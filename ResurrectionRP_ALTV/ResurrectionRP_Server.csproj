@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AltV.Net" Version="1.11.0-dev-preview" />
+    <PackageReference Include="AltV.Net.Async" Version="1.11.0-dev-preview" />
+    <PackageReference Include="MongoDB.Driver" Version="2.9.0-beta2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /Y $(TargetPath) &quot;C:\AltV\resources\resurrectionrp&quot;" />
+  </Target>
+
+</Project>

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResurrectionRP_ALTV", "ResurrectionRP_ALTV\ResurrectionRP_ALTV.csproj", "{C9B3ADDA-90D3-4917-B089-E6771C2AF155}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResurrectionRP_Server", "ResurrectionRP_ALTV\ResurrectionRP_Server.csproj", "{C9B3ADDA-90D3-4917-B089-E6771C2AF155}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

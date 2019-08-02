@@ -12,6 +12,8 @@ namespace ResurrectionRP_Server
         {
             AltAsync.OnPlayerConnect += AltAsync_OnPlayerConnect;
 
+            Task.Run(async () => await (new GameMode()).OnStartAsync());
+
             Alt.Log("GameMode Started");
         }
 

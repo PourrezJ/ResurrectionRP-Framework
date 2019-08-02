@@ -1,8 +1,10 @@
 ﻿using AltV.Net;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using ResurrectionRP.Server;
+using ResurrectionRP_Server.Models;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -32,24 +34,6 @@ namespace ResurrectionRP_Server.Database
                 if (!string.IsNullOrEmpty(_host))
                 {
                     _client = new MongoClient($"mongodb://{_user}:{_password}@{_host}:{_port}");
-                    /*
-                    var credentials = MongoCredential.CreateCredential(
-                        _databaseName,
-                        _user,
-                        _password
-                    );
-
-                    var mongoClientSettings = new MongoClientSettings
-                    {
-                        Credential = credentials,
-                        Server = new MongoServerAddress(_host, _port),
-                        MaxConnectionIdleTime = new TimeSpan(0, 3, 0),
-                        ConnectionMode = ConnectionMode.Automatic,
-                        ConnectTimeout = new TimeSpan(0, 3, 0),
-                    };
-
-
-                    _client = new MongoClient(mongoClientSettings);*/
                 }
                 else
                 {
@@ -64,14 +48,14 @@ namespace ResurrectionRP_Server.Database
                 BsonSerializer.RegisterSerializer(typeof(Vector3), new VectorSerializer());
                 BsonSerializer.RegisterSerializer(typeof(ClothData), new ClothDataSerializer());
                 BsonSerializer.RegisterSerializer(typeof(Color), new ColorBsonSerializer());
-                
+                */
                 BsonClassMap.RegisterClassMap<Location>(cm =>
                 {
                     cm.AutoMap();
                     cm.MapProperty(c => c.Pos).SetSerializer(new VectorSerializer());
                     cm.MapProperty(c => c.Rot).SetSerializer(new VectorSerializer());
                 });
-
+                /*
                 BsonClassMap.RegisterClassMap<Attachment>(cm =>
                 {
                     cm.AutoMap();

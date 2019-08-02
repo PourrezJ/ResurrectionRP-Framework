@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="rmdir  /S /Q &quot;C:\AltV\resources\resurrectionrp\Client\&quot;&#xD;&#xA;mkdir &quot;C:\AltV\resources\resurrectionrp\Client\&quot;&#xD;&#xA;" />
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /Y  $(ProjectDir)\client &quot;C:\AltV\resources\resurrectionrp\Client&quot;" />
+  </Target>
+
+</Project>

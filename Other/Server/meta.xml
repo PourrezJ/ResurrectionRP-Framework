@@ -1,0 +1,31 @@
+<meta>
+  <settings>
+    <!-- Settings MongoDB -->
+    <!-- <setting name="host" value="" /> -->
+    <setting name="host" value="api.resurrectionrp.fr" /> 
+    <setting name="user" value="resuAdmin" />
+    <setting name="password" value="QbCFxrJ2q8RHJCtrpjwz4Yu5" />
+    <setting name="database" value="ragemp" />
+    <setting name="port" value="27017" />
+    <!-- Settings Divers -->
+    <setting name="WhitelistOpen" value="true" />
+    <setting name="ModeAutoFourriere" value="false" />
+    <setting name="Debug" value="true" />
+    <setting name="Winter" value="false" />
+    <!-- Settings Players -->
+    <setting name="MoneyStart" value="500" />
+    <setting name="BankMoneyStart" value="15000" />
+
+    <!-- Settings Weather -->
+    <setting name="OpenWeatherAPIKey" value="a6146f48ca591d9f8f38776894e234de" />
+    <setting name="OpenWeatherCity" value="Paris" />
+
+    <setting name="ServerUniqueIdentifier" value="GU8ZLo6N7gUQPWaCL8+LaMXBDkk=" default="" description="Unique identifier of your TeamSpeak server" /> <!-- Required -->
+    <setting name="RequiredUpdateBranch" value="Stable" default="" description="Update branch the plugin must use (Stable, Testing)" /> <!-- Optional -->
+    <setting name="MinimumPluginVersion" value="0.2.10" default="" description="Lowest plugin version that is requiered on the server (e.g. 0.2)" /> <!-- Optional -->
+    <setting name="SoundPack" value="default" default="default" description="Sound Pack that will be used by the plugin" /> <!-- Required -->
+    <setting name="IngameChannel" value="136" default="" description="ID of the TeamSpeak channel the client should get moved into" /> <!-- Required -->
+    <setting name="IngameChannelPassword" value="123" default="" description="Password of the TeamSpeak channel" /> <!-- Optional -->
+
+  </settings>
+</meta>

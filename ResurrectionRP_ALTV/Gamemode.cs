@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using AltV.Net;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Models;
 using System;
@@ -37,15 +38,15 @@ namespace ResurrectionRP_Server
         #endregion
 
         #endregion
+
         public async Task OnStartAsync()
         {
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
-             
+            Alt.Server.LogInfo("Création des controlleurs...");
+
+            Alt.Server.LogInfo("Création des controlleurs terminé");
+
         }
-
- 
-
-
     }
 }

@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,700,900');
+
+body {
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    background-position-y: -127px;
+    font-family: 'Poppins';
+}
+
+.speedometer {
+    display: none;
+}
+
+.compteur {
+  transform: perspective(900px) rotateZ(-2deg) rotateX(0deg) rotateY(-34deg);
+  height: 14%;
+  position: absolute;
+  bottom: 17%;
+  right: 5%;
+  width: 585px;
+}
+
+.compteur .on {
+  width: 0px;
+  height: 142px;
+  background: url('../img/compteur-on.png');
+  background-position: left;
+  position: absolute;
+  background-repeat: no-repeat;
+  z-index: 999;
+  /*animation: animation 10s ease-in-out;*/
+    width: 0px;
+    height: 142px;
+}
+
+.compteur .off {
+    width: 591px;
+    height: 142px;
+    background: url('../img/compteur.png');
+    background-position: left;
+    position: absolute;
+    background-repeat: no-repeat;
+}
+
+@keyframes animation {
+  0% {
+    width: 0px;
+    height: 142px;
+  }
+  100% {
+    width: 591px;
+    height: 142px;
+  }
+}
+
+.information {
+  transform: perspective(900px) rotateZ(-2deg) rotateX(0deg) rotateY(-34deg);
+  height: 14%;
+  position: absolute;
+  bottom: 17%;
+  right: 5%;
+  width: 585px;
+  text-align: right;
+}
+
+.speed {
+  position: absolute;
+  bottom: -30px;
+  right: 0;
+  color: #fff;
+  /* font-size: 72px; */
+  font-size: 55px;
+  font-weight: 900;
+}
+
+.speed .vitesse {
+    display: inline-block;
+    background: url('../img/speed-bg.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 39px;
+    height: 48px;
+    vertical-align: middle;
+    position: relative;
+}
+
+.speed .vitesse span {
+  font-size: 23px;
+  position: absolute;
+  left: 50%;
+  color: #331600;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.stats {
+  position: absolute;
+  bottom: -20px;
+  right: 150px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  text-align: left;
+}
+
+.stats img {
+  vertical-align: middle;
+  margin-right: 7px;
+}
+
+
+.icons-status {
+  position: absolute;
+  right: 270px;
+  bottom: -60px;
+}
+
+.siren {
+    opacity: 0;
+}
+
+.engine {
+    opacity: 0;
+}
+
+.engine span {
+    display: block;
+    border-radius: 50%;
+    background-color: #ff2323;
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    right: -10px;
+    top: 25px;
+    box-shadow: 0px 0px 5.34px 0.66px rgb(255, 35, 35);
+    opacity: 0;
+    animation: warning 1s infinite;
+}
+
+@keyframes warning {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media all and (max-width: 1200px) {
+  .information {
+    bottom: 14%;
+  }
+}

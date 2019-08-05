@@ -132,7 +132,7 @@ namespace ResurrectionRP_Server.Database
             if (_database.GetCollection<T>(collectionName) == null)
                 return false;
 
-            if (_database.GetCollection<T>(collectionName).Count(new BsonDocument()) == 0)
+            if (_database.GetCollection<T>(collectionName).CountDocuments(new BsonDocument()) == 0)
                 return false;
 
             return true;

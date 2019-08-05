@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "ResurrectionRP_Server": {
+      "commandName": "Executable",
+      "executablePath": "E:\\Sources\\AltV\\Server-Beta\\altv-server.exe",
+      "workingDirectory": "E:\\Sources\\AltV\\Server-Beta"
+    }
+  }
+}

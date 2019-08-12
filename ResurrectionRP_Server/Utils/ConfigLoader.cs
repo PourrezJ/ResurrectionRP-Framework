@@ -70,7 +70,7 @@ namespace ResurrectionRP.Server
                 if (_settings == null)
                 {
                     _settings = new Dictionary<string, CustomSetting>();
-                    var baseDir = "dotnet/resources" + Path.DirectorySeparatorChar + "netcoreapp2.2" + Path.DirectorySeparatorChar + "meta.xml";
+                    var baseDir = "resources" + Path.DirectorySeparatorChar  + "resurrectionrp" + Path.DirectorySeparatorChar + "Server"   +  Path.DirectorySeparatorChar + "meta.xml";
                     LoadConfig(baseDir);
                 }
                 return _settings;

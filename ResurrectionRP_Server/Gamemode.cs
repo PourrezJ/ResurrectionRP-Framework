@@ -3,6 +3,7 @@ using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
 using ResurrectionRP_Server.Models;
 using System;
 using System.Collections.Generic;
@@ -44,11 +45,12 @@ namespace ResurrectionRP_Server
 
         public async Task OnStartAsync()
         {
-            IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
+            IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogInfo("Création des controlleurs...");
             Alt.Server.LogInfo("Création des controlleurs terminée");
-
+            
+            
             Alt.OnPlayerConnect += OnPlayerConnected;
             Alt.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             Alt.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
@@ -63,6 +65,7 @@ namespace ResurrectionRP_Server
             Chat.Broadcast($"==> {player.Name} has joined.");
             player.Model = (uint)AltV.Net.Enums.PedModel.FreemodeMale01;
             player.Spawn(new Position(813, -279, 66), 1000);
+
         }
 
         private void OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
@@ -74,7 +77,7 @@ namespace ResurrectionRP_Server
         {
             player.Emit("OnPlayerLeaveVehicle");
         }
-
+        #region methods
         private void CommandVeh(IPlayer player, string[] args)
         {
             if (args == null)
@@ -88,5 +91,10 @@ namespace ResurrectionRP_Server
             if (vehicle != null)
                 player.Emit("SetPlayerIntoVehicle", vehicle, -1);
         }
+        public async Task Save()
+        {
+            await Database.MongoDB.Update(this, "gamemode", _id);
+        }
+        #endregion
     }
 }

@@ -7,4 +7,5 @@ export function initialize() {
             game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle.scriptID, seat);
         }, 20);
     });
+
 }

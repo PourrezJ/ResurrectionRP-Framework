@@ -1,6 +1,9 @@
-﻿using AltV.Net.Elements.Entities;
+﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Models.InventoryData;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -136,7 +139,7 @@ namespace ResurrectionRP_Server.Models
             }
             catch (Exception ex)
             {
-                MP.Logger.Error("Inventory Delete", ex);
+                Alt.Server.LogError("Inventory Delete: " + ex);
                 return false;
             }
         }
@@ -154,35 +157,14 @@ namespace ResurrectionRP_Server.Models
             }
             catch (Exception ex)
             {
-                MP.Logger.Error("Inventory Delete", ex);
+                Alt.Server.LogError("Inventory Delete: " + ex);
                 return false;
             }
         }
 
-        /*
-        public bool Delete(ItemID itemID, int quantity)
-        {
-            if (InventoryList.Any(x => x.Item.id == itemID))
-            {
-                ItemStack itemStack = InventoryList.Last(x => x.Item.id == itemID);
-
-                if (itemStack == null)
-                    return false;
-
-                if (Delete(itemStack.SlotIndex, quantity))
-                    return true;
-            }
-            return false;
-        }
-        */
-
         public int DeleteAll(ItemID itemID, int quantityNeeded)
         {
             var value = quantityNeeded;
-            // needed = 5
-            // firstStack = 3
-            // secondStack = 7
-
             for (int i = 0; i < InventoryList.Length; i++)
             {
                 if (InventoryList[i] != null)

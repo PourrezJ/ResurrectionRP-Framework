@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace ResurrectionRP_Server.Models.Inventory
+namespace ResurrectionRP_Server.Models
 {
     public class ItemStack
     {
@@ -26,7 +24,7 @@ namespace ResurrectionRP_Server.Models.Inventory
 
         internal object Clone()
         {
-            return this.MemberwiseClone();
+            return MemberwiseClone();
         }
     }
 }

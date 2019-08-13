@@ -1,10 +1,13 @@
-﻿using AltV.Net.Async;
+﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
-using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Models.InventoryData;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Models
@@ -82,7 +85,7 @@ namespace ResurrectionRP_Server.Models
             {
                 var position = await c.GetPositionAsync();
                 var dimension = await c.GetDimensionAsync();
-                ResuPickup resu = await ResuPickup.CreatePickup(MP.Utility.Joaat("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), dimension);
+                ResuPickup resu = await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), dimension);
                 resu.OnTakePickup += OnPickup;
 
                 return true;
@@ -99,7 +102,7 @@ namespace ResurrectionRP_Server.Models
             {
                 var position = await c.GetPositionAsync();
                 var dimension = await c.GetDimensionAsync();
-                ResuPickup resu = await ResuPickup.CreatePickup(MP.Utility.Joaat("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), dimension);
+                ResuPickup resu = await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), dimension);
                 resu.OnTakePickup += OnPickup;
 
                 return true;
@@ -143,12 +146,12 @@ namespace ResurrectionRP_Server.Models
 
         object ICloneable.Clone()
         {
-            return this.MemberwiseClone();
+            return MemberwiseClone();
         }
 
         public Item CloneItem()
         {
-            return (Item)this.MemberwiseClone();
+            return (Item)MemberwiseClone();
         }
     }
 }

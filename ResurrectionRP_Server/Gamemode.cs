@@ -35,6 +35,12 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public float StreamDistance { get; private set; } = 500;
 
+        [BsonIgnore]
+        public List<IPlayer> PlayerList = new List<IPlayer>();
+
+        [BsonIgnore]
+        public short GlobalDimension = 3;
+
         public List<string> PlateList = new List<string>();
 
         #region Static
@@ -52,6 +58,7 @@ namespace ResurrectionRP_Server
             
             
             Alt.OnPlayerConnect += OnPlayerConnected;
+            Alt.OnPlayerDisconnect += OnPlayerDisconnected;
             Alt.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             Alt.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
 
@@ -61,10 +68,22 @@ namespace ResurrectionRP_Server
 
         private void OnPlayerConnected(IPlayer player, string reason)
         {
+
+            if (PlayerList.Find(b => b == player) == null)
+                PlayerList.Add(player);
             Alt.Log($"==> {player.Name} has connected.");
             Chat.Broadcast($"==> {player.Name} has joined.");
             player.Model = (uint)AltV.Net.Enums.PedModel.FreemodeMale01;
             player.Spawn(new Position(813, -279, 66), 1000);
+
+        }
+        private void OnPlayerDisconnected(IPlayer player, string reason)
+        {
+
+            if (PlayerList.Find(b => b == player) != null)
+                PlayerList.Remove(player);
+            Alt.Log($"==> {player.Name} has disconnected.");
+            Chat.Broadcast($"==> {player.Name} has joined.");
 
         }
 

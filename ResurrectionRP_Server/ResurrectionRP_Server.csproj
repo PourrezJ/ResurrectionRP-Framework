@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AltV.Net" Version="1.11.0-dev-preview" />
-    <PackageReference Include="AltV.Net.Async" Version="1.11.0-dev-preview" />
+    <PackageReference Include="AltV.Net" Version="1.12.2-beta" />
+    <PackageReference Include="AltV.Net.Async" Version="1.12.2-beta" />
     <PackageReference Include="MongoDB.Driver" Version="2.9.0-beta2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>

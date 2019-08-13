@@ -43,9 +43,9 @@ namespace ResurrectionRP_Server
 
         #endregion
 
+        #region Events
         public async Task OnStartAsync()
         {
-
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogInfo("Création des controlleurs...");
             Alt.Server.LogInfo("Création des controlleurs terminée");
@@ -77,6 +77,8 @@ namespace ResurrectionRP_Server
         {
             player.Emit("OnPlayerLeaveVehicle");
         }
+        #endregion
+
         #region methods
         private void CommandVeh(IPlayer player, string[] args)
         {

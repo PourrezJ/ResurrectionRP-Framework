@@ -19,6 +19,7 @@ namespace ResurrectionRP_Server.Models
         public DateTime EndBanTime { get; set; }
         public Formulaire Formulaire { get; set; }
         public string IP { get; set; }
+        public string SocialId { get; set; }
 
         public static async Task<Whitelist> GetWhitelistFromAPI(string social)
         {

@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using MongoDB.Bson.Serialization.Attributes;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 
@@ -68,7 +61,6 @@ namespace ResurrectionRP_Server.Entities.Players
         private Data.PlayerSync playerSync = null;
         #endregion
 
-
         #region Constructor
         public PlayerHandler(IPlayer client)
         {
@@ -84,7 +76,6 @@ namespace ResurrectionRP_Server.Entities.Players
         }
 
         #endregion
-
 
         #region Method
 

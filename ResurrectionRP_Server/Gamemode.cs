@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using ResurrectionRP_Server;
+using ResurrectionRP_Server.Entities.Vehicles;
 
 namespace ResurrectionRP_Server
 {
@@ -51,8 +52,12 @@ namespace ResurrectionRP_Server
 
         public List<string> PlateList = new List<string>();
 
-
         public static bool ServerLock;
+
+        #region Pools
+        [BsonIgnore]
+        public VehiclesManager VehicleManager { get; private set; }
+        #endregion
 
         #region Static
         public static Location FirstSpawn = new Location(new Vector3(-1072.886f, -2729.607f, 0.8148939f), new Vector3(0, 0, 313.7496f));
@@ -94,6 +99,7 @@ namespace ResurrectionRP_Server
             Alt.Server.LogInfo("Création des controlleurs...");
             PlayerManager = new Entities.Players.PlayerManager();
             BanManager = new BanManager();
+            VehicleManager = new VehiclesManager();
             Alt.Server.LogInfo("Création des controlleurs terminée");
             
             
@@ -139,7 +145,7 @@ namespace ResurrectionRP_Server
         }
         #endregion
 
-        #region methods
+        #region Methods
         private void CommandVeh(IPlayer player, string[] args)
         {
             if (args == null)

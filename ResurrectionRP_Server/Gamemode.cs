@@ -52,11 +52,16 @@ namespace ResurrectionRP_Server
 
         public List<string> PlateList = new List<string>();
 
-        public static bool ServerLock;
 
         #region Pools
         [BsonIgnore]
         public VehiclesManager VehicleManager { get; private set; }
+        //[BsonIgnore]
+        //public Weather.WeatherManager WeatherManager { get; private set; }
+
+        public static bool ServerLock;
+
+        public Time Time { get; set; }
         #endregion
 
         #region Static
@@ -101,8 +106,10 @@ namespace ResurrectionRP_Server
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();
             Alt.Server.LogInfo("Création des controlleurs terminée");
-            
-            
+
+            if (Time == null)
+                Time = new Time();
+
             Alt.OnPlayerConnect += OnPlayerConnected;
             Alt.OnPlayerDisconnect += OnPlayerDisconnected;
             Alt.OnPlayerEnterVehicle += OnPlayerEnterVehicle;

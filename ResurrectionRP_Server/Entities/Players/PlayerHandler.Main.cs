@@ -3,6 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Concurrent;
 using System.Numerics;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using AltV.Net;
 using AltV.Net.Data;
 using AltV.Net.Async;
@@ -30,8 +31,30 @@ namespace ResurrectionRP_Server.Entities.Players
 
         [BsonIgnore]
         public DateTime LastUpdate { get; set; }
+
+        private Utils.Enums.AdminRank _adminrank;
+        public Utils.Enums.AdminRank StaffRank
+        {
+            get => _adminrank;
+            set
+            {
+                _adminrank = value;
+                Client?.EmitAsync("SetRank", _adminrank);
+            }
+        }
         public Models.Identite Identite { get; set; }
         public int TimeSpent { get; set; }
+        /**
+        public List<VehicleKey> ListVehicleKey { get; private set; }
+    = new List<VehicleKey>();
+
+        public List<License> Licenses { get; set; }
+            = new List<License>();
+
+        [BsonIgnore]
+        public Clothings Clothing { get; set; }**/
+        public Models.Animation[] AnimSettings { get; set; }
+            = new Models.Animation[9];
         public string IP { get; set; }
 
         [BsonIgnore]
@@ -40,7 +63,17 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public Models.Location Location { get; set; }
             = new Models.Location(new Vector3(), new Vector3()); // Default spawn
+
+        public Models.PlayerCustomization Character { get; set; }
+        /**public PlayerCustomization Character { get; set; }
+        public Inventory PocketInventory { get; set; } = new Inventory(6, 4);
+
+        [BsonIgnore]
+        public Inventory BagInventory { get; set; }
+
+        public OutfitInventory OutfitInventory { get; set; } = new OutfitInventory();**/
         public double Money { get; private set; }
+        //public BankAccount BankAccount { get; set; }
         public int Hunger { get; set; } = 100;
         public int Thirst { get; set; } = 100;
         public bool Jailed { get; private set; } = false;
@@ -66,14 +99,11 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Constructor
         public PlayerHandler(IPlayer client)
         {
-            /**
-            MP.Utility.Schedule(() =>
-            {
-                PID = client.GetSocialClubName();
-            }); **/
+            Client = client;
+            
             AltAsync.Do(() =>
            {
-               // AJOUTER PID EN FONCTION WHITELIST
+               client.GetData("SocialClub", out string PID);
            });
         }
 
@@ -85,6 +115,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public async Task LoadPlayer(IPlayer client, bool firstspawn = false)
         {
+            Client = client;
             client.SetData("PlayerHandler", this);
             if (PlayerHandlerList.TryAdd(client, this))
             {
@@ -121,14 +152,14 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                 }**/
 
-                await AltAsync.Do( async () =>
+                await AltAsync.Do( () =>
                 {
-                    //IP = Client.Ip;
-                    //IsOnline = true;
-                    /**
-                    Client.Call
+                    this.IP = Client.Ip;
+                    this.IsOnline = true;
+                    
+                    Client.Emit
                     (
-                        Events.PlayerInitialised,
+                        Utils.Enums.Events.PlayerInitialised,
                         StaffRank,
                         Identite.Name,
                         Convert.ToSingle(Money),
@@ -136,21 +167,20 @@ namespace ResurrectionRP_Server.Entities.Players
                         Hunger,
                         JsonConvert.SerializeObject(AnimSettings),
                         JsonConvert.SerializeObject(GameMode.Instance.Time),
-                        GameMode.Instance.WeatherManager.Actual_weather,
-                        GameMode.Instance.WeatherManager.Wind,
-                        GameMode.Instance.WeatherManager.WindDirection,
+                        0,//GameMode.Instance.WeatherManager.Actual_weather,
+                        0,//GameMode.Instance.WeatherManager.Wind,
+                        0,//GameMode.Instance.WeatherManager.WindDirection,
                         GameMode.Instance.IsDebug,
                         JsonConvert.SerializeObject(Location)
-                    ); **/
+                    );
 
-                    client.Model = (uint)AltV.Net.Enums.PedModel.FreemodeMale01;
-                    //Character.ApplyCharacter(Client);
-                    client.Spawn(Location.Pos, 0);
-                    await client.SetDimensionAsync(GameMode.Instance.GlobalDimension);
-                    await client.SetHealthAsync((ushort)(Health + 100));
-                    await client.SetArmorAsync(59);
+                    Client.Spawn(Location.Pos, 0);
+                    Character.ApplyCharacter(Client);
+                    Client.Dimension = GameMode.Instance.GlobalDimension;
+                    Client.Health = (ushort)(Health + 100);
+
                     
-                    client.Emit("FadeIn", 0);
+                    Client.Emit("FadeIn", 0);
 
                 });
 

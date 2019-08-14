@@ -39,7 +39,7 @@
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptOutFile />
-    <TypeScriptOutDir>E:\Sources\AltV\ResurrectionRP\ResurrectionRP_Client\bin\client</TypeScriptOutDir>
+    <TypeScriptOutDir>C:\altv\ResuRP\ResurrectionRP_Client\bin\client</TypeScriptOutDir>
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptSourceMap>False</TypeScriptSourceMap>
@@ -78,7 +78,10 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="client\chat\chat.ts" />
+    <TypeScriptCompile Include="client\Helpers\UiHelper.ts" />
+    <TypeScriptCompile Include="client\login\Login.ts" />
     <TypeScriptCompile Include="client\main.ts" />
+    <TypeScriptCompile Include="client\Models\Camera.ts" />
     <TypeScriptCompile Include="typings\altv-client.d.ts" />
     <TypeScriptCompile Include="typings\natives.d.ts" />
     <TypeScriptCompile Include="client\utils.ts" />
@@ -87,6 +90,31 @@
     <Content Include="cef\chat\app.js" />
     <Content Include="cef\chat\index.html" />
     <Content Include="cef\chat\style.css" />
+    <Content Include="cef\login\css\style.css" />
+    <Content Include="cef\login\img\BG.jpg" />
+    <Content Include="cef\login\img\bg.png" />
+    <Content Include="cef\login\img\bouche.svg" />
+    <Content Include="cef\login\img\cheveux.svg" />
+    <Content Include="cef\login\img\forme.svg" />
+    <Content Include="cef\login\img\habit.svg" />
+    <Content Include="cef\login\img\icon-man.png" />
+    <Content Include="cef\login\img\icon-pass.png" />
+    <Content Include="cef\login\img\inscription.png" />
+    <Content Include="cef\login\img\logo.svg" />
+    <Content Include="cef\login\img\moustache.svg" />
+    <Content Include="cef\login\img\nez.svg" />
+    <Content Include="cef\login\img\pass-ux.png" />
+    <Content Include="cef\login\img\passport.jpg" />
+    <Content Include="cef\login\img\skins.svg" />
+    <Content Include="cef\login\img\travel.png" />
+    <Content Include="cef\login\img\yeux.svg" />
+    <Content Include="cef\login\index.html" />
+    <Content Include="cef\login\js\app.js" />
+    <Content Include="cef\login\libs\angular.min.js" />
+    <Content Include="cef\login\libs\fontawesome\css\all.min.css" />
+    <Content Include="cef\login\libs\fontawesome\webfonts\fa-brands-400.svg" />
+    <Content Include="cef\login\libs\fontawesome\webfonts\fa-regular-400.svg" />
+    <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.svg" />
     <Content Include="cef\speedometer\css\style.css" />
     <Content Include="cef\speedometer\img\compteur-on.png" />
     <Content Include="cef\speedometer\img\compteur.png" />
@@ -102,6 +130,20 @@
     <Content Include="cef\speedometer\speedometer.html" />
     <Content Include="lib\js\jquery.min.js" />
     <TypeScriptCompile Include="client\speedometer\speedometer.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="cef\login\libs\fontawesome\webfonts\fa-brands-400.eot" />
+    <Content Include="cef\login\libs\fontawesome\webfonts\fa-brands-400.ttf" />
+    <Content Include="cef\login\libs\fontawesome\webfonts\fa-brands-400.woff" />
+    <Content Include="cef\login\libs\fontawesome\webfonts\fa-brands-400.woff2" />
+    <Content Include="cef\login\libs\fontawesome\webfonts\fa-regular-400.eot" />
+    <Content Include="cef\login\libs\fontawesome\webfonts\fa-regular-400.ttf" />
+    <Content Include="cef\login\libs\fontawesome\webfonts\fa-regular-400.woff" />
+    <Content Include="cef\login\libs\fontawesome\webfonts\fa-regular-400.woff2" />
+    <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.eot" />
+    <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.ttf" />
+    <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.woff" />
+    <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.woff2" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -130,7 +172,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>set ClientDir=E:\Sources\AltV\Server-Beta\resources\resurrectionrp\client
+    <PostBuildEvent>set ClientDir=C:\altv\server-files\resources\resurrectionrp\client
 rmdir  /S /Q %25ClientDir%25
 mkdir %25ClientDir%25
 mkdir %25ClientDir%25\cef

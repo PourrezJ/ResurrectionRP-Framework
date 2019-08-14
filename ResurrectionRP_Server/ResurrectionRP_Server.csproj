@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="set ResourceDir=E:\Sources\AltV\Server-Beta\resources\resurrectionrp&#xD;&#xA;set ServerDir=%ResourceDir%\Server&#xD;&#xA;xcopy /Y $(TargetPath) %ServerDir%&#xD;&#xA;copy /Y $(ProjectDir)\resource.cfg %ResourceDir%" />
+    <Exec Command="set ResourceDir=C:\altv\server-files\resources\resurrectionrp&#xD;&#xA;set ServerDir=%25ResourceDir%25\Server&#xD;&#xA;xcopy /Y $(TargetPath) %25ServerDir%25&#xD;&#xA;copy /Y $(ProjectDir)\resource.cfg %25ResourceDir%25" />
   </Target>
 
 </Project>

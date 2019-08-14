@@ -1,4 +1,4 @@
-﻿using AltV.Net.Elements.Entities;
+﻿/**using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -121,10 +121,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             SpawnVeh = spawnVeh;
             Dimension = dimension;
-            /*
+            
             if (inventory != null)
                 Inventory = inventory;
-                */
+                
             if (OilTank == null)
                 OilTank = new OilTank();
 
@@ -132,3 +132,4 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
     }
 }
+**/

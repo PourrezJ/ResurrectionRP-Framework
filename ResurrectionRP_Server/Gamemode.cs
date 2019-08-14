@@ -5,6 +5,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using ResurrectionRP_Server.Models;
+using System.Globalization;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -36,6 +37,12 @@ namespace ResurrectionRP_Server
         public float StreamDistance { get; private set; } = 500;
 
         [BsonIgnore]
+        public BanManager BanManager { get; private set; }
+
+        [BsonIgnore]
+        public Entities.Players.PlayerManager PlayerManager { get; private set; }
+
+        [BsonIgnore]
         public List<IPlayer> PlayerList = new List<IPlayer>();
 
         [BsonIgnore]
@@ -51,11 +58,41 @@ namespace ResurrectionRP_Server
 
         #endregion
 
+        #region Constructor
+        public GameMode()
+        {
+            if (Instance != null) return;
+            Instance = this;
+
+            var ci = new CultureInfo("fr-FR");
+            CultureInfo.DefaultThreadCurrentCulture = ci;
+            System.Threading.Thread.CurrentThread.CurrentCulture = ci;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
+
+            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => OnServerStop();
+        }
+        #endregion
+
         #region Events
+
+        private async void OnServerStop()
+        {
+            var players = GameMode.Instance.PlayerList;
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (players[i] != null && players[i].Exists)
+                    players[i].Kick("Server stop");
+            }
+
+            //await HouseManager.House_Exit();
+        }
         public async Task OnStartAsync()
         {
+
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogInfo("Création des controlleurs...");
+            PlayerManager = new Entities.Players.PlayerManager();
+            BanManager = new BanManager();
             Alt.Server.LogInfo("Création des controlleurs terminée");
             
             
@@ -65,6 +102,7 @@ namespace ResurrectionRP_Server
             Alt.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
             Chat.Initialize();
             Chat.RegisterCmd("veh", CommandVeh);
+            ServerLoaded = true;
         }
 
         private void OnPlayerConnected(IPlayer player, string reason)

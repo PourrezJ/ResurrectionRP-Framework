@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System;
 using System.Threading.Tasks;
-
 
 namespace ResurrectionRP_Server.Utils
 {
-
     class Utils
     {
         public static async Task SetInterval(Action action, TimeSpan timeout)
@@ -40,9 +35,10 @@ namespace ResurrectionRP_Server.Utils
 
         public static void StopTimer(System.Timers.Timer timer) => timer.Stop();
 
-        /**public static async Task SendNotificationPictureToALL(string message, CharPicture picture, bool flash, int icontype, string title, string description)
+        /*
+        public static async Task SendNotificationPictureToALL(string message, CharPicture picture, bool flash, int icontype, string title, string description)
         {
             await MP.Players.CallAsync("SetNotificationMessage", message, picture.ToString(), flash, icontype, title, description);
-        }**/
+        }*/
     }
 }

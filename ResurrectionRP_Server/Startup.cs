@@ -46,13 +46,15 @@ namespace ResurrectionRP_Server
             
         }
 
-        private Task AltAsync_OnPlayerConnect(IPlayer player, string reason)
+        private async Task AltAsync_OnPlayerConnect(IPlayer player, string reason)
         {
             while (gamemode == null)
-                Task.Delay(50);
-           
-            
-            return Task.CompletedTask;
+                await Task.Delay(50);
+
+            while (gamemode.PlayerManager == null)
+                await Task.Delay(50);
+
+            await gamemode.PlayerManager.Events_PlayerJoin(player, reason);
         }
 
         public override void OnStop()

@@ -4,7 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace ResurrectionRP.Server
+namespace ResurrectionRP_Server
 {
     public class Config
     {

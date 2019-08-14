@@ -5,7 +5,7 @@ import * as chat from 'client/chat/chat';
 let inLogin = false;
 
 export function init() {
-    alt.on('OpenLogin', (args: any[]) => {
+    alt.onServer('OpenLogin', (args: any[]) => {
         try {
             let social = game.getSocialclubNickname();
             game.setPlayerInvincible(game.playerId(), true);
@@ -23,5 +23,8 @@ export function init() {
             alt.log(ex);
         }
     });
+
+    alt.onServer("GetSocialClub", (arg: string) => 
+        alt.emitServer(arg, game.getSocialclubNickname()));
 
 }

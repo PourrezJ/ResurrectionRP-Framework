@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AltV.Net.Elements.Entities;
+using AltV.Net;
 
 namespace ResurrectionRP_Server.Models
 {
@@ -27,7 +29,6 @@ namespace ResurrectionRP_Server.Models
 
         public BanManager()
         {
-
         }
 
         public async Task Init()
@@ -39,9 +40,9 @@ namespace ResurrectionRP_Server.Models
 
                 await AltAsync.Do(() =>
                 {
-                    if(GameMode.Instance.PlayerList.Any(p => p.SocialClubId == ban.SocialID))
+                    if (GameMode.Instance.PlayerList.Any(p => p.SocialClubId == ban.SocialID))
                     {
-                       var player = GameMode.Instance.PlayerList.Find(p => p.Exists && (p.SocialClubId == ban.SocialID)) ?? null;
+                        var player = GameMode.Instance.PlayerList.Find(p => p.Exists && (p.SocialClubId == ban.SocialID)) ?? null;
                         player.Kick("Vous êtes bannis du serveur.");
                     }
 
@@ -52,17 +53,24 @@ namespace ResurrectionRP_Server.Models
         /**
         public static async Task BanPlayer(IPlayer player, string reason, DateTime endtime)
         {
-            var ban = new Ban()
-            {
-                SocialClub = await player.GetSocialClubNameAsync(),
-                SocialID = player.SocialClubId,
-                DateEnd = endtime
-            };
+            var players = Entities.Players.PlayerHandler.PlayerHandlerList.ToList();
 
-            GameMode.Instance.BanManager.BanList.Add(ban);
-            MP.Logger.Trace($"Ban du joueur {await player.GetSocialClubNameAsync()} pour la raison: {reason}");
-            await MongoDB.Insert("ban", ban);
-            await player.BanAsync(reason);
+            for (int i = 0; i < players.Count; i++)
+            {
+                var ban = new Ban()
+                {
+                    SocialClub = await player.,
+                    SocialID = player.SocialClubId,
+                    DateEnd = endtime
+                };
+
+                GameMode.Instance.BanManager.BanList.Add(ban);
+                MP.Logger.Trace($"Ban du joueur {await player.GetSocialClubNameAsync()} pour la raison: {reason}");
+                await MongoDB.Insert("ban", ban);
+                await player.BanAsync(reason);
+                await Task.Delay(100);
+            }
+
         } **/
     }
 }

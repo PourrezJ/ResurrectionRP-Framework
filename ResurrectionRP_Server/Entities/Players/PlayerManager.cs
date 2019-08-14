@@ -13,6 +13,8 @@ using Newtonsoft.Json;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Numerics;
+using WordPressPCL;
+using WordPressPCL.Models;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -30,6 +32,8 @@ namespace ResurrectionRP_Server.Entities.Players
         public PlayerManager()
         {
             Alt.OnClient("WhiteListCallback", WhiteListCallback);
+
+            Alt.OnClient("SendLogin", SendLogin );
 
             AltAsync.OnPlayerDead += Events_PlayerDeath;
 
@@ -115,6 +119,13 @@ namespace ResurrectionRP_Server.Entities.Players
         public async void WhiteListCallback(IPlayer player, object[] args)
         {
             string socialclub = args[0].ToString();
+
+            Models.Social soc = GameMode.Instance.SocialList.Find(b => (b.social == socialclub && b.socialId == 0));
+            if (soc == null)
+                GameMode.Instance.SocialList.Add(new Models.Social(socialclub, player.SocialClubId));
+            else if (soc.socialId == 0)
+                soc.socialId = player.SocialClubId;
+
             if (await IsBan(player, socialclub))
             {
                 await player.KickAsync("Vous êtes bannis!");
@@ -153,8 +164,6 @@ namespace ResurrectionRP_Server.Entities.Players
 
             if (!player.Exists)
                 return;
-
-            //await player.SetAlphaAsync(0);
 
 
             if (GameMode.ServerLock)
@@ -196,10 +205,57 @@ namespace ResurrectionRP_Server.Entities.Players
         }
         #endregion
 
+        #region RemoteEvents
+        private async void SendLogin(IPlayer client, object[] args)
+        {
+            if (!client.Exists)
+                return;
+
+            var definition = new { login = "", password = "", socialClub = "" };
+
+            var data = JsonConvert.DeserializeAnonymousType(args[0].ToString(), definition);
+            var wpclient = new WordPressClient("https://resurrectionrp.fr/wp-json/");
+            wpclient.AuthMethod = AuthMethod.JWT;
+
+            try
+            {
+                await wpclient.RequestJWToken(data.login, data.password);
+                if (await wpclient.IsValidJWToken())
+                {
+                    await client.EmitAsync("LoginOK", await PlayerHandlerExist(client));
+                }
+                else
+                {
+                    await client.EmitAsync("LoginError", "");
+                }
+            }
+            catch
+            {
+                await client.EmitAsync("LoginError", "");
+                return;
+            }
+        }
+        #endregion
+
         #region Methods 
         public static async Task<PlayerHandler> GetPlayerHandlerDatabase(string socialClub) =>
             await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == socialClub.ToLower()).FirstOrDefaultAsync();
 
+        public static async Task<bool> PlayerHandlerExist(IPlayer player)
+        {
+            try
+            {
+                var social = GameMode.Instance.SocialList.Find(b => b.socialId == player.SocialClubId)?.social;
+
+                return await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == social.ToLower()).AnyAsync();
+            }
+            catch (Exception ex)
+            {
+                //await player.SendNotificationError("Erreur avec votre compte, contactez un membre du staff.");
+                Alt.Server.LogError("PlayerHandlerExist" + ex.Data);
+            }
+            return false;
+        }
 
         public static PlayerHandler GetPlayerByClient(IPlayer player)
         {

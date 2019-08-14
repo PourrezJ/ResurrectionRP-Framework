@@ -9,7 +9,6 @@ export function initialize() {
             game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle.scriptID, seat);
         }, 20);
     });
-
     alt.on('Display_subtitle', (args: any[]) => UiHelper.ShowSubTitle(args[0], parseInt(args[1])));
 
     alt.on('SET_NOTIFICATION_BACKGROUND_COLOR', (args: any[]) => game.setNotificationBackgroundColor(parseInt(args[0])))

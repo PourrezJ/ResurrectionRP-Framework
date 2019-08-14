@@ -48,6 +48,7 @@ namespace ResurrectionRP_Server
 
         private async Task AltAsync_OnPlayerConnect(IPlayer player, string reason)
         {
+            player.Emit("FadeOut", 0);
             while (gamemode == null)
                 await Task.Delay(50);
 

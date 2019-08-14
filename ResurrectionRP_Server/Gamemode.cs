@@ -46,9 +46,13 @@ namespace ResurrectionRP_Server
         public List<IPlayer> PlayerList = new List<IPlayer>();
 
         [BsonIgnore]
+        public List<Models.Social> SocialList = new List<Models.Social>();
+
+        [BsonIgnore]
         public short GlobalDimension = 3;
 
         public List<string> PlateList = new List<string>();
+
 
         public static bool ServerLock;
 
@@ -63,7 +67,6 @@ namespace ResurrectionRP_Server
         {
             if (Instance != null) return;
             Instance = this;
-
             var ci = new CultureInfo("fr-FR");
             CultureInfo.DefaultThreadCurrentCulture = ci;
             System.Threading.Thread.CurrentThread.CurrentCulture = ci;

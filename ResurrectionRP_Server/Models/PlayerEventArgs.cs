@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using AltV.Net.Elements.Entities;
 
 namespace ResurrectionRP_Server.Models
 {

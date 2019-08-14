@@ -30,7 +30,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        /**public async Task UpdatePlayerInfo()
+        public async Task UpdatePlayerInfo()
         {
             if (Client == null) return;
 
@@ -40,10 +40,10 @@ namespace ResurrectionRP_Server.Entities.Players
                     return;
 
                 var vehicle = await Client.GetVehicleAsync();
-
+                /**
                 if (vehicle != null)
                 {
-                    if (await vehicle.GetOccupantAsync(-1) == Client)
+                    if (Convert.ToInt32(Client.GetSeatAsync()) == -1)
                     {
                         var veh = vehicle.GetVehicleHandler();
 
@@ -55,14 +55,14 @@ namespace ResurrectionRP_Server.Entities.Players
                 else
                 {
                     Location = new Location(await Client.GetPositionAsync(), await Client.GetRotationAsync());
-                }
+                }**/
 
 
-
+                /**
                 if (HouseManager.IsInHouse(Client))
                 {
                     Location = new Location(HouseManager.GetHouse(Client).Position, new Vector3());
-                }
+                }**/
 
                 if (!Client.Exists)
                     return;
@@ -79,8 +79,8 @@ namespace ResurrectionRP_Server.Entities.Players
             }
             catch (Exception ex)
             {
-                MP.Logger.Error("UpdatePlayerInfo", ex);
+                Alt.Server.LogError("UpdatePlayerInfo " + ex.Data);
             }
-        } **/
+        } 
     }
 }

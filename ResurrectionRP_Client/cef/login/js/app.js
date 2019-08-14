@@ -37,7 +37,6 @@ app.controller("LoginCtrl", function ($scope, $http, $ngConfirm) {
                 login: $scope.login,
                 password: $scope.password
             };
-
             alt.emit("SendLogin", JSON.stringify(loginObj));
 
         } else {

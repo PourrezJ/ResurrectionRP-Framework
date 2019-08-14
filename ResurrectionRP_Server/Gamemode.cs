@@ -43,6 +43,8 @@ namespace ResurrectionRP_Server
 
         public List<string> PlateList = new List<string>();
 
+        public static bool ServerLock;
+
         #region Static
         public static Location FirstSpawn = new Location(new Vector3(-1072.886f, -2729.607f, 0.8148939f), new Vector3(0, 0, 313.7496f));
         #endregion
@@ -61,7 +63,6 @@ namespace ResurrectionRP_Server
             Alt.OnPlayerDisconnect += OnPlayerDisconnected;
             Alt.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             Alt.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
-
             Chat.Initialize();
             Chat.RegisterCmd("veh", CommandVeh);
         }
@@ -76,6 +77,7 @@ namespace ResurrectionRP_Server
             player.Model = (uint)AltV.Net.Enums.PedModel.FreemodeMale01;
             player.Spawn(new Position(813, -279, 66), 1000);
 
+
         }
         private void OnPlayerDisconnected(IPlayer player, string reason)
         {
@@ -89,7 +91,7 @@ namespace ResurrectionRP_Server
 
         private void OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
-            player.Emit("OnPlayerEnterVehicle", vehicle.Id, seat, 50, 50);
+            player.Emit("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32( seat ) , 50, 50);
         }
 
         private void OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)

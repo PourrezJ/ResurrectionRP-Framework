@@ -33,6 +33,18 @@ export function initialize() {
 
     alt.onServer('chatmessage', pushMessage);
 
+    alt.on('toggleChat', () => {
+        if (!opened) {
+            hidden = !hidden;
+            view.emit('hideChat', hidden);
+        } else {
+            hidden = !hidden;
+            view.emit('hideChat', hidden);
+        }
+
+
+    });
+
     alt.on('keyup', (key) => {
         if (!loaded)
             return;

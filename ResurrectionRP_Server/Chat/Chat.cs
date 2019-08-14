@@ -17,6 +17,7 @@ namespace ResurrectionRP_Server
         public static void Initialize()
         {
             Alt.OnClient("chatmessage", OnChatMessage);
+            
         }
         #endregion
 
@@ -124,7 +125,7 @@ namespace ResurrectionRP_Server
 
         #region Extensions
         public static void SendChatMessage(this IPlayer player, string msg)
-        {
+        { 
             Send(player, msg);
         }
         #endregion

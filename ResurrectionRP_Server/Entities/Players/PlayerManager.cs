@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using AltV.Net;
-using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using AltV.Net.Async;
-using AltV.Net.Async.Events;
-using MongoDB.Bson.Serialization.Attributes;
-using Newtonsoft.Json;
-using System.Collections.Concurrent;
 using System.Linq;
-using System.Numerics;
 
 namespace ResurrectionRP_Server.Entities.Players
 {

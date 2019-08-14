@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Utils.Extensions;
+using ResurrectionRP_Server.Models;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -30,7 +32,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        /**public async Task UpdatePlayerInfo()
+        public async Task UpdatePlayerInfo()
         {
             if (Client == null) return;
 
@@ -43,12 +45,12 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 if (vehicle != null)
                 {
-                    if (await vehicle.GetOccupantAsync(-1) == Client)
+                    if (await vehicle.GetDriverAsync() == Client)
                     {
                         var veh = vehicle.GetVehicleHandler();
-
+                        /*
                         if (veh != null)
-                            await veh.Update();
+                            await veh.Update();*/
                     }
                     Location = new Location(await vehicle.GetPositionAsync(), await vehicle.GetRotationAsync());
                 }
@@ -57,12 +59,11 @@ namespace ResurrectionRP_Server.Entities.Players
                     Location = new Location(await Client.GetPositionAsync(), await Client.GetRotationAsync());
                 }
 
-
-
+                /*
                 if (HouseManager.IsInHouse(Client))
                 {
                     Location = new Location(HouseManager.GetHouse(Client).Position, new Vector3());
-                }
+                }*/
 
                 if (!Client.Exists)
                     return;
@@ -79,8 +80,8 @@ namespace ResurrectionRP_Server.Entities.Players
             }
             catch (Exception ex)
             {
-                MP.Logger.Error("UpdatePlayerInfo", ex);
+                Alt.Server.LogError("UpdatePlayerInfo: " + ex);
             }
-        } **/
+        } 
     }
 }

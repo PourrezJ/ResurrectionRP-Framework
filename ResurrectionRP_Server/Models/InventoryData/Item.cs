@@ -1,13 +1,9 @@
-﻿using AltV.Net;
-using AltV.Net.Async;
-using AltV.Net.Elements.Entities;
+﻿using AltV.Net.Elements.Entities;
 using Newtonsoft.Json;
-using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Models.InventoryData;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Models
@@ -75,7 +71,7 @@ namespace ResurrectionRP_Server.Models
         {
             return Task.CompletedTask;
         }
-
+        /*
         public virtual async Task<bool> Drop(IPlayer c, int quantite, int slot, OutfitInventory inventory)
         {
             if (!isDropable)
@@ -133,17 +129,17 @@ namespace ResurrectionRP_Server.Models
                 }
             }
         }
-
+        */
         public virtual Task Give(IPlayer sender, IPlayer recever, int quantite)
         {
             return Task.CompletedTask;
         }
-
+        
         public void SetData(string key, object value) => Variables.Add(key, value);
         public dynamic GetData(string key) => Variables.GetValueOrDefault(key);
         public void ResetData(string key) => Variables[key] = null;
         public bool HasData(string key) => Variables.ContainsKey(key);
-
+        
         object ICloneable.Clone()
         {
             return MemberwiseClone();

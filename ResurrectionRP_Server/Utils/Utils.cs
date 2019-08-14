@@ -34,11 +34,5 @@ namespace ResurrectionRP_Server.Utils
         }
 
         public static void StopTimer(System.Timers.Timer timer) => timer.Stop();
-
-        /*
-        public static async Task SendNotificationPictureToALL(string message, CharPicture picture, bool flash, int icontype, string title, string description)
-        {
-            await MP.Players.CallAsync("SetNotificationMessage", message, picture.ToString(), flash, icontype, title, description);
-        }*/
     }
 }

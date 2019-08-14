@@ -1,6 +1,5 @@
 ﻿using AltV.Net.Enums;
 using ResurrectionRP.Server;
-using ResurrectionRP_Server.Models.InventoryData.Items;
 using System.Collections.Generic;
 
 namespace ResurrectionRP_Server.Models.InventoryData
@@ -25,6 +24,7 @@ namespace ResurrectionRP_Server.Models.InventoryData
         {
             return new List<Item>()
                 {
+                /*
                     new Eat(ItemID.Lasagnes, "Lasagnes", "Les lasagnes de la Mama!", 1 , true, true, true, food:15),
                     new Eat(ItemID.Fromage, "Fromage de chèvre", "Fromage de chèvre bien odorant", 1, true, true,true, food:15, isDockable: true, itemPrice: 35, icon:"cheese"),
                     new Eat(ItemID.Sardine, "Sardine", "La sardine est une espèce de poisson de la famille des Clupeidae", 1, true, true,true, food:2, isDockable: true, itemPrice: 4.20, icon:"sardine"),
@@ -139,7 +139,7 @@ namespace ResurrectionRP_Server.Models.InventoryData
                     new Unusable(ItemID.BOrange, "Pochon d'Orange Bud", "Un pochon de 25gr d'Orange Bud", 1, icon:"weed"),
                     new Unusable(ItemID.BWhiteWidow, "Pochon de White Widow", "Un pochon de 25gr de White Widow", icon:"weed"),
 
-                    new LockPick(ItemID.LockPick, "Kit de crochetage", "", 1, true, false, true, true)
+                    new LockPick(ItemID.LockPick, "Kit de crochetage", "", 1, true, false, true, true)*/
             };
         }
     }

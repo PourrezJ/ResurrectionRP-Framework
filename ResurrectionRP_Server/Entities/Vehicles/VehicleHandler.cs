@@ -111,7 +111,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             VehicleSync.FreezePosition = freeze;
 
-            Plate = (string.IsNullOrEmpty(plate)) ? VehicleManager.GenerateRandomPlate() : plate;
+            //Plate = (string.IsNullOrEmpty(plate)) ? VehicleManager.GenerateRandomPlate() : plate;
 
             Locked = locked;
             Owner = owner;
@@ -121,10 +121,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             SpawnVeh = spawnVeh;
             Dimension = dimension;
-
+            /*
             if (inventory != null)
                 Inventory = inventory;
-
+                */
             if (OilTank == null)
                 OilTank = new OilTank();
 

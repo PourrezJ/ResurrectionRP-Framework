@@ -80,7 +80,7 @@ namespace ResurrectionRP_Server.Models
             if (AddItem(item, quantity))
             {
                 if (message)
-                    await client.NotifyAsync("Vous venez d'ajouter " + quantity + " " + item.name + " dans l'inventaire");
+                   // await client.NotifyAsync("Vous venez d'ajouter " + quantity + " " + item.name + " dans l'inventaire");
                 await PlayerManager.GetPlayerByClient(client)?.UpdatePlayerInfo();
                 return true;
             }

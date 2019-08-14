@@ -8,6 +8,7 @@ let inLogin = false;
 export function init() {
     alt.onServer('OpenLogin', (args: any[]) => {
         try {
+            alt.emit("FadeIn", 0);
             let social = game.getSocialclubNickname();
             game.setPlayerInvincible(game.playerId(), true);
             game.displayRadar(false);
@@ -16,7 +17,6 @@ export function init() {
             alt.toggleGameControls(false);
             alt.showCursor(true);
             inLogin = true;
-            game.setEntityAlpha(alt.Player.local.scriptID, 0, 0)
 
             // Camera
             var cameras: any[] = [
@@ -31,7 +31,6 @@ export function init() {
                 return Math.floor(Math.random() * Math.floor(max));
             }
             var _cam = cameras[getRandomInt(5)];
-            game.setEntityCoords(alt.Player.local.scriptID, _cam.Pos.x, _cam.Pos.y, 0, true, true, false, false);
             _cam.SetActiveCamera(true);
 
             let browser = new alt.WebView('http://resources/resurrectionrp/client/cef/login/index.html')
@@ -43,9 +42,13 @@ export function init() {
             alt.onServer("LoginOK", (arg: boolean) => {
                 alt.log("Connexion acceptée, en cours.");
                 game.doScreenFadeOut(0);
+                game.setPlayerInvincible(game.playerId(), false);
+                game.displayRadar(true);
+                game.displayHud(true);
+                alt.emit('toggleChat');
+                
                 inLogin = false;
                 alt.showCursor(false);
-                game.setPedGravity(alt.Player.local.scriptID, true);
 
                 cameras.forEach((cam) => cam.SetActiveCamera(false));
                 alt.toggleGameControls(true);
@@ -55,6 +58,7 @@ export function init() {
                 game.destroyAllCams(true);
 
                 alt.emitServer("LogPlayer");
+                
             });
 
             alt.onServer("LoginError", () => {

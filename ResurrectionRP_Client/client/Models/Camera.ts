@@ -25,6 +25,8 @@ export class Camera {
         game.renderScriptCams(active, false, 0, true, false)
         if (active)
             game.setFocusArea(this.Pos.x, this.Pos.y, this.Pos.z, 100, 100, 1000);
+        else
+            game.clearFocus();
     }
     Destroy() {
         this.SetActiveCamera(false);

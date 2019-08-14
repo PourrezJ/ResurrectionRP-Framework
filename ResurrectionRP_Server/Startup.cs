@@ -55,7 +55,8 @@ namespace ResurrectionRP_Server
             while (gamemode.PlayerManager == null)
                 await Task.Delay(50);
 
-            await gamemode.PlayerManager.Events_PlayerJoin(player, reason);
+            player.Emit("GetSocialClub", "Events_PlayerJoin");
+            //await gamemode.PlayerManager.Events_PlayerJoin(player, reason);
         }
 
         public override void OnStop()

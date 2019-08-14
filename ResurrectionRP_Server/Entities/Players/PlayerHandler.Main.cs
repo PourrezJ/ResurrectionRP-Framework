@@ -3,6 +3,8 @@ using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Concurrent;
 using System.Numerics;
 using System.Threading.Tasks;
+using AltV.Net;
+using AltV.Net.Data;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 
@@ -83,7 +85,6 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public async Task LoadPlayer(IPlayer client, bool firstspawn = false)
         {
-            Client = client;
             client.SetData("PlayerHandler", this);
             if (PlayerHandlerList.TryAdd(client, this))
             {
@@ -120,10 +121,10 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                 }**/
 
-                await AltAsync.Do(() =>
+                await AltAsync.Do( async () =>
                 {
-                    IP = Client.Ip;
-                    IsOnline = true;
+                    //IP = Client.Ip;
+                    //IsOnline = true;
                     /**
                     Client.Call
                     (
@@ -142,14 +143,14 @@ namespace ResurrectionRP_Server.Entities.Players
                         JsonConvert.SerializeObject(Location)
                     ); **/
 
-
-                    Client.Spawn(Location.Pos);
+                    client.Model = (uint)AltV.Net.Enums.PedModel.FreemodeMale01;
                     //Character.ApplyCharacter(Client);
-                    Client.SetDimensionAsync(GameMode.Instance.GlobalDimension);
-                    Client.SetHealthAsync((ushort) Health);
+                    client.Spawn(Location.Pos, 0);
+                    await client.SetDimensionAsync(GameMode.Instance.GlobalDimension);
+                    await client.SetHealthAsync((ushort)(Health + 100));
+                    await client.SetArmorAsync(59);
                     
-                    //Client.SetAlpha(255);
-                    //Client.Call("FadeIn", 0);
+                    client.Emit("FadeIn", 0);
 
                 });
 

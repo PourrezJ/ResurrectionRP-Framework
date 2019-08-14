@@ -28,7 +28,7 @@ namespace ResurrectionRP_Server
         public static bool IsLinux { get; private set; }
 
         [BsonIgnore]
-        public bool IsDebug { get; private set; } = false;
+        public bool IsDebug { get; private set; } = true;
 
         [BsonIgnore]
         public bool ServerLoaded = false;
@@ -45,8 +45,6 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public List<IPlayer> PlayerList = new List<IPlayer>();
 
-        [BsonIgnore]
-        public List<Models.Social> SocialList = new List<Models.Social>();
 
         [BsonIgnore]
         public short GlobalDimension = 3;
@@ -105,6 +103,10 @@ namespace ResurrectionRP_Server
             Alt.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
             Chat.Initialize();
             Chat.RegisterCmd("veh", CommandVeh);
+            Chat.RegisterCmd("coords", (IPlayer player, string[] args) =>
+            {
+                Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z);
+            });
             ServerLoaded = true;
         }
 
@@ -114,9 +116,6 @@ namespace ResurrectionRP_Server
             if (PlayerList.Find(b => b == player) == null)
                 PlayerList.Add(player);
             Alt.Log($"==> {player.Name} has connected.");
-            Chat.Broadcast($"==> {player.Name} has joined.");
-            player.Model = (uint)AltV.Net.Enums.PedModel.FreemodeMale01;
-            player.Spawn(new Position(813, -279, 66), 1000);
 
 
         }
@@ -126,7 +125,6 @@ namespace ResurrectionRP_Server
             if (PlayerList.Find(b => b == player) != null)
                 PlayerList.Remove(player);
             Alt.Log($"==> {player.Name} has disconnected.");
-            Chat.Broadcast($"==> {player.Name} has joined.");
 
         }
 

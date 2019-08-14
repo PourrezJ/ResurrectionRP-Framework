@@ -31,9 +31,10 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Constructor
         public PlayerManager()
         {
-            Alt.OnClient("WhiteListCallback", WhiteListCallback);
 
             Alt.OnClient("SendLogin", SendLogin );
+            Alt.OnClient("LogPlayer", LogPlayer);
+            Alt.OnClient("Events_PlayerJoin", Events_PlayerJoin);
 
             AltAsync.OnPlayerDead += Events_PlayerDeath;
 
@@ -116,59 +117,21 @@ namespace ResurrectionRP_Server.Entities.Players
                 //await GetPlayerByClient(player)?.SetDead(true); // For fix client.Dead is doesn't work actually 
         }
 
-        public async void WhiteListCallback(IPlayer player, object[] args)
-        {
-            string socialclub = args[0].ToString();
-
-            Models.Social soc = GameMode.Instance.SocialList.Find(b => (b.social == socialclub && b.socialId == 0));
-            if (soc == null)
-                GameMode.Instance.SocialList.Add(new Models.Social(socialclub, player.SocialClubId));
-            else if (soc.socialId == 0)
-                soc.socialId = player.SocialClubId;
-
-            if (await IsBan(player, socialclub))
-            {
-                await player.KickAsync("Vous êtes bannis!");
-                return;
-            }
-            Models.Whitelist whitelist = await Models.Whitelist.GetWhitelistFromAPI(socialclub);
-            
-            if (whitelist != null && whitelist.Whitelisted)
-            {
-                if (whitelist.IsBan)
-                {
-                    if (DateTime.Now > whitelist.EndBanTime)
-                    {
-                        whitelist.IsBan = false;
-                        await player.EmitAsync("OpenLogin", args[0]);
-                        return;
-                    }
-
-                    string _kickMessage = $"Vous êtes ban du serveur jusqu'au {whitelist.EndBanTime.ToShortDateString()}";
-                    await player.KickAsync(_kickMessage);
-                }
-                else
-                {
-                     player.Emit("OpenLogin", socialclub);
-                }
-            }
-            else
-            {
-                await player.EmitAsync("FadeIn", 0);
-                string _kickMessage = "Vous n'êtes pas whitelist sur le serveur";
-                await player.KickAsync(_kickMessage);
-            }
-        }
-        public async Task Events_PlayerJoin(IPlayer player, string reason)
+        public async void Events_PlayerJoin(IPlayer player, object[] args)
         {
 
             if (!player.Exists)
                 return;
 
+            string socialclub = args[0].ToString();
+
+            player.SetData("SocialClub", socialclub);
+            player.Model = (uint)AltV.Net.Enums.PedModel.FreemodeMale01;
+            player.Spawn(new Vector3(-1072.886f, -2729.607f, 0.8148939f), 0);
 
             if (GameMode.ServerLock)
             {
-                await player.EmitAsync("fadeIn", 0);
+                await player.EmitAsync("FadeIn", 0);
                 await player.KickAsync("Serveur Lock!");
             }
 
@@ -176,9 +139,8 @@ namespace ResurrectionRP_Server.Entities.Players
             while (!GameMode.Instance.ServerLoaded)
                 await Task.Delay(100);
 
-
             await player.SetDimensionAsync(Dimension++);
-            if (!GameMode.Instance.IsDebug || 1==1)
+            if (!GameMode.Instance.IsDebug)
             {
                 try
                 {
@@ -189,7 +151,38 @@ namespace ResurrectionRP_Server.Entities.Players
 
                         return;
                     }
-                    player.Emit("GetSocialClub", "WhiteListCallback");
+                    if (await IsBan(player, socialclub))
+                    {
+                        await player.KickAsync("Vous êtes bannis!");
+                        return;
+                    }
+                    Models.Whitelist whitelist = await Models.Whitelist.GetWhitelistFromAPI(socialclub);
+
+                    if (whitelist != null && whitelist.Whitelisted)
+                    {
+                        if (whitelist.IsBan)
+                        {
+                            if (DateTime.Now > whitelist.EndBanTime)
+                            {
+                                whitelist.IsBan = false;
+                                await player.EmitAsync("OpenLogin", args[0]);
+                                return;
+                            }
+
+                            string _kickMessage = $"Vous êtes ban du serveur jusqu'au {whitelist.EndBanTime.ToShortDateString()}";
+                            await player.KickAsync(_kickMessage);
+                        }
+                        else
+                        {
+                            player.Emit("OpenLogin", socialclub);
+                        }
+                    }
+                    else
+                    {
+                        await player.EmitAsync("FadeIn", 0);
+                        string _kickMessage = "Vous n'êtes pas whitelist sur le serveur";
+                        await player.KickAsync(_kickMessage);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -200,7 +193,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
             else
             {
-                //await ConnectPlayer(player);
+                await ConnectPlayer(player);
             }
         }
         #endregion
@@ -235,6 +228,30 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
             }
         }
+        private async void LogPlayer(IPlayer client, object[] args)
+        {
+            if (!client.Exists)
+                return;
+
+            await ConnectPlayer(client);
+        }
+        public static async Task ConnectPlayer(IPlayer client)
+        {
+            if (await PlayerHandlerExist(client))
+            {
+                await client.EmitAsync("FadeOut",0);
+                client.GetData("SocialClub", out string social);
+                PlayerHandler player = await GetPlayerHandlerDatabase( social );
+                player.LastUpdate = DateTime.Now;
+                await player.LoadPlayer(client);
+            }
+            else
+            {
+                Alt.Log("LE CREATEUR N'EST PAS ENCORE FAIT OMG");
+                //await OpenCreator(client);
+            }
+        }
+
         #endregion
 
         #region Methods 
@@ -245,13 +262,14 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             try
             {
-                var social = GameMode.Instance.SocialList.Find(b => b.socialId == player.SocialClubId)?.social;
-
+                player.GetData("SocialClub", out string social);
+                
                 return await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == social.ToLower()).AnyAsync();
             }
             catch (Exception ex)
             {
                 //await player.SendNotificationError("Erreur avec votre compte, contactez un membre du staff.");
+                Alt.Server.LogError("PlayerHandlerExist" + ex.Data);
                 Alt.Server.LogError("PlayerHandlerExist" + ex.Data);
             }
             return false;

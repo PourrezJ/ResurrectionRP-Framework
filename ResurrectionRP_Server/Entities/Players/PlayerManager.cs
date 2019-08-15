@@ -35,6 +35,7 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.OnClient("SendLogin", SendLogin );
             Alt.OnClient("LogPlayer", LogPlayer);
             Alt.OnClient("Events_PlayerJoin", Events_PlayerJoin);
+            Alt.OnClient("UpdateHungerThirst", UpdateHungerThirst);
 
             AltAsync.OnPlayerDead += Events_PlayerDeath;
 
@@ -199,6 +200,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region RemoteEvents
+
         private async void SendLogin(IPlayer client, object[] args)
         {
             if (!client.Exists)
@@ -226,6 +228,19 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 await client.EmitAsync("LoginError", "");
                 return;
+            }
+        }
+        private async void UpdateHungerThirst(IPlayer client, object[] arg)
+        {
+            if (!client.Exists)
+                return;
+
+            PlayerHandler ph = GetPlayerByClient(client);
+            if (ph != null)
+            {
+                ph.Hunger = Convert.ToInt32(arg[0]);
+                ph.Thirst = Convert.ToInt32(arg[1]);
+                await ph.UpdatePlayerInfo();
             }
         }
         private async void LogPlayer(IPlayer client, object[] args)

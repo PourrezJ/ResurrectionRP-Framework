@@ -1,0 +1,247 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,700,900');
+
+body {
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    font-family: 'Poppins';
+}
+
+#right {
+  position: absolute;
+  right: 40px;
+  bottom: 35px;
+}
+
+#jauge {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#jauge img {
+  z-index: 999;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#jauge span {
+  position: absolute;
+  top: -15px;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0px 1px 1px rgb(0, 0, 0);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.water, .burger {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  display: inline-block;
+}
+
+.water-on {
+  background: url('../img/water.png');
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  height: 100%;
+  max-height: 46px;
+  width: 46px;
+  position: absolute;
+  bottom: 0;
+  z-index: 800;
+}
+
+.water-off {
+  background: url('../img/jauge-icon.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 46px;
+  width: 46px;
+  position: absolute;
+  bottom: 0;
+}
+
+.burger-on {
+  background: url('../img/burger.png');
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  height: 100%;
+  max-height: 46px;
+  width: 46px;
+  position: absolute;
+  bottom: 0;
+  z-index: 800;
+}
+
+.burger-off {
+  background: url('../img/jauge-icon.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 46px;
+  width: 46px;
+  position: absolute;
+  bottom: 0;
+}
+
+.money {
+  display: inline-block;
+  vertical-align: middle;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  background: url('../img/bg-money.png');
+  background-repeat: no-repeat;
+  background-position: right;
+  border-radius: 2px;
+  padding: 1px 5px;
+  margin-right: 5px;
+  line-height: 36px;
+  margin-top: -5px;
+  width: 90px;
+  height: 30px;
+  text-align: right;
+}
+
+.money span {
+  color: #80cc62;
+  margin-left: 1px;
+  padding-right: 1px;
+}
+
+/* .burger img {
+  animation: shake 1s infinite;
+} */
+
+@keyframes shake {
+  0% {
+    transform: translate(-50%, -50%);
+  }
+  10% {
+    transform: translate(-65%, -50%);
+  }
+  20% {
+    transform: translate(-30%, -50%);
+  }
+  30% {
+    transform: translate(-65%, -50%);
+  }
+  40% {
+    transform: translate(-35%, -50%);
+  }
+  50% {
+    transform: translate(-50%, -50%);
+  }
+  60% {
+    transform: translate(-50%, -50%);
+  }
+  70% {
+    transform: translate(-50%, -50%);
+  }
+  80% {
+    transform: translate(-50%, -50%);
+  }
+  90% {
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    transform: translate(-50%, -50%);
+  }
+}
+
+#left {
+  position: absolute;
+  left: 17%;
+  bottom: 7%;
+}
+
+#speak {
+  font-size: 18px;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 0px 1px 1px rgb(0, 0, 0);
+}
+
+.listening {
+  width: 30px;
+  opacity: 0;
+}
+
+.wave {
+  animation-name: pulse;
+  animation-duration: 1.2s;
+  animation-iteration-count: infinite;
+  height: 4px;
+  y: 11px;
+  fill: #fff;
+}
+
+#wave-1, #wave-1-2 {
+  animation-delay: 0.2s
+}
+
+#wave-2, #wave-2-2 {
+  animation-delay: 1s
+}
+
+#wave-3, #wave-3-2 {
+  animation-delay: 0.6s
+}
+
+#wave-5, #wave-5-2 {
+  animation-delay: 0.4s;
+}
+
+#wave-4, #wave-4-2 {
+  animation-delay: 0.8s;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    height: 4px;
+    y: 11px;
+  }
+  50% {
+    height: 26px;
+    y: 0px;
+  }
+}
+
+#speak.chuchoter span {
+  color: #191ecd;
+}
+
+#speak.parler span {
+  color: #fff;
+}
+
+#speak.crier span {
+  color: #dd1c1c;
+}
+
+#speak.mute span {
+    color: #dd1c1c;
+}
+
+.progress {
+    margin: 20px;
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.progress > svg {
+    height: 100%;
+    display: block;
+}
+
+.progress .progress__label {
+    font-size: 16px;
+}

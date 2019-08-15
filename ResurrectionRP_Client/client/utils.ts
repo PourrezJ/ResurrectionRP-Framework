@@ -19,6 +19,9 @@ export function initialize() {
     alt.onServer('Display_Help', (text, time) => {
         new HelpText(text, time);
     });
+    alt.on('Display_Help', (text, time) => {
+        new HelpText(text, time);
+    });
 
     alt.onServer('Display_subtitle', (text, time) => {
         new Subtitle(text, time);

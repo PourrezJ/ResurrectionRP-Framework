@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
+using VehicleInfoLoader.Data;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
@@ -47,6 +48,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 vehicle = value;
             }
         }
+
+        [BsonIgnore, JsonIgnore]
+        public VehicleManifest VehicleManifest;
 
         [BsonRepresentation(BsonType.Int32, AllowOverflow = true)]
         public uint Model { get; private set; }
@@ -194,7 +198,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     VehicleSync.Location = location;
                 }
 
-                //VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
+                VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
 
                 GameMode.Instance.VehicleManager.VehicleHandlerList.TryAdd(Vehicle, this);
             });

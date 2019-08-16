@@ -3,6 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Concurrent;
 using System.Numerics;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using AltV.Net;
 using AltV.Net.Data;
@@ -45,12 +46,12 @@ namespace ResurrectionRP_Server.Entities.Players
         }
         public Models.Identite Identite { get; set; }
         public int TimeSpent { get; set; }
-        /**
-        public List<VehicleKey> ListVehicleKey { get; private set; }
-    = new List<VehicleKey>();
+        
+        public List<Models.VehicleKey> ListVehicleKey { get; private set; }
+                = new List<Models.VehicleKey>();
 
-        public List<License> Licenses { get; set; }
-            = new List<License>();*/
+        public List<Models.License> Licenses { get; set; }
+            = new List<Models.License>();
 
         [BsonIgnore]
         public Models.Clothings Clothing { get; set; }
@@ -66,7 +67,7 @@ namespace ResurrectionRP_Server.Entities.Players
             = new Models.Location(new Vector3(), new Vector3()); // Default spawn
 
         public Models.PlayerCustomization Character { get; set; }
-        /**public PlayerCustomization Character { get; set; }
+        /**
         public Inventory PocketInventory { get; set; } = new Inventory(6, 4);
 
         [BsonIgnore]
@@ -74,7 +75,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public OutfitInventory OutfitInventory { get; set; } = new OutfitInventory();**/
         public double Money { get; private set; }
-        //public BankAccount BankAccount { get; set; }
+        public Bank.BankAccount BankAccount { get; set; }
         public int Hunger { get; set; } = 100;
         public int Thirst { get; set; } = 100;
         public bool Jailed { get; private set; } = false;
@@ -121,7 +122,7 @@ namespace ResurrectionRP_Server.Entities.Players
             client.SetData("PlayerHandler", this);
             if (PlayerHandlerList.TryAdd(client, this))
             {
-                //if (BankAccount == null) BankAccount = new BankAccount(AccountType.Personnal, await BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
+                if (BankAccount == null) BankAccount = new Bank.BankAccount(Bank.AccountType.Personnal, await Bank.BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
 
                 if (firstspawn)
                 {
@@ -183,9 +184,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     Client.Emit("FadeIn", 0);
                 });
 
-               /** await UpdateClothing();
+               // await UpdateClothing();
 
-                if (PlayerSync.IsCuff)
+                /**if (PlayerSync.IsCuff)
                     await SetCuff(true);
 
                 PlayerSync.IsDead = (Health <= 0);
@@ -217,8 +218,8 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             if (somme < 0) return;
             Money += somme;
-            //Client?.CallAsync(Events.UpdateMoneyHUD, Convert.ToSingle(Money));
-            //await UpdatePlayerInfo();
+            Client?.Emit(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money));
+            await UpdatePlayerInfo();
         }
 
         #endregion

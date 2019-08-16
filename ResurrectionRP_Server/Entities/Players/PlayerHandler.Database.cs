@@ -48,9 +48,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (await vehicle.GetDriverAsync() == Client)
                     {
                         var veh = vehicle.GetVehicleHandler();
-                        /*
+                        
                         if (veh != null)
-                            await veh.Update();*/
+                            await veh.Update();
                     }
                     Location = new Location(await vehicle.GetPositionAsync(), await vehicle.GetRotationAsync());
                 }

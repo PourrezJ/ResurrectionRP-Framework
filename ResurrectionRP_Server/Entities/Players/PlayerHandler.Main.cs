@@ -11,6 +11,8 @@ using AltV.Net.Elements.Entities;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
+
+
     [BsonIgnoreExtraElements]
     public partial class PlayerHandler
     {
@@ -48,10 +50,10 @@ namespace ResurrectionRP_Server.Entities.Players
     = new List<VehicleKey>();
 
         public List<License> Licenses { get; set; }
-            = new List<License>();
+            = new List<License>();*/
 
         [BsonIgnore]
-        public Clothings Clothing { get; set; }**/
+        public Models.Clothings Clothing { get; set; }
         public Models.Animation[] AnimSettings { get; set; }
             = new Models.Animation[9];
         public string IP { get; set; }
@@ -181,7 +183,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     Client.Emit("FadeIn", 0);
                 });
 
-                /**await UpdateClothing();
+               /** await UpdateClothing();
 
                 if (PlayerSync.IsCuff)
                     await SetCuff(true);
@@ -220,6 +222,12 @@ namespace ResurrectionRP_Server.Entities.Players
         }
 
         #endregion
+
+        #endregion
+
+
+        #region Inventory
+
 
         #endregion
     }

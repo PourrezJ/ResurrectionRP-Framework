@@ -117,10 +117,13 @@ export class Game {
                 if (this.Hud.Browser != null)
                     this.Hud.Browser.emit("setHUD", this.Survival.Hunger,
                         this.Survival.Thirst,
-                        0, //Salty is talking
+                        0, //Salty is talking SaltyClient.Voice.IsTalking
                         0, //Salty range
+/*                                        var range = "Parler";
+                if (RAGE.Elements.Player.LocalPlayer.GetSharedData(SaltyShared.SharedData.Voice_VoiceRange) != null)
+                    range = (string)RAGE.Elements.Player.LocalPlayer.GetSharedData(SaltyShared.SharedData.Voice_VoiceRange);*/
                         this.Hud.Money,
-                        0   //Is mic muted
+                        0   //Is mic muted SaltyClient.Voice.IsMicrophoneMuted
                     );
             }
         });

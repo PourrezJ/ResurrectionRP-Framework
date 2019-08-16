@@ -6,6 +6,7 @@ import * as utils from 'client/utils';
 import * as login from 'client/login/Login';
 import * as PlayerCustomization from 'client/player/PlayerCustomization';
 import { Game } from 'client/player/Game';
+import { OpenCharCreator } from 'client/Creator/Creator';
 
 chat.initialize()
 speedometer.initialize();
@@ -29,4 +30,8 @@ alt.onServer("PlayerInitialised", (
     PlayerCustomization.init();
     var GameClass: Game = new Game(StaffRank, IdentiteName, Money, Thirst, Hunger, AnimSettings, Time, Weather, WeatherWind, WeatherWindDirection, isDebug, Location);
 
+});
+
+alt.onServer('OpenCreator', () => {
+    OpenCharCreator();
 });

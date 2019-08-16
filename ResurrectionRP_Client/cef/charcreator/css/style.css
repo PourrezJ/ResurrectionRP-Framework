@@ -1,0 +1,637 @@
+/*  style.css of character_creator */
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,900');
+
+body {
+    font-family: 'Roboto', helvetica, arial;
+    margin: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background: none;
+    color:#fff;
+}
+
+a {
+  text-decoration: none;
+}
+
+li {
+  list-style: none;
+  padding: 0;
+}
+
+input{
+    color:#000;
+}
+
+.content {
+    width: 100%;
+    height: 100vh;
+    background-image: -webkit-linear-gradient(left, rgba(255, 42, 0, 0.788235294117647), transparent 80%);
+    padding: 30px 50px;
+    position: relative;
+}
+
+.content.pass {
+  background-image: none;
+}
+
+.precedent {
+  opacity: 0;
+  -webkit-transition: all 0.7s ease-in-out;
+}
+
+.precedent a {
+  cursor: pointer;
+  color: #fff;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.48);
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.precedent:hover a {
+  text-decoration: none;
+}
+
+.precedent i {
+  margin-right: 10px;
+  -webkit-transition: all 0.3s ease-in-out;
+}
+
+.precedent:hover i {
+  transform: translateX(-7px);
+}
+
+/* character_creator */
+#character_creator {
+  z-index: 10;
+  top: 0;
+  position: absolute;
+}
+
+#character_creator #navigation li {
+  transform: translateY(1000%);
+}
+
+#character_creator .content {
+  background-image: initial;
+}
+
+a.next.perso, a.next.pass {
+  display: none;
+}
+
+#backup a {
+  color: #fff;
+  font-size: 16px;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.48);
+  -webkit-transition: all 0.3s ease-in-out;
+}
+
+#backup a:hover i {
+  transform: translateX(-5px);
+}
+
+#backup a:hover span {
+  transform: translateX(5px);
+}
+
+#backup a span {
+  display: inline-block;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+#backup i {
+  margin-right: 12px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+#navigation {
+    position: absolute;
+    left: 50px;
+    bottom: 30px;
+}
+
+#options {
+    position: absolute;
+    text-align: center;
+    left: 460px;
+    background: rgba(0,0,0,0.85);
+    padding: 25px;
+    width: 450px;
+    top: 350px;
+    border-radius: 4px;
+    padding-bottom: 40px;
+}
+
+.icon-close {
+    float: right;
+    margin-top: -15px;
+    margin-right: -15px;
+}
+
+#options h3:first-of-type {
+    margin-top: 10px;
+}
+
+#options h3 {
+    margin-top: 30px;
+}
+
+.labelHolder {
+    display: inline-block;
+    width: 250px;
+    text-align: center;
+    line-height: 28px;
+    vertical-align: bottom;
+}
+
+.fas, .far {
+    transition: color 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.fas:not(.fa-disabled):hover, .far:not(.fa-disabled):hover {
+    color: #ff2a00;
+}
+
+.fa-disabled {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+nav li.menu {
+  background: #ffd0c5;
+  border-radius: 4px;
+  width: 367px;
+  padding: 18px 20px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 900;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #9f7268;
+  cursor: pointer;
+}
+
+nav li.menu.svg-2x {
+    padding: 8px 11px;
+}
+
+nav li.menu svg {
+    width: 29px;
+    height: 29px;
+    vertical-align: middle;
+}
+
+nav li.menu.svg-2x svg {
+    width: 50px;
+    height: 50px;
+}
+
+nav li.menu svg path {
+  fill: #9f7268;
+}
+
+nav li.menu span {
+  height: 30px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 30px;
+  margin-left: 10px;
+}
+
+nav li.active, nav li:hover {
+    color: #fff;
+    background: #000;
+    box-shadow: 0px 0px 51px 0px rgba(0, 0, 0, 1);
+    -webkit-box-shadow: 0px 0px 50px 0px rgb(0,0,0);
+}
+
+nav li.active svg path, nav li:hover svg path {
+  fill: #fff;
+}
+
+nav li.active ul {
+  position: absolute;
+  right: -400px;
+  background: black;
+  padding: 0;
+  transform: translateY(-85%);
+  padding: 25px;
+}
+
+nav li.active ul li {
+  width: 275px;
+}
+
+li.active.menu ul {
+  width: 316px;
+} ul.options {
+  display: none;
+} .select {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  font: normal 11px/22px Arial, Sans-Serif;
+  color: black;
+  width: 90%;
+  margin-bottom: 30px;
+  padding: 15px;
+} .styledSelect {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #2c2c2c;
+  line-height: 50px;
+  padding-left: 20px;
+  font-size: 12px;
+  color: #fff;
+  font-weight: normal;
+} .styledSelect:after {
+  content: "";
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-color: #fff transparent transparent transparent;
+  position: absolute;
+  top: 23px;
+  right: 20px;
+} .styledSelect:active, .styledSelect.active {
+  background-color: #353535;
+  color: white;
+} .select:last-child {
+  margin-bottom: 0;
+} nav li.active ul ul.options {
+  display: none;
+  position: absolute;
+  top: 125px;
+  width: 100%;
+  right: 0;
+  left: 0;
+  z-index: 999;
+  margin: 0 0;
+  padding: 0 0;
+  list-style: none;
+  background-color: #212121;
+} .options li {
+  margin: 0 0;
+  padding: 10px 19px;
+  color: #777777;
+  font-size: 12px;
+  border-top: 1px solid #1d1d1d;
+} .options li:hover {
+  background-color: #353535;
+  color: white;
+} li.active.menu ul input[type="range"] {
+  width: 99%;
+} input.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 60px;
+    background: #fff;
+    cursor: pointer;
+}
+.slider {
+    -webkit-appearance: none;
+    display: inline-block !important;
+    /*height: 5px;
+  background: #585858;*/
+    outline: none;
+    background-image: -webkit-linear-gradient(left, rgb(255, 42, 0),#464646);
+    border-radius: 13px;
+    padding: 0;
+}
+
+.slider.col-md-8 {
+    width: 62.66666667% !important;
+}
+
+.silder.col-md-12 {
+    width: 100% !important;
+}
+
+.next {
+  position: fixed;
+  right: 50px;
+  bottom: 30px;
+} .logo {
+  position: absolute;
+  right: 50px;
+  top: 30px;
+} .logo svg {
+  width: 48px;
+  opacity: .5;
+} .logo svg path {
+  fill: #fff;
+}
+
+a.next {
+  font-family: 'Roboto', helvetica, arial;
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 900;
+  background: #000;
+  padding: 15px 40px;
+  text-decoration: none;
+  border-radius: 60px;
+  cursor: pointer;
+}
+a.next:hover {
+  background: #ff3f15;
+}
+
+.passux {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  background: url("../img/pass-ux.png") top center no-repeat;
+  width: 1033px;
+  height: 839px;
+  display: block;
+} .passux #write {
+  position: relative;
+  left: 380px;
+  top: 355px;
+} .passux input {
+  display: block;
+  margin-bottom: 30px;
+  border: 0;
+  padding: 5px;
+  background: rgba(255,255,255,0.3);
+  font-family: 'Roboto', helvetica, arial;
+  font-size: 16px;
+  color: #000;
+  font-weight: 900;
+  outline: none;
+} .passux .sexe {
+  font-weight: 900;
+  width: 48px;
+  display: inline-block;
+}
+.passux input.date {
+  width: 150px;
+  display: inline-block;
+  margin-left: 112px;
+}
+.passux input:read-only{
+    background: transparent;
+}
+
+/*Switch input*/
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+    /* Hide default HTML checkbox */
+    .switch input {
+        display: none;
+    }
+
+/* The slider */
+.switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #2196F3;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .switch-slider {
+    background-color: #d8418f;
+}
+
+input:focus + .switch-slider {
+    box-shadow: 0 0 1px #d8418f;
+}
+
+input:checked + .switch-slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+input[type=range] {
+  height: 8px;
+  margin-top: 10px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  background: #fff;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+section h3 {
+  font-weight: bold;
+}
+
+h3 span {
+  font-weight: normal;
+}
+
+i.icon-close {
+  display: none;
+}
+
+.col-md-2 {
+  width: 18.666667%;
+}
+
+i.fa-angle-double-left {
+  font-size: 18px;
+  vertical-align: middle;
+  margin-top: -14px;
+  margin-right: 10px;
+}
+
+i.fa-angle-double-right {
+  font-size: 18px;
+  vertical-align: middle;
+  margin-top: -14px;
+  margin-left: 10px;
+}
+
+/* sexe */
+#sexe {
+  position: absolute;
+  top: 0;
+  z-index: 100;
+  height: 100vh;
+  width: 100%;
+}
+
+.sexe {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#sexe nav li.menu {
+  background: #ffd0c5;
+  border-radius: 4px;
+  width: 175px;
+  height: 190px;
+  padding: 40px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 900;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #9f7268;
+  cursor: pointer;
+  text-align: center;
+  float: left;
+  margin: 20px;
+}
+
+#sexe nav li.menu svg {
+  height: 60px!important;
+  width: auto;
+  vertical-align: middle;
+  margin-bottom: 20px;
+}
+
+#sexe nav li.menu span {
+  margin-left: 0;
+  display: block;
+}
+
+#sexe nav li.active, #sexe nav li:hover {
+    color: #fff;
+    background: #000;
+    box-shadow: 0px 0px 51px 0px rgba(0, 0, 0, 1);
+    -webkit-box-shadow: 0px 0px 50px 0px rgb(0,0,0);
+}
+
+#sexe nav li.active svg path, #sexe nav li:hover svg path {
+  fill: #fff;
+}
+
+.center-sexe {
+  position: absolute;
+  right: 50%;
+  top: 65%;
+  bottom: initial;
+  transform: translate(50%, 50%);
+}
+
+/* Character Editor */
+#parents {
+  margin-bottom: 25px;
+    height: 196px;
+}
+
+#parents .mother, #parents .father {
+    display: inline-block;
+    position: absolute;
+}
+
+#parents .mother {
+    left: 50px;
+}
+
+#parents .father {
+    right: 50px;
+}
+
+/* passport */
+#passport {
+  z-index: 5;
+  top: 0;
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+}
+
+#passport .passux {
+  transform: translateY(-100%);
+}
+
+#passport .sexe-choice {
+  position: absolute;
+  color: #000;
+  font-weight: bold;
+  padding-left: 3px;
+}
+
+#passport .age {
+    color: black;
+    display: inline-block;
+    position: absolute;
+    font-weight: bolder;
+    padding-top: 5px;
+    padding-left: 10px;
+}
+
+a.next.pass {
+  background: #aaf79e;
+  color: #437a3a;
+}
+
+a.next.pass svg {
+  fill: #437a3a;
+  width: 24px;
+  vertical-align: middle;
+  margin-right: 5px;
+  margin-top: -4px;
+}
+
+a.next.pass:hover {
+  background: #ff3f15;
+  color: #fff;
+}
+
+a.next.pass:hover svg {
+  fill: #fff;
+}
+
+/* Rounded sliders */
+.switch-slider.round {
+    border-radius: 34px;
+}
+
+.switch-slider.round:before {
+    border-radius: 50%;
+}
+
+@media all and (max-width: 1300px) {
+  #options {
+    top: initial;
+    bottom: 0;
+    overflow: auto;
+  }
+}

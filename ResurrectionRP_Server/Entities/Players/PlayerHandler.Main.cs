@@ -22,7 +22,6 @@ namespace ResurrectionRP_Server.Entities.Players
         [BsonId]
         public string PID { get; set; }
 
-
         [BsonIgnore]
         public IPlayer Client { get; private set; }
 
@@ -178,10 +177,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     Character.ApplyCharacter(Client);
                     Client.Dimension = GameMode.Instance.GlobalDimension;
                     Client.Health = (ushort)(Health + 100);
-
-                    
                     Client.Emit("FadeIn", 0);
-
                 });
 
                 /**await UpdateClothing();

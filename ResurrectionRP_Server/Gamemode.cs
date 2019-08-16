@@ -14,6 +14,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ResurrectionRP_Server;
 using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Utils.Extensions;
+using AltV.Net.Enums;
 
 namespace ResurrectionRP_Server
 {
@@ -48,7 +50,7 @@ namespace ResurrectionRP_Server
 
 
         [BsonIgnore]
-        public short GlobalDimension = 3;
+        public short GlobalDimension = short.MaxValue;
 
         public List<string> PlateList = new List<string>();
 
@@ -62,6 +64,7 @@ namespace ResurrectionRP_Server
         public static bool ServerLock;
 
         public Time Time { get; set; }
+        public bool ModeAutoFourriere { get; internal set; }
         #endregion
 
         #region Static
@@ -110,10 +113,13 @@ namespace ResurrectionRP_Server
             if (Time == null)
                 Time = new Time();
 
+            Alt.Server.LogInfo("Initialisations des controlleurs...");
+            await VehicleManager.LoadAllVehiclesActive();
+            Alt.Server.LogInfo("Initialisation des controlleurs terminé");
+
             Alt.OnPlayerConnect += OnPlayerConnected;
             Alt.OnPlayerDisconnect += OnPlayerDisconnected;
-            Alt.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
-            Alt.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
+
             Chat.Initialize();
             Chat.RegisterCmd("veh", CommandVeh);
             Chat.RegisterCmd("coords", (IPlayer player, string[] args) =>
@@ -141,15 +147,6 @@ namespace ResurrectionRP_Server
 
         }
 
-        private void OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
-        {
-            player.Emit("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32( seat ) , 50, 50);
-        }
-
-        private void OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
-        {
-            player.Emit("OnPlayerLeaveVehicle");
-        }
         #endregion
 
         #region Methods
@@ -161,10 +158,16 @@ namespace ResurrectionRP_Server
                 return;
             }
 
-            IVehicle vehicle = Alt.CreateVehicle(args[0], player.Position, player.Rotation);
+            //IVehicle vehicle = Alt.CreateVehicle(args[0], player.Position, player.Rotation);
+            
+            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), (uint)VehicleModel.Deluxo, player.Position, player.Rotation);
 
-            if (vehicle != null)
-                player.Emit("SetPlayerIntoVehicle", vehicle, -1);
+            Task.Run(async () =>
+            {
+                await vh.SpawnVehicle();
+                if (vh.Vehicle != null)
+                    player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);
+            });
         }
         public async Task Save()
         {

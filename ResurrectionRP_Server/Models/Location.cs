@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using AltV.Net.Data;
+using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using System.Numerics;
 
@@ -22,5 +23,8 @@ namespace ResurrectionRP_Server.Models
             if (Pos == Vector3.Zero && Rot == Vector3.Zero) return true;
             return false;
         }
+
+        public Rotation GetRotation()
+            => new Rotation(Rot.X, Rot.Y, Rot.Z);
     }
 }

@@ -1,14 +1,20 @@
-﻿/**using AltV.Net.Elements.Entities;
+﻿using AltV.Net;
+using AltV.Net.Async;
+using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.Options;
 using Newtonsoft.Json;
 using ResurrectionRP.Server.Entities.Vehicles.Data;
+using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles.Data;
 using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Utils.Extensions;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
 
@@ -50,13 +56,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public string OwnerID { get; set; } // SocialClubName
         [BsonRepresentation(BsonType.Int32, AllowOverflow = true)]
-        public uint Dimension { get; set; } = uint.MaxValue;
+        public short Dimension { get; set; } = short.MaxValue;
 
         public bool SpawnVeh { get; set; }
         public bool Locked { get; set; } = true;
 
-        public int PrimaryColor { get; set; }
-        public int SecondaryColor { get; set; }
+        public byte PrimaryColor { get; set; }
+        public byte SecondaryColor { get; set; }
 
         private VehicleSync _vehicleSync = null;
         public VehicleSync VehicleSync
@@ -88,14 +94,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Constructor
-        public VehicleHandler(string socialClubName, VehicleModel model, Vector3 position, Vector3 rotation, int primaryColor = 0, int secondaryColor = 0,
+        public VehicleHandler(string socialClubName, uint model, Vector3 position, Vector3 rotation, byte primaryColor = 0, byte secondaryColor = 0,
             float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
-            IPlayer owner = null, ConcurrentDictionary<int, int> mods = null, int[] neon = null, bool spawnVeh = false, uint dimension = uint.MaxValue, Inventory inventory = null, bool freeze = false, float dirt = 0, float health = 1000)
+            IPlayer owner = null, ConcurrentDictionary<int, int> mods = null, int[] neon = null, bool spawnVeh = false, short dimension = short.MaxValue, Inventory inventory = null, bool freeze = false, float dirt = 0, float health = 1000)
         {
             if (model == 0)
                 return;
             OwnerID = socialClubName;
-            Model = (uint)model;
+            Model = model;
             PrimaryColor = primaryColor;
             SecondaryColor = secondaryColor;
 
@@ -111,7 +117,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             VehicleSync.FreezePosition = freeze;
 
-            //Plate = (string.IsNullOrEmpty(plate)) ? VehicleManager.GenerateRandomPlate() : plate;
+            Plate = (string.IsNullOrEmpty(plate)) ? VehiclesManager.GenerateRandomPlate() : plate;
 
             Locked = locked;
             Owner = owner;
@@ -121,15 +127,111 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             SpawnVeh = spawnVeh;
             Dimension = dimension;
-            
+            /*
             if (inventory != null)
-                Inventory = inventory;
+                Inventory = inventory;*/
                 
             if (OilTank == null)
                 OilTank = new OilTank();
-
         }
+        #endregion
+
+        #region Method
+        public async Task<IVehicle> SpawnVehicle(IPlayer owner = null, Location location = null)
+        {
+            if (Dimension.ToString() == "-1")
+                Dimension = short.MaxValue;
+
+            await AltAsync.Do(() =>
+            {
+                try
+                {
+                    if (location == null)
+                    {
+                        Vehicle = Alt.CreateVehicle(Model, VehicleSync.Location.Pos, VehicleSync.Location.GetRotation());
+                    }
+                    else
+                    {
+                        Vehicle = Alt.CreateVehicle(Model, location.Pos, location.GetRotation());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Alt.Server.LogError("SpawnVehicle: " + ex);
+                }
+                if (Vehicle == null)
+                    return;
+
+                VehicleSync.Vehicle = Vehicle;
+                Vehicle.SetData("VehicleHandler", this);
+
+                Vehicle.Dimension = Dimension;
+                Vehicle.NumberplateText = Plate;
+                Vehicle.PrimaryColor = PrimaryColor;
+                Vehicle.SecondaryColor = SecondaryColor;
+
+                if (Mods.Count > 0)
+                {
+                    foreach (KeyValuePair<int, int> mod in Mods)
+                    {
+                        Vehicle.SetMod((byte)mod.Key, (byte)mod.Value);
+                        if (mod.Key == 69)
+                        {
+                            Vehicle.WindowTint = (byte)mod.Value;
+                        }
+                    }
+                }
+
+                if (VehicleSync.NeonsColor != null && VehicleSync.NeonsColor != new Color())
+                    Vehicle.NeonColor = VehicleSync.NeonsColor;
+
+                Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
+                Vehicle.EngineOn = VehicleSync.Engine;
+                LastUse = DateTime.Now;
+
+                if (location != null)
+                {
+                    VehicleSync.Location = location;
+                }
+
+                //VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
+
+                GameMode.Instance.VehicleManager.VehicleHandlerList.TryAdd(Vehicle, this);
+            });
+            
+            if (owner != null)
+                SetOwner(owner);
+            /*
+            if (HaveTowVehicle())
+            {
+                IVehicle _vehtowed = VehicleManager.GetVehicleWithPlate(VehicleSync.TowTruck.VehPlate);
+                if (_vehtowed != null)
+                {
+                    await TowVehicle(_vehtowed);
+                }
+            }*/
+
+            return Vehicle;
+        }
+
+        public async Task Delete(bool perm = false)
+        {
+            if (Vehicle.Exists)
+                await Vehicle.RemoveAsync();
+
+            if (GameMode.Instance.VehicleManager.VehicleHandlerList.Remove(Vehicle, out VehicleHandler value))
+            {
+                if (perm)
+                {
+                   // await RemoveInDatabase();
+                    GameMode.Instance.PlateList.Remove(Plate);
+                }
+            }
+        }
+
+        public void SetOwner(IPlayer player) => OwnerID = player.GetSocialClub();
+        public void SetOwner(PlayerHandler player) => OwnerID = player.Client.GetSocialClub();
+
         #endregion
     }
 }
-**/

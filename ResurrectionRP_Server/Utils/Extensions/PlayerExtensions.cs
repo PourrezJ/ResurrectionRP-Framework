@@ -1,10 +1,18 @@
 ﻿using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Players;
+using System;
 
 namespace ResurrectionRP_Server.Utils.Extensions
 {
     public static class PlayerExtensions
     {
+        public static string GetSocialClub(this IPlayer player)
+        {
+            if (player.GetData<string>("SocialClub", out string data))
+                return data;
+            throw new NullReferenceException("SocialClubMising");
+        }
+
         public static string GetTeamspeakID(this IPlayer player)
         {
             var ID = "NothingAtAll";

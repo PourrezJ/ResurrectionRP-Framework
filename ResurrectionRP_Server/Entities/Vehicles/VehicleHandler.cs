@@ -227,7 +227,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 if (perm)
                 {
-                   // await RemoveInDatabase();
+                    await RemoveInDatabase();
                     GameMode.Instance.PlateList.Remove(Plate);
                 }
             }

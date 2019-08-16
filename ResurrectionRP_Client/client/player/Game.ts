@@ -127,6 +127,9 @@ export class Game {
                     );
             }
         });
+        alt.on('keydown', (key) => {
+            alt.emitServer('OnKeyPress', key);
+        });
     }
     //end constructor
     //methods

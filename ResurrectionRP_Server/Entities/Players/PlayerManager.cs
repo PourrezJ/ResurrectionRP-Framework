@@ -15,6 +15,7 @@ using System.Linq;
 using System.Numerics;
 using WordPressPCL;
 using WordPressPCL.Models;
+using ResurrectionRP_Server.Utils.Extensions;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -39,6 +40,8 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.OnClient("MakePlayer", MakePlayer);
             Alt.OnClient("setGender", (IPlayer client, object[] args) => { client.Model = ((Convert.ToInt32( args[0]) == 1) ? Alt.Hash("mp_f_freemode_01") : Alt.Hash("mp_m_freemode_01")); });
             Alt.OnClient("setCreatorPos", async (IPlayer client, object[] args) => { await client.SetPositionAsync(new Vector3(402.8664f, -996.4108f, -99.00027f)); });
+
+            AltAsync.OnClient("OnKeyPress", OnKeyPress);
 
             AltAsync.OnPlayerDead += Events_PlayerDeath;
 
@@ -204,7 +207,6 @@ namespace ResurrectionRP_Server.Entities.Players
         #region RemoteEvents
         private async void MakePlayer(IPlayer client, object[] args)
         {
-
             if (!client.Exists)
                 return;
             PlayerHandler ph = new PlayerHandler(client);
@@ -223,6 +225,7 @@ namespace ResurrectionRP_Server.Entities.Players
             await Database.MongoDB.Insert("players", ph);
             await ph.LoadPlayer(client, true);
         }
+
         private async void SendLogin(IPlayer client, object[] args)
         {
             if (!client.Exists)
@@ -252,6 +255,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
             }
         }
+
         private async void UpdateHungerThirst(IPlayer client, object[] arg)
         {
             if (!client.Exists)
@@ -265,6 +269,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 await ph.UpdatePlayerInfo();
             }
         }
+
         private async void LogPlayer(IPlayer client, object[] args)
         {
             if (!client.Exists)
@@ -272,6 +277,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             await ConnectPlayer(client);
         }
+
         public static async Task ConnectPlayer(IPlayer client)
         {
             if (await PlayerHandlerExist(client))
@@ -288,6 +294,16 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
+        private async Task OnKeyPress(IPlayer client, object[] args)
+        {
+            if (!client.Exists)
+                return;
+
+            var ph = client.GetPlayerHandler();
+
+            if (ph != null && ph.OnKeyPressed != null)
+                await ph.OnKeyPressed.Invoke(client, (ConsoleKey)(Int64)args[0]);
+        }
         #endregion
 
         #region Methods 
@@ -347,6 +363,5 @@ namespace ResurrectionRP_Server.Entities.Players
         }
 
         #endregion
-
     }
 }

@@ -201,7 +201,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (firstspawn)
                     await Save();
 
-                //OnKeyPressed += OnKeyPressedCallback;
+                OnKeyPressed += OnKeyPressedCallback;
             }
             else
             {
@@ -224,7 +224,6 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #endregion
-
 
         #region Inventory
 

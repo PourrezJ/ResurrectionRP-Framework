@@ -160,7 +160,7 @@ namespace ResurrectionRP_Server
 
             //IVehicle vehicle = Alt.CreateVehicle(args[0], player.Position, player.Rotation);
             
-            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), (uint)VehicleModel.Deluxo, player.Position, player.Rotation);
+            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), (uint)VehicleModel.Deluxo, player.Position, player.Rotation, locked:false);
 
             Task.Run(async () =>
             {

@@ -1,0 +1,85 @@
+﻿<html>
+<head>
+    <meta charset="utf-8" />
+    <title>XMenu</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link href="css/style.css" rel="stylesheet" />
+    <script src="../../lib/js/angular.min.js"></script>
+</head>
+<body ng-app="ResurrectionInteractionMenu" ng-controller="MenuCtrl" ng-cloak>
+    <div class="roue">
+        <svg id="wheel" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430.82 431.72">
+            <g class="selection one" ng-class="{'hoverable':buttons[0] !== undefined}" ng-click="sendAction(0)" ng-mouseover="displayAction(0)" ng-mouseout="emptyAction()">
+                <path id="1" d="M147,144.39s26.67-26.66,65.67-27.66V0S134-6.27,65,60.73Z" transform="translate(0.35 0.17)" />
+                <foreignobject ng-if="buttons[0] !== undefined">
+                    <i class="material-icons md-36" ng-if="buttons[0].Icon.Type == 'mat'">{{buttons[0].Icon.Name}}</i>
+                    <i class="fas" ng-class="buttons[0].Icon.Name" ng-if="buttons[0].Icon.Type == 'fa'"></i>
+                </foreignobject>
+            </g>
+            <g class="selection two" ng-class="{'hoverable':buttons[1] !== undefined}" ng-click="sendAction(1)" ng-mouseover="displayAction(1)" ng-mouseout="emptyAction()">
+                <path id="2" d="M217.18,117s37.71.24,65.83,27.29l83.07-82S315.25,1.92,219.1-.1Z" transform="translate(0.35 0.17)" />
+                <foreignobject ng-if="buttons[1] !== undefined">
+                    <i class="material-icons md-36" ng-if="buttons[1].Icon.Type == 'mat'">{{buttons[1].Icon.Name}}</i>
+                    <i class="fas" ng-class="buttons[1].Icon.Name" ng-if="buttons[1].Icon.Type == 'fa'"></i>
+                </foreignobject>
+            </g>
+            <g class="selection three" ng-class="{'hoverable':buttons[2] !== undefined}" ng-click="sendAction(2)" ng-mouseover="displayAction(2)" ng-mouseout="emptyAction()">
+                <path id="3" d="M285.63,147.43s26.79,26.54,28,65.54l116.75-.53s5.9-78.69-61.42-147.39Z" transform="translate(0.35 0.17)" />
+                <foreignobject ng-if="buttons[2] !== undefined">
+                    <i class="material-icons md-36" ng-if="buttons[2].Icon.Type == 'mat'">{{buttons[2].Icon.Name}}</i>
+                    <i class="fas" ng-class="buttons[2].Icon.Name" ng-if="buttons[2].Icon.Type == 'fa'"></i>
+                </foreignobject>
+            </g>
+            <g class="selection four" ng-class="{'hoverable':buttons[3] !== undefined}" ng-click="sendAction(3)" ng-mouseover="displayAction(3)" ng-mouseout="emptyAction()">
+                <path id="8" d="M313.32,218.12s.15,37.71-26.6,66.11l82.89,82.21S429.45,315,430.47,218.82Z" transform="translate(0.35 0.17)" />
+                <foreignobject ng-if="buttons[3] !== undefined">
+                    <i class="material-icons md-36" ng-if="buttons[3].Icon.Type == 'mat'">{{buttons[3].Icon.Name}}</i>
+                    <i class="fas" ng-class="buttons[3].Icon.Name" ng-if="buttons[3].Icon.Type == 'fa'"></i>
+                </foreignobject>
+            </g>
+            <g class="selection five" ng-class="{'hoverable':buttons[4] !== undefined}" ng-click="sendAction(4)" ng-mouseover="displayAction(4)" ng-mouseout="emptyAction()">
+                <path id="7" d="M284,287s-26.65,26.68-65.65,27.7l.08,116.75s78.67,6.2,147.63-60.84Z" transform="translate(0.35 0.17)" />
+                <foreignobject ng-if="buttons[4] !== undefined">
+                    <i class="material-icons md-36" ng-if="buttons[4].Icon.Type == 'mat'">{{buttons[4].Icon.Name}}</i>
+                    <i class="fas" ng-class="buttons[4].Icon.Name" ng-if="buttons[4].Icon.Type == 'fa'"></i>
+                </foreignobject>
+            </g>
+            <g class="selection six" ng-class="{'hoverable':buttons[5] !== undefined}" ng-click="sendAction(5)" ng-mouseover="displayAction(5)" ng-mouseout="emptyAction()">
+                <path id="6" d="M213.63,314.27s-37.72-.18-65.88-27.18L64.82,369.26s50.93,60.29,147.09,62.14Z" transform="translate(0.35 0.17)" />
+                <foreignobject ng-if="buttons[5] !== undefined">
+                    <i class="material-icons md-36" ng-if="buttons[5].Icon.Type == 'mat'">{{buttons[5].Icon.Name}}</i>
+                    <i class="fas" ng-class="buttons[5].Icon.Name" ng-if="buttons[5].Icon.Type == 'fa'"></i>
+                </foreignobject>
+            </g>
+            <g class="selection seven" ng-class="{'hoverable':buttons[6] !== undefined}" ng-click="sendAction(6)" ng-mouseover="displayAction(6)" ng-mouseout="emptyAction()">
+                <path id="5" d="M144.22,283.44s-26.67-26.67-27.67-65.67l-116.75,0s-6.24,78.66,60.77,147.66Z" transform="translate(0.35 0.17)" />
+                <foreignobject ng-if="buttons[6] !== undefined">
+                    <i class="material-icons md-36" ng-if="buttons[6].Icon.Type == 'mat'">{{buttons[6].Icon.Name}}</i>
+                    <i class="fas" ng-class="buttons[6].Icon.Name" ng-if="buttons[6].Icon.Type == 'fa'"></i>
+                </foreignobject>
+            </g>
+            <g class="selection eight" ng-class="{'hoverable':buttons[7] !== undefined}" ng-click="sendAction(7)" ng-mouseover="displayAction(7)" ng-mouseout="emptyAction()">
+                <path id="4" d="M117.14,213.8s.19-37.71,27.21-65.86L62.22,65S1.91,115.86,0,212Z" transform="translate(0.35 0.17)" />
+                <foreignobject ng-if="buttons[7] !== undefined">
+                    <i class="material-icons md-36" ng-if="buttons[7].Icon.Type == 'mat'">{{buttons[7].Icon.Name}}</i>
+                    <i class="fas" ng-class="buttons[7].Icon.Name" ng-if="buttons[7].Icon.Type == 'fa'"></i>
+                </foreignobject>
+            </g>
+
+            <defs>
+                <linearGradient id="gradient-resu">
+                    <stop offset="5%" stop-color="#F60" />
+                    <stop offset="95%" stop-color="#ff441a" />
+                </linearGradient>
+            </defs>
+        </svg>
+        <div id="detail">
+            <h5>{{selected.name}}</h5>
+            <p ng-show="selected.desc != null && selected.desc !== undefined">{{selected.desc}}</p>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

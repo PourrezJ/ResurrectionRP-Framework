@@ -27,9 +27,10 @@ namespace ResurrectionRP_Server.Entities.Players
             if (ph == null)
                 return;
 
-            /*
+            
             switch (Keycode)
             {
+                /*
                 case ConsoleKey.NumPad0:
                     if (MenuManager.HasOpenMenu(client))
                         return;
@@ -62,22 +63,22 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                     await ph.OpenPlayerMenu();
                     break;
-
+                    */
                 case ConsoleKey.F3:
                     if (vehicle == null || !vehicle.Exists)
                         return;
 
                     if (!vehicle.Exists)
                         return;
-
+                    /*
                     if (ph.IsCuff())
                     {
                         await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menottés.");
                         return;
-                    }
+                    }*/
                     await vh.OpenXtremMenu(client);
                     break;
-
+                    /*
                 case ConsoleKey.F4:
                     if (ph.IsCuff())
                     {
@@ -258,8 +259,8 @@ namespace ResurrectionRP_Server.Entities.Players
                 case ConsoleKey.NumPad8:
                 case ConsoleKey.NumPad9:
                     await OnAnimationKeyPressed(Keycode);
-                    break;
-            }*/
+                    break;*/
+            }
         }
     }
 }

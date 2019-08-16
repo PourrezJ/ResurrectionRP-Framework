@@ -7,9 +7,9 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Models
-{/*
-    [BsonKnownTypes(typeof(Alcohol), typeof(Axe), typeof(BuildingItem), typeof(ClothItem), typeof(CrateTools), typeof(Defibrilator), typeof(Eat), typeof(GasJerrycan), typeof(HandCuff), typeof(HealItem),
-        typeof(IdentityCard), typeof(MaskItem), typeof(PhoneItem), typeof(RadioItem), typeof(BagItem), typeof(Unusable), typeof(Weapons), typeof(SeedItem), typeof(LockPick))]*/
+{
+    [BsonKnownTypes(typeof(Items.Alcohol), typeof(Axe), typeof(BuildingItem), typeof(ClothItem), typeof(CrateTools), typeof(Defibrilator), typeof(Eat), typeof(GasJerrycan), typeof(HandCuff), typeof(HealItem),
+        typeof(IdentityCard), typeof(MaskItem), typeof(PhoneItem), typeof(RadioItem), typeof(BagItem), typeof(Unusable), typeof(Weapons), typeof(SeedItem), typeof(LockPick))]
     public class Item : ICloneable
     {
         [JsonProperty("id")]

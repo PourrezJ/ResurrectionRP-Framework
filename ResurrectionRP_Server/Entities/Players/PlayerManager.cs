@@ -36,6 +36,9 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.OnClient("LogPlayer", LogPlayer);
             Alt.OnClient("Events_PlayerJoin", Events_PlayerJoin);
             Alt.OnClient("UpdateHungerThirst", UpdateHungerThirst);
+            Alt.OnClient("MakePlayer", MakePlayer);
+            Alt.OnClient("setGender", (IPlayer client, object[] args) => { client.Model = ((Convert.ToInt32( args[0]) == 1) ? Alt.Hash("mp_f_freemode_01") : Alt.Hash("mp_m_freemode_01")); });
+            Alt.OnClient("setCreatorPos", async (IPlayer client, object[] args) => { await client.SetPositionAsync(new Vector3(402.8664f, -996.4108f, -99.00027f)); });
 
             AltAsync.OnPlayerDead += Events_PlayerDeath;
 
@@ -125,7 +128,6 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
 
             string socialclub = args[0].ToString();
-
             player.SetData("SocialClub", socialclub);
             player.Model = (uint)AltV.Net.Enums.PedModel.FreemodeMale01;
             player.Spawn(new Vector3(-1072.886f, -2729.607f, 0.8148939f), 0);
@@ -200,7 +202,27 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region RemoteEvents
+        private async void MakePlayer(IPlayer client, object[] args)
+        {
 
+            if (!client.Exists)
+                return;
+            PlayerHandler ph = new PlayerHandler(client);
+
+            try
+            {
+                ph.Character = JsonConvert.DeserializeObject<Models.PlayerCustomization>((string)args[0]);
+                //ph.Clothing = new Clothings(client);
+                ph.Identite = JsonConvert.DeserializeObject<Models.Identite>( (string)args[1], new JsonSerializerSettings { DateParseHandling = DateParseHandling.DateTime } );
+            } catch ( Exception ex) {
+                Alt.Server.LogWarning("Character Creator Error | " + ex.Data);
+                await client.KickAsync("Character Creator Error");
+            }
+
+            await client.EmitAsync("FadeOut", 0);
+            await Database.MongoDB.Insert("players", ph);
+            await ph.LoadPlayer(client, true);
+        }
         private async void SendLogin(IPlayer client, object[] args)
         {
             if (!client.Exists)
@@ -262,30 +284,33 @@ namespace ResurrectionRP_Server.Entities.Players
             }
             else
             {
-                Alt.Log("LE CREATEUR N'EST PAS ENCORE FAIT OMG");
-                //await OpenCreator(client);
+                await OpenCreator(client);
             }
         }
 
         #endregion
 
         #region Methods 
+        public static async Task OpenCreator(IPlayer client)
+        {
+            await client.SetPositionAsync(new Vector3(402.8664f, -996.4108f, -99.00027f));
+            client.Rotation = new Vector3(0, 0, -185f);
+            client.Emit("OpenCreator");
+        }
         public static async Task<PlayerHandler> GetPlayerHandlerDatabase(string socialClub) =>
             await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == socialClub.ToLower()).FirstOrDefaultAsync();
 
         public static async Task<bool> PlayerHandlerExist(IPlayer player)
         {
+            player.GetData("SocialClub", out string social);
+            return await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID == social).AnyAsync();
             try
             {
-                player.GetData("SocialClub", out string social);
-                
-                return await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == social.ToLower()).AnyAsync();
             }
             catch (Exception ex)
             {
                 //await player.SendNotificationError("Erreur avec votre compte, contactez un membre du staff.");
-                Alt.Server.LogError("PlayerHandlerExist" + ex.Data);
-                Alt.Server.LogError("PlayerHandlerExist" + ex.Data);
+                Alt.Server.LogError("PlayerHandlerExist" + ex);
             }
             return false;
         }

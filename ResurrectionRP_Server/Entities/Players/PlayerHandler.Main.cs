@@ -103,6 +103,7 @@ namespace ResurrectionRP_Server.Entities.Players
             AltAsync.Do(() =>
            {
                client.GetData("SocialClub", out string PID);
+               this.PID = PID;
            });
         }
 

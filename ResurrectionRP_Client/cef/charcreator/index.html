@@ -1,0 +1,519 @@
+﻿<!DOCTYPE html>
+<html lang="fr" ng-app="charCreator">
+<head>
+    <meta charset="UTF-8">
+    <title>CharCreator</title>
+    <link rel="stylesheet" href="../../lib/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../lib/css/fontawesome.5.0.13.min.css" />
+    <link rel="stylesheet" href="../../lib/css/angular-confirm.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="../../lib/js/jquery.min.js"></script>
+    <script src="../../lib/js/angular.min.js"></script>
+    <script src="../../lib/js/angular-confirm.min.js"></script>
+    <script src="../../lib/js/moment.min.js"></script>
+    <script src="package://_rage-console/CEF/debugger.js" crossorigin="anonymous"></script>
+    <script src="js/char_data.js"></script>
+    <script src="js/app.js"></script>
+</head>
+<body ng-controller="CharCtrl">
+  <div id="sexe">
+    <div class="content">
+      <div class="logo">
+          <svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 124.26 61.94">
+              <title>resurrection_logo</title>
+              <path d="M311.74,334.41l1.89,5.95H299.46l3.76-11-5-4.74,15.3,2.56h0a6.76,6.76,0,0,1,3.48,5.91h0l-2-.18c-1-.1-2.73.1-3.43.87Z" transform="translate(-244.54 -318.58)" />
+              <path d="M306.67,380.52c17.65,0,19.67-3.49,19.67-3.49L321,365.26h15.05a27.19,27.19,0,0,0,20.05-8.82h0l-10.66-7.72h5.3a16.57,16.57,0,0,0,15.1-9.74h0l-11.21-6.8h1.05a13.12,13.12,0,0,0,13.11-13.56v0H330.2c0,.44-.08.87-.13,1.3-1.4,11.42-11.89,19.95-23.4,20.2-11.5-.25-22-8.78-23.39-20.2,0-.43-.09-.86-.13-1.3h-38.6v0a13.12,13.12,0,0,0,13.11,13.56h1L247.49,339h0a16.59,16.59,0,0,0,15.11,9.74h5.29l-10.65,7.72h0a27.19,27.19,0,0,0,20.05,8.82h15L287,377S289,380.52,306.67,380.52Z" transform="translate(-244.54 -318.58)" />
+          </svg>
+      </div>
+      <div class="sexe">
+        <nav>
+          <li class="menu" ng-class="{'active' : char.Gender == 0}" ng-disabled="char.Gender == 0" ng-click="setGender(0)">
+            <svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 73.11 73.11"><path d="M81.51,13.49H58.94a5,5,0,0,0,0,10h10.5L58.31,34.62a28.56,28.56,0,1,0,7.07,7.07L76.51,30.56v10.5a5,5,0,0,0,10,0V18.49A5,5,0,0,0,81.51,13.49ZM42,76.51A18.52,18.52,0,1,1,60.52,58h0A18.54,18.54,0,0,1,42,76.51Z" transform="translate(-13.4 -13.49)"/></svg>
+            <span>Homme</span>
+          </li>
+          <li class="menu" ng-class="{'active' : char.Gender == 1}" ng-disabled="char.Gender == 1" ng-click="setGender(1)">
+            <svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72.57 72.5"><path d="M57.32,13.78A28.91,28.91,0,0,0,33.66,59.27L28.92,64l-6.61-6.6a5,5,0,1,0-7.19,6.95l.12.12,6.61,6.61L16.6,76.33a5,5,0,1,0,7,7.19l.12-.12,5.26-5.26,6.61,6.61a5,5,0,1,0,7.19-7l-.12-.12L36,71.08l4.74-4.74a28.91,28.91,0,1,0,16.6-52.56ZM70.7,56a18.9,18.9,0,1,1,0-26.74A18.9,18.9,0,0,1,70.7,56Z" transform="translate(-13.71 -13.78)"/></svg>
+            <span>Femme</span>
+          </li>
+        </nav>
+      </div>
+      <a onclick="open_character_creator()" class="next center-sexe">Suivant</a>
+    </div>
+  </div>
+  <div id="character_creator">
+    <div class="content">
+        <div class="precedent">
+          <a onclick="open_gender_selection()"><i class="fas fa-chevron-circle-left"></i>Précédent</a>
+        </div>
+        <div class="logo">
+            <svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 124.26 61.94">
+                <title>resurrection_logo</title>
+                <path d="M311.74,334.41l1.89,5.95H299.46l3.76-11-5-4.74,15.3,2.56h0a6.76,6.76,0,0,1,3.48,5.91h0l-2-.18c-1-.1-2.73.1-3.43.87Z" transform="translate(-244.54 -318.58)" />
+                <path d="M306.67,380.52c17.65,0,19.67-3.49,19.67-3.49L321,365.26h15.05a27.19,27.19,0,0,0,20.05-8.82h0l-10.66-7.72h5.3a16.57,16.57,0,0,0,15.1-9.74h0l-11.21-6.8h1.05a13.12,13.12,0,0,0,13.11-13.56v0H330.2c0,.44-.08.87-.13,1.3-1.4,11.42-11.89,19.95-23.4,20.2-11.5-.25-22-8.78-23.39-20.2,0-.43-.09-.86-.13-1.3h-38.6v0a13.12,13.12,0,0,0,13.11,13.56h1L247.49,339h0a16.59,16.59,0,0,0,15.11,9.74h5.29l-10.65,7.72h0a27.19,27.19,0,0,0,20.05,8.82h15L287,377S289,380.52,306.67,380.52Z" transform="translate(-244.54 -318.58)" />
+            </svg>
+        </div>
+        <div id="navigation">
+            <nav>
+                <li class="menu 1" ng-class="{'active' : currentMenu == 1}" ng-click="currentMenu = 1">
+                    <svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 78.21"><title>noun_people_42801</title><path d="M42.36,78.21c.1-1.92.12-6.66-.09-9.15-.26-3.18.64-12.65,8.84-20.22,1-.89,6-5.87,6.56-6.51a2.13,2.13,0,0,0,.11-2.22c-.27-.42-1.91-2.8-2.23-3.54s-3.81-2.49-4.81-2.81-3-1.21-1.54-3.33a1.6,1.6,0,0,0,0-1.64c-.26-.37,0-.9.43-1.22s.37-.63-.21-.9a1.24,1.24,0,0,1-.75-1.27c0-.53-.1-.63-.68-.58s-2.23-.11-1.22-2.43c.36-.84,1.48-3.34,1.8-3.92s.53-.95,0-1.54a2,2,0,0,1-.27-2.85c.37-.54.36-2.77,2.3-6.07,0,0,.31-.25-.29-.57s-1.44-.88-.6-1.94a31.49,31.49,0,0,1,4.38-4c1.23-.88,3-.77,4.3-.81S63.05.07,64.78,0s9,3.6,10.55,6.17a12.19,12.19,0,0,1,2.11,6c0,1.55,1.24,3.53.53,4.87a21.44,21.44,0,0,0-2.08,4.52c-.39,1.58-.17,3-1,4.44s-2,2.9-1.8,4.94c.42,4.09,7.48,14.64,9,16.69S87.31,61.39,87.89,64c.51,2.33-.9,11.23-1.68,14.18Z"/><path d="M2.59,30.23c.56.21,1.49.3,1.32,1.16s.17,2.84.65,3,.65,0,.73.54.24,1.12.74.76.67-1,1-.24.13,2.51.66,3,1.64.13,1.94.67,1.52,1.48,1.52,2.49-.2,5-.91,6.8S4.36,61,5.36,78.21H38.43s2.67-3.71-.93-8.13c-.56-.69-7.69-9.4-10.66-16.65-.41-1-1.94-3.6-2.12-4s-.22-.34,0-1.15A26.81,26.81,0,0,1,26.43,44,24.16,24.16,0,0,0,28,39.76c.19-.74,1-1.93,2-2s5.06-.08,5.51-.07a2,2,0,0,0,1.9-2.81c0-.17-.42-1.72.09-2a1,1,0,0,0,.17-1.67c-.17-.19-.79,0-.29-.36s.92-1.17.39-1.68-.68-.93-.22-1.35,2.05-1.67.69-2.78c-.33-.27-2.92-1.82-3.53-3.67-.14-.45-.06-5.2-3.91-8.63-.2-.18-1.2-.76-.74-1.43s.13-2.54-3-2.69c-.54,0-12.56-2.55-18.52,5.48a11.4,11.4,0,0,0-2.47,5.31c-.09.7.08,1.8-.65,1.21S1.39,20.44.22,24C-.1,24.93-.53,29.05,2.59,30.23Z"/></svg>
+                    <span>Parents</span>
+                </li>
+                <li class="menu 2" ng-class="{'active' : currentMenu == 2}" ng-click="currentMenu = 2">
+                    <svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45.22 64.05"><title>forme</title><path d="M38.84,73.7a7.09,7.09,0,0,1-9-4.42,6.2,6.2,0,0,1-.3-1.2L27.4,54.6l1.1-16.7A22.11,22.11,0,1,1,53.22,62,27.79,27.79,0,0,1,38.84,73.7Zm25.5-11.48a25.66,25.66,0,0,1-8.79,3.49A32.27,32.27,0,0,1,43,76.33L44.08,82l24-2A2.11,2.11,0,0,0,70,77.72a2,2,0,0,0-.19-.72A102.37,102.37,0,0,1,64.34,62.22Z" transform="translate(-27.4 -17.95)" /></svg>
+                    <span>Forme du visage</span>
+                </li>
+                <li class="menu 3" ng-class="{'active' : currentMenu == 3}" ng-click="currentMenu = 3">
+                    <svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.47 34.01">
+                        <title>yeux</title>
+                        <path d="M46.6,27h-.14A50.84,50.84,0,0,0,8.65,43.34l4,3.65A45.36,45.36,0,0,1,46.46,32.47h.13A44.87,44.87,0,0,1,80.06,47l4.06-3.63A50.36,50.36,0,0,0,46.6,27Z" transform="translate(-8.65 -27.02)" />
+                        <path d="M54,45.16a5.54,5.54,0,0,1-5.54-5.54A5.42,5.42,0,0,1,49,37.21,12.11,12.11,0,1,0,57.34,44,5.48,5.48,0,0,1,54,45.16Z" transform="translate(-8.65 -27.02)" />
+                    </svg>
+                    <span>Yeux</span>
+                </li>
+                <li class="menu 4" ng-class="{'active' : currentMenu == 4}" ng-click="currentMenu = 4">
+                    <svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 216.88 333.82">
+                        <title>nez</title>
+                        <path d="M101,7c3-6,9-9,15-6,5,3,8,9,5,15L35,205c-8,14-29,54,16,52,21,0,63-2,83,10h0c26,15,13,35,2,54l-5,7c-3,6-10,7-15,4s-7-10-4-15l4-7c12-21,27-34-65-30-79,2-45-66-35-86Zm68,183c-5-4-7-11-3-16,3-5,10-7,15-3,0,0,81,52,0,105-5,4-12,2-15-3-4-5-2-12,3-15C221,223,169,190,169,190ZM83,243c-5,3-12,1-15-4s-1-12,4-15c0,0,34-20,65,2,5,3,6,10,3,15a12.48,12.48,0,0,1-16,3C105,230,83,243,83,243Z" transform="translate(-0.12 0.18)" />
+                    </svg>
+                    <span>Nez</span>
+                </li>
+                <li class="menu 5" ng-class="{'active' : currentMenu == 5}" ng-click="currentMenu = 5">
+                    <svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 86.38 76.13">
+                        <title>cheveux</title>
+                        <path d="M92.42,76.37c-1.62,2.48-5.34,3.34-9.45.38s-2.86-14.51-3.53-34.17S72.09,16.43,64.84,13c-4-1.89-10.19-.87-15,.44-4.51-1.31-10.59-2.39-14.7-.44-7.25,3.43-13.93,9.92-14.6,29.58S21.13,73.79,17,76.75s-7.83,2.1-9.45-.38c0,0-.86-.38-.76.85s4.39,8.5,14.41,10.22c9.2,1.57,19.81.64,22.54-8.3H40.45A11.46,11.46,0,0,1,29,67.68V54.82c12.83-7.43,18-16.34,18-16.34a103.41,103.41,0,0,1-1.72,10.3A27,27,0,0,0,60.22,34.9c1.61,2.43,5.5,7.23,11.73,8.88v23.9A11.46,11.46,0,0,1,60.5,79.14H56.23C59,88.08,69.58,89,78.77,87.44c10-1.72,14.32-9,14.41-10.22S92.42,76.37,92.42,76.37Z" transform="translate(-6.81 -11.94)" />
+                    </svg>
+                    <span>Cheveux</span>
+                </li>
+                <li class="menu 6" ng-class="{'active' : currentMenu == 6}" ng-click="currentMenu = 6">
+                    <svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395.71 178.74">
+                        <title>bouche</title>
+                        <path d="M473.23,267.56h0c-11.85-4.61-22.85-9.18-31.65-13-6.45-2.7-13.17-5.65-20.1-8.88l-.63-.29h0a430.48,430.48,0,0,1-43.44-23.24c-14.52-9-28.27-13.56-40.86-13.56-19.45,0-31.95,10.39-39.25,19.71-7.3-9.32-19.79-19.71-39.24-19.71-12.59,0-26.34,4.56-40.87,13.56-28.77,17.79-60.55,31.44-83.79,40.26-4.3,1.75-8.81,3.54-13.45,5.35-34.33,13.76-14.84,40.57-13.15,42.8,58.34,50.93,120.54,76.77,185.35,76.77,83.57,0,151.39-42.47,189.38-73C517.2,284,473.23,267.56,473.23,267.56ZM292.92,303.09a661.77,661.77,0,0,1-134.5-13.69q9.63,1.16,20.26,2.29H416.52A683.28,683.28,0,0,1,292.92,303.09Z" transform="translate(-99.79 -208.63)" />
+                    </svg>
+                    <span>Bouche</span>
+                </li>
+                <li class="menu 7" ng-class="{'active' : currentMenu == 7}" ng-click="currentMenu = 7">
+                    <svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90.06 28.09">
+                        <title>moustache</title>
+                        <path d="M94,44c-12.46,7-25.63-8.83-34-8a14.46,14.46,0,0,0-10,5,14.46,14.46,0,0,0-10-5c-8.37-.83-21.54,15-34,8-.46-.45-1.19.16-1,1,2.58,7,13.19,28.84,45,14,31.81,14.84,42.42-7,45-14,.19-.84-.54-1.45-1-1" transform="translate(-4.97 -35.97)" />
+                    </svg>
+                    <span>Pilosité</span>
+                </li>
+                <li class="menu 8" ng-class="{'active' : currentMenu == 8}" ng-click="currentMenu = 8">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="200" width="200" fill="#000000" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+                    <g>
+                    <path d="M39.0375977,88.0859375c0.0009155-0.142334,0.9378052-15.9884033-0.8517456-35.1190796   c-2.7669067,1.2182007-7.8777466,1.3070679-9.2014771,1.3070679s-6.4348145-0.0888672-9.2019043-1.3070679   c-1.7901611,19.1394043-0.852478,34.977417-0.8425293,35.1400757c0.199707,0.5175781,3.2451172,2.5219727,10.0444336,2.5219727   S38.8286133,88.6245117,39.0375977,88.0859375z" />
+                    <path d="M35.9429321,51.598999c-0.0026245-0.0294189-0.0171509-0.0547485-0.0171509-0.0848389V34.3122559   c-2.1903687,0.7750244-5.5724487,0.8649902-6.9414062,0.8649902s-4.7510376-0.0899658-6.9414062-0.8649902v17.2911987   c1.5375977,0.3615723,3.8685913,0.6704712,6.9414062,0.6704712C32.0699463,52.2739258,34.4058838,51.9624634,35.9429321,51.598999z   " />
+                    <path d="M34.8842773,32.5577393V22.1801758c0-1.3602905-0.2008667-2.907959-0.5370483-4.4204712   c-1.4778442,2.3584595-4.5675049,3.8179321-6.6231079,3.8179321c-1.4274292,0-2.701355-0.3731689-3.5980225-1.0279541   c-0.1660156,1.1378174-0.2550049,2.30896-0.2550049,3.5147705v8.6381836c0,0.0131226-0.007019,0.0240479-0.0075073,0.0370483   c1.1946411,0.2410278,2.9073486,0.437561,5.1207886,0.437561C31.7387695,33.1772461,33.7236938,32.8742065,34.8842773,32.5577393z" />
+                    <path d="M27.7241211,19.5776367c1.512207,0,3.9257812-1.2050781,4.9707031-2.9345703   c0.684021-1.1322632,0.7003174-2.3435059,0.053894-3.6004028c-0.2567139-0.5147705-0.5258789-0.9737549-0.8034058-1.3483276   c-0.3759766-0.5083008-1.1313477-0.6308594-2.2412109-0.359375c-1.5737305,0.3823242-2.9580078,1.5209961-3.703125,3.0458984   l-0.0703125,0.1459961c-0.4454346,0.930542-0.8116455,1.9019165-1.1132202,2.9041138   c-0.1281128,0.4805908-0.0813599,0.8692627,0.1517944,1.1818237   C25.4077148,19.1987305,26.4892578,19.5776367,27.7241211,19.5776367z" /></g>
+                    <g>
+                    <path d="M80.5385742,15.0913086c-1.7700195-3.7958984-6.6875-5.7202148-14.6147461-5.7202148   c-7.9277344,0-12.8447266,1.9243164-14.6152344,5.7202148c-4.2949219,9.2084961,10.2763672,26.7456055,10.4243164,26.921875   c0.0178223,0.0212402,0.0223999,0.0478516,0.038208,0.0700684c0.0441895,0.0617676,0.0785522,0.1268921,0.1079102,0.197998   c0.0201416,0.0491943,0.0389404,0.0960083,0.0509033,0.1470337c0.0060425,0.0253296,0.0210571,0.0466309,0.0251465,0.0726929   c0.1174927,0.1082764,0.3842163,0.244812,0.7792969,0.3746948c-0.864624-1.6627808-1.187561-3.6296387-1.2421875-3.9977417   c-0.0810547-0.5458984,0.2958984-1.0537109,0.8417969-1.1352539c0.5527344-0.0766602,1.0546875,0.2958984,1.1367188,0.8413086   c0.2644043,1.7667847,1.1241455,4.3152466,2.1973877,4.6769409c4.0822754-0.7085571,4.2122803-10.0084229,4.2122803-10.1061401   c0.0004883-0.5517578,0.4482422-0.9990234,1-0.9990234h0.0004883c0.5522461,0,0.9995117,0.4472656,0.9995117,0.9995117   c0,0.3439941-0.0387573,6.0519409-2.2741699,9.5209961c0.1248169-0.0621338,0.2286377-0.1225586,0.2858887-0.175293   c0.0040894-0.026062,0.019104-0.0473633,0.0251465-0.0726929c0.0119019-0.0510864,0.0308228-0.0980225,0.0510254-0.1472778   c0.0292969-0.0709839,0.0637207-0.1359253,0.1077271-0.1975708c0.0158081-0.0222778,0.0203857-0.0489502,0.038269-0.0702515   C70.262207,41.8369141,84.8334961,24.2998047,80.5385742,15.0913086z" />
+                    <path d="M65.9238281,54.4902344c-1.3873901,0-2.8909912-0.1779175-4.0410767-0.6051636L61.347168,88.3706055   c0,0.4277344,0.7768555,2.0825195,4.5766602,2.0825195c3.7993164,0,4.5761719-1.6547852,4.5761719-2.0981445l-0.5355225-34.4699097   C68.8144531,54.3123169,67.3109741,54.4902344,65.9238281,54.4902344z" />
+                    <path d="M69.8920898,51.6831055c0.0059204-0.0378418,0.0265503-0.0692139,0.0365601-0.1055298l-0.1060791-6.8256226   c-1.1304321,0.3909302-2.5673828,0.5561523-3.8987427,0.5561523c-0.1870728,0-0.3764648-0.0039673-0.5667114-0.0105591   c-0.06427,0.0022583-0.125061,0.0105591-0.1906128,0.0105591c-0.0456543,0-0.0847168-0.0200806-0.1287842-0.026001   c-1.0614624-0.0582886-2.130127-0.2247925-3.0131226-0.5301514l-0.1060181,6.8256836   c0.0100098,0.0362549,0.0305786,0.067688,0.036499,0.1054688c0.3222656,0.296875,1.7402344,0.8071289,3.96875,0.8071289   C68.1518555,52.4902344,69.5698242,51.9799805,69.8920898,51.6831055z" /></g></svg>
+                    <span>Cosmétiques</span>
+                </li>
+            </nav>
+        </div>
+        <div id="options" ng-show="currentMenu != null">
+            <i class="icon-close fa-2x far fa-times-circle" ng-click="currentMenu = null"></i>
+            <!--Gender-->
+            <!--<section ng-show="currentMenu == 1">
+            <!-- Parents -->
+            <section ng-show="currentMenu == 1">
+                <div class="row" id="parents">
+                    <div class="father">
+                        <img ng-src="img/parents/{{ParentsName[0]}}.png" width="196px" />
+                    </div>
+                    <div class="mother">
+                        <img ng-src="img/parents/{{ParentsName[1]}}.png" width="196px" />
+                    </div>
+                </div>
+                <h3>Mère</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Parents.ShapeSecond == Parents[1][0]}" ng-click="parentsRangeCheck(Parents[1][0], 1, 'ShapeSecond')"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Parents.ShapeSecond == Parents[1][0]}" ng-mousedown="mouseDown = true; parentsRangeCheck(char.Parents.ShapeSecond-1, 1, 'ShapeSecond')" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">{{ParentsName[1]}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Parents.ShapeSecond  == Parents[1][Parents[1].length-1]}" ng-mousedown="mouseDown = true; parentsRangeCheck(char.Parents.ShapeSecond+1, 1, 'ShapeSecond')" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Parents.ShapeSecond  == Parents[1][Parents[1].length-1]}" ng-click="parentsRangeCheck(Parents[1][Parents[1].length-1], 1, 'ShapeSecond')"></i>
+
+                <h3>Père</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Parents.ShapeFirst == 0}" ng-click="parentsRangeCheck(0, 0, 'ShapeFirst')"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Parents.ShapeFirst == 0}" ng-mousedown="mouseDown = true; parentsRangeCheck(char.Parents.ShapeFirst-1, 0, 'ShapeFirst')" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">{{ParentsName[0]}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Parents.ShapeFirst  == Parents[0][Parents[0].length-1]}" ng-mousedown="mouseDown = true; parentsRangeCheck(char.Parents.ShapeFirst+1, 0, 'ShapeFirst')" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Parents.ShapeFirst  == Parents[0][Parents[0].length-1]}" ng-click="parentsRangeCheck(Parents[0][Parents[0].length-1], 0, 'ShapeFirst')"></i>
+
+                <h3>Ressemblance du visage</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Père</span>
+                    <input class="slider col-md-8" type="range" min="0" max="1" step="0.01" ng-model="char.Parents.ShapeMix">
+                    <span class="col-md-2" style="line-height: 25px;">Mère</span>
+                </div>
+
+                <h3>Ressemblance de la peau</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Père</span>
+                    <input class="slider col-md-8" type="range" min="0" max="1" step="0.01" ng-model="char.Parents.SkinMix">
+                    <span class="col-md-2" style="line-height: 25px;">Mère</span>
+                </div>
+            </section>
+            <!-- Forme -->
+            <section ng-show="currentMenu == 2">
+                <h3>Hauteur du front</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Haut</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[6]" ng-change="setFaceFeature(6)">
+                    <span class="col-md-2" style="line-height: 25px;">Bas</span>
+                </div>
+
+                <h3>Largeur du front</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Fin</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[7]" ng-change="setFaceFeature(7)">
+                    <span class="col-md-2" style="line-height: 25px;">Large</span>
+                </div>
+
+                <h3>Hauteur des pomettes</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Haut</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[8]" ng-change="setFaceFeature(8)">
+                    <span class="col-md-2" style="line-height: 25px;">Bas</span>
+                </div>
+
+                <h3>Largeur des pomettes</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Fin</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[9]" ng-change="setFaceFeature(9)">
+                    <span class="col-md-2" style="line-height: 25px;">Large</span>
+                </div>
+
+                <h3>Joues</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Bombées</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[10]" ng-change="setFaceFeature(10)">
+                    <span class="col-md-2" style="line-height: 25px;">Creusées</span>
+                </div>
+
+                <h3>Largeur de la mâchoire</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Fine</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[13]" ng-change="setFaceFeature(13)">
+                    <span class="col-md-2" style="line-height: 25px;">Large</span>
+                </div>
+
+                <h3>Hauteur de la mâchoire</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Haute</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[14]" ng-change="setFaceFeature(14)">
+                    <span class="col-md-2" style="line-height: 25px;">Basse</span>
+                </div>
+
+                <h3>Largeur du cou</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Fin</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[19]" ng-change="setFaceFeature(19)">
+                    <span class="col-md-2" style="line-height: 25px;">Large</span>
+                </div>
+            </section>
+            <!--Eye-->
+            <section ng-show="currentMenu == 3">
+                <h3>Couleur des yeux</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.EyeColor == 0}" ng-click="updateValue(0, 'EyeColor')"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.EyeColor == 0}" ng-mousedown="mouseDown = true; mouse2 = true; updateValue(char.EyeColor-1, 'EyeColor');" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">{{EyeColor[char.EyeColor]}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.EyeColor == EyeColor.length-1}" ng-mousedown="mouseDown = true; updateValue(char.EyeColor+1, 'EyeColor')" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.EyeColor == EyeColor.length-1}" ng-click="updateValue(EyeColor.length-1, 'EyeColor')"></i>
+
+                <h3>Sourcils</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[2].Index == limits.headOverlay[2].min}" ng-click="updateHeadOverlay(2, 'Index', limits.headOverlay[2].min);"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[2].Index == limits.headOverlay[2].min}" ng-mousedown="mouseDown = true; updateHeadOverlay(2, 'Index', char.Appearance[2].Index - 1);" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">Type {{char.Appearance[2].Index}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[2].Index == limits.headOverlay[2].max}" ng-mousedown="mouseDown = true; updateHeadOverlay(2, 'Index', char.Appearance[2].Index + 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[2].Index == limits.headOverlay[2].max}" ng-click="updateHeadOverlay(2, 'Index', limits.headOverlay[2].max);"></i>
+
+                <h3>Couleur principale</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[2].Color == 0}" ng-click="updateHeadOverlay(2, 'Color', 0);"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[2].Color == 0}" ng-mousedown="mouseDown = true; updateHeadOverlay(2, 'Color', char.Appearance[2].Color - 1);" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">Type {{char.Appearance[2].Color}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[2].Color == limits.hairColor}" ng-mousedown="mouseDown = true; updateHeadOverlay(2, 'Color', char.Appearance[2].Color + 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[2].Color == limits.hairColor}" ng-click="updateHeadOverlay(2, 'Color', limits.hairColor);"></i>
+
+                <h3>Couleur secondaire</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[2].SecondaryColor == 0}" ng-click="updateHeadOverlay(2, 'SecondaryColor', 0);"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[2].SecondaryColor == 0}" ng-mousedown="mouseDown = true; updateHeadOverlay(2, 'SecondaryColor', char.Appearance[2].SecondaryColor - 1);" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">Type {{char.Appearance[2].SecondaryColor}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[2].SecondaryColor == limits.hairColor}" ng-mousedown="mouseDown = true; updateHeadOverlay(2, 'SecondaryColor', char.Appearance[2].SecondaryColor + 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[2].SecondaryColor == limits.hairColor}" ng-click="updateHeadOverlay(2, 'SecondaryColor', limits.hairColor);"></i>
+
+                <h3>Opacité</h3>
+                <div class="">
+                    <input class="slider col-md-12" type="range" min="0" max="1" step="0.01" ng-model="char.Appearance[2].Opacity" ng-change="updateHeadOverlay(2, 'Opacity');">
+                </div>
+            </section>
+            <!-- Nez -->
+            <section ng-show="currentMenu == 4">
+                <h3>Largeur du nez</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Fin</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[0]" ng-change="setFaceFeature(0)">
+                    <span class="col-md-2" style="line-height: 25px;">Large</span>
+                </div>
+                <h3>Hauteur du nez</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Haut</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[1]" ng-change="setFaceFeature(1)">
+                    <span class="col-md-2" style="line-height: 25px;">Bas</span>
+                </div>
+                <h3>Longueur du nez</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Long</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[2]" ng-change="setFaceFeature(2)">
+                    <span class="col-md-2" style="line-height: 25px;">Court</span>
+                </div>
+                <h3>Pont du nez</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Round</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[3]" ng-change="setFaceFeature(3)">
+                    <span class="col-md-2" style="line-height: 25px;">Hollow</span>
+                </div>
+            </section>
+            <!-- Cheveux -->
+            <section ng-show="currentMenu == 5">
+                <h3>Style</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Hair.Hair == 0}" ng-click="hairStyleRangeCheck(0)"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Hair.Hair == 0}" ng-mousedown="mouseDown = true; hairStyleRangeCheck(char.Hair.Hair-1)" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">{{hairName}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Hair.Hair == Hair[char.Gender][Hair[char.Gender].length-1].ID}" ng-mousedown="mouseDown = true; hairStyleRangeCheck(char.Hair.Hair+1)" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Hair.Hair == Hair[char.Gender][Hair[char.Gender].length-1].ID}" ng-click="hairStyleRangeCheck(Hair[char.Gender][Hair[char.Gender].length-1].ID)"></i>
+
+                <h3>Couleur des racines</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Hair.Color == 0}" ng-click="updateValue(0, 'Hair', 'Color', limits.hairColor)"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Hair.Color == 0}" ng-mousedown="mouseDown = true; updateValue(char.Hair.Color-1, 'Hair', 'Color', limits.hairColor)" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">{{char.Hair.Color}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Hair.Color == limits.hairColor}" ng-mousedown="mouseDown = true; updateValue(char.Hair.Color+1, 'Hair', 'Color', limits.hairColor)" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Hair.Color == limits.hairColor}" ng-click="updateValue(limits.hairColor, 'Hair', 'Color', limits.hairColor)"></i>
+
+                <h3>Couleur des pointes</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Hair.HighlightColor == 0}" ng-click="updateValue(0, 'Hair', 'HighlightColor', limits.hairColor)"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Hair.HighlightColor == 0}" ng-mousedown="mouseDown = true; updateValue(char.Hair.HighlightColor-1, 'Hair', 'HighlightColor', limits.hairColor)" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">{{char.Hair.HighlightColor}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Hair.HighlightColor == limits.hairColor}" ng-mousedown="mouseDown = true; updateValue(char.Hair.HighlightColor+1, 'Hair', 'HighlightColor', limits.hairColor)" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Hair.HighlightColor == limits.hairColor}" ng-click="updateValue(limits.hairColor, 'Hair', 'HighlightColor', limits.hairColor)"></i>
+            </section>
+            <!-- Bouche -->
+            <section ng-show="currentMenu == 6">
+                <h3>Épaisseur des lèvres</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Épaisses</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[12]" ng-change="setFaceFeature(12)">
+                    <span class="col-md-2" style="line-height: 25px;">Fines</span>
+                </div>
+
+                <h3>Longueur du menton</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Petit</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[15]" ng-change="setFaceFeature(15)">
+                    <span class="col-md-2" style="line-height: 25px;">Grand</span>
+                </div>
+
+                <h3>Position du menton</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Intérieur</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[16]" ng-change="setFaceFeature(16)">
+                    <span class="col-md-2" style="line-height: 25px;">Extérieur</span>
+                </div>
+
+                <h3>Largeur du menton</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Fin</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[17]" ng-change="setFaceFeature(17)">
+                    <span class="col-md-2" style="line-height: 25px;">Épais</span>
+                </div>
+
+                <h3>Forme du menton</h3>
+                <div class="row">
+                    <span class="col-md-2" style="line-height: 25px;">Simple</span>
+                    <input class="slider col-md-8" type="range" min="-1" max="1" step="0.01" ng-model="char.Features[18]" ng-change="setFaceFeature(18)">
+                    <span class="col-md-2" style="line-height: 25px;">Double</span>
+                </div>
+            </section>
+            <!-- Pilosité -->
+            <section ng-show="currentMenu == 7">
+
+                <h3>Pilosité faciale</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Index == limits.headOverlay[1].min}" ng-click="updateHeadOverlay(1, 'Index', limits.headOverlay[1].min);"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Index == limits.headOverlay[1].min}" ng-mousedown="mouseDown = true; updateHeadOverlay(1, 'Index', char.Appearance[1].Index - 1);" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">Type {{char.Appearance[1].Index + 1}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Index == limits.headOverlay[1].max}" ng-mousedown="mouseDown = true; updateHeadOverlay(1, 'Index', char.Appearance[1].Index + 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Index == limits.headOverlay[1].max}" ng-click="updateHeadOverlay(1, 'Index', limits.headOverlay[1].max);"></i>
+
+                <h3>Couleur principale</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Color == 0}" ng-click="updateHeadOverlay(1, 'Color', 0);"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Color == 0}" ng-mousedown="mouseDown = true; updateHeadOverlay(1, 'Color', char.Appearance[1].Color - 1);" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">Type {{char.Appearance[1].Color}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Color == limits.hairColor}" ng-mousedown="mouseDown = true; updateHeadOverlay(1, 'Color', char.Appearance[1].Color + 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Color == limits.hairColor}" ng-click="updateHeadOverlay(1, 'Color', limits.hairColor);"></i>
+
+                <h3>Couleur secondaire</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[1].SecondaryColor == 0}" ng-click="updateHeadOverlay(1, 'SecondaryColor', 0);"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[1].SecondaryColor == 0}" ng-mousedown="mouseDown = true; updateHeadOverlay(1, 'SecondaryColor', char.Appearance[1].SecondaryColor - 1);" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">Type {{char.Appearance[1].SecondaryColor}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[1].SecondaryColor == limits.hairColor}" ng-mousedown="mouseDown = true; updateHeadOverlay(1, 'SecondaryColor', char.Appearance[1].SecondaryColor + 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[1].SecondaryColor == limits.hairColor}" ng-click="updateHeadOverlay(1, 'SecondaryColor', limits.hairColor);"></i>
+
+                <h3>Opacité</h3>
+                <div class="row">
+                    <input class="slider col-md-12" type="range" min="0" max="1" step="0.01" ng-model="char.Appearance[1].Opacity" ng-change="updateHeadOverlay(1, 'Opacity');">
+                </div>
+            </section>
+            <!-- Cosmétiques -->
+            <section ng-show="currentMenu == 8">
+                <h3>Tâches</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[0].Index == limits.headOverlay[0].min}" ng-click="updateHeadOverlay(0, 'Index', limits.headOverlay[0].min);"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[0].Index == limits.headOverlay[0].min}" ng-mousedown="mouseDown = true; updateHeadOverlay(0, 'Index', char.Appearance[0].Index - 1);" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">Type {{char.Appearance[0].Index + 1}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[0].Index == limits.headOverlay[0].max}" ng-mousedown="mouseDown = true; updateHeadOverlay(0, 'Index', char.Appearance[0].Index + 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[0].Index == limits.headOverlay[0].max}" ng-click="updateHeadOverlay(0, 'Index', limits.headOverlay[0].max);"></i>
+
+                <h3>Complexion</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[6].Index == limits.headOverlay[6].min}" ng-click="updateHeadOverlay(6, 'Index', limits.headOverlay[6].min);"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[6].Index == limits.headOverlay[6].min}" ng-mousedown="mouseDown = true; updateHeadOverlay(6, 'Index', char.Appearance[6].Index - 1);" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">Type {{char.Appearance[6].Index + 1}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[6].Index == limits.headOverlay[6].max}" ng-mousedown="mouseDown = true; updateHeadOverlay(6, 'Index', char.Appearance[6].Index + 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[6].Index == limits.headOverlay[6].max}" ng-click="updateHeadOverlay(6, 'Index', limits.headOverlay[6].max);"></i>
+
+                <h3>Rouge à lèvres</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[8].Index == limits.headOverlay[8].min}" ng-click="updateHeadOverlay(8, 'Index', limits.headOverlay[8].min);"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[8].Index == limits.headOverlay[8].min}" ng-mousedown="mouseDown = true; updateHeadOverlay(8, 'Index', char.Appearance[8].Index - 1);" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">Type {{char.Appearance[8].Index + 1}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[8].Index == limits.headOverlay[8].max}" ng-mousedown="mouseDown = true; updateHeadOverlay(8, 'Index', char.Appearance[8].Index + 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[8].Index == limits.headOverlay[8].max}" ng-click="updateHeadOverlay(8, 'Index', limits.headOverlay[8].max);"></i>
+
+                <h3>Couleur du rouge à lèvres</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[8].Color == 0}" ng-click="updateHeadOverlay(8, 'Color', 0);"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[8].Color == 0}" ng-mousedown="mouseDown = true; updateHeadOverlay(8, 'Color', char.Appearance[8].Color - 1, limits.maxLipstickColor);" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">Type {{char.Appearance[8].Color}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[8].Color == limits.maxLipstickColor}" ng-mousedown="mouseDown = true; updateHeadOverlay(8, 'Color', char.Appearance[8].Color + 1, limits.maxLipstickColor);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[8].Color == limits.maxLipstickColor}" ng-click="updateHeadOverlay(8, 'Color', limits.maxLipstickColor);"></i>
+
+                <h3>Opacité du rouge à lèvres</h3>
+                <div class="row">
+                    <input class="slider col-md-12" type="range" min="0" max="1" step="0.01" ng-model="char.Appearance[8].Opacity" ng-change="updateHeadOverlay(8, 'Opacity');">
+                </div>
+
+                <h3>Maquillage</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[4].Index == limits.headOverlay[4].min}" ng-click="updateHeadOverlay(4, 'Index', limits.headOverlay[4].min);"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[4].Index == limits.headOverlay[4].min}" ng-mousedown="mouseDown = true; updateHeadOverlay(4, 'Index', char.Appearance[4].Index - 1);" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">Type {{char.Appearance[4].Index + 1}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[4].Index == limits.headOverlay[4].max}" ng-mousedown="mouseDown = true; updateHeadOverlay(4, 'Index', char.Appearance[4].Index + 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[4].Index == limits.headOverlay[4].max}" ng-click="updateHeadOverlay(4, 'Index', limits.headOverlay[4].max);"></i>
+
+                <h3>Couleur du Maquillage</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[4].Color == 0}" ng-click="updateHeadOverlay(4, 'Color', 0);"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[4].Color == 0}" ng-mousedown="mouseDown = true; updateHeadOverlay(4, 'Color', char.Appearance[4].Color - 1, limits.maxLipstickColor);" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">Type {{char.Appearance[4].Color}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[4].Color == limits.maxLipstickColor}" ng-mousedown="mouseDown = true; updateHeadOverlay(4, 'Color', char.Appearance[4].Color + 1, limits.maxLipstickColor);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[4].Color == limits.maxLipstickColor}" ng-click="updateHeadOverlay(4, 'Color', limits.maxLipstickColor);"></i>
+
+                <h3>Opacité du maquillage</h3>
+                <div class="row">
+                    <input class="slider col-md-12" type="range" min="0" max="1" step="0.01" ng-model="char.Appearance[4].Opacity" ng-change="updateHeadOverlay(4, 'Opacity');">
+                </div>
+
+                <h3>Tâches de rousseur</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[9].Index == limits.headOverlay[9].min}" ng-click="updateHeadOverlay(9, 'Index', limits.headOverlay[9].min);"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[9].Index == limits.headOverlay[9].min}" ng-mousedown="mouseDown = true; updateHeadOverlay(9, 'Index', char.Appearance[9].Index - 1);" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">Type {{char.Appearance[9].Index + 1}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[9].Index == limits.headOverlay[9].max}" ng-mousedown="mouseDown = true; updateHeadOverlay(9, 'Index', char.Appearance[9].Index + 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[9].Index == limits.headOverlay[9].max}" ng-click="updateHeadOverlay(9, 'Index', limits.headOverlay[9].max);"></i>
+
+                <h3>Opacité des tâches de rousseur</h3>
+                <div class="row">
+                    <input class="slider col-md-12" type="range" min="0" max="1" step="0.01" ng-model="char.Appearance[9].Opacity" ng-change="updateHeadOverlay(9, 'Opacity');">
+                </div>
+
+                <h3>Rides</h3>
+                <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[3].Index == limits.headOverlay[3].min}" ng-click="updateHeadOverlay(3, 'Index', limits.headOverlay[3].min);"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[3].Index == limits.headOverlay[3].min}" ng-mousedown="mouseDown = true; updateHeadOverlay(3, 'Index', char.Appearance[3].Index - 1);" ng-mouseup="mouseDown = false;"></i>
+                <span class="labelHolder">Type {{char.Appearance[3].Index + 1}}</span>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[3].Index == limits.headOverlay[3].max}" ng-mousedown="mouseDown = true; updateHeadOverlay(3, 'Index', char.Appearance[3].Index + 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[3].Index == limits.headOverlay[3].max}" ng-click="updateHeadOverlay(3, 'Index', limits.headOverlay[3].max);"></i>
+            </section>
+        </div>
+        <a onclick="open_passport()" class="next perso" >Créer</a>
+    </div>
+    <div style="margin-left:200px;">
+        <section>
+            <label for="facialHair">Facial Hair</label>
+            <input type="number" id="facialHair" />
+        </section>
+        <section>
+            <h3>Head Overlay</h3>
+            <label>Blemishes</label>
+            <input type="number" data-type="headOverlay" data-index="0" />
+            <input type="number" data-type="headOverlayColor" data-index="0" />
+            <label>Facial Hair</label>
+            <input type="number" data-type="headOverlay" data-index="1" />
+            <input type="number" data-type="headOverlayColor" data-index="1" />
+            <label>Eye Brow</label>
+            <input type="number" data-type="headOverlay" data-index="2" />
+            <input type="number" data-type="headOverlayColor" data-index="2" />
+            <label>Ageing</label>
+            <input type="number" data-type="headOverlay" data-index="3" />
+            <input type="number" data-type="headOverlayColor" data-index="3" />
+            <label>Makeup Color</label>
+            <input type="number" data-type="headOverlay" data-index="4" />
+            <input type="number" data-type="headOverlayColor" data-index="4" />
+            <label>Blush Color</label>
+            <input type="number" data-type="headOverlay" data-index="5" />
+            <input type="number" data-type="headOverlayColor" data-index="5" />
+            <label>Complexion</label>
+            <input type="number" data-type="headOverlay" data-index="6" />
+            <input type="number" data-type="headOverlayColor" data-index="6" />
+            <label>Sun Damage Color</label>
+            <input type="number" data-type="headOverlay" data-index="7" />
+            <input type="number" data-type="headOverlayColor" data-index="7" />
+            <label>Lipstick Color</label>
+            <input type="number" data-type="headOverlay" data-index="8" />
+            <input type="number" data-type="headOverlayColor" data-index="8" />
+            <label>Moles/Freckles Color</label>
+            <input type="number" data-type="headOverlay" data-index="9" />
+            <input type="number" data-type="headOverlayColor" data-index="9" />
+            <label>Chest Hair Color</label>
+            <input type="number" data-type="headOverlay" data-index="10" />
+            <input type="number" data-type="headOverlayColor" data-index="10" />
+            <label>Body Blemishes</label>
+            <input type="number" data-type="headOverlay" data-index="11" />
+            <input type="number" data-type="headOverlayColor" data-index="11" />
+            <label>Add Body Blemishes</label>
+            <input type="number" data-type="headOverlay" data-index="12" />
+            <input type="number" data-type="headOverlayColor" data-index="12" />
+        </section>
+    </div>
+  </div>
+  <div id="passport">
+      <div class="content pass">
+          <div class="precedent">
+              <a onclick="open_character_creator()"><i class="fas fa-chevron-circle-left"></i>Précédent</a>
+          </div>
+          <div class="logo"><svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 124.26 61.94"><title>resurrection_logo</title><path d="M311.74,334.41l1.89,5.95H299.46l3.76-11-5-4.74,15.3,2.56h0a6.76,6.76,0,0,1,3.48,5.91h0l-2-.18c-1-.1-2.73.1-3.43.87Z" transform="translate(-244.54 -318.58)" /><path d="M306.67,380.52c17.65,0,19.67-3.49,19.67-3.49L321,365.26h15.05a27.19,27.19,0,0,0,20.05-8.82h0l-10.66-7.72h5.3a16.57,16.57,0,0,0,15.1-9.74h0l-11.21-6.8h1.05a13.12,13.12,0,0,0,13.11-13.56v0H330.2c0,.44-.08.87-.13,1.3-1.4,11.42-11.89,19.95-23.4,20.2-11.5-.25-22-8.78-23.39-20.2,0-.43-.09-.86-.13-1.3h-38.6v0a13.12,13.12,0,0,0,13.11,13.56h1L247.49,339h0a16.59,16.59,0,0,0,15.11,9.74h5.29l-10.65,7.72h0a27.19,27.19,0,0,0,20.05,8.82h15L287,377S289,380.52,306.67,380.52Z" transform="translate(-244.54 -318.58)" /></svg></div>
+
+          <div class="passux">
+              <div id="write">
+                  <input type="text" ng-model="char.Identite.LastName" placeholder="Nom" />
+                  <input type="text" ng-model="char.Identite.FirstName" placeholder="Prenom" />
+                  <input type="text" ng-model="char.Identite.Nationalite" />
+                  <div class="sexe-choice">
+                      <span ng-show="char.Gender == 0">M</span>
+                      <span ng-show="char.Gender == 1">F</span>
+                  </div>
+                  <input class="date" type="text" ng-model="char.Identite.BirthDate" placeholder="DD/MM/YYYY" ng-keyup="getAge()" />
+                  <div class="age">
+                      {{char.Identite.AgeString}}
+                  </div>
+                  <input type="text" ng-model="passportDeliveryDate" readonly />
+              </div>
+          </div>
+          <a class="next pass" ng-click="saveChar()"><svg xmlns="http://www.w3.org/2000/svg" id="Calque_1" data-name="Calque 1" viewBox="0 0 84.73 67.28"><title>noun_Travel_62578</title><path d="M65.49,65.37a3.26,3.26,0,0,1-3.25.52A3.39,3.39,0,0,1,61,65a24.55,24.55,0,0,1-13.28,8.8c3-2.08,5.47-5.67,7.12-10.21H60.3c0-.1-.07-.18-.08-.28l-.28-2.16H55.63a40.79,40.79,0,0,0,1.44-9.84h1.57l-.32-2.44H57.07a45.12,45.12,0,0,0-.4-4.76c-.78.22-1.59.43-2.39.64.18,1.34.3,2.7.35,4.12H46l-.5,2.44h9.11a38.12,38.12,0,0,1-1.54,9.84H42.79v-5.4l-1.25.87a3.1,3.1,0,0,1-1.19.49v4H30.06a35.18,35.18,0,0,1-1-4.6c-.27.1-.54.21-.8.33-.53.22-1,.44-1.49.66.22,1.24.47,2.45.79,3.61h-7.8c-.7.43-1.38.86-2,1.3s-.94.68-1.36,1a28.5,28.5,0,0,0,49.47,1.64ZM21.11,63.58H28.3c1.66,4.54,4.13,8.13,7.12,10.21A24.58,24.58,0,0,1,21.11,63.58Zm19.24,9.69c-3.88-.65-7.27-4.33-9.42-9.69h9.42Zm2.44-9.69h9.43c-2.15,5.36-5.54,9-9.43,9.69Z" transform="translate(-2.64 -11.36)" /><path d="M87.36,24.46c-4-2.63-12.35-.77-21.61,2.8L49.47,11.36,44,11.55,57.07,31c-5.39,2.47-10.72,5.23-15.4,7.77l-6.75-5.1L32.11,34l7,8.79L39.69,54,42,52.34,43.68,44c5.19-1.19,11-2.66,16.69-4.37l3.05,23.21,4.24-3.5,1.65-22.69C78.63,33.22,86.11,29.07,87.36,24.46Z" transform="translate(-2.64 -11.36)" /><path d="M48.53,24.07l-1.35-2a28.5,28.5,0,0,0-33.8,23.64c1.75-1.32,3.46-2.49,5-3.5A23.47,23.47,0,0,1,19.71,39h3.93c1.42-.82,2.87-1.64,4.41-2.45H21.11A24.58,24.58,0,0,1,35.42,26.36a16.85,16.85,0,0,0-4.28,4.54,2.93,2.93,0,0,1,.6-.15l2.81-.33h.05a10,10,0,0,1,5.75-3.53v6.79L42,34.9l.83-.43V26.89a10.57,10.57,0,0,1,6.4,4.28l3.16-1.5Z" transform="translate(-2.64 -11.36)" /><path d="M35.92,44l-4.4-5.54c-3,1.53-6.32,3.35-9.8,5.52A71.66,71.66,0,0,0,10,52.8a30.75,30.75,0,0,0-5.1,6.26,17.79,17.79,0,0,0-1.77,4c-.11.35-.19.73-.28,1.1,0,.18-.06.37-.1.56l-.1.68v.84l0,1.22a10.59,10.59,0,0,0,1.28,4.42A8.6,8.6,0,0,0,7,75a13.45,13.45,0,0,0,6.39,1.7,35.85,35.85,0,0,0,8.7-.91c.63-.13,1.16-.25,1.61-.36-5.88-.31-9.54-1.72-11.51-2.78a8.71,8.71,0,0,1-1.53-1l-.32-.26h0a3.89,3.89,0,0,1-.36-.34,3.44,3.44,0,0,1-.6-3.4,4,4,0,0,0,.14-.41l.24-.8v0c0-.13,0,.14,0,.11l0,0,0-.07,0-.12c0-.08.05-.16.09-.24s.14-.32.23-.49a10.56,10.56,0,0,1,1.35-2,22.84,22.84,0,0,1,4.32-3.8A62.64,62.64,0,0,1,27,53.89c3.28-1.39,6.45-2.52,9.32-3.47Z" transform="translate(-2.64 -11.36)" /></svg> S'envoler pour Los Santos</a>
+      </div>
+  </div>
+</body>
+</html>

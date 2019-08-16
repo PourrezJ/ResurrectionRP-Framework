@@ -1,0 +1,6 @@
+﻿<h3>{{property.name}}</h3>
+<i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[property.index].Index == limits.headOverlay[property.index].min}" ng-click="updateHeadOverlay(property.index, 'Index', limits.headOverlay[property.index].min);"></i>
+<i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[property.index].Index == limits.headOverlay[property.index].min}" ng-mousedown="mouseDown = true; updateHeadOverlay(property.index, 'Index', char.Appearance[property.index].Index - 1);" ng-mouseup="mouseDown = false;"></i>
+<span class="labelHolder">Type {{char.Appearance[property.index].Index + 1}}</span>
+<i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[property.index].Index == limits.headOverlay[property.index].max}" ng-mousedown="mouseDown = true; updateHeadOverlay(property.index, 'Index', char.Appearance[property.index].Index + 1);" ng-mouseup="mouseDown = false;"></i>
+<i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[property.index].Index == limits.headOverlay[property.index].max}" ng-click="updateHeadOverlay(property.index, 'Index', limits.headOverlay[property.index].max);"></i>

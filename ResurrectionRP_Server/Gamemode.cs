@@ -60,6 +60,8 @@ namespace ResurrectionRP_Server
         public VehiclesManager VehicleManager { get; private set; }
         //[BsonIgnore]
         //public Weather.WeatherManager WeatherManager { get; private set; }
+        [BsonIgnore]
+        public Inventory.RPGInventoryManager RPGInventory { get; private set; }
 
         public static bool ServerLock;
 
@@ -108,6 +110,7 @@ namespace ResurrectionRP_Server
             PlayerManager = new Entities.Players.PlayerManager();
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();
+            RPGInventory = new Inventory.RPGInventoryManager();
             Alt.Server.LogInfo("Création des controlleurs terminée");
 
             if (Time == null)
@@ -144,6 +147,7 @@ namespace ResurrectionRP_Server
             if (PlayerList.Find(b => b == player) != null)
                 PlayerList.Remove(player);
             Alt.Log($"==> {player.Name} has disconnected.");
+            RPGInventory.OnPlayerQuit(player);
 
         }
 

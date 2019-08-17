@@ -1,8 +1,9 @@
 ﻿using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Players;
 using System;
+using System.Threading.Tasks;
 
-namespace ResurrectionRP_Server.Utils.Extensions
+namespace ResurrectionRP_Server
 {
     public static class PlayerExtensions
     {
@@ -39,6 +40,20 @@ namespace ResurrectionRP_Server.Utils.Extensions
 
             if (PlayerHandler.PlayerHandlerList.TryGetValue(client, out PlayerHandler value)) return value;
             return null;
+        }
+
+        public async static Task SendNotification(this IPlayer client, string text)
+        {
+
+        }
+        public async static Task SendNotificationError(this IPlayer client, string text)
+        {
+
+        }
+
+        public async static Task NotifyAsync(this IPlayer client, string text)
+        {
+
         }
     }
 }

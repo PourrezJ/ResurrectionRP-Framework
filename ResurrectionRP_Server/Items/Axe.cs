@@ -1,7 +1,7 @@
 ﻿using AltV.Net.Elements.Entities;
 using System.Numerics;
 using System.Threading.Tasks;
-//using Flags = ResurrectionRP_Server.AnimationFlags;
+using Flags = ResurrectionRP_Server.Utils.Enums.AnimationFlags;
 
 namespace ResurrectionRP_Server.Items
 {
@@ -18,8 +18,10 @@ namespace ResurrectionRP_Server.Items
 
         public override async Task Use(IPlayer client, string inventoryType, int slot)
         {
-            client.CurrentWeaponIvent
-            var weapons = client.Weapo;
+            uint Weapon = client.Weapon;
+
+            if(Weapon)
+            
 
             if (weapons.Count > 0)
             {

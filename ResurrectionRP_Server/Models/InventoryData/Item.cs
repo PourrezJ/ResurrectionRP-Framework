@@ -4,7 +4,12 @@ using ResurrectionRP_Server.Models.InventoryData;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Numerics;
 using System.Threading.Tasks;
+using AltV.Net;
+using AltV.Net.Data;
+using MongoDB.Bson.Serialization.Attributes;
+using OutfitInventory = ResurrectionRP_Server.Inventory.OutfitInventory;
 
 namespace ResurrectionRP_Server.Models
 {
@@ -71,7 +76,7 @@ namespace ResurrectionRP_Server.Models
         {
             return Task.CompletedTask;
         }
-        /*
+        
         public virtual async Task<bool> Drop(IPlayer c, int quantite, int slot, OutfitInventory inventory)
         {
             if (!isDropable)
@@ -79,9 +84,9 @@ namespace ResurrectionRP_Server.Models
 
             if (inventory.Delete(slot, quantite))
             {
-                var position = await c.GetPositionAsync();
-                var dimension = await c.GetDimensionAsync();
-                ResuPickup resu = await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), dimension);
+                var position = c.GetPosition();
+                var dimension = c.Dimension;
+                ResuPickup resu = await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension);
                 resu.OnTakePickup += OnPickup;
 
                 return true;
@@ -96,9 +101,9 @@ namespace ResurrectionRP_Server.Models
 
             if (inventory.Delete(slot, quantite))
             {
-                var position = await c.GetPositionAsync();
-                var dimension = await c.GetDimensionAsync();
-                ResuPickup resu = await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), dimension);
+                var position = c.GetPosition();
+                var dimension = c.Dimension;
+                ResuPickup resu = await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension);
                 resu.OnTakePickup += OnPickup;
 
                 return true;
@@ -108,7 +113,7 @@ namespace ResurrectionRP_Server.Models
 
         public virtual async Task OnPickup(IPlayer client, ResuPickup pickup)
         {
-            PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
+            Entities.Players.PlayerHandler ph = Entities.Players.PlayerManager.GetPlayerByClient(client);
             if (ph != null)
             {
                 if (!ph.InventoryIsFull(pickup.Quantite * pickup.Item.weight))
@@ -120,16 +125,16 @@ namespace ResurrectionRP_Server.Models
                     }
                     else
                     {
-                        await client.SendNotificationError("Action impossible.");
+                        client.SendNotificationError("Action impossible.");
                     }
                 }
                 else
                 {
-                    await client.SendNotificationError("Vous n'avez pas la place.");
+                    client.SendNotificationError("Vous n'avez pas la place.");
                 }
             }
         }
-        */
+        
         public virtual Task Give(IPlayer sender, IPlayer recever, int quantite)
         {
             return Task.CompletedTask;

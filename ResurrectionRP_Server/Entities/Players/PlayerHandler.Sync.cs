@@ -13,7 +13,7 @@ namespace ResurrectionRP_Server.Entities.Players
     public partial class PlayerHandler
     {
 
-        public async Task PlayAnimation(string animDict, string animName, float blendInSpeed = 8f, float blendOutSpeed = -8f, int duration = -1, AnimationFlags flags = (AnimationFlags)0, float playbackRate = 0f)
+        public async Task PlayAnimation(string animDict, string animName, float blendInSpeed = 8f, float blendOutSpeed = -8f, int duration = -1, ResurrectionRP_Server.Utils.Enums.AnimationFlags flags = (ResurrectionRP_Server.Utils.Enums.AnimationFlags)0, float playbackRate = 0f)
         {
             var animsync = new AnimationsSync()
             {

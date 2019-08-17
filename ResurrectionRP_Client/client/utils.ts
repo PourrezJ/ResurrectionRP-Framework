@@ -31,6 +31,7 @@ export function initialize() {
         new Loading(text, time, type, toggled);
     });
 
+    alt.onServer("showCursor", (state: boolean) => alt.showCursor(state));
 
 
 

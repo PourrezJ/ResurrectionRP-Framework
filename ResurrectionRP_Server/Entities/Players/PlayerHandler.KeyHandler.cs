@@ -171,7 +171,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }*/
 
-                    RPGInventoryMenu menu = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, null);
+                    Inventory.RPGInventoryMenu menu = new Inventory.RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, null);
                     menu.OnMove += (async (c, m) =>
                     {
                         await ph.UpdatePlayerInfo();
@@ -258,8 +258,8 @@ namespace ResurrectionRP_Server.Entities.Players
                 case ConsoleKey.NumPad8:
                 case ConsoleKey.NumPad9:
                     await OnAnimationKeyPressed(Keycode);
-                    break;
-            }*/
+                    break;*/
+            }
         }
     }
 }

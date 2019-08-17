@@ -118,6 +118,7 @@ namespace ResurrectionRP_Server
 
             Alt.Server.LogInfo("Initialisations des controlleurs...");
             await VehicleManager.LoadAllVehiclesActive();
+            await Loader.ClothingLoader.LoadAllCloth();
             Alt.Server.LogInfo("Initialisation des controlleurs terminé");
 
             Alt.OnPlayerConnect += OnPlayerConnected;

@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using AltV.Net;
 using System.Threading.Tasks;
 using AltV.Net.Elements.Entities;
+using Inventory = ResurrectionRP_Server.Inventory.Inventory;
 
 
 namespace ResurrectionRP_Server.Inventory
@@ -137,7 +139,7 @@ namespace ResurrectionRP_Server.Inventory
             }
             catch (Exception ex)
             {
-                MP.Logger.Error("RPGInventoryMenu", ex);
+                Alt.Server.LogError("RPGInventoryMenu" + ex);
             }
         }
 

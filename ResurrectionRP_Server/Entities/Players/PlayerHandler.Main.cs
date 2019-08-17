@@ -9,6 +9,7 @@ using AltV.Net;
 using AltV.Net.Data;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
+using RPGInventoryManager = ResurrectionRP_Server.Inventory.RPGInventoryManager;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -67,13 +68,13 @@ namespace ResurrectionRP_Server.Entities.Players
             = new Models.Location(new Vector3(), new Vector3()); // Default spawn
 
         public Models.PlayerCustomization Character { get; set; }
-        /**
-        public Inventory PocketInventory { get; set; } = new Inventory(6, 4);
+        
+        public Inventory.Inventory PocketInventory { get; set; } = new Inventory.Inventory(6, 4);
 
         [BsonIgnore]
-        public Inventory BagInventory { get; set; }
+        public Inventory.Inventory BagInventory { get; set; }
 
-        public OutfitInventory OutfitInventory { get; set; } = new OutfitInventory();**/
+        public Inventory.OutfitInventory OutfitInventory { get; set; } = new Inventory.OutfitInventory();
         public double Money { get; private set; }
         public Bank.BankAccount BankAccount { get; set; }
         public int Hunger { get; set; } = 100;
@@ -294,9 +295,9 @@ namespace ResurrectionRP_Server.Entities.Players
                                 int torso = 0;
 
                                 if (Character.Gender == 0)
-                                    torso = ClothingLoader.ClothingsMaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
+                                    torso = Loader.ClothingLoader.ClothingsMaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
                                 else
-                                    torso = ClothingLoader.ClothingsFemaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
+                                    torso = Loader.ClothingLoader.ClothingsFemaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
 
                                 Clothing.Torso = new Models.ClothData((byte)torso, 0, 0);
                             }
@@ -341,7 +342,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         case 13: // backpack
                             if (clothSlot?.Item != null)
                             {
-                                var backpack = (clothSlot.Item) as BagItem;
+                                var backpack = (clothSlot.Item) as Items.BagItem;
                                 if (backpack.InventoryBag != null)
                                 {
                                     BagInventory = backpack.InventoryBag;
@@ -401,7 +402,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        public async Task<bool> AddItem(Item item, int quantity = 1)
+        public async Task<bool> AddItem(Models.Item item, int quantity = 1)
         {
 
             if (PocketInventory.AddItem(item, quantity))

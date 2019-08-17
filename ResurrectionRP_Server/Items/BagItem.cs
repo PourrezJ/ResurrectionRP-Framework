@@ -1,18 +1,20 @@
-﻿using AlternateLife.RageMP.Net.Data;
-using AlternateLife.RageMP.Net.Interfaces;
-using System.Threading.Tasks;
+﻿
+using AltV.Net;
+using AltV.Net.Data;
+using AltV.Net.Async;
+using AltV.Net.Elements.Entities;
 
-namespace ResurrectionRP.Server
+namespace ResurrectionRP_Server.Items
 {
-    public class BagItem : Item
+    public class BagItem : Models.Item
     {
-        public Inventory InventoryBag { get; set; }
-        public ClothData Clothing { get; set; }
+        public Inventory.Inventory InventoryBag { get; set; }
+        public Models.ClothData Clothing { get; set; }
 
-        public BagItem(ItemID id, string name, string description, ClothData bag, int weightMax, int maxSlot, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, int itemPrice = 0, string type = "item", string icon = "backpack", string classes = "backpack") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
+        public BagItem(Utils.Enums.ItemID id, string name, string description, Models.ClothData bag, int weightMax, int maxSlot, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, int itemPrice = 0, string type = "item", string icon = "backpack", string classes = "backpack") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
         {
             Clothing = bag;
-            InventoryBag = new Inventory(weightMax, maxSlot);
+            InventoryBag = new Inventory.Inventory(weightMax, maxSlot);
         }
     }
 }

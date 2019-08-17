@@ -13,8 +13,8 @@ using OutfitInventory = ResurrectionRP_Server.Inventory.OutfitInventory;
 
 namespace ResurrectionRP_Server.Models
 {
-    [BsonKnownTypes(typeof(Items.Alcohol), typeof(Axe), typeof(BuildingItem), typeof(ClothItem), typeof(CrateTools), typeof(Defibrilator), typeof(Eat), typeof(GasJerrycan), typeof(HandCuff), typeof(HealItem),
-        typeof(IdentityCard), typeof(MaskItem), typeof(PhoneItem), typeof(RadioItem), typeof(BagItem), typeof(Unusable), typeof(Weapons), typeof(SeedItem), typeof(LockPick))]
+    [BsonKnownTypes(typeof(Items.Alcohol), typeof(Items.Axe), typeof(Items.BuildingItem), typeof(ClothItem), typeof(Items.CrateTools), typeof(Items.Defibrilator), typeof(Items.Eat), typeof(Items.GasJerrycan), typeof(Items.HandCuff), typeof(Items.HealItem),
+        typeof(Items.IdentityCard), typeof(Items.MaskItem), typeof(Items.PhoneItem), typeof(Items.RadioItem), typeof(Items.BagItem), typeof(Items.Unusable), typeof(Weapons), typeof(Items.SeedItem), typeof(Items.LockPick))]
     public class Item : ICloneable
     {
         [JsonProperty("id")]
@@ -94,7 +94,7 @@ namespace ResurrectionRP_Server.Models
             return false;
         }
 
-        public virtual async Task<bool> Drop(IPlayer c, int quantite, int slot, Inventory inventory)
+        public virtual async Task<bool> Drop(IPlayer c, int quantite, int slot, Inventory.Inventory inventory)
         {
             if (!isDropable)
                 return false;

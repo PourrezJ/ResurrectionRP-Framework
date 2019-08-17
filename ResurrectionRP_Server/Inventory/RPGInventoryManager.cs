@@ -191,7 +191,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Drop
-        private async Task RPGInventory_DropItem(IPlayer client, object[] args)
+        private async void RPGInventory_DropItem(IPlayer client, object[] args)
         {
             try
             {
@@ -350,7 +350,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Give
-        private async Task RPGInventory_GiveItem(IPlayer client, object[] args)
+        private async void RPGInventory_GiveItem(IPlayer client, object[] args)
         {
             try
             {
@@ -524,7 +524,7 @@ namespace ResurrectionRP_Server.Inventory
                             break;
                     }
 
-                    await Refresh(client, menu);
+                    Refresh(client, menu);
                     await menu.OpenMenu(client);
                 }
             }
@@ -536,7 +536,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Switch
-        private async Task RPGInventory_SwitchItemInventory_SRV(IPlayer client, object[] args)
+        private async void RPGInventory_SwitchItemInventory_SRV(IPlayer client, object[] args)
         {
             try
             {
@@ -628,7 +628,7 @@ namespace ResurrectionRP_Server.Inventory
                         {
                             if (stack.Item.id == ItemID.Bag && targetRPGInv != Utils.Enums.InventoryTypes.Outfit)
                             {
-                                var backpack = item as BagItem;
+                                var backpack = item as Items.BagItem;
                                 if (!backpack.InventoryBag.IsEmpty())
                                 {
                                     await menu.CloseMenu(client);
@@ -859,9 +859,9 @@ namespace ResurrectionRP_Server.Inventory
                                         int torso = 0;
 
                                         if (player.Character.Gender == 0)
-                                            torso = ClothingLoader.ClothingsMaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
+                                            torso = Loader.ClothingLoader.ClothingsMaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
                                         else
-                                            torso = ClothingLoader.ClothingsFemaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
+                                            torso = Loader.ClothingLoader.ClothingsFemaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
 
                                         player.Clothing.Torso = new ClothData((byte)torso, 0, 0);
                                         break;
@@ -895,7 +895,7 @@ namespace ResurrectionRP_Server.Inventory
                                         break;
 
                                     case ItemID.Bag: // backpack
-                                        var backpack = (item) as BagItem;
+                                        var backpack = (item) as Items.BagItem;
                                         if (backpack != null)
                                         {
                                             player.BagInventory = backpack.InventoryBag;
@@ -937,11 +937,10 @@ namespace ResurrectionRP_Server.Inventory
                                     case ItemID.Pistol:
                                     case ItemID.Pump:
                                     case ItemID.Taser:
-                                        var weaponItem = (item) as Weapons;
+                                        var weaponItem = (item) as Items.Weapons;
                                         if (weaponItem != null)
                                         {
-                                            await client.GiveWeaponAsync(weaponItem.Hash, 99999);
-                                            await client.SetCurrentWeaponAsync((uint)weaponItem.Hash);
+                                            await client.GiveWeaponAsync((uint)weaponItem.Hash, 99999, true);
                                         }
                                         break;
                                 }
@@ -954,7 +953,7 @@ namespace ResurrectionRP_Server.Inventory
                         }
                     }
 
-                    await Refresh(client, menu);
+                    Refresh(client, menu);
 
                     if (menu.OnMove != null)
                         await menu.OnMove.Invoke(client, menu);
@@ -964,13 +963,13 @@ namespace ResurrectionRP_Server.Inventory
             }
             catch (Exception ex)
             {
-                MP.Logger.Error("RPGInventory_SwitchItemInventory_SRV", ex);
+                Alt.Server.LogError("RPGInventory_SwitchItemInventory_SRV" + ex);
             }
         }
         #endregion
 
         #region Split
-        private async Task RPGInventory_SplitItemInventory_SRV(IPlayer client, object[] args)
+        private async void RPGInventory_SplitItemInventory_SRV(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -1024,7 +1023,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Price
-        private async Task RPGInventory_PriceItemInventory_SRV(IPlayer client, object[] args)
+        private async void RPGInventory_PriceItemInventory_SRV(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -1069,7 +1068,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Refresh
-        public static async Task Refresh(IPlayer sender, RPGInventoryMenu menu)
+        public static async void Refresh(IPlayer sender, RPGInventoryMenu menu)
         {
             menu.PocketsItems.RPGInventoryItems = new List<RPGInventoryItem>();
             for (int i = 0; i < menu.Inventory.InventoryList.Length; i++)
@@ -1141,7 +1140,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Close
-        private async Task RPGInventory_ClosedMenu_SRV(IPlayer client, object[] args)
+        private async void RPGInventory_ClosedMenu_SRV(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;

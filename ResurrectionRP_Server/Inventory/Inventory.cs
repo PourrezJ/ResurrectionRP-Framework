@@ -1,16 +1,15 @@
-﻿using System;
+﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
-using AltV.Net.Elements.Entities;
-using System.Collections.Generic;
+using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Models.InventoryData;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using AltV.Net;
-
 
 namespace ResurrectionRP_Server.Inventory
 {
-
     [BsonIgnoreExtraElements]
     public partial class Inventory
     {
@@ -44,7 +43,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Method
-        public Models.ItemStack[] FindAllItemWithType(Models.InventoryData.ItemID itemID)
+        public Models.ItemStack[] FindAllItemWithType(ItemID itemID)
         {
             return Array.FindAll(InventoryList, x => x?.Item.id == itemID);
         }
@@ -81,8 +80,8 @@ namespace ResurrectionRP_Server.Inventory
             if (AddItem(item, quantity))
             {
                 if (message)
-                    await client.NotifyAsync("Vous venez d'ajouter " + quantity + " " + item.name + " dans l'inventaire");
-                await Entities.Players.PlayerManager.GetPlayerByClient(client)?.UpdatePlayerInfo();
+                    client.Emit("Display_Help", "Vous venez d'ajouter " + quantity + " " + item.name + " dans l'inventaire", 10000);
+                await PlayerManager.GetPlayerByClient(client)?.UpdatePlayerInfo();
                 return true;
             }
             return false;
@@ -100,7 +99,7 @@ namespace ResurrectionRP_Server.Inventory
 
             if (InventoryList.Any(x => x?.Item.id == item.id) && item.isStackable)
             {
-                Models.ItemStack itemStack = InventoryList.First(x => x?.Item.id == item.id);
+               Models.ItemStack itemStack = InventoryList.First(x => x?.Item.id == item.id);
                 itemStack.Quantity += quantity;
             }
             else
@@ -140,7 +139,7 @@ namespace ResurrectionRP_Server.Inventory
             }
             catch (Exception ex)
             {
-                Alt.Server.LogError("Inventory Delete" +  ex);
+                Alt.Server.LogError("Inventory Delete: " + ex);
                 return false;
             }
         }
@@ -158,35 +157,14 @@ namespace ResurrectionRP_Server.Inventory
             }
             catch (Exception ex)
             {
-                Alt.Server.LogError("Inventory Delete" +ex);
+                Alt.Server.LogError("Inventory Delete: " + ex);
                 return false;
             }
         }
 
-        /*
-        public bool Delete(ItemID itemID, int quantity)
-        {
-            if (InventoryList.Any(x => x.Item.id == itemID))
-            {
-                ItemStack itemStack = InventoryList.Last(x => x.Item.id == itemID);
-
-                if (itemStack == null)
-                    return false;
-
-                if (Delete(itemStack.SlotIndex, quantity))
-                    return true;
-            }
-            return false;
-        }
-        */
-
-        public int DeleteAll(Models.InventoryData.ItemID itemID, int quantityNeeded)
+        public int DeleteAll(ItemID itemID, int quantityNeeded)
         {
             var value = quantityNeeded;
-            // needed = 5
-            // firstStack = 3
-            // secondStack = 7
-
             for (int i = 0; i < InventoryList.Length; i++)
             {
                 if (InventoryList[i] != null)
@@ -212,77 +190,7 @@ namespace ResurrectionRP_Server.Inventory
             return quantityNeeded - value; // valeur supprimer
         }
 
-        /*
-        public bool Delete(Item item, int quantity)
-        {
-            if (InventoryList.Any(x => x.Item.id == item.id))
-            {
-                ItemStack itemStack = InventoryList.Last(x => x.Item.id == item.id);
-
-                if (itemStack == null)
-                    return false;
-
-                if (Delete(itemStack.SlotIndex, quantity))
-                    return true;
-            }
-            return false;
-        }
-
-        public async Task<bool> Delete(IPlayer client, Item item, int quantity)
-        {
-            if (Delete(item, quantity))
-            {
-                await client.NotifyAsync("Vous venez de supprimer " + quantity + " " + item.name + " de votre inventaire");
-                return true;
-            }
-            return false;
-        }
-
-
-        public async Task<bool> Delete(IPlayer client, Item item, int slot, int quantity)
-        {
-            if (Delete(slot, quantity))
-            {
-                await client.NotifyAsync("Vous venez de supprimer " + quantity + " " + item.name + " de votre inventaire");
-                return true;
-            }
-            return false;
-        }
-
-        public int DeleteAll(ItemID itemID, int quantityNeeded)
-        {
-            var value = quantityNeeded;
-            // needed = 5
-            // firstStack = 3
-            // secondStack = 7
-
-            for (int i = 0; i < InventoryList.Length; i++)
-            {
-                if (InventoryList[i] != null)
-                {
-                    if (InventoryList[i].Item == null)
-                        continue;
-
-                    if (InventoryList[i].Item.id == itemID)
-                    {
-                        if (InventoryList[i].Quantity > value)
-                        {
-                            InventoryList[i].Quantity -= value;
-                            return quantityNeeded;
-                        }  
-                        else
-                        {
-                            value -= InventoryList[i].Quantity; //5 - 3
-                            InventoryList[i] = null;
-                        }
-                    }                        
-                }
-            }
-            return quantityNeeded - value; // valeur supprimer
-        }
-        */
-
-        public Models.Item FindItemID(Models.InventoryData.ItemID id)
+        public Models.Item FindItemID(ItemID id)
         {
             foreach (Models.Item item in LoadItem.ItemsList)
             {
@@ -292,7 +200,7 @@ namespace ResurrectionRP_Server.Inventory
             return null;
         }
 
-        public static Item ItemByID(ItemID id)
+        public static Models.Item ItemByID(ItemID id)
         {
             var item = LoadItem.ItemsList.Find(i => i.id == id) ?? null;
 
@@ -311,7 +219,7 @@ namespace ResurrectionRP_Server.Inventory
             return false;
         }
 
-        public bool HasItem(Item item)
+        public bool HasItem(Models.Item item)
         {
             if (InventoryList.Any(x => x?.Item.id == item?.id))
             {
@@ -320,10 +228,10 @@ namespace ResurrectionRP_Server.Inventory
             return false;
         }
 
-        public int CountItem(Item item)
+        public int CountItem(Models.Item item)
         {
             int a = 0;
-            foreach (ItemStack invItem in InventoryList)
+            foreach (Models.ItemStack invItem in InventoryList)
             {
                 if (invItem != null && invItem.Item.id == item.id) a += invItem.Quantity;
             }
@@ -333,14 +241,14 @@ namespace ResurrectionRP_Server.Inventory
         public int CountItem(ItemID itemID)
         {
             int a = 0;
-            foreach (ItemStack invItem in InventoryList)
+            foreach (Models.ItemStack invItem in InventoryList)
             {
                 if (invItem != null && invItem.Item.id == itemID) a += invItem.Quantity;
             }
             return a;
         }
 
-        public int GetSlotIndexUseStack(ItemStack stack)
+        public int GetSlotIndexUseStack(Models.ItemStack stack)
         {
             for (int i = 0; i < InventoryList.Length; i++)
             {

@@ -4,6 +4,7 @@ import * as enums from 'client/Utils/Enums/Enums';
 import { Time as TimeLib } from 'client/Env/Time';
 import { Survival as SurvivalLib } from 'client/player/Survival';
 import { Hud as HudLib } from 'client/player/Hud';
+import { RPGInventoryManager } from 'client/RPGinventory';
 
 export class Game {
     //region Static Var
@@ -45,6 +46,9 @@ export class Game {
 
     private _Hud: HudLib;
     public get Hud(): HudLib { return this._Hud; }
+
+    private _Inventory: RPGInventoryManager;
+    public get Inventory(): RPGInventoryManager { return this._Inventory; }
 
     //End region pools
     //constructor
@@ -89,6 +93,7 @@ export class Game {
 
             alt.log('Chargement des pools');
             this._Hud = new HudLib(Money);
+            this._Inventory = new RPGInventoryManager();
             alt.log('Chargement des pools done');
 
             alt.log("Chargement des stats");

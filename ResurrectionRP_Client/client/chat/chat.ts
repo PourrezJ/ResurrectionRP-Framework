@@ -31,7 +31,6 @@ export function initialize() {
         alt.toggleGameControls(true);
     });
 
-    alt.onServer('chatmessage', pushMessage);
 
     alt.on('toggleChat', () => {
         if (!opened) {
@@ -44,6 +43,7 @@ export function initialize() {
 
 
     });
+    alt.on("isChatOpen", () => { return !hidden });
 
     alt.on('keyup', (key) => {
         if (!loaded)

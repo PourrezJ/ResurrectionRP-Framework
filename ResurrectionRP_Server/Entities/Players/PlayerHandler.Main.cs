@@ -411,7 +411,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     var rpg = RPGInventoryManager.GetRPGInventory(this.Client);
                     if (rpg != null)
-                        await RPGInventoryManager.Refresh(this.Client, rpg);
+                        RPGInventoryManager.Refresh(this.Client, rpg);
                 }
                 await item.OnPlayerGetItem(this.Client);
 
@@ -423,7 +423,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     var rpg = RPGInventoryManager.GetRPGInventory(this.Client);
                     if (rpg != null)
-                        await RPGInventoryManager.Refresh(this.Client, rpg);
+                        RPGInventoryManager.Refresh(this.Client, rpg);
                 }
                 await item.OnPlayerGetItem(this.Client);
                 return true;
@@ -431,26 +431,26 @@ namespace ResurrectionRP_Server.Entities.Players
             else return false;
         }
 
-        public bool HasItemID(ItemID id)
+        public bool HasItemID(Models.InventoryData.ItemID id)
         {
             if (PocketInventory.HasItemID(id)) return true;
             else if (BagInventory != null && BagInventory.HasItemID(id)) return true;
             else return false;
         }
 
-        public List<ItemStack> GetAllItems()
+        public List<Models.ItemStack> GetAllItems()
         {
 
-            List<ItemStack> _stacks = new List<ItemStack>();
+            List<Models.ItemStack> _stacks = new List<Models.ItemStack>();
 
-            foreach (ItemStack stack in PocketInventory.InventoryList)
+            foreach (Models.ItemStack stack in PocketInventory.InventoryList)
             {
                 _stacks.Add(stack);
             }
 
             if (BagInventory != null)
             {
-                foreach (ItemStack stack in BagInventory.InventoryList)
+                foreach (Models.ItemStack stack in BagInventory.InventoryList)
                 {
                     _stacks.Add(stack);
                 }
@@ -463,19 +463,19 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             switch (inventoryType)
             {
-                case InventoryTypes.Pocket:
+                case Utils.Enums.InventoryTypes.Pocket:
                     return PocketInventory.Delete(slot, quantity);
 
-                case InventoryTypes.Bag:
+                case Utils.Enums.InventoryTypes.Bag:
                     return BagInventory.Delete(slot, quantity);
 
-                case InventoryTypes.Outfit:
+                case Utils.Enums.InventoryTypes.Outfit:
                     return OutfitInventory.Delete(slot, quantity);
             }
             return false;
         }
 
-        public bool DeleteOneItemWithID(ItemID itemID)
+        public bool DeleteOneItemWithID(Models.InventoryData.ItemID itemID)
         {
             if (PocketInventory.DeleteAll(itemID, 1) == 1)
                 return true;
@@ -486,7 +486,7 @@ namespace ResurrectionRP_Server.Entities.Players
             return false;
         }
 
-        public bool DeleteAllItem(ItemID itemID, int quantite = 1)
+        public bool DeleteAllItem(Models.InventoryData.ItemID itemID, int quantite = 1)
         {
             int pocketCount = PocketInventory.CountItem(itemID);
             var bagCount = 0;
@@ -510,7 +510,7 @@ namespace ResurrectionRP_Server.Entities.Players
             return false;
         }
 
-        public int CountItem(ItemID itemid)
+        public int CountItem(Utils.Enums.ItemID itemid)
         {
             int somme = 0;
             somme += PocketInventory.CountItem(itemid);
@@ -523,7 +523,7 @@ namespace ResurrectionRP_Server.Entities.Players
             return somme;
         }
 
-        public int CountItem(Item item)
+        public int CountItem(Models.Item item)
         {
             int somme = 0;
             somme += PocketInventory.CountItem(item);
@@ -536,26 +536,26 @@ namespace ResurrectionRP_Server.Entities.Players
             return somme;
         }
 
-        public Dictionary<string, ItemStack[]> GetStacksItems(ItemID itemID)
+        public Dictionary<string, Models.ItemStack[]> GetStacksItems(Models.InventoryData.ItemID itemID)
         {
-            Dictionary<string, ItemStack[]> items = new Dictionary<string, ItemStack[]>();
+            Dictionary<string, Models.ItemStack[]> items = new Dictionary<string, Models.ItemStack[]>();
 
             var pocket = PocketInventory.FindAllItemWithType(itemID);
             if (pocket != null && pocket.Length > 0)
-                items.Add(InventoryTypes.Pocket, pocket);
+                items.AddUtils.Enums.(Utils.Enums.InventoryTypes.Pocket, pocket);
 
             if (BagInventory != null)
             {
                 var bag = BagInventory.FindAllItemWithType(itemID);
                 if (bag != null && bag.Length > 0)
-                    items.Add(InventoryTypes.Bag, bag);
+                    items.Add(Utils.Enums.InventoryTypes.Bag, bag);
             }
 
             if (OutfitInventory != null)
             {
                 var outfit = OutfitInventory.FindAllItemWithType(itemID);
                 if (outfit != null && outfit.Length > 0)
-                    items.Add(InventoryTypes.Outfit, outfit);
+                    items.Add(Utils.Enums.InventoryTypes.Outfit, outfit);
             }
             return items;
         }

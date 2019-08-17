@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html lang="fr" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>ResurrectionRP :: Inventory Management</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="../../lib/js/jquery.min.js"></script>
+    <script src="../../lib/js/jquery-ui.min.js"></script>
+    <script src="../../lib/js/angular.min.js"></script>
+    <script src="../../lib/js/angular-confirm.min.js"></script>
+    <script src="../../lib/js/angular-dragdrop.js"></script>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="../../lib/css/jquery-ui.min.css" rel="stylesheet" />
+    <link href="../../lib/css/angular-confirm.min.css" rel="stylesheet" />
+    <script src="package://_rage-console/CEF/debugger.js" crossorigin="anonymous"></script>
+
+</head>
+    <body ng-app="ResurrectionInventory" ng-controller="InventoryCtrl">
+
+        <div id="playerInventory-outfit">
+            <div class="playerInventory slotWeapons ng-cloak" ng-show="showSlotWeapons">
+                <div class="holster slot" jqyoui-droppable="{stack:false,containment:'position'}" data-drop="true" data-jqyoui-options="{tolerence:'fit',accept:'.weapon.gun'}"></div>
+                <div class="inback slot" jqyoui-droppable="{stack:false,containment:'position'}" data-drop="true" data-jqyoui-options="{tolerence:'fit',accept:'.weapon.heavy'}"></div>
+            </div>
+
+            <div class="playerInventory outfit ng-cloak" data-jqyoui-options="{hoverClass:'hover'}">
+                <div class="slot" ng-class="slot.class" jqyoui-droppable="{stack:false,containment:'position',onDrop:'onSlotDrop(slot)',beforeDrop:'onbeforeDrop(slot)'}" data-drop="true" data-jqyoui-options="{tolerance:'fit'}" ng-repeat="slot in outfitSlots">
+                    <div ng-if="slot.item != null" ng-class="slot.item.class" class="item" jqyoui-draggable="{onStart:'onDragStart(slot.item)'}" data-drag="true" data-jqyoui-options="{revert:'invalid',snap:'.slot',snapMode:'inner', zIndex: 100}" ng-right-click="openCtxMenu(slot.item, $event)">
+                        <div class="name">{{slot.item.name}}</div>
+                        <img ng-src="img/icons/{{slot.item.icon}}.png" width="32px" height="32px" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="inventoryDistant">
+            <div class="playerInventory distant ng-cloak" ng-show="itemsDistant != null" data-jqyoui-options="{hoverClass:'hover'}">
+                <div class="slot" ng-class="'slot'+slot.index" jqyoui-droppable="{stack:false,containment:'position',onDrop:'onSlotDrop(slot)', beforeDrop :'onbeforeDrop(slot)'}" data-drop="getSlotAcceptation(slot)" data-jqyoui-options="{tolerance:'fit', hoverClass:true}" ng-repeat="slot in distantSlots">
+                    <div ng-if="slot.item != null" ng-class="slot.item.class" ng-show="slot.item.quantity > 0" class="item" jqyoui-draggable="{onStart:'onDragStart(slot.item)'}" data-drag="true" data-jqyoui-options="{revert: 'invalid',snap:'.slot',snapMode:'inner', zIndex: 100}" ng-right-click="openCtxMenu(slot.item, $event)">
+                        <div class="name">{{slot.item.name}}</div>
+                        <img ng-src="img/icons/{{slot.item.icon}}.png" width="32px" height="32px" />
+                        <span ng-if="slot.item.quantity > 1" class="count">x{{slot.item.quantity}}</span>
+                    </div>
+                </div>
+                <div class="weight">
+                    <div class="distantBar">
+                        <span></span>
+                    </div>
+                    <div class="number">
+                        <span>{{itemsDistant.CurrentSize}}KG</span>/{{itemsDistant.MaxSize}}KG
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="playerInventory-global">
+
+            <div id="mainAction" ng-show="showMainAction">
+            </div>
+
+            <div class="title-categories">
+                <div class="title-onglet ng-cloak" ng-class="{'active':displayInventory=='pocket'}" ng-click="setInventory('pocket')" jqyoui-droppable="{onDrop:'onPocketDrop()',beforeDrop :'onbeforeDrop(\'pocketSlots\')'}" data-drop="displayInventory != 'pocket'" data-jqyoui-options="{hoverClass:'hover'}">
+                    <svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 90 90" style="enable-background:new 0 0 90 90;" xml:space="preserve">
+                        <path d="M87.5,0h-85C1.1,0,0,1.1,0,2.5V65c0,0.9,0.5,1.8,1.3,2.2l42.5,22.5c0.4,0.2,0.8,0.3,1.2,0.3s0.8-0.1,1.2-0.3l42.5-22.5
+                        c0.8-0.4,1.3-1.3,1.3-2.2V2.5C90,1.1,88.9,0,87.5,0z M85,63.5L45,84.7L5,63.5V5h80V63.5z" />
+                        <path d="M42.5,15h5c1.4,0,2.5-1.1,2.5-2.5S48.9,10,47.5,10h-5c-1.4,0-2.5,1.1-2.5,2.5S41.1,15,42.5,15z" />
+                        <path d="M27.5,15h5c1.4,0,2.5-1.1,2.5-2.5S33.9,10,32.5,10h-5c-1.4,0-2.5,1.1-2.5,2.5S26.1,15,27.5,15z" />
+                        <path d="M12.5,15h5c1.4,0,2.5-1.1,2.5-2.5S18.9,10,17.5,10h-5c-1.4,0-2.5,1.1-2.5,2.5S11.1,15,12.5,15z" />
+                        <path d="M57.5,15h5c1.4,0,2.5-1.1,2.5-2.5S63.9,10,62.5,10h-5c-1.4,0-2.5,1.1-2.5,2.5S56.1,15,57.5,15z" />
+                        <path d="M72.5,15h5c1.4,0,2.5-1.1,2.5-2.5S78.9,10,77.5,10h-5c-1.4,0-2.5,1.1-2.5,2.5S71.1,15,72.5,15z" />
+                        <path d="M12.5,30c1.4,0,2.5-1.1,2.5-2.5v-5c0-1.4-1.1-2.5-2.5-2.5S10,21.1,10,22.5v5C10,28.9,11.1,30,12.5,30z" />
+                        <path d="M12.5,45c1.4,0,2.5-1.1,2.5-2.5v-5c0-1.4-1.1-2.5-2.5-2.5S10,36.1,10,37.5v5C10,43.9,11.1,45,12.5,45z" />
+                        <path d="M12.5,60c1.4,0,2.5-1.1,2.5-2.5v-5c0-1.4-1.1-2.5-2.5-2.5S10,51.1,10,52.5v5C10,58.9,11.1,60,12.5,60z" />
+                        <path d="M77.5,50c-1.4,0-2.5,1.1-2.5,2.5v5c0,1.4,1.1,2.5,2.5,2.5s2.5-1.1,2.5-2.5v-5C80,51.1,78.9,50,77.5,50z" />
+                        <path d="M77.5,35c-1.4,0-2.5,1.1-2.5,2.5v5c0,1.4,1.1,2.5,2.5,2.5s2.5-1.1,2.5-2.5v-5C80,36.1,78.9,35,77.5,35z" />
+                        <path d="M77.5,20c-1.4,0-2.5,1.1-2.5,2.5v5c0,1.4,1.1,2.5,2.5,2.5s2.5-1.1,2.5-2.5v-5C80,21.1,78.9,20,77.5,20z" />
+                        <path d="M32.5,69.6c-0.6,1.2-0.2,2.7,1,3.4l5.3,2.8c0.4,0.2,0.8,0.3,1.2,0.3c0.9,0,1.8-0.5,2.2-1.3c0.6-1.2,0.2-2.7-1-3.4l-5.3-2.8
+                        C34.6,67.9,33.1,68.3,32.5,69.6z" />
+                        <path d="M18.3,62.1c-0.6,1.2-0.2,2.7,1,3.4l5.3,2.8c0.4,0.2,0.8,0.3,1.2,0.3c0.9,0,1.8-0.5,2.2-1.3c0.6-1.2,0.2-2.7-1-3.4L21.7,61
+                        C20.5,60.4,19,60.9,18.3,62.1z" />
+                        <path d="M61.9,67.2c0.4,0.8,1.3,1.3,2.2,1.3c0.4,0,0.8-0.1,1.2-0.3l5.3-2.8c1.2-0.6,1.7-2.2,1-3.4c-0.6-1.2-2.2-1.7-3.4-1L63,63.8
+                        C61.8,64.5,61.3,66,61.9,67.2z" />
+                        <path d="M47.8,74.7c0.4,0.8,1.3,1.3,2.2,1.3c0.4,0,0.8-0.1,1.2-0.3l5.3-2.8c1.2-0.6,1.7-2.2,1-3.4s-2.2-1.7-3.4-1l-5.3,2.8
+                        C47.6,72,47.1,73.5,47.8,74.7z" />
+                    </svg>
+                    Poches
+                </div>
+                <div class="title-onglet ng-cloak" ng-class="{'active':displayInventory=='bag'}" ng-click="setInventory('bag')" ng-show="itemsBag != null && showInventoryBag" jqyoui-droppable="{onDrop:'onBagDrop()',beforeDrop :'onbeforeDrop(\'bagSlots\')'}" data-drop="displayInventory != 'bag'" data-jqyoui-options="{hoverClass:'hover'}" ng-right-click="openCtxMenu(itemsBag, $event)">
+                    <svg version="1.1"
+                        id="Calque_1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 270 234" style="enable-background:new 0 0 270 234;" xml:space="preserve">
+                        <g transform="translate(0,-952.36218)">
+                            <path d="M102,952.4c-11.5,0-21,9.5-21,21v9.2c-25,1.6-45,22.4-45,47.8v36H17.7c-9.7,0-17.7,8.1-17.7,17.7v72.6
+                                c0,9.7,8.1,17.7,17.7,17.7H37c2.5,6.9,9.2,12,17,12h162c7.7,0,14.5-5.1,17-12h19.3c9.7,0,17.7-8.1,17.7-17.7v-72.6
+                                c0-9.7-8.1-17.7-17.7-17.7H234v-36c0-25.4-20-46.2-45-47.8v-9.2c0-11.5-9.5-21-21-21L102,952.4z M102,970.4h66c1.8,0,3,1.2,3,3v9
+                                H99v-9C99,971.5,100.2,970.4,102,970.4z M84,1000.4h102c13.9,0,25.4,9.1,28.9,21.8c-8-6.1-18-9.8-28.9-9.8H84
+                                c-10.8,0-20.8,3.7-28.9,9.8C58.6,1009.5,70.1,1000.4,84,1000.4z M84,1030.4h102c16.8,0,30,13.2,30,30v26.3
+                                c-23.1-7.7-51.8-14.3-81-14.3c-29.2,0-57.9,6.7-81,14.3v-26.3C54,1043.6,67.2,1030.4,84,1030.4z M18,1084.4h18v72H18V1084.4z
+                                M234,1084.4h18v72h-18V1084.4z M135,1090.4c28.7,0,58.3,7.3,81,15.3v62.7H54v-62.7C76.7,1097.7,106.3,1090.4,135,1090.4z" />
+                        </g>
+                    </svg>
+                    Sac à dos
+                </div>
+            </div>
+
+            <div class="playerInventory inventory pocket ng-cloak" ng-show="displayInventory == 'pocket'">
+                <div class="slot" ng-class="'slot'+slot.index" jqyoui-droppable="{stack:false,containment:'position',onDrop:'onSlotDrop(slot)',beforeDrop :'onbeforeDrop(slot)'}" data-drop="getSlotAcceptation(slot)" data-jqyoui-options="{tolerance:'fit'}" ng-repeat="slot in pocketSlots">
+                    <div ng-if="slot.item != null" ng-class="slot.item.class" ng-show="slot.item.quantity > 0" class="item" jqyoui-draggable="{onStart:'onDragStart(slot.item)', beforeDrop :'onbeforeDrop(slot)'}" data-drag="true" data-jqyoui-options="{revert: 'invalid',snap:'.slot',snapMode:'inner', zIndex: 100}" ng-right-click="openCtxMenu(slot.item, $event)">
+                        <div class="name">{{slot.item.name}}</div>
+                        <img ng-src="img/icons/{{slot.item.icon}}.png" width="32px" height="32px" />
+                        <span ng-if="slot.item.quantity > 1" class="count">x{{slot.item.quantity}}</span>
+                    </div>
+                </div>
+                <div class="weight">
+                    <div class="bar">
+                        <span></span>
+                    </div>
+                    <div class="number">
+                        <span>{{itemsPocket.CurrentSize}}KG</span>/{{itemsPocket.MaxSize}}KG
+                    </div>
+                </div>
+            </div>
+            <div class="playerInventory inventory bag ng-cloak" ng-show="displayInventory == 'bag'">
+                <div class="slot" ng-class="'slot'+slot.index" jqyoui-droppable="{stack:false,containment:'position',onDrop:'onSlotDrop(slot)',beforeDrop :'onbeforeDrop(slot)'}" data-drop="getSlotAcceptation(slot)" data-jqyoui-options="{tolerance:'fit'}" ng-repeat="slot in bagSlots">
+                    <div ng-if="slot.item != null" ng-class="slot.item.class" ng-show="slot.item.quantity > 0" class="item" jqyoui-draggable="{onStart:'onDragStart(slot.item)', beforeDrop :'onbeforeDrop(slot)'}" data-drag="true" data-jqyoui-options="{revert: 'invalid',snap:'.slot',snapMode:'inner', zIndex: 100}" ng-right-click="openCtxMenu(slot.item, $event)">
+                        <div class="name">{{slot.item.name}}</div>
+                        <img ng-src="img/icons/{{slot.item.icon}}.png" width="32px" height="32px" />
+                        <span ng-if="slot.item.quantity > 1" class="count">x{{slot.item.quantity}}</span>
+                    </div>
+                </div>
+                <div class="weight">
+                    <div class="bagbar">
+                        <span></span>
+                    </div>
+                    <div class="number">
+                        <span>{{itemsBag.CurrentSize}}KG</span>/{{itemsBag.MaxSize}}KG
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="contextMenu">
+            <ul>
+                <li ng-show="selectedItem.usable" ng-click="useItem()">
+                    <a href="#">Utiliser</a>
+                </li>
+                <!--<li ng-show="selectedItem.equipable" ng-click="equipItem()">
+                    <a href="#">Équiper</a>
+                </li>-->
+
+                <li ng-show="itemGive" ng-click="giveItem()">
+                    <a href="#">Donner</a>
+                </li>
+                <li ng-show="selectedItem.dropable" ng-click="dropItem()">
+                    <a href="#">Jeter</a>
+                </li>
+                <!--<li ng-show="selectedItem.quantity > 1 && selectedItem.stackable && selectedItem.splittable" ng-click="splitItem()">-->
+                <li ng-show="selectedItem.quantity > 1 && selectedItem.stackable" ng-click="splitItem()">
+                    <a href="#">Split</a>
+                </li>
+                <li ng-show="itemsDistant.IsMarket && selectedItem.inventoryType == 'distantSlots'" ng-click="changeItemPrice()">
+                    <a href="#">Définir un prix</a>
+                </li>
+            </ul>
+        </div>
+
+        <script src="js/app.js"></script>
+    </body>
+</html>

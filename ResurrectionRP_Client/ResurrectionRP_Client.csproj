@@ -136,6 +136,7 @@
     <Content Include="cef\speedometer\img\speed-bg.png" />
     <Content Include="cef\speedometer\js\app.js" />
     <Content Include="cef\speedometer\speedometer.html" />
+    <Content Include="cef\xtrem\css\font-awesome.css" />
     <Content Include="cef\xtrem\css\style.css" />
     <Content Include="cef\xtrem\js\app.js" />
     <Content Include="cef\xtrem\playerMenu.html" />

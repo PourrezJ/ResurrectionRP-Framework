@@ -7,9 +7,7 @@ let inputMenu;
 
 export function init() {
     alt.onServer('XMenuManager_OpenMenu', (menu) => {
-        alt.log(menu);
         xmenuData = menu;
-
         alt.toggleGameControls(false);
         alt.showCursor(true);
         let browser = new alt.WebView('http://resources/resurrectionrp/client/cef/xtrem/playerMenu.html?params=' + menu);

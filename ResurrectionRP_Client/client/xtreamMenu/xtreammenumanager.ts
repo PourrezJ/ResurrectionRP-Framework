@@ -11,6 +11,7 @@ export function init() {
         alt.toggleGameControls(false);
         alt.showCursor(true);
         let browser = new alt.WebView('http://resources/resurrectionrp/client/cef/xtrem/playerMenu.html?params=' + menu);
+        browser.focus();
     });
 
     alt.onServer('XMenuManager_Callback', (args: any[]) => {

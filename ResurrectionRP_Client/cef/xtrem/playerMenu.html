@@ -3,27 +3,26 @@
     <meta charset="utf-8" />
     <title>XMenu</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!---<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">-->
     <link href="css/style.css" rel="stylesheet" />
-    <link href="css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 
     <script src="../../lib/js/angular.min.js"></script>
 </head>
 <body ng-app="ResurrectionInteractionMenu" ng-controller="MenuCtrl" ng-cloak>
     <div class="roue">
-        <svg id="wheel" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430.82 431.72">
+        <svg id="wheel" data-name="Calque 1"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430.82 431.72">
             <g class="selection one" ng-class="{'hoverable':buttons[0] !== undefined}" ng-click="sendAction(0)" ng-mouseover="displayAction(0)" ng-mouseout="emptyAction()">
                 <path id="1" d="M147,144.39s26.67-26.66,65.67-27.66V0S134-6.27,65,60.73Z" transform="translate(0.35 0.17)" />
                 <foreignobject ng-if="buttons[0] !== undefined">
                     <i class="material-icons md-36" ng-if="buttons[0].Icon.Type == 'mat'">{{buttons[0].Icon.Name}}</i>
-                    <i class="fas" ng-class="buttons[0].Icon.Name" ng-if="buttons[0].Icon.Type == 'fa'"></i>
+                    <i class="fas" style="color: tomato" ng-class="buttons[0].Icon.Name" ng-if="buttons[0].Icon.Type == 'fa'"></i>
                 </foreignobject>
             </g>
             <g class="selection two" ng-class="{'hoverable':buttons[1] !== undefined}" ng-click="sendAction(1)" ng-mouseover="displayAction(1)" ng-mouseout="emptyAction()">
                 <path id="2" d="M217.18,117s37.71.24,65.83,27.29l83.07-82S315.25,1.92,219.1-.1Z" transform="translate(0.35 0.17)" />
                 <foreignobject ng-if="buttons[1] !== undefined">
                     <i class="material-icons md-36" ng-if="buttons[1].Icon.Type == 'mat'">{{buttons[1].Icon.Name}}</i>
-                    <i class="fas" ng-class="buttons[1].Icon.Name" ng-if="buttons[1].Icon.Type == 'fa'"></i>
+                    <i class="fas" style="color: tomato" ng-class="buttons[1].Icon.Name" ng-if="buttons[1].Icon.Type == 'fa'"></i>
                 </foreignobject>
             </g>
             <g class="selection three" ng-class="{'hoverable':buttons[2] !== undefined}" ng-click="sendAction(2)" ng-mouseover="displayAction(2)" ng-mouseout="emptyAction()">

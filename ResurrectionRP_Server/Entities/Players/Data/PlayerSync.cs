@@ -10,7 +10,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
         public bool IsInvinsible { get; set; }
         public bool IsCuff { get; set; }
         public string WalkingAnim { get; set; }
-        //public AnimationsSync AnimationsSync { get; set; }
+        public AnimationsSync AnimationsSync { get; set; }
         public string MoodAnim { get; set; }
         public bool Crounch { get; set; }
         public bool Freeze { get; set; }

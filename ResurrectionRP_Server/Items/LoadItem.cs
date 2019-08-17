@@ -1,28 +1,34 @@
-﻿using AlternateLife.RageMP.Net.Data;
-using AlternateLife.RageMP.Net.Enums;
+﻿using System;
+using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
+using AltV.Net.Elements.Entities;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AltV.Net;
 
-namespace ResurrectionRP.Server
+
+namespace ResurrectionRP_Server.Items
 {
     class LoadItem
     {
-        private static List<Item> items;
-        public static List<Item> ItemsList
+        private static List<Models.Item> items;
+        public static List<Models.Item> ItemsList
         {
             get
             {
                 if (items == null)
                 {
-                    items = new List<Item>();
+                    items = new List<Models.Item>();
                     items.AddRange(LoadItemList());
                 }
                 return items;
             }
         }
 
-        private static List<Item> LoadItemList()
+        private static List<Models.Item> LoadItemList()
         {
-            return new List<Item>()
+            return new List<Models.Item>()
                 {
                     new Eat(ItemID.Lasagnes, "Lasagnes", "Les lasagnes de la Mama!", 1 , true, true, true, food:15),
                     new Eat(ItemID.Fromage, "Fromage de chèvre", "Fromage de chèvre bien odorant", 1, true, true,true, food:15, isDockable: true, itemPrice: 35, icon:"cheese"),

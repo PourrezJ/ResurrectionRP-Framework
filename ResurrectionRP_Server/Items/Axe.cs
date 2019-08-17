@@ -18,7 +18,8 @@ namespace ResurrectionRP_Server.Items
 
         public override async Task Use(IPlayer client, string inventoryType, int slot)
         {
-            var weapons = client.CurrentWeapon;
+            client.CurrentWeaponIvent
+            var weapons = client.Weapo;
 
             if (weapons.Count > 0)
             {

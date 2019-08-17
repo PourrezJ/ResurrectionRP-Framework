@@ -1,19 +1,28 @@
-﻿using AlternateLife.RageMP.Net.Interfaces;
-using AlternateLife.RageMP.Net.Scripting;
-using System.Numerics;
+﻿using System;
+using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
+using AltV.Net.Elements.Entities;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Flags = ResurrectionRP.Server.AnimationFlags;
+using System.Numerics;
+using AltV.Net;
+using AltV.Net.Data;
+using AltV.Net.Async;
+using AltV.Net.Async.Events;
 
-namespace ResurrectionRP.Server
+using Flags = ResurrectionRP_Server.Utils.Enums.AnimationFlags;
+
+namespace ResurrectionRP_Server.Items
 {
-    public class Eat : Item
+    public class Eat : Models.Item
     {
-        private ObjectHandler obj = null;
+       // private ObjectHandler obj = null;
 
         public int Food;
         public int Drink;
 
-        public Eat(ItemID id, string name, string description, double weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, double itemPrice = 0, string type = "eat", string icon = "unknown-item", string classes = "food", int drink = 0, int food = 0) : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
+        public Eat(Models.InventoryData.ItemID id, string name, string description, double weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, double itemPrice = 0, string type = "eat", string icon = "unknown-item", string classes = "food", int drink = 0, int food = 0) : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
         {
             Food = food;
             Drink = drink;
@@ -21,7 +30,7 @@ namespace ResurrectionRP.Server
 
         public override async Task Use(IPlayer client, string inventoryType, int slot)
         {
-            PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
+            Entities.Players.PlayerHandler ph = Entities.Players.PlayerManager.GetPlayerByClient(client);
             if (ph != null)
             {
                 if (ph.DeleteItem(slot, inventoryType, 1))
@@ -40,23 +49,23 @@ namespace ResurrectionRP.Server
 
                 switch (id)
                 {
-                    case ItemID.Cafe:
+                    case Models.InventoryData.ItemID.Cafe:
                         await AnimateEatDrink(client, ph, "prop_food_coffee", new Vector3(), new Vector3());
                         break;
 
-                    case ItemID.JambonBeurre:
+                    case Models.InventoryData.ItemID.JambonBeurre:
                         await AnimateEatDrink(client, ph, "prop_sandwich_01", new Vector3(), new Vector3());
                         break;
 
-                    case ItemID.Donuts:
+                    case Models.InventoryData.ItemID.Donuts:
                         await AnimateEatDrink(client, ph, "prop_donut_01", new Vector3(), new Vector3());
                         break;
 
-                    case ItemID.Eau:
+                    case Models.InventoryData.ItemID.Eau:
                         await AnimateEatDrink(client, ph, "prop_ld_flow_bottle", new Vector3(), new Vector3());
                         break;
 
-                    case ItemID.Vin:
+                    case Models.InventoryData.ItemID.Vin:
                         await AnimateEatDrink(client, ph, "prop_wine_bot_01", new Vector3(), new Vector3());
                         break;
                 }
@@ -64,7 +73,7 @@ namespace ResurrectionRP.Server
             await MenuManager.CloseMenu(client);
         }
 
-        public async Task AnimateEatDrink(IPlayer client, PlayerHandler ph, string props, Vector3 position, Vector3 rotation)
+        public async Task AnimateEatDrink(IPlayer client, Entities.Players.PlayerHandler ph, string props, Vector3 position, Vector3 rotation)
         {
             //obj = await ObjectHandlerManager.CreateObject(MP.Utility.Joaat(props), await client.GetPositionAsync(), await client.GetRotationAsync());
            //await obj.AttachObject(client, "PH_L_Hand", position, rotation);
@@ -73,36 +82,36 @@ namespace ResurrectionRP.Server
             {
                 await ph.PlayAnimation("mp_player_inteat@burger", "mp_player_int_eat_burger", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
 
-                Utils.Delay(4000, true, async () =>
+                Utils.Utils.Delay(4000, true, async () =>
                 {
                     if (!client.Exists)
                         return;
 
                     await ph.PlayAnimation("mp_player_inteat@burger", "mp_player_int_eat_exit_burger", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
                     
-                    if (obj != null)
+/*                    if (obj != null)
                     {
                         await ph.PlayAnimation("mp_player_inteat@burger", "mp_player_int_eat_exit_burger", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
                        // await obj.Destroy();
-                    }
+                    }*/
                 });
             }
             else
             {
                 await ph.PlayAnimation("mp_player_intdrink", "loop_bottle", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
 
-                Utils.Delay(4000, true,async () =>
+                Utils.Utils.Delay(4000, true,async () =>
                 {
                     if (!client.Exists)
                         return;
 
                     await ph.PlayAnimation("mp_player_intdrink", "outro_bottle", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
                     
-                    if (obj != null)
+/*                    if (obj != null)
                     {
                         await ph.PlayAnimation("mp_player_intdrink", "outro_bottle", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
                         //await obj.Destroy();
-                    }
+                    }*/
                 });
             }
         }

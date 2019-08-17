@@ -96,6 +96,16 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
         private Data.PlayerSync playerSync = null;
+        public Data.PlayerSync PlayerSync
+        {
+            get
+            {
+                if (playerSync == null)
+                    playerSync = new Data.PlayerSync();
+                return playerSync;
+            }
+            set => playerSync = value;
+        }
         #endregion
 
         #region Constructor

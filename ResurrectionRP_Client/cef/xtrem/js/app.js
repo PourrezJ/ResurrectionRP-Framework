@@ -33,6 +33,6 @@
 
     $scope.sendAction = index => {
         if ($scope.buttons[index] !== undefined)
-            mp.trigger("XMenuManager_Callback", $scope.menuId, index);
+            alt.emitServer("XMenuManager_Callback", $scope.menuId, index);
     };
 });

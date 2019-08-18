@@ -1,16 +1,16 @@
-﻿using AlternateLife.RageMP.Net.Interfaces;
+﻿using AltV.Net.Elements.Entities;
 using System.Threading.Tasks;
-using Flags = ResurrectionRP.Server.AnimationFlags;
+using Flags = ResurrectionRP_Server.Utils.Enums.AnimationFlags;
 
-namespace ResurrectionRP.Server
+namespace ResurrectionRP_Server.Items
 {
-    class CrateTools : Item
+    class CrateTools : Models.Item
     {
-        public CrateTools(ItemID id, string name, string description, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, int itemPrice = 0, bool isDockable = false, string type = "crateTool", string icon = "unknown-item", string classes = "basic") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
+        public CrateTools(Models.InventoryData.ItemID id, string name, string description, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, int itemPrice = 0, bool isDockable = false, string type = "crateTool", string icon = "unknown-item", string classes = "basic") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
         {
         }
 
-        public static async Task RepairVehicle(IPlayer player, IVehicle vehicle)
+/*        public static async Task RepairVehicle(IPlayer player, IVehicle vehicle)
         {
             if (!player.Exists || !vehicle.Exists)
                 return;
@@ -21,18 +21,18 @@ namespace ResurrectionRP.Server
 
             await player.NotifyAsync("Appuyer sur la touche du numpad 0 pour arrêter l'action.");
             player.SetData("VehicleRepair", 0);
-            var rot = await vehicle.GetRotationAsync();
-            var pos = (await vehicle.GetPositionAsync()).Forward(rot.Z, 2.9f);
-            await player.SetPositionAsync(pos);
+            var rot = vehicle.Rotation;
+            var pos = (vehicle.GetVehicleVector()).Forward(rot.Yaw, 2.9f);
+            player.SetPosition(pos.X, pos.Y, pos.Z);
  
-            await player.SetRotationAsync(rot + new System.Numerics.Vector3(0,0,180));
-            await vehicleHandler.SetDoorState(DoorID.DoorHood, DoorState.DoorOpen);
+            player.SetRotation(rot + new System.Numerics.Vector3(0,0,180));
+            //await vehicleHandler.SetDoorState(Entities.Vehicles.DoorID.DoorHood, Entities.Vehicles.DoorState.DoorOpen);
 
             player.GetPlayerHandler()?.PlayAnimation("mini@repair", "fixing_a_ped", 4, -8, -1, (Flags.Loop | Flags.AllowPlayerControl));
-            await player.CallAsync("LaunchProgressBar", 60000);
-            await player.Freeze(true);
+            player.Emit("LaunchProgressBar", 60000);
+            player.Emit("togglePlayerControl", true);
             await Task.Delay(60000);
-            await player.Freeze(false);
+            player.Emit("togglePlayerControl", false);
             await player.StopAnimationAsync();
             if (!player.HasData("VehicleRepair"))
             {
@@ -61,6 +61,6 @@ namespace ResurrectionRP.Server
             await player.CallAsync("StopProgressBar");
             player.ResetData("VehicleRepair");
             await player.Freeze(false);
-        }
+        }*/
     }
 }

@@ -13,8 +13,8 @@ using OutfitInventory = ResurrectionRP_Server.Inventory.OutfitInventory;
 
 namespace ResurrectionRP_Server.Models
 {
-    [BsonKnownTypes(typeof(Items.Alcohol), typeof(Items.Axe), typeof(Items.BuildingItem), typeof(ClothItem), typeof(Items.CrateTools), typeof(Items.Defibrilator), typeof(Items.Eat), typeof(Items.GasJerrycan), typeof(Items.HandCuff), typeof(Items.HealItem),
-        typeof(Items.IdentityCard), typeof(Items.MaskItem), typeof(Items.PhoneItem), typeof(Items.RadioItem), typeof(Items.BagItem), typeof(Items.Unusable), typeof(Weapons), typeof(Items.SeedItem), typeof(Items.LockPick))]
+    [BsonKnownTypes(typeof(Items.Alcohol), typeof(Items.Axe), typeof(Items.BuildingItem), typeof(ClothItem), typeof(Items.CrateTools), typeof(Items.Defibrilator), typeof(Items.Eat) /*,typeof(Items.GasJerrycan), typeof(Items.HandCuff), typeof(Items.HealItem),
+        typeof(Items.IdentityCard), typeof(Items.MaskItem), typeof(Items.PhoneItem), typeof(Items.RadioItem), typeof(Items.BagItem), typeof(Items.Unusable), typeof(Weapons), typeof(Items.SeedItem), typeof(Items.LockPick)*/)]
     public class Item : ICloneable
     {
         [JsonProperty("id")]
@@ -86,8 +86,8 @@ namespace ResurrectionRP_Server.Models
             {
                 var position = c.GetPosition();
                 var dimension = c.Dimension;
-                ResuPickup resu = await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension);
-                resu.OnTakePickup += OnPickup;
+                //ResuPickup resu = await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension);
+                //resu.OnTakePickup += OnPickup;
 
                 return true;
             }
@@ -103,16 +103,16 @@ namespace ResurrectionRP_Server.Models
             {
                 var position = c.GetPosition();
                 var dimension = c.Dimension;
-                ResuPickup resu = await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension);
-                resu.OnTakePickup += OnPickup;
+                //ResuPickup resu = await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension);
+                //resu.OnTakePickup += OnPickup;
 
                 return true;
             }
             return false;
         }
 
-        public virtual async Task OnPickup(IPlayer client, ResuPickup pickup)
-        {
+        public virtual async Task OnPickup(IPlayer client, object pickup)
+        {/*
             Entities.Players.PlayerHandler ph = Entities.Players.PlayerManager.GetPlayerByClient(client);
             if (ph != null)
             {
@@ -132,7 +132,7 @@ namespace ResurrectionRP_Server.Models
                 {
                     client.SendNotificationError("Vous n'avez pas la place.");
                 }
-            }
+            }*/
         }
         
         public virtual Task Give(IPlayer sender, IPlayer recever, int quantite)

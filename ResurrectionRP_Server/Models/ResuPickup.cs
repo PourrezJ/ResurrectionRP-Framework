@@ -14,7 +14,7 @@ namespace ResurrectionRP_Server.Models
     public class ResuPickupManager
     {
         #region Private static properties
-        public static List<ResuPickup> ResuPickupList = new List<ResuPickup>();
+        //public static List<ResuPickup> ResuPickupList = new List<ResuPickup>();
         #endregion
 
         public ResuPickupManager()
@@ -29,9 +29,9 @@ namespace ResurrectionRP_Server.Models
 
             if (int.TryParse(args[0].ToString(), out int netID))
             {
-                var resupickup = GetResuPickup(netID);
+                /*var resupickup = GetResuPickup(netID);
                 if (resupickup != null)
-                    await resupickup.Take(client);
+                    await resupickup.Take(client);*/
             }
         }
         /*
@@ -42,13 +42,13 @@ namespace ResurrectionRP_Server.Models
             return pickup;
         }*/
 
-        public static ResuPickup GetResuPickup(int netID)
+/*        public static ResuPickup GetResuPickup(int netID)
         {
             return ResuPickupList.Find(r => r.Object.NetHandle == netID) ?? null;
-        }
+        }*/
     }
 
-    public class ResuPickup
+/*    public class ResuPickup
     {
         [JsonIgnore]
         public ObjectHandler Object;
@@ -127,5 +127,5 @@ namespace ResurrectionRP_Server.Models
                 }
             });
         }
-    }
+    }*/
 }

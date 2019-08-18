@@ -1,7 +1,7 @@
 ﻿
 using System.Threading.Tasks;
 using AltV.Net.Elements.Entities;
-
+/**
 namespace ResurrectionRP_Server.Items
 {
     public class RadioItem : Models.Item
@@ -34,3 +34,4 @@ namespace ResurrectionRP_Server.Items
         }
     }
 }
+    **/

@@ -96,13 +96,13 @@ namespace ResurrectionRP_Server.Items
 
                     new Unusable(ItemID.Plastic, "Matière Polymère", "", 4),
 
-                    new BuildingItem(ItemID.Building, "barriere", "", 1, modelhash:1072616162),
+                    //new BuildingItem(ItemID.Building, "barriere", "", 1, modelhash:1072616162),
                     new Axe(ItemID.Hache, "Hache", "Permet de couper du bois", 1, icon:"pickaxe"),
 
                     new ClothItem(ItemID.TShirt, "TShirt Blanc", "Un tshirt qui sent la sueur", new Models.ClothData(1, 0, 0), 0, true, false, false, true, false, 0, classes:"shirt", icon:"shirt"),
 
-                    new PhoneItem(ItemID.Phone, "Téléphone", "", PhoneManager.GeneratePhone(), 1, true, true, false, true, true, 500, "phone", "phone"),
-                    new RadioItem(ItemID.Radio, "Radio", "", 1, true, true, false, true, true, 500, "radio", "talky", "radio"),
+                    //new PhoneItem(ItemID.Phone, "Téléphone", "", PhoneManager.GeneratePhone(), 1, true, true, false, true, true, 500, "phone", "phone"),
+                    //new RadioItem(ItemID.Radio, "Radio", "", 1, true, true, false, true, true, 500, "radio", "talky", "radio"),
                     new BagItem(ItemID.Bag, "Backpack", "", new Models.ClothData(1, 0, 0), 25, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"),
 
                     new Weapons(ItemID.Weapon, "Poignard", "", 1, hash: WeaponHash.Dagger, isDockable: true, itemPrice: 9100),
@@ -143,7 +143,7 @@ namespace ResurrectionRP_Server.Items
                     new Unusable(ItemID.BOrange, "Pochon d'Orange Bud", "Un pochon de 25gr d'Orange Bud", 1, icon:"weed"),
                     new Unusable(ItemID.BWhiteWidow, "Pochon de White Widow", "Un pochon de 25gr de White Widow", icon:"weed"),
 
-                    new LockPick(ItemID.LockPick, "Kit de crochetage", "", 1, true, false, true, true)
+                    //new LockPick(ItemID.LockPick, "Kit de crochetage", "", 1, true, false, true, true)
             };
         }
     }

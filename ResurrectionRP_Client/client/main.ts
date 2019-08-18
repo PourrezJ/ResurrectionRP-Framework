@@ -35,3 +35,7 @@ alt.onServer("PlayerInitialised", (
 alt.onServer('OpenCreator', () => {
     OpenCharCreator();
 });
+
+alt.onServer("togglePlayerControl", (value: boolean) => {
+    alt.toggleGameControls(value);
+});

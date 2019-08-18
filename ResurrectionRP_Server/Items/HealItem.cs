@@ -15,11 +15,7 @@ namespace ResurrectionRP_Server
         public override async Task Use(IPlayer client, string inventoryType, int slot)
         {
             ushort healthActual = client.Health;
-            client.Health = (healthActual + (ushort)Life < 100) ? healthActual + (ushort)Life : ; // Raccourcis rapide à faire
-            if ((healthActual += (ushort)Life) > 100)
-                client.Health = 100;
-            else
-                client.Health = (healthActual + (ushort)Life);
+            client.Health =  (ushort)((healthActual + (ushort)Life < 100) ? healthActual + Life : 100); 
 
             if (inventoryType == Utils.Enums.InventoryTypes.Pocket)
                 Entities.Players.PlayerManager.GetPlayerByClient(client)?.PocketInventory?.Delete(slot, 1);

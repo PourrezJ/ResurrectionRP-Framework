@@ -9,7 +9,8 @@ let inputselected = "";
 export function init() {
     alt.onServer('XMenuManager_OpenMenu', (menu) => {
 
-        if (browser != null)
+        alt.log(browser);
+        if (browser !== null)
             closeMenu();
 
         xmenuData = new Array();
@@ -45,11 +46,17 @@ export function init() {
             closeMenu();
         });
     });
+
+    alt.onServer('XMenuManager_CloseMenu', (menu) => {
+        alt.log("XMenuManager_CloseMenu");
+        closeMenu();
+    });
 }
 
 function closeMenu() {
     if (browser != null) {
         browser.destroy();
+        browser = null;
         alt.toggleGameControls(true);
         alt.showCursor(false);
     }

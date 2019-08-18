@@ -124,12 +124,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             switch (menuItem.Id)
             {
-                /*
+                
                 case "ID_LockUnlockVehicle":
-                    await LockUnlock(client);
+                    //await LockUnlock(client);
                     await OpenXtremMenu(client);
                     break;
-
+/*
                 case "ID_OpenInventory":
 
                     if (RPGInventoryManager.HasInventoryOpen(Inventory))

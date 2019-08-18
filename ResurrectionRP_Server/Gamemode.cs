@@ -58,6 +58,15 @@ namespace ResurrectionRP_Server
         #region Pools
         [BsonIgnore]
         public VehiclesManager VehicleManager { get; private set; }
+
+
+        // Menus
+        [BsonIgnore]
+        public XMenuManager.XMenuManager XMenuManager { get; private set; }
+
+
+
+
         //[BsonIgnore]
         //public Weather.WeatherManager WeatherManager { get; private set; }
 
@@ -108,6 +117,7 @@ namespace ResurrectionRP_Server
             PlayerManager = new Entities.Players.PlayerManager();
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();
+            XMenuManager = new XMenuManager.XMenuManager();
             Alt.Server.LogInfo("Création des controlleurs terminée");
 
             if (Time == null)

@@ -39,7 +39,7 @@
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptOutFile />
-    <TypeScriptOutDir>C:\altv\ResuRP\ResurrectionRP_Client\bin\client</TypeScriptOutDir>
+    <TypeScriptOutDir>C:\altv\server-files\resources\resurrectionrp\client</TypeScriptOutDir>
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptSourceMap>False</TypeScriptSourceMap>
@@ -136,7 +136,6 @@
     <Content Include="cef\speedometer\img\speed-bg.png" />
     <Content Include="cef\speedometer\js\app.js" />
     <Content Include="cef\speedometer\speedometer.html" />
-    <Content Include="cef\xtrem\css\font-awesome.css" />
     <Content Include="cef\xtrem\css\style.css" />
     <Content Include="cef\xtrem\js\app.js" />
     <Content Include="cef\xtrem\playerMenu.html" />
@@ -185,7 +184,8 @@
   </ProjectExtensions>
   <PropertyGroup>
     <PostBuildEvent>set ClientDir=C:\altv\server-files\resources\resurrectionrp\client
-rmdir  /S /Q %25ClientDir%25
+rmdir  /S /Q %25ClientDir%25\cef
+rmdir  /S /Q %25ClientDir%25\lib
 mkdir %25ClientDir%25
 mkdir %25ClientDir%25\cef
 mkdir %25ClientDir%25\lib

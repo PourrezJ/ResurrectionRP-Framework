@@ -232,7 +232,33 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 }
             }
         }
+        /*
+        public async Task LockUnlock(IPlayer client, bool statut)
+        {
+            VehicleHandler VH = VehiclesManager.GetHandlerByVehicle(Vehicle);
 
+            if (PlayerManager.HasVehicleKey(client, await Vehicle.GetNumberplateTextAsync()) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())
+            {
+                await client.NotifyAsync($"Vous avez {(statut ? " ~g~ouvert" : "~r~fermé")} ~w~le véhicule");
+                Locked = statut;
+                await Vehicle.SetLockedAsync(statut);
+            }
+        }
+
+        public async Task<bool> LockUnlock(IPlayer client)
+        {
+            VehicleHandler VH = VehicleManager.GetHandlerByVehicle(Vehicle);
+
+            if (PlayerManager.HasVehicleKey(client, await Vehicle.GetNumberPlateAsync()) || VH.SpawnVeh && VH.OwnerID == await client.GetSocialClubNameAsync())
+            {
+                await client.NotifyAsync($"Vous avez {(await Vehicle.IsLockedAsync() ? " ~g~ouvert" : "~r~fermé")} ~w~le véhicule");
+                Locked = !await this.Vehicle.IsLockedAsync();
+                await Vehicle.SetLockedAsync(Locked);
+                return true;
+            }
+            return false;
+        }
+        */
         public void SetOwner(IPlayer player) => OwnerID = player.GetSocialClub();
         public void SetOwner(PlayerHandler player) => OwnerID = player.Client.GetSocialClub();
 

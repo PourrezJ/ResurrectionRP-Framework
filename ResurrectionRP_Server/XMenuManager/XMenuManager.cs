@@ -29,16 +29,19 @@ namespace ResurrectionRP_Server.XMenuManager
 
             try
             {
-                int menuIndex = (int)args[0];
+                int menuIndex = Convert.ToInt32(args[0]);
                 string data = args[1].ToString();
 
                 if (_clientMenus.TryGetValue(client, out XMenu menu))
                 {
-                    XMenu temp = JsonConvert.DeserializeObject<XMenu>(data.ToString());
-
-                    if (!string.IsNullOrEmpty(temp.Items[menuIndex].InputValue))
+                    if (!string.IsNullOrEmpty(data))
                     {
-                        menu.Items[menuIndex].InputValue = temp.Items[menuIndex].InputValue;
+                        XMenu temp = JsonConvert.DeserializeObject<XMenu>(data);
+
+                        if (!string.IsNullOrEmpty(temp.Items[menuIndex]?.InputValue))
+                        {
+                            menu.Items[menuIndex].InputValue = temp.Items[menuIndex].InputValue;
+                        }
                     }
 
                     if (menu.Items[menuIndex] != null)

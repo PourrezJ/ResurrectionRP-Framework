@@ -1,6 +1,7 @@
 ﻿
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using WeaponHash = ResurrectionRP_Server.Utils.Enums.WeaponHash;
 
 namespace ResurrectionRP_Server.Items
 {

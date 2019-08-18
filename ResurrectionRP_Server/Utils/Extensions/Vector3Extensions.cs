@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace ResurrectionRP_Server.Utils.Extensions
+namespace ResurrectionRP_Server
 {
     public static class Vector3Extensions
     {

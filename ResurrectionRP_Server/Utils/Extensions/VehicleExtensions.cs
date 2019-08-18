@@ -9,5 +9,6 @@ namespace ResurrectionRP_Server.Utils.Extensions
         {
             return VehiclesManager.GetHandlerByVehicle(vehicle);
         }
+
     }
 }

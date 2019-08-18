@@ -1,12 +1,8 @@
-﻿using System;
-using MongoDB.Bson.Serialization.Attributes;
-using Newtonsoft.Json;
-using AltV.Net.Elements.Entities;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AltV.Net;
-
+using ItemID = ResurrectionRP_Server.Models.InventoryData.ItemID;
+using WeaponHash = ResurrectionRP_Server.Utils.Enums.WeaponHash;
+using SeedType = ResurrectionRP_Server.Illegal.WeedLab.SeedType;
 
 namespace ResurrectionRP_Server.Items
 {
@@ -103,11 +99,11 @@ namespace ResurrectionRP_Server.Items
                     new BuildingItem(ItemID.Building, "barriere", "", 1, modelhash:1072616162),
                     new Axe(ItemID.Hache, "Hache", "Permet de couper du bois", 1, icon:"pickaxe"),
 
-                    new ClothItem(ItemID.TShirt, "TShirt Blanc", "Un tshirt qui sent la sueur", new ClothData(1, 0, 0), 0, true, false, false, true, false, 0, classes:"shirt", icon:"shirt"),
+                    new ClothItem(ItemID.TShirt, "TShirt Blanc", "Un tshirt qui sent la sueur", new Models.ClothData(1, 0, 0), 0, true, false, false, true, false, 0, classes:"shirt", icon:"shirt"),
 
                     new PhoneItem(ItemID.Phone, "Téléphone", "", PhoneManager.GeneratePhone(), 1, true, true, false, true, true, 500, "phone", "phone"),
                     new RadioItem(ItemID.Radio, "Radio", "", 1, true, true, false, true, true, 500, "radio", "talky", "radio"),
-                    new BagItem(ItemID.Bag, "Backpack", "", new ClothData(1, 0, 0), 25, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"),
+                    new BagItem(ItemID.Bag, "Backpack", "", new Models.ClothData(1, 0, 0), 25, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"),
 
                     new Weapons(ItemID.Weapon, "Poignard", "", 1, hash: WeaponHash.Dagger, isDockable: true, itemPrice: 9100),
                     new Weapons(ItemID.Weapon, "Batte", "", 3, hash: WeaponHash.Bat, isDockable: true, itemPrice: 8400),

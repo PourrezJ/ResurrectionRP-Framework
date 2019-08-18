@@ -1,9 +1,10 @@
-﻿using AlternateLife.RageMP.Net.Interfaces;
+﻿
 using System.Threading.Tasks;
+using AltV.Net.Elements.Entities;
 
-namespace ResurrectionRP.Server
+namespace ResurrectionRP_Server.Items
 {
-    public class RadioItem : Item
+    public class RadioItem : Models.Item
     {
         private Radio _radio = null;
         public Radio Radio
@@ -16,7 +17,7 @@ namespace ResurrectionRP.Server
             set => _radio = value;
         }
 
-        public RadioItem(ItemID id, string name, string description, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, int itemPrice = 0, string type = "radio", string icon = "talky", string classes = "radio") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
+        public RadioItem(Models.InventoryData.ItemID id, string name, string description, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, int itemPrice = 0, string type = "radio", string icon = "talky", string classes = "radio") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
         {  
         }
 

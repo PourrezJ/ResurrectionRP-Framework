@@ -359,7 +359,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         case 14: // phone
                             if (clothSlot?.Item != null)
                             {
-                                var phone = clothSlot.Item as PhoneItem;
+                                var phone = clothSlot.Item as Items.PhoneItem;
                                 if (phone != null)
                                     PhoneSelected = phone.PhoneHandler;
                             }
@@ -510,7 +510,7 @@ namespace ResurrectionRP_Server.Entities.Players
             return false;
         }
 
-        public int CountItem(Utils.Enums.ItemID itemid)
+        public int CountItem(Models.InventoryData.ItemID itemid)
         {
             int somme = 0;
             somme += PocketInventory.CountItem(itemid);
@@ -542,7 +542,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             var pocket = PocketInventory.FindAllItemWithType(itemID);
             if (pocket != null && pocket.Length > 0)
-                items.AddUtils.Enums.(Utils.Enums.InventoryTypes.Pocket, pocket);
+                items.Add(Utils.Enums.InventoryTypes.Pocket, pocket);
 
             if (BagInventory != null)
             {

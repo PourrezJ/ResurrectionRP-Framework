@@ -1,21 +1,23 @@
-﻿using AlternateLife.RageMP.Net.Interfaces;
-using AlternateLife.RageMP.Net.Scripting;
+﻿using AltV.Net;
+using AltV.Net.Async;
+using AltV.Net.Elements.Entities;
+using AltV.Net.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ResurrectionRP.Server
+namespace ResurrectionRP_Server
 {
-    class GasJerrycan : Item
+    class GasJerrycan : Models.Item
     {
 
-        public GasJerrycan(ItemID id, string name, string description, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, int itemPrice = 0, string type = "gasjerrycan", string icon = "unknown-item", string classes = "basic") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
+        public GasJerrycan(Models.InventoryData.ItemID id, string name, string description, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, int itemPrice = 0, string type = "gasjerrycan", string icon = "unknown-item", string classes = "basic") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
         {
         }
 
         public override async Task Use(IPlayer client, string inventoryType, int slot)
         {
-            var vehs = await MP.Vehicles.GetInRangeAsync(await client.GetPositionAsync(), 5f);
-            VehicleHandler _vehicle = VehicleManager.GetHandlerByVehicle(vehs.FirstOrDefault());
+            var vehs = client.GetVehiclesInRange(5);
+            Entities.Vehicles.VehicleHandler _vehicle = Entities.Vehicles.VehiclesManager.GetHandlerByVehicle(vehs.FirstOrDefault());
             if (_vehicle != null)
             {
                 _vehicle.VehicleSync.Fuel += 20;
@@ -24,4 +26,3 @@ namespace ResurrectionRP.Server
         }
     }
 }
- 

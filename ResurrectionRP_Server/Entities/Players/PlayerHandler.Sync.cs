@@ -27,8 +27,8 @@ namespace ResurrectionRP_Server.Entities.Players
             };
 
             PlayerSync.AnimationsSync = animsync;
-
-            foreach (IPlayer player in GameMode.Instance.PlayerList)
+            // LES ANIMATIONS SONT SYNCHRO DONC OSEF
+/*            foreach (IPlayer player in GameMode.Instance.PlayerList)
             {
                 if (!Client.Exists)
                     continue;
@@ -37,12 +37,12 @@ namespace ResurrectionRP_Server.Entities.Players
                     continue;
 
                 var ClientPosition = await Client.GetPositionAsync();
-
+                
                 if ((await player.GetPositionAsync()).DistanceTo2D(ClientPosition) <= GameMode.Instance.StreamDistance)
                 {
                     await player.CallAsync("PlayerSync_PlayAnimation", Client.Id, JsonConvert.SerializeObject(animsync));
                 }
-            }
+            }*/
         }
 
 

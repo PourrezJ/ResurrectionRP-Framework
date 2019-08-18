@@ -189,8 +189,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (VehicleSync.NeonsColor != null && VehicleSync.NeonsColor != new Color())
                     Vehicle.NeonColor = VehicleSync.NeonsColor;
 
-                Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
-                Vehicle.EngineOn = VehicleSync.Engine;
+                Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
+                Vehicle.SetEngineOnAsync(VehicleSync.Engine);
                 LastUse = DateTime.Now;
 
                 if (location != null)
@@ -232,7 +232,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 }
             }
         }
-        /*
+        
         public async Task LockUnlock(IPlayer client, bool statut)
         {
             VehicleHandler VH = VehiclesManager.GetHandlerByVehicle(Vehicle);
@@ -241,24 +241,25 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 await client.NotifyAsync($"Vous avez {(statut ? " ~g~ouvert" : "~r~fermé")} ~w~le véhicule");
                 Locked = statut;
-                await Vehicle.SetLockedAsync(statut);
+                await Vehicle.SetLockStateAsync(statut ? VehicleLockState.Locked : VehicleLockState.Unlocked);
             }
         }
 
         public async Task<bool> LockUnlock(IPlayer client)
         {
-            VehicleHandler VH = VehicleManager.GetHandlerByVehicle(Vehicle);
+            VehicleHandler VH = VehiclesManager.GetHandlerByVehicle(Vehicle);
 
-            if (PlayerManager.HasVehicleKey(client, await Vehicle.GetNumberPlateAsync()) || VH.SpawnVeh && VH.OwnerID == await client.GetSocialClubNameAsync())
+            if (PlayerManager.HasVehicleKey(client, await Vehicle.GetNumberplateTextAsync()) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())
             {
-                await client.NotifyAsync($"Vous avez {(await Vehicle.IsLockedAsync() ? " ~g~ouvert" : "~r~fermé")} ~w~le véhicule");
-                Locked = !await this.Vehicle.IsLockedAsync();
-                await Vehicle.SetLockedAsync(Locked);
+                Locked = await Vehicle.GetLockStateAsync() == VehicleLockState.Locked ? false : true;
+                await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
+                await client.NotifyAsync($"Vous avez {(Locked ? " ~g~ouvert" : "~r~fermé")} ~w~le véhicule");
+
                 return true;
             }
             return false;
         }
-        */
+        
         public void SetOwner(IPlayer player) => OwnerID = player.GetSocialClub();
         public void SetOwner(PlayerHandler player) => OwnerID = player.Client.GetSocialClub();
 

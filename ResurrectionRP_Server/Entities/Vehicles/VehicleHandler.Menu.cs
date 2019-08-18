@@ -126,7 +126,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 
                 case "ID_LockUnlockVehicle":
-                    //await LockUnlock(client);
+                    await LockUnlock(client);
                     await OpenXtremMenu(client);
                     break;
 /*

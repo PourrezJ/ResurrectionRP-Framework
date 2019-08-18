@@ -31,8 +31,11 @@ export function initialize() {
         new Loading(text, time, type, toggled);
     });
 
-
-
+    alt.onServer('showNotification', (text) => {
+        game.setNotificationTextEntry("STRING");
+        game.addTextComponentSubstringPlayerName(text);
+        game.drawNotification(true, false);
+    });
 
     alt.on('SET_NOTIFICATION_BACKGROUND_COLOR', (args: any[]) => game.setNotificationBackgroundColor(parseInt(args[0])))
 

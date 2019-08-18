@@ -9,6 +9,7 @@ using AltV.Net;
 using AltV.Net.Data;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Utils.Extensions;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -228,6 +229,10 @@ namespace ResurrectionRP_Server.Entities.Players
 
         #region Inventory
 
+
+        #endregion
+
+        #region Methods
 
         #endregion
     }

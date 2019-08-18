@@ -168,15 +168,13 @@ namespace ResurrectionRP_Server
                 return;
             }
 
-            //IVehicle vehicle = Alt.CreateVehicle(args[0], player.Position, player.Rotation);
-            
-            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), (uint)VehicleModel.Deluxo, player.Position, player.Rotation, locked:false);
-
+            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), player.Position, player.Rotation, locked:false);
             Task.Run(async () =>
             {
                 await vh.SpawnVehicle();
-                if (vh.Vehicle != null)
-                    player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);
+                player.GetPlayerHandler().ListVehicleKey.Add(new VehicleKey(vh.VehicleManifest.DisplayName, vh.Plate));
+                /*if (vh.Vehicle != null)
+                    player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);*/
             });
         }
         public async Task Save()

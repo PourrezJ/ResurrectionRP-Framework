@@ -362,6 +362,9 @@ namespace ResurrectionRP_Server.Entities.Players
             return false;
         }
 
+        public static bool HasVehicleKey(IPlayer client, string plate) 
+            => client.GetPlayerHandler().ListVehicleKey.Exists(x => x.Plate == plate);
+
         #endregion
     }
 }

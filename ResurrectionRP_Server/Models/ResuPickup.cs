@@ -51,7 +51,7 @@ namespace ResurrectionRP_Server.Models
     public class ResuPickup
     {
         [JsonIgnore]
-        public ObjectHandler Object;
+        public Entities.Objects.ObjectHandler Object;
         [JsonIgnore]
         public ITextLabel Label;
 
@@ -78,7 +78,7 @@ namespace ResurrectionRP_Server.Models
                 Quantite = quantite,
                 Position = position,
                 Hide = hide,
-                Object = await ObjectHandlerManager.CreateObject(hash, position, new Vector3(), false, true, dimension)
+                Object = await Entities.Objects.ObjectHandlerManager.CreateObject(hash, position, new Vector3(), false, true, dimension)
             };
 
             string str = $"{item.name} x{quantite}";

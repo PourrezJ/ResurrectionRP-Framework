@@ -157,5 +157,15 @@ namespace ResurrectionRP_Server
         {
             client.SetData(Data, null);
         }
+
+        public async static Task PlaySoundFrontEndFix(this IPlayer client, int id, string dict, string anim)
+        {
+
+        }
+
+        public async static Task PlaySoundFromEntity(this IPlayer client, IPlayer initiator, int id,  string dict , string anim)
+        {
+
+        }
     }
 }

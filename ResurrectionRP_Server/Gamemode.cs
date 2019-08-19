@@ -63,7 +63,7 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public Inventory.RPGInventoryManager RPGInventory { get; private set; }
         [BsonIgnore]
-        public PhoneManager PhoneManager { get; private set; }
+        public Phone.PhoneManager PhoneManager { get; private set; }
 
         public static bool ServerLock;
 

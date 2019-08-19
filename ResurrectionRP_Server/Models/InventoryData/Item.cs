@@ -111,8 +111,8 @@ namespace ResurrectionRP_Server.Models
             return false;
         }
 
-        public virtual async Task OnPickup(IPlayer client, object pickup)
-        {/*
+        public virtual async Task OnPickup(IPlayer client, ResuPickup pickup)
+        {
             Entities.Players.PlayerHandler ph = Entities.Players.PlayerManager.GetPlayerByClient(client);
             if (ph != null)
             {
@@ -125,14 +125,14 @@ namespace ResurrectionRP_Server.Models
                     }
                     else
                     {
-                        client.SendNotificationError("Action impossible.");
+                        await client.SendNotificationError("Action impossible.");
                     }
                 }
                 else
                 {
-                    client.SendNotificationError("Vous n'avez pas la place.");
+                    await client.SendNotificationError("Vous n'avez pas la place.");
                 }
-            }*/
+            }
         }
         
         public virtual Task Give(IPlayer sender, IPlayer recever, int quantite)

@@ -9,4 +9,4 @@ namespace ResurrectionRP_Server.Phone.Data
         public string originalNumber;
     }
 }
-}
+

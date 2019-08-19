@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Phone
         }
 
         [JsonIgnore, BsonIgnore]
-        public ObjectHandler props;
+        public Entities.Objects.ObjectHandler props;
 
         public Phone()
         {
@@ -383,8 +383,8 @@ namespace ResurrectionRP_Server.Phone
         #region Static Methods
         public static void AddPhoneInList(IPlayer client, Phone phone)
         {
-            lock (GameMode.Instance.PhoneManager.PhoneClientList)
-            {
+            //lock (GameMode.Instance.PhoneManager.PhoneClientList)
+            //{
                 if (GameMode.Instance.PhoneManager.PhoneClientList.ContainsKey(client))
                 {
                     if (!GameMode.Instance.PhoneManager.PhoneClientList[client].Exists(p => p?.PhoneNumber == phone?.PhoneNumber))
@@ -396,13 +396,13 @@ namespace ResurrectionRP_Server.Phone
                 {
                     GameMode.Instance.PhoneManager.PhoneClientList.Add(client, new List<Phone>() { phone });
                 }
-            }
+            //}
         }
 
         public static void RemovePhoneInList(IPlayer client, Phone phonee)
         {
-            lock (GameMode.Instance.PhoneManager.PhoneClientList)
-            {
+            //lock (GameMode.Instance.PhoneManager.PhoneClientList)
+            //{
                 if (GameMode.Instance.PhoneManager.PhoneClientList.ContainsKey(client))
                 {
                     if (GameMode.Instance.PhoneManager.PhoneClientList[client].Exists(p => p.PhoneNumber == phonee.PhoneNumber))
@@ -411,14 +411,14 @@ namespace ResurrectionRP_Server.Phone
                         GameMode.Instance.PhoneManager.PhoneClientList[client].RemoveAt(id);
                     }
                 }
-            }
+            //}
         }
 
         public static IPlayer GetClientWithPhoneNumber(string phoneNumber)
         {
             
-            lock (GameMode.Instance.PhoneManager.PhoneClientList)
-            {
+            //lock (GameMode.Instance.PhoneManager.PhoneClientList)
+            //{
                 foreach (var phones in GameMode.Instance.PhoneManager.PhoneClientList)
                 {
                     if (phones.Value.Exists(f => f.PhoneNumber == phoneNumber))
@@ -426,14 +426,14 @@ namespace ResurrectionRP_Server.Phone
                         return phones.Key;
                     }
                 }
-            }
+            //}
             return null;
         }
 
         public static Phone GetPhoneWithPhoneNumber(string phoneNumber)
         {
-            lock (GameMode.Instance.PhoneManager.PhoneClientList)
-            {
+            //lock (GameMode.Instance.PhoneManager.PhoneClientList)
+            //{
                 foreach (var phones in GameMode.Instance.PhoneManager.PhoneClientList)
                 {
                     if (phones.Value.Exists(f => f.PhoneNumber == phoneNumber))
@@ -441,7 +441,7 @@ namespace ResurrectionRP_Server.Phone
                         return phones.Value.Find(p => p.PhoneNumber == phoneNumber);
                     }
                 }
-            }
+            //}
 
             return null;
         }

@@ -62,22 +62,22 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                     await ph.OpenPlayerMenu();
                     break;
-
+                    */
                 case ConsoleKey.F3:
                     if (vehicle == null || !vehicle.Exists)
                         return;
 
                     if (!vehicle.Exists)
                         return;
-
+                    /*
                     if (ph.IsCuff())
                     {
                         await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menottés.");
                         return;
-                    }
+                    }*/
                     await vh.OpenXtremMenu(client);
                     break;
-
+                    /*
                 case ConsoleKey.F4:
                     if (ph.IsCuff())
                     {

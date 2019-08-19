@@ -78,10 +78,18 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="client\chat\chat.ts" />
+    <TypeScriptCompile Include="client\Creator\Creator.ts" />
+    <TypeScriptCompile Include="client\Env\Time.ts" />
     <TypeScriptCompile Include="client\Helpers\UiHelper.ts" />
     <TypeScriptCompile Include="client\login\Login.ts" />
     <TypeScriptCompile Include="client\main.ts" />
     <TypeScriptCompile Include="client\Models\Camera.ts" />
+    <TypeScriptCompile Include="client\player\Game.ts" />
+    <TypeScriptCompile Include="client\player\Hud.ts" />
+    <TypeScriptCompile Include="client\player\PlayerCustomization.ts" />
+    <TypeScriptCompile Include="client\player\Survival.ts" />
+    <TypeScriptCompile Include="client\Utils\Enums\Enums.ts" />
+    <TypeScriptCompile Include="client\xtreamMenu\XtreamMenuManager.ts" />
     <TypeScriptCompile Include="typings\altv-client.d.ts" />
     <TypeScriptCompile Include="typings\natives.d.ts" />
     <TypeScriptCompile Include="client\utils.ts" />
@@ -128,6 +136,10 @@
     <Content Include="cef\speedometer\img\speed-bg.png" />
     <Content Include="cef\speedometer\js\app.js" />
     <Content Include="cef\speedometer\speedometer.html" />
+    <Content Include="cef\xtrem\css\font-awesome.css" />
+    <Content Include="cef\xtrem\css\style.css" />
+    <Content Include="cef\xtrem\js\app.js" />
+    <Content Include="cef\xtrem\playerMenu.html" />
     <Content Include="lib\js\jquery.min.js" />
     <TypeScriptCompile Include="client\speedometer\speedometer.ts" />
   </ItemGroup>

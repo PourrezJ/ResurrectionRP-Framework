@@ -39,10 +39,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (await client.IsInVehicleAsync() && await client.GetSeatAsync() == 1)
                 {
                     xmenu.Add(new XMenuItem($"{(client.Vehicle.EngineOn ? "Eteindre" : "Allumer")} le véhicule", "", "ID_start", XMenuItemIcons.KEY_SOLID, executeCallback: true));
-
+                    /*
                     if (locked == VehicleLockState.Unlocked)
                         xmenu.Add(new XMenuItem("Gestion des portes", "", "ID_doors", XMenuItemIcons.DOOR_CLOSED_SOLID, executeCallback: true));
-
+                        */
                     if (this.VehicleSync.NeonsColor != Color.Empty && (VehicleManifest?.Neon == true))
                         xmenu.Add(new XMenuItem($"{(VehicleSync.NeonState ? "Eteindre" : "Allumer")} les neons", "", "ID_neons", XMenuItemIcons.LIGHTBULB_SOLID, executeCallback: true));
                 }
@@ -102,14 +102,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             XMenu menu = new XMenu("DoorMenu");
             menu.Callback = VehicleXMenuCallback;
-            /*
-            menu.Add(new XMenuItem("Porte avant gauche", "", "ID_frontLeft", ((this.GetDoorState(DoorID.DoorFrontLeft) == DoorState.DoorOpen) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-            menu.Add(new XMenuItem("Porte avant droite", "", "ID_frontRight", ((this.GetDoorState(DoorID.DoorFrontRight) == DoorState.DoorOpen) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-            menu.Add(new XMenuItem("Porte arrière gauche", "", "ID_backLeft", ((this.GetDoorState(DoorID.DoorRearLeft) == DoorState.DoorOpen) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-            menu.Add(new XMenuItem("Porte arrière droite", "", "ID_backRight", ((this.GetDoorState(DoorID.DoorRearRight) == DoorState.DoorOpen) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-            menu.Add(new XMenuItem("Capot", "", "ID_hood", ((this.GetDoorState(DoorID.DoorHood) == DoorState.DoorOpen) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-            menu.Add(new XMenuItem("Coffre", "", "ID_trunk", ((this.GetDoorState(DoorID.DoorTrunk) == DoorState.DoorOpen) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-            */
+            
+            menu.Add(new XMenuItem("Porte avant gauche", "", "ID_frontLeft", ((this.GetDoorState(VehicleDoor.DriverFront) >= VehicleDoorState.OpenedLevel1) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
+            menu.Add(new XMenuItem("Porte avant droite", "", "ID_frontRight", ((this.GetDoorState(VehicleDoor.PassengerFront) >= VehicleDoorState.OpenedLevel1) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
+            menu.Add(new XMenuItem("Porte arrière gauche", "", "ID_backLeft", ((this.GetDoorState(VehicleDoor.DriverRear) >= VehicleDoorState.OpenedLevel1) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
+            menu.Add(new XMenuItem("Porte arrière droite", "", "ID_backRight", ((this.GetDoorState(VehicleDoor.PassengerRear) >= VehicleDoorState.OpenedLevel1) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
+            menu.Add(new XMenuItem("Capot", "", "ID_hood", ((this.GetDoorState(VehicleDoor.Hood) >= VehicleDoorState.OpenedLevel1) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
+            menu.Add(new XMenuItem("Coffre", "", "ID_trunk", ((this.GetDoorState(VehicleDoor.Trunk) >= VehicleDoorState.OpenedLevel1) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
+            
             await menu.OpenXMenu(client);
         }
 
@@ -130,76 +130,70 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     await LockUnlock(client);
                     await OpenXtremMenu(client);
                     break;
-/*
-                case "ID_OpenInventory":
+                /*
+                    case "ID_OpenInventory":
 
-                    if (RPGInventoryManager.HasInventoryOpen(Inventory))
-                    {
-                        await client.SendNotificationError("Le coffre est déjà occupé.");
-                        return;
-                    }
-
-                    await XMenuManager.CloseMenu(client);
-                    var inv = new RPGInventoryMenu(PlayerHandler.PocketInventory, PlayerHandler.OutfitInventory, PlayerHandler.BagInventory, this.Inventory);
-                    inv.OnOpen = ((IPlayer c, RPGInventoryMenu m) =>
-                    {
-                        Inventory.Locked = true;
-                        return Task.CompletedTask;
-                    });
-                    inv.OnMove = (async (IPlayer c, RPGInventoryMenu m) =>
-                    {
-                        if (PlayerHandler != null)
+                        if (RPGInventoryManager.HasInventoryOpen(Inventory))
                         {
-                            await PlayerHandler.UpdatePlayerInfo();
+                            await client.SendNotificationError("Le coffre est déjà occupé.");
+                            return;
                         }
 
-                        await this.Update();
-                    });
-                    inv.OnClose = ((IPlayer c, RPGInventoryMenu m) =>
-                    {
-                        Inventory.Locked = false;
-                        return Task.CompletedTask;
-                    });
-                    await inv.OpenMenu(client);
-                    break;
+                        await XMenuManager.CloseMenu(client);
+                        var inv = new RPGInventoryMenu(PlayerHandler.PocketInventory, PlayerHandler.OutfitInventory, PlayerHandler.BagInventory, this.Inventory);
+                        inv.OnOpen = ((IPlayer c, RPGInventoryMenu m) =>
+                        {
+                            Inventory.Locked = true;
+                            return Task.CompletedTask;
+                        });
+                        inv.OnMove = (async (IPlayer c, RPGInventoryMenu m) =>
+                        {
+                            if (PlayerHandler != null)
+                            {
+                                await PlayerHandler.UpdatePlayerInfo();
+                            }
 
+                            await this.Update();
+                        });
+                        inv.OnClose = ((IPlayer c, RPGInventoryMenu m) =>
+                        {
+                            Inventory.Locked = false;
+                            return Task.CompletedTask;
+                        });
+                        await inv.OpenMenu(client);
+                        break;
+                            */
+                    #warning DOOR SYSTEM DESACTIVER SONT COMPORTEMENT EST ETRANGE SUR ALTV
+                    /* 
                 case "ID_doors":
-                    menu = new XMenu("DoorMenu");
-                    menu.Callback = VehicleXMenuCallback;
-                    menu.Add(new XMenuItem("Porte avant gauche", "", "ID_frontLeft", ((this.GetDoorState(DoorID.DoorFrontLeft) == DoorState.DoorOpen) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-                    menu.Add(new XMenuItem("Porte avant droite", "", "ID_frontRight", ((this.GetDoorState(DoorID.DoorFrontRight) == DoorState.DoorOpen) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-                    menu.Add(new XMenuItem("Porte arrière gauche", "", "ID_backLeft", ((this.GetDoorState(DoorID.DoorRearLeft) == DoorState.DoorOpen) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-                    menu.Add(new XMenuItem("Porte arrière droite", "", "ID_backRight", ((this.GetDoorState(DoorID.DoorRearRight) == DoorState.DoorOpen) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-                    menu.Add(new XMenuItem("Capot", "", "ID_hood", ((this.GetDoorState(DoorID.DoorHood) == DoorState.DoorOpen) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-                    menu.Add(new XMenuItem($"{((await this.Vehicle.GetModelAsync() != (uint)VehicleHash.Trash) ? "Coffre" : "Benne")}", "", "ID_trunk", ((this.GetDoorState(DoorID.DoorTrunk) == DoorState.DoorOpen) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-
-                    await menu.OpenXMenu(client);
+                    await OpenDoorsMenu(client);
                     break;
 
                 case "ID_frontLeft":
-                    await SetDoorState(DoorID.DoorFrontLeft, (this.GetDoorState(DoorID.DoorFrontLeft) == DoorState.DoorOpen ? DoorState.DoorClosed : DoorState.DoorOpen));
+                    await SetDoorState(VehicleDoor.DriverFront, (this.GetDoorState(VehicleDoor.DriverFront) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel2));
                     await OpenDoorsMenu(client);
                     break;
                 case "ID_frontRight":
-                    await SetDoorState(DoorID.DoorFrontRight, (this.GetDoorState(DoorID.DoorFrontRight) == DoorState.DoorOpen ? DoorState.DoorClosed : DoorState.DoorOpen));
+                    await SetDoorState(VehicleDoor.PassengerFront, (this.GetDoorState(VehicleDoor.PassengerFront) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel1));
                     await OpenDoorsMenu(client);
                     break;
                 case "ID_backLeft":
-                    await SetDoorState(DoorID.DoorRearLeft, (this.GetDoorState(DoorID.DoorRearLeft) == DoorState.DoorOpen ? DoorState.DoorClosed : DoorState.DoorOpen));
+                    await SetDoorState(VehicleDoor.DriverRear, (this.GetDoorState(VehicleDoor.DriverRear) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel1));
                     await OpenDoorsMenu(client);
                     break;
                 case "ID_backRight":
-                    await SetDoorState(DoorID.DoorRearRight, (this.GetDoorState(DoorID.DoorRearRight) == DoorState.DoorOpen ? DoorState.DoorClosed : DoorState.DoorOpen));
+                    await SetDoorState(VehicleDoor.PassengerRear, (this.GetDoorState(VehicleDoor.PassengerRear) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel1));
                     await OpenDoorsMenu(client);
                     break;
                 case "ID_hood":
-                    await SetDoorState(DoorID.DoorHood, (this.GetDoorState(DoorID.DoorHood) == DoorState.DoorOpen ? DoorState.DoorClosed : DoorState.DoorOpen));
+                    await SetDoorState(VehicleDoor.Hood, (this.GetDoorState(VehicleDoor.Hood) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel1));
                     await OpenDoorsMenu(client);
                     break;
                 case "ID_trunk":
-                    await SetDoorState(DoorID.DoorTrunk, (this.GetDoorState(DoorID.DoorTrunk) == DoorState.DoorOpen ? DoorState.DoorClosed : DoorState.DoorOpen));
+                    await SetDoorState(VehicleDoor.Trunk, (this.GetDoorState(VehicleDoor.Trunk) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel1));
                     await OpenDoorsMenu(client);
                     break;
+                    /*
                 case "ID_neons":
                     if (VehicleSync.NeonsColor == null)
                     {
@@ -215,141 +209,141 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     await XMenuManager.CloseMenu(client);
                     break;
                     */
-                case "ID_start":
-                    var engineCurrent = await Vehicle.IsEngineOnAsync();
-                    await Vehicle.SetEngineOnAsync(!engineCurrent);
-                    await XMenuManager.XMenuManager.CloseMenu(client);
-                    break;
-                    /*
-                case "ID_give":
-                    List<PlayerHandler> players = await PlayerManager.GetNearestPlayers(client);
-                    if (players.Count > 0)
-                    {
-                        Menu menugive = new Menu("ID_GiveVehicle", "", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
-
-                        foreach (PlayerHandler player in players)
+                    case "ID_start":
+                        var engineCurrent = await Vehicle.IsEngineOnAsync();
+                        await Vehicle.SetEngineOnAsync(!engineCurrent);
+                        await XMenuManager.XMenuManager.CloseMenu(client);
+                        break;
+                        /*
+                    case "ID_give":
+                        List<PlayerHandler> players = await PlayerManager.GetNearestPlayers(client);
+                        if (players.Count > 0)
                         {
-                            MenuItem pitem = new MenuItem(player.Identite.Name, executeCallback: true, id: "Give");
-                            menugive.Add(pitem);
-                        }
+                            Menu menugive = new Menu("ID_GiveVehicle", "", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
 
-                        menugive.Callback = (async (_client, _menu, _menuitem, _menuindex, _data) =>
-                        {
-                            PlayerHandler destinataire = PlayerManager.GetPlayerByName(_menuitem.Text);
-                            if (destinataire != null)
+                            foreach (PlayerHandler player in players)
                             {
-                                await SetOwner(destinataire);
-                                var vehinfo = VehicleInfoLoader.VehicleInfoLoader.Get(await Vehicle.GetModelAsync());
-                                await _client.SendNotificationSuccess("Vous avez donné votre " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " à " + destinataire.Identite.Name);
-                                await destinataire.Client.SendNotificationSuccess("Vous avez reçu un(e) " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " par " + PlayerManager.GetPlayerByClient(_client)?.Identite.Name);
-
-                                await this.Update();
-                                await MenuManager.CloseMenu(_client);
+                                MenuItem pitem = new MenuItem(player.Identite.Name, executeCallback: true, id: "Give");
+                                menugive.Add(pitem);
                             }
-                        });
 
-                        await MenuManager.OpenMenu(client, menugive);
-                    }
-                    else
-                    {
-                        await client.SendNotificationError("Personne autour de vous.");
-                        await XMenuManager.CloseMenu(client);
-                    }
-                    break;
-
-                case "ID_Buy":
-                    try
-                    {
-                        await XMenuManager.CloseMenu(client);
-                        int carPrice;
-                        if (Vehicle.TryGetData("CarDealer", out dynamic _data) == true)
-                        {
-                            Vehicle.TryGetData("CarDealerPrice", out carPrice);
-                            CarDealerPlace _place = _data;
-                            PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
-                            if (ph != null)
+                            menugive.Callback = (async (_client, _menu, _menuitem, _menuindex, _data) =>
                             {
-                                if (await ph.HasBankMoney(carPrice, $"Achat de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
+                                PlayerHandler destinataire = PlayerManager.GetPlayerByName(_menuitem.Text);
+                                if (destinataire != null)
                                 {
-                                    await _place.CarDealer.BuyCar(_place, ph);
+                                    await SetOwner(destinataire);
+                                    var vehinfo = VehicleInfoLoader.VehicleInfoLoader.Get(await Vehicle.GetModelAsync());
+                                    await _client.SendNotificationSuccess("Vous avez donné votre " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " à " + destinataire.Identite.Name);
+                                    await destinataire.Client.SendNotificationSuccess("Vous avez reçu un(e) " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " par " + PlayerManager.GetPlayerByClient(_client)?.Identite.Name);
+
+                                    await this.Update();
+                                    await MenuManager.CloseMenu(_client);
                                 }
-                                else
-                                {
-                                    await client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque");
-                                }
-                            }
+                            });
+
+                            await MenuManager.OpenMenu(client, menugive);
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        MP.Logger.Error(ex.ToString(), ex);
-                    }
-                    break;
-                case "ID_Rent":
-                    try
-                    {
-                        await XMenuManager.CloseMenu(client);
-
-                        if (Vehicle.TryGetData("RentShop", out dynamic _data) == true)
+                        else
                         {
-                            VehicleRentPlace _place = _data;
-                            PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
-                            if (ph != null)
+                            await client.SendNotificationError("Personne autour de vous.");
+                            await XMenuManager.CloseMenu(client);
+                        }
+                        break;
+
+                    case "ID_Buy":
+                        try
+                        {
+                            await XMenuManager.CloseMenu(client);
+                            int carPrice;
+                            if (Vehicle.TryGetData("CarDealer", out dynamic _data) == true)
                             {
-                                if (await ph.HasBankMoney(_place.VehicleInfo.Price, $"Location de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
+                                Vehicle.TryGetData("CarDealerPrice", out carPrice);
+                                CarDealerPlace _place = _data;
+                                PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
+                                if (ph != null)
                                 {
-                                    await _place.RentShop.RentCar(_place, ph);
-                                }
-                                else
-                                {
-                                    await client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque");
+                                    if (await ph.HasBankMoney(carPrice, $"Achat de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
+                                    {
+                                        await _place.CarDealer.BuyCar(_place, ph);
+                                    }
+                                    else
+                                    {
+                                        await client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque");
+                                    }
                                 }
                             }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        MP.Logger.Error(ex.ToString(), ex);
-                    }
-                    break;
-
-                case "ID_delete":
-                    await this.Delete(true);
-                    break;
-
-                case "ID_lockpick":
-                    var lockPicks = PlayerHandler.GetStacksItems(ItemID.LockPick);
-                    if (lockPicks.Count > 0)
-                    {
-                        LockPick lockPick = null;
-                        if (lockPicks.ContainsKey(InventoryTypes.Pocket))
+                        catch (Exception ex)
                         {
-                            lockPick = lockPicks[InventoryTypes.Pocket][0].Item as LockPick;
-                            if (lockPick != null)
-                                await LockPick.LockPickVehicle(client, Vehicle, client.GetPlayerHandler()?.PocketInventory);
+                            MP.Logger.Error(ex.ToString(), ex);
                         }
-                        else if (lockPicks.ContainsKey(InventoryTypes.Bag))
+                        break;
+                    case "ID_Rent":
+                        try
                         {
-                            lockPick = lockPicks[InventoryTypes.Bag][0].Item as LockPick;
-                            if (lockPick != null)
-                                await LockPick.LockPickVehicle(client, Vehicle, client.GetPlayerHandler()?.BagInventory);
+                            await XMenuManager.CloseMenu(client);
+
+                            if (Vehicle.TryGetData("RentShop", out dynamic _data) == true)
+                            {
+                                VehicleRentPlace _place = _data;
+                                PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
+                                if (ph != null)
+                                {
+                                    if (await ph.HasBankMoney(_place.VehicleInfo.Price, $"Location de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
+                                    {
+                                        await _place.RentShop.RentCar(_place, ph);
+                                    }
+                                    else
+                                    {
+                                        await client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque");
+                                    }
+                                }
+                            }
                         }
-                    }
-                    break;
+                        catch (Exception ex)
+                        {
+                            MP.Logger.Error(ex.ToString(), ex);
+                        }
+                        break;
+
+                    case "ID_delete":
+                        await this.Delete(true);
+                        break;
+
+                    case "ID_lockpick":
+                        var lockPicks = PlayerHandler.GetStacksItems(ItemID.LockPick);
+                        if (lockPicks.Count > 0)
+                        {
+                            LockPick lockPick = null;
+                            if (lockPicks.ContainsKey(InventoryTypes.Pocket))
+                            {
+                                lockPick = lockPicks[InventoryTypes.Pocket][0].Item as LockPick;
+                                if (lockPick != null)
+                                    await LockPick.LockPickVehicle(client, Vehicle, client.GetPlayerHandler()?.PocketInventory);
+                            }
+                            else if (lockPicks.ContainsKey(InventoryTypes.Bag))
+                            {
+                                lockPick = lockPicks[InventoryTypes.Bag][0].Item as LockPick;
+                                if (lockPick != null)
+                                    await LockPick.LockPickVehicle(client, Vehicle, client.GetPlayerHandler()?.BagInventory);
+                            }
+                        }
+                        break;
 
 
-                case "ID_Faction":
-                    menu.ClearItems();
-                    FactionManager.AddFactionVehicleMenu(client, Vehicle, menu);
-                    await menu.OpenXMenu(client);
+                    case "ID_Faction":
+                        menu.ClearItems();
+                        FactionManager.AddFactionVehicleMenu(client, Vehicle, menu);
+                        await menu.OpenXMenu(client);
 
-                    break;
+                        break;
 
-                default:
-                    break;
-            }*/
+                    default:
+                        break;
+                }*/
+            }
+            #endregion
         }
-        #endregion
     }
-}
 }

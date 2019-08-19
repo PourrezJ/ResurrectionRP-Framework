@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Elements.Entities;
+using AltV.Net.Enums;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP.Entities.Vehicles.Data;
 using ResurrectionRP_Server.Models;
@@ -20,23 +21,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles.Data
         WindowFixed,
         WindowDown,
         WindowBroken
-    }
-
-    public enum DoorID
-    {
-        DoorFrontLeft,
-        DoorFrontRight,
-        DoorRearLeft,
-        DoorRearRight,
-        DoorHood,
-        DoorTrunk
-    }
-
-    public enum DoorState
-    {
-        DoorClosed,
-        DoorOpen,
-        DoorBroken,
     }
 
     public enum WheelID
@@ -82,7 +66,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles.Data
         public float Milage { get; set; }
 
         public Color NeonsColor { get; set; } = Color.Empty;
-        public int[] Door { get; set; } = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
+        public VehicleDoorState[] Door { get; set; } = new VehicleDoorState[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
         public int[] Window { get; set; } = new int[4] { 0, 0, 0, 0 };
         public int[] Wheel { get; set; } = new int[10] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 

@@ -20,24 +20,14 @@ namespace ResurrectionRP_Server.Items
         {
             uint Weapon = client.Weapon;
 
-            if(Weapon)
-            
-
-            if (weapons.Count > 0)
-            {
-                if (weapons.ContainsKey(WeaponHash.Hatchet))
+                if (Weapon == (uint)Utils.Enums.WeaponHash.Hatchet)
                 {
-                    await client.RemoveWeaponAsync(WeaponHash.Hatchet);
+                    client.RemoveWeapon((uint)Utils.Enums.WeaponHash.Hatchet);
                 }
                 else
                 {
-                    await client.GiveWeaponAsync(WeaponHash.Hatchet, 200);
+                    client.GiveWeapon((uint)Utils.Enums.WeaponHash.Hatchet, 200, true);
                 }
-            }
-            else
-            {
-                await client.GiveWeaponAsync(WeaponHash.Hatchet, 200);
-            }
         }
     }
 }

@@ -164,6 +164,8 @@ namespace ResurrectionRP_Server.Entities.Players
         public async Task LoadPlayer(IPlayer client, bool firstspawn = false)
         {
             Client = client;
+            Alt.Server.LogDebug("Im at loadplayer");
+            Alt.Server.LogError("Im at loadplayer");
             client.SetData("PlayerHandler", this);
             if (PlayerHandlerList.TryAdd(client, this))
             {
@@ -171,15 +173,15 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 if (firstspawn)
                 {
-                    /**
-                    PocketInventory.AddItem(Inventory.ItemByID(ItemID.JambonBeurre), 1);
-                    PocketInventory.AddItem(Inventory.ItemByID(ItemID.Eau), 1);
+                    
+                    PocketInventory.AddItem(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.JambonBeurre), 1);
+                    PocketInventory.AddItem(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.Eau), 1);
 
-                    OutfitInventory.Slots[11] = new ItemStack(new ClothItem(ItemID.Shoes, "Chaussure", "", new Models.ClothData((Character.Gender == 0) ? (byte)1 : (byte)3, 0, 0), 0, true, false, false, true, false, 0, classes: "shoes", icon: "shoes"), 1, 11);
-                    OutfitInventory.Slots[9] = new ItemStack(new ClothItem(ItemID.Pant, "Pantalon", "", new Models.ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "pants", icon: "pants"), 1, 9);
-                    OutfitInventory.Slots[5] = new ItemStack(new ClothItem(ItemID.Jacket, "Resurrection", "", new Models.ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "jacket", icon: "jacket"), 1, 9);
+                    OutfitInventory.Slots[11] = new Models.ItemStack(new ClothItem(Models.InventoryData.ItemID.Shoes, "Chaussure", "", new Models.ClothData((Character.Gender == 0) ? (byte)1 : (byte)3, 0, 0), 0, true, false, false, true, false, 0, classes: "shoes", icon: "shoes"), 1, 11);
+                    OutfitInventory.Slots[9] = new Models.ItemStack(new ClothItem(Models.InventoryData.ItemID.Pant, "Pantalon", "", new Models.ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "pants", icon: "pants"), 1, 9);
+                    OutfitInventory.Slots[5] = new Models.ItemStack(new ClothItem(Models.InventoryData.ItemID.Jacket, "Resurrection", "", new Models.ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "jacket", icon: "jacket"), 1, 9);
                     //OutfitInventory.Slots[13] = new ItemStack(new BagItem(ItemID.Bag, "Backpack", "", new Models.ClothData(1, 0, 0), new Inventory(25, 20, InventoryType.Bag),0, true, false, false, true, false, 0, classes: "backpack", icon: "backpack"), 1, 9);
-                    **/
+                    
                     await AddMoney(PlayerManager.StartMoney);
 
                     Location = GameMode.FirstSpawn;

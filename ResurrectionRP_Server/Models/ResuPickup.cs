@@ -52,8 +52,8 @@ namespace ResurrectionRP_Server.Models
     {
         [JsonIgnore]
         public Entities.Objects.ObjectHandler Object;
-        [JsonIgnore]
-        public ITextLabel Label;
+        /*[JsonIgnore]
+        public ITextLabel Label;*/
 
         public uint Hash;
         public Item Item;
@@ -69,8 +69,8 @@ namespace ResurrectionRP_Server.Models
         {
         }
 
-        public static async Task<ResuPickup> CreatePickup(uint hash, Item item, int quantite, Vector3 position, bool hide, TimeSpan endlife, uint dimension = MP.GlobalDimension)
-        {
+        public static async void CreatePickup(uint hash, Item item, int quantite, Vector3 position, bool hide, TimeSpan endlife, uint dimension = 2)
+        {/**
             var obj = new ResuPickup()
             {
                 Hash = hash,
@@ -93,7 +93,7 @@ namespace ResurrectionRP_Server.Models
                 obj.Delete();
             });
 
-            return obj;
+            return obj;**/
         }
 
         public async Task<bool> Take(IPlayer client)
@@ -111,7 +111,7 @@ namespace ResurrectionRP_Server.Models
         }
 
         public void Delete()
-        {
+        {/**
             AltAsync.Do(() =>
             {
                 if (Object != null)
@@ -119,13 +119,13 @@ namespace ResurrectionRP_Server.Models
                     if (Object.IObject != null && Object.IObject.Exists)
                     {
                         Object.IObject.Destroy();
-                        Label.Destroy();
+                        Label.Destroy(); TODO
 
                         if (ResuPickupManager.ResuPickupList.Contains(this))
                             ResuPickupManager.ResuPickupList.Remove(this);
                     }
                 }
-            });
+            });**/
         }
     }
 }

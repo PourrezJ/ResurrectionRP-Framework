@@ -70,7 +70,7 @@ namespace ResurrectionRP_Server.Items
                         break;
                 }
             }
-            await MenuManager.CloseMenu(client);
+            //await MenuManager.CloseMenu(client);
         }
 
         public async Task AnimateEatDrink(IPlayer client, Entities.Players.PlayerHandler ph, string props, Vector3 position, Vector3 rotation)

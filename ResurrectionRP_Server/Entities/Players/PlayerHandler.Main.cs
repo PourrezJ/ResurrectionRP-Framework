@@ -13,8 +13,6 @@ using ResurrectionRP_Server.Utils.Extensions;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
-
-
     [BsonIgnoreExtraElements]
     public partial class PlayerHandler
     {
@@ -123,7 +121,8 @@ namespace ResurrectionRP_Server.Entities.Players
             client.SetData("PlayerHandler", this);
             if (PlayerHandlerList.TryAdd(client, this))
             {
-                if (BankAccount == null) BankAccount = new Bank.BankAccount(Bank.AccountType.Personnal, await Bank.BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
+                if (BankAccount == null)
+                    BankAccount = new Bank.BankAccount(Bank.AccountType.Personnal, await Bank.BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
 
                 if (firstspawn)
                 {

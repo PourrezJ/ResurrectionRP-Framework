@@ -239,11 +239,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             if (PlayerManager.HasVehicleKey(client, await Vehicle.GetNumberplateTextAsync()) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())
             {
-                await client.NotifyAsync($"Vous avez {(statut ? " ~g~ouvert" : "~r~fermé")} ~w~le véhicule");
                 Locked = statut;
                 await Vehicle.SetLockStateAsync(statut ? VehicleLockState.Locked : VehicleLockState.Unlocked);
+                await client.NotifyAsync($"Vous avez {(statut ? " ~r~ouvert" : "~g~fermé")} ~w~le véhicule");
             }
-        }
+        }  
 
         public async Task<bool> LockUnlock(IPlayer client)
         {
@@ -253,7 +253,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 Locked = await Vehicle.GetLockStateAsync() == VehicleLockState.Locked ? false : true;
                 await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
-                await client.NotifyAsync($"Vous avez {(Locked ? " ~g~ouvert" : "~r~fermé")} ~w~le véhicule");
+                await client.NotifyAsync($"Vous avez {(Locked ? " ~r~fermé" : "~g~ouvert")} ~w~le véhicule");
 
                 return true;
             }

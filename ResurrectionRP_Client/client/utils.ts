@@ -254,3 +254,18 @@ export function initialize() {
 export function Distance(positionOne, positionTwo) {
     return Math.sqrt(Math.pow(positionOne.x - positionTwo.x, 2) + Math.pow(positionOne.y - positionTwo.y, 2) + Math.pow(positionOne.z - positionTwo.z, 2));
 }
+
+export function GetCameraDirection() {
+    const heading = game.getGameplayCamRelativeHeading() + game.getEntityHeading(alt.Player.local.scriptID);
+    const pitch = game.getGameplayCamRot(0).x;
+    var x = -Math.sin(heading * Math.PI / 180.0);
+    var y = Math.cos(heading * Math.PI / 180.0);
+    var z = Math.sin(pitch * Math.PI / 180.0);
+    var len = Math.sqrt(x * x + y * y + z * z);
+    if (len !== 0) {
+        x = x / len;
+        y = y / len;
+        z = z / len;
+    }
+    return new alt.Vector3(x, y, z);
+}

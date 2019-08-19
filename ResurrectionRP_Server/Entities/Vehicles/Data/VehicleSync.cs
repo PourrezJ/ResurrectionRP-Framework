@@ -81,7 +81,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles.Data
         public float PowerMultiplicator { get; set; }
         public float Milage { get; set; }
 
-        public Color NeonsColor { get; set; }
+        public Color NeonsColor { get; set; } = Color.Empty;
         public int[] Door { get; set; } = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
         public int[] Window { get; set; } = new int[4] { 0, 0, 0, 0 };
         public int[] Wheel { get; set; } = new int[10] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };

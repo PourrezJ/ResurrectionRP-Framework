@@ -172,9 +172,16 @@ namespace ResurrectionRP_Server
             Task.Run(async () =>
             {
                 await vh.SpawnVehicle();
-                player.GetPlayerHandler().ListVehicleKey.Add(new VehicleKey(vh.VehicleManifest.DisplayName, vh.Plate));
-                /*if (vh.Vehicle != null)
-                    player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);*/
+                var ph = player.GetPlayerHandler();
+
+                if (ph != null)
+                {
+                    ph.ListVehicleKey.Add(new VehicleKey(vh.VehicleManifest.DisplayName, vh.Plate));
+                    if (vh.Vehicle != null)
+                        player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);
+
+                    await ph.UpdatePlayerInfo();
+                }
             });
         }
         public async Task Save()

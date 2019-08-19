@@ -10,6 +10,7 @@ using ResurrectionRP_Server.Utils.Extensions;
 using ResurrectionRP_Server.XMenuManager;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,20 +30,20 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             var locked = await Vehicle.GetLockStateAsync();
 
-            if (client.IsInVehicle)
+            if (await client.IsInVehicleAsync())
             {
                 xmenu.Add((locked == VehicleLockState.Locked ? new XMenuItem("Déverrouiller", "Déverrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_OPEN_SOLID, false)
                      : new XMenuItem("Verrouiller", "Verrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_SOLID, false)));
-
+                var test = await client.GetSeatAsync();
                 // Driver
-                if (await client.IsInVehicleAsync() && await client.GetSeatAsync() == 0)
+                if (await client.IsInVehicleAsync() && await client.GetSeatAsync() == 1)
                 {
                     xmenu.Add(new XMenuItem($"{(client.Vehicle.EngineOn ? "Eteindre" : "Allumer")} le véhicule", "", "ID_start", XMenuItemIcons.KEY_SOLID, executeCallback: true));
 
                     if (locked == VehicleLockState.Unlocked)
                         xmenu.Add(new XMenuItem("Gestion des portes", "", "ID_doors", XMenuItemIcons.DOOR_CLOSED_SOLID, executeCallback: true));
 
-                    if (this.VehicleSync.NeonsColor != null && (VehicleManifest?.Neon == true))
+                    if (this.VehicleSync.NeonsColor != Color.Empty && (VehicleManifest?.Neon == true))
                         xmenu.Add(new XMenuItem($"{(VehicleSync.NeonState ? "Eteindre" : "Allumer")} les neons", "", "ID_neons", XMenuItemIcons.LIGHTBULB_SOLID, executeCallback: true));
                 }
             }
@@ -213,11 +214,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     await Vehicle.SetNeonsActiveAsync(VehicleSync.NeonState);
                     await XMenuManager.CloseMenu(client);
                     break;
+                    */
                 case "ID_start":
-                    if (Vehicle == null) return;
-                    await SetEngineState(!(GetEngineState()));
-                    await XMenuManager.CloseMenu(client);
+                    var engineCurrent = await Vehicle.IsEngineOnAsync();
+                    await Vehicle.SetEngineOnAsync(!engineCurrent);
+                    await XMenuManager.XMenuManager.CloseMenu(client);
                     break;
+                    /*
                 case "ID_give":
                     List<PlayerHandler> players = await PlayerManager.GetNearestPlayers(client);
                     if (players.Count > 0)

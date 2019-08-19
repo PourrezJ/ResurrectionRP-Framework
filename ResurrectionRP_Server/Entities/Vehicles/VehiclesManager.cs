@@ -28,6 +28,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public VehiclesManager()
         {
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
+
+            AltAsync.OnClient("LockUnlockVehicle", LockUnlockVehicle);
         }
         #endregion
 
@@ -37,6 +39,32 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             await player.EmitAsync("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32(seat), 50, 50);
         }
 
+        private async Task LockUnlockVehicle(IPlayer player, object[] args)
+        {
+
+            var vehicle = args[0] as IVehicle;
+
+            if (!vehicle.Exists)
+                return;
+
+            VehicleHandler veh = GetHandlerByVehicle(vehicle);
+            if (veh == null) return;
+            
+            if (await veh.LockUnlock(player))
+            {
+                /*
+                var receverList = await MP.Players.GetInRangeAsync(await vehicle.GetPositionAsync(), 5);
+
+                foreach (IPlayer recever in receverList)
+                {
+                    if (!recever.Exists)
+                        continue;
+                    await recever.PlaySoundFromEntity(veh.Vehicle, 0, "5_SEC_WARNING", "HUD_MINI_GAME_SOUNDSET");
+                }
+                */
+                await veh.Update();
+            }
+        }
         private async Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
             await player.EmitAsync("OnPlayerLeaveVehicle");

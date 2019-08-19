@@ -905,13 +905,13 @@ namespace ResurrectionRP_Server.Inventory
                                         break;
 
                                     case ItemID.Phone:
-                                        var phoneItem = (item) as PhoneItem;
+                                        var phoneItem = (item) as Items.PhoneItem;
                                         if (phoneItem != null)
                                             player.PhoneSelected = phoneItem.PhoneHandler;
                                         break;
 
                                     case ItemID.Radio:
-                                        var radioItem = (item) as RadioItem;
+                                        var radioItem = (item) as Items.RadioItem;
                                         if (radioItem != null)
                                             player.RadioSelected = radioItem.Radio;
                                         break;

@@ -62,6 +62,8 @@ namespace ResurrectionRP_Server
         //public Weather.WeatherManager WeatherManager { get; private set; }
         [BsonIgnore]
         public Inventory.RPGInventoryManager RPGInventory { get; private set; }
+        [BsonIgnore]
+        public PhoneManager PhoneManager { get; private set; }
 
         public static bool ServerLock;
 
@@ -110,6 +112,7 @@ namespace ResurrectionRP_Server
             PlayerManager = new Entities.Players.PlayerManager();
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();
+            PhoneManager = new Phone.PhoneManager();
             RPGInventory = new Inventory.RPGInventoryManager();
             Alt.Server.LogInfo("Création des controlleurs terminée");
 

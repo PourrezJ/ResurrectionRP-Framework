@@ -1,7 +1,7 @@
 ﻿using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using System.Threading.Tasks;
-/**
+
 namespace ResurrectionRP_Server.Items
 {
     [BsonIgnoreExtraElements]
@@ -50,4 +50,3 @@ namespace ResurrectionRP_Server.Items
         }
     }
 }
-**/

@@ -14,10 +14,10 @@ namespace ResurrectionRP_Server
             return base.Give(sender, recever, quantite);
         }
 
-/*        public override Task OnPickup(IPlayer client, Models.ResuPickup pickup)
+        public override Task OnPickup(IPlayer client, Models.ResuPickup pickup)
         {
             return base.OnPickup(client, pickup);
-        }*/
+        }
 
         public override Task OnPlayerGetItem(IPlayer player)
         {

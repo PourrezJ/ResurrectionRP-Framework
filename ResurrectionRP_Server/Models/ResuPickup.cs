@@ -14,7 +14,7 @@ namespace ResurrectionRP_Server.Models
     public class ResuPickupManager
     {
         #region Private static properties
-        //public static List<ResuPickup> ResuPickupList = new List<ResuPickup>();
+        public static List<ResuPickup> ResuPickupList = new List<ResuPickup>();
         #endregion
 
         public ResuPickupManager()
@@ -48,7 +48,7 @@ namespace ResurrectionRP_Server.Models
         }*/
     }
 
-/*    public class ResuPickup
+    public class ResuPickup
     {
         [JsonIgnore]
         public ObjectHandler Object;
@@ -127,5 +127,5 @@ namespace ResurrectionRP_Server.Models
                 }
             });
         }
-    }*/
+    }
 }

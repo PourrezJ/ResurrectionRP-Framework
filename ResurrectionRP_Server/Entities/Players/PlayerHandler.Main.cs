@@ -107,6 +107,40 @@ namespace ResurrectionRP_Server.Entities.Players
             }
             set => playerSync = value;
         }
+
+        private Radio.Radio radioSelected;
+        [BsonIgnore]
+        public Radio.Radio RadioSelected
+        {
+            get
+            {
+                if (OutfitInventory.Slots[15] == null)
+                    return null;
+
+                var radio = OutfitInventory.Slots[15].Item as Items.RadioItem;
+                if (radio != null)
+                    return radio.Radio;
+                return null;
+            }
+            set => radioSelected = value;
+        }
+
+        private Phone.Phone phoneSelected;
+        [BsonIgnore]
+        public Phone.Phone PhoneSelected
+        {
+            get
+            {
+                if (OutfitInventory.Slots[14] == null)
+                    return null;
+
+                var phone = OutfitInventory.Slots[14].Item as Items.PhoneItem;
+                if (phone != null)
+                    return phone.PhoneHandler;
+                return null;
+            }
+            set => phoneSelected = value;
+        }
         #endregion
 
         #region Constructor
@@ -368,7 +402,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         case 15:
                             if (clothSlot?.Item != null)
                             {
-                                var radio = clothSlot.Item as RadioItem;
+                                var radio = clothSlot.Item as Items.RadioItem;
                                 if (radio != null)
                                     RadioSelected = radio.Radio;
                                 else

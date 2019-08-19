@@ -146,5 +146,16 @@ namespace ResurrectionRP_Server
             Rotation rotating = new Rotation(rotate.X, rotate.Y, rotate.Z);
             client.Rotation = rotating;
         }
+
+        public static bool HasData(this IPlayer client, string Data)
+        {
+            client.GetData(Data, out string result);
+            return (Data != null) ? true : false;
+        }
+
+        public static void ResetData(this IPlayer client, string Data)
+        {
+            client.SetData(Data, null);
+        }
     }
 }

@@ -12,10 +12,10 @@ namespace ResurrectionRP_Server.Items
         {
         }
 
-/*        public override async Task OnPickup(IPlayer client, Models.ResuPickup pickup)
+        public override async Task OnPickup(IPlayer client, Models.ResuPickup pickup)
         {
             await base.OnPickup(client, pickup);
-        }*/
+        }
 
         public override async Task Use(IPlayer client, string inventoryType, int slot)
         {

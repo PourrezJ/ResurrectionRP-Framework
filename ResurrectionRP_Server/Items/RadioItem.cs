@@ -1,17 +1,18 @@
 ﻿
 using System.Threading.Tasks;
 using AltV.Net.Elements.Entities;
-/**
+using RadLib = ResurrectionRP_Server.Radio;
+
 namespace ResurrectionRP_Server.Items
 {
     public class RadioItem : Models.Item
     {
-        private Radio _radio = null;
-        public Radio Radio
+        private RadLib.Radio _radio = null;
+        public RadLib.Radio Radio
         {
             get
             {
-                if (_radio == null) _radio = new Radio();
+                if (_radio == null) _radio = new RadLib.Radio();
                 return _radio;
             }
             set => _radio = value;
@@ -23,7 +24,7 @@ namespace ResurrectionRP_Server.Items
 
         public override async Task Use(IPlayer c, string inventoryType, int slot)
         {
-            await RadioManager.OpenRadio(c, Radio);
+            await RadLib.RadioManager.OpenRadio(c, Radio);
             await MenuManager.CloseMenu(c);
         }
 
@@ -34,4 +35,3 @@ namespace ResurrectionRP_Server.Items
         }
     }
 }
-    **/

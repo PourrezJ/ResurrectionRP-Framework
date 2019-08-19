@@ -45,15 +45,20 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             LastUse = DateTime.Now;
 
             if (location != null)
-                VehicleSync.Location = location;
+                Location = location;
             else if (Vehicle != null)
             {
                 if (!Vehicle.Exists)
                     return;
 
-                VehicleSync.Location.Pos = await Vehicle.GetPositionAsync();
-                VehicleSync.Location.Rot = await Vehicle.GetRotationAsync();
-                VehicleSync.Engine = await Vehicle.IsEngineOnAsync();
+                Location.Pos = await Vehicle.GetPositionAsync();
+                Location.Rot = await Vehicle.GetRotationAsync();
+                Engine = await Vehicle.IsEngineOnAsync();
+                BodyHealth = await Vehicle.GetBodyHealthAsync();
+                EngineHealth = await Vehicle.GetEngineHealthAsync();
+                Dirt = await Vehicle.GetDirtLevelAsync();
+                RadioID = await Vehicle.GetRadioStationAsync();
+
             }
 
             if (!_updateWaiting)

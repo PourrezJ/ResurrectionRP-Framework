@@ -34,8 +34,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 xmenu.Add((locked == VehicleLockState.Locked ? new XMenuItem("Déverrouiller", "Déverrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_OPEN_SOLID, false)
                      : new XMenuItem("Verrouiller", "Verrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_SOLID, false)));
-                var test = await client.GetSeatAsync();
-                // Driver
+
                 if (await client.IsInVehicleAsync() && await client.GetSeatAsync() == 1)
                 {
                     xmenu.Add(new XMenuItem($"{(client.Vehicle.EngineOn ? "Eteindre" : "Allumer")} le véhicule", "", "ID_start", XMenuItemIcons.KEY_SOLID, executeCallback: true));
@@ -43,8 +42,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     if (locked == VehicleLockState.Unlocked)
                         xmenu.Add(new XMenuItem("Gestion des portes", "", "ID_doors", XMenuItemIcons.DOOR_CLOSED_SOLID, executeCallback: true));
                         */
-                    if (this.VehicleSync.NeonsColor != Color.Empty && (VehicleManifest?.Neon == true))
-                        xmenu.Add(new XMenuItem($"{(VehicleSync.NeonState ? "Eteindre" : "Allumer")} les neons", "", "ID_neons", XMenuItemIcons.LIGHTBULB_SOLID, executeCallback: true));
+                    if (NeonsColor != Color.Empty && (VehicleManifest?.Neon == true))
+                        xmenu.Add(new XMenuItem($"{(NeonState ? "Eteindre" : "Allumer")} les neons", "", "ID_neons", XMenuItemIcons.LIGHTBULB_SOLID, executeCallback: true));
                 }
             }
             else

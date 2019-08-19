@@ -1,6 +1,7 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
+using AltV.Net.NetworkingEntity;
 using MongoDB.Driver;
 using System;
 using System.Collections.Concurrent;

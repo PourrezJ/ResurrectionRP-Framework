@@ -32,6 +32,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Constructor
         public PlayerManager()
         {
+            var PlayerCommands = new PlayerCommands();
 
             Alt.OnClient("SendLogin", SendLogin );
             Alt.OnClient("LogPlayer", LogPlayer);

@@ -49,8 +49,7 @@ namespace ResurrectionRP_Server
         public List<IPlayer> PlayerList = new List<IPlayer>();
 
 
-        [BsonIgnore]
-        public short GlobalDimension = short.MaxValue;
+        public static short GlobalDimension = short.MaxValue;
 
         public List<string> PlateList = new List<string>();
 

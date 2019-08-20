@@ -179,7 +179,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     Client.Spawn(Location.Pos, 0);
                     Character.ApplyCharacter(Client);
-                    Client.Dimension = GameMode.Instance.GlobalDimension;
+                    Client.Dimension = GameMode.GlobalDimension;
                     Client.Health = (ushort)(Health + 100);
                     Client.Emit("FadeIn", 0);
                 });

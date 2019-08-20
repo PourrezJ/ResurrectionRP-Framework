@@ -10,8 +10,10 @@
     <PackageReference Include="AltV.Net.Async" Version="1.12.3-beta" />
     <PackageReference Include="AltV.Net.Mock" Version="1.12.3-beta" />
     <PackageReference Include="AltV.Net.NetworkingEntity" Version="1.2.4-dev-preview" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.9.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="VIEApps.Components.Utility" Version="10.2.1906.2" />
   </ItemGroup>
 
   <ItemGroup>

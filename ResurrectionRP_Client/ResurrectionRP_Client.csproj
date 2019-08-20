@@ -157,6 +157,9 @@
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.woff" />
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.woff2" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="resource.cfg" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

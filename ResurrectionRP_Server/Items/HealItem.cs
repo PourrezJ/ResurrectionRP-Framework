@@ -1,7 +1,7 @@
 using AltV.Net.Elements.Entities;
 using System.Threading.Tasks;
 
-namespace ResurrectionRP_Server
+namespace ResurrectionRP_Server.Items
 {
     public class HealItem : Models.Item
     {

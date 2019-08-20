@@ -229,7 +229,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     Client.Emit("FadeIn", 0);
                 });
 
-               // await UpdateClothing();
+               await UpdateClothing();
 
                 /**if (PlayerSync.IsCuff)
                     await SetCuff(true);

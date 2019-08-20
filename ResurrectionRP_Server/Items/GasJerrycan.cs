@@ -5,7 +5,7 @@ using AltV.Net.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ResurrectionRP_Server
+namespace ResurrectionRP_Server.Items
 {
     class GasJerrycan : Models.Item
     {

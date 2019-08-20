@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ResurrectionRP_Server
+namespace ResurrectionRP_Server.Items
 {
     class IdentityCard : Models.Item
     {

@@ -34,31 +34,7 @@ namespace ResurrectionRP_Server
                 if (database == null)
                     return;
 
-                var conventionPack = new ConventionPack { new IgnoreExtraElementsConvention(true) };
-                ConventionRegistry.Register("IgnoreExtraElements", conventionPack, type => true);
 
-                BsonSerializer.RegisterSerializer(typeof(Vector3), new VectorSerializer());
-                //BsonSerializer.RegisterSerializer(typeof(ClothData), new ClothDataSerializer());
-                BsonSerializer.RegisterSerializer(typeof(Color), new ColorBsonSerializer());
-                /*
-                BsonClassMap.RegisterClassMap<Location>(cm =>
-                {
-                    cm.AutoMap();
-                    cm.MapProperty(c => c.Pos).SetSerializer(new VectorSerializer());
-                    cm.MapProperty(c => c.Rot).SetSerializer(new VectorSerializer());
-                });
-                */
-                /*
-                BsonClassMap.RegisterClassMap<Attachment>(cm =>
-                {
-                    cm.AutoMap();
-                    cm.MapProperty(c => c.Bone).SetSerializer(new StringSerializer());
-                    cm.MapProperty(c => c.PositionOffset).SetSerializer(new VectorSerializer());
-                    cm.MapProperty(c => c.RemoteID).SetSerializer(new UInt32Serializer(BsonType.Int32, new RepresentationConverter(true, true)));
-                    cm.MapProperty(c => c.RotationOffset).SetSerializer(new VectorSerializer());
-                    cm.MapProperty(c => c.Type).SetSerializer(new ByteSerializer());
-                });
-                */
                 var collectionData = Database.MongoDB.GetCollectionSafe<GameMode>("gamemode");
                 var data = await collectionData.FindAsync<GameMode>(new BsonDocument());
                 gamemode = await data.FirstOrDefaultAsync();

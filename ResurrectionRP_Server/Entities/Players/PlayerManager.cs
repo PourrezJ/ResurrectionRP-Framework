@@ -280,15 +280,12 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public static async Task ConnectPlayer(IPlayer client)
         {
-            Alt.Server.LogError("ConnecterPlayer 1 ");
             if (await PlayerHandlerExist(client))
             {
-                Alt.Server.LogError("ConnecterPlayer 2 ");
                 await client.EmitAsync("FadeOut",0);
                 client.GetData("SocialClub", out string social);
                 PlayerHandler player = await GetPlayerHandlerDatabase( social );
                 player.LastUpdate = DateTime.Now;
-                Alt.Server.LogError("ConnecterPlayer 3 ");
                 await player.LoadPlayer(client);
             }
             else

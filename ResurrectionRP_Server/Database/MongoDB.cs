@@ -3,6 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
+using System.Drawing;
 using ResurrectionRP.Server;
 using ResurrectionRP_Server.Models;
 using System;
@@ -44,11 +45,11 @@ namespace ResurrectionRP_Server.Database
 
                 var conventionPack = new ConventionPack { new IgnoreExtraElementsConvention(true) };
                 ConventionRegistry.Register("IgnoreExtraElements", conventionPack, type => true);
-                /*
+                
                 BsonSerializer.RegisterSerializer(typeof(Vector3), new VectorSerializer());
                 BsonSerializer.RegisterSerializer(typeof(ClothData), new ClothDataSerializer());
                 BsonSerializer.RegisterSerializer(typeof(Color), new ColorBsonSerializer());
-                */
+                
                 BsonClassMap.RegisterClassMap<Location>(cm =>
                 {
                     cm.AutoMap();

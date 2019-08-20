@@ -10,6 +10,7 @@ using AltV.Net.Async;
 using PropData = ResurrectionRP_Server.Models.PropData;
 using ClothData = ResurrectionRP_Server.Models.ClothData;
 using ItemID = ResurrectionRP_Server.Models.InventoryData.ItemID;
+using Newtonsoft.Json;
 
 namespace ResurrectionRP_Server.Inventory
 {
@@ -80,7 +81,12 @@ namespace ResurrectionRP_Server.Inventory
 
             if (_clientMenus.TryAdd(client, menu))
             {
-                await client.EmitAsync("InventoryManager_OpenMenu", menu.PocketsItems, menu.BagItems, menu.DistantItems, menu.OutfitItems, (menu.DistantPlayer == null) ? false : true);
+                await client.EmitAsync("InventoryManager_OpenMenu", 
+                    JsonConvert.SerializeObject( menu.PocketsItems), 
+                    JsonConvert.SerializeObject(menu.BagItems), 
+                    JsonConvert.SerializeObject(menu.DistantItems), 
+                    JsonConvert.SerializeObject(menu.OutfitItems), 
+                    (menu.DistantPlayer == null) ? false : true);
                 await client.EmitAsync("showCursor", true);
 
 

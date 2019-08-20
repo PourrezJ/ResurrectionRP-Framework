@@ -12,9 +12,9 @@ namespace ResurrectionRP_Server.Models
 
         public ItemStack(Item item, int quantity, int price = 0)
         {
-            Item = item;
-            Quantity = quantity;
-            Price = price;
+            this.Item = item;
+            this.Quantity = quantity;
+            this.Price = price;
         }
 
         public void SetData(string key, object value) => Variables.Add(key, value);

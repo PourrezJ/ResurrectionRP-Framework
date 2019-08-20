@@ -88,6 +88,7 @@
     <TypeScriptCompile Include="client\player\Hud.ts" />
     <TypeScriptCompile Include="client\player\PlayerCustomization.ts" />
     <TypeScriptCompile Include="client\player\Survival.ts" />
+    <TypeScriptCompile Include="client\RPGInventory.ts" />
     <TypeScriptCompile Include="client\Utils\Enums\Enums.ts" />
     <TypeScriptCompile Include="client\xtreamMenu\XtreamMenuManager.ts" />
     <TypeScriptCompile Include="typings\altv-client.d.ts" />

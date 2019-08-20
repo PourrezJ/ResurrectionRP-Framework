@@ -4,17 +4,14 @@ using ResurrectionRP_Server.Models.InventoryData;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Numerics;
 using System.Threading.Tasks;
-using AltV.Net;
-using AltV.Net.Data;
 using MongoDB.Bson.Serialization.Attributes;
 using OutfitInventory = ResurrectionRP_Server.Inventory.OutfitInventory;
 
 namespace ResurrectionRP_Server.Models
 {
-    [BsonKnownTypes(typeof(Items.Alcohol), typeof(Items.Axe), typeof(Items.BuildingItem), typeof(ClothItem), typeof(Items.CrateTools), typeof(Items.Defibrilator), typeof(Items.Eat) /*,typeof(Items.GasJerrycan), typeof(Items.HandCuff), typeof(Items.HealItem),
-        typeof(Items.IdentityCard), typeof(Items.MaskItem), typeof(Items.PhoneItem), typeof(Items.RadioItem), typeof(Items.BagItem), typeof(Items.Unusable), typeof(Weapons), typeof(Items.SeedItem), typeof(Items.LockPick)*/)]
+    [BsonKnownTypes(typeof(Items.Alcohol), typeof(Items.Axe), typeof(Items.BuildingItem), typeof(ClothItem), typeof(Items.CrateTools), typeof(Items.Defibrilator), typeof(Items.Eat) /*,typeof(Items.GasJerrycan), typeof(Items.HandCuff), typeof(Items.HealItem),*/
+        /*typeof(Items.IdentityCard), typeof(Items.MaskItem)*/, typeof(Items.PhoneItem), typeof(Items.RadioItem), typeof(Items.BagItem), typeof(Items.Unusable)/*, typeof(Weapons), typeof(Items.SeedItem), typeof(Items.LockPick)*/)]
     public class Item : ICloneable
     {
         [JsonProperty("id")]

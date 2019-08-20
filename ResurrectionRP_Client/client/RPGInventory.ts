@@ -12,14 +12,14 @@ export class RPGInventoryManager {
     private give: boolean;
 
     constructor() {
-        alt.onServer("InventoryManager_OpenMenu", (pocket: object, bag: object, distant: object, outfit: object, give: boolean) => {
+        alt.onServer("InventoryManager_OpenMenu", (pocket: string, bag: string, distant: string, outfit: string, give: boolean) => {
             if (chat.isOpened() || game.isPauseMenuActive())
                 return;
 
-            this.pocket = pocket;
-            this.bag = bag;
-            this.distant = distant;
-            this.outfit = outfit;
+            this.pocket = JSON.parse( pocket );
+            this.bag = JSON.parse(  bag );
+            this.distant = JSON.parse( distant );
+            this.outfit = JSON.parse( outfit );
             this.give = give;
 
             this.loading = true;

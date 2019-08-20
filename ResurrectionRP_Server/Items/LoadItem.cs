@@ -101,8 +101,8 @@ namespace ResurrectionRP_Server.Items
 
                     new ClothItem(ItemID.TShirt, "TShirt Blanc", "Un tshirt qui sent la sueur", new Models.ClothData(1, 0, 0), 0, true, false, false, true, false, 0, classes:"shirt", icon:"shirt"),
 
-                    //new PhoneItem(ItemID.Phone, "Téléphone", "", PhoneManager.GeneratePhone(), 1, true, true, false, true, true, 500, "phone", "phone"),
-                    //new RadioItem(ItemID.Radio, "Radio", "", 1, true, true, false, true, true, 500, "radio", "talky", "radio"),
+                    new PhoneItem(ItemID.Phone, "Téléphone", "", Phone.PhoneManager.GeneratePhone(), 1, true, true, false, true, true, 500, "phone", "phone"),
+                    new RadioItem(ItemID.Radio, "Radio", "", 1, true, true, false, true, true, 500, "radio", "talky", "radio"),
                     new BagItem(ItemID.Bag, "Backpack", "", new Models.ClothData(1, 0, 0), 25, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"),
 
                     new Weapons(ItemID.Weapon, "Poignard", "", 1, hash: WeaponHash.Dagger, isDockable: true, itemPrice: 9100),

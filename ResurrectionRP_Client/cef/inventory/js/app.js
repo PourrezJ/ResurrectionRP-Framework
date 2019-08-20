@@ -723,12 +723,12 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
         });
     });
 }]);
-alt.on("loadInventory", loadInventory)
-loadInventory = (pocket, bag, distant, outfit, give) => {
+
+alt.on("loadInventory", (pocket, bag, distant, outfit, give) =>  {
     console.log(give);
-    var event = new CustomEvent("ItemsLoaded", { "detail": { pocket, bag, distant, outfit, give} });
+    var event = new CustomEvent("ItemsLoaded", { "detail": { pocket, bag, distant, outfit, give } });
     window.dispatchEvent(event);
-};
+})
 
 $(function () {
     alt.emit("LoadInventoryItems");

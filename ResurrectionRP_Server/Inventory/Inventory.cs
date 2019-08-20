@@ -192,7 +192,7 @@ namespace ResurrectionRP_Server.Inventory
 
         public Models.Item FindItemID(ItemID id)
         {
-            foreach (Models.Item item in LoadItem.ItemsList)
+            foreach (Models.Item item in Items.LoadItem.ItemsList)
             {
                 if (item.id == id)
                     return item;
@@ -202,7 +202,7 @@ namespace ResurrectionRP_Server.Inventory
 
         public static Models.Item ItemByID(ItemID id)
         {
-            var item = LoadItem.ItemsList.Find(i => i.id == id) ?? null;
+            var item =Items.LoadItem.ItemsList.Find(i => i.id == id) ?? null;
 
             if (item == null)
                 return null;

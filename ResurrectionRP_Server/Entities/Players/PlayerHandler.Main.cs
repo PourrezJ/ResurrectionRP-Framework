@@ -164,8 +164,6 @@ namespace ResurrectionRP_Server.Entities.Players
         public async Task LoadPlayer(IPlayer client, bool firstspawn = false)
         {
             Client = client;
-            Alt.Server.LogDebug("Im at loadplayer");
-            Alt.Server.LogError("Im at loadplayer");
             client.SetData("PlayerHandler", this);
             if (PlayerHandlerList.TryAdd(client, this))
             {

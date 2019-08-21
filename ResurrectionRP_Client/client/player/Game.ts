@@ -99,7 +99,8 @@ export class Game {
 
             alt.log('Chargement des pools');
             this._Hud = new HudLib(Money);
-            this._Inventory = new RPGInventoryManager();
+            //this._Inventory = new RPGInventoryManager();
+            this._streamer = new Streamer();
             alt.log('Chargement des pools done');
 
             alt.log("Chargement des stats");

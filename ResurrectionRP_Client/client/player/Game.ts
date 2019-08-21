@@ -7,6 +7,7 @@ import Raycast, * as raycast from 'client/Utils/Raycast';
 import { Time as TimeLib } from 'client/Env/Time';
 import { Survival as SurvivalLib } from 'client/player/Survival';
 import { Hud as HudLib } from 'client/player/Hud';
+import { Streamer } from 'client/Streamer/Streamer';
 import { RPGInventoryManager } from 'client/RPGinventory';
 
 export class Game {
@@ -19,6 +20,8 @@ export class Game {
     private _LevelRank: enums.AdminRank = enums.AdminRank.Player;
     public get LevelRank(): number { return this._LevelRank }
 
+    private _streamer: Streamer;
+    public get Streamer(): Streamer { return this._streamer; }
 
     private _PlayerName: string;
     public get PlayerName(): string { return this._PlayerName }

@@ -20,7 +20,7 @@ namespace ResurrectionRP_Server
 
                 var data = new Dictionary<string, object>(); // This is the entity data, the streamer on clientside will receive it with entity.data
                 data["model"] = "a_c_deer";
-                var test = AltNetworking.CreateEntity(new Entity.Position { X = 0, Y = 0, Z = 73 }, GameMode.GlobalDimension, 50, data, StreamingType.EntityStreaming);
+                var test = AltNetworking.CreateEntity(new Entity.Position { X = 395, Y = -1030, Z = 30 }, GameMode.GlobalDimension, 10, data, StreamingType.EntityStreaming);
 
                 AltNetworking.OnEntityStreamIn = (entity, client) =>
                 {

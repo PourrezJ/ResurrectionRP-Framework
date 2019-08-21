@@ -7,6 +7,9 @@ export function init() {
     alt.onServer('ComponentVariation', (arg: number, arg1: number, arg2: number, arg3: number) => {
         game.setPedComponentVariation(alt.Player.local.scriptID, arg, arg1, arg2, arg3);
     });
+    alt.onServer('PropVariation', (arg: number, arg1: number, arg2: number) => {
+        game.setPedPropIndex(alt.Player.local.scriptID, arg, arg1, arg2, true);
+    });
     alt.onServer('HairVariation', (arg0: number, arg1: number) => {
         game.setPedHairColor(alt.Player.local.scriptID, arg0, arg1)
     });

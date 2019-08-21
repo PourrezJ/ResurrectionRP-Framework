@@ -6,7 +6,6 @@
 
     $scope.menuId = menu.Id;
     $scope.buttons = menu.Items;
-    console.log(JSON.stringify(menu));
 
     $scope.selected = {
         name: null,
@@ -34,6 +33,6 @@
 
     $scope.sendAction = index => {
         if ($scope.buttons[index] !== undefined)
-            alt.emit("XMenuManager_Callback", $scope.menuId, index);
+            alt.emit("XMenuManager_Callback", index);
     };
 });

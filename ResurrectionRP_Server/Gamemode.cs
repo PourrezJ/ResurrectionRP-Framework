@@ -49,8 +49,7 @@ namespace ResurrectionRP_Server
         public List<IPlayer> PlayerList = new List<IPlayer>();
 
 
-        [BsonIgnore]
-        public short GlobalDimension = short.MaxValue;
+        public static short GlobalDimension = short.MaxValue;
 
         public List<string> PlateList = new List<string>();
 
@@ -58,6 +57,15 @@ namespace ResurrectionRP_Server
         #region Pools
         [BsonIgnore]
         public VehiclesManager VehicleManager { get; private set; }
+
+
+        // Menus
+        [BsonIgnore]
+        public XMenuManager.XMenuManager XMenuManager { get; private set; }
+
+
+
+
         //[BsonIgnore]
         //public Weather.WeatherManager WeatherManager { get; private set; }
         [BsonIgnore]
@@ -114,6 +122,7 @@ namespace ResurrectionRP_Server
             VehicleManager = new VehiclesManager();
             PhoneManager = new Phone.PhoneManager();
             RPGInventory = new Inventory.RPGInventoryManager();
+            XMenuManager = new XMenuManager.XMenuManager();
             Alt.Server.LogInfo("Création des controlleurs terminée");
 
             if (Time == null)
@@ -166,15 +175,20 @@ namespace ResurrectionRP_Server
                 return;
             }
 
-            //IVehicle vehicle = Alt.CreateVehicle(args[0], player.Position, player.Rotation);
-            
-            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), (uint)VehicleModel.Deluxo, player.Position, player.Rotation, locked:false);
-
+            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), player.Position, player.Rotation, locked:false);
             Task.Run(async () =>
             {
                 await vh.SpawnVehicle();
-                if (vh.Vehicle != null)
-                    player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);
+                var ph = player.GetPlayerHandler();
+
+                if (ph != null)
+                {
+                    ph.ListVehicleKey.Add(new VehicleKey(vh.VehicleManifest.DisplayName, vh.Plate));
+                    if (vh.Vehicle != null)
+                        player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);
+
+                    await ph.UpdatePlayerInfo();
+                }
             });
         }
         public async Task Save()

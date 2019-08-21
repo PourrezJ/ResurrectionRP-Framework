@@ -32,6 +32,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Constructor
         public PlayerManager()
         {
+            var PlayerCommands = new PlayerCommands();
 
             Alt.OnClient("SendLogin", SendLogin );
             Alt.OnClient("LogPlayer", LogPlayer);
@@ -361,6 +362,9 @@ namespace ResurrectionRP_Server.Entities.Players
 
             return false;
         }
+
+        public static bool HasVehicleKey(IPlayer client, string plate) 
+            => client.GetPlayerHandler().ListVehicleKey.Exists(x => x.Plate == plate);
 
         #endregion
     }

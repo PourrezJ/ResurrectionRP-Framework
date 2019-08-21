@@ -13,8 +13,6 @@ using RPGInventoryManager = ResurrectionRP_Server.Inventory.RPGInventoryManager;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
-
-
     [BsonIgnoreExtraElements]
     public partial class PlayerHandler
     {
@@ -167,7 +165,8 @@ namespace ResurrectionRP_Server.Entities.Players
             client.SetData("PlayerHandler", this);
             if (PlayerHandlerList.TryAdd(client, this))
             {
-                if (BankAccount == null) BankAccount = new Bank.BankAccount(Bank.AccountType.Personnal, await Bank.BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
+                if (BankAccount == null)
+                    BankAccount = new Bank.BankAccount(Bank.AccountType.Personnal, await Bank.BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
 
                 if (firstspawn)
                 {
@@ -224,7 +223,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     Client.Spawn(Location.Pos, 0);
                     Character.ApplyCharacter(Client);
-                    Client.Dimension = GameMode.Instance.GlobalDimension;
+                    Client.Dimension = GameMode.GlobalDimension;
                     Client.Health = (ushort)(Health + 100);
                     Client.Emit("FadeIn", 0);
                 });
@@ -593,6 +592,10 @@ namespace ResurrectionRP_Server.Entities.Players
             }
             return items;
         }
+
+        #endregion
+
+        #region Methods
 
         #endregion
     }

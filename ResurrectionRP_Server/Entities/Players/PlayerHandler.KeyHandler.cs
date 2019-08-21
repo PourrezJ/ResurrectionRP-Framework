@@ -86,14 +86,16 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                     await ph.OpenAdminMenu();
                     break;
-
+                    */
                 case ConsoleKey.Backspace:
+                    await XMenuManager.XMenuManager.CloseMenu(client);
+                    /*
                     if (MenuManager.HasOpenMenu(client))
                         await MenuManager.CloseMenu(client);
                     await XMenuManager.CloseMenu(client);
-                    await RPGInventoryManager.CloseMenu(client);
+                    await RPGInventoryManager.CloseMenu(client);*/
                     break;
-
+                    /*
                 case ConsoleKey.M:
                     if (MenuManager.HasOpenMenu(client))
                         return;

@@ -39,7 +39,7 @@
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptOutFile />
-    <TypeScriptOutDir>C:\altv\ResuRP\ResurrectionRP_Client\bin\client</TypeScriptOutDir>
+    <TypeScriptOutDir>C:\altv\server-files\resources\resurrectionrp\client</TypeScriptOutDir>
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptSourceMap>False</TypeScriptSourceMap>
@@ -90,6 +90,7 @@
     <TypeScriptCompile Include="client\player\Survival.ts" />
     <TypeScriptCompile Include="client\RPGInventory.ts" />
     <TypeScriptCompile Include="client\Utils\Enums\Enums.ts" />
+    <TypeScriptCompile Include="client\Utils\Raycast.ts" />
     <TypeScriptCompile Include="client\xtreamMenu\XtreamMenuManager.ts" />
     <TypeScriptCompile Include="typings\altv-client.d.ts" />
     <TypeScriptCompile Include="typings\natives.d.ts" />
@@ -236,7 +237,6 @@
     <Content Include="cef\speedometer\img\speed-bg.png" />
     <Content Include="cef\speedometer\js\app.js" />
     <Content Include="cef\speedometer\speedometer.html" />
-    <Content Include="cef\xtrem\css\font-awesome.css" />
     <Content Include="cef\xtrem\css\style.css" />
     <Content Include="cef\xtrem\js\app.js" />
     <Content Include="cef\xtrem\playerMenu.html" />
@@ -256,6 +256,9 @@
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.ttf" />
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.woff" />
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.woff2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="resource.cfg" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -285,7 +288,8 @@
   </ProjectExtensions>
   <PropertyGroup>
     <PostBuildEvent>set ClientDir=C:\altv\server-files\resources\resurrectionrp\client
-rmdir  /S /Q %25ClientDir%25
+rmdir  /S /Q %25ClientDir%25\cef
+rmdir  /S /Q %25ClientDir%25\lib
 mkdir %25ClientDir%25
 mkdir %25ClientDir%25\cef
 mkdir %25ClientDir%25\lib

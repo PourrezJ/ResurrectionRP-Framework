@@ -1,6 +1,9 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
 import * as enums from 'client/Utils/Enums/Enums';
+import * as chat from 'client/chat/chat';
+import Raycast, * as raycast from 'client/Utils/Raycast';
+
 import { Time as TimeLib } from 'client/Env/Time';
 import { Survival as SurvivalLib } from 'client/player/Survival';
 import { Hud as HudLib } from 'client/player/Hud';
@@ -111,9 +114,10 @@ export class Game {
         } catch (ex) {
             alt.log(ex);
         }
+
         alt.on("update", () => {
-            game.disableControlAction(0, 75, true);
-            game.disableControlAction(0, 58, true);
+            //game.disableControlAction(0, 75, true);
+            //game.disableControlAction(0, 58, true);
 
             this._Time.OnTick();
 
@@ -132,8 +136,31 @@ export class Game {
                     );
             }
         });
-        alt.on('keydown', (key) => {
-            alt.emitServer('OnKeyPress', key);
+
+        alt.on('keydown', (key) =>
+        {
+            if (game.isPauseMenuActive() || chat.isOpened())
+                return;
+
+            if (key === 85) {
+                if (alt.Player.local.vehicle != null)
+                    return;
+
+                let result = Raycast.line(5, 2, alt.Player.local.scriptID);
+
+                if (result.isHit) {
+                    var vehicle = alt.Vehicle.all.find(p => p.scriptID == result.hitEntity);
+                    alt.emitServer('LockUnlockVehicle', vehicle);
+                    //alt.log(`Hit Pos: ${JSON.stringify(result.pos)}`);
+                    //alt.log(`Entity hitted: ${result.hitEntity}`);
+                    //alt.log(`Entity Type: ${result.entityType}`);
+                    //alt.log(`Entity Hash: ${result.entityHash}`);
+                }
+            }
+            else
+            {
+                alt.emitServer('OnKeyPress', key);
+            }      
         });
     }
     //end constructor

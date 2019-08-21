@@ -53,5 +53,10 @@ namespace ResurrectionRP_Server
 
         public static Vector3 Subtract(this Vector3 left, Vector3 right) => new Vector3(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
 
+        public static Entity.Position ConvertToEntityPosition(this Vector3 pos)
+        {
+            return new Entity.Position { X = pos.X, Y=pos.Y, Z=pos.Z };
+        }
+
     }
 }

@@ -15,6 +15,7 @@ utils.initialize();
 login.init();
 xtreamMenu.init();
 
+
 alt.onServer("PlayerInitialised", (
     StaffRank: number,
     IdentiteName: string,

@@ -37,6 +37,9 @@ namespace ResurrectionRP_Server
         public bool ServerLoaded = false;
 
         [BsonIgnore]
+        public Streamer.Streamer Streamer { get; private set; }
+
+        [BsonIgnore]
         public float StreamDistance { get; private set; } = 500;
 
         [BsonIgnore]
@@ -117,6 +120,7 @@ namespace ResurrectionRP_Server
 
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogInfo("Création des controlleurs...");
+            Streamer = new Streamer.Streamer();
             PlayerManager = new Entities.Players.PlayerManager();
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();

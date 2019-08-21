@@ -19,12 +19,10 @@ namespace ResurrectionRP_Server
 {
     public class Startup : AsyncResource
     {
-        private Streamer Streamer;
 
         private GameMode gamemode = null;
         public async override void OnStart()
         {
-            Streamer = new Streamer();
 
             AltAsync.OnPlayerConnect += AltAsync_OnPlayerConnect;
 

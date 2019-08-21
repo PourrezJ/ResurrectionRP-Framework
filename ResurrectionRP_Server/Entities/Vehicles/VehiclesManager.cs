@@ -98,6 +98,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                     if (!checkedPlate.Contains(vehicle.Plate))
                     {
+
                         checkedPlate.Add(vehicle.Plate);
                         await vehicle.SpawnVehicle();
                     }

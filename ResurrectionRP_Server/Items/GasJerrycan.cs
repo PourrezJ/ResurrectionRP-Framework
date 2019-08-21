@@ -20,7 +20,7 @@ namespace ResurrectionRP_Server.Items
             Entities.Vehicles.VehicleHandler _vehicle = Entities.Vehicles.VehiclesManager.GetHandlerByVehicle(vehs.FirstOrDefault());
             if (_vehicle != null)
             {
-                _vehicle.VehicleSync.Fuel += 20;
+                _vehicle.Fuel += 20;
                 await client.SendNotificationSuccess("Vous avez remis de l'essence dans le véhicule");
             }
         }

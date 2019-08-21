@@ -174,9 +174,5 @@ namespace ResurrectionRP_Server
 
         }
 
-        public static async Task NotifyAsync(this IPlayer player, string text)
-        {
-            await player.EmitAsync("showNotification", text);
-        }
     }
 }

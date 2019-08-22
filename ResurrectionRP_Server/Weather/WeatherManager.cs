@@ -3,8 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using AltV.Net;
+using AltV.Net.Elements.Entities;
 using AltV.Net.Data;
 using OpenWeatherAPI;
+using AltV.Net.Async;
 using WeatherType = ResurrectionRP_Server.Weather.Data.WeatherType;
 
 namespace ResurrectionRP_Server.Weather
@@ -24,7 +26,8 @@ namespace ResurrectionRP_Server.Weather
                 if (Config.GetSetting<bool>("Winter"))
                 {
                     Actual_weather = WeatherType.Xmas;
-                    await MP.World.SetWeatherAsync(WeatherType.Xmas);
+                    //await MP.World.SetWeatherAsync(WeatherType.Xmas);
+                    await this.UpdatePlayersWeather();
                 }
                 var apikey = Config.GetSetting<string>("OpenWeatherAPIKey");
                 if (string.IsNullOrEmpty(apikey)) throw new ArgumentException("Vous devez renseigner l'api key de OpenWeather");
@@ -45,6 +48,15 @@ namespace ResurrectionRP_Server.Weather
             }
         }
 
+        public async Task UpdatePlayersWeather()
+        {
+            var players = Alt.GetAllPlayers();
+            foreach(IPlayer player in players)
+            {
+                await player.EmitAsync("WeatherChange", this.Actual_weather.ToString(), this.Wind, this.WindDirection, this.WeatherTransition);
+            }
+        }
+
         private Timer timer = null;
         public async Task ChangeWeather(WeatherType weather, double wind, double winddirection)
         {
@@ -62,6 +74,7 @@ namespace ResurrectionRP_Server.Weather
 
             if (Actual_weather != weather)
             {
+                this.Actual_weather = weather;
                 WeatherTransition = 0.0f;
 #pragma warning disable CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
                 timer = Utils.Utils.Delay(2500, false, async () =>
@@ -71,21 +84,20 @@ namespace ResurrectionRP_Server.Weather
                     if (WeatherTransition >= 1.0)
                     {
                         WeatherTransition = 1;
-                        await MP.World.SetWeatherAsync(weather);
                         timer.Close();
                     }
-                    await MP.Players.CallAsync("WeatherManager_Change", weather.ToString(), wind, winddirection, WeatherTransition);
+                    //await .CallAsync("WeatherManager_Change", weather.ToString(), wind, winddirection, WeatherTransition);
+                    await this.UpdatePlayersWeather();
 
                     await Task.Delay(2500);
                 });
 #pragma warning restore CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
-                Alt.Server.LogInfo("Changing weather to " + weather.ToString());
+                Alt.Server.LogInfo("[WEATHER] Weather Update to " + weather.ToString());
             }
             else if (WeatherTransition > 1.0)
             {
-                await MP.World.SetWeatherAsync(weather);
+                await this.UpdatePlayersWeather();
             }
-            Actual_weather = weather;
         }
 
         private async Task WeatherDataReceived(OpenWeatherAPI.Weather weather, Wind wind)

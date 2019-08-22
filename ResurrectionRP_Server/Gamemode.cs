@@ -198,27 +198,9 @@ namespace ResurrectionRP_Server
         }
         private void CommandWeather(IPlayer player, string[] args)
         {
-            if (args == null)
-            {
-                player.SendChatMessage("{FF0000}Usage: /weather [vehicle name]");
-                return;
-            }
+            Alt.Log(Weather.Data.WeatherType.Smog.ToString());
+            player.Emit("WeatherChange", Weather.Data.WeatherType.Smog.ToString(), 100, 150, 1);
 
-            var players = Alt.GetAllPlayers();
-            Task.Run(async () =>
-            {
-                await vh.SpawnVehicle();
-                var ph = player.GetPlayerHandler();
-
-                if (ph != null)
-                {
-                    ph.ListVehicleKey.Add(new VehicleKey(vh.VehicleManifest.DisplayName, vh.Plate));
-                    if (vh.Vehicle != null)
-                        player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);
-
-                    await ph.UpdatePlayerInfo();
-                }
-            });
         }
         public async Task Save()
         {

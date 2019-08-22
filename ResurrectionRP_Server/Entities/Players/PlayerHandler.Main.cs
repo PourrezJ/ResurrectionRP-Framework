@@ -214,7 +214,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         Hunger,
                         JsonConvert.SerializeObject(AnimSettings),
                         JsonConvert.SerializeObject(GameMode.Instance.Time),
-                        GameMode.Instance.WeatherManager.Actual_weather,
+                        GameMode.Instance.WeatherManager.Actual_weather.ToString(),
                         GameMode.Instance.WeatherManager.Wind,
                         GameMode.Instance.WeatherManager.WindDirection,
                         GameMode.Instance.IsDebug,

@@ -24,7 +24,9 @@ export class Weather {
         game.setWind(this.WindSpeed);
         game.setWindDirection(this.WindDirection);
 
-        
+
+        alt.on("update", this.OnUpdate);
+        alt.onServer("WeatherChange", this.WeatherChange);
     }
 
     WeatherChange = (weatherType: string, windSpeed: number, windDirection: number, transition: number) => {
@@ -32,12 +34,10 @@ export class Weather {
         this.WindSpeed = windSpeed;
         this.WindDirection = windDirection;
         this.WeatherTransition = transition;
-        alt.log("Mise à jour de la météo, nouvelle météo : " + weatherType);
         game.setWeatherTypeTransition(game.getHashKey(this.OldWeather), game.getHashKey(this.WeatherType), this.WeatherTransition);
 
     }
     private lastcheck: number;
-
     OnUpdate = () => {
         if (game.getGameTimer() - this.lastcheck < 60000)
             return;

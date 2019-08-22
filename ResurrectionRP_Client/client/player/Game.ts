@@ -116,6 +116,8 @@ export class Game {
             game.setRelationshipBetweenGroups(2, game.getHashKey("SYNCPED_TEAMMATES"), game.getHashKey("SYNCPED"));
 
             game.startAudioScene("FBI_HEIST_H5_MUTE_AMBIENCE_SCENE");
+            game.setPedConfigFlag(alt.Player.local.scriptID, 35, true);
+            game.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
 
             alt.log("Stats terminées");
 
@@ -123,6 +125,7 @@ export class Game {
         } catch (ex) {
             alt.log(ex);
         }
+        
 
         alt.on("update", () => {
             //game.disableControlAction(0, 75, true);
@@ -144,6 +147,7 @@ export class Game {
                         0   //Is mic muted SaltyClient.Voice.IsMicrophoneMuted
                     );
             }
+
         });
 
         alt.on('keydown', (key) =>

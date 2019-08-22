@@ -117,7 +117,7 @@ namespace ResurrectionRP_Server
         {
 
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
-            Alt.Server.LogInfo("Création des controlleurs...");
+            Alt.Server.LogColored("~g~Création des controlleurs...");
             Streamer = new Streamer.Streamer();
             PlayerManager = new Entities.Players.PlayerManager();
             BanManager = new BanManager();
@@ -126,23 +126,22 @@ namespace ResurrectionRP_Server
             RPGInventory = new Inventory.RPGInventoryManager();
             XMenuManager = new XMenuManager.XMenuManager();
             WeatherManager = new Weather.WeatherManager();
-            Alt.Server.LogInfo("Création des controlleurs terminée");
+            Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
             if (Time == null)
                 Time = new Time();
 
-            Alt.Server.LogInfo("Initialisations des controlleurs...");
+            Alt.Server.LogColored("~g~Initialisations des controlleurs...");
             await VehicleManager.LoadAllVehiclesActive();
             await Loader.ClothingLoader.LoadAllCloth();
             await WeatherManager.InitWeather();
-            Alt.Server.LogInfo("Initialisation des controlleurs terminé");
+            Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
             Alt.OnPlayerConnect += OnPlayerConnected;
             Alt.OnPlayerDisconnect += OnPlayerDisconnected;
 
             Chat.Initialize();
             Chat.RegisterCmd("veh", CommandVeh);
-            Chat.RegisterCmd("weather", CommandWeather);
             Chat.RegisterCmd("coords", (IPlayer player, string[] args) =>
             {
                 Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z);
@@ -195,12 +194,6 @@ namespace ResurrectionRP_Server
                     await ph.UpdatePlayerInfo();
                 }
             });
-        }
-        private void CommandWeather(IPlayer player, string[] args)
-        {
-            Alt.Log(Weather.Data.WeatherType.Smog.ToString());
-            player.Emit("WeatherChange", Weather.Data.WeatherType.Smog.ToString(), 100, 150, 1);
-
         }
         public async Task Save()
         {

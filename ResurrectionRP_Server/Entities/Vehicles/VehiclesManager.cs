@@ -29,6 +29,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public VehiclesManager()
         {
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
+            AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
 
             AltAsync.OnClient("LockUnlockVehicle", LockUnlockVehicle);
         }
@@ -64,7 +65,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         continue;
                     await recever.PlaySoundFromEntity(veh.Vehicle, 0, "5_SEC_WARNING", "HUD_MINI_GAME_SOUNDSET");
                 }
-                
+
                 await veh.Update();
             }
         }

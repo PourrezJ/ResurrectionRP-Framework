@@ -57,6 +57,9 @@ namespace ResurrectionRP_Server
 
         #region Pools
         [BsonIgnore]
+        public MenuManager MenuManager { get; private set; }
+
+        [BsonIgnore]
         public VehiclesManager VehicleManager { get; private set; }
         //[BsonIgnore]
         //public Weather.WeatherManager WeatherManager { get; private set; }
@@ -105,6 +108,7 @@ namespace ResurrectionRP_Server
 
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogInfo("Création des controlleurs...");
+            MenuManager = new MenuManager();
             PlayerManager = new Entities.Players.PlayerManager();
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();

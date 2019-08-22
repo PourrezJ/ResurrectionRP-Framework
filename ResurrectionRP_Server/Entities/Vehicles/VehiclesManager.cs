@@ -43,7 +43,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         private async Task LockUnlockVehicle(IPlayer player, object[] args)
         {
-
+            if (GameMode.Instance.IsDebug)
+                Alt.Server.LogInfo("VehicleManager | " + player.GetSocialClub() + " is trying to lock/unlock a car");
             var vehicle = args[0] as IVehicle;
 
             if (!vehicle.Exists)
@@ -54,8 +55,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             
             if (await veh.LockUnlock(player))
             {
-                /*
-                var receverList = await MP.Players.GetInRangeAsync(await vehicle.GetPositionAsync(), 5);
+
+                var receverList =  vehicle.GetPlayersInRange(5f);
 
                 foreach (IPlayer recever in receverList)
                 {
@@ -63,7 +64,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         continue;
                     await recever.PlaySoundFromEntity(veh.Vehicle, 0, "5_SEC_WARNING", "HUD_MINI_GAME_SOUNDSET");
                 }
-                */
+                
                 await veh.Update();
             }
         }

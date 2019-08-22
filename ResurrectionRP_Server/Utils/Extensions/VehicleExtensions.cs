@@ -37,6 +37,24 @@ namespace ResurrectionRP_Server
             }
             return endup;
         }
+        public static List<IPlayer> GetPlayersInRange(this IVehicle client, float Range)
+        {
+            var vehs = Alt.GetAllPlayers();
+            List<IPlayer> endup = new List<IPlayer>();
+            var position = client.GetPosition();
+            Vector3 osition = new Vector3(position.X, position.Y, position.Z);
+            foreach (IPlayer veh in vehs)
+            {
+                if (!veh.Exists)
+                    continue;
+                var vehpos = veh.GetPosition();
+                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= Range)
+                {
+                    endup.Add(veh);
+                }
+            }
+            return endup;
+        }
 
     }
 }

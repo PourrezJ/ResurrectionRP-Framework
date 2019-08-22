@@ -173,6 +173,10 @@ namespace ResurrectionRP_Server
         {
 
         }
+        public async static Task PlaySoundFromEntity(this IPlayer client, IVehicle initiator, int id, string dict, string anim)
+        {
+
+        }
 
     }
 }

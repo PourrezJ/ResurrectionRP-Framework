@@ -147,6 +147,29 @@ namespace ResurrectionRP_Server
             }
             return endup;
         }
+        public static IVehicle GetNearestVehicle(this IPlayer client)
+        {
+            var vehs = Alt.GetAllVehicles();
+            IVehicle endup = null;
+            var position = client.GetPosition();
+            Vector3 osition = new Vector3(position.X, position.Y, position.Z);
+            foreach (IVehicle veh in vehs)
+            {
+                if (!veh.Exists)
+                    continue;
+                if (endup == null)
+                    endup = veh;
+                var vehpos = veh.GetPosition();
+                var enduppos = endup.GetPosition();
+                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= osition.DistanceTo2D(new Vector3(enduppos.X, enduppos.Y, enduppos.Z)))
+                {
+                    endup = veh;
+                }
+            }
+            return endup;
+        }
+        public static Entities.Vehicles.VehicleHandler GetNearestVehicleHandler(this IPlayer client) =>
+            client.GetNearestVehicle()?.GetVehicleHandler();
         public static void SetRotation(this IPlayer client, Vector3 rotate)
         {
             Rotation rotating = new Rotation(rotate.X, rotate.Y, rotate.Z);

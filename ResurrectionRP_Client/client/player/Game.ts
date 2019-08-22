@@ -10,6 +10,7 @@ import { Hud as HudLib } from 'client/player/Hud';
 import { Streamer } from 'client/Streamer/Streamer';
 import { RPGInventoryManager } from 'client/RPGinventory';
 import { Weather as WeatherLib } from 'client/Env/Weather';
+import { Interaction as InteractionLib} from 'client/Player/Interaction';
 
 export class Game {
     //region Static Var
@@ -87,6 +88,7 @@ export class Game {
             var time = JSON.parse(Time);
             this._Time = new TimeLib(time.Hours, time.Minutes, time.Seconds);
             this._IsDebug = isDebug;
+            new InteractionLib();
 
             game.setAudioFlag('LoadMPData', true);
             game.setAudioFlag('DisableFlightMusic', true);

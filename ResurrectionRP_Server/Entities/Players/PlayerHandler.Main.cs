@@ -184,7 +184,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     Location = GameMode.FirstSpawn;
                 }
 
-                /*var inventoriesPhones = this.GetStacksItems(ItemID.Phone);
+                var inventoriesPhones = this.GetStacksItems(Models.InventoryData.ItemID.Phone);
 
                 if (inventoriesPhones.Count > 0)
                 {
@@ -192,12 +192,12 @@ namespace ResurrectionRP_Server.Entities.Players
                     {
                         foreach (var phone in stacks.Value)
                         {
-                            var phoneItem = phone.Item as PhoneItem;
+                            var phoneItem = phone.Item as Items.PhoneItem;
                             if (phoneItem != null)
-                                Phone.AddPhoneInList(Client, phoneItem.PhoneHandler);
+                                Phone.Phone.AddPhoneInList(Client, phoneItem.PhoneHandler);
                         }
                     }
-                }**/
+                }
 
                 await AltAsync.Do( () =>
                 {
@@ -207,16 +207,16 @@ namespace ResurrectionRP_Server.Entities.Players
                     Client.Emit
                     (
                         Utils.Enums.Events.PlayerInitialised,
-                        StaffRank,
+                        (int)StaffRank,
                         Identite.Name,
                         Convert.ToSingle(Money),
                         Thirst,
                         Hunger,
                         JsonConvert.SerializeObject(AnimSettings),
                         JsonConvert.SerializeObject(GameMode.Instance.Time),
-                        0,//GameMode.Instance.WeatherManager.Actual_weather,
-                        0,//GameMode.Instance.WeatherManager.Wind,
-                        0,//GameMode.Instance.WeatherManager.WindDirection,
+                        GameMode.Instance.WeatherManager.Actual_weather,
+                        GameMode.Instance.WeatherManager.Wind,
+                        GameMode.Instance.WeatherManager.WindDirection,
                         GameMode.Instance.IsDebug,
                         JsonConvert.SerializeObject(Location)
                     );

@@ -67,10 +67,8 @@ namespace ResurrectionRP_Server
         public XMenuManager.XMenuManager XMenuManager { get; private set; }
 
 
-
-
-        //[BsonIgnore]
-        //public Weather.WeatherManager WeatherManager { get; private set; }
+        [BsonIgnore]
+        public Weather.WeatherManager WeatherManager { get; private set; }
         [BsonIgnore]
         public Inventory.RPGInventoryManager RPGInventory { get; private set; }
         [BsonIgnore]
@@ -127,6 +125,7 @@ namespace ResurrectionRP_Server
             PhoneManager = new Phone.PhoneManager();
             RPGInventory = new Inventory.RPGInventoryManager();
             XMenuManager = new XMenuManager.XMenuManager();
+            WeatherManager = new Weather.WeatherManager();
             Alt.Server.LogInfo("Création des controlleurs terminée");
 
             if (Time == null)
@@ -135,6 +134,7 @@ namespace ResurrectionRP_Server
             Alt.Server.LogInfo("Initialisations des controlleurs...");
             await VehicleManager.LoadAllVehiclesActive();
             await Loader.ClothingLoader.LoadAllCloth();
+            await WeatherManager.InitWeather();
             Alt.Server.LogInfo("Initialisation des controlleurs terminé");
 
             Alt.OnPlayerConnect += OnPlayerConnected;
@@ -142,6 +142,7 @@ namespace ResurrectionRP_Server
 
             Chat.Initialize();
             Chat.RegisterCmd("veh", CommandVeh);
+            Chat.RegisterCmd("weather", CommandWeather);
             Chat.RegisterCmd("coords", (IPlayer player, string[] args) =>
             {
                 Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z);
@@ -179,7 +180,31 @@ namespace ResurrectionRP_Server
                 return;
             }
 
-            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), player.Position, player.Rotation, locked:false);
+            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), new Vector3(player.Position.X+5, player.Position.Y, player.Position.Z), player.Rotation, locked:false);
+            Task.Run(async () =>
+            {
+                await vh.SpawnVehicle();
+                var ph = player.GetPlayerHandler();
+
+                if (ph != null)
+                {
+                    ph.ListVehicleKey.Add(new VehicleKey(vh.VehicleManifest.DisplayName, vh.Plate));
+                    if (vh.Vehicle != null)
+                        player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);
+
+                    await ph.UpdatePlayerInfo();
+                }
+            });
+        }
+        private void CommandWeather(IPlayer player, string[] args)
+        {
+            if (args == null)
+            {
+                player.SendChatMessage("{FF0000}Usage: /weather [vehicle name]");
+                return;
+            }
+
+            var players = Alt.GetAllPlayers();
             Task.Run(async () =>
             {
                 await vh.SpawnVehicle();
@@ -199,6 +224,7 @@ namespace ResurrectionRP_Server
         {
             await Database.MongoDB.Update(this, "gamemode", _id);
         }
+
         #endregion
     }
 }

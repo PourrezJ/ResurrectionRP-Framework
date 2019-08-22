@@ -9,6 +9,7 @@ import { Survival as SurvivalLib } from 'client/player/Survival';
 import { Hud as HudLib } from 'client/player/Hud';
 import { Streamer } from 'client/Streamer/Streamer';
 import { RPGInventoryManager } from 'client/RPGinventory';
+import { Weather as WeatherLib } from 'client/Env/Weather';
 
 export class Game {
     //region Static Var
@@ -28,6 +29,9 @@ export class Game {
 
     private _Time: TimeLib = new TimeLib();
     public get Time(): TimeLib { return this._Time; }
+
+    private _Weather: WeatherLib = null;
+    public get Weather(): WeatherLib { return this._Weather; }
 
     private _IsConnected: boolean;
     public get IsConnected(): boolean { return this._IsConnected; }
@@ -66,7 +70,7 @@ export class Game {
         Hunger: number,
         AnimSettings: string,
         Time: string,
-        Weather: number,
+        Weather: string,
         WeatherWind: number,
         WeatherWindDirection: number,
         isDebug: boolean,
@@ -100,6 +104,7 @@ export class Game {
             alt.log('Chargement des pools');
             this._Hud = new HudLib(Money);
             //this._Inventory = new RPGInventoryManager();
+            this._Weather = new WeatherLib(Weather, WeatherWind, WeatherWindDirection);
             this._streamer = new Streamer();
             alt.log('Chargement des pools done');
 

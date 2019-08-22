@@ -74,7 +74,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Constructor
         public VehicleHandler(string socialClubName, uint model, Vector3 position, Vector3 rotation, byte primaryColor = 0, byte secondaryColor = 0,
             float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
-            IPlayer owner = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, short dimension = short.MaxValue, Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
+            IPlayer owner = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, short dimension = short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
         {
             if (model == 0)
                 return;
@@ -99,7 +99,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             /*
             if (inventory != null)
                 Inventory = inventory;*/
-                
+
             if (OilTank == null)
                 OilTank = new OilTank();
         }
@@ -111,7 +111,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (Dimension.ToString() == "-1")
                 Dimension = short.MaxValue;
 
-            await AltAsync.Do(() =>
+            await AltAsync.Do(async () =>
             {
                 try
                 {
@@ -161,6 +161,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.EngineHealth = EngineHealth;
                 Vehicle.BodyHealth = BodyHealth;
                 Vehicle.RadioStation = RadioID;
+
+                await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
+                await Vehicle.SetEngineOnAsync(Engine);
 
 
                 LastUse = DateTime.Now;

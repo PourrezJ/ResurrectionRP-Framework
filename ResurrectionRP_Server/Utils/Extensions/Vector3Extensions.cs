@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace ResurrectionRP_Server.Utils.Extensions
+namespace ResurrectionRP_Server
 {
     public static class Vector3Extensions
     {
@@ -52,6 +52,11 @@ namespace ResurrectionRP_Server.Utils.Extensions
         public static float Distance(Vector3 position1, Vector3 position2) => (position1 - position2).Length();
 
         public static Vector3 Subtract(this Vector3 left, Vector3 right) => new Vector3(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
+
+        public static Entity.Position ConvertToEntityPosition(this Vector3 pos)
+        {
+            return new Entity.Position { X = pos.X, Y=pos.Y, Z=pos.Z };
+        }
 
     }
 }

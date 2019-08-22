@@ -7,6 +7,10 @@ import Raycast, * as raycast from 'client/Utils/Raycast';
 import { Time as TimeLib } from 'client/Env/Time';
 import { Survival as SurvivalLib } from 'client/player/Survival';
 import { Hud as HudLib } from 'client/player/Hud';
+import { Streamer } from 'client/Streamer/Streamer';
+import { RPGInventoryManager } from 'client/RPGinventory';
+import { Weather as WeatherLib } from 'client/Env/Weather';
+import { Interaction as InteractionLib} from 'client/Player/Interaction';
 
 export class Game {
     //region Static Var
@@ -18,12 +22,17 @@ export class Game {
     private _LevelRank: enums.AdminRank = enums.AdminRank.Player;
     public get LevelRank(): number { return this._LevelRank }
 
+    private _streamer: Streamer;
+    public get Streamer(): Streamer { return this._streamer; }
 
     private _PlayerName: string;
     public get PlayerName(): string { return this._PlayerName }
 
     private _Time: TimeLib = new TimeLib();
     public get Time(): TimeLib { return this._Time; }
+
+    private _Weather: WeatherLib = null;
+    public get Weather(): WeatherLib { return this._Weather; }
 
     private _IsConnected: boolean;
     public get IsConnected(): boolean { return this._IsConnected; }
@@ -49,6 +58,9 @@ export class Game {
     private _Hud: HudLib;
     public get Hud(): HudLib { return this._Hud; }
 
+    private _Inventory: RPGInventoryManager;
+    public get Inventory(): RPGInventoryManager { return this._Inventory; }
+
     //End region pools
     //constructor
     constructor(
@@ -59,7 +71,7 @@ export class Game {
         Hunger: number,
         AnimSettings: string,
         Time: string,
-        Weather: number,
+        Weather: string,
         WeatherWind: number,
         WeatherWindDirection: number,
         isDebug: boolean,
@@ -76,6 +88,7 @@ export class Game {
             var time = JSON.parse(Time);
             this._Time = new TimeLib(time.Hours, time.Minutes, time.Seconds);
             this._IsDebug = isDebug;
+            new InteractionLib();
 
             game.setAudioFlag('LoadMPData', true);
             game.setAudioFlag('DisableFlightMusic', true);
@@ -92,6 +105,9 @@ export class Game {
 
             alt.log('Chargement des pools');
             this._Hud = new HudLib(Money);
+            //this._Inventory = new RPGInventoryManager();
+            this._Weather = new WeatherLib(Weather, WeatherWind, WeatherWindDirection);
+            this._streamer = new Streamer();
             alt.log('Chargement des pools done');
 
             alt.log("Chargement des stats");
@@ -102,6 +118,8 @@ export class Game {
             game.setRelationshipBetweenGroups(2, game.getHashKey("SYNCPED_TEAMMATES"), game.getHashKey("SYNCPED"));
 
             game.startAudioScene("FBI_HEIST_H5_MUTE_AMBIENCE_SCENE");
+            game.setPedConfigFlag(alt.Player.local.scriptID, 35, true);
+            game.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
 
             alt.log("Stats terminées");
 
@@ -109,6 +127,7 @@ export class Game {
         } catch (ex) {
             alt.log(ex);
         }
+        
 
         alt.on("update", () => {
             //game.disableControlAction(0, 75, true);
@@ -130,6 +149,7 @@ export class Game {
                         0   //Is mic muted SaltyClient.Voice.IsMicrophoneMuted
                     );
             }
+
         });
 
         alt.on('keydown', (key) =>

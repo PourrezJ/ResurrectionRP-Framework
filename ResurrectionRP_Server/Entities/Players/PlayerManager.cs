@@ -22,7 +22,7 @@ namespace ResurrectionRP_Server.Entities.Players
     public class PlayerManager
     {
         #region Variables 
-        private static short Dimension = 2;
+        private static short Dimension = short.MaxValue;
         public static int StartMoney = 0;
         public static int StartBankMoney = 0;
 
@@ -319,10 +319,10 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public static async Task<bool> PlayerHandlerExist(IPlayer player)
         {
-            player.GetData("SocialClub", out string social);
-            return await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID == social).AnyAsync();
             try
             {
+                player.GetData("SocialClub", out string social);
+                return await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID == social).AnyAsync();
             }
             catch (Exception ex)
             {

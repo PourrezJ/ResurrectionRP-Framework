@@ -15,6 +15,7 @@ utils.initialize();
 login.init();
 xtreamMenu.init();
 
+
 alt.onServer("PlayerInitialised", (
     StaffRank: number,
     IdentiteName: string,
@@ -23,7 +24,7 @@ alt.onServer("PlayerInitialised", (
     Hunger: number,
     AnimSettings: string,
     Time: string,
-    Weather: number,
+    Weather: string,
     WeatherWind: number,
     WeatherWindDirection: number,
     isDebug: boolean,
@@ -36,4 +37,8 @@ alt.onServer("PlayerInitialised", (
 
 alt.onServer('OpenCreator', () => {
     OpenCharCreator();
+});
+
+alt.onServer("togglePlayerControl", (value: boolean) => {
+    alt.toggleGameControls(value);
 });

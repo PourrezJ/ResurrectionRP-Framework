@@ -37,6 +37,9 @@ namespace ResurrectionRP_Server
         public bool ServerLoaded = false;
 
         [BsonIgnore]
+        public Streamer.Streamer Streamer { get; private set; }
+
+        [BsonIgnore]
         public float StreamDistance { get; private set; } = 500;
 
         [BsonIgnore]
@@ -64,10 +67,12 @@ namespace ResurrectionRP_Server
         public XMenuManager.XMenuManager XMenuManager { get; private set; }
 
 
-
-
-        //[BsonIgnore]
-        //public Weather.WeatherManager WeatherManager { get; private set; }
+        [BsonIgnore]
+        public Weather.WeatherManager WeatherManager { get; private set; }
+        [BsonIgnore]
+        public Inventory.RPGInventoryManager RPGInventory { get; private set; }
+        [BsonIgnore]
+        public Phone.PhoneManager PhoneManager { get; private set; }
 
         public static bool ServerLock;
 
@@ -112,19 +117,25 @@ namespace ResurrectionRP_Server
         {
 
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
-            Alt.Server.LogInfo("Création des controlleurs...");
+            Alt.Server.LogColored("~g~Création des controlleurs...");
+            Streamer = new Streamer.Streamer();
             PlayerManager = new Entities.Players.PlayerManager();
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();
+            PhoneManager = new Phone.PhoneManager();
+            RPGInventory = new Inventory.RPGInventoryManager();
             XMenuManager = new XMenuManager.XMenuManager();
-            Alt.Server.LogInfo("Création des controlleurs terminée");
+            WeatherManager = new Weather.WeatherManager();
+            Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
             if (Time == null)
                 Time = new Time();
 
-            Alt.Server.LogInfo("Initialisations des controlleurs...");
+            Alt.Server.LogColored("~g~Initialisations des controlleurs...");
             await VehicleManager.LoadAllVehiclesActive();
-            Alt.Server.LogInfo("Initialisation des controlleurs terminé");
+            await Loader.ClothingLoader.LoadAllCloth();
+            await WeatherManager.InitWeather();
+            Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
             Alt.OnPlayerConnect += OnPlayerConnected;
             Alt.OnPlayerDisconnect += OnPlayerDisconnected;
@@ -153,6 +164,7 @@ namespace ResurrectionRP_Server
             if (PlayerList.Find(b => b == player) != null)
                 PlayerList.Remove(player);
             Alt.Log($"==> {player.Name} has disconnected.");
+            RPGInventory.OnPlayerQuit(player);
 
         }
 
@@ -167,7 +179,7 @@ namespace ResurrectionRP_Server
                 return;
             }
 
-            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), player.Position, player.Rotation, locked:false);
+            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), new Vector3(player.Position.X+5, player.Position.Y, player.Position.Z), player.Rotation, locked:false);
             Task.Run(async () =>
             {
                 await vh.SpawnVehicle();
@@ -187,6 +199,7 @@ namespace ResurrectionRP_Server
         {
             await Database.MongoDB.Update(this, "gamemode", _id);
         }
+
         #endregion
     }
 }

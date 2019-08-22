@@ -8,13 +8,13 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ResurrectionRP_Server.Models
+namespace ResurrectionRP_Server.Inventory
 {
     [BsonIgnoreExtraElements]
     public partial class Inventory
     {
         #region Variables
-        public ItemStack[] InventoryList;
+        public Models.ItemStack[] InventoryList;
         public int MaxSize { get; set; }
         public int MaxSlot { get; set; }
         [BsonIgnore, JsonIgnore]
@@ -24,12 +24,12 @@ namespace ResurrectionRP_Server.Models
         #region Constructor
         public Inventory(int maxSize, int maxSlot)
         {
-            InventoryList = new ItemStack[maxSlot];
+            InventoryList = new Models.ItemStack[maxSlot];
             MaxSize = maxSize;
             MaxSlot = maxSlot;
         }
 
-        public ItemStack this[int x]
+        public Models.ItemStack this[int x]
         {
             get { return InventoryList[x]; }
             set
@@ -43,7 +43,7 @@ namespace ResurrectionRP_Server.Models
         #endregion
 
         #region Method
-        public ItemStack[] FindAllItemWithType(ItemID itemID)
+        public Models.ItemStack[] FindAllItemWithType(ItemID itemID)
         {
             return Array.FindAll(InventoryList, x => x?.Item.id == itemID);
         }
@@ -51,7 +51,7 @@ namespace ResurrectionRP_Server.Models
         public double CurrentSize()
         {
             double currentSize = 0;
-            foreach (ItemStack itemStack in InventoryList)
+            foreach (Models.ItemStack itemStack in InventoryList)
             {
                 if (itemStack != null && itemStack.Item != null)
                     currentSize += (itemStack.Item.weight * itemStack.Quantity);
@@ -68,38 +68,38 @@ namespace ResurrectionRP_Server.Models
 
         public bool IsEmpty()
         {
-            foreach (ItemStack itemStack in InventoryList)
+            foreach (Models.ItemStack itemStack in InventoryList)
             {
                 if (itemStack != null) return false;
             }
             return true;
         }
 
-        public async Task<bool> AddItem(IPlayer client, Item item, int quantity = 1, bool message = true)
+        public async Task<bool> AddItem(IPlayer client, Models.Item item, int quantity = 1, bool message = true)
         {
             if (AddItem(item, quantity))
             {
                 if (message)
-                   // await client.NotifyAsync("Vous venez d'ajouter " + quantity + " " + item.name + " dans l'inventaire");
+                    client.Emit("Display_Help", "Vous venez d'ajouter " + quantity + " " + item.name + " dans l'inventaire", 10000);
                 await PlayerManager.GetPlayerByClient(client)?.UpdatePlayerInfo();
                 return true;
             }
             return false;
         }
 
-        public bool AddItem(Item item, int quantity)
+        public bool AddItem(Models.Item item, int quantity)
         {
             return AddItem(item, quantity, out int slot);
         }
 
-        public bool AddItem(Item item, int quantity, out int slot)
+        public bool AddItem(Models.Item item, int quantity, out int slot)
         {
             slot = -1;
             if (CurrentSize() + (item.weight * quantity) > MaxSize) return false;
 
             if (InventoryList.Any(x => x?.Item.id == item.id) && item.isStackable)
             {
-                ItemStack itemStack = InventoryList.First(x => x?.Item.id == item.id);
+               Models.ItemStack itemStack = InventoryList.First(x => x?.Item.id == item.id);
                 itemStack.Quantity += quantity;
             }
             else
@@ -108,7 +108,7 @@ namespace ResurrectionRP_Server.Models
                 if (slot == -1)
                     return false;
 
-                InventoryList[slot] = new ItemStack(item, quantity, slot);
+                InventoryList[slot] = new Models.ItemStack(item, quantity, slot);
             }
             return true;
         }
@@ -125,7 +125,7 @@ namespace ResurrectionRP_Server.Models
         public void Clear() => new Inventory(MaxSize, MaxSlot);
         public void Clear(int newsize, int maxSlot) => new Inventory(newsize, maxSlot);
 
-        public bool Delete(ItemStack itemStack, int quantity = 1)
+        public bool Delete(Models.ItemStack itemStack, int quantity = 1)
         {
             try
             {
@@ -190,9 +190,9 @@ namespace ResurrectionRP_Server.Models
             return quantityNeeded - value; // valeur supprimer
         }
 
-        public Item FindItemID(ItemID id)
+        public Models.Item FindItemID(ItemID id)
         {
-            foreach (Item item in LoadItem.ItemsList)
+            foreach (Models.Item item in Items.LoadItem.ItemsList)
             {
                 if (item.id == id)
                     return item;
@@ -200,9 +200,9 @@ namespace ResurrectionRP_Server.Models
             return null;
         }
 
-        public static Item ItemByID(ItemID id)
+        public static Models.Item ItemByID(ItemID id)
         {
-            var item = LoadItem.ItemsList.Find(i => i.id == id) ?? null;
+            var item =Items.LoadItem.ItemsList.Find(i => i.id == id) ?? null;
 
             if (item == null)
                 return null;
@@ -219,7 +219,7 @@ namespace ResurrectionRP_Server.Models
             return false;
         }
 
-        public bool HasItem(Item item)
+        public bool HasItem(Models.Item item)
         {
             if (InventoryList.Any(x => x?.Item.id == item?.id))
             {
@@ -228,10 +228,10 @@ namespace ResurrectionRP_Server.Models
             return false;
         }
 
-        public int CountItem(Item item)
+        public int CountItem(Models.Item item)
         {
             int a = 0;
-            foreach (ItemStack invItem in InventoryList)
+            foreach (Models.ItemStack invItem in InventoryList)
             {
                 if (invItem != null && invItem.Item.id == item.id) a += invItem.Quantity;
             }
@@ -241,14 +241,14 @@ namespace ResurrectionRP_Server.Models
         public int CountItem(ItemID itemID)
         {
             int a = 0;
-            foreach (ItemStack invItem in InventoryList)
+            foreach (Models.ItemStack invItem in InventoryList)
             {
                 if (invItem != null && invItem.Item.id == itemID) a += invItem.Quantity;
             }
             return a;
         }
 
-        public int GetSlotIndexUseStack(ItemStack stack)
+        public int GetSlotIndexUseStack(Models.ItemStack stack)
         {
             for (int i = 0; i < InventoryList.Length; i++)
             {

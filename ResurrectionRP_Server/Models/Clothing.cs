@@ -51,6 +51,14 @@ namespace ResurrectionRP_Server.Models
         Decals = 10,
         Tops = 11
     }
+    public enum PropSlot
+    {
+        Hats = 0,
+        Glasses = 1,
+        Ears = 2,
+        Watches = 6,
+        Bracelets = 7
+    }
     public class Clothings
     {
         public ClothData Accessory = new ClothData(0, 0, 0);
@@ -95,29 +103,27 @@ namespace ResurrectionRP_Server.Models
                 {ClothSlot.Torso, new ClothData(Torso.Drawable, Torso.Texture, Torso.Palette) }
             };
 
-            await AltAsync.Do(() =>
+            await AltAsync.Do( async () =>
             {
-                //Player.SetClothesAsync(cloths); // (arg: number, arg1: number, arg2: number, arg3: number)
                 foreach (KeyValuePair<ClothSlot, ClothData> entry in cloths)
                 {
-                    Alt.Log(entry.Key.ToString());
-                     Player.EmitAsync("ComponentVariation", entry.Key, entry.Value.Drawable, entry.Value.Texture, entry.Value.Palette);
+                    await Player.SetClothAsync(entry.Key, entry.Value.Drawable, entry.Value.Texture, entry.Value.Palette);
                 }
 
-/*                if (Bracelets != null)
-                    Player.SetProp(PropSlot.Bracelets, Bracelets.Value);
+                if (Bracelets != null)
+                    await Player.SetPropAsync(PropSlot.Bracelets, Bracelets.Value);
 
                 if (Ears != null)
-                    Player.SetProp(PropSlot.Ears, Ears.Value);
+                    await Player.SetPropAsync(PropSlot.Ears, Ears.Value);
 
                 if (Glasses != null)
-                    Player.SetProp(PropSlot.Glasses, Glasses.Value);
+                    await Player.SetPropAsync(PropSlot.Glasses, Glasses.Value);
 
                 if (Watches != null)
-                    Player.SetProp(PropSlot.Watches, Watches.Value);
+                    await Player.SetPropAsync(PropSlot.Watches, Watches.Value);
 
                 if (Hats != null)
-                    Player.SetProp(PropSlot.Hats, Hats.Value);*/
+                    await Player.SetPropAsync(PropSlot.Hats, Hats.Value);
 
             });
         }

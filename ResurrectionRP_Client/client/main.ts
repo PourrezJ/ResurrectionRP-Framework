@@ -24,7 +24,7 @@ alt.onServer("PlayerInitialised", (
     Hunger: number,
     AnimSettings: string,
     Time: string,
-    Weather: number,
+    Weather: string,
     WeatherWind: number,
     WeatherWindDirection: number,
     isDebug: boolean,

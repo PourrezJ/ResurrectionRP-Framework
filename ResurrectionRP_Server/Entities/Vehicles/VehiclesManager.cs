@@ -40,6 +40,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             await player.EmitAsync("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32(seat), 50, 50);
         }
 
+
         private async Task LockUnlockVehicle(IPlayer player, object[] args)
         {
 

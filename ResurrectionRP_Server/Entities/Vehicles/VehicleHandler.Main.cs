@@ -111,7 +111,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (Dimension.ToString() == "-1")
                 Dimension = short.MaxValue;
 
-            await AltAsync.Do(() =>
+            await AltAsync.Do(async () =>
             {
                 try
                 {
@@ -161,6 +161,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.EngineHealth = EngineHealth;
                 Vehicle.BodyHealth = BodyHealth;
                 Vehicle.RadioStation = RadioID;
+
+                await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
+                await Vehicle.SetEngineOnAsync(Engine);
 
 
                 LastUse = DateTime.Now;

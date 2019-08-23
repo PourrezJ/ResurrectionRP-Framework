@@ -12,6 +12,7 @@ using Ped = ResurrectionRP_Server.Streamer.Data.Ped;
 using Object = ResurrectionRP_Server.Streamer.Data.Object;
 using TextLabel = ResurrectionRP_Server.Streamer.Data.TextLabel;
 using PedType = ResurrectionRP_Server.Streamer.Data.PedType;
+using Marker = ResurrectionRP_Server.Streamer.Data.Marker;
 
 namespace ResurrectionRP_Server.Streamer
 {
@@ -22,6 +23,7 @@ namespace ResurrectionRP_Server.Streamer
 
         public Streamer()
         {
+            //var data = new Marker(Data.MarkerType.HorizontalSplitArrowCircle, new Vector3(1, 1, 1), 255, 0, 0, 255, this.EntityNumber++);
             try
             {
                 AltNetworking.Configure(options =>
@@ -29,8 +31,6 @@ namespace ResurrectionRP_Server.Streamer
                     options.Port = 46429;
                 });
 
-                var data = new TextLabel("Test Label", 2, 0, 125, 125, 100, this.EntityNumber++);
-                this.ListEntities.Add( this.EntityNumber, AltNetworking.CreateEntity(new Entity.Position { X = 395, Y = -1030, Z = 30 }, GameMode.GlobalDimension, 5, data.export(), StreamingType.EntityStreaming));
                 AltNetworking.OnEntityStreamIn = (entity, client) =>
                 {
                     if(GameMode.Instance.IsDebug)
@@ -47,25 +47,37 @@ namespace ResurrectionRP_Server.Streamer
             {
                 AltV.Net.Alt.Server.LogError(ex.ToString());
             }
+            //addEntityMarker(Data.MarkerType.VerticalCylinder, new Vector3(404,-991,30), new Vector3(2,2,2));
+            
         }
 
-        public async Task addEntityPed(PedType type, string model, Vector3 pos, float heading)
+        public int addEntityPed(PedType type, string model, Vector3 pos, float heading)
         {
             var data = new Ped(model, type, heading, this.EntityNumber++);
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());
             this.ListEntities.Add(this.EntityNumber, item);
+            return this.EntityNumber;
         }
-        public async Task addEntityObject(string model, Vector3 pos)
+        public int addEntityObject(string model, Vector3 pos)
         {
             var data = new Object(model,  this.EntityNumber++);
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());
             this.ListEntities.Add(this.EntityNumber, item);
+            return this.EntityNumber;
         }
-        public async Task addEntityTextLabel(string label, Vector3 pos, int font = 1, int r = 225, int g = 225, int b = 225, int a = 100)
+        public int addEntityTextLabel(string label, Vector3 pos, int font = 1, int r = 225, int g = 225, int b = 225, int a = 100)
         {
             var data = new TextLabel(label, font, r, g, b, a, this.EntityNumber++);
+            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance / 3, data.export());
+            this.ListEntities.Add(this.EntityNumber, item);
+            return this.EntityNumber;
+        }
+        public int addEntityMarker(Data.MarkerType type, Vector3 pos, Vector3 scale, int r = 225, int g = 225, int b = 225, int a = 100)
+        {
+            var data = new Marker(type, scale, r,g,b,a, this.EntityNumber++);
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());
             this.ListEntities.Add(this.EntityNumber, item);
+            return this.EntityNumber;
         }
 
     }

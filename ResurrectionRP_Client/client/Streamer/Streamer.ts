@@ -13,6 +13,20 @@ export class Streamer {
             this.EntityList.forEach((item, index) => {
                 if (item != null && item["Text"] != null) {
                     displayTextLabel(item);
+                } else if (item != null && item["scalex"] != null) {
+                    game.drawMarker(
+                        item["type"],
+                        item["PosX"],
+                        item["PosY"],
+                        item["PosZ"],
+                        0, 0, 0, 0, 0, 0,
+                        item["scalex"],
+                        item["scaley"],
+                        item["scalez"],
+                        item["Color"]["r"],
+                        item["Color"]["g"],
+                        item["Color"]["b"],
+                        item["Color"]["a"], false, false, 0, false, undefined, undefined, false)
                 }
             });
         });
@@ -54,7 +68,21 @@ export class Streamer {
                     entity["position"]["y"],
                     entity["position"]["z"],
                     entity["data"]["font"]["intValue"],
-                    { r: entity["data"]["r"]["intValue"], g: entity["data"]["g"]["intValue"], b: entity["data"]["b"]["intValue"], a: entity["data"]["a"]["intValue"],}
+                    { r: entity["data"]["r"]["intValue"], g: entity["data"]["g"]["intValue"], b: entity["data"]["b"]["intValue"], a: entity["data"]["a"]["intValue"]}
+                );
+                break;
+            case 3:
+                //alt.log(JSON.stringify(entity["data"]));
+                await this.streamMarker(
+                    entity["data"]["id"]["intValue"],
+                    entity["data"]["type"]["intValue"],
+                    entity["position"]["x"],
+                    entity["position"]["y"],
+                    entity["position"]["z"],
+                    entity["data"]["scalex"]["doubleValue"],
+                    entity["data"]["scaley"]["doubleValue"],
+                    entity["data"]["scalez"]["doubleValue"],
+                    { r: entity["data"]["r"]["intValue"], g: entity["data"]["g"]["intValue"], b: entity["data"]["b"]["intValue"], a: entity["data"]["a"]["intValue"] }
                 );
                 break;
         }
@@ -95,12 +123,16 @@ export class Streamer {
     private streamTextLabel = async (id: number, text: string, x: number, y: number, z: number, font: number, rgba: object) => {
         this.EntityList[id] = {PosX: x, PosY: y, PosZ: z, Text: text, Font: font, Color: rgba};
     }
+    private streamMarker = async (id: number, type:number, x: number, y: number, z: number, scalex: number, scaley: number, scalez: number, rgba:object) => {
+        this.EntityList[id] = { PosX: x, PosY: y, PosZ: z, Color: rgba , type: type, scalex: scalex, scaley: scaley, scalez: scalez};
+    }
 
     public onStreamDataChange(entity: object, data: object) {
 
     }
 
 }
+
 function displayTextLabel(textLabel) {
     //alt.log(textLabel["PosX"] + " " +  textLabel["PosY"] + " " +  textLabel["PosZ"])
     const [bol, _x, _y] = game.getScreenCoordFromWorldCoord(textLabel["PosX"], textLabel["PosY"], textLabel["PosZ"],0,0);

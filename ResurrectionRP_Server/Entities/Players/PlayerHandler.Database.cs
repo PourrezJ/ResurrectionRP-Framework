@@ -18,8 +18,10 @@ namespace ResurrectionRP_Server.Entities.Players
         
         public async Task Save()
         {
-            Alt.Server.LogDebug("Save is disabled for now, waiting to be more complete.");
-            return;
+            //Alt.Server.LogWarning("Save is disabled for now, waiting to be more complete.");
+            //return;
+            if (GameMode.Instance.IsDebug)
+                Alt.Server.LogColored("~b~PlayerHandler ~w~| Save Player()");
             try
             {
                 if (Location.Pos == Vector3.Zero)

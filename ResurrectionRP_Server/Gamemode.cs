@@ -67,10 +67,8 @@ namespace ResurrectionRP_Server
         public XMenuManager.XMenuManager XMenuManager { get; private set; }
 
 
-
-
-        //[BsonIgnore]
-        //public Weather.WeatherManager WeatherManager { get; private set; }
+        [BsonIgnore]
+        public Weather.WeatherManager WeatherManager { get; private set; }
         [BsonIgnore]
         public Inventory.RPGInventoryManager RPGInventory { get; private set; }
         [BsonIgnore]
@@ -119,7 +117,7 @@ namespace ResurrectionRP_Server
         {
 
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
-            Alt.Server.LogInfo("Création des controlleurs...");
+            Alt.Server.LogColored("~g~Création des controlleurs...");
             Streamer = new Streamer.Streamer();
             PlayerManager = new Entities.Players.PlayerManager();
             BanManager = new BanManager();
@@ -127,15 +125,17 @@ namespace ResurrectionRP_Server
             PhoneManager = new Phone.PhoneManager();
             RPGInventory = new Inventory.RPGInventoryManager();
             XMenuManager = new XMenuManager.XMenuManager();
-            Alt.Server.LogInfo("Création des controlleurs terminée");
+            WeatherManager = new Weather.WeatherManager();
+            Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
             if (Time == null)
                 Time = new Time();
 
-            Alt.Server.LogInfo("Initialisations des controlleurs...");
+            Alt.Server.LogColored("~g~Initialisations des controlleurs...");
             await VehicleManager.LoadAllVehiclesActive();
             await Loader.ClothingLoader.LoadAllCloth();
-            Alt.Server.LogInfo("Initialisation des controlleurs terminé");
+            await WeatherManager.InitWeather();
+            Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
             Alt.OnPlayerConnect += OnPlayerConnected;
             Alt.OnPlayerDisconnect += OnPlayerDisconnected;
@@ -179,7 +179,7 @@ namespace ResurrectionRP_Server
                 return;
             }
 
-            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), player.Position, player.Rotation, locked:false);
+            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), new Vector3(player.Position.X+5, player.Position.Y, player.Position.Z), player.Rotation, locked:false);
             Task.Run(async () =>
             {
                 await vh.SpawnVehicle();
@@ -199,6 +199,7 @@ namespace ResurrectionRP_Server
         {
             await Database.MongoDB.Update(this, "gamemode", _id);
         }
+
         #endregion
     }
 }

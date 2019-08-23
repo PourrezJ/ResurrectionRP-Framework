@@ -29,20 +29,31 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public VehiclesManager()
         {
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
+            AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
 
             AltAsync.OnClient("LockUnlockVehicle", LockUnlockVehicle);
+            AltAsync.OnClient("OpenXtremVehicle", OpenXtremVehicle);
         }
         #endregion
 
         #region Server Events
         private async Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
+            await player.GetPlayerHandler()?.UpdatePlayerInfo();
             await player.EmitAsync("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32(seat), 50, 50);
         }
+        public static Task OpenXtremVehicle(IPlayer client, object[] args)
+        {
+            if (!client.Exists)
+                return Task.CompletedTask;
+            return client.GetNearestVehicleHandler()?.OpenXtremMenu(client);
+        }
+
 
         private async Task LockUnlockVehicle(IPlayer player, object[] args)
         {
-
+            if (GameMode.Instance.IsDebug)
+                Alt.Server.LogColored("~b~VehicleManager ~w~| " + player.GetSocialClub() + " is trying to lock/unlock a car");
             var vehicle = args[0] as IVehicle;
 
             if (!vehicle.Exists)
@@ -53,8 +64,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             
             if (await veh.LockUnlock(player))
             {
-                /*
-                var receverList = await MP.Players.GetInRangeAsync(await vehicle.GetPositionAsync(), 5);
+
+                var receverList =  vehicle.GetPlayersInRange(5f);
 
                 foreach (IPlayer recever in receverList)
                 {
@@ -62,12 +73,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         continue;
                     await recever.PlaySoundFromEntity(veh.Vehicle, 0, "5_SEC_WARNING", "HUD_MINI_GAME_SOUNDSET");
                 }
-                */
+
                 await veh.Update();
             }
         }
         private async Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
+            await player.GetPlayerHandler()?.UpdatePlayerInfo();
             await player.EmitAsync("OnPlayerLeaveVehicle");
         }
         #endregion

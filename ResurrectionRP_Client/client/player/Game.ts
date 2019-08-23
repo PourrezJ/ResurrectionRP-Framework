@@ -7,7 +7,6 @@ import Raycast, * as raycast from 'client/Utils/Raycast';
 import { Time as TimeLib } from 'client/Env/Time';
 import { Survival as SurvivalLib } from 'client/player/Survival';
 import { Hud as HudLib } from 'client/player/Hud';
-import { Streamer } from 'client/Streamer/Streamer';
 import { RPGInventoryManager } from 'client/RPGinventory';
 import { Weather as WeatherLib } from 'client/Env/Weather';
 import { Interaction as InteractionLib} from 'client/Player/Interaction';
@@ -22,8 +21,6 @@ export class Game {
     private _LevelRank: enums.AdminRank = enums.AdminRank.Player;
     public get LevelRank(): number { return this._LevelRank }
 
-    private _streamer: Streamer;
-    public get Streamer(): Streamer { return this._streamer; }
 
     private _PlayerName: string;
     public get PlayerName(): string { return this._PlayerName }
@@ -107,7 +104,6 @@ export class Game {
             this._Hud = new HudLib(Money);
             //this._Inventory = new RPGInventoryManager();
             this._Weather = new WeatherLib(Weather, WeatherWind, WeatherWindDirection);
-            this._streamer = new Streamer();
             alt.log('Chargement des pools done');
 
             alt.log("Chargement des stats");

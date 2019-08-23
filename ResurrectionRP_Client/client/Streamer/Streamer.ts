@@ -2,12 +2,30 @@
 import * as game from 'natives';
 
 export class Streamer {
+    public StaticEntityList: any[] = [];
     public EntityList: any[] = [];
     constructor() {
         alt.on("onStreamIn", this.onStreamIn);
         alt.on("onStreamOut", this.onStreamOut);
         alt.on("onStreamDataChange", this.onStreamDataChange);
         alt.on("disconnect", this.unloadStream);
+
+        alt.onServer('createStaticEntity', (data: any[]) => {
+            switch (data["entityType"]) {
+                case 4:
+                    this.streamBlip(
+                        data["id"],
+                        data["posx"],
+                        data["posy"],
+                        data["posz"],
+                        data["sprite"],
+                        data["color"],
+                        data["name"]
+                    );
+                    break;
+            }
+        });
+
 
         alt.on("update", () => {
             this.EntityList.forEach((item, index) => {
@@ -72,7 +90,6 @@ export class Streamer {
                 );
                 break;
             case 3:
-                //alt.log(JSON.stringify(entity["data"]));
                 await this.streamMarker(
                     entity["data"]["id"]["intValue"],
                     entity["data"]["type"]["intValue"],
@@ -126,6 +143,16 @@ export class Streamer {
     private streamMarker = async (id: number, type:number, x: number, y: number, z: number, scalex: number, scaley: number, scalez: number, rgba:object) => {
         this.EntityList[id] = { PosX: x, PosY: y, PosZ: z, Color: rgba , type: type, scalex: scalex, scaley: scaley, scalez: scalez};
     }
+    private streamBlip = async (id: number, x: number, y: number, z: number, sprite: number, color:number, name: string) => {
+
+        var test = new alt.PointBlip(x,y,z);
+        test.sprite = sprite;
+        test.color = color;
+        test.name = name;
+        test.shrinked = true;
+        test.shortRange = true;
+        this.StaticEntityList[id] = test;
+    }
 
     public onStreamDataChange(entity: object, data: object) {
 
@@ -159,5 +186,5 @@ function displayTextLabel(textLabel) {
             game.beginTextCommandDisplayText("STRING");
             game.addTextComponentSubstringPlayerName(textLabel["Text"]);
             game.endTextCommandDisplayText(_x, _y + 0.025);
-        }
+    }
 }

@@ -80,6 +80,19 @@ namespace ResurrectionRP_Server.Streamer
             this.ListEntities.Add(this.EntityNumber, item);
             return this.EntityNumber;
         }
+
+        public int updateEntityTextLabel(int entityid, string label)
+        {
+            ListEntities[entityid].SetData("text", label);
+            return entityid;
+        }
+
+        public int destroyEntityLabel(int entityid)
+        {
+            AltNetworking.RemoveEntity(ListEntities[entityid]);
+            ListEntities[entityid] = null;
+            return 0;
+        }
         public int addEntityMarker(Data.MarkerType type, Vector3 pos, Vector3 scale, int r = 225, int g = 225, int b = 225, int a = 255)
         {
             var data = new Marker(type, scale, r,g,b,a, this.EntityNumber++);

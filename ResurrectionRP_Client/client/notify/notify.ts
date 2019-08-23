@@ -14,15 +14,6 @@ export class Notify {
         this.notify.view.on('notify:loaded', () => {
             this.notify.isLoaded = true;
         });
-
-        alt.on('consoleCommand', (command, ...args) => {
-            alt.log(command);
-            alt.log("Loaded: " + this.notify.isLoaded)
-            if (command === 'notify' && this.notify.isLoaded) {
-                const text = args.join(' ');
-                this.successNotify("Test title", "test content", 10000);
-            }
-        });
         alt.onServer("notify", this.Notify);
         alt.onServer("successNotify", this.successNotify);
         alt.onServer("alertNotify", this.alertNotify);

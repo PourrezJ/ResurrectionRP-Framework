@@ -232,17 +232,17 @@ namespace ResurrectionRP_Server.Entities.Players
 
                await UpdateClothing();
 
-                /**if (PlayerSync.IsCuff)
+                /*if (PlayerSync.IsCuff)
                     await SetCuff(true);
 
                 PlayerSync.IsDead = (Health <= 0);
-
-                await GameMode.Instance.HouseManager.OnPlayerConnected(client);
+                */
+                //await GameMode.Instance.HouseManager.OnPlayerConnected(client);
                 await GameMode.Instance.DoorManager.OnPlayerConnected(client);
-                await GameMode.Instance.PedManager.OnPlayerConnected(client);
-                await GameMode.Instance.VoiceController.OnPlayerConnected(client);
-                await GameMode.Instance.IllegalManager.OnPlayerConnected(client);
-                **/
+                //await GameMode.Instance.PedManager.OnPlayerConnected(client);
+                //await GameMode.Instance.VoiceController.OnPlayerConnected(client);
+                //await GameMode.Instance.IllegalManager.OnPlayerConnected(client);
+                
                 await Task.Delay(500);
 
                 if (firstspawn)

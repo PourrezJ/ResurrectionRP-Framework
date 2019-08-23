@@ -9,7 +9,8 @@ import { Survival as SurvivalLib } from 'client/player/Survival';
 import { Hud as HudLib } from 'client/player/Hud';
 import { RPGInventoryManager } from 'client/RPGinventory';
 import { Weather as WeatherLib } from 'client/Env/Weather';
-import { Interaction as InteractionLib} from 'client/Player/Interaction';
+import { Interaction as InteractionLib } from 'client/Player/Interaction';
+import { Doors as DoorsManagerLib } from 'client/Env/Doors';
 
 export class Game {
     //region Static Var
@@ -30,6 +31,9 @@ export class Game {
 
     private _Weather: WeatherLib = null;
     public get Weather(): WeatherLib { return this._Weather; }
+
+    private _Doors: DoorsManagerLib = null;
+    public get Doors(): DoorsManagerLib { return this._Doors; }
 
     private _IsConnected: boolean;
     public get IsConnected(): boolean { return this._IsConnected; }
@@ -102,6 +106,7 @@ export class Game {
 
             alt.log('Chargement des pools');
             this._Hud = new HudLib(Money);
+            this._Doors = new DoorsManagerLib();
             //this._Inventory = new RPGInventoryManager();
             this._Weather = new WeatherLib(Weather, WeatherWind, WeatherWindDirection);
             alt.log('Chargement des pools done');

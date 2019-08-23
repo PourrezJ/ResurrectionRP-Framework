@@ -66,6 +66,8 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public XMenuManager.XMenuManager XMenuManager { get; private set; }
 
+        [BsonIgnore]
+        public Utils.DoorManager DoorManager { get; private set; }
 
         [BsonIgnore]
         public Weather.WeatherManager WeatherManager { get; private set; }
@@ -119,6 +121,7 @@ namespace ResurrectionRP_Server
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
             Streamer = new Streamer.Streamer();
+            DoorManager = new Utils.DoorManager();
             PlayerManager = new Entities.Players.PlayerManager();
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();
@@ -138,6 +141,7 @@ namespace ResurrectionRP_Server
             await WeatherManager.InitWeather();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
+
             Alt.OnPlayerConnect += OnPlayerConnected;
             Alt.OnPlayerDisconnect += OnPlayerDisconnected;
 
@@ -146,6 +150,10 @@ namespace ResurrectionRP_Server
             Chat.RegisterCmd("coords", (IPlayer player, string[] args) =>
             {
                 Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z);
+            });
+            Chat.RegisterCmd("notify", async (IPlayer player, string[] args) =>
+            {
+                this.Streamer.updateEntityTextLabel(14, "test");
             });
             ServerLoaded = true;
         }

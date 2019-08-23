@@ -53,7 +53,6 @@ export class Streamer {
 
 
     onStreamIn = async (entity: object) => {
-        //alt.log("EVENT STREAM IN : " + JSON.stringify(entity));
 
         switch (entity["data"]["entityType"]["intValue"]) {
             case 0:
@@ -106,7 +105,6 @@ export class Streamer {
 
     }
     private onStreamOut = async (entity: object) => {
-        //alt.log("EVENT STREAM OUT : " + JSON.stringify(entity));
 
         this.EntityList.forEach((item, index) => {
             if (entity["data"]["Text"])
@@ -140,7 +138,7 @@ export class Streamer {
     private streamTextLabel = async (id: number, text: string, x: number, y: number, z: number, font: number, rgba: object) => {
         this.EntityList[id] = {PosX: x, PosY: y, PosZ: z, Text: text, Font: font, Color: rgba};
     }
-    private streamMarker = async (id: number, type:number, x: number, y: number, z: number, scalex: number, scaley: number, scalez: number, rgba:object) => {
+    private streamMarker = async (id: number, type: number, x: number, y: number, z: number, scalex: number, scaley: number, scalez: number, rgba: object) => {
         this.EntityList[id] = { PosX: x, PosY: y, PosZ: z, Color: rgba , type: type, scalex: scalex, scaley: scaley, scalez: scalez};
     }
     private streamBlip = async (id: number, x: number, y: number, z: number, sprite: number, color:number, name: string) => {
@@ -154,8 +152,22 @@ export class Streamer {
         this.StaticEntityList[id] = test;
     }
 
-    public onStreamDataChange(entity: object, data: object) {
-
+    public onStreamDataChange = (entity: object, data: object) => {
+        switch (entity["data"]["entityType"]["intValue"]) {
+            case 0:
+                game.deletePed(this.EntityList[entity["data"]["id"]["intValue"]])
+                break;
+            case 1:
+                game.deleteObject(this.EntityList[entity["data"]["id"]["intValue"]])
+                break;
+            case 2:
+                this.EntityList[entity["data"]["id"]["intValue"]] = undefined;
+                break;
+            case 3:
+                this.EntityList[entity["data"]["id"]["intValue"]] = undefined;
+                break;
+        }
+         this.onStreamIn(entity);
     }
 
 }

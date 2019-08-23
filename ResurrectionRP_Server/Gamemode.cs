@@ -132,6 +132,7 @@ namespace ResurrectionRP_Server
                 Time = new Time();
 
             Alt.Server.LogColored("~g~Initialisations des controlleurs...");
+            await Loader.CarParkLoader.LoadAllCarPark();
             await VehicleManager.LoadAllVehiclesActive();
             await Loader.ClothingLoader.LoadAllCloth();
             await WeatherManager.InitWeather();
@@ -148,6 +149,7 @@ namespace ResurrectionRP_Server
             });
             ServerLoaded = true;
         }
+
 
         private void OnPlayerConnected(IPlayer player, string reason)
         {

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
@@ -104,6 +105,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                     if (vehicle == null)
                         continue;
+                    if (vehicle.isParked)
+                        continue;
 
                     //await DeleteVehicleInAllParking(vehicle.Plate);
                     //DeleteVehicleInPound(vehicle.Plate);
@@ -151,6 +154,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
             return null;
         }
+        public static async Task<bool> GetVehicleInSpawn(Models.Location location, float distance = 4, uint dimension = (uint)ushort.MaxValue) =>
+            await GetVehicleInSpawn(location.Pos, distance, dimension);
+
+        public static async Task<bool> GetVehicleInSpawn(Vector3 location, float distance = 4, uint dimension = (uint)ushort.MaxValue)
+        {
+            var vehhandler = await GetNearestVehicle(location, distance, dimension);
+            if (vehhandler != null)
+            {
+                return true;
+            }
+            return false;
+        }
 
         public static string GenerateRandomPlate()
         {
@@ -168,8 +183,40 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 return generatedPlate = new string(stringChars);
             } while (!IsPlateUnique(generatedPlate));
         }
+        public static async Task<IVehicle> GetNearestVehicle(IPlayer client, float distance = 3.0f, uint dimension = (uint)short.MaxValue) => await GetNearestVehicle(await client.GetPositionAsync(), distance, dimension);
+        //private static object lockobj = new object();
+        public static async Task<IVehicle> GetNearestVehicle(Vector3 position, float distance = 3.0f, uint dimension = (uint)short.MaxValue)
+        {
+            // lock (lockobj)
+            // return MP.Vehicles.FirstOrDefault(p => p.Position.DistanceTo2D(position) <= distance && p.Dimension == dimension && p.Exists) ?? null;
+
+            ICollection<IVehicle> vehs = Alt.GetAllVehicles();
+            IVehicle nearest = null;
+            foreach(IVehicle veh in vehs)
+            {
+                if (position.DistanceTo2D(veh.Position) > distance)
+                    continue;
+                if (nearest == null)
+                    nearest = veh;
+                if (position.DistanceTo2D(veh.Position) < position.DistanceTo(nearest.Position))
+                    nearest = veh;
+            }
+            return nearest;
+
+        }
+
 
         public static bool IsPlateUnique(string plate) => !GameMode.Instance.PlateList.Exists(x => x == plate);
+
+        public IVehicle GetVehicleByPlate(string plate)
+        {
+            foreach(KeyValuePair<IVehicle, VehicleHandler> entity in this.VehicleHandlerList)
+            {
+                if (entity.Value.Plate == plate)
+                    return entity.Key; 
+            }
+            return null;
+        }
         #endregion
     }
 }

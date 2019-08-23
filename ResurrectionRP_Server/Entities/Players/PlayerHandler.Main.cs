@@ -161,6 +161,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public async Task LoadPlayer(IPlayer client, bool firstspawn = false)
         {
+
             Client = client;
             client.SetData("PlayerHandler", this);
             if (PlayerHandlerList.TryAdd(client, this))
@@ -265,6 +266,33 @@ namespace ResurrectionRP_Server.Entities.Players
             Money += somme;
             Client?.Emit(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money));
             await UpdatePlayerInfo();
+        }
+
+
+        public async Task<bool> HasMoney(double somme)
+        {
+            if (somme < 0) return false;
+            if (Money >= somme)
+            {
+                Money -= somme;
+                await Client?.EmitAsync(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money)) ;
+                await UpdatePlayerInfo();
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> HasBankMoney(double somme, string reason)
+        {
+            if (somme < 0) return false;
+            if (BankAccount.Balance >= somme)
+            {
+                BankAccount.GetBankMoney(somme, reason);
+                await Client?.EmitAsync(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money));
+                await UpdatePlayerInfo();
+                return true;
+            }
+            return false;
         }
 
         #endregion

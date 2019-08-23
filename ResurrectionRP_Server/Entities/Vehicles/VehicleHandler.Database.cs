@@ -62,16 +62,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
 
             if (!_updateWaiting)
-                UpdateAsync();
+                await UpdateAsync();
         }
 
-        private void UpdateAsync()
+        private async Task UpdateAsync()
         {
             if (GameMode.Instance.IsDebug)
                 Alt.Server.LogColored("~b~VehicleHandler.Database.cs~w~ | Vehicle saving()");
             _updateWaiting = true;
 
-            Task.Run(async () =>
+            await Task.Run(async () =>
             {
                 DateTime updateTime = _lastUpdateRequest.AddMilliseconds(_updateWaitTime);
 

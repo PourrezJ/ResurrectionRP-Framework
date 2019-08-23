@@ -48,6 +48,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         [BsonIgnore, JsonIgnore]
         public IVehicle Vehicle { get; set; }
 
+        public bool isParked { get; set; } = false;
+
         public bool SpawnVeh { get; set; }
         public bool Locked { get; set; } = true;
 
@@ -111,18 +113,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (Dimension.ToString() == "-1")
                 Dimension = short.MaxValue;
 
+
             await AltAsync.Do(async () =>
             {
                 try
                 {
-                    if (location == null)
-                    {
-                        Vehicle = Alt.CreateVehicle(Model, Location.Pos, Location.GetRotation());
-                    }
-                    else
-                    {
-                        Vehicle = Alt.CreateVehicle(Model, location.Pos, location.GetRotation());
-                    }
+                    Vehicle = Alt.CreateVehicle(Model, (location == null) ? Location.Pos : location.Pos, (location == null) ? Location.Rot : location.Rot);
                 }
                 catch (Exception ex)
                 {

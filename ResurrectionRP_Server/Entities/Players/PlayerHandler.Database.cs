@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 var vehicle = await Client.GetVehicleAsync();
 
-                if (vehicle != null)
+                if (vehicle != null && !vehicle.GetVehicleHandler().isParked)
                 {
                     if (await vehicle.GetDriverAsync() == Client)
                     {

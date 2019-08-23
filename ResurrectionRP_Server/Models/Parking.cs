@@ -8,10 +8,12 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using VehicleHandler = ResurrectionRP_Server.Entities.Vehicles.VehicleHandler;
 using VehicleManager = ResurrectionRP_Server.Entities.Vehicles.VehiclesManager;
 using AltV.Net.ColShape;
+using Newtonsoft.Json;
 
 namespace ResurrectionRP_Server.Models
 {
@@ -20,6 +22,19 @@ namespace ResurrectionRP_Server.Models
         Public,
         House,
         Society
+    }
+    public class ParkedCar
+    {
+        [BsonId]
+        public string plate;
+        public DateTime parkTime;
+        public ParkedCar(string plate, DateTime date )
+        {
+            this.plate = plate;
+            this.parkTime  = date ;
+        }
+        public IVehicle getVehicle() => GameMode.Instance.VehicleManager.GetVehicleByPlate(this.plate);
+        public Entities.Vehicles.VehicleHandler getVehicleHandler() => GameMode.Instance.VehicleManager.GetVehicleByPlate(this.plate)?.GetVehicleHandler();
     }
     class Parking
     {
@@ -37,13 +52,13 @@ namespace ResurrectionRP_Server.Models
         public int Limite;
         public ParkingType ParkingType;
 
-        private List<string> _listvehiclestored = new List<string>();
-        public List<string> ListVehicleStored
+        private List<ParkedCar> _listvehiclestored = new List<ParkedCar>();
+        public List<ParkedCar> ListVehicleStored
         {
             get
             {
                 if (_listvehiclestored == null)
-                    _listvehiclestored = new List<string>();
+                    _listvehiclestored = new List<ParkedCar>();
                 return _listvehiclestored;
             }
             set => _listvehiclestored = value;
@@ -67,7 +82,7 @@ namespace ResurrectionRP_Server.Models
         [BsonIgnore]
         public OnSaveNeededDelegate OnSaveNeeded { get; set; }
         [BsonIgnore]
-        public AltV.Net.ColShape.IColShape ParkingColshape { get; private set; }
+        public AltV.Net.Elements.Entities.IColShape ParkingColshape { get; private set; }
         #endregion
 
 
@@ -89,7 +104,6 @@ namespace ResurrectionRP_Server.Models
             Spawn2 = spawn2;
             Owner = owner;
             Limite = limite;
-            Alt.OnColShape += OnEnterColShape;
         }
         #endregion
 
@@ -103,12 +117,12 @@ namespace ResurrectionRP_Server.Models
             }
             return number;
         }
-        /*        private async Task StoreVehicle(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex, dynamic data)
-                {
-                    var vehicle = await client.GetVehicleAsync();
-                    await StoreVehicle(client, vehicle);
-                }*/
-        private async Task GetVehicle(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex, dynamic data)
+        private async Task StoreVehicle(IPlayer client /*,Menu menu, IMenuItem menuItem, int itemIndex, dynamic data*/)
+        {
+            var vehicle = await client.GetVehicleAsync();
+            await StoreVehicle(client, vehicle);
+        }
+/*        private async Task GetVehicle(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex, dynamic data)
         {
             try
             {
@@ -146,19 +160,19 @@ namespace ResurrectionRP_Server.Models
                 }
 
                 Spawn = Spawn2;
-                if (ParkingType == ParkingType.House)
-                    await client.PutIntoVehicleAsync(veh.Vehicle, -1);
+ //                if (ParkingType == ParkingType.House) TDO
+ //                   await client.PutIntoVehicleAsync(veh.Vehicle, -1);
 
                 RemoveVehicle(veh); // retrait du véhicule dans la list.
                 await OnVehicleOut?.Invoke(client, veh, Spawn); // callback (ex carpark)
                 await MenuManager.CloseMenu(client);
-                await veh.InsertVehicle();
+                //await veh.InsertVehicle();
             }
             catch (Exception ex)
             {
                 Alt.Server.LogError("Parking | " + ex.ToString());
             }
-        }
+        }*/
 
         private async Task<VehicleHandler> GetVehicleInParking(string plate)
         {
@@ -169,37 +183,41 @@ namespace ResurrectionRP_Server.Models
 
 
         #region Public methods
-        public static async void OnEnterColShape(AltV.Net.Elements.Entities.IColShape colshapePointer, IEntity client, bool state)
+        public static void OnEnterColShape(AltV.Net.Elements.Entities.IColShape colshapePointer, IEntity client, bool state)
         {
             if (!client.Exists)
                 return;
-            if (client.Type != 0)
+            if (client.Type != BaseObjectType.Vehicle || client.Type != BaseObjectType.Player)
                 return;
-            var player = client as IPlayer;
-            Parking parking = ParkingList.Find(p => p.ParkingColshape == colshapePointer);
-
+            if (!state)
+                return;
+            Parking parking = ParkingList.Find(p => p.ParkingColshape.Position == colshapePointer.Position);
+/*
             if (parking != null && parking.ParkingType != ParkingType.Society)
-                await parking.OpenParkingMenu(player);
+                await parking.OpenParkingMenu(player);*/
         }
 
-        public async Task Load(float markerscale = 3f, int opacite = 128, bool blip = false, uint sprite = 50, float scale = 1f, byte color = 0, uint alpha = 255, string name = "", uint dimension = MP.GlobalDimension)
+        public async Task Load(float markerscale = 3f, int opacite = 128, bool blip = false, uint sprite = 50, float scale = 1f, byte color = 0, uint alpha = 255, string name = "", uint dimension = (uint)short.MaxValue)
         {
-            await MP.Markers.NewAsync(MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale), new Vector3(), new Vector3(), 3f, Color.FromArgb(180, 255, 255, 255), true, dimension);
-            ParkingColshape = await MP.Colshapes.NewTubeAsync(Location - new Vector3(0.0f, 0.0f, markerscale), markerscale, dimension);
+            GameMode.Instance.Streamer.addEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale), new Vector3(3,3,3), 180);
+            ParkingColshape = Alt.CreateColShapeCylinder(new AltV.Net.Data.Position(Location.X, Location.Y, Location.Z -1), markerscale, 4);
 
             if (blip)
-                await MP.Blips.NewAsync(sprite, Location, scale, color, name, alpha, 10, true);
+                GameMode.Instance.Streamer.addStaticEntityBlip(name, Location,color,(int) sprite);
+
+            Alt.OnColShape += OnEnterColShape;
             ParkingList.Add(this);
         }
-
-        public async Task OpenParkingMenu(IPlayer client, string title = "", string description = "", bool canGetAllVehicle = false, Location location = null, int vehicleType = -1)
+        
+/*
+        public async Task OpenParkingMenu(IPlayer client, string title = "", string description = "", bool canGetAllVehicle = false, Location location = null, int vehicleType = -1, Menu menu = null, Menu.MenuCallback menuCallback = null)
         {
             if (!client.Exists)
                 return;
 
             if (Whitelist != null && Whitelist.Count > 0)
             {
-                var social = await client.GetSocialClubNameAsync();
+                var social = client.GetSocialClub();
 
                 if (!Whitelist.Contains(social))
                 {
@@ -208,8 +226,16 @@ namespace ResurrectionRP_Server.Models
                 }
             }
 
-            Menu ParkingMenu = new Menu("ID_ParkingMenu", (string.IsNullOrEmpty(title) ? "Parking" : title), (string.IsNullOrEmpty(description)) ? "" : description, 0, 0, Menu.MenuAnchor.MiddleLeft, false, true, false);
-            if (await client.IsInVehicleAsync() && await client.GetSeatAsync() == -1) // i'm store my vehicle
+            if (menu == null)
+                menu = new Menu("ID_ParkingMenu", (string.IsNullOrEmpty(title) ? "Parking" : title), (string.IsNullOrEmpty(description)) ? "" : description, 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+            else
+            {
+                menu.ClearItems();
+                menu.BackCloseMenu = false;
+                menu.Callback = menuCallback;
+            }
+
+            if (await client.IsInVehicleAsync() && await client.GetSeatAsync() == -1 ) // I store my vehicle
             {
                 var vehplayer = await client.GetVehicleAsync();
 
@@ -224,11 +250,11 @@ namespace ResurrectionRP_Server.Models
                 // some check
                 if (vehicle.SpawnVeh)
                 {
-                    await client.SendNotificationError("Vous ne pouvez pas garer dans le parking un véhicule de location!");
+                    await client.SendNotificationError("Vous ne pouvez pas garer un véhicule de location dans le parking!");
                     return;
                 }
 
-                if (ListVehicleStored.Count + 1 > Limite)
+                if (ListVehicleStored.Count + 1 >= Limite)
                 {
                     await client.SendNotificationError("Le parking est plein!");
                     return;
@@ -236,24 +262,26 @@ namespace ResurrectionRP_Server.Models
                 // it's ok!
                 var item = new MenuItem("Ranger votre voiture", "", "ID_StoreVehicle", true, rightLabel: $"{((Price > 0) ? "$" + Price.ToString() : "")}");
                 item.OnMenuItemCallback = StoreVehicle;
-                ParkingMenu.Add(item);
+                menu.Add(item);
             }
-            else // i'm want my vehicle
+            else // I want my vehicle
             {
-                ParkingMenu.SubTitle = "Quel véhicule souhaitez-vous récupérer :";
-                var ph = client.GetPlayerHandler();
-                if (ph == null) return;
+                menu.SubTitle = "Quel véhicule souhaitez-vous récupérer :";
+                Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
 
-                var social = await client.GetSocialClubNameAsync();
+                if (ph == null)
+                    return;
+
+                var social = client.GetSocialClub();
                 if (!canGetAllVehicle)
                 {
-                    List<VehicleHandler> vehicleList = null;
-
+                    List<ParkedCar> vehicleListParked = null;
                     if (vehicleType == -1)
-                        vehicleList = ListVehicleStored.FindAll(p => p.OwnerID == social || ph.ListVehicleKey.Exists(v => v.Plate == p.Plate));
+                        vehicleListParked = ListVehicleStored.FindAll(p => ph.ListVehicleKey.Exists(v => v.Plate == p.plate));
                     else
-                        vehicleList = ListVehicleStored.FindAll(p => (p.OwnerID == social || ph.ListVehicleKey.Exists(v => v.Plate == p.Plate)) && p.VehicleManifest?.VehicleClass == vehicleType);
+                        vehicleListParked = ListVehicleStored.FindAll(p => (ph.ListVehicleKey.Exists(v => v.Plate == p.plate)));
 
+                    List<VehicleHandler> vehicleList = await Database.MongoDB.GetCollectionSafe<VehicleHandler>("vehicles").Find(p => (vehicleListParked.FirstOrDefault(car => car.plate == p.Plate)).plate == p.Plate ).ToListAsync();
                     if (vehicleList.Count > 0)
                     {
                         foreach (var veh in vehicleList)
@@ -266,18 +294,18 @@ namespace ResurrectionRP_Server.Models
                                 }
 
                                 string _description =
-                                    $"~g~Essence:~w~ {veh.VehicleSync.Fuel} \n" +
-                                    $"~g~Etat: ~w~{(veh.VehicleSync.BodyHealth * 0.1)} \n" +
+                                    $"~g~Essence:~w~ {veh.Fuel} \n" +
+                                    $"~g~Etat: ~w~{(veh.BodyHealth * 0.1)} \n" +
                                     $"{((ParkingType == ParkingType.Public) ? $"~g~Fin Horodateur:~w~ {veh.LastUse.AddMonths(1).ToShortDateString()}" : "")}";
 
                                 MenuItem item = new MenuItem(string.IsNullOrEmpty(veh.VehicleManifest.LocalizedName) ? veh.VehicleManifest.DisplayName : veh.VehicleManifest.LocalizedName, _description, "", true, rightLabel: veh.Plate);
                                 item.SetData("Vehicle", veh);
                                 item.OnMenuItemCallback = GetVehicle;
-                                ParkingMenu.Add(item);
+                                menu.Add(item);
                             }
-                            catch (Exception ex)
+                            catch(Exception ex)
                             {
-                                MP.Logger.Error($"OpenParkingMenu: {veh.Plate} {this.ID} {this.Name} {await client.GetSocialClubNameAsync()}", ex);
+                                Alt.Server.LogError($"OpenParkingMenu: {veh.Plate} {this.ID} {this.Name} {client.GetSocialClub()} : " + ex);
                             }
                         }
                     }
@@ -286,12 +314,13 @@ namespace ResurrectionRP_Server.Models
                         await client.SendNotificationError("Vous n'avez aucun véhicule dans ce parking.");
                         return;
                     }
-                }
+                } 
                 else
                 {
                     if (ListVehicleStored.Count > 0)
                     {
-                        foreach (var veh in ListVehicleStored)
+                        List<VehicleHandler> vehicleList = await Database.MongoDB.GetCollectionSafe<VehicleHandler>("vehicles").Find(p => (ListVehicleStored.FirstOrDefault(car => car.plate == p.Plate)).plate == p.Plate).ToListAsync();
+                        foreach (VehicleHandler veh in vehicleList)
                         {
                             try
                             {
@@ -301,18 +330,18 @@ namespace ResurrectionRP_Server.Models
                                 }
 
                                 string _description =
-                                    $"~g~Essence:~w~ {veh.VehicleSync.Fuel} \n" +
-                                    $"~g~Etat: ~w~{(veh.VehicleSync.BodyHealth * 0.1)} \n" +
+                                    $"~g~Essence:~w~ {veh.Fuel} \n" +
+                                    $"~g~Etat: ~w~{(veh.BodyHealth * 0.1)} \n" +
                                     $"{((ParkingType == ParkingType.Public) ? $"~g~Fin Horodateur:~w~ {veh.LastUse.AddMonths(1).ToShortDateString()}" : "")}";
 
                                 MenuItem item = new MenuItem(string.IsNullOrEmpty(veh.VehicleManifest.LocalizedName) ? veh.VehicleManifest.DisplayName : veh.VehicleManifest.LocalizedName, _description, "", true, rightLabel: veh.Plate);
                                 item.SetData("Vehicle", veh);
                                 item.OnMenuItemCallback = GetVehicle;
-                                ParkingMenu.Add(item);
+                                menu.Add(item);
                             }
                             catch (Exception ex)
                             {
-                                MP.Logger.Error($"OpenParkingMenu: {veh.Plate} {this.ID} {this.Name} {await client.GetSocialClubNameAsync()}", ex);
+                                Alt.Server.LogError($"OpenParkingMenu: {veh.Plate} {this.ID} {this.Name} {client.GetSocialClub()} : " + ex);
                             }
                         }
                     }
@@ -324,13 +353,13 @@ namespace ResurrectionRP_Server.Models
                 }
             }
 
-            ParkingMenu.SetData("Location", location);
-
-            await ParkingMenu.OpenMenu(client);
-        }
+            menu.SetData("Location", location);
+            await menu.OpenMenu(client);
+        }*/
 
         public async Task StoreVehicle(IPlayer client, IVehicle vh)
         {
+            await client.EmitAsync("toggleControl", false);
             try
             {
                 if (!await client.GetPlayerHandler().HasMoney(Price))
@@ -343,31 +372,37 @@ namespace ResurrectionRP_Server.Models
 
                 if (veh != null)
                 {
-                    await veh.SetEngineState(false);
+                    if (veh.isParked)
+                        return;
+                    if (GameMode.Instance.IsDebug)
+                        Alt.Server.LogColored($"~b~Parking ~w~| New vehicle in parking id {this.ID} ");
+                    await vh.SetEngineOnAsync(false);
                     veh.Locked = true;
                     veh.LastUse = DateTime.Now; // refresh the last use
 
                     lock (ListVehicleStored)
                     {
-                        if (ListVehicleStored.FirstOrDefault(v => v.Plate == veh.Plate) != null)
-                            MP.Logger.Warn($"Parking '{Name}': Duplicate plate {veh.Plate}");
-                        else
-                            ListVehicleStored.Add(veh); // Store vehicle into a list
+                        ListVehicleStored.Add(new Models.ParkedCar(veh.Plate, DateTime.Now)); // Store vehicle into a list
+                        veh.isParked = true;
                     }
+                    
+                    await veh.Update();
 
-                    await veh.Delete(true);
+                    await veh.Delete(false);
                     await OnVehicleStored?.Invoke(client, veh); // call event for success storage
                 }
                 else
                 {
-                    MP.Logger.Info("GetHandlerByVehicle fuck is null this shit! mother fucker!");
+                    Alt.Server.LogError("GetHandlerByVehicle fuck is null this shit! mother fucker!");
                 }
-                await MenuManager.CloseMenu(client);
+                //await MenuManager.CloseMenu(client); TODO
             }
             catch (Exception ex)
             {
-                MP.Logger.Error("StoreVehicle", ex);
+                Alt.Server.LogError("StoreVehicle" + ex);
             }
+            await client.EmitAsync("toggleControl", true);
+
         }
 
         public bool RemoveVehicle(VehicleHandler veh)
@@ -376,16 +411,18 @@ namespace ResurrectionRP_Server.Models
 
             lock (ListVehicleStored)
             {
-                VehicleHandler vehicle = ListVehicleStored.FirstOrDefault(v => v.Plate == veh.Plate);
-
+                ParkedCar vehicle = ListVehicleStored.FirstOrDefault(v => v.plate == veh.Plate);
                 if (vehicle == null)
                     success = false;
                 else
+                {
                     success = ListVehicleStored.Remove(vehicle);
+
+                }
             }
 
             if (!success)
-                MP.Logger.Warn($"Parking '{Name}': Error removing vehicle {veh.Plate}");
+                Alt.Server.LogError($"Parking '{Name}': Error removing vehicle {veh.Plate}");
 
             return success;
         }

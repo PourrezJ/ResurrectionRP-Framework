@@ -73,14 +73,14 @@ namespace ResurrectionRP_Server.Streamer
             this.ListEntities.Add(this.EntityNumber, item);
             return this.EntityNumber;
         }
-        public int addEntityTextLabel(string label, Vector3 pos, int font = 1, int r = 225, int g = 225, int b = 225, int a = 100)
+        public int addEntityTextLabel(string label, Vector3 pos, int font = 1, int r = 255, int g = 255, int b = 255, int a = 255)
         {
             var data = new TextLabel(label, font, r, g, b, a, this.EntityNumber++);
-            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance / 3, data.export());
+            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance / 25, data.export());
             this.ListEntities.Add(this.EntityNumber, item);
             return this.EntityNumber;
         }
-        public int addEntityMarker(Data.MarkerType type, Vector3 pos, Vector3 scale, int r = 225, int g = 225, int b = 225, int a = 100)
+        public int addEntityMarker(Data.MarkerType type, Vector3 pos, Vector3 scale, int r = 225, int g = 225, int b = 225, int a = 255)
         {
             var data = new Marker(type, scale, r,g,b,a, this.EntityNumber++);
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());

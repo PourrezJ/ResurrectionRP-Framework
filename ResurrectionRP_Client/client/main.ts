@@ -9,13 +9,14 @@ import * as PlayerCustomization from 'client/player/PlayerCustomization';
 import { Game } from 'client/player/Game';
 import { OpenCharCreator } from 'client/Creator/Creator';
 import { Streamer } from 'client/Streamer/Streamer';
+import { Notify } from 'client/Notify/Notify';
 
 chat.initialize()
 speedometer.initialize();
 utils.initialize();
 login.init();
 xtreamMenu.init();
- new Streamer();
+new Streamer();
 
 
 alt.onServer("PlayerInitialised", (
@@ -33,6 +34,7 @@ alt.onServer("PlayerInitialised", (
     Location: string
 ) => {
     PlayerCustomization.init();
+    new Notify();
     var GameClass: Game = new Game(StaffRank, IdentiteName, Money, Thirst, Hunger, AnimSettings, Time, Weather, WeatherWind, WeatherWindDirection, isDebug, Location);
 
 });

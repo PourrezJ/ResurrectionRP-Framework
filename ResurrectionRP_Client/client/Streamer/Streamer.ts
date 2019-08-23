@@ -166,9 +166,11 @@ function displayTextLabel(textLabel) {
         const camCord = game.getGameplayCamCoords();
     const dist = game.getDistanceBetweenCoords(camCord.x, camCord.y, camCord.z, textLabel["PosX"], textLabel["PosY"], textLabel["PosZ"], true);
 
-        let scale = (4.00001 / dist) * 0.3
+        let scale = (4.00001 / dist) * 0.5
         if (scale > 0.2)
             scale = 0.2;
+        if(scale < 0.1)
+            scale = 0;
 
         const fov = (1 / game.getGameplayCamFov()) * 100;
         scale = scale * fov;

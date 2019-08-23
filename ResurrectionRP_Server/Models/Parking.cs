@@ -12,7 +12,6 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using VehicleHandler = ResurrectionRP_Server.Entities.Vehicles.VehicleHandler;
 using VehicleManager = ResurrectionRP_Server.Entities.Vehicles.VehiclesManager;
-using AltV.Net.ColShape;
 using Newtonsoft.Json;
 
 namespace ResurrectionRP_Server.Models
@@ -199,8 +198,9 @@ namespace ResurrectionRP_Server.Models
 
         public async Task Load(float markerscale = 3f, int opacite = 128, bool blip = false, uint sprite = 50, float scale = 1f, byte color = 0, uint alpha = 255, string name = "", uint dimension = (uint)short.MaxValue)
         {
-            GameMode.Instance.Streamer.addEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale), new Vector3(3,3,3), 180);
+            GameMode.Instance.Streamer.addEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale-1), new Vector3(3,3,3), 180);
             ParkingColshape = Alt.CreateColShapeCylinder(new AltV.Net.Data.Position(Location.X, Location.Y, Location.Z -1), markerscale, 4);
+            GameMode.Instance.Streamer.addEntityTextLabel(this.Name + "\n~o~Approchez pour interagir", Location, 4);
 
             if (blip)
                 GameMode.Instance.Streamer.addStaticEntityBlip(name, Location,color,(int) sprite);

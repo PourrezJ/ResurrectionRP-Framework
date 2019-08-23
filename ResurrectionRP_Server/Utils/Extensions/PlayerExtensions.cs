@@ -57,22 +57,18 @@ namespace ResurrectionRP_Server
 
         public async static Task SendNotification(this IPlayer client, string text)
         {
-
+            await client.EmitAsync("notify", "Notification", text, 7000);
         }
         public async static Task SendNotificationError(this IPlayer client, string text)
         {
-
+            await client.EmitAsync("alertNotify", "Erreur", text, 7000);
         }
         public async static Task SendNotificationSuccess(this IPlayer client, string text)
         {
-
+            await client.EmitAsync("successNotify", "Succès", text, 7000);
         }
 
-        public async static Task NotifyAsync(this IPlayer client, string text)
-        {
-
-        }
-
+        public async static Task NotifyAsync(this IPlayer client, string text) => await client.SendNotification(text);
         public static List<IVehicle> GetVehiclesInRange(this IPlayer client, int Range)
         {
             var vehs = Alt.GetAllVehicles();

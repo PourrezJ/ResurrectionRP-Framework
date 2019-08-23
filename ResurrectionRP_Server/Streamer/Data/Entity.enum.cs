@@ -7,6 +7,7 @@ namespace ResurrectionRP_Server.Streamer.Data
         Ped = 0,
         Object = 1,
         TextLabel = 2,
-        Marker = 3
+        Marker = 3,
+        Blip = 4
     }
 }

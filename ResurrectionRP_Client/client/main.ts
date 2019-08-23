@@ -8,12 +8,14 @@ import * as login from 'client/login/Login';
 import * as PlayerCustomization from 'client/player/PlayerCustomization';
 import { Game } from 'client/player/Game';
 import { OpenCharCreator } from 'client/Creator/Creator';
+import { Streamer } from 'client/Streamer/Streamer';
 
 chat.initialize()
 speedometer.initialize();
 utils.initialize();
 login.init();
 xtreamMenu.init();
+ new Streamer();
 
 
 alt.onServer("PlayerInitialised", (

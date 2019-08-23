@@ -11,6 +11,7 @@ using AltV.Net.Elements.Args;
 
 namespace ResurrectionRP_Server
 {
+
     public static class PlayerExtensions
     {
         public static string GetSocialClub(this IPlayer player)

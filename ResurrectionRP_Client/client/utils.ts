@@ -16,6 +16,10 @@ export function initialize() {
         }, 20);
     });
 
+    alt.onServer('toggleControl', (state: boolean) => {
+        alt.toggleGameControls(state);
+    });
+
     alt.onServer('Display_Help', (text, time) => {
         new HelpText(text, time);
     });

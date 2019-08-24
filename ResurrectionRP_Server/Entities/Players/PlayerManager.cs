@@ -39,6 +39,8 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.OnClient("Events_PlayerJoin", Events_PlayerJoin);
             Alt.OnClient("UpdateHungerThirst", UpdateHungerThirst);
             Alt.OnClient("MakePlayer", MakePlayer);
+            Alt.OnClient("IWantToDie", IWantToDie);
+            Alt.OnClient("ImGod", ReviveEvent);
             Alt.OnClient("setGender", (IPlayer client, object[] args) => { client.Model = ((Convert.ToInt32( args[0]) == 1) ? Alt.Hash("mp_f_freemode_01") : Alt.Hash("mp_m_freemode_01")); });
             Alt.OnClient("setCreatorPos", async (IPlayer client, object[] args) => { await client.SetPositionAsync(new Vector3(402.8664f, -996.4108f, -99.00027f)); });
 
@@ -346,6 +348,59 @@ namespace ResurrectionRP_Server.Entities.Players
                 return value;
             }
             return null;
+        }
+
+        private async void IWantToDie(IPlayer client, object[] args)
+        {
+            if (!client.Exists)
+                return;
+
+/*            PlayerHandler ph = GetPlayerByClient(client); TODO
+            if (ph != null)
+            {
+                if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList.Count > 0)
+                {
+                    ph.PocketInventory.Clear();
+                    await ph.HasMoney(ph.Money);
+                }
+
+                await ph.UpdateHungerThirst(100, 100);
+                await client.SpawnAsync(new Vector3(308.2974f, -567.4647f, 43.29008f));
+                await client.SetRotationAsync(new Rotation(0, 239.0923f, 0));
+                await client.Resurrect();
+                ph.PlayerSync.Injured = false;
+                ph.Health = 100; TODO
+            }*/
+        }
+
+        public async void ReviveEvent(IPlayer client, object[] args )
+        {
+            if (!client.Exists)
+                return;
+
+            await Revive(client);
+        }
+        public static async Task Revive(IPlayer client)
+        {
+            await AltAsync.Do(async () =>
+            {
+                await client.SpawnAsync(new Position(client.GetPosition().X, client.GetPosition().Y, client.GetPosition().Z));
+                await client.SetRotationAsync(client.Rotation);
+                await client.SetHealthAsync(5);
+            });
+
+            await client.Resurrect();
+            var ph = GetPlayerByClient(client);
+            //if (ph != null)
+                //await ph.SetDead(false); TODO
+/*
+            if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
+            {
+                foreach (var medecin in await GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
+                {
+                    await medecin.CallAsync("ONU_BlesseEnd", client.Id);
+                }
+            }*/
         }
 
         public static async Task<bool> IsBan(IPlayer player, string social)

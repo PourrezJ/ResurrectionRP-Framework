@@ -154,9 +154,10 @@ namespace ResurrectionRP_Server
             {
                 Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z);
             });
-            Chat.RegisterCmd("notify", async (IPlayer player, string[] args) =>
+            Chat.RegisterCmd("task", async (IPlayer player, string[] args) =>
             {
-                this.Streamer.updateEntityTextLabel(14, "test");
+                var vehicle = player.GetNearestVehicle();
+                player.Emit("TrySetPlayerIntoVehicle", vehicle);
             });
             ServerLoaded = true;
         }

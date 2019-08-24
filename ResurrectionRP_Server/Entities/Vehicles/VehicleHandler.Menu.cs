@@ -280,15 +280,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         {
                             Alt.Server.LogError("VehicleHandler.Menu.Cs : " + ex.ToString());
                         }
-                        break;/*
+                        break;
                     case "ID_Rent":
                         try
                         {
-                            await XMenuManager.CloseMenu(client);
+                            await XMenuManager.XMenuManager.CloseMenu(client);
 
                             if (Vehicle.TryGetData("RentShop", out dynamic _data) == true)
                             {
-                                VehicleRentPlace _place = _data;
+                                Loader.VehicleRentLoader.VehicleRentPlace _place = _data;
                                 PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
                                 if (ph != null)
                                 {
@@ -305,10 +305,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         }
                         catch (Exception ex)
                         {
-                            MP.Logger.Error(ex.ToString(), ex);
+                            Alt.Server.LogError("VehicleHandler.Menu.cs : " + ex.ToString() );
                         }
                         break;
-
+                    /*
                     case "ID_delete":
                         await this.Delete(true);
                         break;

@@ -137,6 +137,7 @@ namespace ResurrectionRP_Server
             Alt.Server.LogColored("~g~Initialisations des controlleurs...");
             await Loader.CarParkLoader.LoadAllCarPark();
             await Loader.CarDealerLoaders.LoadAllCardealer();
+            await Loader.VehicleRentLoaders.LoadAllVehicleRent();
             await VehicleManager.LoadAllVehiclesActive();
             await Loader.ClothingLoader.LoadAllCloth();
             await WeatherManager.InitWeather();

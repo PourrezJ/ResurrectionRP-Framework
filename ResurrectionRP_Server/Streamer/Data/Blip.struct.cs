@@ -15,8 +15,10 @@ namespace ResurrectionRP_Server.Streamer.Data
         public float posx;
         public float posy;
         public float posz;
+        public float scale;
+        public bool shortRange;
 
-        public Blips(string name, Vector3 pos, int color, int sprite, int entityId)
+        public Blips(string name, Vector3 pos, int color, int sprite, float scale, bool shortRange, int entityId)
         {
             this.id = entityId;
             this.name = name;
@@ -25,6 +27,8 @@ namespace ResurrectionRP_Server.Streamer.Data
             this.posx = pos.X;
             this.posy = pos.Y;
             this.posz = pos.Z;
+            this.scale = scale;
+            this.shortRange = shortRange;
 
         }
 
@@ -37,6 +41,8 @@ namespace ResurrectionRP_Server.Streamer.Data
             data["posz"] = this.posz;
             data["color"] = this.color;
             data["sprite"] = this.sprite;
+            data["scale"] = this.scale;
+            data["shortRange"] = this.shortRange;
             data["entityType"] = (int)EntityType.Blip;
             data["id"] = this.id;
             return data;

@@ -196,6 +196,7 @@ namespace ResurrectionRP_Server.Models
                 await parking.OpenParkingMenu(player);*/
         }
 
+
         public async Task Load(float markerscale = 3f, int opacite = 128, bool blip = false, uint sprite = 50, float scale = 1f, byte color = 0, uint alpha = 255, string name = "", uint dimension = (uint)short.MaxValue)
         {
             GameMode.Instance.Streamer.addEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale-1), new Vector3(3,3,3), 180);
@@ -208,154 +209,155 @@ namespace ResurrectionRP_Server.Models
             Alt.OnColShape += OnEnterColShape;
             ParkingList.Add(this);
         }
-        
-/*
-        public async Task OpenParkingMenu(IPlayer client, string title = "", string description = "", bool canGetAllVehicle = false, Location location = null, int vehicleType = -1, Menu menu = null, Menu.MenuCallback menuCallback = null)
-        {
-            if (!client.Exists)
-                return;
 
-            if (Whitelist != null && Whitelist.Count > 0)
-            {
-                var social = client.GetSocialClub();
 
-                if (!Whitelist.Contains(social))
+        /*
+                public async Task OpenParkingMenu(IPlayer client, string title = "", string description = "", bool canGetAllVehicle = false, Location location = null, int vehicleType = -1, Menu menu = null, Menu.MenuCallback menuCallback = null)
                 {
-                    await client.SendNotificationError("Vous n'êtes pas autorisé à utiliser ce parking.");
-                    return;
-                }
-            }
+                    if (!client.Exists)
+                        return;
 
-            if (menu == null)
-                menu = new Menu("ID_ParkingMenu", (string.IsNullOrEmpty(title) ? "Parking" : title), (string.IsNullOrEmpty(description)) ? "" : description, 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
-            else
-            {
-                menu.ClearItems();
-                menu.BackCloseMenu = false;
-                menu.Callback = menuCallback;
-            }
-
-            if (await client.IsInVehicleAsync() && await client.GetSeatAsync() == -1 ) // I store my vehicle
-            {
-                var vehplayer = await client.GetVehicleAsync();
-
-                if (!vehplayer.Exists)
-                    return;
-
-                VehicleHandler vehicle = VehicleManager.GetHandlerByVehicle(vehplayer);
-
-                if (vehicle == null)
-                    return;
-
-                // some check
-                if (vehicle.SpawnVeh)
-                {
-                    await client.SendNotificationError("Vous ne pouvez pas garer un véhicule de location dans le parking!");
-                    return;
-                }
-
-                if (ListVehicleStored.Count + 1 >= Limite)
-                {
-                    await client.SendNotificationError("Le parking est plein!");
-                    return;
-                }
-                // it's ok!
-                var item = new MenuItem("Ranger votre voiture", "", "ID_StoreVehicle", true, rightLabel: $"{((Price > 0) ? "$" + Price.ToString() : "")}");
-                item.OnMenuItemCallback = StoreVehicle;
-                menu.Add(item);
-            }
-            else // I want my vehicle
-            {
-                menu.SubTitle = "Quel véhicule souhaitez-vous récupérer :";
-                Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
-
-                if (ph == null)
-                    return;
-
-                var social = client.GetSocialClub();
-                if (!canGetAllVehicle)
-                {
-                    List<ParkedCar> vehicleListParked = null;
-                    if (vehicleType == -1)
-                        vehicleListParked = ListVehicleStored.FindAll(p => ph.ListVehicleKey.Exists(v => v.Plate == p.plate));
-                    else
-                        vehicleListParked = ListVehicleStored.FindAll(p => (ph.ListVehicleKey.Exists(v => v.Plate == p.plate)));
-
-                    List<VehicleHandler> vehicleList = await Database.MongoDB.GetCollectionSafe<VehicleHandler>("vehicles").Find(p => (vehicleListParked.FirstOrDefault(car => car.plate == p.Plate)).plate == p.Plate ).ToListAsync();
-                    if (vehicleList.Count > 0)
+                    if (Whitelist != null && Whitelist.Count > 0)
                     {
-                        foreach (var veh in vehicleList)
+                        var social = client.GetSocialClub();
+
+                        if (!Whitelist.Contains(social))
                         {
-                            try
+                            await client.SendNotificationError("Vous n'êtes pas autorisé à utiliser ce parking.");
+                            return;
+                        }
+                    }
+
+                    if (menu == null)
+                        menu = new Menu("ID_ParkingMenu", (string.IsNullOrEmpty(title) ? "Parking" : title), (string.IsNullOrEmpty(description)) ? "" : description, 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+                    else
+                    {
+                        menu.ClearItems();
+                        menu.BackCloseMenu = false;
+                        menu.Callback = menuCallback;
+                    }
+
+                    if (await client.IsInVehicleAsync() && await client.GetSeatAsync() == -1 ) // I store my vehicle
+                    {
+                        var vehplayer = await client.GetVehicleAsync();
+
+                        if (!vehplayer.Exists)
+                            return;
+
+                        VehicleHandler vehicle = VehicleManager.GetHandlerByVehicle(vehplayer);
+
+                        if (vehicle == null)
+                            return;
+
+                        // some check
+                        if (vehicle.SpawnVeh)
+                        {
+                            await client.SendNotificationError("Vous ne pouvez pas garer un véhicule de location dans le parking!");
+                            return;
+                        }
+
+                        if (ListVehicleStored.Count + 1 >= Limite)
+                        {
+                            await client.SendNotificationError("Le parking est plein!");
+                            return;
+                        }
+                        // it's ok!
+                        var item = new MenuItem("Ranger votre voiture", "", "ID_StoreVehicle", true, rightLabel: $"{((Price > 0) ? "$" + Price.ToString() : "")}");
+                        item.OnMenuItemCallback = StoreVehicle;
+                        menu.Add(item);
+                    }
+                    else // I want my vehicle
+                    {
+                        menu.SubTitle = "Quel véhicule souhaitez-vous récupérer :";
+                        Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
+
+                        if (ph == null)
+                            return;
+
+                        var social = client.GetSocialClub();
+                        if (!canGetAllVehicle)
+                        {
+                            List<ParkedCar> vehicleListParked = null;
+                            if (vehicleType == -1)
+                                vehicleListParked = ListVehicleStored.FindAll(p => ph.ListVehicleKey.Exists(v => v.Plate == p.plate));
+                            else
+                                vehicleListParked = ListVehicleStored.FindAll(p => (ph.ListVehicleKey.Exists(v => v.Plate == p.plate)));
+
+                            List<VehicleHandler> vehicleList = await Database.MongoDB.GetCollectionSafe<VehicleHandler>("vehicles").Find(p => (vehicleListParked.FirstOrDefault(car => car.plate == p.Plate)).plate == p.Plate ).ToListAsync();
+                            if (vehicleList.Count > 0)
                             {
-                                if (veh.VehicleManifest == null)
+                                foreach (var veh in vehicleList)
                                 {
-                                    veh.VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(veh.Model) ?? null;
+                                    try
+                                    {
+                                        if (veh.VehicleManifest == null)
+                                        {
+                                            veh.VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(veh.Model) ?? null;
+                                        }
+
+                                        string _description =
+                                            $"~g~Essence:~w~ {veh.Fuel} \n" +
+                                            $"~g~Etat: ~w~{(veh.BodyHealth * 0.1)} \n" +
+                                            $"{((ParkingType == ParkingType.Public) ? $"~g~Fin Horodateur:~w~ {veh.LastUse.AddMonths(1).ToShortDateString()}" : "")}";
+
+                                        MenuItem item = new MenuItem(string.IsNullOrEmpty(veh.VehicleManifest.LocalizedName) ? veh.VehicleManifest.DisplayName : veh.VehicleManifest.LocalizedName, _description, "", true, rightLabel: veh.Plate);
+                                        item.SetData("Vehicle", veh);
+                                        item.OnMenuItemCallback = GetVehicle;
+                                        menu.Add(item);
+                                    }
+                                    catch(Exception ex)
+                                    {
+                                        Alt.Server.LogError($"OpenParkingMenu: {veh.Plate} {this.ID} {this.Name} {client.GetSocialClub()} : " + ex);
+                                    }
                                 }
-
-                                string _description =
-                                    $"~g~Essence:~w~ {veh.Fuel} \n" +
-                                    $"~g~Etat: ~w~{(veh.BodyHealth * 0.1)} \n" +
-                                    $"{((ParkingType == ParkingType.Public) ? $"~g~Fin Horodateur:~w~ {veh.LastUse.AddMonths(1).ToShortDateString()}" : "")}";
-
-                                MenuItem item = new MenuItem(string.IsNullOrEmpty(veh.VehicleManifest.LocalizedName) ? veh.VehicleManifest.DisplayName : veh.VehicleManifest.LocalizedName, _description, "", true, rightLabel: veh.Plate);
-                                item.SetData("Vehicle", veh);
-                                item.OnMenuItemCallback = GetVehicle;
-                                menu.Add(item);
                             }
-                            catch(Exception ex)
+                            else
                             {
-                                Alt.Server.LogError($"OpenParkingMenu: {veh.Plate} {this.ID} {this.Name} {client.GetSocialClub()} : " + ex);
+                                await client.SendNotificationError("Vous n'avez aucun véhicule dans ce parking.");
+                                return;
+                            }
+                        } 
+                        else
+                        {
+                            if (ListVehicleStored.Count > 0)
+                            {
+                                List<VehicleHandler> vehicleList = await Database.MongoDB.GetCollectionSafe<VehicleHandler>("vehicles").Find(p => (ListVehicleStored.FirstOrDefault(car => car.plate == p.Plate)).plate == p.Plate).ToListAsync();
+                                foreach (VehicleHandler veh in vehicleList)
+                                {
+                                    try
+                                    {
+                                        if (veh.VehicleManifest == null)
+                                        {
+                                            veh.VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(veh.Model) ?? null;
+                                        }
+
+                                        string _description =
+                                            $"~g~Essence:~w~ {veh.Fuel} \n" +
+                                            $"~g~Etat: ~w~{(veh.BodyHealth * 0.1)} \n" +
+                                            $"{((ParkingType == ParkingType.Public) ? $"~g~Fin Horodateur:~w~ {veh.LastUse.AddMonths(1).ToShortDateString()}" : "")}";
+
+                                        MenuItem item = new MenuItem(string.IsNullOrEmpty(veh.VehicleManifest.LocalizedName) ? veh.VehicleManifest.DisplayName : veh.VehicleManifest.LocalizedName, _description, "", true, rightLabel: veh.Plate);
+                                        item.SetData("Vehicle", veh);
+                                        item.OnMenuItemCallback = GetVehicle;
+                                        menu.Add(item);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Alt.Server.LogError($"OpenParkingMenu: {veh.Plate} {this.ID} {this.Name} {client.GetSocialClub()} : " + ex);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                await client.SendNotificationError("Vous n'avez aucun véhicule dans ce parking.");
+                                return;
                             }
                         }
                     }
-                    else
-                    {
-                        await client.SendNotificationError("Vous n'avez aucun véhicule dans ce parking.");
-                        return;
-                    }
-                } 
-                else
-                {
-                    if (ListVehicleStored.Count > 0)
-                    {
-                        List<VehicleHandler> vehicleList = await Database.MongoDB.GetCollectionSafe<VehicleHandler>("vehicles").Find(p => (ListVehicleStored.FirstOrDefault(car => car.plate == p.Plate)).plate == p.Plate).ToListAsync();
-                        foreach (VehicleHandler veh in vehicleList)
-                        {
-                            try
-                            {
-                                if (veh.VehicleManifest == null)
-                                {
-                                    veh.VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(veh.Model) ?? null;
-                                }
 
-                                string _description =
-                                    $"~g~Essence:~w~ {veh.Fuel} \n" +
-                                    $"~g~Etat: ~w~{(veh.BodyHealth * 0.1)} \n" +
-                                    $"{((ParkingType == ParkingType.Public) ? $"~g~Fin Horodateur:~w~ {veh.LastUse.AddMonths(1).ToShortDateString()}" : "")}";
-
-                                MenuItem item = new MenuItem(string.IsNullOrEmpty(veh.VehicleManifest.LocalizedName) ? veh.VehicleManifest.DisplayName : veh.VehicleManifest.LocalizedName, _description, "", true, rightLabel: veh.Plate);
-                                item.SetData("Vehicle", veh);
-                                item.OnMenuItemCallback = GetVehicle;
-                                menu.Add(item);
-                            }
-                            catch (Exception ex)
-                            {
-                                Alt.Server.LogError($"OpenParkingMenu: {veh.Plate} {this.ID} {this.Name} {client.GetSocialClub()} : " + ex);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        await client.SendNotificationError("Vous n'avez aucun véhicule dans ce parking.");
-                        return;
-                    }
-                }
-            }
-
-            menu.SetData("Location", location);
-            await menu.OpenMenu(client);
-        }*/
+                    menu.SetData("Location", location);
+                    await menu.OpenMenu(client);
+                }*/
 
         public async Task StoreVehicle(IPlayer client, IVehicle vh)
         {

@@ -153,31 +153,6 @@ export class Game {
 
         });
 
-        alt.on('keydown', (key) =>
-        {
-            if (game.isPauseMenuActive() || chat.isOpened())
-                return;
-
-            if (key === 85) {
-                if (alt.Player.local.vehicle != null)
-                    return;
-
-                let result = Raycast.line(5, 2, alt.Player.local.scriptID);
-
-                if (result.isHit) {
-                    var vehicle = alt.Vehicle.all.find(p => p.scriptID == result.hitEntity);
-                    alt.emitServer('LockUnlockVehicle', vehicle);
-                    //alt.log(`Hit Pos: ${JSON.stringify(result.pos)}`);
-                    //alt.log(`Entity hitted: ${result.hitEntity}`);
-                    //alt.log(`Entity Type: ${result.entityType}`);
-                    //alt.log(`Entity Hash: ${result.entityHash}`);
-                }
-            }
-            else
-            {
-                alt.emitServer('OnKeyPress', key);
-            }      
-        });
     }
     //end constructor
     //methods

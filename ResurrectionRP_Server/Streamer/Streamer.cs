@@ -39,14 +39,12 @@ namespace ResurrectionRP_Server.Streamer
 
                 AltNetworking.OnEntityStreamIn = (entity, client) =>
                 {
-                    if(GameMode.Instance.IsDebug)
-                        Console.WriteLine("streamed in " + entity.Id + " in client " + client.Token);
+
                 };
 
                 AltNetworking.OnEntityStreamOut = (entity, client) =>
                 {
-                    if (GameMode.Instance.IsDebug)
-                        Console.WriteLine("streamed out " + entity.Id + " in client " + client.Token);
+
                 };
             }
             catch(Exception ex)
@@ -101,9 +99,9 @@ namespace ResurrectionRP_Server.Streamer
             return this.EntityNumber;
         }
 
-        public int addStaticEntityBlip(string name, Vector3 pos, int color, int sprite)
+        public int addStaticEntityBlip(string name, Vector3 pos, int color, int sprite, float scale = 1, bool shortRange = true)
         {
-            this.ListStaticEntities.Add(this.StaticEntityNumber, new Blips(name, pos,color, sprite, this.StaticEntityNumber++).export());
+            this.ListStaticEntities.Add(this.StaticEntityNumber, new Blips(name, pos,color, sprite, scale, shortRange, this.StaticEntityNumber++).export());
             return this.StaticEntityNumber;
         }
 

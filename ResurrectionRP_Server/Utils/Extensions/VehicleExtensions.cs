@@ -56,5 +56,10 @@ namespace ResurrectionRP_Server
             return endup;
         }
 
+        public static void ResetData(this IVehicle client, string key)
+        {
+            client.SetData(key, null);
+        }
+
     }
 }

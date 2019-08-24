@@ -49,5 +49,12 @@ namespace ResurrectionRP_Server.Utils.Enums
         public const string CreateAllPed = "CreateAllPed";
         public const string TaskEnterVehicle = "TaskEnterVehicle";
         public const string TaskPlayAnim = "TaskPlayAnim";
+
+        //Colshapes
+        public const string OnPlayerEnterColShape = "OnPlayerEnterColshape";
+        public const string OnPlayerExitColShape = "OnPlayerExitColshape";
+        public const string OnVehicleEnterColShape = "OnVehicleEnterColshape";
+        public const string OnVehicleExitColShape = "OnVehicleExitColshape";
+
     }
 }

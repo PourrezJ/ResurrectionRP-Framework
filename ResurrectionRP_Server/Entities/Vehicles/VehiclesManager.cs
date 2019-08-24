@@ -132,6 +132,22 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Methods
+        public static async Task<VehicleHandler> SpawnVehicle(string socialClubName, uint model, Vector3 position, Vector3 rotation, int primaryColor = 0, int secondaryColor = 0,
+float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
+IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = null, bool spawnVeh = false, uint dimension = (uint)short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
+        {
+            if (model == 0) return null;
+            VehicleHandler veh = new VehicleHandler(socialClubName, model, position, rotation, (byte)primaryColor, (byte)secondaryColor, fuel, fuelMax, plate, engineStatus, locked, client, mods, neon, spawnVeh, (short)dimension, inventory, freeze, dirt, health);
+            await veh.SpawnVehicle(new Models.Location(position, rotation));
+
+            if (!veh.SpawnVeh && IsPlateUnique(veh.Plate))
+            {
+                //await veh.InsertVehicle();
+                GameMode.Instance.PlateList.Add(veh.Plate);
+            }
+
+            return veh;
+        }
         public static VehicleHandler GetHandlerByVehicle(IVehicle vehicle)
         {
             try

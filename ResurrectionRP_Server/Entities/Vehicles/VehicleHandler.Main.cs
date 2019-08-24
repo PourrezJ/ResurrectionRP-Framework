@@ -38,8 +38,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public uint Model { get; private set; }
 
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        public ConcurrentDictionary<byte, byte> Mods { get; set; }
-            = new ConcurrentDictionary<byte, byte>();
+        public ConcurrentDictionary<int, int> Mods { get; set; }
+            = new ConcurrentDictionary<int, int>();
 
         public string OwnerID { get; set; } // SocialClubName
         [BsonRepresentation(BsonType.Int32, AllowOverflow = true)]
@@ -76,7 +76,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Constructor
         public VehicleHandler(string socialClubName, uint model, Vector3 position, Vector3 rotation, byte primaryColor = 0, byte secondaryColor = 0,
             float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
-            IPlayer owner = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, short dimension = short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
+            IPlayer owner = null, ConcurrentDictionary<int, int> mods = null, int[] neon = null, bool spawnVeh = false, short dimension = short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
         {
             if (model == 0)
                 return;
@@ -108,17 +108,19 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Method
-        public async Task<IVehicle> SpawnVehicle(IPlayer owner = null, Location location = null)
+        public async Task<IVehicle> SpawnVehicle(Location location = null)
         {
             if (Dimension.ToString() == "-1")
                 Dimension = short.MaxValue;
-
 
             await AltAsync.Do(async () =>
             {
                 try
                 {
-                    Vehicle = Alt.CreateVehicle(Model, (location == null) ? Location.Pos : location.Pos, (location == null) ? Location.Rot : location.Rot);
+                    if(location == null)
+                        Vehicle = Alt.CreateVehicle(Model,  Location.Pos , Location.GetRotation() );
+                    else
+                        Vehicle = Alt.CreateVehicle(Model, location.Pos, location.GetRotation());
                 }
                 catch (Exception ex)
                 {
@@ -137,12 +139,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 if (Mods.Count > 0)
                 {
-                    foreach (KeyValuePair<byte, byte> mod in Mods)
+                    foreach (KeyValuePair<int, int> mod in Mods)
                     {
-                        Vehicle.SetMod(mod.Key, mod.Value);
+                        Vehicle.SetMod((byte)mod.Key, (byte)mod.Value);
                         if (mod.Key == 69)
                         {
-                            Vehicle.WindowTint = mod.Value;
+                            Vehicle.WindowTint = (byte)mod.Value;
                         }
                     }
                 }
@@ -173,9 +175,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 GameMode.Instance.VehicleManager.VehicleHandlerList.TryAdd(Vehicle, this);
             });
-            
-            if (owner != null)
-                SetOwner(owner);
             /*
             if (HaveTowVehicle())
             {

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
+using AltV.Net;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
@@ -50,8 +51,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 dynamic data = null;
                 int carPrice;
-                if (Vehicle.GetData("CarDealer", out carPrice))
+                
+                if (Vehicle.TryGetData("CarDealer", out data))
                 {
+                    Vehicle.TryGetData("CarDealerPrice", out carPrice);
                     xmenu.Add(new XMenuItem("Acheter", $"Acheter le véhicule pour le prix de ${ carPrice }", "ID_Buy", XMenuItemIcons.MONEY_BILL_SOLID, false));
                 }
                 else if (Vehicle.GetData("RentShop", out data))
@@ -249,16 +252,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             await XMenuManager.CloseMenu(client);
                         }
                         break;
-
+                        */
                     case "ID_Buy":
                         try
                         {
-                            await XMenuManager.CloseMenu(client);
+                            await XMenuManager.XMenuManager.CloseMenu(client);
                             int carPrice;
                             if (Vehicle.TryGetData("CarDealer", out dynamic _data) == true)
                             {
                                 Vehicle.TryGetData("CarDealerPrice", out carPrice);
-                                CarDealerPlace _place = _data;
+                                Loader.CarDealerLoader.CarDealerPlace _place = _data;
                                 PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
                                 if (ph != null)
                                 {
@@ -275,9 +278,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         }
                         catch (Exception ex)
                         {
-                            MP.Logger.Error(ex.ToString(), ex);
+                            Alt.Server.LogError("VehicleHandler.Menu.Cs : " + ex.ToString());
                         }
-                        break;
+                        break;/*
                     case "ID_Rent":
                         try
                         {

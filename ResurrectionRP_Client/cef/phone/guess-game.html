@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Devine Game App - GTA RP</title>
+
+    <link rel="stylesheet" href="../../lib/css/onsenui.min.css">
+    <link rel="stylesheet" href="../../lib/css/onsen-css-components.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark-style.css">
+
+    <script src="../../lib/js/jquery.min.js"></script>
+    <script src="../../lib/js/onsenui.min.js"></script>
+    <script src="../../lib/js/angular.min.js"></script>
+    <script src="../../lib/js/moment.min.js"></script>
+    <script src="../../lib/js/angular-moment.min.js"></script>
+    <script src="js/app.js"></script>
+</head>
+<body>
+	<div class="main-container">
+		<div class="phone-frame"></div>
+		<div class="innerapp">
+			<div class="toolbar">
+				<div class="toolbar__left">
+					<a href="home.html" class="toolbar-button">
+						<i class="ion-ios-home-outline" style="font-size:28px; vertical-align:-6px;"></i>
+					</a>
+				</div>
+
+				<div class="toolbar__center">
+					Guessing Game
+				</div>
+
+				<div class="toolbar__right">
+					
+				</div>
+			</div>	
+
+			<div class="container-game">
+			<br><br>
+
+		    <div id="message_txt"></div>
+
+		    <br>
+		    <form id="userInput" name="userInput" method="post">
+		        <input id="input_txt" name="limitedtextfield" type="text" onKeyDown="limitText(this.form.limitedtextfield,3);" onKeyUp="limitText(this.form.limitedtextfield,3);" maxlength="3">
+		        <br />
+		        <button id="guess_btn" type="button" onclick="guessNumber()">?</button>
+		        <br />
+		        <button id="playAgain_btn" type="button" onclick="initGame()">&#x21BB;</button>
+		    </form>
+
+		    </div>
+
+		    <style type="text/css">
+
+		    	.container-game{
+		    		text-align: center;
+		    	}
+
+				input[type=text] {
+				    border: 2px solid #333;
+				    border-radius: 10px;
+				    -moz-border-radius: 10px;
+				    -webkit-border-radius: 10px;
+				    outline: none;
+				    background: #fff;
+				    width: 100px;
+				    height: 50px;
+				    font-family:"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+				    text-align:center;
+				    font-size: 2em;
+				    margin: 0 0 2ex;
+				}
+				button {
+				    border: 2px solid #333;
+				    border-radius: 50%;
+				    -moz-border-radius: 50%;
+				    -webkit-border-radius: 50%;
+				    background: #ccc;
+				    margin: 0 0 1.75ex;
+				    font-size: 2em;
+				    text-align:center;
+				    width: 50px;
+				    height: 50px;
+				    cursor: pointer;
+				    color: #333;
+				}
+				button[disabled], input[type=text][disabled] {
+				    border: 2px solid #999;
+				    color: #999;
+				    cursor: default;
+				    background: #ccc;
+				}
+
+		    </style>
+
+		    <script type="text/javascript">
+		    	var randomNumber;
+				var guess;
+
+				function initGame() {
+				    input_txt.value = "";
+
+				    document.getElementById("input_txt").focus();
+
+				    document.getElementById("input_txt").disabled = false;
+				    document.getElementById("guess_btn").disabled = false;
+				    document.getElementById("playAgain_btn").disabled = true;
+
+				    document.getElementById("message_txt").innerHTML = "Choose a number between 1 and 100.";
+
+				    randomNumber = Math.ceil(Math.random() * 100);
+
+				    var input = document.getElementById("input_txt");
+
+				    input.onkeypress = function (e) {
+				        e = e || window.event;
+				        if (!e.ctrlKey && !e.metaKey && !e.altKey) {
+				            var charCode = (typeof e.which === "undefined") ? e.keyCode : e.which;
+				            if (charCode && !/\d/.test(String.fromCharCode(charCode))) {
+				                return false;
+				            }
+				        }
+				    }
+				}
+
+				function limitText(limitField, limitNum) {
+				    if (limitField.value.length > limitNum) {
+				        limitField.value = limitField.value.substring(0, limitNum);
+				    } else {
+				        limitCount.value = limitNum - limitField.value.length;
+				    }
+				}
+
+				function guessNumber() {
+				    guess = document.getElementById("input_txt").value;
+
+				    document.getElementById("input_txt").focus();
+
+				    if (guess === "") {
+				        document.getElementById("message_txt").innerHTML = "0 is too low. Try again!";
+				    } else if (guess > randomNumber) {
+				        document.getElementById("message_txt").innerHTML = guess + " is too high. Try again!";
+				        input_txt.value = "";
+				    } else if (guess < randomNumber) {
+				        document.getElementById("message_txt").innerHTML = guess + " is too low. Try again!"
+				        input_txt.value = "";
+				    } else {
+				        document.getElementById("message_txt").innerHTML = "Great guessing! The number is " + guess + ".";
+				        input_txt.value = "";
+
+				        endGame();
+				    }
+				}
+
+				function endGame() {
+				    document.getElementById("input_txt").disabled = true;
+				    document.getElementById("guess_btn").disabled = true;
+				    document.getElementById("playAgain_btn").disabled = false;
+				}
+
+				function playAgain() {
+				    initGame();
+				}
+
+				window.onload = initGame;
+		    </script>
+
+		</div>
+	</div>
+</body>
+</html>

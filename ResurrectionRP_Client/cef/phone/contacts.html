@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Texting App - GTA RP</title>
+
+    <link rel="stylesheet" href="../../lib/css/onsenui.min.css">
+    <link rel="stylesheet" href="../../lib/css/onsen-css-components.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark-style.css">
+
+    <!-- Thèmes -->
+    <!-- <link rel="stylesheet" href="themes/dark/style.css"> -->
+
+    <script src="../../lib/js/angular.min.js"></script>
+    <script src="../../lib/js/moment.min.js"></script>
+    <script src="../../lib/js/angular-moment.min.js"></script>
+    <script src="../../lib/js/jquery.min.js"></script>
+    <script src="../../lib/js/onsenui.min.js"></script>
+
+    <script src="js/app.js"></script>
+    <script src="js/contacts.js"></script>
+</head>
+<body ng-app="ResurrectionPhone" ng-class="{'dark-theme':phoneSettings.darkMode}">
+	<div class="main-container" ng-controller="ContactsCtrl">
+		<div class="phone-frame"></div>
+		<div class="innerapp launcher-white">
+			<div class="toolbar">
+				<div class="toolbar__left">
+					<a href="home.html" class="toolbar-button">
+						<i class="fas fa-home"></i>
+					</a>
+				</div>
+
+				<div class="toolbar__center">
+					Contacts
+				</div>
+
+				<div class="toolbar__right">
+					<a href="contact-page.html" class="toolbar-button"><i class="ion-ios-personadd" style="font-size:28px; vertical-align:-6px;margin-rigt:5px;"></i></a>
+				</div>
+			</div>
+
+            <ul class="list contacts-list scroll" id="mycontacts">
+
+                <li class="list-item" ng-repeat="contact in contacts">
+                    <a ng-href="{{!$first ? 'contact-page.html?name=' + contact.contactName + '&phone=' + contact.phoneNumber : '#'}}">
+                        <div class="list-item__left">
+                            <img class="list-item__thumbnail" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wwJCB8v/9zErgAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggR0lNUFeBDhcAAAAvSURBVFjD7c0BDQAACAMgtX+KJzWGm4MCdJK6MHVELBaLxWKxWCwWi8VisVj8MV7qBgI2A8rYpgAAAABJRU5ErkJggg==">
+                        </div>
+
+                        <div class="list-item__center">
+                            <div class="list-item__title">{{contact.contactName}}</div>
+                            <div class="list-item__subtitle">{{contact.phoneNumber}}</div>
+                        </div>
+
+                        <div class="list-item__right">
+                            <a href="msg-view.html?number={{contact.phoneNumber}}&convName={{contact.contactName}}" class="list-item__right" style="margin-right:5px;"><ion-icon name="ios-chatbubbles"></ion-icon></a>
+                            <a href="call.html?number={{contact.phoneNumber}}" class="list-item__right"><ion-icon name="ios-call"></ion-icon></a>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+
+			<div class="tabbar absolute">
+				<a href="call.html" class="tabbar__item">
+					<button class="tabbar__button">
+						<ion-icon name="ios-call">
+						<div class="tabbar__label"></div>
+					</button>
+				</a>
+
+				<a href="contacts.html" class="tabbar__item">
+					<button class="tabbar__button active">
+						<ion-icon name="ios-contacts"></ion-icon>
+						<div class="tabbar__label"></div>
+					</button>
+				</a>
+
+				<a href="messages.html" class="tabbar__item">
+					<button class="tabbar__button">
+						<ion-icon name="ios-chatbubbles"></ion-icon>
+						<div class="tabbar__label"></div>
+					</button>
+				</a>
+			</div>
+		</div>
+	</div>
+	<script src="https://unpkg.com/ionicons@4.1.2/dist/ionicons.js"></script>
+</body>
+
+</html>

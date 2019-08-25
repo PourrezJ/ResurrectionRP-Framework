@@ -167,11 +167,11 @@ namespace ResurrectionRP_Server.Entities.Players
 /*                    if (MenuManager.HasOpenMenu(client))
                         return;*/
 
-/*                    if (ph.IsCuff())
+                    if (ph.IsCuff())
                     {
                         await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menottés.");
                         return;
-                    }*/
+                    }
 
                     Inventory.RPGInventoryMenu menu = new Inventory.RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, null);
 
@@ -200,10 +200,10 @@ namespace ResurrectionRP_Server.Entities.Players
                 case ConsoleKey.PageDown:
                     await RadioManager.Close(client);
                     break;
-
+                */
                 case ConsoleKey.UpArrow:
-                    if (MenuManager.HasOpenMenu(client))
-                        return;
+/*                    if (MenuManager.HasOpenMenu(client))
+                        return;*/
 
                     if (ph.IsCuff())
                     {
@@ -217,14 +217,14 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    await PhoneManager.OpenPhone(client, ph.PhoneSelected);
+                    await Phone.PhoneManager.OpenPhone(client, ph.PhoneSelected);
                     break;
 
 
                 case ConsoleKey.DownArrow:
-                    await PhoneManager.ClosePhone(client);
+                    Phone.PhoneManager.ClosePhone(client);
                     break;
-
+                    /*
 
                 case ConsoleKey.D1:
                     if (MenuManager.HasOpenMenu(client))

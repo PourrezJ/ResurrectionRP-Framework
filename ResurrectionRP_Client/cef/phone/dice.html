@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dice App - GTA RP</title>
+
+    <link rel="stylesheet" href="../../lib/css/onsenui.min.css">
+    <link rel="stylesheet" href="../../lib/css/onsen-css-components.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark-style.css">
+    <script src="../../lib/js/angular.min.js"></script>
+    <script src="../../lib/js/moment.min.js"></script>
+    <script src="../../lib/js/angular-moment.min.js"></script>
+    <script src="../../lib/js/jquery.min.js"></script>
+    <script src="../../lib/js/onsenui.min.js"></script>
+    <script src="../../lib/js/app.js"></script>
+</head>
+<body>
+	<div class="main-container">
+		<div class="phone-frame"></div>
+		<div class="innerapp launcher-white">
+			<div class="toolbar">
+				<div class="toolbar__left">
+					<a href="home.html" class="toolbar-button">
+						<i class="fas fa-home"></i>
+					</a>
+				</div>
+
+				<div class="toolbar__center">
+					Dice
+				</div>
+
+				<div class="toolbar__right">
+
+				</div>
+			</div>
+
+			<div class="card">
+				<h2 class="card__title">Jouons !</h2>
+				<div class="card__content">Choisis le nombre de dés à lancer...</div>
+			</div>
+
+			<div class="input-container"><input class="text-input text-input--material" type="number" value="1" min="1" max="6"></div>
+
+			<input class="button calltoaction" type="button" value="Lancer">
+    		<div id="dice"></div>
+
+    		<script type="text/javascript">
+
+    			document.querySelector('input[type=button]').addEventListener('click', function(){rollTheDice();});
+
+				var rollTheDice = function() {
+				    var i,
+				        faceValue,
+				        output = '',
+				        diceCount = document.querySelector('input[type=number]').value || 1;
+				    for (i = 0; i < diceCount; i++) {
+				        faceValue = Math.floor(Math.random() * 6);
+				        output += "&#x268" + faceValue + "; ";
+				    }
+				    document.getElementById('dice').innerHTML = output;
+				}
+
+    		</script>
+
+		</div>
+	</div>
+</body>
+</html>

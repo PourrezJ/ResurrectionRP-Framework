@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Texting App - GTA RP</title>
+
+    <link rel="stylesheet" href="../../lib/css/onsenui.min.css">
+    <link rel="stylesheet" href="../../lib/css/onsen-css-components.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark-style.css">
+
+    <script src="../../lib/js/jquery.min.js"></script>
+    <script src="../../lib/js/angular.min.js"></script>
+    <script src="../../lib/js/moment.min.js"></script>
+    <script src="../../lib/js/angular-moment.min.js"></script>
+    <script src="../../lib/js/onsenui.min.js"></script>
+
+    <script src="js/app.js"></script>
+    <script src="js/contacts.js"></script>
+</head>
+<body ng-app="ResurrectionPhone" ng-class="{'dark-theme':phoneSettings.darkMode}">
+    <div class="main-container" ng-controller="NewContactCtrl">
+        <div class="phone-frame"></div>
+        <div class="innerapp launcher-white">
+            <div class="toolbar">
+                <div class="toolbar__left">
+                    <a href="contacts.html" class="toolbar-button">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </div>
+
+                <div class="toolbar__center">
+                    Nouveau contact
+                </div>
+
+                <div class="toolbar__right">
+
+                </div>
+            </div>
+            <section class="contact-container">
+                <div class="input-container contact">
+                    <i class="fas fa-user-circle"></i><input type="text" id="inputName" maxlength="32" onfocus="alt.emit('CanClose', false);" class="text-input text-input--material contact" placeholder="Nom du contact" ng-model="contactName">
+                </div>
+                <div class="input-container contact">
+                    <i class="fas fa-phone-square"></i><input type="tel" size="9" maxlength="9" id="inputNumber" onfocus="alt.emit('CanClose', false);" class="text-input text-input--material contact" placeholder="xxxx-xxxx" ng-model="phoneNumber">
+                </div>
+
+                <button class="button calltoaction addContact" ng-click="addContact();" ng-show="originalNumber == null">Enregistrer</button>
+
+                <button class="button calltoaction editContact" ng-click="addContact();" ng-show="originalNumber != null">Éditer</button>
+                <button class="button calltoaction removeContact" ng-click="removeContact();" ng-show="originalNumber != null">Supprimer</button>
+            </section>
+
+
+            <div class="tabbar">
+                <a href="call.html" class="tabbar__item">
+                    <button class="tabbar__button">
+                        <ion-icon name="ios-call">
+                            <div class="tabbar__label"></div>
+                    </button>
+                </a>
+
+                <a href="contacts.html" class="tabbar__item">
+                    <button class="tabbar__button active">
+                        <ion-icon name="ios-contacts"></ion-icon>
+                        <div class="tabbar__label"></div>
+                    </button>
+                </a>
+
+                <a href="messages.html" class="tabbar__item">
+                    <button class="tabbar__button">
+                        <ion-icon name="ios-chatbubbles"></ion-icon>
+                        <div class="tabbar__label"></div>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <ons-alert-dialog id="dialog-1">
+        <div class="alert-dialog-title">Echec !</div>
+        <div class="alert-dialog-content">
+            Vous avez entré un mauvais numéro :(
+        </div>
+        <div class="alert-dialog-footer">
+            <button class="alert-dialog-button" onclick="hideDialog('dialog-1')">Annuler</button>
+        </div>
+    </ons-alert-dialog>
+
+    <ons-alert-dialog id="dialog-2">
+        <div class="alert-dialog-title">Excellent !</div>
+        <div class="alert-dialog-content">
+            Un nouveau contact a été ajouté dans votre smartphone.
+        </div>
+        <div class="alert-dialog-footer">
+            <!-- <button class="alert-dialog-button" onclick="hideDialog('dialog-2')">Cancel</button> -->
+            <a class="alert-dialog-button" href="contacts.html">OK</a>
+        </div>
+    </ons-alert-dialog>
+    <script src="https://unpkg.com/ionicons@4.1.2/dist/ionicons.js"></script>
+</body>
+</html>

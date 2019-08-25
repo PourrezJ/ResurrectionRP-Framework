@@ -11,6 +11,8 @@ import { RPGInventoryManager } from 'client/menus/rpgInventory/RPGinventory';
 import { Weather as WeatherLib } from 'client/Env/Weather';
 import { Interaction as InteractionLib } from 'client/Player/Interaction';
 import { Doors as DoorsManagerLib } from 'client/Env/Doors';
+import { PhoneManager } from 'client/phone/PhoneManager';
+
 
 export class Game {
     //region Static Var
@@ -89,7 +91,9 @@ export class Game {
             var time = JSON.parse(Time);
             this._Time = new TimeLib(time.Hours, time.Minutes, time.Seconds);
             this._IsDebug = isDebug;
+
             new InteractionLib();
+            new PhoneManager();
 
             game.setAudioFlag('LoadMPData', true);
             game.setAudioFlag('DisableFlightMusic', true);
@@ -153,11 +157,23 @@ export class Game {
 
         });
 
+        alt.on("toggleChatAdminRank", this.toggleChatAdminRank);
+
+
+
     }
     //end constructor
     //methods
 
-    
+    public toggleChatAdminRank = () => {
+        if (this.LevelRank > enums.AdminRank.Player)
+            alt.emit("toggleChat", true);
+    }
+
+    public static closeAllMenus() {
+        alt.emit("InventoryManager_CloseMenu");
+        alt.emit("toggleChat");
+    }
 
     //endmethods
 }

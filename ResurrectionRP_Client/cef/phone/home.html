@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Launcher - GTA RP</title>
+
+    <link rel="stylesheet" href="../../lib/css/onsenui.min.css">
+    <link rel="stylesheet" href="../../lib/css/onsen-css-components.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark-style.css">
+
+    <script src="../../lib/js/angular.min.js"></script>
+    <script src="../../lib/js/moment.min.js"></script>
+    <script src="../../lib/js/angular-moment.min.js"></script>
+    <script src="../../lib/js/jquery.min.js"></script>
+    <script src=https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js></script>
+
+    <script src="js/app.js"></script>
+</head>
+    <body ng-app="ResurrectionPhone" ng-controller="HomeCtrl">
+	    <div class="main-container">
+		    <div class="phone-frame"></div>
+		    <div class="innerapp launcher">
+                <div class="innerlauncher">
+                    <div class="linner homy" id="homy">
+                        <div class="app">
+                            <a href="stopwatch.html" id="test123456">
+                                <img width="80" src="img/watch-icon.png"> Chrono
+                            </a>
+                        </div>
+                        <div class="app"><a href="guess-game.html"><img width="80" src="img/guess-icon.png"> Guess Game</a></div>
+                        <div class="app"><a href="dice.html"><img width="80" src="img/dice-icon.png"> Dice</a></div>
+                        <div class="app"><a href="services.html"><img width="80" src="img/services-icon.png"> Services</a></div>
+					    <div class="app"><a href="#"><img width="80" src="img/store-icon.png"> Store</a></div>
+
+                    </div>
+
+                    <div class="linner launchbar">
+                        <div class="app"><a href="call.html"><img width="80" src="img/phone-icon.png"></a></div>
+                        <div class="app"><a href="contacts.html"><img width="80" src="img/contact-icon.png"></a></div>
+                        <div class="app">
+                            <a href="messages.html">
+						        <span class="notification" ng-show="newMessagesCount > 0">{{newMessagesCount}}</span>
+                                <img width="80" src="img/message-icon.png">
+                            </a>
+					    </div>
+                        <div class="app"><a href="settings.html"><img width="80" src="img/settings-icon.png"></a></div>
+                    </div>
+
+                    <!--<div class="clock">00:00</div>-->
+                </div>
+		    </div>
+	    </div>
+    </body>
+</html>

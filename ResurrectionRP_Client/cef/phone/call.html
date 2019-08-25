@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Texting App - GTA RP</title>
+
+    <link rel="stylesheet" href="../../lib/css/onsenui.min.css">
+    <link rel="stylesheet" href="../../lib/css/onsen-css-components.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark-style.css">
+
+    <script src="../../lib/js/angular.min.js"></script>
+    <script src="../../lib/js/moment.min.js"></script>
+    <script src="../../lib/js/angular-moment.min.js"></script>
+    <script src="../../lib/js/jquery.min.js"></script>
+    <script src="../../lib/js/onsenui.min.js"></script>
+
+    <script src="js/app.js"></script>
+    <script src="js/call.js"></script>
+</head>
+<body ng-app="ResurrectionPhone" ng-class="{'dark-theme':phoneSettings.darkMode}">
+	<div class="main-container" ng-controller="CallCtrl">
+		<div class="phone-frame"></div>
+		<div class="innerapp launcher-white">
+			<div class="toolbar">
+				<div class="toolbar__left">
+					<a href="home.html" class="toolbar-button">
+						<i class="fas fa-home"></i>
+					</a>
+				</div>
+
+				<div class="toolbar__center">
+					Appel
+				</div>
+
+				<div class="toolbar__right">
+
+				</div>
+			</div>
+			<section class="call-container">
+				<div class="input-container">
+					<input id="inputNumber" class="text-input text-input--material" size="9" maxlength="9" placeholder="xxxx-xxxx" ng-model="inputNumber" ng-change="checkFormat()" ng-keydown="keyDown($event)" value="">
+				</div>
+
+				<div class="tapnumbers">
+                    <div class="numbers">
+                        <span ng-click="addNumber('1')">1</span>
+                        <span ng-click="addNumber('2')">2</span>
+                        <span ng-click="addNumber('3')">3</span>
+                        <span ng-click="addNumber('4')">4</span>
+                        <span ng-click="addNumber('5')">5</span>
+                        <span ng-click="addNumber('6')">6</span>
+                        <span ng-click="addNumber('7')">7</span>
+                        <span ng-click="addNumber('8')">8</span>
+                        <span ng-click="addNumber('9')">9</span>
+                        <span ng-click="addNumber('-')">-</span>
+                        <span ng-click="addNumber('0')">0</span>
+                        <span ng-click="addNumber('#')">#</span>
+                    </div>
+				</diV>
+				<div class="deletbutton" ng-click="remove()"><ion-icon name="ios-close"></div>
+				<button class="button--large--cta calltoaction startCall" ng-click="callNumber();"><i class="tabbar__icon ion-ios-telephone"></i></button>
+			</section>
+
+			<div class="tabbar">
+				<a href="call.html" class="tabbar__item">
+					<button class="tabbar__button active">
+						<ion-icon name="ios-call">
+						<div class="tabbar__label"></div>
+					</button>
+				</a>
+
+				<a href="contacts.html" class="tabbar__item">
+					<button class="tabbar__button">
+						<ion-icon name="ios-contacts"></ion-icon>
+						<div class="tabbar__label"></div>
+					</button>
+				</a>
+
+				<a href="messages.html" class="tabbar__item">
+					<button class="tabbar__button">
+						<ion-icon name="ios-chatbubbles"></ion-icon>
+						<div class="tabbar__label"></div>
+					</button>
+				</a>
+			</div>
+		</div>
+	</div>
+	<script src="https://unpkg.com/ionicons@4.1.2/dist/ionicons.js"></script>
+</body>
+</html>

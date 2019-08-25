@@ -54,6 +54,7 @@ namespace ResurrectionRP_Server.Phone
             Alt.OnClient("cancelCall", PhoneMenuCallBack);
             Alt.OnClient("endCall", PhoneMenuCallBack);
             Alt.OnClient("acceptCall", PhoneMenuCallBack);
+            Alt.OnClient("PhoneMenuCallBack", PhoneMenuCallBack);
 
             Alt.OnClient("CallOpenPhone", EventTrigered);
             Alt.OnClient("ClosePhone", EventTrigered);

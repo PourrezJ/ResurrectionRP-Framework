@@ -42,34 +42,34 @@ export class PhoneManager {
             this.browser.emit("loadPhoneSettings", JSON.stringify(idk1));
         }, 100);
 
-        this.browser.on("SavePhoneSettings", (arg) => alt.emitServer("SavePhoneSettings", arg));
+        this.browser.on("SavePhoneSettings", (arg) => alt.emitServer("PhoneMenuCallBack","SavePhoneSettings", arg));
 
-        this.browser.on("GetContacts", (arg) => alt.emitServer("GetContacts", arg));
+        this.browser.on("GetContacts", (arg) => alt.emitServer("PhoneMenuCallBack","GetContacts", arg));
         alt.onServer("ContactReturned", (arg) => this.browser.emit("loadContacts", arg));
         alt.onServer("ContactEdited", (args) => { if (this.browser != null) { this.browser.url = "http://resources/resurrectionrp/client/cef/phone/contacts.html" } });
         alt.onServer("ConversationsReturnedV2", (args) => { if (this.browser != null) { this.browser.emit("loadConversations", JSON.stringify(args)) } });
-        this.browser.on("AddOrEditContact", (arg) => alt.emitServer("AddOrEditContact", arg));
-        this.browser.on("RemoveContact", (arg) => alt.emitServer("RemoveContact"));
-        this.browser.on("getConversations", (arg) => alt.emitServer("getConversations"));
+        this.browser.on("AddOrEditContact", (arg) => alt.emitServer("PhoneMenuCallBack","AddOrEditContact", arg));
+        this.browser.on("RemoveContact", (arg) => alt.emitServer("PhoneMenuCallBack","RemoveContact", arg));
+        this.browser.on("getConversations", (arg) => alt.emitServer("PhoneMenuCallBack","getConversationsV2"));
 
 
         this.browser.on("callTaxi", () => alt.emit("alertNotify", "Les services de taxi ne sont pas encore en ville !", 10000));
         this.browser.on("callUrgences", () => alt.emitServer("ONU_CallUrgenceMedic"));
         //this.browser.on("callPolice", () => alt.emitServer("ONU_CallUrgenceMedic")); NEED MENU MANAGER
 
-        this.browser.on("getMessages", (arg, arg2) => alt.emitServer("getMessages", arg2));
-        this.browser.on("sendMessage", (arg, arg2) => alt.emitServer("SendMessage", arg, arg2));
+        this.browser.on("getMessages", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","getMessages", arg2));
+        this.browser.on("sendMessage", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","SendMessage", arg, arg2));
         this.browser.on("deleteConversation", (arg, arg2) => { if (this.browser != null) { this.browser.url = "http://resources/resurrectionrp/client/cef/phone/messages.html" } });
-        this.browser.on("deleteConversation", (arg, arg2) => alt.emitServer("deleteConversation"));
+        this.browser.on("deleteConversation", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","DeleteConversation",arg));
 
         alt.on("ClosePhone", () => this.ClosePhone());
         alt.onServer("ClosePhone", () => this.ClosePhone());
 
 
-        this.browser.on("initiateCall", (arg, arg2) => alt.emitServer("initiateCall", arg));
+        this.browser.on("initiateCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","initiateCall", arg));
         this.browser.on("initiatedCall", (arg, arg2) => { if (this.browser != null) { this.browser.url = 'http://resources/resurrectionrp/client/cef/phone/oncall.html?incomingCall=true&number=' + arg + '&name=' + arg2 } } );
-        this.browser.on("acceptCall", (arg, arg2) => alt.emitServer("acceptCall", arg));
-        this.browser.on("cancelCall", (arg, arg2) => alt.emitServer("cancelCall", arg));
+        this.browser.on("acceptCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","acceptCall", arg));
+        this.browser.on("cancelCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","cancelCall", arg));
         this.browser.on("canceledCall", (arg, arg2) => {
 /*            Events.CallRemote("canceledCall", args[0]);
             _animStage = 0;
@@ -78,7 +78,7 @@ export class PhoneManager {
                 browser.ExecuteJs("callEvent('canceled')");*/
             // CA ME CASSE LES COUILLES TOUS CES EVENTS
         });
-        this.browser.on("endCall", (arg, arg2) => alt.emitServer("endCall", arg));
+        this.browser.on("endCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","endCall", arg));
 
         /* ALLER HOP JE FINIRAI UN AUTRE JOUR ** Protocole
          * 

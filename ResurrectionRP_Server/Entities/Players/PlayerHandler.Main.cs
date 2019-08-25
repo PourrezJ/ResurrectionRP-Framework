@@ -311,7 +311,6 @@ namespace ResurrectionRP_Server.Entities.Players
         }
         #endregion
 
-
         #region Inventory
         public async Task UpdateClothing()
         {

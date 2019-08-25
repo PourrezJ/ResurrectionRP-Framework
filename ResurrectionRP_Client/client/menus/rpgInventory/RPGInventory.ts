@@ -62,7 +62,7 @@ export class RPGInventoryManager {
             this.view.on('inventorySplitItem', (arg1: any, arg2: any, arg3: any, arg4: any, arg5: any, arg6: any, arg7: any) => alt.emitServer("RPGInventory_SplitItemInventory_SRV", arg1, arg2, arg3, arg4, arg5, arg6, arg7));
 
 
-            alt.emit("toggleChat");
+            alt.emit("hideChat");
         });
 
         alt.onServer("InventoryManager_CloseMenu", () => this.CloseMenu());
@@ -84,7 +84,7 @@ export class RPGInventoryManager {
         alt.emitServer("RPGInventory_ClosedMenu_SRV");
         alt.toggleGameControls(true);
         alt.showCursor(false);
-        alt.emit("toggleChat");
+        alt.emit("toggleChatAdminRank");
 
     }
     public HasOpen() { this.view != null };

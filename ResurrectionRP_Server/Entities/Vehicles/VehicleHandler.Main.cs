@@ -58,7 +58,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public OilTank OilTank = null;
 
-        public VehicleProperties Properties { get; protected set; } = new VehicleProperties();
         #endregion
 
         #region Events
@@ -79,8 +78,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 return;
             OwnerID = socialClubName;
             Model = model;
-            Properties.PrimaryColor = primaryColor;
-            Properties.SecondaryColor = secondaryColor;
+            PrimaryColor = primaryColor;
+            SecondaryColor = secondaryColor;
 
             FreezePosition = freeze;
 
@@ -90,7 +89,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             Owner = owner;
 
             if (mods != null)
-                Properties.Mods = mods;
+                Mods = mods;
 
             SpawnVeh = spawnVeh;
             Dimension = dimension;
@@ -131,12 +130,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 Vehicle.Dimension = Dimension;
                 Vehicle.NumberplateText = Plate;
-                Vehicle.PrimaryColor = Properties.PrimaryColor;
-                Vehicle.SecondaryColor = Properties.SecondaryColor;
+                Vehicle.PrimaryColor = PrimaryColor;
+                Vehicle.SecondaryColor = SecondaryColor;
 
-                if (Properties.Mods.Count > 0)
+                if (Mods.Count > 0)
                 {
-                    foreach (KeyValuePair<int, int> mod in Properties.Mods)
+                    foreach (KeyValuePair<int, int> mod in Mods)
                     {
                         Vehicle.SetMod((byte)mod.Key, (byte)mod.Value);
                         if (mod.Key == 69)
@@ -150,15 +149,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Vehicle.NeonColor = NeonsColor;
 
 
-                Vehicle.DirtLevel = Properties.Dirt;
+                Vehicle.DirtLevel = Dirt;
                 Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
-                Vehicle.EngineOn = Properties.Engine;
-                Vehicle.EngineHealth = Properties.EngineHealth;
-                Vehicle.BodyHealth = Properties.BodyHealth;
+                Vehicle.EngineOn = Engine;
+                Vehicle.EngineHealth = EngineHealth;
+                Vehicle.BodyHealth = BodyHealth;
                 Vehicle.RadioStation = RadioID;
 
                 await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
-                await Vehicle.SetEngineOnAsync(Properties.Engine);
+                await Vehicle.SetEngineOnAsync(Engine);
 
 
                 LastUse = DateTime.Now;
@@ -229,15 +228,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public async Task UpdateProperties()
         {
-            this.Properties.Dirt = await Vehicle.GetDirtLevelAsync();
+            this.Dirt = await Vehicle.GetDirtLevelAsync();
 
-            this.Properties.Engine = await Vehicle.IsEngineOnAsync();
-            this.Properties.EngineHealth = await Vehicle.GetEngineHealthAsync();
+            this.Engine = await Vehicle.IsEngineOnAsync();
+            this.EngineHealth = await Vehicle.GetEngineHealthAsync();
 
             Tuple<bool, bool, bool, bool> NeonState = await Vehicle.GetNeonActiveAsync();
             
-            //this.Properties.NeonState.Clear();
-            //this.Properties.NeonState.Add(NeonState.Item1);
+            //this.NeonState.Clear();
+            //this.NeonState.Add(NeonState.Item1);
             
         }
 

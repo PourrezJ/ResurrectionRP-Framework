@@ -79,17 +79,24 @@
   <ItemGroup>
     <TypeScriptCompile Include="client\chat\chat.ts" />
     <TypeScriptCompile Include="client\Creator\Creator.ts" />
+    <TypeScriptCompile Include="client\Env\Doors.ts" />
     <TypeScriptCompile Include="client\Env\Time.ts" />
+    <TypeScriptCompile Include="client\Env\Weather.ts" />
     <TypeScriptCompile Include="client\Helpers\UiHelper.ts" />
     <TypeScriptCompile Include="client\login\Login.ts" />
     <TypeScriptCompile Include="client\main.ts" />
+    <TypeScriptCompile Include="client\Medical.ts" />
     <TypeScriptCompile Include="client\menus\rpgInventory\RPGInventory.ts" />
     <TypeScriptCompile Include="client\menus\xtreamMenu\xtreamMenuManager.ts" />
     <TypeScriptCompile Include="client\Models\Camera.ts" />
+    <TypeScriptCompile Include="client\notify\notify.ts" />
     <TypeScriptCompile Include="client\player\Game.ts" />
     <TypeScriptCompile Include="client\player\Hud.ts" />
+    <TypeScriptCompile Include="client\player\Interaction.ts" />
     <TypeScriptCompile Include="client\player\PlayerCustomization.ts" />
     <TypeScriptCompile Include="client\player\Survival.ts" />
+    <TypeScriptCompile Include="client\RPGInventory.ts" />
+    <TypeScriptCompile Include="client\Streamer\Streamer.ts" />
     <TypeScriptCompile Include="client\Streamer\Streamer.ts" />
     <TypeScriptCompile Include="client\Utils\Enums\Enums.ts" />
     <TypeScriptCompile Include="client\Utils\Raycast.ts" />
@@ -225,6 +232,8 @@
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-brands-400.svg" />
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-regular-400.svg" />
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.svg" />
+    <Content Include="cef\notify\index.html" />
+    <Content Include="cef\notify\js\main.js" />
     <Content Include="cef\speedometer\css\style.css" />
     <Content Include="cef\speedometer\img\compteur-on.png" />
     <Content Include="cef\speedometer\img\compteur.png" />
@@ -241,6 +250,19 @@
     <Content Include="cef\xtrem\css\style.css" />
     <Content Include="cef\xtrem\js\app.js" />
     <Content Include="cef\xtrem\playerMenu.html" />
+    <Content Include="lib\css\angular-confirm.min.css" />
+    <Content Include="lib\css\bootstrap.min.css" />
+    <Content Include="lib\css\fontawesome.5.0.13.min.css" />
+    <Content Include="lib\css\font_awesome\css\font-awesome.css" />
+    <Content Include="lib\css\font_awesome\css\font-awesome.min.css" />
+    <Content Include="lib\css\font_awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="lib\css\ionicons\css\ionicons.css" />
+    <Content Include="lib\css\ionicons\css\ionicons.min.css" />
+    <Content Include="lib\css\ionicons\fonts\ionicons.svg" />
+    <Content Include="lib\css\jquery-ui.min.css" />
+    <Content Include="lib\css\material-design-iconic-font\css\material-design-iconic-font.css" />
+    <Content Include="lib\css\material-design-iconic-font\css\material-design-iconic-font.min.css" />
+    <Content Include="lib\css\material-design-iconic-font\fonts\Material-Design-Iconic-Font.svg" />
     <Content Include="lib\js\jquery.min.js" />
     <TypeScriptCompile Include="client\speedometer\speedometer.ts" />
   </ItemGroup>
@@ -259,7 +281,47 @@
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.woff2" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="cef\notify\css\notify.min.css" />
+    <Content Include="lib\webfonts\fa-brands-400.svg" />
+    <Content Include="lib\webfonts\fa-regular-400.svg" />
+    <Content Include="lib\webfonts\fa-solid-900.svg" />
     <Content Include="resource.cfg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\css\font_awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="lib\css\font_awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="lib\css\font_awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="lib\css\font_awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="lib\css\font_awesome\fonts\FontAwesome.otf" />
+    <Content Include="lib\css\ionicons\fonts\ionicons.eot" />
+    <Content Include="lib\css\ionicons\fonts\ionicons.ttf" />
+    <Content Include="lib\css\ionicons\fonts\ionicons.woff" />
+    <Content Include="lib\css\material-design-iconic-font\fonts\Material-Design-Iconic-Font.eot" />
+    <Content Include="lib\css\material-design-iconic-font\fonts\Material-Design-Iconic-Font.ttf" />
+    <Content Include="lib\css\material-design-iconic-font\fonts\Material-Design-Iconic-Font.woff" />
+    <Content Include="lib\css\material-design-iconic-font\fonts\Material-Design-Iconic-Font.woff2" />
+    <Content Include="lib\webfonts\fa-brands-400.eot" />
+    <Content Include="lib\webfonts\fa-brands-400.ttf" />
+    <Content Include="lib\webfonts\fa-brands-400.woff" />
+    <Content Include="lib\webfonts\fa-brands-400.woff2" />
+    <Content Include="lib\webfonts\fa-regular-400.eot" />
+    <Content Include="lib\webfonts\fa-regular-400.ttf" />
+    <Content Include="lib\webfonts\fa-regular-400.woff" />
+    <Content Include="lib\webfonts\fa-regular-400.woff2" />
+    <Content Include="lib\webfonts\fa-solid-900.eot" />
+    <Content Include="lib\webfonts\fa-solid-900.ttf" />
+    <Content Include="lib\webfonts\fa-solid-900.woff" />
+    <Content Include="lib\webfonts\fa-solid-900.woff2" />
+    <Content Include="lib\webfonts\FuturaPTBook.woff" />
+    <Content Include="lib\webfonts\FuturaPTHeavy.woff" />
+    <Content Include="lib\webfonts\poppins\Poppins-Black.otf" />
+    <Content Include="lib\webfonts\poppins\Poppins-Bold.otf" />
+    <Content Include="lib\webfonts\poppins\Poppins-Light.otf" />
+    <Content Include="lib\webfonts\poppins\Poppins-Regular.otf" />
+    <Content Include="lib\webfonts\poppins\Poppins-Thin.otf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\webfonts\poppins\Poppins-Regular.woff2" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

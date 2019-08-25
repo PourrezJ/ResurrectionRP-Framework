@@ -53,10 +53,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 Location.Pos = await Vehicle.GetPositionAsync();
                 Location.Rot = await Vehicle.GetRotationAsync();
-                Properties.Engine = await Vehicle.IsEngineOnAsync();
-                Properties.BodyHealth = await Vehicle.GetBodyHealthAsync();
-                Properties.EngineHealth = await Vehicle.GetEngineHealthAsync();
-                Properties.Dirt = await Vehicle.GetDirtLevelAsync();
+                Engine = await Vehicle.IsEngineOnAsync();
+                BodyHealth = await Vehicle.GetBodyHealthAsync();
+                EngineHealth = await Vehicle.GetEngineHealthAsync();
+                Dirt = await Vehicle.GetDirtLevelAsync();
                 RadioID = await Vehicle.GetRadioStationAsync();
 
             }

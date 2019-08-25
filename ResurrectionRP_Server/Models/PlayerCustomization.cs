@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.Options;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Async;
 using AltV.Net;
-using System.Threading.Tasks;
+using ResurrectionRP_Server.Entities.Players.Data;
 
 namespace ResurrectionRP_Server.Models
 {
@@ -64,8 +61,7 @@ namespace ResurrectionRP_Server.Models
         public HeadOverlay[] Appearance = new HeadOverlay[10];
 
         // Tatouages
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        public Dictionary<int, int> Decorations = new Dictionary<int, int>();
+        public List<Decoration> Decorations = new List<Decoration>();
 
         // Hair & Colors
         public HairData Hair;
@@ -109,12 +105,8 @@ namespace ResurrectionRP_Server.Models
                         //player.SetHeadOverlay(i, new HeadOverlayData(Appearance[i].Index, Appearance[i].Opacity, Appearance[i].Color, Appearance[i].SecondaryColor));
                         player.Emit("HeadOverlayVariation", Appearance[i].Index, Appearance[i].Opacity, Appearance[i].Color, Appearance[i].SecondaryColor);
 
-                    if (Decorations != null && Decorations.Count > 0)
-                    {
-                        //player.SetDecorations(Decorations);
-                        foreach (KeyValuePair<int, int> deco in Decorations)
-                            player.Emit("DecorationVariation", deco.Key, deco.Value);
-                    }
+                    foreach (Decoration decoration in Decorations)
+                        player.Emit("DecorationVariation", decoration.Collection, decoration.Overlay);
                 }
                 catch (Exception ex)
                 {

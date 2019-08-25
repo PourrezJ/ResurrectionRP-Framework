@@ -7,7 +7,7 @@ import Raycast, * as raycast from 'client/Utils/Raycast';
 import { Time as TimeLib } from 'client/Env/Time';
 import { Survival as SurvivalLib } from 'client/player/Survival';
 import { Hud as HudLib } from 'client/player/Hud';
-import { RPGInventoryManager } from 'client/RPGinventory';
+import { RPGInventoryManager } from 'client/menus/rpgInventory/RPGinventory';
 import { Weather as WeatherLib } from 'client/Env/Weather';
 import { Interaction as InteractionLib } from 'client/Player/Interaction';
 import { Doors as DoorsManagerLib } from 'client/Env/Doors';
@@ -107,7 +107,7 @@ export class Game {
             alt.log('Chargement des pools');
             this._Hud = new HudLib(Money);
             this._Doors = new DoorsManagerLib();
-            //this._Inventory = new RPGInventoryManager();
+            this._Inventory = new RPGInventoryManager();
             this._Weather = new WeatherLib(Weather, WeatherWind, WeatherWindDirection);
             alt.log('Chargement des pools done');
 

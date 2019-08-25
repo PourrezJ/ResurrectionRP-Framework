@@ -14,16 +14,16 @@ using System.Drawing;
 using MongoDB.Bson.Serialization.Serializers;
 using ResurrectionRP_Server.Database;
 using MongoDB.Bson.Serialization.Options;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace ResurrectionRP_Server
 {
     public class Startup : AsyncResource
     {
-
         private GameMode gamemode = null;
         public async override void OnStart()
         {
-
             AltAsync.OnPlayerConnect += AltAsync_OnPlayerConnect;
 
             Database.MongoDB.Init();
@@ -54,7 +54,6 @@ namespace ResurrectionRP_Server
                 await gamemode.OnStartAsync();
                 await gamemode.Save();
             }
-            
         }
 
         private async Task AltAsync_OnPlayerConnect(IPlayer player, string reason)

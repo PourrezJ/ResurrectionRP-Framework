@@ -6,7 +6,8 @@ let inputMenu = null;
 let browser = null;
 let inputselected = "";
 
-export function init() {
+export function init()
+{
     alt.onServer('XMenuManager_OpenMenu', (menu) => {
 
         alt.log(browser);

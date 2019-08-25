@@ -37,9 +37,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         [BsonRepresentation(BsonType.Int32, AllowOverflow = true)]
         public uint Model { get; private set; }
 
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        public ConcurrentDictionary<int, int> Mods { get; set; }
-            = new ConcurrentDictionary<int, int>();
 
         public string OwnerID { get; set; } // SocialClubName
         [BsonRepresentation(BsonType.Int32, AllowOverflow = true)]
@@ -53,8 +50,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public bool SpawnVeh { get; set; }
         public bool Locked { get; set; } = true;
 
-        public byte PrimaryColor { get; set; }
-        public byte SecondaryColor { get; set; }
 
         public DateTime LastUse { get; set; } = DateTime.Now;
         public string LastDriver { get; set; }
@@ -62,6 +57,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public bool PlateHide;
 
         public OilTank OilTank = null;
+
+        public VehicleProperties Properties { get; protected set; } = new VehicleProperties();
         #endregion
 
         #region Events
@@ -82,8 +79,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 return;
             OwnerID = socialClubName;
             Model = model;
-            PrimaryColor = primaryColor;
-            SecondaryColor = secondaryColor;
+            Properties.PrimaryColor = primaryColor;
+            Properties.SecondaryColor = secondaryColor;
 
             FreezePosition = freeze;
 
@@ -93,7 +90,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             Owner = owner;
 
             if (mods != null)
-                Mods = mods;
+                Properties.Mods = mods;
 
             SpawnVeh = spawnVeh;
             Dimension = dimension;
@@ -134,12 +131,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 Vehicle.Dimension = Dimension;
                 Vehicle.NumberplateText = Plate;
-                Vehicle.PrimaryColor = PrimaryColor;
-                Vehicle.SecondaryColor = SecondaryColor;
+                Vehicle.PrimaryColor = Properties.PrimaryColor;
+                Vehicle.SecondaryColor = Properties.SecondaryColor;
 
-                if (Mods.Count > 0)
+                if (Properties.Mods.Count > 0)
                 {
-                    foreach (KeyValuePair<int, int> mod in Mods)
+                    foreach (KeyValuePair<int, int> mod in Properties.Mods)
                     {
                         Vehicle.SetMod((byte)mod.Key, (byte)mod.Value);
                         if (mod.Key == 69)
@@ -153,15 +150,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Vehicle.NeonColor = NeonsColor;
 
 
-                Vehicle.DirtLevel = Dirt;
+                Vehicle.DirtLevel = Properties.Dirt;
                 Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
-                Vehicle.EngineOn = Engine;
-                Vehicle.EngineHealth = EngineHealth;
-                Vehicle.BodyHealth = BodyHealth;
+                Vehicle.EngineOn = Properties.Engine;
+                Vehicle.EngineHealth = Properties.EngineHealth;
+                Vehicle.BodyHealth = Properties.BodyHealth;
                 Vehicle.RadioStation = RadioID;
 
                 await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
-                await Vehicle.SetEngineOnAsync(Engine);
+                await Vehicle.SetEngineOnAsync(Properties.Engine);
 
 
                 LastUse = DateTime.Now;
@@ -229,7 +226,21 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
             return false;
         }
-        
+
+        public async Task UpdateProperties()
+        {
+            this.Properties.Dirt = await Vehicle.GetDirtLevelAsync();
+
+            this.Properties.Engine = await Vehicle.IsEngineOnAsync();
+            this.Properties.EngineHealth = await Vehicle.GetEngineHealthAsync();
+
+            Tuple<bool, bool, bool, bool> NeonState = await Vehicle.GetNeonActiveAsync();
+            
+            //this.Properties.NeonState.Clear();
+            //this.Properties.NeonState.Add(NeonState.Item1);
+            
+        }
+
         public void SetOwner(IPlayer player) => OwnerID = player.GetSocialClub();
         public void SetOwner(PlayerHandler player) => OwnerID = player.Client.GetSocialClub();
 

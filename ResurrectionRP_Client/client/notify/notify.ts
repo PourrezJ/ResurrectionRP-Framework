@@ -15,11 +15,14 @@ export class Notify {
             this.notify.isLoaded = true;
         });
         alt.onServer("notify", this.Notify);
+        alt.on      ("notify", this.Notify);
         alt.onServer("successNotify", this.successNotify);
+        alt.on      ("successNotify", this.successNotify);
         alt.onServer("alertNotify", this.alertNotify);
+        alt.on      ("alertNotify", this.alertNotify);
     }
 
-    Notify = (title: string, content: string, time: number, r: number = 236, g: number = 236, b: number = 255) => {
+    Notify = (title: string, content: string, time: number=5000, r: number = 236, g: number = 236, b: number = 255) => {
         this.notify.view.emit('notify:send', {
             text: "<h1>" + title + "</h1><br/><b>" + content + "</b>",
             timeout: time,
@@ -29,7 +32,7 @@ export class Notify {
         });
     }
 
-    successNotify = (title:string, content: string, time: number, r: number = 236, g:number = 236, b: number = 255) => {
+    successNotify = (title:string, content: string, time: number = 5000, r: number = 236, g:number = 236, b: number = 255) => {
         this.notify.view.emit('notify:send', {
             text: "<h1>"+title+"</h1><br/><b>" + content + "</b>",
             timeout: time,
@@ -38,7 +41,7 @@ export class Notify {
             lineColor: '#009900'
         });
     }
-    alertNotify = (title: string, content: string, time: number, r: number = 236, g: number = 236, b: number = 255) => {
+    alertNotify = (title: string, content: string, time: number = 5000, r: number = 236, g: number = 236, b: number = 255) => {
         this.notify.view.emit('notify:send', {
             text: "<h1>" + title + "</h1><br/><b>" + content + "</b>",
             timeout: time,

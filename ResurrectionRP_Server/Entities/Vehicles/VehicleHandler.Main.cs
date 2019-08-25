@@ -37,9 +37,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         [BsonRepresentation(BsonType.Int32, AllowOverflow = true)]
         public uint Model { get; private set; }
 
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        public ConcurrentDictionary<byte, byte> Mods { get; set; }
-            = new ConcurrentDictionary<byte, byte>();
 
         public string OwnerID { get; set; } // SocialClubName
         [BsonRepresentation(BsonType.Int32, AllowOverflow = true)]
@@ -53,8 +50,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public bool SpawnVeh { get; set; }
         public bool Locked { get; set; } = true;
 
-        public byte PrimaryColor { get; set; }
-        public byte SecondaryColor { get; set; }
 
         public DateTime LastUse { get; set; } = DateTime.Now;
         public string LastDriver { get; set; }
@@ -62,6 +57,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public bool PlateHide;
 
         public OilTank OilTank = null;
+
+        public VehicleProperties Properties { get; protected set; } = new VehicleProperties();
         #endregion
 
         #region Events
@@ -76,14 +73,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Constructor
         public VehicleHandler(string socialClubName, uint model, Vector3 position, Vector3 rotation, byte primaryColor = 0, byte secondaryColor = 0,
             float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
-            IPlayer owner = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, short dimension = short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
+            IPlayer owner = null, ConcurrentDictionary<int, int> mods = null, int[] neon = null, bool spawnVeh = false, short dimension = short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
         {
             if (model == 0)
                 return;
             OwnerID = socialClubName;
             Model = model;
-            PrimaryColor = primaryColor;
-            SecondaryColor = secondaryColor;
+            Properties.PrimaryColor = primaryColor;
+            Properties.SecondaryColor = secondaryColor;
 
             FreezePosition = freeze;
 
@@ -93,7 +90,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             Owner = owner;
 
             if (mods != null)
-                Mods = mods;
+                Properties.Mods = mods;
 
             SpawnVeh = spawnVeh;
             Dimension = dimension;
@@ -108,17 +105,19 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Method
-        public async Task<IVehicle> SpawnVehicle(IPlayer owner = null, Location location = null)
+        public async Task<IVehicle> SpawnVehicle(Location location = null)
         {
             if (Dimension.ToString() == "-1")
                 Dimension = short.MaxValue;
-
 
             await AltAsync.Do(async () =>
             {
                 try
                 {
-                    Vehicle = Alt.CreateVehicle(Model, (location == null) ? Location.Pos : location.Pos, (location == null) ? Location.Rot : location.Rot);
+                    if(location == null)
+                        Vehicle = Alt.CreateVehicle(Model,  Location.Pos , Location.GetRotation() );
+                    else
+                        Vehicle = Alt.CreateVehicle(Model, location.Pos, location.GetRotation());
                 }
                 catch (Exception ex)
                 {
@@ -132,17 +131,17 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 Vehicle.Dimension = Dimension;
                 Vehicle.NumberplateText = Plate;
-                Vehicle.PrimaryColor = PrimaryColor;
-                Vehicle.SecondaryColor = SecondaryColor;
+                Vehicle.PrimaryColor = Properties.PrimaryColor;
+                Vehicle.SecondaryColor = Properties.SecondaryColor;
 
-                if (Mods.Count > 0)
+                if (Properties.Mods.Count > 0)
                 {
-                    foreach (KeyValuePair<byte, byte> mod in Mods)
+                    foreach (KeyValuePair<int, int> mod in Properties.Mods)
                     {
-                        Vehicle.SetMod(mod.Key, mod.Value);
+                        Vehicle.SetMod((byte)mod.Key, (byte)mod.Value);
                         if (mod.Key == 69)
                         {
-                            Vehicle.WindowTint = mod.Value;
+                            Vehicle.WindowTint = (byte)mod.Value;
                         }
                     }
                 }
@@ -151,15 +150,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Vehicle.NeonColor = NeonsColor;
 
 
-                Vehicle.DirtLevel = Dirt;
+                Vehicle.DirtLevel = Properties.Dirt;
                 Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
-                Vehicle.EngineOn = Engine;
-                Vehicle.EngineHealth = EngineHealth;
-                Vehicle.BodyHealth = BodyHealth;
+                Vehicle.EngineOn = Properties.Engine;
+                Vehicle.EngineHealth = Properties.EngineHealth;
+                Vehicle.BodyHealth = Properties.BodyHealth;
                 Vehicle.RadioStation = RadioID;
 
                 await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
-                await Vehicle.SetEngineOnAsync(Engine);
+                await Vehicle.SetEngineOnAsync(Properties.Engine);
 
 
                 LastUse = DateTime.Now;
@@ -173,9 +172,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 GameMode.Instance.VehicleManager.VehicleHandlerList.TryAdd(Vehicle, this);
             });
-            
-            if (owner != null)
-                SetOwner(owner);
             /*
             if (HaveTowVehicle())
             {
@@ -230,7 +226,21 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
             return false;
         }
-        
+
+        public async Task UpdateProperties()
+        {
+            this.Properties.Dirt = await Vehicle.GetDirtLevelAsync();
+
+            this.Properties.Engine = await Vehicle.IsEngineOnAsync();
+            this.Properties.EngineHealth = await Vehicle.GetEngineHealthAsync();
+
+            Tuple<bool, bool, bool, bool> NeonState = await Vehicle.GetNeonActiveAsync();
+            
+            //this.Properties.NeonState.Clear();
+            //this.Properties.NeonState.Add(NeonState.Item1);
+            
+        }
+
         public void SetOwner(IPlayer player) => OwnerID = player.GetSocialClub();
         public void SetOwner(PlayerHandler player) => OwnerID = player.Client.GetSocialClub();
 

@@ -10,7 +10,34 @@ var loading;
 
 
 export function initialize() {
+    alt.onServer("test", (vehicle) => {
+        game.taskEnterVehicle(alt.Player.local.scriptID, vehicle.scriptID, 10000, -1, 1, 1, 0);
+        alt.setTimeout(() => {
+            game.taskVehicleDriveToCoord(alt.Player.local.scriptID, vehicle.scriptID, 0, 0, 74, 100, 1, vehicle.model, 2883621 , 10, 1);
+            
+        }, 10000);
+    });
     alt.onServer('SetPlayerIntoVehicle', (vehicle, seat) => {
+        alt.setTimeout(() => {
+            game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle.scriptID, seat);
+        }, 20);
+    });
+    alt.onServer('TrySetPlayerIntoVehicle', (vehicle: alt.Vehicle) => {
+        var success: boolean = false;
+        var seat: number = game.getVehicleModelNumberOfSeats(vehicle.model);
+        for (var i = seat - 2; i > -1; i--) {
+            alt.log("Nombre de siège: " + seat)
+            alt.log("Vérificatin actuelle: " + i)
+            if (game.isVehicleSeatFree(vehicle.scriptID, i) && success == false) {
+                game.taskEnterVehicle(alt.Player.local.scriptID, vehicle.scriptID, 10000, i, 1, 1, 0);
+                success = true;
+            }
+        }
+        if (!success) {
+
+            alt.emit('alertNotify', "Erreur", "Aucun siège dans le véhicule disponible! ", 5000);
+        }
+
         alt.setTimeout(() => {
             game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle.scriptID, seat);
         }, 20);

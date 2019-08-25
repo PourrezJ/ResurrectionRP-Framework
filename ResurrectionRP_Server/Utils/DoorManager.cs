@@ -36,7 +36,7 @@ namespace ResurrectionRP_Server.Utils
                 Locked = locked,
                 Hide = hide
             };
-            door.TextLabel = GameMode.Instance.Streamer.addEntityTextLabel($"Porte: {((door.Locked) ? "Verrouiller" : "Deverrouiller")}", door.Position, 1);
+            door.TextLabel = GameMode.Instance.Streamer.addEntityTextLabel($"Porte: {((door.Locked) ? "Verrouillée" : "Deverrouillée")}", door.Position, 1);
             //door.TextLabel = await MP.TextLabels.NewAsync(door.Position, $"Porte: {((door.Locked) ? "Verrouiller" : "Deverrouiller")}", 1, System.Drawing.Color.White, 2);
             GameMode.Instance.DoorManager?.DoorList.Add(door);
             await door.SetDoorLockState(locked);
@@ -47,7 +47,7 @@ namespace ResurrectionRP_Server.Utils
         public async Task SetDoorLockState(bool lockStatut)
         {
             Locked = lockStatut;
-            GameMode.Instance.Streamer.updateEntityTextLabel(this.TextLabel, $"Porte: {((Locked) ? "Verrouiller" : "Deverrouiller")}");
+            GameMode.Instance.Streamer.updateEntityTextLabel(this.TextLabel, $"Porte: {((Locked) ? "Verrouillée" : "Deverrouillée")}");
             foreach(IPlayer player in Alt.GetAllPlayers())
             {
                 await player.EmitAsync("SetDoorLockState", ID, Locked);

@@ -20,7 +20,9 @@ export class Streamer {
                         data["posz"],
                         data["sprite"],
                         data["color"],
-                        data["name"]
+                        data["name"],
+                        data["scale"],
+                        data["shortRange"]
                     );
                     break;
             }
@@ -141,14 +143,15 @@ export class Streamer {
     private streamMarker = async (id: number, type: number, x: number, y: number, z: number, scalex: number, scaley: number, scalez: number, rgba: object) => {
         this.EntityList[id] = { PosX: x, PosY: y, PosZ: z, Color: rgba , type: type, scalex: scalex, scaley: scaley, scalez: scalez};
     }
-    private streamBlip = async (id: number, x: number, y: number, z: number, sprite: number, color:number, name: string) => {
+    private streamBlip = async (id: number, x: number, y: number, z: number, sprite: number, color:number, name: string, scale: number, shortRange: boolean) => {
 
         var test = new alt.PointBlip(x,y,z);
         test.sprite = sprite;
         test.color = color;
         test.name = name;
+        test.scale = scale;
         test.shrinked = true;
-        test.shortRange = true;
+        test.shortRange = shortRange;
         this.StaticEntityList[id] = test;
     }
 

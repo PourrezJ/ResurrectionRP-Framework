@@ -136,11 +136,14 @@ namespace ResurrectionRP_Server
 
             Alt.Server.LogColored("~g~Initialisations des controlleurs...");
             await Loader.CarParkLoader.LoadAllCarPark();
+            await Loader.CarDealerLoaders.LoadAllCardealer();
+            await Loader.VehicleRentLoaders.LoadAllVehicleRent();
             await VehicleManager.LoadAllVehiclesActive();
             await Loader.ClothingLoader.LoadAllCloth();
             await WeatherManager.InitWeather();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
+            new EventsHandler.Events();
 
             Alt.OnPlayerConnect += OnPlayerConnected;
             Alt.OnPlayerDisconnect += OnPlayerDisconnected;
@@ -151,9 +154,10 @@ namespace ResurrectionRP_Server
             {
                 Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z);
             });
-            Chat.RegisterCmd("notify", async (IPlayer player, string[] args) =>
+            Chat.RegisterCmd("task", async (IPlayer player, string[] args) =>
             {
-                this.Streamer.updateEntityTextLabel(14, "test");
+                var vehicle = player.GetNearestVehicle();
+                player.Emit("TrySetPlayerIntoVehicle", vehicle);
             });
             ServerLoaded = true;
         }
@@ -192,7 +196,7 @@ namespace ResurrectionRP_Server
             VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), new Vector3(player.Position.X+5, player.Position.Y, player.Position.Z), player.Rotation, locked:false);
             Task.Run(async () =>
             {
-                await vh.SpawnVehicle();
+                await vh.SpawnVehicle(null);
                 var ph = player.GetPlayerHandler();
 
                 if (ph != null)

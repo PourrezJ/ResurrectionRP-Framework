@@ -197,6 +197,13 @@ namespace ResurrectionRP_Server
         {
 
         }
+        public async static Task PlaySoundFromEntity(this IPlayer client, IEntity initiator, int id, string dict, string anim)
+        {
+
+        }
+
+        public static async Task Resurrect(this IPlayer client)
+            => await client.EmitAsync("ResurrectPlayer");
 
     }
 }

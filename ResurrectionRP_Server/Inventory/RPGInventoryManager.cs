@@ -11,6 +11,7 @@ using PropData = ResurrectionRP_Server.Models.PropData;
 using ClothData = ResurrectionRP_Server.Models.ClothData;
 using ItemID = ResurrectionRP_Server.Models.InventoryData.ItemID;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Utils.Enums;
 
 namespace ResurrectionRP_Server.Inventory
 {
@@ -81,13 +82,13 @@ namespace ResurrectionRP_Server.Inventory
 
             if (_clientMenus.TryAdd(client, menu))
             {
-                await client.EmitAsync("InventoryManager_OpenMenu", 
-                    JsonConvert.SerializeObject( menu.PocketsItems), 
-                    JsonConvert.SerializeObject(menu.BagItems), 
-                    JsonConvert.SerializeObject(menu.DistantItems), 
-                    JsonConvert.SerializeObject(menu.OutfitItems), 
+                await client.EmitAsync("InventoryManager_OpenMenu",
+                    JsonConvert.SerializeObject(menu.PocketsItems),
+                    JsonConvert.SerializeObject(menu.BagItems),
+                    JsonConvert.SerializeObject(menu.DistantItems),
+                    JsonConvert.SerializeObject(menu.OutfitItems),
                     (menu.DistantPlayer == null) ? false : true);
-                await client.EmitAsync("showCursor", true);
+                //await client.EmitAsync("showCursor", true);
 
 
                 return true;
@@ -105,11 +106,11 @@ namespace ResurrectionRP_Server.Inventory
             RPGInventoryMenu menu = null;
 
             Models.InventoryData.ItemID itemID = (Models.InventoryData.ItemID)args[0];
-            string targetInventory = (string)args[1];
-            int itemSlot = (int)args[2];
+            string targetInventory = Convert.ToString(args[1]);
+            int itemSlot = Convert.ToInt32(args[2]);
 
-            _clientMenus.TryGetValue(client, out menu);
-            if (menu != null)
+
+            if (_clientMenus.TryGetValue(client, out menu))
             {
                 Models.ItemStack itemStack = null;
 
@@ -131,67 +132,7 @@ namespace ResurrectionRP_Server.Inventory
                 if (itemStack != null && itemStack.Item != null)
                     await itemStack.Item.Use(client, targetInventory, itemSlot);
 
-                #region Refresh
-                for (int i = 0; i < menu.Inventory.InventoryList.Length; i++)
-                {
-                    if (menu.Inventory.InventoryList[i] != null && menu.Inventory.InventoryList[i].Item != null)
-                        menu.PocketsItems.RPGInventoryItems.Add(new RPGInventoryItem(menu.Inventory.InventoryList[i], Utils.Enums.InventoryTypes.Pocket, i));
-                }
-
-                if (menu.Bag != null)
-                {
-                    menu.BagItems = new RPGInventory();
-                    menu.BagItems.CurrentSize = menu.Bag.CurrentSize();
-                    menu.BagItems.MaxSize = menu.Bag.MaxSize;
-                    menu.BagItems.Slots = menu.Bag.MaxSlot;
-                    menu.BagItems.RPGInventoryItems = new List<RPGInventoryItem>();
-
-                    for (int i = 0; i < menu.Bag.InventoryList.Length; i++)
-                    {
-                        if (menu.Bag.InventoryList[i] != null && menu.Bag.InventoryList[i].Item != null)
-                            menu.BagItems.RPGInventoryItems.Add(new RPGInventoryItem(menu.Bag.InventoryList[i], Utils.Enums.InventoryTypes.Bag, i));
-                    }
-                }
-                else
-                {
-                    menu.BagItems = null;
-                }
-
-                if (menu.Distant != null)
-                {
-                    menu.DistantItems = new RPGInventory();
-                    menu.DistantItems.CurrentSize = menu.Distant.CurrentSize();
-                    menu.DistantItems.MaxSize = menu.Distant.MaxSize;
-                    menu.DistantItems.Slots = menu.Distant.MaxSlot;
-                    menu.DistantItems.RPGInventoryItems = new List<RPGInventoryItem>();
-
-                    for (int i = 0; i < menu.Distant.InventoryList.Length; i++)
-                    {
-                        if (menu.Distant.InventoryList[i] != null && menu.Distant.InventoryList[i].Item != null)
-                            menu.DistantItems.RPGInventoryItems.Add(new RPGInventoryItem(menu.Distant.InventoryList[i], Utils.Enums.InventoryTypes.Distant, i));
-                    }
-                }
-
-                if (menu.Outfit != null)
-                {
-                    menu.OutfitItems = new RPGInventoryOutfit();
-                    menu.OutfitItems.NamedSlots = new RPGOutfitSlots[18];
-                    menu.OutfitItems.RPGInventoryItems = new List<RPGInventoryItem>();
-                    for (int i = 0; i < menu.Outfit.Slots.Length; i++)
-                    {
-                        if (menu.Outfit.Slots[i] != null)
-                        {
-                            menu.OutfitItems.NamedSlots[i] = new RPGOutfitSlots(i + 1, (menu.Outfit.Slots[i].Item != null) ? menu.Outfit.Slots[i].Item.name : "", OutfitInventory.OutfitClasses[i], true);
-                            menu.OutfitItems.RPGInventoryItems.Add(new RPGInventoryItem(menu.Outfit.Slots[i], Utils.Enums.InventoryTypes.Outfit, i));
-                        }
-                        else
-                        {
-                            menu.OutfitItems.NamedSlots[i] = new RPGOutfitSlots(i + 1, "", OutfitInventory.OutfitClasses[i], true);
-                        }
-                    }
-                }
-                #endregion
-                await menu.OpenMenu(client);
+                await Refresh(client, menu);
             }
         }
         #endregion
@@ -201,12 +142,12 @@ namespace ResurrectionRP_Server.Inventory
         {
             try
             {
-                string inventoryType = (string)args[0];
+                string inventoryType = Convert.ToString(args[0]);
                 Models.InventoryData.ItemID itemID = (Models.InventoryData.ItemID)args[1];
-                int slot = (int)args[2];
-                int quantite = (int)args[3];
+                int slot = Convert.ToInt32(args[2]);
+                int quantity = Convert.ToInt32(args[3]);
 
-                if (quantite == 0)
+                if (quantity == 0)
                     return;
 
                 if (!client.Exists)
@@ -217,43 +158,72 @@ namespace ResurrectionRP_Server.Inventory
                     return;
 
                 RPGInventoryMenu menu = null;
-                RPGInventoryItem invslot = null;
-                _clientMenus.TryGetValue(client, out menu);
-                if (menu != null)
+                RPGInventoryItem invItem = null;
+
+                if (_clientMenus.TryGetValue(client, out menu))
                 {
                     switch (inventoryType)
                     {
-                        case Utils.Enums.InventoryTypes.Pocket:
-                            invslot = menu.PocketsItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
-                            if (invslot == null)
+                        case InventoryTypes.Pocket:
+                            invItem = menu.PocketsItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+
+                            if (invItem == null)
                                 return;
-                            if (await invslot.stack.Item.Drop(client, quantite, slot, menu.Inventory))
-                                menu.PocketsItems.RPGInventoryItems.RemoveAll(p => p.inventorySlot == slot);
-                            break;
-                        case Utils.Enums.InventoryTypes.Bag:
-                            invslot = menu.BagItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
-                            if (invslot == null)
-                                return;
-                            if (await invslot.stack.Item.Drop(client, quantite, slot, menu.Bag))
-                                menu.BagItems.RPGInventoryItems.RemoveAll(p => p.inventorySlot == slot);
+
+                            if (await invItem.stack.Item.Drop(client, quantity, slot, menu.Inventory))
+                            {
+                                if (invItem.stack.Quantity == 0)
+                                    menu.PocketsItems.RPGInventoryItems.Remove(invItem);
+                                else
+                                    invItem.quantity = invItem.stack.Quantity;
+                            }
 
                             break;
-                        case Utils.Enums.InventoryTypes.Distant:
-                            invslot = menu.DistantItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
-                            if (invslot == null)
+                        case InventoryTypes.Bag:
+                            invItem = menu.BagItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+
+                            if (invItem == null)
                                 return;
-                            if (await invslot.stack.Item.Drop(client, quantite, slot, menu.Distant))
-                                menu.DistantItems.RPGInventoryItems.RemoveAll(p => p.inventorySlot == slot);
+
+                            if (await invItem.stack.Item.Drop(client, quantity, slot, menu.Bag))
+                            {
+                                if (invItem.stack.Quantity == 0)
+                                    menu.PocketsItems.RPGInventoryItems.Remove(invItem);
+                                else
+                                    invItem.quantity = invItem.stack.Quantity;
+                            }
+
                             break;
-                        case Utils.Enums.InventoryTypes.Outfit:
-                            invslot = menu.OutfitItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
-                            if (invslot == null)
+                        case InventoryTypes.Distant:
+                            invItem = menu.DistantItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+
+                            if (invItem == null)
                                 return;
-                            if (await invslot.stack.Item.Drop(client, quantite, slot, menu.Outfit))
-                                menu.OutfitItems.RPGInventoryItems.RemoveAll(p => p.inventorySlot == slot);
 
+                            if (await invItem.stack.Item.Drop(client, quantity, slot, menu.Distant))
+                            {
+                                if (invItem.stack.Quantity == 0)
+                                    menu.PocketsItems.RPGInventoryItems.Remove(invItem);
+                                else
+                                    invItem.quantity = invItem.stack.Quantity;
+                            }
 
-                            switch (invslot.id)
+                            break;
+                        case InventoryTypes.Outfit:
+                            invItem = menu.OutfitItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+
+                            if (invItem == null)
+                                return;
+
+                            if (await invItem.stack.Item.Drop(client, quantity, slot, menu.Outfit))
+                            {
+                                if (invItem.stack.Quantity == 0)
+                                    menu.PocketsItems.RPGInventoryItems.Remove(invItem);
+                                else
+                                    invItem.quantity = invItem.stack.Quantity;
+                            }
+
+                            switch (invItem.id)
                             {
                                 case ItemID.Glasses: // glasses
                                     ph.Clothing.Glasses = (ph.Character.Gender == 0) ? new PropData(14, 0) : new PropData(13, 0);
@@ -342,10 +312,12 @@ namespace ResurrectionRP_Server.Inventory
                             }
 
                             await ph.Clothing.UpdatePlayerClothing();
-
                             break;
                     }
-                    await menu.OpenMenu(client);
+
+                    // Temporary solution to save inventory after object drop. Doesn't update inventory when dropping from distant inventory.
+                    await ph.UpdatePlayerInfo();
+                    await Refresh(client, menu);
                 }
             }
             catch (Exception ex)
@@ -353,6 +325,7 @@ namespace ResurrectionRP_Server.Inventory
                 Alt.Server.LogError("RPGInventory_DropItem" + ex);
             }
         }
+
         #endregion
 
         #region Give
@@ -360,12 +333,12 @@ namespace ResurrectionRP_Server.Inventory
         {
             try
             {
-                string inventoryType = (string)args[0];
+                string inventoryType = Convert.ToString(args[0]);
                 ItemID itemID = (ItemID)args[1];
-                int slot = (int)args[2];
-                int quantite = (int)args[3];
+                int slot = Convert.ToInt32(args[2]);
+                int quantity = Convert.ToInt32(args[3]);
 
-                if (quantite == 0)
+                if (quantity == 0)
                     return;
 
                 if (!client.Exists)
@@ -376,7 +349,7 @@ namespace ResurrectionRP_Server.Inventory
                     return;
 
                 RPGInventoryMenu menu = null;
-                RPGInventoryItem invslot = null;
+                RPGInventoryItem invItem = null;
                 _clientMenus.TryGetValue(client, out menu);
                 if (menu != null)
                 {
@@ -394,50 +367,50 @@ namespace ResurrectionRP_Server.Inventory
                     switch (inventoryType)
                     {
                         case Utils.Enums.InventoryTypes.Pocket:
-                            invslot = menu.PocketsItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
-                            if (invslot == null)
+                            invItem = menu.PocketsItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+                            if (invItem == null)
                                 return;
 
-                            if (await phDistant.AddItem(invslot.stack.Item, quantite))
+                            if (await phDistant.AddItem(invItem.stack.Item, quantity))
                             {
-                                await phDistant.Client.NotifyAsync($"On vous à donner {quantite} {invslot.stack.Item.name}");
-                                ph.DeleteItem(slot, inventoryType, quantite);
+                                await phDistant.Client.NotifyAsync($"On vous à donner {quantity} {invItem.stack.Item.name}");
+                                ph.DeleteItem(slot, inventoryType, quantity);
                             }
 
                             break;
                         case Utils.Enums.InventoryTypes.Bag:
-                            invslot = menu.BagItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
-                            if (invslot == null)
+                            invItem = menu.BagItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+                            if (invItem == null)
                                 return;
-                            if (await phDistant.AddItem(invslot.stack.Item, quantite))
+                            if (await phDistant.AddItem(invItem.stack.Item, quantity))
                             {
-                                await phDistant.Client.NotifyAsync($"On vous à donner {quantite} {invslot.stack.Item.name}");
-                                ph.DeleteItem(slot, inventoryType, quantite);
+                                await phDistant.Client.NotifyAsync($"On vous à donner {quantity} {invItem.stack.Item.name}");
+                                ph.DeleteItem(slot, inventoryType, quantity);
                             }
 
                             break;
                         case Utils.Enums.InventoryTypes.Distant:
-                            invslot = menu.DistantItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
-                            if (invslot == null)
+                            invItem = menu.DistantItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+                            if (invItem == null)
                                 return;
-                            if (await phDistant.AddItem(invslot.stack.Item, quantite))
+                            if (await phDistant.AddItem(invItem.stack.Item, quantity))
                             {
-                                await phDistant.Client.NotifyAsync($"On vous à donner {quantite} {invslot.stack.Item.name}");
-                                ph.DeleteItem(slot, inventoryType, quantite);
+                                await phDistant.Client.NotifyAsync($"On vous à donner {quantity} {invItem.stack.Item.name}");
+                                ph.DeleteItem(slot, inventoryType, quantity);
                             }
                             break;
                         case Utils.Enums.InventoryTypes.Outfit:
-                            invslot = menu.OutfitItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
-                            if (invslot == null)
+                            invItem = menu.OutfitItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+                            if (invItem == null)
                                 return;
-                            if (await phDistant.AddItem(invslot.stack.Item, quantite))
+                            if (await phDistant.AddItem(invItem.stack.Item, quantity))
                             {
-                                await phDistant.Client.NotifyAsync($"On vous a donné {quantite} {invslot.stack.Item.name}");
-                                ph.DeleteItem(slot, inventoryType, quantite);
+                                await phDistant.Client.NotifyAsync($"On vous a donné {quantity} {invItem.stack.Item.name}");
+                                ph.DeleteItem(slot, inventoryType, quantity);
                             }
 
 
-                            switch (invslot.id)
+                            switch (invItem.id)
                             {
                                 case ItemID.Glasses: // glasses
                                     ph.Clothing.Glasses = (ph.Character.Gender == 0) ? new PropData(14, 0) : new PropData(13, 0);
@@ -530,13 +503,15 @@ namespace ResurrectionRP_Server.Inventory
                             break;
                     }
 
-                    Refresh(client, menu);
-                    await menu.OpenMenu(client);
+                    // Temporary solution to save inventory after object drop
+                    await ph.UpdatePlayerInfo();
+                    await phDistant.UpdatePlayerInfo();
+                    await Refresh(client, menu);
                 }
             }
             catch (Exception ex)
             {
-                Alt.Server.LogError("RPGInventory_DropItem"  + ex);
+                Alt.Server.LogError("RPGInventory_DropItem" + ex);
             }
         }
         #endregion
@@ -546,11 +521,11 @@ namespace ResurrectionRP_Server.Inventory
         {
             try
             {
-                string targetRPGInv = (string)args[0];
-                string oldRPGInv = (string)args[1];
-                int itemID = (int)args[2];
-                int slotID = (int)args[3];
-                int oldslotID = (int)args[4];
+                string targetRPGInv = Convert.ToString(args[0]);
+                string oldRPGInv = Convert.ToString(args[1]);
+                int itemID = Convert.ToInt32(args[2]);
+                int slotID = Convert.ToInt32(args[3]);
+                int oldslotID = Convert.ToInt32(args[4]);
 
                 RPGInventoryMenu menu = null;
                 _clientMenus.TryGetValue(client, out menu);
@@ -959,12 +934,11 @@ namespace ResurrectionRP_Server.Inventory
                         }
                     }
 
-                    Refresh(client, menu);
 
                     if (menu.OnMove != null)
                         await menu.OnMove.Invoke(client, menu);
-                    await menu.OpenMenu(client);
 
+                    await Refresh(client, menu);
                 }
             }
             catch (Exception ex)
@@ -980,22 +954,18 @@ namespace ResurrectionRP_Server.Inventory
             if (!client.Exists)
                 return;
 
-            var player = client;
-            var arguments = args;
-
-            string inventoryType = (string)arguments[0];
-            int itemID = (int)arguments[1];
-            int newSlot = (int)arguments[2];
-            int oldSlot = (int)arguments[3];
-            int oldCount = (int)arguments[4];
-            int newCount = (int)arguments[5];
-            int splitCount = (int)arguments[6];
+            string inventoryType = Convert.ToString(args[0]);
+            int itemID = Convert.ToInt32(args[1]);
+            int newSlot = Convert.ToInt32(args[2]);
+            int oldSlot = Convert.ToInt32(args[3]);
+            int oldCount = Convert.ToInt32(args[4]);
+            int newCount = Convert.ToInt32(args[5]);
+            int splitCount = Convert.ToInt32(args[1]);
 
             RPGInventoryMenu menu;
             Inventory inv = null;
 
-            _clientMenus.TryGetValue(player, out menu);
-            if (menu != null)
+            if (_clientMenus.TryGetValue(client, out menu))
             {
                 switch (inventoryType)
                 {
@@ -1023,7 +993,7 @@ namespace ResurrectionRP_Server.Inventory
                     }
                 }
             }
-            await new RPGInventoryMenu(menu.Inventory, menu.Outfit, menu.Bag, menu.Distant).OpenMenu(player);
+            await new RPGInventoryMenu(menu.Inventory, menu.Outfit, menu.Bag, menu.Distant).OpenMenu(client);
         }
 
         #endregion
@@ -1034,19 +1004,15 @@ namespace ResurrectionRP_Server.Inventory
             if (!client.Exists)
                 return;
 
-            var player = client;
-            var arguments = args;
-
-            string inventoryType = (string)arguments[0];
-            int itemID = (int)arguments[1];
-            int slot = (int)arguments[2];
-            int price = (int)arguments[3];
+            string inventoryType = Convert.ToString(args[0]);
+            int itemID = Convert.ToInt32(args[1]);
+            int slot = Convert.ToInt32(args[2]);
+            int price = Convert.ToInt32(args[3]);
 
             RPGInventoryMenu menu;
             Inventory inv = null;
 
-            _clientMenus.TryGetValue(player, out menu);
-            if (menu != null)
+            if (_clientMenus.TryGetValue(client, out menu))
             {
                 switch (inventoryType)
                 {
@@ -1066,7 +1032,9 @@ namespace ResurrectionRP_Server.Inventory
                     if (inv.InventoryList[slot] != null)
                     {
                         inv.InventoryList[slot].Price = price;
-                        await menu?.PriceChange?.Invoke(player, menu, inv.InventoryList[slot], price);
+
+                        if (menu.PriceChange != null)
+                            await menu.PriceChange.Invoke(client, menu, inv.InventoryList[slot], price);
                     }
                 }
             }
@@ -1074,13 +1042,14 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Refresh
-        public static async void Refresh(IPlayer sender, RPGInventoryMenu menu)
+        public static async Task Refresh(IPlayer sender, RPGInventoryMenu menu)
         {
             menu.PocketsItems.RPGInventoryItems = new List<RPGInventoryItem>();
+
             for (int i = 0; i < menu.Inventory.InventoryList.Length; i++)
             {
                 if (menu.Inventory.InventoryList[i] != null && menu.Inventory.InventoryList[i].Item != null)
-                    menu.PocketsItems.RPGInventoryItems.Add(new RPGInventoryItem(menu.Inventory.InventoryList[i], Utils.Enums.InventoryTypes.Pocket, i));
+                    menu.PocketsItems.RPGInventoryItems.Add(new RPGInventoryItem(menu.Inventory.InventoryList[i], InventoryTypes.Pocket, i));
             }
 
             if (menu.Bag != null)
@@ -1094,7 +1063,7 @@ namespace ResurrectionRP_Server.Inventory
                 for (int i = 0; i < menu.Bag.InventoryList.Length; i++)
                 {
                     if (menu.Bag.InventoryList[i] != null && menu.Bag.InventoryList[i].Item != null)
-                        menu.BagItems.RPGInventoryItems.Add(new RPGInventoryItem(menu.Bag.InventoryList[i], Utils.Enums.InventoryTypes.Bag, i));
+                        menu.BagItems.RPGInventoryItems.Add(new RPGInventoryItem(menu.Bag.InventoryList[i], InventoryTypes.Bag, i));
                 }
             }
             else
@@ -1118,7 +1087,7 @@ namespace ResurrectionRP_Server.Inventory
                 for (int i = 0; i < menu.Distant.InventoryList.Length; i++)
                 {
                     if (menu.Distant.InventoryList[i] != null && menu.Distant.InventoryList[i].Item != null)
-                        menu.DistantItems.RPGInventoryItems.Add(new RPGInventoryItem(menu.Distant.InventoryList[i], Utils.Enums.InventoryTypes.Distant, i));
+                        menu.DistantItems.RPGInventoryItems.Add(new RPGInventoryItem(menu.Distant.InventoryList[i], InventoryTypes.Distant, i));
                 }
             }
 
@@ -1132,7 +1101,7 @@ namespace ResurrectionRP_Server.Inventory
                     if (menu.Outfit.Slots[i] != null)
                     {
                         menu.OutfitItems.NamedSlots[i] = new RPGOutfitSlots(i + 1, (menu.Outfit.Slots[i].Item != null) ? menu.Outfit.Slots[i].Item.name : "", OutfitInventory.OutfitClasses[i], true);
-                        menu.OutfitItems.RPGInventoryItems.Add(new RPGInventoryItem(menu.Outfit.Slots[i], Utils.Enums.InventoryTypes.Outfit, i));
+                        menu.OutfitItems.RPGInventoryItems.Add(new RPGInventoryItem(menu.Outfit.Slots[i], InventoryTypes.Outfit, i));
                     }
                     else
                     {
@@ -1140,7 +1109,7 @@ namespace ResurrectionRP_Server.Inventory
                     }
                 }
             }
-            menu.OnMove?.Invoke(sender, menu);
+
             await menu.OpenMenu(sender);
         }
         #endregion
@@ -1153,8 +1122,8 @@ namespace ResurrectionRP_Server.Inventory
 
             var player = client;
 
-            _clientMenus.TryRemove(player, out RPGInventoryMenu menu);
-            await menu?.OnClose?.Invoke(player, menu);
+            if (_clientMenus.TryRemove(player, out RPGInventoryMenu menu))
+                await menu.OnClose?.Invoke(player, menu);
         }
         #endregion
     }

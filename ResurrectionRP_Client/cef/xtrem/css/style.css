@@ -1,0 +1,157 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Roboto:300,700');
+
+body {
+    overflow: hidden;
+    font-family: "Karla", helvetica, arial;
+}
+
+foreignobject {
+    overflow: initial;
+}
+
+.roue {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+svg#wheel {
+    width: 450px;
+    height: auto;
+}
+
+svg g.selection path {
+    opacity: 0.8;
+}
+
+svg g.selection.hoverable:hover path {
+    fill: url(#gradient-resu);
+    opacity: 1;
+}
+
+svg g.selection:hover foreignobject i, svg g.selection:hover foreignobject span {
+    color: #fff;
+}
+
+g.selection foreignobject i {
+    font-size: 40px;
+}
+
+g.selection foreignobject span {
+    font-size: 11px;
+}
+
+g.selection foreignobject i, g.selection foreignobject span {
+    position: absolute;
+    color: #FF4117;
+}
+
+g.selection.one foreignobject i {
+    left: 134px;
+    top: 50px;
+}
+
+g.selection.two foreignobject i {
+    left: 255px;
+    top: 50px;
+}
+
+g.selection.three foreignobject i {
+    left: 340px;
+    top: 135px;
+}
+
+g.selection.four foreignobject i {
+    left: 340px;
+    top: 255px;
+}
+
+g.selection.five foreignobject i {
+    left: 255px;
+    top: 340px;
+}
+
+g.selection.six foreignobject i {
+    left: 135px;
+    top: 340px;
+}
+
+g.selection.seven foreignobject i {
+    left: 50px;
+    top: 250px;
+}
+
+g.selection.eight foreignobject i {
+    left: 50px;
+    top: 135px;
+}
+
+/* details */
+#detail {
+    text-shadow: 1px 1px black;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 205px;
+    left: 123px;
+    text-align: center;
+}
+
+#detail h5 {
+  font-weight: bolder;
+  margin: 0;
+  font-size: 16px;
+  color: #ff4117;
+  padding: 0 13px;
+}
+
+#detail p {
+    color: white;
+    margin-bottom: 0;
+    font-size: 12px;
+    opacity: 0.8;
+    padding: 0 20px;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 150px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 20px;
+    border-radius: 6px;
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -94px;
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+    /* Tooltip arrow */
+    .tooltip .tooltiptext::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #555 transparent transparent transparent;
+    }
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.material-icons, .fas, .fab, .far {
+    padding: 10px 0 0 10px;
+}

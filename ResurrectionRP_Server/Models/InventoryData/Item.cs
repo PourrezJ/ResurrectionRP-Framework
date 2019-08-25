@@ -5,11 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using MongoDB.Bson.Serialization.Attributes;
+using OutfitInventory = ResurrectionRP_Server.Inventory.OutfitInventory;
 
 namespace ResurrectionRP_Server.Models
-{/*
-    [BsonKnownTypes(typeof(Alcohol), typeof(Axe), typeof(BuildingItem), typeof(ClothItem), typeof(CrateTools), typeof(Defibrilator), typeof(Eat), typeof(GasJerrycan), typeof(HandCuff), typeof(HealItem),
-        typeof(IdentityCard), typeof(MaskItem), typeof(PhoneItem), typeof(RadioItem), typeof(BagItem), typeof(Unusable), typeof(Weapons), typeof(SeedItem), typeof(LockPick))]*/
+{
+    [BsonKnownTypes(typeof(Items.Alcohol), typeof(Items.Axe), typeof(Items.BuildingItem), typeof(ClothItem), typeof(Items.CrateTools), typeof(Items.Defibrilator), typeof(Items.Eat) ,typeof(Items.GasJerrycan), typeof(Items.HandCuff), typeof(Items.HealItem),
+        typeof(Items.IdentityCard), /*typeof(Items.MaskItem),*/ typeof(Items.PhoneItem), typeof(Items.RadioItem), typeof(Items.BagItem), typeof(Items.Unusable), typeof(Items.Weapons), typeof(Items.SeedItem), typeof(Items.LockPick))]
     public class Item : ICloneable
     {
         [JsonProperty("id")]
@@ -71,7 +73,7 @@ namespace ResurrectionRP_Server.Models
         {
             return Task.CompletedTask;
         }
-        /*
+        
         public virtual async Task<bool> Drop(IPlayer c, int quantite, int slot, OutfitInventory inventory)
         {
             if (!isDropable)
@@ -79,27 +81,27 @@ namespace ResurrectionRP_Server.Models
 
             if (inventory.Delete(slot, quantite))
             {
-                var position = await c.GetPositionAsync();
-                var dimension = await c.GetDimensionAsync();
-                ResuPickup resu = await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), dimension);
-                resu.OnTakePickup += OnPickup;
+                var position = c.GetPosition();
+                var dimension = c.Dimension;
+                //ResuPickup resu = await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension); TODO
+                //resu.OnTakePickup += OnPickup;
 
                 return true;
             }
             return false;
         }
 
-        public virtual async Task<bool> Drop(IPlayer c, int quantite, int slot, Inventory inventory)
+        public virtual async Task<bool> Drop(IPlayer c, int quantite, int slot, Inventory.Inventory inventory)
         {
             if (!isDropable)
                 return false;
 
             if (inventory.Delete(slot, quantite))
             {
-                var position = await c.GetPositionAsync();
-                var dimension = await c.GetDimensionAsync();
-                ResuPickup resu = await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), dimension);
-                resu.OnTakePickup += OnPickup;
+                var position = c.GetPosition();
+                var dimension = c.Dimension;
+                //ResuPickup resu =await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension); TODO
+                //resu.OnTakePickup += OnPickup;
 
                 return true;
             }
@@ -108,7 +110,7 @@ namespace ResurrectionRP_Server.Models
 
         public virtual async Task OnPickup(IPlayer client, ResuPickup pickup)
         {
-            PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
+            Entities.Players.PlayerHandler ph = Entities.Players.PlayerManager.GetPlayerByClient(client);
             if (ph != null)
             {
                 if (!ph.InventoryIsFull(pickup.Quantite * pickup.Item.weight))
@@ -129,7 +131,7 @@ namespace ResurrectionRP_Server.Models
                 }
             }
         }
-        */
+        
         public virtual Task Give(IPlayer sender, IPlayer recever, int quantite)
         {
             return Task.CompletedTask;

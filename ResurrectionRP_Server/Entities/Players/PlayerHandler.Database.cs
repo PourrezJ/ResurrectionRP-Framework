@@ -18,8 +18,10 @@ namespace ResurrectionRP_Server.Entities.Players
         
         public async Task Save()
         {
-            Alt.Server.LogDebug("Save is disabled for now, waiting to be more complete.");
-            return;
+            //Alt.Server.LogWarning("Save is disabled for now, waiting to be more complete.");
+            //return;
+            if (GameMode.Instance.IsDebug)
+                Alt.Server.LogColored("~b~PlayerHandler ~w~| Save Player()");
             try
             {
                 if (Location.Pos == Vector3.Zero)
@@ -43,7 +45,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 var vehicle = await Client.GetVehicleAsync();
 
-                if (vehicle != null)
+                if (vehicle != null && !vehicle.GetVehicleHandler().isParked)
                 {
                     if (await vehicle.GetDriverAsync() == Client)
                     {

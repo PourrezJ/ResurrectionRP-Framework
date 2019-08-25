@@ -37,6 +37,9 @@ namespace ResurrectionRP_Server
         public bool ServerLoaded = false;
 
         [BsonIgnore]
+        public Streamer.Streamer Streamer { get; private set; }
+
+        [BsonIgnore]
         public float StreamDistance { get; private set; } = 500;
 
         [BsonIgnore]
@@ -49,20 +52,29 @@ namespace ResurrectionRP_Server
         public List<IPlayer> PlayerList = new List<IPlayer>();
 
 
-        [BsonIgnore]
-        public short GlobalDimension = short.MaxValue;
+        public static short GlobalDimension = short.MaxValue;
 
         public List<string> PlateList = new List<string>();
 
 
         #region Pools
         [BsonIgnore]
-        public MenuManager MenuManager { get; private set; }
+        public VehiclesManager VehicleManager { get; private set; }
+
+
+        // Menus
+        [BsonIgnore]
+        public XMenuManager.XMenuManager XMenuManager { get; private set; }
 
         [BsonIgnore]
-        public VehiclesManager VehicleManager { get; private set; }
-        //[BsonIgnore]
-        //public Weather.WeatherManager WeatherManager { get; private set; }
+        public Utils.DoorManager DoorManager { get; private set; }
+
+        [BsonIgnore]
+        public Weather.WeatherManager WeatherManager { get; private set; }
+        [BsonIgnore]
+        public Inventory.RPGInventoryManager RPGInventory { get; private set; }
+        [BsonIgnore]
+        public Phone.PhoneManager PhoneManager { get; private set; }
 
         public static bool ServerLock;
 
@@ -107,19 +119,31 @@ namespace ResurrectionRP_Server
         {
 
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
-            Alt.Server.LogInfo("Création des controlleurs...");
-            MenuManager = new MenuManager();
+            Alt.Server.LogColored("~g~Création des controlleurs...");
+            Streamer = new Streamer.Streamer();
+            DoorManager = new Utils.DoorManager();
             PlayerManager = new Entities.Players.PlayerManager();
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();
-            Alt.Server.LogInfo("Création des controlleurs terminée");
+            PhoneManager = new Phone.PhoneManager();
+            RPGInventory = new Inventory.RPGInventoryManager();
+            XMenuManager = new XMenuManager.XMenuManager();
+            WeatherManager = new Weather.WeatherManager();
+            Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
             if (Time == null)
                 Time = new Time();
 
-            Alt.Server.LogInfo("Initialisations des controlleurs...");
+            Alt.Server.LogColored("~g~Initialisations des controlleurs...");
+            await Loader.CarParkLoader.LoadAllCarPark();
+            await Loader.CarDealerLoaders.LoadAllCardealer();
+            await Loader.VehicleRentLoaders.LoadAllVehicleRent();
             await VehicleManager.LoadAllVehiclesActive();
-            Alt.Server.LogInfo("Initialisation des controlleurs terminé");
+            await Loader.ClothingLoader.LoadAllCloth();
+            await WeatherManager.InitWeather();
+            Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
+
+            new EventsHandler.Events();
 
             Alt.OnPlayerConnect += OnPlayerConnected;
             Alt.OnPlayerDisconnect += OnPlayerDisconnected;
@@ -130,8 +154,14 @@ namespace ResurrectionRP_Server
             {
                 Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z);
             });
+            Chat.RegisterCmd("task", async (IPlayer player, string[] args) =>
+            {
+                var vehicle = player.GetNearestVehicle();
+                player.Emit("TrySetPlayerIntoVehicle", vehicle);
+            });
             ServerLoaded = true;
         }
+
 
         private void OnPlayerConnected(IPlayer player, string reason)
         {
@@ -148,6 +178,7 @@ namespace ResurrectionRP_Server
             if (PlayerList.Find(b => b == player) != null)
                 PlayerList.Remove(player);
             Alt.Log($"==> {player.Name} has disconnected.");
+            RPGInventory.OnPlayerQuit(player);
 
         }
 
@@ -162,21 +193,27 @@ namespace ResurrectionRP_Server
                 return;
             }
 
-            //IVehicle vehicle = Alt.CreateVehicle(args[0], player.Position, player.Rotation);
-            
-            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), (uint)VehicleModel.Deluxo, player.Position, player.Rotation);
-
+            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), new Vector3(player.Position.X+5, player.Position.Y, player.Position.Z), player.Rotation, locked:false);
             Task.Run(async () =>
             {
-                await vh.SpawnVehicle();
-                if (vh.Vehicle != null)
-                    player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);
+                await vh.SpawnVehicle(null);
+                var ph = player.GetPlayerHandler();
+
+                if (ph != null)
+                {
+                    ph.ListVehicleKey.Add(new VehicleKey(vh.VehicleManifest.DisplayName, vh.Plate));
+                    if (vh.Vehicle != null)
+                        player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);
+
+                    await ph.UpdatePlayerInfo();
+                }
             });
         }
         public async Task Save()
         {
             await Database.MongoDB.Update(this, "gamemode", _id);
         }
+
         #endregion
     }
 }

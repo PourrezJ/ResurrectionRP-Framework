@@ -31,54 +31,25 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         [BsonIgnore, JsonIgnore]
         public IPlayer Owner { get; private set; }
 
-        private IVehicle vehicle;
-        [BsonIgnore, JsonIgnore]
-        public IVehicle Vehicle
-        {
-            get
-            {
-                return vehicle;
-            }
-            set
-            {
-                if (value != null)
-                {
-                    VehicleSync.Vehicle = value;
-                }
-                vehicle = value;
-            }
-        }
-
         [BsonIgnore, JsonIgnore]
         public VehicleManifest VehicleManifest;
 
         [BsonRepresentation(BsonType.Int32, AllowOverflow = true)]
         public uint Model { get; private set; }
 
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        public ConcurrentDictionary<int, int> Mods { get; set; } = new ConcurrentDictionary<int, int>();
 
         public string OwnerID { get; set; } // SocialClubName
         [BsonRepresentation(BsonType.Int32, AllowOverflow = true)]
         public short Dimension { get; set; } = short.MaxValue;
 
+        [BsonIgnore, JsonIgnore]
+        public IVehicle Vehicle { get; set; }
+
+        public bool isParked { get; set; } = false;
+
         public bool SpawnVeh { get; set; }
         public bool Locked { get; set; } = true;
 
-        public byte PrimaryColor { get; set; }
-        public byte SecondaryColor { get; set; }
-
-        private VehicleSync _vehicleSync = null;
-        public VehicleSync VehicleSync
-        {
-            get
-            {
-                if (_vehicleSync == null)
-                    _vehicleSync = new VehicleSync();
-                return _vehicleSync;
-            }
-            set => _vehicleSync = value;
-        }
 
         public DateTime LastUse { get; set; } = DateTime.Now;
         public string LastDriver { get; set; }
@@ -86,6 +57,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public bool PlateHide;
 
         public OilTank OilTank = null;
+
         #endregion
 
         #region Events
@@ -100,7 +72,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Constructor
         public VehicleHandler(string socialClubName, uint model, Vector3 position, Vector3 rotation, byte primaryColor = 0, byte secondaryColor = 0,
             float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
-            IPlayer owner = null, ConcurrentDictionary<int, int> mods = null, int[] neon = null, bool spawnVeh = false, short dimension = short.MaxValue, Inventory inventory = null, bool freeze = false, float dirt = 0, float health = 1000)
+            IPlayer owner = null, ConcurrentDictionary<int, int> mods = null, int[] neon = null, bool spawnVeh = false, short dimension = short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
         {
             if (model == 0)
                 return;
@@ -109,17 +81,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             PrimaryColor = primaryColor;
             SecondaryColor = secondaryColor;
 
-            VehicleSync = new VehicleSync
-            {
-                Location = new Location(position, rotation),
-                Fuel = fuel,
-                FuelMax = fuelMax,
-                Engine = engineStatus,
-                FreezePosition = freeze,
-                Dirt = dirt,
-            };
-
-            VehicleSync.FreezePosition = freeze;
+            FreezePosition = freeze;
 
             Plate = (string.IsNullOrEmpty(plate)) ? VehiclesManager.GenerateRandomPlate() : plate;
 
@@ -131,33 +93,30 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             SpawnVeh = spawnVeh;
             Dimension = dimension;
+            Location = new Location(position, rotation);
             /*
             if (inventory != null)
                 Inventory = inventory;*/
-                
+
             if (OilTank == null)
                 OilTank = new OilTank();
         }
         #endregion
 
         #region Method
-        public async Task<IVehicle> SpawnVehicle(IPlayer owner = null, Location location = null)
+        public async Task<IVehicle> SpawnVehicle(Location location = null)
         {
             if (Dimension.ToString() == "-1")
                 Dimension = short.MaxValue;
 
-            await AltAsync.Do(() =>
+            await AltAsync.Do(async () =>
             {
                 try
                 {
-                    if (location == null)
-                    {
-                        Vehicle = Alt.CreateVehicle(Model, VehicleSync.Location.Pos, VehicleSync.Location.GetRotation());
-                    }
+                    if(location == null)
+                        Vehicle = Alt.CreateVehicle(Model,  Location.Pos , Location.GetRotation() );
                     else
-                    {
                         Vehicle = Alt.CreateVehicle(Model, location.Pos, location.GetRotation());
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -166,7 +125,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (Vehicle == null)
                     return;
 
-                VehicleSync.Vehicle = Vehicle;
+                Vehicle = Vehicle;
                 Vehicle.SetData("VehicleHandler", this);
 
                 Vehicle.Dimension = Dimension;
@@ -186,25 +145,32 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     }
                 }
 
-                if (VehicleSync.NeonsColor != null && VehicleSync.NeonsColor != new Color())
-                    Vehicle.NeonColor = VehicleSync.NeonsColor;
+                if (NeonsColor != null && NeonsColor != new Color())
+                    Vehicle.NeonColor = NeonsColor;
 
+
+                Vehicle.DirtLevel = Dirt;
                 Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
-                Vehicle.EngineOn = VehicleSync.Engine;
+                Vehicle.EngineOn = Engine;
+                Vehicle.EngineHealth = EngineHealth;
+                Vehicle.BodyHealth = BodyHealth;
+                Vehicle.RadioStation = RadioID;
+
+                await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
+                await Vehicle.SetEngineOnAsync(Engine);
+
+
                 LastUse = DateTime.Now;
 
                 if (location != null)
                 {
-                    VehicleSync.Location = location;
+                    Location = location;
                 }
 
                 VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
 
                 GameMode.Instance.VehicleManager.VehicleHandlerList.TryAdd(Vehicle, this);
             });
-            
-            if (owner != null)
-                SetOwner(owner);
             /*
             if (HaveTowVehicle())
             {
@@ -231,6 +197,47 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     GameMode.Instance.PlateList.Remove(Plate);
                 }
             }
+        }
+        
+        public async Task LockUnlock(IPlayer client, bool statut)
+        {
+            VehicleHandler VH = VehiclesManager.GetHandlerByVehicle(Vehicle);
+
+            if (PlayerManager.HasVehicleKey(client, await Vehicle.GetNumberplateTextAsync()) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())
+            {
+                Locked = statut;
+                await Vehicle.SetLockStateAsync(statut ? VehicleLockState.Locked : VehicleLockState.Unlocked);
+                await client.NotifyAsync($"Vous avez {(statut ? " ~r~ouvert" : "~g~fermé")} ~w~le véhicule");
+            }
+        }  
+
+        public async Task<bool> LockUnlock(IPlayer client)
+        {
+            VehicleHandler VH = VehiclesManager.GetHandlerByVehicle(Vehicle);
+
+            if (PlayerManager.HasVehicleKey(client, await Vehicle.GetNumberplateTextAsync()) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())
+            {
+                Locked = await Vehicle.GetLockStateAsync() == VehicleLockState.Locked ? false : true;
+                await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
+                await client.NotifyAsync($"Vous avez {(Locked ? " ~r~fermé" : "~g~ouvert")} ~w~le véhicule");
+
+                return true;
+            }
+            return false;
+        }
+
+        public async Task UpdateProperties()
+        {
+            this.Dirt = await Vehicle.GetDirtLevelAsync();
+
+            this.Engine = await Vehicle.IsEngineOnAsync();
+            this.EngineHealth = await Vehicle.GetEngineHealthAsync();
+
+            Tuple<bool, bool, bool, bool> NeonState = await Vehicle.GetNeonActiveAsync();
+            
+            //this.NeonState.Clear();
+            //this.NeonState.Add(NeonState.Item1);
+            
         }
 
         public void SetOwner(IPlayer player) => OwnerID = player.GetSocialClub();

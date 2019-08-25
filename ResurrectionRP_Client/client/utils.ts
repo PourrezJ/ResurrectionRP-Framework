@@ -10,10 +10,41 @@ var loading;
 
 
 export function initialize() {
+    alt.onServer("test", (vehicle) => {
+        game.taskEnterVehicle(alt.Player.local.scriptID, vehicle.scriptID, 10000, -1, 1, 1, 0);
+        alt.setTimeout(() => {
+            game.taskVehicleDriveToCoord(alt.Player.local.scriptID, vehicle.scriptID, 0, 0, 74, 100, 1, vehicle.model, 2883621 , 10, 1);
+            
+        }, 10000);
+    });
     alt.onServer('SetPlayerIntoVehicle', (vehicle, seat) => {
         alt.setTimeout(() => {
             game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle.scriptID, seat);
         }, 20);
+    });
+    alt.onServer('TrySetPlayerIntoVehicle', (vehicle: alt.Vehicle) => {
+        var success: boolean = false;
+        var seat: number = game.getVehicleModelNumberOfSeats(vehicle.model);
+        for (var i = seat - 2; i > -1; i--) {
+            alt.log("Nombre de siège: " + seat)
+            alt.log("Vérificatin actuelle: " + i)
+            if (game.isVehicleSeatFree(vehicle.scriptID, i) && success == false) {
+                game.taskEnterVehicle(alt.Player.local.scriptID, vehicle.scriptID, 10000, i, 1, 1, 0);
+                success = true;
+            }
+        }
+        if (!success) {
+
+            alt.emit('alertNotify', "Erreur", "Aucun siège dans le véhicule disponible! ", 5000);
+        }
+
+        alt.setTimeout(() => {
+            game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle.scriptID, seat);
+        }, 20);
+    });
+
+    alt.onServer('toggleControl', (state: boolean) => {
+        alt.toggleGameControls(state);
     });
 
     alt.onServer('Display_Help', (text, time) => {
@@ -31,8 +62,12 @@ export function initialize() {
         new Loading(text, time, type, toggled);
     });
 
-
-
+    alt.onServer("showCursor", (state: boolean) => alt.showCursor(state));
+    alt.onServer('showNotification', (text) => {
+        game.setNotificationTextEntry("STRING");
+        game.addTextComponentSubstringPlayerName(text);
+        game.drawNotification(true, false);
+    });
 
     alt.on('SET_NOTIFICATION_BACKGROUND_COLOR', (args: any[]) => game.setNotificationBackgroundColor(parseInt(args[0])))
 
@@ -250,4 +285,19 @@ export function initialize() {
 
 export function Distance(positionOne, positionTwo) {
     return Math.sqrt(Math.pow(positionOne.x - positionTwo.x, 2) + Math.pow(positionOne.y - positionTwo.y, 2) + Math.pow(positionOne.z - positionTwo.z, 2));
+}
+
+export function GetCameraDirection() {
+    const heading = game.getGameplayCamRelativeHeading() + game.getEntityHeading(alt.Player.local.scriptID);
+    const pitch = game.getGameplayCamRot(0).x;
+    var x = -Math.sin(heading * Math.PI / 180.0);
+    var y = Math.cos(heading * Math.PI / 180.0);
+    var z = Math.sin(pitch * Math.PI / 180.0);
+    var len = Math.sqrt(x * x + y * y + z * z);
+    if (len !== 0) {
+        x = x / len;
+        y = y / len;
+        z = z / len;
+    }
+    return new alt.Vector3(x, y, z);
 }

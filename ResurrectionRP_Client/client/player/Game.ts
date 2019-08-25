@@ -1,9 +1,16 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
 import * as enums from 'client/Utils/Enums/Enums';
+import * as chat from 'client/chat/chat';
+import Raycast, * as raycast from 'client/Utils/Raycast';
+
 import { Time as TimeLib } from 'client/Env/Time';
 import { Survival as SurvivalLib } from 'client/player/Survival';
 import { Hud as HudLib } from 'client/player/Hud';
+import { RPGInventoryManager } from 'client/menus/rpgInventory/RPGinventory';
+import { Weather as WeatherLib } from 'client/Env/Weather';
+import { Interaction as InteractionLib } from 'client/Player/Interaction';
+import { Doors as DoorsManagerLib } from 'client/Env/Doors';
 
 export class Game {
     //region Static Var
@@ -21,6 +28,12 @@ export class Game {
 
     private _Time: TimeLib = new TimeLib();
     public get Time(): TimeLib { return this._Time; }
+
+    private _Weather: WeatherLib = null;
+    public get Weather(): WeatherLib { return this._Weather; }
+
+    private _Doors: DoorsManagerLib = null;
+    public get Doors(): DoorsManagerLib { return this._Doors; }
 
     private _IsConnected: boolean;
     public get IsConnected(): boolean { return this._IsConnected; }
@@ -46,6 +59,9 @@ export class Game {
     private _Hud: HudLib;
     public get Hud(): HudLib { return this._Hud; }
 
+    private _Inventory: RPGInventoryManager;
+    public get Inventory(): RPGInventoryManager { return this._Inventory; }
+
     //End region pools
     //constructor
     constructor(
@@ -56,7 +72,7 @@ export class Game {
         Hunger: number,
         AnimSettings: string,
         Time: string,
-        Weather: number,
+        Weather: string,
         WeatherWind: number,
         WeatherWindDirection: number,
         isDebug: boolean,
@@ -73,6 +89,7 @@ export class Game {
             var time = JSON.parse(Time);
             this._Time = new TimeLib(time.Hours, time.Minutes, time.Seconds);
             this._IsDebug = isDebug;
+            new InteractionLib();
 
             game.setAudioFlag('LoadMPData', true);
             game.setAudioFlag('DisableFlightMusic', true);
@@ -89,6 +106,9 @@ export class Game {
 
             alt.log('Chargement des pools');
             this._Hud = new HudLib(Money);
+            this._Doors = new DoorsManagerLib();
+            this._Inventory = new RPGInventoryManager();
+            this._Weather = new WeatherLib(Weather, WeatherWind, WeatherWindDirection);
             alt.log('Chargement des pools done');
 
             alt.log("Chargement des stats");
@@ -99,6 +119,8 @@ export class Game {
             game.setRelationshipBetweenGroups(2, game.getHashKey("SYNCPED_TEAMMATES"), game.getHashKey("SYNCPED"));
 
             game.startAudioScene("FBI_HEIST_H5_MUTE_AMBIENCE_SCENE");
+            game.setPedConfigFlag(alt.Player.local.scriptID, 35, true);
+            game.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
 
             alt.log("Stats terminées");
 
@@ -106,9 +128,11 @@ export class Game {
         } catch (ex) {
             alt.log(ex);
         }
+        
+
         alt.on("update", () => {
-            game.disableControlAction(0, 75, true);
-            game.disableControlAction(0, 58, true);
+            //game.disableControlAction(0, 75, true);
+            //game.disableControlAction(0, 58, true);
 
             this._Time.OnTick();
 
@@ -126,10 +150,9 @@ export class Game {
                         0   //Is mic muted SaltyClient.Voice.IsMicrophoneMuted
                     );
             }
+
         });
-        alt.on('keydown', (key) => {
-            alt.emitServer('OnKeyPress', key);
-        });
+
     }
     //end constructor
     //methods

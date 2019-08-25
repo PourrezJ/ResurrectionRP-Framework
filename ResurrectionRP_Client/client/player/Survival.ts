@@ -41,7 +41,9 @@ export class Survival {
                 } else {
                     this._RefreshHunger = Date.now() + 1000 * 60 * 3;
                 }
+                alt.emitServer("UpdateHungerThirst", this.Hunger, this.Thirst);
             }
+
             if (this.RefreshThirst < Date.now()) {
                 if (this.Thirst > 0) this.Thirst--;
                 if (this.Thirst <= 0) {
@@ -56,8 +58,8 @@ export class Survival {
                 } else {
                     this._RefreshThirst = Date.now() + 1000 * 60 * 3;
                 }
+                alt.emitServer("UpdateHungerThirst", this.Hunger, this.Thirst);
             }
-            alt.emitServer("UpdateHungerThirst", this.Hunger, this.Thirst);
         });
     }
 

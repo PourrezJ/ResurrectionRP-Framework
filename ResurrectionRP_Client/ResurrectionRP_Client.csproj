@@ -39,7 +39,7 @@
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptOutFile />
-    <TypeScriptOutDir>C:\altv\ResuRP\ResurrectionRP_Client\bin\client</TypeScriptOutDir>
+    <TypeScriptOutDir>C:\altv\server-files\resources\resurrectionrp\client</TypeScriptOutDir>
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptSourceMap>False</TypeScriptSourceMap>
@@ -78,10 +78,28 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="client\chat\chat.ts" />
+    <TypeScriptCompile Include="client\Creator\Creator.ts" />
+    <TypeScriptCompile Include="client\Env\Doors.ts" />
+    <TypeScriptCompile Include="client\Env\Time.ts" />
+    <TypeScriptCompile Include="client\Env\Weather.ts" />
     <TypeScriptCompile Include="client\Helpers\UiHelper.ts" />
     <TypeScriptCompile Include="client\login\Login.ts" />
     <TypeScriptCompile Include="client\main.ts" />
+    <TypeScriptCompile Include="client\Medical.ts" />
+    <TypeScriptCompile Include="client\menus\rpgInventory\RPGInventory.ts" />
+    <TypeScriptCompile Include="client\menus\xtreamMenu\xtreamMenuManager.ts" />
     <TypeScriptCompile Include="client\Models\Camera.ts" />
+    <TypeScriptCompile Include="client\notify\notify.ts" />
+    <TypeScriptCompile Include="client\player\Game.ts" />
+    <TypeScriptCompile Include="client\player\Hud.ts" />
+    <TypeScriptCompile Include="client\player\Interaction.ts" />
+    <TypeScriptCompile Include="client\player\PlayerCustomization.ts" />
+    <TypeScriptCompile Include="client\player\Survival.ts" />
+    <TypeScriptCompile Include="client\RPGInventory.ts" />
+    <TypeScriptCompile Include="client\Streamer\Streamer.ts" />
+    <TypeScriptCompile Include="client\Streamer\Streamer.ts" />
+    <TypeScriptCompile Include="client\Utils\Enums\Enums.ts" />
+    <TypeScriptCompile Include="client\Utils\Raycast.ts" />
     <TypeScriptCompile Include="typings\altv-client.d.ts" />
     <TypeScriptCompile Include="typings\natives.d.ts" />
     <TypeScriptCompile Include="client\utils.ts" />
@@ -90,6 +108,105 @@
     <Content Include="cef\chat\app.js" />
     <Content Include="cef\chat\index.html" />
     <Content Include="cef\chat\style.css" />
+    <Content Include="cef\inventory\css\style.css" />
+    <Content Include="cef\inventory\img\icons\apple.png" />
+    <Content Include="cef\inventory\img\icons\backpack.png" />
+    <Content Include="cef\inventory\img\icons\bandage.png" />
+    <Content Include="cef\inventory\img\icons\barre.png" />
+    <Content Include="cef\inventory\img\icons\beef.png" />
+    <Content Include="cef\inventory\img\icons\beer.png" />
+    <Content Include="cef\inventory\img\icons\bobine-cuivre.png" />
+    <Content Include="cef\inventory\img\icons\bouteille-verre.png" />
+    <Content Include="cef\inventory\img\icons\bracelet.png" />
+    <Content Include="cef\inventory\img\icons\caissetools.png" />
+    <Content Include="cef\inventory\img\icons\canne.png" />
+    <Content Include="cef\inventory\img\icons\cap.png" />
+    <Content Include="cef\inventory\img\icons\cavair.png" />
+    <Content Include="cef\inventory\img\icons\champagne.png" />
+    <Content Include="cef\inventory\img\icons\cheese.png" />
+    <Content Include="cef\inventory\img\icons\chocolate.png" />
+    <Content Include="cef\inventory\img\icons\cigarette.png" />
+    <Content Include="cef\inventory\img\icons\cni.png" />
+    <Content Include="cef\inventory\img\icons\coal.png" />
+    <Content Include="cef\inventory\img\icons\cocaine.png" />
+    <Content Include="cef\inventory\img\icons\coffee.png" />
+    <Content Include="cef\inventory\img\icons\defibrilator.png" />
+    <Content Include="cef\inventory\img\icons\donuts.png" />
+    <Content Include="cef\inventory\img\icons\earring.png" />
+    <Content Include="cef\inventory\img\icons\filet.png" />
+    <Content Include="cef\inventory\img\icons\frein.png" />
+    <Content Include="cef\inventory\img\icons\fricadelle.png" />
+    <Content Include="cef\inventory\img\icons\fuel.png" />
+    <Content Include="cef\inventory\img\icons\glass.png" />
+    <Content Include="cef\inventory\img\icons\glasses.png" />
+    <Content Include="cef\inventory\img\icons\gloves.png" />
+    <Content Include="cef\inventory\img\icons\gnole.png" />
+    <Content Include="cef\inventory\img\icons\gold.png" />
+    <Content Include="cef\inventory\img\icons\graine.png" />
+    <Content Include="cef\inventory\img\icons\grapes.png" />
+    <Content Include="cef\inventory\img\icons\heroine.png" />
+    <Content Include="cef\inventory\img\icons\hotdog.png" />
+    <Content Include="cef\inventory\img\icons\hydroponics.png" />
+    <Content Include="cef\inventory\img\icons\iron.png" />
+    <Content Include="cef\inventory\img\icons\jacket.png" />
+    <Content Include="cef\inventory\img\icons\jambon-beurre.png" />
+    <Content Include="cef\inventory\img\icons\jerrycan.png" />
+    <Content Include="cef\inventory\img\icons\juice.png" />
+    <Content Include="cef\inventory\img\icons\kevlar.png" />
+    <Content Include="cef\inventory\img\icons\kit-soin.png" />
+    <Content Include="cef\inventory\img\icons\main-bg.png" />
+    <Content Include="cef\inventory\img\icons\mask.png" />
+    <Content Include="cef\inventory\img\icons\menotte.png" />
+    <Content Include="cef\inventory\img\icons\meth.png" />
+    <Content Include="cef\inventory\img\icons\moteur.png" />
+    <Content Include="cef\inventory\img\icons\necklace.png" />
+    <Content Include="cef\inventory\img\icons\nems.png" />
+    <Content Include="cef\inventory\img\icons\outfit_sprite.png" />
+    <Content Include="cef\inventory\img\icons\pants.png" />
+    <Content Include="cef\inventory\img\icons\petrol-brut.png" />
+    <Content Include="cef\inventory\img\icons\petrol.png" />
+    <Content Include="cef\inventory\img\icons\phone.png" />
+    <Content Include="cef\inventory\img\icons\pickaxe.png" />
+    <Content Include="cef\inventory\img\icons\pizza.png" />
+    <Content Include="cef\inventory\img\icons\planche.png" />
+    <Content Include="cef\inventory\img\icons\plastic.png" />
+    <Content Include="cef\inventory\img\icons\plot.png" />
+    <Content Include="cef\inventory\img\icons\pochon.png" />
+    <Content Include="cef\inventory\img\icons\rum.png" />
+    <Content Include="cef\inventory\img\icons\sake.png" />
+    <Content Include="cef\inventory\img\icons\salade.png" />
+    <Content Include="cef\inventory\img\icons\sand.png" />
+    <Content Include="cef\inventory\img\icons\sardine.png" />
+    <Content Include="cef\inventory\img\icons\secateur.png" />
+    <Content Include="cef\inventory\img\icons\serpent.png" />
+    <Content Include="cef\inventory\img\icons\shirt.png" />
+    <Content Include="cef\inventory\img\icons\shoes.png" />
+    <Content Include="cef\inventory\img\icons\spoiler.png" />
+    <Content Include="cef\inventory\img\icons\sprunk.png" />
+    <Content Include="cef\inventory\img\icons\sushi.png" />
+    <Content Include="cef\inventory\img\icons\suspension.png" />
+    <Content Include="cef\inventory\img\icons\syrniki.png" />
+    <Content Include="cef\inventory\img\icons\tacos.png" />
+    <Content Include="cef\inventory\img\icons\talky.png" />
+    <Content Include="cef\inventory\img\icons\tequila.png" />
+    <Content Include="cef\inventory\img\icons\tomato.png" />
+    <Content Include="cef\inventory\img\icons\tranmission.png" />
+    <Content Include="cef\inventory\img\icons\turbo.png" />
+    <Content Include="cef\inventory\img\icons\unknown-item.png" />
+    <Content Include="cef\inventory\img\icons\vin.png" />
+    <Content Include="cef\inventory\img\icons\vodka.png" />
+    <Content Include="cef\inventory\img\icons\watch.png" />
+    <Content Include="cef\inventory\img\icons\water.png" />
+    <Content Include="cef\inventory\img\icons\weapon.png" />
+    <Content Include="cef\inventory\img\icons\weapons_sprite.png" />
+    <Content Include="cef\inventory\img\icons\weed.png" />
+    <Content Include="cef\inventory\img\icons\whisky.png" />
+    <Content Include="cef\inventory\img\icons\wood.png" />
+    <Content Include="cef\inventory\index.html" />
+    <Content Include="cef\inventory\js\app.js" />
+    <Content Include="cef\inventory\tmpl\dropItem.html" />
+    <Content Include="cef\inventory\tmpl\priceItem.html" />
+    <Content Include="cef\inventory\tmpl\splitItem.html" />
     <Content Include="cef\login\css\style.css" />
     <Content Include="cef\login\img\BG.jpg" />
     <Content Include="cef\login\img\bg.png" />
@@ -115,6 +232,8 @@
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-brands-400.svg" />
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-regular-400.svg" />
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.svg" />
+    <Content Include="cef\notify\index.html" />
+    <Content Include="cef\notify\js\main.js" />
     <Content Include="cef\speedometer\css\style.css" />
     <Content Include="cef\speedometer\img\compteur-on.png" />
     <Content Include="cef\speedometer\img\compteur.png" />
@@ -128,6 +247,22 @@
     <Content Include="cef\speedometer\img\speed-bg.png" />
     <Content Include="cef\speedometer\js\app.js" />
     <Content Include="cef\speedometer\speedometer.html" />
+    <Content Include="cef\xtrem\css\style.css" />
+    <Content Include="cef\xtrem\js\app.js" />
+    <Content Include="cef\xtrem\playerMenu.html" />
+    <Content Include="lib\css\angular-confirm.min.css" />
+    <Content Include="lib\css\bootstrap.min.css" />
+    <Content Include="lib\css\fontawesome.5.0.13.min.css" />
+    <Content Include="lib\css\font_awesome\css\font-awesome.css" />
+    <Content Include="lib\css\font_awesome\css\font-awesome.min.css" />
+    <Content Include="lib\css\font_awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="lib\css\ionicons\css\ionicons.css" />
+    <Content Include="lib\css\ionicons\css\ionicons.min.css" />
+    <Content Include="lib\css\ionicons\fonts\ionicons.svg" />
+    <Content Include="lib\css\jquery-ui.min.css" />
+    <Content Include="lib\css\material-design-iconic-font\css\material-design-iconic-font.css" />
+    <Content Include="lib\css\material-design-iconic-font\css\material-design-iconic-font.min.css" />
+    <Content Include="lib\css\material-design-iconic-font\fonts\Material-Design-Iconic-Font.svg" />
     <Content Include="lib\js\jquery.min.js" />
     <TypeScriptCompile Include="client\speedometer\speedometer.ts" />
   </ItemGroup>
@@ -144,6 +279,49 @@
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.ttf" />
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.woff" />
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-solid-900.woff2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="cef\notify\css\notify.min.css" />
+    <Content Include="lib\webfonts\fa-brands-400.svg" />
+    <Content Include="lib\webfonts\fa-regular-400.svg" />
+    <Content Include="lib\webfonts\fa-solid-900.svg" />
+    <Content Include="resource.cfg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\css\font_awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="lib\css\font_awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="lib\css\font_awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="lib\css\font_awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="lib\css\font_awesome\fonts\FontAwesome.otf" />
+    <Content Include="lib\css\ionicons\fonts\ionicons.eot" />
+    <Content Include="lib\css\ionicons\fonts\ionicons.ttf" />
+    <Content Include="lib\css\ionicons\fonts\ionicons.woff" />
+    <Content Include="lib\css\material-design-iconic-font\fonts\Material-Design-Iconic-Font.eot" />
+    <Content Include="lib\css\material-design-iconic-font\fonts\Material-Design-Iconic-Font.ttf" />
+    <Content Include="lib\css\material-design-iconic-font\fonts\Material-Design-Iconic-Font.woff" />
+    <Content Include="lib\css\material-design-iconic-font\fonts\Material-Design-Iconic-Font.woff2" />
+    <Content Include="lib\webfonts\fa-brands-400.eot" />
+    <Content Include="lib\webfonts\fa-brands-400.ttf" />
+    <Content Include="lib\webfonts\fa-brands-400.woff" />
+    <Content Include="lib\webfonts\fa-brands-400.woff2" />
+    <Content Include="lib\webfonts\fa-regular-400.eot" />
+    <Content Include="lib\webfonts\fa-regular-400.ttf" />
+    <Content Include="lib\webfonts\fa-regular-400.woff" />
+    <Content Include="lib\webfonts\fa-regular-400.woff2" />
+    <Content Include="lib\webfonts\fa-solid-900.eot" />
+    <Content Include="lib\webfonts\fa-solid-900.ttf" />
+    <Content Include="lib\webfonts\fa-solid-900.woff" />
+    <Content Include="lib\webfonts\fa-solid-900.woff2" />
+    <Content Include="lib\webfonts\FuturaPTBook.woff" />
+    <Content Include="lib\webfonts\FuturaPTHeavy.woff" />
+    <Content Include="lib\webfonts\poppins\Poppins-Black.otf" />
+    <Content Include="lib\webfonts\poppins\Poppins-Bold.otf" />
+    <Content Include="lib\webfonts\poppins\Poppins-Light.otf" />
+    <Content Include="lib\webfonts\poppins\Poppins-Regular.otf" />
+    <Content Include="lib\webfonts\poppins\Poppins-Thin.otf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\webfonts\poppins\Poppins-Regular.woff2" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -173,7 +351,8 @@
   </ProjectExtensions>
   <PropertyGroup>
     <PostBuildEvent>set ClientDir=C:\altv\server-files\resources\resurrectionrp\client
-rmdir  /S /Q %25ClientDir%25
+rmdir  /S /Q %25ClientDir%25\cef
+rmdir  /S /Q %25ClientDir%25\lib
 mkdir %25ClientDir%25
 mkdir %25ClientDir%25\cef
 mkdir %25ClientDir%25\lib

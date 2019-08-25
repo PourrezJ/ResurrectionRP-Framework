@@ -1,30 +1,31 @@
-﻿using AltV.Net.Enums;
-using ResurrectionRP.Server;
+﻿
 using System.Collections.Generic;
+using ItemID = ResurrectionRP_Server.Models.InventoryData.ItemID;
+using WeaponHash = ResurrectionRP_Server.Utils.Enums.WeaponHash;
+using SeedType = ResurrectionRP_Server.Illegal.WeedLab.SeedType;
 
-namespace ResurrectionRP_Server.Models.InventoryData
+namespace ResurrectionRP_Server.Items
 {
     class LoadItem
     {
-        private static List<Item> items;
-        public static List<Item> ItemsList
+        private static List<Models.Item> items;
+        public static List<Models.Item> ItemsList
         {
             get
             {
                 if (items == null)
                 {
-                    items = new List<Item>();
+                    items = new List<Models.Item>();
                     items.AddRange(LoadItemList());
                 }
                 return items;
             }
         }
 
-        private static List<Item> LoadItemList()
+        private static List<Models.Item> LoadItemList()
         {
-            return new List<Item>()
+            return new List<Models.Item>()
                 {
-                /*
                     new Eat(ItemID.Lasagnes, "Lasagnes", "Les lasagnes de la Mama!", 1 , true, true, true, food:15),
                     new Eat(ItemID.Fromage, "Fromage de chèvre", "Fromage de chèvre bien odorant", 1, true, true,true, food:15, isDockable: true, itemPrice: 35, icon:"cheese"),
                     new Eat(ItemID.Sardine, "Sardine", "La sardine est une espèce de poisson de la famille des Clupeidae", 1, true, true,true, food:2, isDockable: true, itemPrice: 4.20, icon:"sardine"),
@@ -41,7 +42,7 @@ namespace ResurrectionRP_Server.Models.InventoryData
                     new Eat(ItemID.Tacos , "Tacos ", "Sans gluten", 1 , true, true, true, food:30, icon:"tacos", isDockable:true, itemPrice:17.5),
                     new Eat(ItemID.Cafe, "Un Café", "Du café soluble dégueulasse.", 1 , true, true,true, drink:15, icon:"coffee", isDockable:true, itemPrice:17.5),
                     new Eat(ItemID.Eau, "Bouteille Eau", "Eau potable?.", 1 , true, true, true, drink:20, icon:"water", isDockable: true, itemPrice: 28),
-                    new Eat(ItemID.Sprunk, "Canette de Sprunk", "Peut-être radioactif...", 1 , true, true, true, drink:15, icon:"sprunk"),
+                    new Eat(ItemID.Sprunk, "Canette de Sprunk", "Peut-être radioactif...", 1 , true, true, true, drink:15, icon:"sprunk", isDockable: true, itemPrice: 17.5),
                     new Eat(ItemID.Ramen, "Ramen", "Des nouilles chinoise en gros ...", 1 , true, true, true, food:15),
                     new Eat(ItemID.Grappa, "Grappa", "Je suis rital et je le reste ... ", 1 , true, true, true, drink:20),
                     new Eat(ItemID.Apple , "Pomme", "Une pomme verte et juteuse, oh y'a un trou dedans", 2 , true, true, true, food:5, icon:"apple"),
@@ -74,8 +75,10 @@ namespace ResurrectionRP_Server.Models.InventoryData
                     new HealItem(ItemID.KitSoin,"Kit de Soin","Un Kit de soin pour les blessures graves.",2,true,true,true,life:75, icon:"kit-soin"),
                     new Defibrilator(ItemID.Defibrilateur,"Defibrilateur","Un défibrilateur et tout le matériel nécessaire à une réanimation.",3,true,true,true, icon:"defibrilator"),
 
-                    new IdentityCard(ItemID.IdentityCard,"Passeport", ""),
+                    new IdentityCard(ItemID.IdentityCard, "Passeport", ""),
+
                     new HandCuff(ItemID.Handcuff, "Paire de Menottes", "", 1, icon:"menotte"),
+                    new HandCuff(ItemID.Handcuff, "Serflex", "", 1, icon:"menotte", isDockable: true, itemPrice: 50),
 
                     new CrateTools(ItemID.CrateTool, "Caisse a outil", "", 5, icon:"caissetool"),
 
@@ -89,36 +92,37 @@ namespace ResurrectionRP_Server.Models.InventoryData
                     new Alcohol(ItemID.Mirabelle , "Mirabelle", "Peux servir d'antiseptique ou de carburant.", 1 , true, true, true, drink:30, timer:120000),
                     new Alcohol(ItemID.Vin, "Une Bouteille de Vin", "Une bouteille de Vin.", 1, true, true,true, icon:"vin"),
                     new Alcohol(ItemID.Vin, "Martini", "Une bouteille de Vin.", 1, true, true,true, icon:"whisky"),
+                    new Alcohol(ItemID.Vin, "Alcool de serpent", "", 1, true, true,true, icon:"vin", isDockable: true, itemPrice: 140),
 
                     new Unusable(ItemID.Plastic, "Matière Polymère", "", 4),
 
-                    new BuildingItem(ItemID.Building, "barriere", "", 1, modelhash:1072616162),
+                    //new BuildingItem(ItemID.Building, "barriere", "", 1, modelhash:1072616162),
                     new Axe(ItemID.Hache, "Hache", "Permet de couper du bois", 1, icon:"pickaxe"),
 
-                    new ClothItem(ItemID.TShirt, "TShirt Blanc", "Un tshirt qui sent la sueur", new ClothData(1, 0, 0), 0, true, false, false, true, false, 0, classes:"shirt", icon:"shirt"),
+                    new ClothItem(ItemID.TShirt, "TShirt Blanc", "Un tshirt qui sent la sueur", new Models.ClothData(1, 0, 0), 0, true, false, false, true, false, 0, classes:"shirt", icon:"shirt"),
 
-                    new PhoneItem(ItemID.Phone, "Téléphone", "", PhoneManager.GeneratePhone(), 1, true, true, false, true, true, 500, "phone", "phone"),
+                    new PhoneItem(ItemID.Phone, "Téléphone", "", Phone.PhoneManager.GeneratePhone(), 1, true, true, false, true, true, 500, "phone", "phone"),
                     new RadioItem(ItemID.Radio, "Radio", "", 1, true, true, false, true, true, 500, "radio", "talky", "radio"),
-                    new BagItem(ItemID.Bag, "Backpack", "", new ClothData(1, 0, 0), 25, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"),
+                    new BagItem(ItemID.Bag, "Backpack", "", new Models.ClothData(1, 0, 0), 25, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"),
 
-                    //new Weapons(ItemID.Weapon, "Poignard", "", 1, hash: WeaponModel.Dagger, isDockable: true, itemPrice: 9100),
-                    new Weapons(ItemID.Weapon, "Batte", "", 3, hash: WeaponModel.BaseballBat, isDockable: true, itemPrice: 8400),
-                    new Weapons(ItemID.Weapon, "Pied de biche", "", 3, hash: WeaponModel.Crowbar, isDockable: true, itemPrice: 10500),
-                    new Weapons(ItemID.Weapon, "Club de golf", "", 3, hash: WeaponModel.GolfClub, isDockable: true, itemPrice: 10500),
-                    new Weapons(ItemID.Weapon, "Marteau", "", 3, hash: WeaponModel.Hammer, isDockable: true, itemPrice: 10500),
-                    new Weapons(ItemID.Weapon, "Hachette", "", 3, hash: WeaponModel.Hatchet, isDockable: true, itemPrice: 12600),
-                    new Weapons(ItemID.Weapon, "Poing américain", "", 3, hash: WeaponModel.BrassKnuckles, isDockable: true, itemPrice: 5950),
-                    new Weapons(ItemID.Weapon, "Couteau", "", 2, hash: WeaponModel.Knife, isDockable: true, itemPrice: 9800),
+                    new Weapons(ItemID.Weapon, "Poignard", "", 1, hash: WeaponHash.Dagger, isDockable: true, itemPrice: 9100),
+                    new Weapons(ItemID.Weapon, "Batte", "", 3, hash: WeaponHash.Bat, isDockable: true, itemPrice: 8400),
+                    new Weapons(ItemID.Weapon, "Pied de biche", "", 3, hash: WeaponHash.Crowbar, isDockable: true, itemPrice: 10500),
+                    new Weapons(ItemID.Weapon, "Club de golf", "", 3, hash: WeaponHash.GolfClub, isDockable: true, itemPrice: 10500),
+                    new Weapons(ItemID.Weapon, "Marteau", "", 3, hash: WeaponHash.Hammer, isDockable: true, itemPrice: 10500),
+                    new Weapons(ItemID.Weapon, "Hachette", "", 3, hash: WeaponHash.Hatchet, isDockable: true, itemPrice: 12600),
+                    new Weapons(ItemID.Weapon, "Poing américain", "", 3, hash: WeaponHash.KnuckleDuster, isDockable: true, itemPrice: 5950),
+                    new Weapons(ItemID.Weapon, "Couteau", "", 2, hash: WeaponHash.Knife, isDockable: true, itemPrice: 9800),
                     //new Weapons(ItemID.Weapon, "Machette", "", 3, hash: WeaponHash.Knife, isDockable: true, itemPrice: 11200),
-                    new Weapons(ItemID.Weapon, "Cran d'arret", "", 3, hash: WeaponModel.Switchblade, isDockable: true, itemPrice: 11200),
-                    new Weapons(ItemID.Weapon, "Cle anglaise", "", 3, hash: WeaponModel.PipeWrench, isDockable: true, itemPrice: 10500),
-                    new Weapons(ItemID.Weapon, "Hache", "", 3, hash: WeaponModel.BattleAxe, isDockable: true, itemPrice: 10500),
-                    new Weapons(ItemID.Weapon, "Queue de Billard", "", 3, hash: WeaponModel.PoolCue, isDockable: true, itemPrice: 7000),
-                    new Weapons(ItemID.Weapon, "Pistolet", "", 3, hash: WeaponModel.Pistol, isDockable: true, itemPrice: 35000),
-                    new Weapons(ItemID.Weapon, "Heavy Revolver", "", 3, hash: WeaponModel.HeavyPistol, isDockable: true, itemPrice: 50000),
-                    new Weapons(ItemID.Weapon, "Double Action Revolver", "", 3, hash: WeaponModel.DoubleActionRevolver, isDockable: true, itemPrice: 50000),
+                    new Weapons(ItemID.Weapon, "Cran d'arret", "", 3, hash: WeaponHash.SwitchBlade, isDockable: true, itemPrice: 11200),
+                    new Weapons(ItemID.Weapon, "Cle anglaise", "", 3, hash: WeaponHash.Wrench, isDockable: true, itemPrice: 10500),
+                    new Weapons(ItemID.Weapon, "Hache", "", 3, hash: WeaponHash.BattleAxe, isDockable: true, itemPrice: 10500),
+                    new Weapons(ItemID.Weapon, "Queue de Billard", "", 3, hash: WeaponHash.PoolCue, isDockable: true, itemPrice: 7000),
+                    new Weapons(ItemID.Weapon, "Pistolet", "", 3, hash: WeaponHash.Pistol, isDockable: true, itemPrice: 35000),
+                    new Weapons(ItemID.Weapon, "Heavy Revolver", "", 3, hash: WeaponHash.HeavyPistol, isDockable: true, itemPrice: 50000),
+                    new Weapons(ItemID.Weapon, "Double Action Revolver", "", 3, hash: WeaponHash.DoubleAction, isDockable: true, itemPrice: 50000),
                     //new Weapons(ItemID.Weapon, "Hachette en pierre", "", 3, hash: WeaponHash.StoneHatchet, isDockable: true, itemPrice: 7000),
-                    new Weapons(ItemID.Weapon, "Katana", "", 3, hash: WeaponModel.BrokenBottle, isDockable: false, itemPrice: 7000),
+                    new Weapons(ItemID.Weapon, "Katana", "", 3, hash: WeaponHash.Bottle, isDockable: false, itemPrice: 7000),
 
                     new Alcohol(ItemID.Rhum , "Rhum", "Tous les chemins mènent au Rhum", 1 , true, true, true, timer:120000, isDockable: false, itemPrice: 140, icon: "rum"),
                     new HealItem(ItemID.RhumLiquide, "Rhum Liquide", "Déinfecte et sert de carburant.",1,true,true,true,life:-15, icon:"bandage"),
@@ -139,7 +143,7 @@ namespace ResurrectionRP_Server.Models.InventoryData
                     new Unusable(ItemID.BOrange, "Pochon d'Orange Bud", "Un pochon de 25gr d'Orange Bud", 1, icon:"weed"),
                     new Unusable(ItemID.BWhiteWidow, "Pochon de White Widow", "Un pochon de 25gr de White Widow", icon:"weed"),
 
-                    new LockPick(ItemID.LockPick, "Kit de crochetage", "", 1, true, false, true, true)*/
+                    //new LockPick(ItemID.LockPick, "Kit de crochetage", "", 1, true, false, true, true)
             };
         }
     }

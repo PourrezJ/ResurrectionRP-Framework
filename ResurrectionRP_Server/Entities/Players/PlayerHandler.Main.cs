@@ -9,11 +9,10 @@ using AltV.Net;
 using AltV.Net.Data;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
+using RPGInventoryManager = ResurrectionRP_Server.Inventory.RPGInventoryManager;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
-
-
     [BsonIgnoreExtraElements]
     public partial class PlayerHandler
     {
@@ -67,13 +66,13 @@ namespace ResurrectionRP_Server.Entities.Players
             = new Models.Location(new Vector3(), new Vector3()); // Default spawn
 
         public Models.PlayerCustomization Character { get; set; }
-        /**
-        public Inventory PocketInventory { get; set; } = new Inventory(6, 4);
+        
+        public Inventory.Inventory PocketInventory { get; set; } = new Inventory.Inventory(6, 4);
 
         [BsonIgnore]
-        public Inventory BagInventory { get; set; }
+        public Inventory.Inventory BagInventory { get; set; }
 
-        public OutfitInventory OutfitInventory { get; set; } = new OutfitInventory();**/
+        public Inventory.OutfitInventory OutfitInventory { get; set; } = new Inventory.OutfitInventory();
         public double Money { get; private set; }
         public Bank.BankAccount BankAccount { get; set; }
         public int Hunger { get; set; } = 100;
@@ -96,6 +95,50 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
         private Data.PlayerSync playerSync = null;
+        public Data.PlayerSync PlayerSync
+        {
+            get
+            {
+                if (playerSync == null)
+                    playerSync = new Data.PlayerSync();
+                return playerSync;
+            }
+            set => playerSync = value;
+        }
+
+        private Radio.Radio radioSelected;
+        [BsonIgnore]
+        public Radio.Radio RadioSelected
+        {
+            get
+            {
+                if (OutfitInventory.Slots[15] == null)
+                    return null;
+
+                var radio = OutfitInventory.Slots[15].Item as Items.RadioItem;
+                if (radio != null)
+                    return radio.Radio;
+                return null;
+            }
+            set => radioSelected = value;
+        }
+
+        private Phone.Phone phoneSelected;
+        [BsonIgnore]
+        public Phone.Phone PhoneSelected
+        {
+            get
+            {
+                if (OutfitInventory.Slots[14] == null)
+                    return null;
+
+                var phone = OutfitInventory.Slots[14].Item as Items.PhoneItem;
+                if (phone != null)
+                    return phone.PhoneHandler;
+                return null;
+            }
+            set => phoneSelected = value;
+        }
         #endregion
 
         #region Constructor
@@ -118,29 +161,32 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public async Task LoadPlayer(IPlayer client, bool firstspawn = false)
         {
+
             Client = client;
             client.SetData("PlayerHandler", this);
             if (PlayerHandlerList.TryAdd(client, this))
             {
-                if (BankAccount == null) BankAccount = new Bank.BankAccount(Bank.AccountType.Personnal, await Bank.BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
+                if (BankAccount == null)
+                    BankAccount = new Bank.BankAccount(Bank.AccountType.Personnal, await Bank.BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
+                await GameMode.Instance.Streamer.LoadStreamPlayer(client);
 
                 if (firstspawn)
                 {
-                    /**
-                    PocketInventory.AddItem(Inventory.ItemByID(ItemID.JambonBeurre), 1);
-                    PocketInventory.AddItem(Inventory.ItemByID(ItemID.Eau), 1);
+                    
+                    PocketInventory.AddItem(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.JambonBeurre), 1);
+                    PocketInventory.AddItem(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.Eau), 1);
 
-                    OutfitInventory.Slots[11] = new ItemStack(new ClothItem(ItemID.Shoes, "Chaussure", "", new ClothData((Character.Gender == 0) ? (byte)1 : (byte)3, 0, 0), 0, true, false, false, true, false, 0, classes: "shoes", icon: "shoes"), 1, 11);
-                    OutfitInventory.Slots[9] = new ItemStack(new ClothItem(ItemID.Pant, "Pantalon", "", new ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "pants", icon: "pants"), 1, 9);
-                    OutfitInventory.Slots[5] = new ItemStack(new ClothItem(ItemID.Jacket, "Resurrection", "", new ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "jacket", icon: "jacket"), 1, 9);
-                    //OutfitInventory.Slots[13] = new ItemStack(new BagItem(ItemID.Bag, "Backpack", "", new ClothData(1, 0, 0), new Inventory(25, 20, InventoryType.Bag),0, true, false, false, true, false, 0, classes: "backpack", icon: "backpack"), 1, 9);
-                    **/
+                    OutfitInventory.Slots[11] = new Models.ItemStack(new ClothItem(Models.InventoryData.ItemID.Shoes, "Chaussure", "", new Models.ClothData((Character.Gender == 0) ? (byte)1 : (byte)3, 0, 0), 0, true, false, false, true, false, 0, classes: "shoes", icon: "shoes"), 1, 11);
+                    OutfitInventory.Slots[9] = new Models.ItemStack(new ClothItem(Models.InventoryData.ItemID.Pant, "Pantalon", "", new Models.ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "pants", icon: "pants"), 1, 9);
+                    OutfitInventory.Slots[5] = new Models.ItemStack(new ClothItem(Models.InventoryData.ItemID.Jacket, "Resurrection", "", new Models.ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "jacket", icon: "jacket"), 1, 9);
+                    //OutfitInventory.Slots[13] = new ItemStack(new BagItem(ItemID.Bag, "Backpack", "", new Models.ClothData(1, 0, 0), new Inventory(25, 20, InventoryType.Bag),0, true, false, false, true, false, 0, classes: "backpack", icon: "backpack"), 1, 9);
+                    
                     await AddMoney(PlayerManager.StartMoney);
 
                     Location = GameMode.FirstSpawn;
                 }
 
-                /*var inventoriesPhones = this.GetStacksItems(ItemID.Phone);
+                var inventoriesPhones = this.GetStacksItems(Models.InventoryData.ItemID.Phone);
 
                 if (inventoriesPhones.Count > 0)
                 {
@@ -148,12 +194,12 @@ namespace ResurrectionRP_Server.Entities.Players
                     {
                         foreach (var phone in stacks.Value)
                         {
-                            var phoneItem = phone.Item as PhoneItem;
+                            var phoneItem = phone.Item as Items.PhoneItem;
                             if (phoneItem != null)
-                                Phone.AddPhoneInList(Client, phoneItem.PhoneHandler);
+                                Phone.Phone.AddPhoneInList(Client, phoneItem.PhoneHandler);
                         }
                     }
-                }**/
+                }
 
                 await AltAsync.Do( () =>
                 {
@@ -163,40 +209,40 @@ namespace ResurrectionRP_Server.Entities.Players
                     Client.Emit
                     (
                         Utils.Enums.Events.PlayerInitialised,
-                        StaffRank,
+                        (int)StaffRank,
                         Identite.Name,
                         Convert.ToSingle(Money),
                         Thirst,
                         Hunger,
                         JsonConvert.SerializeObject(AnimSettings),
                         JsonConvert.SerializeObject(GameMode.Instance.Time),
-                        0,//GameMode.Instance.WeatherManager.Actual_weather,
-                        0,//GameMode.Instance.WeatherManager.Wind,
-                        0,//GameMode.Instance.WeatherManager.WindDirection,
+                        GameMode.Instance.WeatherManager.Actual_weather.ToString(),
+                        GameMode.Instance.WeatherManager.Wind,
+                        GameMode.Instance.WeatherManager.WindDirection,
                         GameMode.Instance.IsDebug,
                         JsonConvert.SerializeObject(Location)
                     );
 
                     Client.Spawn(Location.Pos, 0);
                     Character.ApplyCharacter(Client);
-                    Client.Dimension = GameMode.Instance.GlobalDimension;
+                    Client.Dimension = GameMode.GlobalDimension;
                     Client.Health = (ushort)(Health + 100);
                     Client.Emit("FadeIn", 0);
                 });
 
-               // await UpdateClothing();
+               await UpdateClothing();
 
-                /**if (PlayerSync.IsCuff)
+                /*if (PlayerSync.IsCuff)
                     await SetCuff(true);
 
                 PlayerSync.IsDead = (Health <= 0);
-
-                await GameMode.Instance.HouseManager.OnPlayerConnected(client);
+                */
+                //await GameMode.Instance.HouseManager.OnPlayerConnected(client);
                 await GameMode.Instance.DoorManager.OnPlayerConnected(client);
-                await GameMode.Instance.PedManager.OnPlayerConnected(client);
-                await GameMode.Instance.VoiceController.OnPlayerConnected(client);
-                await GameMode.Instance.IllegalManager.OnPlayerConnected(client);
-                **/
+                //await GameMode.Instance.PedManager.OnPlayerConnected(client);
+                //await GameMode.Instance.VoiceController.OnPlayerConnected(client);
+                //await GameMode.Instance.IllegalManager.OnPlayerConnected(client);
+                
                 await Task.Delay(500);
 
                 if (firstspawn)
@@ -222,12 +268,362 @@ namespace ResurrectionRP_Server.Entities.Players
             await UpdatePlayerInfo();
         }
 
+
+        public async Task<bool> HasMoney(double somme)
+        {
+            if (somme < 0) return false;
+            if (Money >= somme)
+            {
+                Money -= somme;
+                await Client?.EmitAsync(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money)) ;
+                await UpdatePlayerInfo();
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> HasBankMoney(double somme, string reason)
+        {
+            if (somme < 0) return false;
+            if (BankAccount.Balance >= somme)
+            {
+                BankAccount.GetBankMoney(somme, reason);
+                await Client?.EmitAsync(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money));
+                await UpdatePlayerInfo();
+                return true;
+            }
+            return false;
+        }
+
         #endregion
 
+        #endregion
+
+        #region Misc
+        public async Task UpdateHungerThirst(int hunger = -1, int thirst = -1)
+        {
+            if (!Client.Exists)
+                return;
+            Thirst = (thirst == -1) ? Thirst : thirst;
+            Hunger = (hunger == -1) ? Hunger : hunger;
+            await  Client?.EmitAsync("UpdateHungerThirst", Hunger, Thirst);
+            await UpdatePlayerInfo();
+        }
         #endregion
 
         #region Inventory
+        public async Task UpdateClothing()
+        {
+            Clothing = new Models.Clothings(Client);
 
+            for (int i = 0; i < OutfitInventory.Slots.Length; i++)
+            {
+                try
+                {
+                    ClothItem cloth = null;
+                    var clothSlot = OutfitInventory.Slots[i];
+
+                    if (OutfitInventory.Slots[i] != null && OutfitInventory.Slots[i].Item != null)
+                        cloth = (OutfitInventory.Slots[i].Item) as ClothItem;
+
+                    switch (i)
+                    {
+                        case 0: // glasses
+                            Clothing.Glasses = (cloth != null) ? new Models.PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture) : (Character.Gender == 0) ? new Models.PropData(14, 0) : new Models.PropData(13, 0);
+                            break;
+
+                        case 1: // cap
+                            Clothing.Hats = (cloth != null) ? new Models.PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture) : (Character.Gender == 0) ? new Models.PropData(121, 0) : new Models.PropData(120, 0);
+                            break;
+
+                        case 2: // necklace
+                            Clothing.Accessory = (cloth != null) ? cloth.Clothing : new Models.ClothData();
+                            break;
+
+                        case 3: // mask
+                            Clothing.Mask = (cloth != null) ? cloth.Clothing : new Models.ClothData();
+                            break;
+
+                        case 4: // earring
+                            Clothing.Ears = (cloth != null) ? new Models.PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture) : (Character.Gender == 0) ? new Models.PropData(33, 0) : new Models.PropData(12, 0);
+                            break;
+
+                        case 5: // jacket
+                            if (cloth != null)
+                            {
+                                Clothing.Tops = cloth.Clothing;
+
+                                int torso = 0;
+
+                                if (Character.Gender == 0)
+                                    torso = Loader.ClothingLoader.ClothingsMaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
+                                else
+                                    torso = Loader.ClothingLoader.ClothingsFemaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
+
+                                Clothing.Torso = new Models.ClothData((byte)torso, 0, 0);
+                            }
+                            else
+                            {
+                                Clothing.Tops = new Models.ClothData(15, 0, 0);
+                                Clothing.Torso = new Models.ClothData(15, 0, 0);
+                            }
+                            break;
+
+                        case 6: // watch
+                            if (cloth != null) Clothing.Watches = new Models.PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                            break;
+
+                        case 7: // shirt
+                            Clothing.Undershirt = (cloth != null) ? cloth.Clothing : new Models.ClothData(15, 0, 0);
+                            break;
+
+                        case 8: // bracelet
+                            if (cloth != null) Clothing.Bracelets = new Models.PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                            break;
+
+                        case 9: // pants
+                            Clothing.Legs = (cloth != null) ? cloth.Clothing : (Character.Gender == 0) ? new Models.ClothData(14, 0, 0) : new Models.ClothData(15, 0, 0);
+                            break;
+
+                        case 10: // gloves
+                            /*
+                            Clothing.Torso = (cloth != null) ? cloth.Clothing : (Character.Gender == 0) ?
+                                    new Models.ClothData((byte)ClothingLoader.ClothingsMaleTopsList.DrawablesList[Clothing.Tops.Drawable].Torso[0], 0, 0) :
+                                    new Models.ClothData((byte)ClothingLoader.ClothingsFemaleTopsList.DrawablesList[Clothing.Tops.Drawable].Torso[0], 0, 0);*/
+                            break;
+
+                        case 11: // shoes
+                            Clothing.Feet = (cloth != null) ? cloth.Clothing : (Character.Gender == 0) ? new Models.ClothData(34, 0, 0) : new Models.ClothData(35, 0, 0);
+                            break;
+
+                        case 12: // kevlar
+                            Clothing.BodyArmor = (cloth != null) ? cloth.Clothing : new Models.ClothData();
+                            break;
+
+                        case 13: // backpack
+                            if (clothSlot?.Item != null)
+                            {
+                                var backpack = (clothSlot.Item) as Items.BagItem;
+                                if (backpack.InventoryBag != null)
+                                {
+                                    BagInventory = backpack.InventoryBag;
+                                    Clothing.Bags = backpack.Clothing;
+                                }
+                            }
+                            else
+                            {
+                                BagInventory = null;
+                                Clothing.Bags = new Models.ClothData();
+                            }
+                            break;
+
+                        case 14: // phone
+                            if (clothSlot?.Item != null)
+                            {
+                                var phone = clothSlot.Item as Items.PhoneItem;
+                                if (phone != null)
+                                    PhoneSelected = phone.PhoneHandler;
+                            }
+                            break;
+
+                        case 15:
+                            if (clothSlot?.Item != null)
+                            {
+                                var radio = clothSlot.Item as Items.RadioItem;
+                                if (radio != null)
+                                    RadioSelected = radio.Radio;
+                                else
+                                    RadioSelected = null;
+                            }
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Client.GetData("SocialClub", out string social);
+                    Alt.Server.LogError($"UpdateClothing ID: {i} player: {social}" +ex);
+                }
+            }
+            await Clothing.UpdatePlayerClothing();
+        }
+
+        public bool PocketIsFull() => PocketInventory.IsFull();
+
+        public bool InventoryIsFull(double itemSize = 0)
+        {
+            if (BagInventory != null)
+            {
+                if (BagInventory.IsFull(itemSize) && PocketInventory.IsFull(itemSize)) return true;
+                else return false;
+            }
+            else
+            {
+                if (PocketInventory.IsFull(itemSize)) return true;
+                else return false;
+            }
+        }
+
+        public async Task<bool> AddItem(Models.Item item, int quantity = 1)
+        {
+
+            if (PocketInventory.AddItem(item, quantity))
+            {
+                if (RPGInventoryManager.HasInventoryOpen(this.Client))
+                {
+                    var rpg = RPGInventoryManager.GetRPGInventory(this.Client);
+                    if (rpg != null)
+                        RPGInventoryManager.Refresh(this.Client, rpg);
+                }
+                await item.OnPlayerGetItem(this.Client);
+
+                return true;
+            }
+            else if (BagInventory != null && BagInventory.AddItem(item, quantity))
+            {
+                if (RPGInventoryManager.HasInventoryOpen(this.Client))
+                {
+                    var rpg = RPGInventoryManager.GetRPGInventory(this.Client);
+                    if (rpg != null)
+                        RPGInventoryManager.Refresh(this.Client, rpg);
+                }
+                await item.OnPlayerGetItem(this.Client);
+                return true;
+            }
+            else return false;
+        }
+
+        public bool HasItemID(Models.InventoryData.ItemID id)
+        {
+            if (PocketInventory.HasItemID(id)) return true;
+            else if (BagInventory != null && BagInventory.HasItemID(id)) return true;
+            else return false;
+        }
+
+        public List<Models.ItemStack> GetAllItems()
+        {
+
+            List<Models.ItemStack> _stacks = new List<Models.ItemStack>();
+
+            foreach (Models.ItemStack stack in PocketInventory.InventoryList)
+            {
+                _stacks.Add(stack);
+            }
+
+            if (BagInventory != null)
+            {
+                foreach (Models.ItemStack stack in BagInventory.InventoryList)
+                {
+                    _stacks.Add(stack);
+                }
+            }
+
+            return _stacks;
+        }
+
+        public bool DeleteItem(int slot, string inventoryType, int quantity)
+        {
+            switch (inventoryType)
+            {
+                case Utils.Enums.InventoryTypes.Pocket:
+                    return PocketInventory.Delete(slot, quantity);
+
+                case Utils.Enums.InventoryTypes.Bag:
+                    return BagInventory.Delete(slot, quantity);
+
+                case Utils.Enums.InventoryTypes.Outfit:
+                    return OutfitInventory.Delete(slot, quantity);
+            }
+            return false;
+        }
+
+        public bool DeleteOneItemWithID(Models.InventoryData.ItemID itemID)
+        {
+            if (PocketInventory.DeleteAll(itemID, 1) == 1)
+                return true;
+            if (BagInventory != null && BagInventory.DeleteAll(itemID, 1) == 1)
+                return true;
+            if (OutfitInventory != null && OutfitInventory.Delete(itemID, 1))
+                return true;
+            return false;
+        }
+
+        public bool DeleteAllItem(Models.InventoryData.ItemID itemID, int quantite = 1)
+        {
+            int pocketCount = PocketInventory.CountItem(itemID);
+            var bagCount = 0;
+            if (BagInventory != null)
+                bagCount = BagInventory.CountItem(itemID);
+
+
+            if (pocketCount + bagCount >= quantite)
+            {
+                if (pocketCount >= quantite)
+                    PocketInventory.DeleteAll(itemID, quantite);
+                else
+                {
+                    PocketInventory.DeleteAll(itemID, pocketCount);
+                    if (BagInventory != null)
+                        BagInventory.DeleteAll(itemID, quantite - pocketCount);
+                }
+
+                return true;
+            }
+            return false;
+        }
+
+        public int CountItem(Models.InventoryData.ItemID itemid)
+        {
+            int somme = 0;
+            somme += PocketInventory.CountItem(itemid);
+
+            if (BagInventory != null)
+            {
+                somme += BagInventory.CountItem(itemid);
+            }
+
+            return somme;
+        }
+
+        public int CountItem(Models.Item item)
+        {
+            int somme = 0;
+            somme += PocketInventory.CountItem(item);
+
+            if (BagInventory != null)
+            {
+                somme += BagInventory.CountItem(item);
+            }
+
+            return somme;
+        }
+
+        public Dictionary<string, Models.ItemStack[]> GetStacksItems(Models.InventoryData.ItemID itemID)
+        {
+            Dictionary<string, Models.ItemStack[]> items = new Dictionary<string, Models.ItemStack[]>();
+
+            var pocket = PocketInventory.FindAllItemWithType(itemID);
+            if (pocket != null && pocket.Length > 0)
+                items.Add(Utils.Enums.InventoryTypes.Pocket, pocket);
+
+            if (BagInventory != null)
+            {
+                var bag = BagInventory.FindAllItemWithType(itemID);
+                if (bag != null && bag.Length > 0)
+                    items.Add(Utils.Enums.InventoryTypes.Bag, bag);
+            }
+
+            if (OutfitInventory != null)
+            {
+                var outfit = OutfitInventory.FindAllItemWithType(itemID);
+                if (outfit != null && outfit.Length > 0)
+                    items.Add(Utils.Enums.InventoryTypes.Outfit, outfit);
+            }
+            return items;
+        }
+
+        #endregion
+
+        #region Methods
 
         #endregion
     }

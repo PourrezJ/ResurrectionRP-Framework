@@ -27,9 +27,9 @@ namespace ResurrectionRP_Server.Entities.Players
             if (ph == null)
                 return;
 
-            /*
+            
             switch (Keycode)
-            {
+            {/**
                 case ConsoleKey.NumPad0:
                     if (MenuManager.HasOpenMenu(client))
                         return;
@@ -62,22 +62,22 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                     await ph.OpenPlayerMenu();
                     break;
-
+                    */
                 case ConsoleKey.F3:
                     if (vehicle == null || !vehicle.Exists)
                         return;
 
                     if (!vehicle.Exists)
                         return;
-
+                    /*
                     if (ph.IsCuff())
                     {
                         await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menottés.");
                         return;
-                    }
+                    }*/
                     await vh.OpenXtremMenu(client);
                     break;
-
+                    /*
                 case ConsoleKey.F4:
                     if (ph.IsCuff())
                     {
@@ -86,14 +86,16 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                     await ph.OpenAdminMenu();
                     break;
-
+                    */
                 case ConsoleKey.Backspace:
+                    await XMenuManager.XMenuManager.CloseMenu(client);
+                    /*
                     if (MenuManager.HasOpenMenu(client))
                         await MenuManager.CloseMenu(client);
                     await XMenuManager.CloseMenu(client);
-                    await RPGInventoryManager.CloseMenu(client);
+                    await RPGInventoryManager.CloseMenu(client);*/
                     break;
-
+                    /*
                 case ConsoleKey.M:
                     if (MenuManager.HasOpenMenu(client))
                         return;
@@ -160,18 +162,18 @@ namespace ResurrectionRP_Server.Entities.Players
                     await ph.Crounch(!ph.PlayerSync.Crounch);
 
                     break;
-
+                **/
                 case ConsoleKey.I:
-                    if (MenuManager.HasOpenMenu(client))
-                        return;
+/*                    if (MenuManager.HasOpenMenu(client))
+                        return;*/
 
-                    if (ph.IsCuff())
+/*                    if (ph.IsCuff())
                     {
                         await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menottés.");
                         return;
-                    }
+                    }*/
 
-                    RPGInventoryMenu menu = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, null);
+                    Inventory.RPGInventoryMenu menu = new Inventory.RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, null);
                     menu.OnMove += (async (c, m) =>
                     {
                         await ph.UpdatePlayerInfo();
@@ -179,7 +181,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     await menu.OpenMenu(client);
                     break;
 
-                case ConsoleKey.PageUp:
+                /**case ConsoleKey.PageUp:
                     if (MenuManager.HasOpenMenu(client))
                         return;
 
@@ -258,8 +260,8 @@ namespace ResurrectionRP_Server.Entities.Players
                 case ConsoleKey.NumPad8:
                 case ConsoleKey.NumPad9:
                     await OnAnimationKeyPressed(Keycode);
-                    break;
-            }*/
+                    break;*/
+            }
         }
     }
 }

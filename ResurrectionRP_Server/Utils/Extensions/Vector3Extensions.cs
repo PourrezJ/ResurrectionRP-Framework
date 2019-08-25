@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Numerics;
+using AltV.Net.Data;
+using AltV.Net;
 
-namespace ResurrectionRP_Server.Utils.Extensions
+namespace ResurrectionRP_Server
 {
     public static class Vector3Extensions
     {
@@ -53,5 +55,9 @@ namespace ResurrectionRP_Server.Utils.Extensions
 
         public static Vector3 Subtract(this Vector3 left, Vector3 right) => new Vector3(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
 
+        public static Entity.Position ConvertToEntityPosition(this Vector3 pos) =>  new Entity.Position { X = pos.X, Y=pos.Y, Z=pos.Z };
+        
+        public static AltV.Net.Data.Rotation ConvertToEntityRotation(this Vector3 pos) => new AltV.Net.Data.Rotation(pos.X, pos.Y, pos.Z );
+        
     }
 }

@@ -99,7 +99,7 @@ namespace ResurrectionRP_Server.Inventory
 
             if (InventoryList.Any(x => x?.Item.id == item.id) && item.isStackable)
             {
-               Models.ItemStack itemStack = InventoryList.First(x => x?.Item.id == item.id);
+                Models.ItemStack itemStack = InventoryList.First(x => x?.Item.id == item.id);
                 itemStack.Quantity += quantity;
             }
             else
@@ -152,7 +152,10 @@ namespace ResurrectionRP_Server.Inventory
                 if (itemStack.Quantity > quantity)
                     itemStack.Quantity -= quantity;
                 else
+                {
+                    itemStack.Quantity = 0;
                     InventoryList[slot] = null;
+                }
                 return true;
             }
             catch (Exception ex)
@@ -202,7 +205,7 @@ namespace ResurrectionRP_Server.Inventory
 
         public static Models.Item ItemByID(ItemID id)
         {
-            var item =Items.LoadItem.ItemsList.Find(i => i.id == id) ?? null;
+            var item = Items.LoadItem.ItemsList.Find(i => i.id == id) ?? null;
 
             if (item == null)
                 return null;

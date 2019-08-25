@@ -12,6 +12,20 @@ app.config(['$compileProvider', ($compileProvider) => {
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|package|file):/);
 }]);
 
+function loadInventory(pocket, bag, distant, outfit, give) {
+    console.log("cef: loadInventory recept");
+    var event = new CustomEvent("ItemsLoaded", { "detail": { pocket, bag, distant, outfit, give } });
+    window.dispatchEvent(event);
+}
+
+$(() => {
+    if ('alt' in window) {
+        console.log("cef: Request Item Inventory Event");
+        alt.on("loadInventory", loadInventory);
+        alt.emit('loaditem');
+    }
+});
+
 /**
  * ngRightClick
  * @description Directive to create an attribute 'ng-right-click' in view
@@ -149,7 +163,7 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
             $(".distantBar span").css("width", value.toString() + "%");
 
         }
-        
+
         // Outfit
         if ($scope.itemsOutfit !== undefined) {
             let itemInSlot = null;
@@ -300,7 +314,7 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
      */
     $scope.onSlotDrop = (ev, ui, slot) => {
 
-        if ($scope.selectedItem === undefined || $scope.selectedItem === null ||$scope.selectedItem === slot.item) return;
+        if ($scope.selectedItem === undefined || $scope.selectedItem === null || $scope.selectedItem === slot.item) return;
 
         if (slot.item !== undefined && $scope.selectedItem.id && slot.item.id) {
             $scope.selectedItem.quantity += slot.item.quantity;
@@ -312,7 +326,7 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
         if (oldSlot.item !== undefined && (oldSlot.index !== slot.index || oldSlot.item.inventoryType !== slot.type)) {
             try {
                 //oldSlot.item.inventoryType = slot.type;
-                alt.emit("RPGInventory_SwitchItemInventory", slot.type, oldSlot.type, oldSlot.item.id, slot.index, oldSlot.item.inventorySlot);
+                alt.emit("inventorySwitchItem", slot.type, oldSlot.type, oldSlot.item.id, slot.index, oldSlot.item.inventorySlot);
                 //slot.inventorySlot = slot.index;
                 //oldSlot.item = undefined;
                 //$scope.calculSize(oldSlot.type);
@@ -342,8 +356,8 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
             let selectedInventory = $scope.selectedItem.inventoryType;
             let oldSlot = $scope[selectedInventory][$scope.selectedItem.inventorySlot];
             if (oldSlot !== undefined) {
-                alt.emit("RPGInventory_SwitchItemInventory", availableSlot.type, $scope.selectedItem.inventoryType, itemId, availableSlot.index, oldSlot.item.inventorySlot);
-                
+                alt.emit("inventorySwitchItem", availableSlot.type, $scope.selectedItem.inventoryType, itemId, availableSlot.index, oldSlot.item.inventorySlot);
+
                 $scope.selectedItem.inventoryType = "pocketSlots";
                 availableSlot.item.inventoryType = "pocketSlots";
 
@@ -373,8 +387,8 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
             let selectedInventory = $scope.selectedItem.inventoryType;
             let oldSlot = $scope[selectedInventory][$scope.selectedItem.inventorySlot];
             if (oldSlot !== undefined) {
-                alt.emit("RPGInventory_SwitchItemInventory", availableSlot.type, $scope.selectedItem.inventoryType, itemId, availableSlot.index, oldSlot.item.inventorySlot);
-                
+                alt.emit("inventorySwitchItem", availableSlot.type, $scope.selectedItem.inventoryType, itemId, availableSlot.index, oldSlot.item.inventorySlot);
+
                 $scope.selectedItem.inventoryType = "bagSlots";
                 availableSlot.item.inventoryType = "bagSlots";
 
@@ -418,7 +432,7 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
             //$scope.calculSize($scope.selectedItem.inventoryType);
 
             alt.emit("inventoryUseItem", $scope.selectedItem.id, $scope.selectedItem.inventoryType, $scope.selectedItem.inventorySlot);
-            
+
             // Initial inventory slot is emptied
             //if($scope.selectedItem.quantity <= 0) {
             //    $scope.clearInitialSlot();
@@ -435,7 +449,7 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
     $scope.equipItem = () => {
         let item = $scope.selectedItem;
         let itemInventory = item.inventoryType;
-        let outfitSlot = $scope.outfitSlots[item.outfitPosition-1];
+        let outfitSlot = $scope.outfitSlots[item.outfitPosition - 1];
 
         if (item == undefined || !item.equipable) return;
 
@@ -448,19 +462,19 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
             if (item.id == 69) {
                 $scope.showInventoryBag = true;
             }
-            
+
             // Initial inventory slot is emptied
             $scope[itemInventory][$scope.selectedItem.inventorySlot].item = undefined; // A creuser
             // Recalc inventory weight
             $scope.calculSize(itemInventory);
-            
+
             // Copy item and change his options
             outfitSlot.item = item;
             outfitSlot.item.inventoryType = 'outfitSlots';
-            outfitSlot.item.inventorySlot = item.outfitPosition-1;
+            outfitSlot.item.inventorySlot = item.outfitPosition - 1;
         }
 
-		//mp.trigger("inventoryEquipItem", $scope.selectedItem.id, $scope.displayInventory, $scope.selectedItem.inventorySlot);
+        //mp.trigger("inventoryEquipItem", $scope.selectedItem.id, $scope.displayInventory, $scope.selectedItem.inventorySlot);
 
         $scope.selectedItem = null;
     }
@@ -486,7 +500,7 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
 
                                 alt.emit("inventoryDropItem", $scope.selectedItem.inventoryType, $scope.selectedItem.id, $scope.selectedItem.inventorySlot, value);
 
-                                if($scope.selectedItem.quantity <= 0) {
+                                if ($scope.selectedItem.quantity <= 0) {
                                     $scope.clearInitialSlot();
                                 }
                             }
@@ -522,7 +536,7 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
 
                                 alt.emit("inventoryGiveItem", $scope.selectedItem.inventoryType, $scope.selectedItem.id, $scope.selectedItem.inventorySlot, value);
 
-                                if($scope.selectedItem.quantity <= 0) {
+                                if ($scope.selectedItem.quantity <= 0) {
                                     $scope.clearInitialSlot();
                                 }
                             }
@@ -565,8 +579,8 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
      * @returns boolean
      */
     $scope.getSlotAcceptation = slot => {
-       
-       // if (slot.item === undefined) return true;
+
+        // if (slot.item === undefined) return true;
 
         return true;
     };
@@ -649,7 +663,7 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
                     btnClass: 'btn-red',
                     action: (scope, button) => {
                         $scope.$apply(() => {
-                            alt.emit("InventoryChangeItemPrice", $scope.selectedItem.inventoryType, $scope.selectedItem.id, $scope.selectedItem.inventorySlot, $scope.priceChange);
+                            alt.emit("inventoryChangeItemPrice", $scope.selectedItem.inventoryType, $scope.selectedItem.id, $scope.selectedItem.inventorySlot, $scope.priceChange);
                         });
                     }
                 },
@@ -723,14 +737,3 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
         });
     });
 }]);
-
-alt.on("loadInventory", (pocket, bag, distant, outfit, give) =>  {
-    console.log(give);
-    var event = new CustomEvent("ItemsLoaded", { "detail": { pocket, bag, distant, outfit, give } });
-    window.dispatchEvent(event);
-})
-
-$(function () {
-    alt.emit("LoadInventoryItems");
-});
-

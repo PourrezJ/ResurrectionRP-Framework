@@ -37,7 +37,7 @@ export class RPGInventoryManager {
                             (this.distant) ? this.distant : null,
                             (this.outfit) ? this.outfit : null,
                             (this.give) ? "true" : "false");
-                    }, 50);
+                    }, 75);
 
                     this.loading = false;
                 });

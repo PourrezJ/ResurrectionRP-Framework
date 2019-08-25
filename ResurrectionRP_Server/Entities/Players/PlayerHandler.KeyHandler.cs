@@ -3,6 +3,7 @@ using AltV.Net.Async.Events;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Inventory;
 using ResurrectionRP_Server.Utils.Extensions;
 using System;
 using System.Threading.Tasks;
@@ -91,9 +92,8 @@ namespace ResurrectionRP_Server.Entities.Players
                     await XMenuManager.XMenuManager.CloseMenu(client);
                     /*
                     if (MenuManager.HasOpenMenu(client))
-                        await MenuManager.CloseMenu(client);
-                    await XMenuManager.CloseMenu(client);
-                    await RPGInventoryManager.CloseMenu(client);*/
+                        await MenuManager.CloseMenu(client);*/
+                    await RPGInventoryManager.CloseMenu(client);
                     break;
                     /*
                 case ConsoleKey.M:
@@ -174,10 +174,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     }*/
 
                     Inventory.RPGInventoryMenu menu = new Inventory.RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, null);
-                    menu.OnMove += (async (c, m) =>
-                    {
-                        await ph.UpdatePlayerInfo();
-                    });
+
                     await menu.OpenMenu(client);
                     break;
 

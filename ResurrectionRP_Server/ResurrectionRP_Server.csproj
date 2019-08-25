@@ -1,17 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AltV.Net" Version="1.12.3-beta" />
-    <PackageReference Include="AltV.Net.Async" Version="1.12.3-beta" />
-    <PackageReference Include="AltV.Net.Mock" Version="1.12.3-beta" />
+    <PackageReference Include="AltV.Net" Version="1.13.0" />
+    <PackageReference Include="AltV.Net.Async" Version="1.13.1" />
+    <PackageReference Include="AltV.Net.Mock" Version="1.13.0" />
     <PackageReference Include="AltV.Net.NetworkingEntity" Version="1.2.4-dev-preview" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.9.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.9.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="VIEApps.Components.Utility" Version="10.2.1906.2" />
   </ItemGroup>
@@ -20,6 +26,12 @@
     <Reference Include="WordPressPCL">
       <HintPath>..\Other\Server\WordPressPCL.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

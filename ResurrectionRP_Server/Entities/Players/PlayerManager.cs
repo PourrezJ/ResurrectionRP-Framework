@@ -43,6 +43,7 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.OnClient("ImGod", ReviveEvent);
             Alt.OnClient("setGender", (IPlayer client, object[] args) => { client.Model = ((Convert.ToInt32( args[0]) == 1) ? Alt.Hash("mp_f_freemode_01") : Alt.Hash("mp_m_freemode_01")); });
             Alt.OnClient("setCreatorPos", async (IPlayer client, object[] args) => { await client.SetPositionAsync(new Vector3(402.8664f, -996.4108f, -99.00027f)); });
+            Alt.OnClient("OpenXtremPlayer", OpenXtremPlayer);
 
             AltAsync.OnClient("OnKeyPress", OnKeyPress);
 
@@ -416,6 +417,21 @@ namespace ResurrectionRP_Server.Entities.Players
             }
 
             return false;
+        }
+        private async void OpenXtremPlayer(IPlayer client, object[] args)
+        {
+            if (uint.TryParse(args[0].ToString(), out uint playerID))
+            {
+                if (!client.Exists)
+                    return;
+                var players = Alt.GetAllPlayers();
+                foreach(IPlayer player in players)
+                {
+                    if(player.Id == playerID)
+                        if (player != null) await GetPlayerByClient(client)?.OpenXtremPlayer(player);
+                }
+                
+            }
         }
 
         public static bool HasVehicleKey(IPlayer client, string plate) 

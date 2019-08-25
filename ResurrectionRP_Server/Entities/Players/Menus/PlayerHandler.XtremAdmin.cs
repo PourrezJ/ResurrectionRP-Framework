@@ -35,6 +35,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 menu.Add(new XMenuItem("Kill", "", "ID_Kill", XMenuItemIcons.CANCEL));
                 menu.Add(new XMenuItem("Revive", "", "ID_Revive", XMenuItemIcons.HEART_SOLID));
                 menu.Add(new XMenuItem("Heal", "", "ID_Heal", XMenuItemIcons.BRIEFCASE_MEDICAL_SOLID));
+                menu.Add(new XMenuItem("Rassasier", "", "ID_Food", XMenuItemIcons.FASTFOOD));
 
             }
 
@@ -77,7 +78,11 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 case "ID_Heal":
                     await client.SendNotificationSuccess($"Vous venez de soigner {TargetHandler.Identite.Name}.");
-                    TargetClient.Health = (100);
+                    TargetClient.Health = (200);
+                    break;
+                case "ID_Food":
+                    await client.SendNotificationSuccess($"Vous venez de rassasier {TargetHandler.Identite.Name}.");
+                    TargetClient.GetPlayerHandler()?.UpdateHungerThirst(100, 100);
                     break;
             }
         }

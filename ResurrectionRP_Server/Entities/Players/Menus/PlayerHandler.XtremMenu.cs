@@ -72,13 +72,16 @@ namespace ResurrectionRP_Server.Entities.Players
                     string licenceStr = "";
                     foreach (var licence in ph.Licenses)
                     {
-                        licenceStr += licence.Type + " " + licence.Point + "\n";
+                        if (licence.Type.ToString() != "")
+                            licenceStr += licence.Type + " " + licence.Point + "\n";
                     }
+                    if (licenceStr == "")
+                        licenceStr = "La personne n'a aucune license!";
                     await TargetClient.NotifyAsync(licenceStr);
                     break;
 
                 case "ID_ShowPassport":
-                    await TargetClient.NotifyAsync($"Nom: {ph.Identite.LastName} \nPrenom: {ph.Identite.FirstName}\nAge: {ph.Identite.Age}");
+                    await TargetClient.NotifyAsync($"Nom: {ph.Identite.LastName} <br/>Prenom: {ph.Identite.FirstName}<br/>Age: {ph.Identite.Age}");
                     break;
 
                 case "ID_GiveMoney":

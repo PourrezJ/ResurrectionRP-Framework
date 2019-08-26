@@ -12,6 +12,7 @@ import { Weather as WeatherLib } from 'client/Env/Weather';
 import { Interaction as InteractionLib } from 'client/Player/Interaction';
 import { Doors as DoorsManagerLib } from 'client/Env/Doors';
 import { PhoneManager } from 'client/phone/PhoneManager';
+import { DrivingSchool } from 'client/DrivingSchool';
 
 
 export class Game {
@@ -94,6 +95,7 @@ export class Game {
 
             new InteractionLib();
             new PhoneManager();
+            new DrivingSchool();
 
             game.setAudioFlag('LoadMPData', true);
             game.setAudioFlag('DisableFlightMusic', true);

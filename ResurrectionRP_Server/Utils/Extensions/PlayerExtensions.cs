@@ -43,6 +43,9 @@ namespace ResurrectionRP_Server
         public async static Task SetPropAsync(this IPlayer client, Models.PropSlot slot, Models.PropData item) =>
             await client.EmitAsync("PropVariation", (int)slot, item.Drawable, item.Texture);
 
+        public async static Task setWaypoint(this IPlayer client, Vector3 pos, bool overrideOld = true) => 
+            await client.EmitAsync("setWaypoint", pos.X, pos.Y, overrideOld);
+
         public static PlayerHandler GetPlayerHandler(this IPlayer client)
         {
             if (client == null)
@@ -69,6 +72,11 @@ namespace ResurrectionRP_Server
         {
             await client.EmitAsync("successNotify", "Succès", text, 7000);
         }
+        public static async Task SendNotificationPicture(this IPlayer client, string message, Utils.Enums.CharPicture picture, bool flash, int icontype, string title, string description) =>
+                await client.EmitAsync("SetNotificationMessage", message, picture.ToString(), flash, icontype, title, description);
+
+        public static async Task SendNotificationPicture(this IPlayer client, string message, string picture, bool flash, int icontype, string title, string description) =>
+            await client.EmitAsync("SetNotificationMessage", message, picture.ToString(), flash, icontype, title, description);
 
         public async static Task NotifyAsync(this IPlayer client, string text) => await client.SendNotification(text);
         public static List<IVehicle> GetVehiclesInRange(this IPlayer client, int Range)

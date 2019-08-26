@@ -44,7 +44,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         xmenu.Add(new XMenuItem("Gestion des portes", "", "ID_doors", XMenuItemIcons.DOOR_CLOSED_SOLID, executeCallback: true));
                         */
                     if (NeonsColor != Color.Empty && (VehicleManifest?.Neon == true))
-                        xmenu.Add(new XMenuItem($"{(Properties.NeonState.Item1 ? "Eteindre" : "Allumer")} les neons", "", "ID_neons", XMenuItemIcons.LIGHTBULB_SOLID, executeCallback: true));
+                        xmenu.Add(new XMenuItem($"{(NeonState.Item1 ? "Eteindre" : "Allumer")} les neons", "", "ID_neons", XMenuItemIcons.LIGHTBULB_SOLID, executeCallback: true));
                 }
             }
             else

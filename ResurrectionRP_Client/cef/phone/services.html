@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Texting App - GTA RP</title>
+
+    <link rel="stylesheet" href="../../lib/css/onsenui.min.css">
+    <link rel="stylesheet" href="../../lib/css/onsen-css-components.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark-style.css">
+
+    <script src="../../lib/js/angular.min.js"></script>
+    <script src="../../lib/js/moment.min.js"></script>
+    <script src="../../lib/js/angular-moment.min.js"></script>
+    <script src="../../lib/js/jquery.min.js"></script>
+    <script src="../../lib/js/onsenui.min.js"></script>
+
+    <script src="js/app.js"></script>
+</head>
+<body>
+    <div class="main-container">
+        <div class="phone-frame"></div>
+        <div class="innerapp launcher-white">
+            <div class="toolbar">
+                <div class="toolbar__left">
+                    <a href="home.html" class="toolbar-button">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </div>
+
+                <div class="toolbar__center">
+                    Services
+                </div>
+
+                <div class="toolbar__right">
+
+                </div>
+            </div>
+
+            <button class="button--large--cta calltoaction services taxi" onclick="callTaxi();">
+                <img src="img/taxi.png"></br>
+                <p>Demander un taxi</p>
+            </button>
+            <button class="button--large--cta calltoaction services police" onclick="callPolice();">
+                <img src="img/police.png"></br>
+                <p>Appeler la police</p>
+            </button>
+            <button class="button--large--cta calltoaction services urgences" onclick="callUrgences();">
+                <img src="img/urgences.png"></br>
+                <p>Appeler les urgences</p>
+            </button>
+
+        </div>
+    </div>
+    <script src="js/services.js"></script>
+    <script src="https://unpkg.com/ionicons@4.1.2/dist/ionicons.js"></script>
+</body>
+</html>

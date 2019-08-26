@@ -25,6 +25,7 @@ export class Survival {
         this._RefreshThirst = Date.now() + 1000 * 60 * 3;
 
         alt.on("UpdateHungerThirst", this.UpdateHungerThirst);
+        alt.onServer("UpdateHungerThirst", this.UpdateHungerThirst);
 
         alt.on("update", () => {
             if (this.RefreshHunger < Date.now()) {
@@ -63,7 +64,7 @@ export class Survival {
         });
     }
 
-    private UpdateHungerThirst(Thirst: number, Hunger: number) {
+    UpdateHungerThirst = (Thirst: number, Hunger: number) => {
         this.Hunger = Hunger;
         this.Thirst = Thirst;
     } 

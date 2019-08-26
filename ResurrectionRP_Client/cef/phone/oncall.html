@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Texting App - GTA RP</title>
+
+    <link rel="stylesheet" href="../../lib/css/onsenui.min.css">
+    <link rel="stylesheet" href="../../lib/css/onsen-css-components.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark-style.css">
+
+    <script src="../../lib/js/angular.min.js"></script>
+    <script src="../../lib/js/moment.min.js"></script>
+    <script src="../../lib/js/angular-moment.min.js"></script>
+    <script src="../../lib/js/jquery.min.js"></script>
+    <script src="../../lib/js/onsenui.min.js"></script>
+
+    <script src="js/app.js"></script>
+    <script src="js/call.js"></script>
+</head>
+<body ng-app="ResurrectionPhone" ng-class="{'dark-theme':phoneSettings.darkMode}">
+    <div class="main-container" ng-controller="OnCallCtrl">
+        <div class="phone-frame"></div>
+        <div class="launcher-call launcher"></div>
+        <div class="innerapp blur">
+            <div class="oncall">
+                <div class="nameid">
+                    <h3>{{contactName}}</h3>
+                    <h4>{{calledNumber}}</h4>
+                </div>
+                <div class="faceid">
+                    <img class="list-item__thumbnail" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wwJCB8v/9zErgAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggR0lNUFeBDhcAAAAvSURBVFjD7c0BDQAACAMgtX+KJzWGm4MCdJK6MHVELBaLxWKxWCwWi8VisVj8MV7qBgI2A8rYpgAAAABJRU5ErkJggg==">
+                </div>
+
+                <div class="count">{{callStatus}}</div>
+                <div ng-show="!incomingCall || timerInterval != null">
+                    <button class="button-close calltoaction endCall" ng-click="endCall();"><ion-icon name="ios-call"></ion-icon></button>
+                </div>
+                <div ng-show="incomingCall && timerInterval == null">
+                    <button class="button-open calltoaction acceptCall" ng-click="acceptCall();"><ion-icon name="ios-call"></ion-icon></button>
+                    <button class="button-close calltoaction cancelCall" ng-click="cancelCall();"><ion-icon name="ios-call"></ion-icon></button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <script src="https://unpkg.com/ionicons@4.1.2/dist/ionicons.js"></script>
+</body>
+</html>

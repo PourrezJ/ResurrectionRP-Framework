@@ -3,6 +3,7 @@ using AltV.Net.Async.Events;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Inventory;
 using ResurrectionRP_Server.Utils.Extensions;
 using System;
 using System.Threading.Tasks;
@@ -91,9 +92,8 @@ namespace ResurrectionRP_Server.Entities.Players
                     await XMenuManager.XMenuManager.CloseMenu(client);
                     /*
                     if (MenuManager.HasOpenMenu(client))
-                        await MenuManager.CloseMenu(client);
-                    await XMenuManager.CloseMenu(client);
-                    await RPGInventoryManager.CloseMenu(client);*/
+                        await MenuManager.CloseMenu(client);*/
+                    await RPGInventoryManager.CloseMenu(client);
                     break;
                     /*
                 case ConsoleKey.M:
@@ -167,17 +167,14 @@ namespace ResurrectionRP_Server.Entities.Players
 /*                    if (MenuManager.HasOpenMenu(client))
                         return;*/
 
-/*                    if (ph.IsCuff())
+                    if (ph.IsCuff())
                     {
                         await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menottés.");
                         return;
-                    }*/
+                    }
 
                     Inventory.RPGInventoryMenu menu = new Inventory.RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, null);
-                    menu.OnMove += (async (c, m) =>
-                    {
-                        await ph.UpdatePlayerInfo();
-                    });
+
                     await menu.OpenMenu(client);
                     break;
 
@@ -203,10 +200,10 @@ namespace ResurrectionRP_Server.Entities.Players
                 case ConsoleKey.PageDown:
                     await RadioManager.Close(client);
                     break;
-
+                */
                 case ConsoleKey.UpArrow:
-                    if (MenuManager.HasOpenMenu(client))
-                        return;
+/*                    if (MenuManager.HasOpenMenu(client))
+                        return;*/
 
                     if (ph.IsCuff())
                     {
@@ -220,14 +217,14 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    await PhoneManager.OpenPhone(client, ph.PhoneSelected);
+                    await Phone.PhoneManager.OpenPhone(client, ph.PhoneSelected);
                     break;
 
 
                 case ConsoleKey.DownArrow:
-                    await PhoneManager.ClosePhone(client);
+                    Phone.PhoneManager.ClosePhone(client);
                     break;
-
+                    /*
 
                 case ConsoleKey.D1:
                     if (MenuManager.HasOpenMenu(client))

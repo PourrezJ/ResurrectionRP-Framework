@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Texting App - GTA RP</title>
+
+    <link rel="stylesheet" href="../../lib/css/onsenui.min.css">
+    <link rel="stylesheet" href="../../lib/css/onsen-css-components.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark-style.css">
+
+    <script src="../../lib/js/angular.min.js"></script>
+    <script src="../../lib/js/moment.min.js"></script>
+    <script src="../../lib/js/angular-moment.min.js"></script>
+    <script src="../../lib/js/jquery.min.js"></script>
+    <script src="../../lib/js/onsenui.min.js"></script>
+
+    <script src="js/app.js"></script>
+    <script src="js/messages.js"></script>
+</head>
+<body ng-app="ResurrectionPhone" ng-class="{'dark-theme':phoneSettings.darkMode}">
+    <div class="main-container" ng-controller="MsgOptionsCtrl">
+        <div class="phone-frame"></div>
+        <div class="innerapp launcher-white">
+            <div class="toolbar">
+                <div class="toolbar__left">
+                    <a ng-href="msg-view.html?convId={{conversationId}}&convName={{contactName}}&number={{contactNumber}}&knownContact={{(knownContact ? 1 : 0)}}" class="toolbar-button">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </div>
+
+                <div class="toolbar__center">
+                    Options
+                </div>
+
+                <div class="toolbar__right">
+
+                </div>
+            </div>
+            <section class="contact-container">
+                <div class="input-container contact">
+                    <i class="fas fa-user-circle"></i><input type="text" id="inputName" maxlength="32" class="text-input text-input--material contact" placeholder="Nom du contact" ng-model="contactName" ng-disabled="knownContact">
+                </div>
+                <div class="input-container contact">
+                    <i class="fas fa-phone-square"></i><input type="tel" size="9" maxlength="9" id="inputNumber" class="text-input text-input--material contact" placeholder="xxxx-xxxx" ng-model="contactNumber" ng-disabled="knownContact">
+                </div>
+
+                <button class="button calltoaction addContactOnConv" ng-click="addContact();" ng-show="!knownContact">Enregistrer le contact</button>
+                <br />
+                <button class="button calltoaction removeConversation" ng-click="deleteConversation();">Supprimer la conversation</button>
+            </section>
+
+
+            <div class="tabbar">
+                <a href="call.html" class="tabbar__item">
+                    <button class="tabbar__button">
+                        <ion-icon name="ios-call">
+                            <div class="tabbar__label"></div>
+                    </button>
+                </a>
+
+                <a href="contacts.html" class="tabbar__item">
+                    <button class="tabbar__button">
+                        <ion-icon name="ios-contacts"></ion-icon>
+                        <div class="tabbar__label"></div>
+                    </button>
+                </a>
+
+                <a href="messages.html" class="tabbar__item">
+                    <button class="tabbar__button active">
+                        <ion-icon name="ios-chatbubbles"></ion-icon>
+                        <div class="tabbar__label"></div>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/ionicons@4.1.2/dist/ionicons.js"></script>
+</body>
+</html>

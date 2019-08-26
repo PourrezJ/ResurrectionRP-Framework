@@ -57,6 +57,8 @@ namespace ResurrectionRP_Server
 
         public async static Task SendNotification(this IPlayer client, string text)
         {
+            if (text == "")
+                return;
             await client.EmitAsync("notify", "Notification", text, 7000);
         }
         public async static Task SendNotificationError(this IPlayer client, string text)

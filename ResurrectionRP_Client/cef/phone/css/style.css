@@ -1,0 +1,1012 @@
+/* Main FRAME */
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,900');
+body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
+    /*background: url(https://i.ytimg.com/vi/pMdqCM-6ET0/maxresdefault.jpg) no-repeat;
+	    background-size: cover;*/
+    font-family: 'Roboto', Arial, serif;
+}
+
+a {
+   outline: 0;
+}
+
+a {
+   outline: 0;
+}
+
+.main-container{
+    position: absolute;
+    /*pointer-events: none;*/
+    height: 595px;
+    width: 300px;
+    bottom: 20px;
+    right: 20px;
+    transition: 1s linear transform;
+}
+
+.phone-frame{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: url(../img/iphoneX.png) center no-repeat;
+    background-size: cover;
+    z-index: 1;
+}
+
+.input-container{
+	width: 100%;
+	margin: 10px 0 0 0;
+	text-align: center;
+}
+
+.input-container input{
+	font-size: 26px;
+	height: 49px;
+	width: 95%;
+	text-align: center;
+	color: #000;
+}
+
+.text-input--material {
+	background-image: none;
+}
+
+.text-input--material:focus {
+	background-image: none;
+}
+
+.calltoaction{
+	display: block;
+	text-align: center;
+	margin: 20px auto;
+	width: 95%;
+}
+
+.calltoaction.endCall, .calltoaction.acceptCall, .calltoaction.cancelCall {
+    width: initial;
+}
+
+/* HOME VIEW */
+.innerapp{
+    position: absolute;
+    height: 99%;
+    width: 99%;
+    top: 0;
+    left: 0;
+    background: #fff;
+    padding: 35px 25px 5px 30px;
+    box-sizing: border-box;
+    border-radius: 41px;
+    overflow: hidden;
+}
+
+.innerapp.grey {
+	background: #f0eff5;
+}
+
+.innerapp > *{
+	z-index: 3;
+	position: relative;
+}
+
+.innerapp > .toolbar{
+	z-index: unset;
+	width: 115%;
+	margin-left: -20px;
+	margin-top: -41px;
+	background: #f9f9f9;
+	border-bottom: 1px solid #ededed;
+}
+
+.launcher{
+    background: url(../img/bgx.png) center no-repeat;
+    background-size: cover;
+		background-position-x: 10px;
+    border-radius: 60px;
+}
+
+.launcher-white{
+	top: 0px;
+	left: 3%;
+	width: 95%;
+	border-top: 41px solid #f9f9f9;
+}
+
+.innerlauncher{
+	position: relative;
+	height: 100%;
+	width: 100%;
+	z-index: 2;
+}
+
+.clock {
+    font-size: 14px;
+    position: absolute;
+    display: inline;
+    top: -18px;
+    left: 22px;
+    font-weight: bolder;
+}
+
+.linner{
+	padding: 10px 0;
+	display: flex;
+	flex-direction: row;
+  	flex-wrap: nowrap;
+  	font-size: 15px;
+}
+
+.linner img{
+	width: 40px;
+}
+
+.linner .app{
+	flex: 1;
+	flex-basis: 100%;
+	text-align: center;
+	font-size: 0.85em;
+}
+
+.linner.launchbar{
+	position: absolute;
+	bottom: 9px;
+	left: 1px;
+	right: 0;
+	background: rgba(255, 255, 255, 0.27);
+	padding-bottom: 10px;
+	margin: 0px -7px;
+	border-radius: 20px;
+}
+
+.tabbar:not(.tabbar--top){
+    border-bottom-left-radius: 28px;
+    border-bottom-right-radius: 28px;
+}
+
+.app a{
+	display: block;
+	text-decoration: none;
+	color: white;
+	text-shadow: 0 1px 0 black;
+	-moz-text-shadow: 0 1px 0 black;
+	-webkit-text-shadow: 0 1px 0 black;
+}
+
+.app img{
+	display: block;
+	margin: 5px auto;
+}
+
+
+/* CONTACTS VIEW */
+
+.contacts-list, .messages-list, .msg-container, .call-container, .contact-container, .settings-container {
+    height: 447px;
+    overflow: hidden;
+    overflow-y: auto;
+    margin: 0 -4px;
+}
+
+
+/* MESSAGE */
+.msg-container {
+	height: 425px;
+	overflow: hidden;
+	overflow-y: auto;
+	margin: 0 -4px;
+	padding-bottom: 22px;
+}
+
+.msg-box{
+	font-size: 1.1em;
+	max-width: 75%;
+	padding: 10px;
+	margin: 7px 10px;
+	color: #fff;
+	border-radius: 18px;
+	clear: both;
+    word-wrap: break-word;
+}
+
+.msg-box.received{
+	background: #eee;
+	color: #000;
+	float: left;
+}
+
+.msg-box.sent{
+	background: #007aff;
+	float: right;
+	margin-right: 0;
+}
+
+.msg-box i.timestamp {
+    color: #555555;
+    font-size: 0.7em;
+    text-align: right;
+    font-style:italic;
+}
+
+.msg-send{
+	flex: 1 1 auto;
+	border: 1px solid #aaa;
+	border-radius: 15px;
+	margin: 15px 0 15px 15px;
+	padding-left: 10px;
+	width: 100%;
+}
+
+.msg-send-btn{
+	width: 55px;
+	font-size: 38px;
+	margin: 1px;
+}
+
+.msg-send-btn i:hover {
+	color: #007aff;
+}
+
+/* STOPWATCH VIEW */
+
+#stopwatchs{
+	margin-top: 80px;
+    text-align: center;
+}
+
+#stopwatchs .timer{
+	font-size: 3.6em;
+    font-weight: bold;
+}
+
+.list.messages-list a .list-item__title, .list.contacts-list a .list-item__title  {
+	color: #000;
+}
+
+.list.messages-list a .list-item__subtitle, .contacts-list a .list-item__subtitle  {
+	color: #1f1f21;
+}
+
+.list.messages-list li .list-item__title, .list.messages-list li .list-item__subtitle {
+	transition: 0.11s ease;
+}
+
+.list.messages-list li:hover .list-item__title, .list.messages-list li:hover .list-item__subtitle  {
+	font-size: 15px;
+	max-width: 150px;
+}
+
+.list.messages-list li .list-item__thumbnail {
+	transition: 0.11s ease;
+}
+
+.list.messages-list li:hover .list-item__thumbnail {
+	width: 45px;
+	height: auto;
+	border-radius: 60px;
+}
+
+.list.messages-list li .list-item__right.arrow {
+	position: absolute;
+	right: 0;
+	top: 10px;
+	transition: .3s ease-in-out;
+}
+
+.list.messages-list li:hover .list-item__right.arrow {
+	position: absolute;
+	right: -20px;
+	top: 10px;
+}
+
+.list-item__left {
+  float: left;
+}
+
+li.list-item {
+	transition: .2s ease-in-out;
+}
+
+li.list-item.message:hover {
+		padding: 5px 0;
+}
+
+/* PHONE */
+.tapnumbers {
+	width: 100%;
+	padding-top: 14px;
+}
+
+.numbers {
+	text-align: center;
+}
+
+.numbers span {
+	font-size: 25px;
+	background: #e6e6e6;
+	height: 20px;
+	width: 20px;
+	padding: 14px;
+	border-radius: 60px;
+	margin: 10px;
+	display: inline-block;
+	text-align: center;
+	line-height: 20px;
+	cursor: pointer;
+}
+
+button.button--large--cta i {
+	margin-bottom: -2px;
+}
+
+.numbers span:hover {
+	background: #b5b5b5;
+}
+
+button.calltoaction.addContact, button.calltoaction.editContact, button.calltoaction.startCall {
+    width: auto;
+    background: #4bd964;
+    border-radius: 50%;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+    button.calltoaction.addContact:hover, button.calltoaction.editContact:hover, button.calltoaction.startCall:hover, button.calltoaction.addContactOnConv:hover {
+        background: #33a246;
+    }
+
+button.calltoaction.removeContact, button.calltoaction.removeConversation {
+    width: auto;
+    background: #ff3b2f;
+    border-radius: 50%;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+    button.calltoaction.removeContact:hover, button.calltoaction.removeConversation:hover {
+        background: #ff3b2f;
+    }
+
+.deletbutton:hover {
+	background: #b5b5b5;
+}
+
+.deletbutton:hover::before {
+	border-color: transparent #b5b5b5 transparent transparent;
+}
+
+.deletbutton {
+	position: absolute;
+	background: #e6e6e6;
+	height: 23px;
+	right: 35px;
+	bottom: 45px;
+	cursor: pointer;
+	z-index: 9999;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+.deletbutton ion-icon {
+	font-size: 22px;
+}
+
+.deletbutton::before {
+	position: absolute;
+	content: '';
+	width: 0px;
+	left: -8px;
+	height: 0px;
+	border-style: solid;
+	border-width: 11px 8px 11px 0;
+	border-color: transparent #e6e6e6 transparent transparent;
+}
+
+/* RESET SOURCES */
+
+.toolbar__left, .toolbar__right{
+	z-index: 999999;
+}
+
+ons-alert-dialog{
+    width: 320px;
+    height: 690px;
+    margin-left: 27px;
+    top: 28px;
+}
+
+.list{
+	background-image: none;
+}
+
+.msg-container {
+	font-size: 14px;
+	margin-right: -11px;
+}
+
+.msg-container .msg-box.received {
+	border-radius: 14px 14px 14px 0px;
+	background: #e5e4e9;
+}
+
+.msg-container .msg-box.sent {
+	border-radius: 14px 14px 0px 14px;
+}
+
+/* DICE VIEW */
+
+#dice {
+	font-size: 6rem;
+	text-align: center;
+}
+
+/* RESET UI */
+.toolbar__center {
+	font-weight: bold;
+}
+
+.innerapp i {
+	font-family: 'FontAwesome';
+	font-style: normal;
+	font-size: 22px;
+}
+
+.innerapp.launcher-white a {
+	text-decoration: none;
+	color: #1378ee;
+}
+
+.innerapp a:hover i {
+	color: #000;
+}
+
+.toolbar {
+	background-image: #ededed;
+}
+
+.list-item__center, .list-item__right {
+	background-image: none;
+}
+
+.list-item {
+	border-bottom: 1px solid #e3e3e3;
+	padding: 0;
+}
+
+.list.contacts-list {
+  position: absolute;
+  left: 14px;
+  width: 93%;
+}
+
+.tabbar.absolute {
+  position: absolute;
+  bottom: 8px;
+  width: 265px;
+  left: 30px;
+}
+
+.contacts-list .list-item {
+  padding: 5px 15px;
+}
+
+.scroll::-webkit-scrollbar-track
+{
+	background-color: transparent;
+}
+
+.scroll::-webkit-scrollbar
+{
+	width: 0px;
+}
+
+.scroll::-webkit-scrollbar-thumb
+{
+	background-color: transparent;
+	border: 0;
+}
+
+ul.contacts-list li.list-item:first-child .list-item__title {
+  font-weight: normal;
+  color: #1f1f21;
+  opacity: .75;
+}
+
+ul.contacts-list li.list-item:first-child .list-item__subtitle {
+  font-weight: bold;
+  color: #000;
+  opacity: 1;
+  font-size: 15px;
+
+}
+
+ul.contacts-list li.list-item:first-child  {
+  background: #dedede;
+}
+
+ul.contacts-list li.list-item:first-child .list-item__right {
+  display: none;
+}
+
+.list-item__thumbnail {
+	border-radius: 20px;
+	padding: 0;
+}
+.list-item__title {
+	font-size: 14px;
+	font-weight: 700;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	max-width: 100px;
+	max-height: 19px
+}
+
+.list-item__subtitle {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	max-width: 100px;
+	max-height: 19px;
+}
+
+.list-item__right {
+	padding: 0;
+}
+
+.list-item__right ion-icon{
+	font-size: 19px;
+	background: #04d602;
+  padding: 3px;
+  border-radius: 20px;
+	color: white;
+	transition: .2s ease-in-out;
+}
+
+.list-item__right ion-icon:hover{
+	padding: 4px;
+	font-size: 22px;
+}
+
+.tabbar {
+	width: 115%;
+	background: #f9f9f9;
+	margin-left: -20px;
+	bottom: 6px;
+	border-top: 1px solid #e3e3e3;
+	height: 60px;
+}
+
+.tabbar ion-icon {
+	font-size: 27px;
+}
+
+.tabbar ion-icon:hover  {
+	color: #1378ee;
+}
+
+.tabbar__button.active ion-icon {
+	color: #1378ee;
+}
+
+.tabbar__button.msg-send-btn {
+	height: 53px;
+	margin: 0;
+}
+
+.tabbar__button {
+	height: 60px;
+	margin-top: 6px;
+	cursor: pointer;
+}
+
+.toolbar__left, .toolbar__right {
+	width: 18%;
+}
+
+.toolbar__center {
+	width: 100%;
+}
+
+input#contactName {
+	width: 100%;
+}
+
+.emoji {
+	line-height: 63px;
+	margin-left: 10px;
+	color: #a3a3a3;
+	cursor: pointer;
+}
+
+.emoji:hover {
+	color: #007aff;
+}
+
+::-webkit-scrollbar {
+	overflow: hidden;
+}
+
+/* ADD NEW CONTACT */
+.contact i {
+	font-size: 16px;
+	line-height: 40px;
+	color: #999999;
+	text-align: left;
+	width: 13%;
+	float: left;
+}
+
+input.contact {
+	font-size: 14px;
+	text-align: left;
+	float: left;
+	width: 87%;
+	border-bottom: 1px solid #e6e6e6;
+	height: 40px;
+}
+
+button.button.calltoaction.addContact {
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    border-radius: 40px;
+}
+
+button.button.calltoaction.editContact {
+    position: absolute;
+    bottom: 0;
+    left: 6%;
+    border-radius: 40px;
+}
+
+button.button.calltoaction.removeContact {
+    position: absolute;
+    bottom: 0;
+    left: 48%;
+    border-radius: 40px;
+}
+
+button.button.calltoaction.addContactOnConv {
+    position: absolute;
+    bottom: 14%;
+    left: 10%;
+    border-radius: 40px;
+}
+
+button.button.calltoaction.removeConversation {
+    position: absolute;
+    bottom: 0;
+    left: 1.5%;
+    border-radius: 40px;
+}
+
+.linner.homy {
+	padding: 10px 0;
+	display: block;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	text-align: left;
+	width: 100%;
+}
+
+.linner.homy .app {
+	width: 20%;
+  padding: 2.5%;
+  text-align: center;
+  font-size: 12px;
+  float: left;
+  height: 75px;
+}
+
+/* SETTINGS */
+.settings-container {
+	position: absolute;
+    left: 14px;
+    width: 264px;
+}
+
+.settings {
+	margin-top: -1px;
+	width: 100%;
+	height: 22px;
+	background: #fff;
+	padding: 10px 15px;
+	border-top: 1px solid #e9e8ed;
+	border-bottom: 1px solid #e9e8ed;
+}
+
+.settings:hover {
+	background: #1378ee;
+}
+
+.settings-container .settings:hover .settings-type {
+	color: #fff!important;
+}
+
+.settings-container .settings:hover i.list-item__icon {
+	color: #fff;
+	right: -20px;
+}
+
+.settings ion-icon {
+	float: left;
+	margin-right: 10px;
+	border-radius: 5px;
+	padding: 3px;
+	color: #fff;
+}
+
+.settings ion-icon.sonnerie {
+	background: #fe2e52;
+}
+
+.settings label.switch {
+	position: absolute;
+	right: 15px;
+	width: 20px;
+	height: 21px;
+	min-width: initial;
+}
+
+.settings label.switch .switch__handle {
+	height: 17px;
+	width: 17px;
+}
+
+.settings ion-icon.silencieux {
+	background: #ff9500;
+	font-size: 22px;
+	padding: 0px;
+}
+
+.settings ion-icon.themes {
+	background: #047aff;
+}
+
+.settings ion-icon.fond {
+	background: #34aada;
+}
+
+.settings-container a .settings-type {
+	color: #000;
+}
+
+.settings .settings-type {
+	float: left;
+	vertical-align: middle;
+	line-height: 22px;
+	font-size: 15px;
+}
+
+.settings i.list-item__icon {
+	position: absolute;
+	right: 10px;
+	transition: .3s ease-in-out;
+}
+
+/* ON CALL */
+.innerapp.blur {
+	background: transparent;
+	padding: 35px 35px 5px 40px;
+}
+
+.launcher-call {
+	position: absolute;
+	height: 97%;
+	width: 98%;
+	top: 10px;
+	left: 0;
+	padding: 35px 25px 5px 30px;
+	box-sizing: border-box;
+	filter: blur(5px);
+	border-radius: 50px;
+	overflow: hidden;
+}
+
+.oncall {
+	margin-top: 30px;
+	height: 90%;
+}
+
+.oncall .nameid {
+	width: 70%;
+	float: left;
+}
+
+.oncall h3 {
+	font-size: 20px;
+	font-weight: normal;
+	color: white;
+	margin: 0;
+}
+
+.oncall h4 {
+	font-size: 18px;
+	font-weight: normal;
+	color: white;
+	opacity: .7;
+	margin: 0;
+	margin-top: 5px;
+}
+
+.oncall .faceid {
+	width: 30%;
+	float: left;
+	text-align: right;
+}
+
+.oncall .faceid img {
+	float: right;
+}
+
+button.button-close:hover, button.button-open:hover {
+    background: #7b7b7b;
+}
+
+button.button-close, button.button-open {
+    position: absolute;
+    bottom: 0;
+    border: none;
+    padding: 10.5px 13px;
+    border-radius: 50%;
+}
+
+button.button-close.cancelCall {
+    right: 15%;
+    background: #ff3b2f;
+}
+
+button.button-close.endCall {
+    left: 40%;
+    background: #ff3b2f;
+}
+
+button.button-open {
+    left: 15%;
+    background: #0bdc00;
+}
+
+button.button-close ion-icon, button.button-open ion-icon {
+	color: #fff;
+	font-size: 20px;
+}
+
+button.button-close ion-icon {
+    transform: rotate(135deg);
+}
+
+.count {
+	position: absolute;
+	bottom: 100px;
+	color: white;
+	text-align: center;
+	width: 100%;
+}
+
+/* SERVICE */
+button.services {
+	border-radius: 8px;
+	width: 100%;
+}
+
+
+button.services p {
+	margin: 0;
+	line-height: 20px;
+	margin-bottom: 13px;
+}
+
+button.services.taxi {
+	background: url(../img/taxibg.png) no-repeat bottom right, linear-gradient(#ffe273, #e0b900);
+	color: #000000a1;
+	background-position-x: -20px;
+}
+
+button.services.taxi:hover {
+	background: url(../img/taxibg.png) no-repeat bottom right, linear-gradient(#ffe273, #ffe273);
+	background-position-x: -20px;
+}
+
+button.services.police {
+	background: linear-gradient(#75a5e8, #1f456b);
+	color: #fff;
+}
+
+button.services.police:hover {
+	background: linear-gradient(#75a5e8, #75a5e8);
+}
+
+button.services.urgences {
+	background: linear-gradient(#e87575, #ef1b1b);
+	color: #fff;
+}
+
+button.services.urgences:hover {
+	background: linear-gradient(#e87575, #e87575);
+}
+
+button.services.urgences img {
+	opacity: .7;
+	width: 30px;
+}
+
+button.services.police img {
+	opacity: .7;
+	width: 30px;
+}
+
+button.services.taxi img {
+	opacity: .7;
+	width: 45px;
+}
+
+/* Chronomètre */
+#stopwatchs {
+  height: 47vh;
+}
+
+#sw_status {
+  opacity: .7;
+}
+
+.button-chrono-nav {
+  position: absolute;
+  left: 23px;
+  width: 100%;
+}
+
+#stopwatchs .timer {
+	font-size: 2.6em;
+}
+
+.button.chrono.start {
+  background: #4bd964;
+}
+
+.button.chrono.pause {
+  background: #ff5a5a;
+}
+
+.button.chrono.reset {
+  background: #d6d6d6;
+  color: #adadad;
+}
+
+.button.chrono {
+  display: inline-block;
+  font-family: -apple-system,'Helvetica Neue',Helvetica,Arial,'Lucida Grande',sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 400;
+  -webkit-user-select: none;
+  user-select: none;
+  padding: 12px 10px;
+  font-size: 17px;
+  line-height: 0px;
+  letter-spacing: 0;
+  color: #fff;
+  vertical-align: middle;
+  border-radius: 3px;
+  width: 22.33333%;
+  margin: 0 2%;
+  float: left;
+  font-size: 26px;
+  border-radius: 50%;
+  width: 50px
+}
+
+span.notification {
+  position: absolute;
+  text-shadow: none;
+  background: #FB0000;
+  right: 69px;
+  top: 5px;
+  font-size: 12px;
+}

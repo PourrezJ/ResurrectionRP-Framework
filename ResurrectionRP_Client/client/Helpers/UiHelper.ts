@@ -45,6 +45,14 @@ export function SendPicNotification(title, sender, msg, notifPic, icon = 0, flas
 
 }
 
+export function SetNotificationPicture(message: string, dict: string, img: string, flash: boolean, iconType: number, sender: string, subject: string) {
+    game.setNotificationTextEntry("STRING");
+    game.addTextComponentSubstringPlayerName(message);
+
+    game.setNotificationMessage2(dict, img, flash, iconType, sender, subject);
+    game.drawNotification(true, false);
+}
+
 export function ShowSubTitle(subtitle, duration = 5000, drawImmediatly = true) {
     game.beginTextCommandPrint("STRING")
     game.addTextComponentSubstringTextLabel(subtitle);

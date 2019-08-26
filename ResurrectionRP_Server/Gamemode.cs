@@ -68,6 +68,9 @@ namespace ResurrectionRP_Server
         public XMenuManager.XMenuManager XMenuManager { get; private set; }
 
         [BsonIgnore]
+        public DrivingSchool.DrivingSchoolManager DrivingSchoolManager { get; private set; }
+
+        [BsonIgnore]
         public Utils.DoorManager DoorManager { get; private set; }
 
         [BsonIgnore]
@@ -130,6 +133,7 @@ namespace ResurrectionRP_Server
             RPGInventory = new Inventory.RPGInventoryManager();
             XMenuManager = new XMenuManager.XMenuManager();
             WeatherManager = new Weather.WeatherManager();
+            DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
             if (Time == null)
@@ -142,6 +146,7 @@ namespace ResurrectionRP_Server
             await VehicleManager.LoadAllVehiclesActive();
             await Loader.ClothingLoader.LoadAllCloth();
             await WeatherManager.InitWeather();
+            await DrivingSchoolManager.InitAll();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
             new EventsHandler.Events();
@@ -155,10 +160,15 @@ namespace ResurrectionRP_Server
             {
                 Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z);
             });
+            Chat.RegisterCmd("getCoords", (IPlayer player, string[] args) =>
+            {
+                Alt.Server.LogColored($" X: {player.Position.X}  Y: {player.Position.Y} Z: {player.Position.Z} ");
+                Alt.Server.LogColored($" RX: {player.Rotation.Roll}  RY: {player.Rotation.Pitch} RZ: {player.Rotation.Yaw} ");
+            });
             Chat.RegisterCmd("task", async (IPlayer player, string[] args) =>
             {
                 var vehicle = player.GetNearestVehicle();
-                player.Emit("TrySetPlayerIntoVehicle", vehicle);
+                player.Emit("TestOut", 10000);
             });
             ServerLoaded = true;
         }

@@ -10,12 +10,10 @@ var loading;
 
 
 export function initialize() {
-    alt.onServer("test", (vehicle) => {
-        game.taskEnterVehicle(alt.Player.local.scriptID, vehicle.scriptID, 10000, -1, 1, 1, 0);
-        alt.setTimeout(() => {
-            game.taskVehicleDriveToCoord(alt.Player.local.scriptID, vehicle.scriptID, 0, 0, 74, 100, 1, vehicle.model, 2883621 , 10, 1);
-            
-        }, 10000);
+    alt.onServer("setWaypoint", (posx: number, posy: number, override: boolean) => {
+        game.setNewWaypoint(posx, posy);
+        if (game.isWaypointActive() && override == true || !game.isWaypointActive() && override == false)
+            game.setNewWaypoint(posx, posy);
     });
     alt.onServer('SetPlayerIntoVehicle', (vehicle, seat) => {
         alt.setTimeout(() => {
@@ -71,12 +69,22 @@ export function initialize() {
 
     alt.on('SET_NOTIFICATION_BACKGROUND_COLOR', (args: any[]) => game.setNotificationBackgroundColor(parseInt(args[0])))
 
+    alt.onServer("SetNotificationMessage", (args: any[]) =>
+    {
+        UiHelper.SetNotificationPicture(args[0], args[1], args[1], args[2], args[3], args[4], args[5]);
+    });
+    alt.on("SetNotificationMessage", (args: any[]) =>
+    {
+        UiHelper.SetNotificationPicture(args[0], args[1], args[1], args[2], args[3], args[4], args[5]);
+    });
+
     alt.on('RemoveLoadingPrompt', () => game.removeLoadingPrompt());
 
-    alt.onServer('FadeIn', (args: any[]) => game.doScreenFadeIn(parseInt(args[0])));
-    alt.onServer('FadeOut', (args: any[]) => game.doScreenFadeOut(parseInt(args[0])));
-    alt.on('FadeIn', (args: any[]) => game.doScreenFadeIn(parseInt(args[0])));
-    alt.on('FadeOut', (args: any[]) => game.doScreenFadeOut(parseInt(args[0])));
+
+    alt.onServer('FadeIn', (args: number) => game.doScreenFadeIn(args));
+    alt.onServer('FadeOut', (args: number) => game.doScreenFadeOut(args));
+    alt.on('FadeIn', (args: number) => game.doScreenFadeIn(args));
+    alt.on('FadeOut', (args: number) => game.doScreenFadeOut(args));
 
     alt.on('SetNotificationMessage', (args: any[]) => SetNotificationPicture(args[0], args[1], args[1], args[2], args[3], args[4], args[5]))
 

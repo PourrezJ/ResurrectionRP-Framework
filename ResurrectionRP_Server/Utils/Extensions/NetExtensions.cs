@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace ResurrectionRP_Server.Utils.Extensions
+namespace ResurrectionRP_Server
 {
     public static class NetExtensions
     {

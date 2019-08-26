@@ -21,5 +21,19 @@ namespace ResurrectionRP_Server.Streamer.Data
         orizontalCircleSkinny = 25,
         HorizontalCircleArrow  = 26,
         HorizontalSplitArrowCircle = 27,
+        MarkerTypeDebugSphere =28,
+        MarkerTypeDollarSign = 29,
+        MarkerTypeHorizontalBars = 30,
+        MarkerTypeWolfHead = 31,
+        MarkerTypeQuestionMark = 32,
+        MarkerTypePlaneSymbol = 33,
+        MarkerTypeHelicopterSymbol = 34,
+        MarkerTypeBoatSymbol = 35,
+        MarkerTypeCarSymbol = 36,
+        MarkerTypeMotorcycleSymbol = 37,
+        MarkerTypeBikeSymbol = 38,
+        MarkerTypeTruckSymbol = 39,
+        MarkerTypeParachuteSymbol = 40,
+        MarkerTypeSawbladeSymbol = 41
     }
 }

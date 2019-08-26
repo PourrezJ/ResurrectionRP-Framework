@@ -5,12 +5,12 @@
         string Description { get; set; }
         bool ExecuteCallback { get; set; }
         bool ExecuteCallbackIndexChange { get; set; }
-        bool ExecuteCallbackListChange { get; set; }
         string Id { get; set; }
         byte? InputMaxLength { get; set; }
         bool InputSetRightLabel { get; set; }
         InputType? InputType { get; set; }
         string InputValue { get; set; }
+        bool? InputErrorResetValue { get; set; }
         BadgeStyle? LeftBadge { get; set; }
         MenuItemType? MenuType { get; set; }
         MenuItem.OnMenuItemCallBackDelegate OnMenuItemCallback { get; set; }

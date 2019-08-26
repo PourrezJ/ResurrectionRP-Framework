@@ -1,4 +1,4 @@
-﻿namespace ResurrectionRP.Server.Entities.Vehicles.Data
+﻿namespace ResurrectionRP_Server.Entities.Vehicles.Data
 {
     public class OilTank
     {

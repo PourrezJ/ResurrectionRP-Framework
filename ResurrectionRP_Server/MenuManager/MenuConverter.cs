@@ -17,7 +17,6 @@ namespace ResurrectionRP_Server
             _types = types;
         }
 
-
         public override bool CanRead
         {
             get { return true; }
@@ -40,7 +39,7 @@ namespace ResurrectionRP_Server
             Menu menu = jo.ToObject<Menu>();
 
             List<dynamic> Items = jo["Items"].ToObject<List<dynamic>>();
-            List<MenuItem> MenuItems = new List<MenuItem>();
+            MenuItemList MenuItems = new MenuItemList();
 
             for (int i = 0; i < Items.Count; i++)
             {
@@ -50,7 +49,6 @@ namespace ResurrectionRP_Server
 
                 InputType inputtype = (item["InputType"] != null) ? ((JToken)item["InputType"]).ToObject<InputType>() : InputType.Text;
 
-
                 string Id = (string)item["Id"];
                 string Text = (string)item["Text"];
                 string Description = (string)item["Description"];
@@ -58,12 +56,12 @@ namespace ResurrectionRP_Server
                 bool ExecuteCallbackIndexChange = (bool)item["ExecuteCallbackIndexChange"];
                 bool ExecuteCallbackListChange = (bool)item["ExecuteCallbackListChange"];
                 bool InputSetRightLabel = (bool)item["InputSetRightLabel"];
+                bool InputErrorResetValue = (bool)item["InputErrorResetValue"];
                 string LeftBadge = (string)item["LeftBadge"];
                 MenuItemType MenuType = type;
                 string RightBadge = (string)item["RightBadge"];
                 string RightLabel = (string)item["RightLabel"];
-
-                MenuItem menuitem = new MenuItem(Text, Description, Id, ExecuteCallback, ExecuteCallbackIndexChange, ExecuteCallbackListChange, RightLabel);
+                MenuItem menuitem = null;
 
                 switch (type)
                 {
@@ -76,7 +74,6 @@ namespace ResurrectionRP_Server
                         break;
 
                     case MenuItemType.ListItem:
-
                         JArray a = (JArray)item["Items"];
                         List<object> items = a.ToObject<List<object>>();
                         int SelectedItem = (int)item["SelectedItem"];
@@ -84,7 +81,7 @@ namespace ResurrectionRP_Server
                         break;
 
                     default:
-
+                        menuitem = new MenuItem(Text, Description, Id, ExecuteCallback, ExecuteCallbackIndexChange, RightLabel);
                         break;
                 }
 

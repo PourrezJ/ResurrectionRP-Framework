@@ -116,12 +116,14 @@ namespace ResurrectionRP_Server.Models
             }
             return number;
         }
-        private async Task StoreVehicle(IPlayer client /*,Menu menu, IMenuItem menuItem, int itemIndex, dynamic data*/)
+
+        private async Task StoreVehicle(IPlayer client,Menu menu, IMenuItem menuItem, int itemIndex, dynamic data)
         {
             var vehicle = await client.GetVehicleAsync();
             await StoreVehicle(client, vehicle);
         }
-/*        private async Task GetVehicle(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex, dynamic data)
+
+        private async Task GetVehicle(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex, dynamic data)
         {
             try
             {
@@ -134,7 +136,7 @@ namespace ResurrectionRP_Server.Models
                     if (!await VehicleManager.GetVehicleInSpawn(menu.GetData("Location")))
                     {
                         Spawn = menu.GetData("Location");
-                        await veh.SpawnVehicle(client, Spawn);
+                        await veh.SpawnVehicle(Spawn);
                     }
                 }
                 else
@@ -143,12 +145,12 @@ namespace ResurrectionRP_Server.Models
                     if (!await VehicleManager.GetVehicleInSpawn(Spawn1.Pos))
                     {
                         Spawn = Spawn1;
-                        await veh.SpawnVehicle(client, Spawn1);
+                        await veh.SpawnVehicle(Spawn1);
                     }
                     else if (Spawn2 != null && !await VehicleManager.GetVehicleInSpawn(Spawn2.Pos))
                     {
                         Spawn = Spawn2;
-                        await veh.SpawnVehicle(client, Spawn2);
+                        await veh.SpawnVehicle(Spawn2);
                     }
                     else
                     {
@@ -158,20 +160,18 @@ namespace ResurrectionRP_Server.Models
                     }
                 }
 
-                Spawn = Spawn2;
- //                if (ParkingType == ParkingType.House) TDO
- //                   await client.PutIntoVehicleAsync(veh.Vehicle, -1);
+                // if (ParkingType != ParkingType.Public)
+                //     await client.PutIntoVehicleAsync(veh.Vehicle, -1);
 
                 RemoveVehicle(veh); // retrait du véhicule dans la list.
                 await OnVehicleOut?.Invoke(client, veh, Spawn); // callback (ex carpark)
                 await MenuManager.CloseMenu(client);
-                //await veh.InsertVehicle();
             }
             catch (Exception ex)
             {
                 Alt.Server.LogError("Parking | " + ex.ToString());
             }
-        }*/
+        }
 
         private async Task<VehicleHandler> GetVehicleInParking(string plate)
         {
@@ -208,11 +208,11 @@ namespace ResurrectionRP_Server.Models
 
             Alt.OnColShape += OnEnterColShape;
             ParkingList.Add(this);
+            await Task.CompletedTask;
         }
 
 
-        /*
-                public async Task OpenParkingMenu(IPlayer client, string title = "", string description = "", bool canGetAllVehicle = false, Location location = null, int vehicleType = -1, Menu menu = null, Menu.MenuCallback menuCallback = null)
+        public async Task OpenParkingMenu(IPlayer client, string title = "", string description = "", bool canGetAllVehicle = false, Location location = null, int vehicleType = -1, Menu menu = null, Menu.MenuCallback menuCallback = null)
                 {
                     if (!client.Exists)
                         return;
@@ -357,7 +357,7 @@ namespace ResurrectionRP_Server.Models
 
                     menu.SetData("Location", location);
                     await menu.OpenMenu(client);
-                }*/
+                }
 
         public async Task StoreVehicle(IPlayer client, IVehicle vh)
         {

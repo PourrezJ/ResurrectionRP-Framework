@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using ResurrectionRP_Server;
+using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Utils.Extensions;
 using AltV.Net.Enums;
@@ -21,9 +22,9 @@ namespace ResurrectionRP_Server
 {
     public class GameMode
     {
+        #region Variables
         public ObjectId _id;
 
-        #region Variables
         [BsonIgnore]
         public static GameMode Instance { get; private set; }
 
@@ -194,26 +195,28 @@ namespace ResurrectionRP_Server
             }
 
             VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), new Vector3(player.Position.X+5, player.Position.Y, player.Position.Z), player.Rotation, locked:false);
+
             Task.Run(async () =>
             {
                 await vh.SpawnVehicle(null);
-                var ph = player.GetPlayerHandler();
+                PlayerHandler ph = player.GetPlayerHandler();
 
                 if (ph != null)
                 {
                     ph.ListVehicleKey.Add(new VehicleKey(vh.VehicleManifest.DisplayName, vh.Plate));
+
                     if (vh.Vehicle != null)
                         player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);
 
-                    await ph.UpdatePlayerInfo();
+                    await ph.Update();
                 }
             });
         }
+
         public async Task Save()
         {
             await Database.MongoDB.Update(this, "gamemode", _id);
         }
-
         #endregion
     }
 }

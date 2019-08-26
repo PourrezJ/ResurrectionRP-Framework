@@ -22,6 +22,7 @@ namespace ResurrectionRP_Server
     public class Startup : AsyncResource
     {
         private GameMode gamemode = null;
+
         public async override void OnStart()
         {
             AltAsync.OnPlayerConnect += AltAsync_OnPlayerConnect;
@@ -59,6 +60,7 @@ namespace ResurrectionRP_Server
         private async Task AltAsync_OnPlayerConnect(IPlayer player, string reason)
         {
             player.Emit("FadeOut", 0);
+
             while (gamemode == null)
                 await Task.Delay(50);
 

@@ -8,6 +8,7 @@ namespace ResurrectionRP_Server
         #region Public properties
         public List<object> Items { get; set; }
         public int SelectedItem { get; set; } = 0;
+        public bool ExecuteCallbackListChange { get; set; }
         #endregion
 
         #region Constructor

@@ -6,7 +6,6 @@ namespace ResurrectionRP_Server
     {
         List<object> Items { get; set; }
         int SelectedItem { get; set; }
-
-        bool IsInput();
+        bool ExecuteCallbackListChange { get; set; }
     }
 }

@@ -18,14 +18,17 @@ namespace ResurrectionRP_Server
         {
             if (player.GetData<string>("SocialClub", out string data))
                 return data;
+
             throw new NullReferenceException("SocialClubMising");
         }
 
         public static string GetTeamspeakID(this IPlayer player)
         {
             var ID = "NothingAtAll";
+
             if (player.GetData<string>("PLAYER_TEAMSPEAK_IDENT", out string data))
                 ID = data;
+
             return ID;
         }
 
@@ -45,13 +48,12 @@ namespace ResurrectionRP_Server
 
         public static PlayerHandler GetPlayerHandler(this IPlayer client)
         {
-            if (client == null)
+            if (client == null || !client.Exists)
                 return null;
 
-            if (!client.Exists)
-                return null;
+            if (PlayerHandler.PlayerHandlerList.TryGetValue(client, out PlayerHandler value))
+                return value;
 
-            if (PlayerHandler.PlayerHandlerList.TryGetValue(client, out PlayerHandler value)) return value;
             return null;
         }
 
@@ -59,6 +61,7 @@ namespace ResurrectionRP_Server
         {
             if (text == "")
                 return;
+
             await client.EmitAsync("notify", "Notification", text, 7000);
         }
         public async static Task SendNotificationError(this IPlayer client, string text)
@@ -188,20 +191,20 @@ namespace ResurrectionRP_Server
 
         public async static Task PlaySoundFrontEndFix(this IPlayer client, int id, string dict, string anim)
         {
-
+            await Task.CompletedTask;
         }
 
         public async static Task PlaySoundFromEntity(this IPlayer client, IPlayer initiator, int id, string dict, string anim)
         {
-
+            await Task.CompletedTask;
         }
         public async static Task PlaySoundFromEntity(this IPlayer client, IVehicle initiator, int id, string dict, string anim)
         {
-
+            await Task.CompletedTask;
         }
         public async static Task PlaySoundFromEntity(this IPlayer client, IEntity initiator, int id, string dict, string anim)
         {
-
+            await Task.CompletedTask;
         }
 
         public static async Task Resurrect(this IPlayer client)

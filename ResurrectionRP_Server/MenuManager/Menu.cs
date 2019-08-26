@@ -23,7 +23,7 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Public delegates
-        public delegate Task MenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex, dynamic data);
+        public delegate Task MenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex);
         public delegate Task MenuCheckbox(IPlayer client, Menu menu, IMenuItem menuItem, bool value);
         public delegate Task MenuListCallback(IPlayer client, Menu menu, IListItem listItem, int listIndex);
         public delegate Task MenuCurrentIndex(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem);

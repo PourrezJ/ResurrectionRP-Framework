@@ -1,7 +1,5 @@
-﻿
-namespace ResurrectionRP_Server.Utils.Enums
+﻿namespace ResurrectionRP_Server.Utils.Enums
 {
-
     static class Events
     {
         public const string PlayerInitialised = "PlayerInitialised";

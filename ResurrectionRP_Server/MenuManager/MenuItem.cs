@@ -28,15 +28,15 @@ namespace ResurrectionRP_Server
         public string RightLabel { get; set; }
         public bool ExecuteCallback { get; set; }
         public bool ExecuteCallbackIndexChange { get; set; }
-        public bool ExecuteCallbackListChange { get; set; }
         public bool InputSetRightLabel { get; set; }
         public string InputValue { get; set; }
         public byte? InputMaxLength { get; set; }
         public InputType? InputType { get; set; }
+        public bool? InputErrorResetValue { get; set; }
         #endregion
 
         #region Constructor
-        public MenuItem(string text, string description = null, string id = null, bool executeCallback = false, bool executeCallbackIndexChange = false, bool executeCallbackListChange = false, string rightLabel = "")
+        public MenuItem(string text, string description = null, string id = null, bool executeCallback = false, bool executeCallbackIndexChange = false, string rightLabel = "")
         {
             MenuType = MenuItemType.MenuItem;
 
@@ -65,7 +65,6 @@ namespace ResurrectionRP_Server
 
             ExecuteCallback = executeCallback;
             ExecuteCallbackIndexChange = executeCallbackIndexChange;
-            ExecuteCallbackListChange = executeCallbackListChange;
             InputSetRightLabel = false;
             InputValue = null;
             InputMaxLength = null;

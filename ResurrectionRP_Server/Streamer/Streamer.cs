@@ -29,7 +29,6 @@ namespace ResurrectionRP_Server.Streamer
 
         public Streamer()
         {
-            //var data = new Marker(Data.MarkerType.HorizontalSplitArrowCircle, new Vector3(1, 1, 1), 255, 0, 0, 255, this.EntityNumber++);
             try
             {
                 AltNetworking.Configure(options =>
@@ -51,7 +50,6 @@ namespace ResurrectionRP_Server.Streamer
             {
                 AltV.Net.Alt.Server.LogError(ex.ToString());
             }
-            //addEntityMarker(Data.MarkerType.VerticalCylinder, new Vector3(404,-991,30), new Vector3(2,2,2));
 
 
 

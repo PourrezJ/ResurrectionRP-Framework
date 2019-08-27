@@ -242,7 +242,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 //await GameMode.Instance.PedManager.OnPlayerConnected(client);
                 //await GameMode.Instance.VoiceController.OnPlayerConnected(client);
                 //await GameMode.Instance.IllegalManager.OnPlayerConnected(client);
-                
+
                 await Task.Delay(500);
 
                 if (firstspawn)
@@ -626,5 +626,40 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Methods
 
         #endregion
+
+        #region Keys
+        public void AddKey(Entities.Vehicles.VehicleHandler veh, string keyVehicleName = null)
+        {
+            if (keyVehicleName == null) ListVehicleKey.Add(new Models.VehicleKey(veh.VehicleManifest.DisplayName, veh.Plate));
+            else ListVehicleKey.Add(new Models.VehicleKey(keyVehicleName, veh.Plate));
+        }
+
+        public bool HasKey(Entities.Vehicles.VehicleHandler veh)
+        {
+            if (ListVehicleKey.Exists(k => k.Plate == veh.Plate))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void RemoveKey(Entities.Vehicles.VehicleHandler veh)
+        {
+            Models.VehicleKey _key = ListVehicleKey.Find(k => k.Plate == veh.Plate);
+            if (_key != null)
+            {
+                ListVehicleKey.Remove(_key);
+            }
+        }
+        #endregion
+
+        #region Licences
+        public bool HasLicense(Models.LicenseType type) =>
+            Licenses.Exists(l => l.Type == type);
+        #endregion
+
     }
 }

@@ -1,0 +1,146 @@
+/* theme dark */
+
+/* GLOBAL */
+body.dark-theme .launcher-white {
+  border-top: 41px solid #15181b;
+}
+
+body.dark-theme .list {
+    background: bottom no-repeat,top no-repeat #202429;
+}
+
+body.dark-theme .innerapp:not(.blur) {
+    background-color: #202429;
+}
+
+body.dark-theme .list-item {
+    border-bottom: 1px solid #171717;
+}
+
+body.dark-theme .toolbar__center {
+    color: #fff;
+}
+
+body.dark-theme .text-input--material {
+    color: #fff;
+}
+
+body.dark-theme .innerapp.launcher-white a {
+    color: #f5a623;
+}
+
+body.dark-theme .innerapp a:hover i {
+    color: #fff;
+}
+
+body.dark-theme ul.contacts-list li.list-item:first-child {
+    background: #8c8c8c;
+}
+
+body.dark-theme .list.messages-list a .list-item__title, .list.contacts-list a .list-item__title {
+    color: #c5c6c7;
+}
+
+body.dark-theme .list.messages-list a .list-item__subtitle, .list.contacts-list a .list-item__subtitle {
+    color: #c5c6c7;
+}
+
+body.dark-theme .list-item__title {
+    color: #c5c6c7;
+}
+
+body.dark-theme .list-item__subtitle {
+    color: grey;
+}
+
+body.dark-theme .innerapp > .toolbar {
+    background: #15181b;
+    border-bottom: 1px solid #15181b;
+}
+
+body.dark-theme .tabbar {
+    background: #15181b;
+    border-top: 1px solid #15181b;
+}
+
+body.dark-theme .tabbar__button.active ion-icon {
+    color: #f5a623;
+}
+
+body.dark-theme .tabbar ion-icon:hover {
+    color: #f5a623;
+}
+
+body.dark-theme .toolbar-button {
+    color: #f5a623;
+}
+
+/* MESSAGE */
+body.dark-theme .msg-container .msg-box.received {
+    background: #15181b;
+    color: #fff;
+}
+
+body.dark-theme .msg-box.sent {
+    background: #f5a623;
+    color: #000;
+}
+
+body.dark-theme .msg-send {
+    border: 1px solid #22262a;
+    background: #22262a;
+}
+
+body.dark-theme .text-input {
+    color: #fff;
+}
+
+body.dark-theme .emoji:hover {
+    color: #f5a623;
+}
+
+body.dark-theme .msg-send-btn i:hover {
+    color: #f5a623;
+}
+
+/* SETTINGS */
+body.dark-theme .innerapp.grey {
+    background: #202429;
+}
+
+body.dark-theme .settings {
+    background: #2c3138;
+    border-top: 1px solid #353a42;
+    border-bottom: 1px solid #353a42;
+}
+
+    body.dark-theme .settings:hover {
+        background: #f5a623;
+    }
+
+body.dark-theme .settings-container a .settings-type {
+    color: #fff;
+}
+
+body.dark-theme .switch__toggle {
+    background-color: #15181b;
+    box-shadow: inset 0 0 0 2px #31363c;
+}
+
+body.dark-theme .switch__handle {
+    background-color: #fff;
+}
+
+body.dark-theme :checked + .switch__toggle {
+    box-shadow: inset 0 0 0 2px #f5a623;
+    background-color: #e7a623;
+}
+
+/* TIMER */
+body.dark-theme .timer {
+    color: #fff;
+}
+
+body.dark-theme #sw_status {
+    color: #fff;
+}

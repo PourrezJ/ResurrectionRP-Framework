@@ -32,10 +32,10 @@ export function initialize() {
     });
 
 
-    alt.on('toggleChat', () => {
-        if (!opened) {
-            hidden = !hidden;
-            view.emit('hideChat', hidden);
+    alt.on('toggleChat', (state: boolean = null) => {
+        if (!opened && state == null || state ) {
+            hidden = state == null ? !hidden : state;
+            view.emit('hideChat', state == null ? hidden : state);
         } else {
             hidden = !hidden;
             view.emit('hideChat', hidden);

@@ -88,7 +88,7 @@ namespace ResurrectionRP_Server.Phone
                 if (_client != null)
                 {
                     string contactName = GetNameForNumber(receiver);
-                    await _client.NotifyAsync("Message bien envoyer " + ("à ~b~~h~" + contactName ?? "au ~b~~h~" + receiver));
+                    await _client.NotifyAsync("Message bien envoyé " + ("à ~b~~h~" + contactName ?? "au ~b~~h~" + receiver));
                     await _client.PlaySoundFrontEndFix(-1, "MP_5_SECOND_TIMER", "HUD_FRONTEND_DEFAULT_SOUNDSET");
                 }
 

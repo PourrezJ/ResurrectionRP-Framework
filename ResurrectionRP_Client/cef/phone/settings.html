@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Texting App - GTA RP</title>
+
+    <link rel="stylesheet" href="../../lib/css/onsenui.min.css">
+    <link rel="stylesheet" href="../../lib/css/onsen-css-components.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark-style.css">
+
+    <script src="../../lib/js/angular.min.js"></script>
+    <script src="../../lib/js/moment.min.js"></script>
+    <script src="../../lib/js/angular-moment.min.js"></script>
+    <script src="../../lib/js/jquery.min.js"></script>
+    <script src="../../lib/js/onsenui.min.js"></script>
+
+    <script src="js/app.js"></script>
+    <script src="js/phoneSettings.js"></script>
+</head>
+<body ng-app="ResurrectionPhone" ng-class="{'dark-theme':phoneSettings.darkMode}">
+	<div class="main-container" ng-controller="PhoneSettingsCtrl">
+		<div class="phone-frame"></div>
+		<div class="innerapp grey launcher-white">
+			<div class="toolbar">
+				<div class="toolbar__left">
+					<a href="home.html" class="toolbar-button">
+						<i class="fas fa-home"></i>
+					</a>
+				</div>
+
+				<div class="toolbar__center">
+					Paramètres
+				</div>
+
+				<div class="toolbar__right">
+
+				</div>
+			</div>
+            <section class="settings-container">
+                <a href="#">
+                    <div class="settings" style="margin-top: 20px;">
+                        <ion-icon name="ios-volume-mute" class="silencieux"></ion-icon>
+                        <div class="settings-type">Mode silencieux</div>
+                        <label class="switch">
+                            <input type="checkbox" class="switch__input" ng-model="phoneSettings.silenceMode" ng-change="saveSettings()">
+                            <div class="switch__toggle">
+                                <div class="switch__handle"></div>
+                            </div>
+                        </label>
+                    </div>
+                </a>
+                <a href="#">
+                    <div class="settings">
+                        <ion-icon name="ios-color-palette" class="themes"></ion-icon>
+                        <div class="settings-type">Mode Sombre</div>
+                        <!--<i class="ion-ios-arrow-right list-item__icon"></i>-->
+                        <label class="switch">
+                            <input type="checkbox" class="switch__input" ng-model="phoneSettings.darkMode" ng-change="saveSettings()">
+                            <div class="switch__toggle">
+                                <div class="switch__handle"></div>
+                            </div>
+                        </label>
+                    </div>
+                </a>
+                <a href="#">
+                    <div class="settings">
+                        <ion-icon name="musical-notes" class="sonnerie"></ion-icon>
+                        <div class="settings-type">Sonnerie</div>
+                        <i class="ion-ios-arrow-right list-item__icon"></i>
+                    </div>
+                </a>
+                <a href="#">
+                    <div class="settings">
+                        <ion-icon name="ios-image" class="fond"></ion-icon>
+                        <div class="settings-type">Fond d'écran</div>
+                        <i class="ion-ios-arrow-right list-item__icon"></i>
+                    </div>
+                </a>
+            </section>
+		</div>
+	</div>
+
+	<script src="https://unpkg.com/ionicons@4.1.2/dist/ionicons.js"></script>
+</body>
+</html>

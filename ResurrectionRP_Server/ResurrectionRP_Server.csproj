@@ -34,6 +34,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DrivingSchool\" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="set ResourceDir=C:\altv\server-files\resources\resurrectionrp&#xD;&#xA;set ServerDir=%25ResourceDir%25\Server&#xD;&#xA;xcopy /Y $(TargetPath) %25ServerDir%25&#xD;&#xA;copy /Y $(ProjectDir)\resource.cfg %25ResourceDir%25" />
   </Target>

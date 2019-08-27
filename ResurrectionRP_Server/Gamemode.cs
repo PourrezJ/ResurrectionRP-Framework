@@ -61,6 +61,8 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public VehiclesManager VehicleManager { get; private set; }
 
+        [BsonIgnore]
+        public Jobs.JobsManager JobsManager { get; private set; }
 
         // Menus
         [BsonIgnore]
@@ -133,6 +135,7 @@ namespace ResurrectionRP_Server
             XMenuManager = new XMenuManager.XMenuManager();
             WeatherManager = new Weather.WeatherManager();
             DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
+            JobsManager = new Jobs.JobsManager();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
             if (Time == null)
@@ -145,6 +148,7 @@ namespace ResurrectionRP_Server
             await VehicleManager.LoadAllVehiclesActive();
             await Loader.ClothingLoader.LoadAllCloth();
             await WeatherManager.InitWeather();
+            await JobsManager.Init();
             await DrivingSchoolManager.InitAll();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
@@ -168,6 +172,10 @@ namespace ResurrectionRP_Server
             {
                 var vehicle = player.GetNearestVehicle();
                 player.Emit("TestOut", 10000);
+            });
+            Chat.RegisterCmd("setCoords", (IPlayer player, string[] args) =>
+            {
+                player.Position = new Vector3(float.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2]));
             });
             ServerLoaded = true;
         }

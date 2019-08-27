@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Numerics;
 using AltV.Net.Data;
+using AltV.Net.Elements.Entities;
 using AltV.Net;
+using System.Collections.Generic;
 
 namespace ResurrectionRP_Server
 {
@@ -58,6 +60,28 @@ namespace ResurrectionRP_Server
         public static Entity.Position ConvertToEntityPosition(this Vector3 pos) =>  new Entity.Position { X = pos.X, Y=pos.Y, Z=pos.Z };
         
         public static AltV.Net.Data.Rotation ConvertToEntityRotation(this Vector3 pos) => new AltV.Net.Data.Rotation(pos.X, pos.Y, pos.Z );
+
+        public static List<IVehicle> GetVehiclesInRange(this Vector3 pos, float range)
+        {
+            ICollection<IVehicle> vehicles = Alt.GetAllVehicles();
+            List<IVehicle> end = new List<IVehicle>();
+            foreach(IVehicle veh in vehicles)
+            {
+                if (pos.DistanceTo2D(new Vector3(veh.Position.X, veh.Position.Y, veh.Position.Y)) <= range)
+                    end.Add(veh);
+            }
+            return end;
+        }        public static List<IPlayer> GetPlayersInRange(this Vector3 pos, float range)
+        {
+            ICollection<IPlayer> vehicles = Alt.GetAllPlayers();
+            List<IPlayer> end = new List<IPlayer>();
+            foreach(IPlayer veh in vehicles)
+            {
+                if (pos.DistanceTo2D(new Vector3(veh.Position.X, veh.Position.Y, veh.Position.Y)) <= range)
+                    end.Add(veh);
+            }
+            return end;
+        }
         
     }
 }

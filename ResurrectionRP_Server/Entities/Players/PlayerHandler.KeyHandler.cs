@@ -191,7 +191,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (ph.RadioSelected == null)
                     {
-                        await client.SendNotificationError("Vous n'avez pas de radio d'équiper sur vous.");
+                        await client.SendNotificationError("Vous n'avez pas de radio d'équipée sur vous.");
                         return;
                     }
 
@@ -214,7 +214,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (ph.PhoneSelected == null)
                     {
-                        await client.SendNotificationError("Vous n'avez pas de téléphone d'équiper sur vous.");
+                        await client.SendNotificationError("Vous n'avez pas de téléphone d'équipé sur vous.");
                         return;
                     }
 

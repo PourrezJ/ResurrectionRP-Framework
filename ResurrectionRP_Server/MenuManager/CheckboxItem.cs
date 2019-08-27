@@ -9,7 +9,7 @@
         #region Constructor
         public CheckboxItem(string text, string description, string id, bool isChecked, bool executeCallback = false) : base(text, description, id)
         {
-            MenuType = MenuItemType.CheckboxItem;
+            Type = MenuItemType.CheckboxItem;
             Checked = isChecked;
             ExecuteCallback = executeCallback;
         }

@@ -65,6 +65,8 @@ namespace ResurrectionRP_Server
 
         // Menus
         [BsonIgnore]
+        public MenuManager MenuManager { get; private set; }
+        [BsonIgnore]
         public XMenuManager.XMenuManager XMenuManager { get; private set; }
 
         [BsonIgnore]
@@ -107,7 +109,6 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Events
-
         private async void OnServerStop()
         {
             var players = GameMode.Instance.PlayerList;
@@ -119,9 +120,9 @@ namespace ResurrectionRP_Server
 
             //await HouseManager.House_Exit();
         }
+
         public async Task OnStartAsync()
         {
-
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
             Streamer = new Streamer.Streamer();
@@ -131,6 +132,7 @@ namespace ResurrectionRP_Server
             VehicleManager = new VehiclesManager();
             PhoneManager = new Phone.PhoneManager();
             RPGInventory = new Inventory.RPGInventoryManager();
+            MenuManager = new MenuManager();
             XMenuManager = new XMenuManager.XMenuManager();
             WeatherManager = new Weather.WeatherManager();
             DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
@@ -176,23 +178,21 @@ namespace ResurrectionRP_Server
 
         private void OnPlayerConnected(IPlayer player, string reason)
         {
-
             if (PlayerList.Find(b => b == player) == null)
                 PlayerList.Add(player);
+
             Alt.Log($"==> {player.Name} has connected.");
-
-
         }
+
         private void OnPlayerDisconnected(IPlayer player, string reason)
         {
-
             if (PlayerList.Find(b => b == player) != null)
                 PlayerList.Remove(player);
-            Alt.Log($"==> {player.Name} has disconnected.");
+
             RPGInventory.OnPlayerQuit(player);
-
+            PlayerHandler.PlayerHandlerList.TryRemove(player, out _);
+            Alt.Log($"==> {player.Name} has disconnected.");
         }
-
         #endregion
 
         #region Methods

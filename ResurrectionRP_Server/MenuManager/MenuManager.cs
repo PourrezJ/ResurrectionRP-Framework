@@ -57,59 +57,42 @@ namespace ResurrectionRP_Server
             if (!player.Exists)
                 return;
 
-            MenuItem menuItem = null;
-
-            int itemIndex = Convert.ToInt32(args[0]);
-
-            if (itemIndex == -1)
-                return;
-
             _clientMenus.TryGetValue(player, out Menu menu);
 
             if (menu != null)
             {
-                dynamic dynMenu = JsonConvert.DeserializeObject(args[1].ToString());
+                string menuId = (string)args[0];
+                string itemId = (string)args[1];
+                int itemIndex = Convert.ToInt32(args[2]);
+                bool forced = (bool)args[3];
+                dynamic data = JsonConvert.DeserializeObject(args[4].ToString());
 
-                for (int i = 0; i < menu.Items.Count; i++)
+                foreach (MenuItem menuItem in menu.Items)
                 {
-                    var item = menu.Items[i];
-                    var newitem = dynMenu.Items[i];
-
-                    if (!string.IsNullOrEmpty((string)newitem.InputValue))
-                        item.InputValue = newitem.InputValue;
-
-                    if (item.MenuType == MenuItemType.CheckboxItem)
-                        ((CheckboxItem)item).Checked = newitem.Checked;
-
-                    if (item.MenuType == MenuItemType.ListItem)
-                        ((ListItem)item).SelectedItem = newitem.SelectedItem;
+                    if (menuItem.Type == MenuItemType.CheckboxItem)
+                        ((CheckboxItem)menuItem).Checked = data[menuItem.Id];
+                    else if (menuItem.Type == MenuItemType.ListItem)
+                        ((ListItem)menuItem).SelectedItem = data[menuItem.Id]["Index"];
+                    else if (menuItem.InputMaxLength > 0)
+                        menuItem.InputValue = data[menuItem.Id];
                 }
 
-                if (menu.Items[itemIndex] == null)
+                try
                 {
-                    Alt.Server.LogError($"MenuManager_ExecuteCallbacks ID: {dynMenu.Id} Player: {player.GetSocialClub()}");
-                    return;
+                    MenuItem menuItem = menu.Items[itemIndex];
+
+                    if (menuItem == null)
+                        return;
+
+                    if (menuItem.OnMenuItemCallback != null)
+                        await menuItem.OnMenuItemCallback.Invoke(player, menu, menuItem, itemIndex);
+
+                    if (menu.Callback != null)
+                        await menu.Callback.Invoke(player, menu, menu.Items[itemIndex], itemIndex);
                 }
-
-                if (menu.Items.Count >= itemIndex)
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        menuItem = menu.Items[itemIndex];
-
-                        if (menuItem == null)
-                            return;
-
-                        if (menu.Callback != null)
-                            await menu.Callback.Invoke(player, menu, menu.Items[itemIndex], itemIndex);
-
-                        if (menuItem.OnMenuItemCallback != null)
-                            await menuItem.OnMenuItemCallback.Invoke(player, menu, menuItem, itemIndex);
-                    }
-                    catch(Exception ex)
-                    {
-                        Alt.Server.LogError(ex.ToString());
-                    }
+                    Alt.Server.LogError(ex.ToString());
                 }
             }
         }
@@ -207,7 +190,8 @@ namespace ResurrectionRP_Server
                 if (menu.CurrentItemCallback != null)
                     menu.CallbackCurrentItem = true;
 
-                await client.EmitAsync("MenuManager_OpenMenu", JsonConvert.SerializeObject(menu));
+                string json = JsonConvert.SerializeObject(menu, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                await client.EmitAsync("MenuManager_OpenMenu", json);
                 return true;
             }
 

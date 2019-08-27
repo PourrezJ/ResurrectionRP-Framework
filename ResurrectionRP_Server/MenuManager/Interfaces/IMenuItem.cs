@@ -12,7 +12,7 @@
         string InputValue { get; set; }
         bool? InputErrorResetValue { get; set; }
         BadgeStyle? LeftBadge { get; set; }
-        MenuItemType? MenuType { get; set; }
+        MenuItemType? Type { get; set; }
         MenuItem.OnMenuItemCallBackDelegate OnMenuItemCallback { get; set; }
         BadgeStyle? RightBadge { get; set; }
         string RightLabel { get; set; }

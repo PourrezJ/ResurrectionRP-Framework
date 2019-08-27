@@ -19,7 +19,7 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Public properties
-        public MenuItemType? MenuType { get; set; }
+        public MenuItemType? Type { get; set; }
         public string Id { get; set; }
         public string Text { get; set; }
         public string Description { get; set; }
@@ -38,7 +38,7 @@ namespace ResurrectionRP_Server
         #region Constructor
         public MenuItem(string text, string description = null, string id = null, bool executeCallback = false, bool executeCallbackIndexChange = false, string rightLabel = "")
         {
-            MenuType = MenuItemType.MenuItem;
+            Type = MenuItemType.MenuItem;
 
             if (text != null && text.Trim().Length == 0)
                 Text = null;

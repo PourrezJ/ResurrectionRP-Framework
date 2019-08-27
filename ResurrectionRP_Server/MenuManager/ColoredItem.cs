@@ -10,7 +10,7 @@
         #region Constructor
         public ColoredItem(string text, string description, string id, string backgroundColor, string highlightColor) : base(text, description, id)
         {
-            MenuType = MenuItemType.ColoredItem;
+            Type = MenuItemType.ColoredItem;
             BackgroundColor = backgroundColor;
             HighlightColor = highlightColor;
         }

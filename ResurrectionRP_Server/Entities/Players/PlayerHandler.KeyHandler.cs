@@ -4,6 +4,7 @@ using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Inventory;
+using ResurrectionRP_Server.Radio;
 using ResurrectionRP_Server.Utils.Extensions;
 using System;
 using System.Threading.Tasks;
@@ -178,9 +179,10 @@ namespace ResurrectionRP_Server.Entities.Players
                     await menu.OpenMenu(client);
                     break;
 
-                /**case ConsoleKey.PageUp:
+                case ConsoleKey.PageUp:
+                    /*
                     if (MenuManager.HasOpenMenu(client))
-                        return;
+                        return;*/
 
                     if (ph.IsCuff())
                     {
@@ -200,7 +202,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 case ConsoleKey.PageDown:
                     await RadioManager.Close(client);
                     break;
-
+                /*
                 case ConsoleKey.UpArrow:
                     if (MenuManager.HasOpenMenu(client))
                         return;

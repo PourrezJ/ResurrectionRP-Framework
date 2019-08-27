@@ -11,6 +11,7 @@ import { RPGInventoryManager } from 'client/menus/rpgInventory/RPGinventory';
 import { Weather as WeatherLib } from 'client/Env/Weather';
 import { Interaction as InteractionLib } from 'client/Player/Interaction';
 import { Doors as DoorsManagerLib } from 'client/Env/Doors';
+import { RadioManager } from 'client/menus/RadioManager';
 
 export class Game {
     //region Static Var
@@ -62,6 +63,9 @@ export class Game {
     private _Inventory: RPGInventoryManager;
     public get Inventory(): RPGInventoryManager { return this._Inventory; }
 
+    private _Radio: RadioManager;
+    public get Radio(): RadioManager { return this._Radio; }
+
     //End region pools
     //constructor
     constructor(
@@ -109,6 +113,7 @@ export class Game {
             this._Doors = new DoorsManagerLib();
             this._Inventory = new RPGInventoryManager();
             this._Weather = new WeatherLib(Weather, WeatherWind, WeatherWindDirection);
+            this._Radio = new RadioManager();
             alt.log('Chargement des pools done');
 
             alt.log("Chargement des stats");

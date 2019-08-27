@@ -20,5 +20,4 @@ export class Blesse {
             game.setFadeOutAfterDeath(false);
         });
     }
-
 }

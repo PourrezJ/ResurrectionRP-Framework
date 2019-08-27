@@ -20,8 +20,7 @@ function loadInventory(pocket, bag, distant, outfit, give) {
 
 $(() => {
     if ('alt' in window) {
-        console.log("cef: Request Item Inventory Event");
-        alt.on("loadInventory", loadInventory);
+        alt.on('loadInventory', loadInventory);
         alt.emit('loaditem');
     }
 });

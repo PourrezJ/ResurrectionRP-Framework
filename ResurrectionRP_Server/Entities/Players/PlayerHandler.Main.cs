@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Concurrent;
 using System.Numerics;
@@ -227,7 +227,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     Character.ApplyCharacter(Client);
                     Client.Dimension = GameMode.GlobalDimension;
                     Client.Health = (ushort)(Health + 100);
-                    Client.Emit("FadeIn", 0);
+                    Client.Emit("FadeIn", 3000);
                 });
 
                await UpdateClothing();
@@ -243,8 +243,9 @@ namespace ResurrectionRP_Server.Entities.Players
                 await GameMode.Instance.VoiceController.OnPlayerConnected(client);
                 //await GameMode.Instance.IllegalManager.OnPlayerConnected(client);
 
-                //GameMode.Instance.GlobalVoiceChannel.AddPlayer(Client);
+                GameMode.Instance.GlobalVoiceChannel.AddPlayer(Client);
 
+>>>>>>> Stashed changes
                 await Task.Delay(500);
 
                 if (firstspawn)

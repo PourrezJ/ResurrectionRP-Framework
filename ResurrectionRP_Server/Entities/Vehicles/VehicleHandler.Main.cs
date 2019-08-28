@@ -129,6 +129,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.PrimaryColor = PrimaryColor;
                 Vehicle.SecondaryColor = SecondaryColor;
 
+
                 if (Mods.Count > 0)
                 {
                     foreach (KeyValuePair<int, int> mod in Mods)
@@ -151,8 +152,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.RadioStation = RadioID;
                 IsParked = false;
 
+                for (byte i = 0; i < await Vehicle.GetWheelsCountAsync(); i++)
+                {
+                    Vehicle.SetWheelBurst( i, Wheel.Wheels[i].Burst );
+                    Vehicle.SetWheelHealth(i, Wheel.Wheels[i].Health);
+                }
+
+                for(byte i = 0; i < (byte)VehicleDoor.Trunk; i++)
+                    await Vehicle.SetDoorStateAsync(i,(byte) Door[i]);
+
                 await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
                 await Vehicle.SetEngineOnAsync(Engine);
+                await Vehicle.SetPositionAsync( Vehicle.Position.X, Vehicle.Position.Y, Vehicle.Position.Z );
 
                 if (setLastUse)
                     LastUse = DateTime.Now;
@@ -220,16 +231,55 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public async Task UpdateProperties()
         {
-            this.Dirt = await Vehicle.GetDirtLevelAsync();
+            if (Door == null)
+                Door = new VehicleDoorState[7];
 
-            this.Engine = await Vehicle.IsEngineOnAsync();
-            this.EngineHealth = await Vehicle.GetEngineHealthAsync();
 
-            Tuple<bool, bool, bool, bool> NeonState = await Vehicle.GetNeonActiveAsync();
-            
+            if (Wheel == null)
+                Wheel = new WheelsStruct();
+            if(Wheel.Wheels == null)
+                Wheel.Wheels = new WheelStruct[await Vehicle.GetWheelsCountAsync()];
+
+
+            try
+            {
+                this.Dirt = await Vehicle.GetDirtLevelAsync();
+
+                this.Engine = await Vehicle.IsEngineOnAsync();
+                this.EngineHealth = await Vehicle.GetEngineHealthAsync();
+                BodyHealth = await Vehicle.GetBodyHealthAsync();
+                RadioID = await Vehicle.GetRadioStationAsync();
+
+                Tuple<bool, bool, bool, bool> NeonState = await Vehicle.GetNeonActiveAsync();
+                NeonsColor = await Vehicle.GetNeonColorAsync();
+
+                for (byte i = 0; i < 5; i++)
+                {
+                    Door[i] = (VehicleDoorState)(await Vehicle.GetDoorStateAsync(i));
+                }
+
+                for (byte i = 0; i < await Vehicle.GetWheelsCountAsync(); i++)
+                {
+                    Wheel.Wheels[i] = new WheelStruct();
+
+                    Wheel.Wheels[i].Health = Vehicle.GetWheelHealth(i);
+                    Wheel.Wheels[i].Burst = Vehicle.IsWheelBurst(i);
+                }
+                Wheel.Type = Vehicle.WheelType;
+                Wheel.Variation = await Vehicle.GetWheelVariationAsync();
+
+                Location.Pos = await Vehicle.GetPositionAsync();
+                Location.Rot = await Vehicle.GetRotationAsync();
+            }
+            catch (Exception ex)
+            {
+                Alt.Server.LogError("Error on veicle save: " + ex.ToString());
+            }
+
+
             //this.NeonState.Clear();
             //this.NeonState.Add(NeonState.Item1);
-            
+
         }
 
         public void SetOwner(IPlayer player) => OwnerID = player.GetSocialClub();

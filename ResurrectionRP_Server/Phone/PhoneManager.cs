@@ -42,22 +42,10 @@ namespace ResurrectionRP_Server.Phone
         public PhoneManager()
         {
             PhoneClientList = new Dictionary<IPlayer, List<Phone>>();
-            Alt.OnClient("SavePhoneSettings", PhoneMenuCallBack);
-            Alt.OnClient("GetContacts", PhoneMenuCallBack);
-            Alt.OnClient("AddOrEditContact", PhoneMenuCallBack);
-            Alt.OnClient("RemoveContact", PhoneMenuCallBack);
-            Alt.OnClient("getConversationsV2", PhoneMenuCallBack);
-            Alt.OnClient("DeleteConversation", PhoneMenuCallBack);
-            Alt.OnClient("getMessages", PhoneMenuCallBack);
-            Alt.OnClient("SendMessage", PhoneMenuCallBack);
-            Alt.OnClient("initiateCall", PhoneMenuCallBack);
-            Alt.OnClient("cancelCall", PhoneMenuCallBack);
-            Alt.OnClient("endCall", PhoneMenuCallBack);
-            Alt.OnClient("acceptCall", PhoneMenuCallBack);
-            Alt.OnClient("PhoneMenuCallBack", PhoneMenuCallBack);
+            AltAsync.OnClient("PhoneMenuCallBack", PhoneMenuCallBack);
 
-            Alt.OnClient("CallOpenPhone", EventTrigered);
-            Alt.OnClient("ClosePhone", EventTrigered);
+            AltAsync.OnClient("CallOpenPhone", EventTrigered);
+            AltAsync.OnClient("ClosePhone", EventTrigered);
         }
         #endregion
 
@@ -134,7 +122,7 @@ namespace ResurrectionRP_Server.Phone
         }
         #endregion
 
-        private async void EventTrigered(IPlayer client, object[] args)
+        private async Task EventTrigered(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -161,7 +149,7 @@ namespace ResurrectionRP_Server.Phone
             }
         }
 
-        private async void PhoneMenuCallBack(IPlayer client, object[] args)
+        private async Task PhoneMenuCallBack(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;

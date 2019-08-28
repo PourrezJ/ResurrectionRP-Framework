@@ -44,7 +44,7 @@ namespace ResurrectionRP_Server
             _clientMenus.TryGetValue(player, out Menu menu);
 
             if (menu != null && !menu.BackCloseMenu)
-                await menu.Callback(player, menu, null, -1);
+                await menu.ItemSelectCallback(player, menu, null, -1);
             else if (menu != null)
             {
                 await menu.Finalizer?.Invoke(player, menu);
@@ -87,8 +87,8 @@ namespace ResurrectionRP_Server
                     if (menuItem.OnMenuItemCallback != null)
                         await menuItem.OnMenuItemCallback.Invoke(player, menu, menuItem, itemIndex);
 
-                    if (menu.Callback != null)
-                        await menu.Callback.Invoke(player, menu, menu.Items[itemIndex], itemIndex);
+                    if (menu.ItemSelectCallback != null)
+                        await menu.ItemSelectCallback.Invoke(player, menu, menu.Items[itemIndex], itemIndex);
                 }
                 catch (Exception ex)
                 {
@@ -104,10 +104,10 @@ namespace ResurrectionRP_Server
 
             _clientMenus.TryGetValue(player, out Menu menu);
 
-            if (menu != null && menu.CallbackCurrentItem)
+            if (menu != null && menu.IndexChangeCallback != null)
             {
                 int index = Convert.ToInt32(args[0]);
-                await menu.CurrentItemCallback(player, menu, index, menu.Items[index]);
+                await menu.IndexChangeCallback(player, menu, index, menu.Items[index]);
             }
         }
  
@@ -155,7 +155,7 @@ namespace ResurrectionRP_Server
         {
             _clientMenus.TryGetValue(client, out Menu menu);
 
-            if (menu == null || menu.Callback == null)
+            if (menu == null || menu.ItemSelectCallback == null)
                 return;
 
             await client.EmitAsync("MenuManager_ForceCallback");
@@ -187,9 +187,6 @@ namespace ResurrectionRP_Server
 
             if (_clientMenus.TryAdd(client, menu))
             {
-                if (menu.CurrentItemCallback != null)
-                    menu.CallbackCurrentItem = true;
-
                 string json = JsonConvert.SerializeObject(menu, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                 await client.EmitAsync("MenuManager_OpenMenu", json);
                 return true;

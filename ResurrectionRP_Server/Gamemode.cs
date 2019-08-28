@@ -12,7 +12,7 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using ResurrectionRP_Server;
+using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Utils.Extensions;
@@ -151,7 +151,7 @@ namespace ResurrectionRP_Server
             await DrivingSchoolManager.InitAll();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
-            new EventsHandler.Events();
+            Events.Initialize();
 
             Alt.OnPlayerConnect += OnPlayerConnected;
             Alt.OnPlayerDisconnect += OnPlayerDisconnected;
@@ -160,7 +160,16 @@ namespace ResurrectionRP_Server
             Chat.RegisterCmd("veh", CommandVeh);
             Chat.RegisterCmd("coords", (IPlayer player, string[] args) =>
             {
-                Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z);
+                if (player.Vehicle != null)
+                {
+                    Chat.SendChatMessage(player, "X: " + player.Vehicle.Position.X + " Y: " + player.Vehicle.Position.Y + " Z: " + player.Vehicle.Position.Z);
+                    Chat.SendChatMessage(player, "RX: " + player.Vehicle.Rotation.Roll + " RY: " + player.Vehicle.Rotation.Pitch + " RZ: " + player.Vehicle.Rotation.Yaw);
+                }
+                else
+                {
+                    Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z);
+                    Chat.SendChatMessage(player, "RX: " + player.Rotation.Roll + " RY: " + player.Rotation.Pitch + " RZ: " + player.Rotation.Yaw);
+                }
             });
             Chat.RegisterCmd("getCoords", (IPlayer player, string[] args) =>
             {
@@ -204,6 +213,7 @@ namespace ResurrectionRP_Server
                 return;
             }
 
+            Chat.SendChatMessage(player, "Count avant: " + Alt.GetAllVehicles().Count);
             VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), new Vector3(player.Position.X+5, player.Position.Y, player.Position.Z), player.Rotation, locked:false);
 
             Task.Run(async () =>
@@ -218,8 +228,10 @@ namespace ResurrectionRP_Server
                     if (vh.Vehicle != null)
                         player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);
 
+                    await vh.InsertVehicle();
                     await ph.Update();
                 }
+                Chat.SendChatMessage(player, "Count après: " + Alt.GetAllVehicles().Count);
             });
         }
 

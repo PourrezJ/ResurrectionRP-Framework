@@ -46,7 +46,7 @@ namespace ResurrectionRP_Server.Models
                 menu = new Menu("ID_WalkingMenu", "Style de marche", "Choisissez une option :", 0, 0, Menu.MenuAnchor.MiddleRight)
             };
 
-            walkmenu.menu.Callback = walkmenu.WalkingStyleMenuCallBack;
+            walkmenu.menu.ItemSelectCallback = walkmenu.WalkingStyleMenuCallBack;
 
             foreach (WalkingStyle walk in WalkingStyles)
             {

@@ -42,7 +42,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         [BsonIgnore, JsonIgnore]
         public IVehicle Vehicle { get; set; }
 
-        public bool isParked { get; set; } = false;
+        public bool IsParked { get; set; } = false;
 
         public bool SpawnVeh { get; set; }
         public bool Locked { get; set; } = true;
@@ -149,6 +149,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.EngineHealth = EngineHealth;
                 Vehicle.BodyHealth = BodyHealth;
                 Vehicle.RadioStation = RadioID;
+                IsParked = false;
 
                 await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
                 await Vehicle.SetEngineOnAsync(Engine);

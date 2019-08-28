@@ -42,10 +42,8 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
             {
                 foreach (var place in CarDealerPlaces)
                 {
-                    if (place.VehicleHandler == null && !await Entities.Vehicles.VehiclesManager.GetVehicleInSpawn(place.Location.Pos, 4))
-                    {
+                    if (place.VehicleHandler == null && !Entities.Vehicles.VehiclesManager.IsVehicleInSpawn(place.Location.Pos, 4))
                         await Respawn(place);
-                    }
                 }
             });
         }

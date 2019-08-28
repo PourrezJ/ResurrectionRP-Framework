@@ -140,6 +140,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (TargetHandler.IsCuff())
                     {
                         IVehicle vehicle = await Entities.Vehicles.VehiclesManager.GetNearestVehicle(Client);
+
                         if (vehicle != null)
                         {
                             if (vehicle.LockState == AltV.Net.Enums.VehicleLockState.Locked)

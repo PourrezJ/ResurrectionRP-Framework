@@ -62,7 +62,9 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    await ph.OpenPlayerMenu();
+                    if (!MenuManager.HasOpenMenu(client))
+                        await ph.OpenPlayerMenu();
+
                     break;
                     
                 case ConsoleKey.F3:
@@ -203,8 +205,8 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
                 */
                 case ConsoleKey.UpArrow:
-/*                    if (MenuManager.HasOpenMenu(client))
-                        return;*/
+                    if (MenuManager.HasOpenMenu(client))
+                        return;
 
                     if (ph.IsCuff())
                     {

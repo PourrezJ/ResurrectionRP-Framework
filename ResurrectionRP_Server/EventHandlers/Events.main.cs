@@ -5,18 +5,17 @@ using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 
-namespace ResurrectionRP_Server.EventsHandler
+namespace ResurrectionRP_Server.EventHandlers
 {
-    public partial class Events
+    public static partial class Events
     {
-        public Events()
+        public static void Initialize()
         {
             Alt.OnColShape += OnEntityColshape;
-
             Alt.OnServerCustomEvent += Alt_OnServerCustomEvent;
         }
 
-        private void Alt_OnServerCustomEvent(string eventName, ref AltV.Net.Native.MValueArray mValueArray)
+        private static void Alt_OnServerCustomEvent(string eventName, ref AltV.Net.Native.MValueArray mValueArray)
         {
 
         }

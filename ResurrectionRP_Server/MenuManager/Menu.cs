@@ -49,7 +49,10 @@ namespace ResurrectionRP_Server
         public MenuAnchor Anchor { get; set; } = MenuAnchor.BottomRight;
         public bool NoExit { get; set; }
         public bool EnableBanner { get; set; }
-        public bool CallbackCurrentItem { get; set; }
+        public bool CallbackOnIndexChange
+        {
+            get { return IndexChangeCallback != null; }
+        }
         public List<MenuItem> Items
         {
             get => _items;
@@ -89,11 +92,11 @@ namespace ResurrectionRP_Server
             }
         }
         [JsonIgnore]
-        public MenuCallback Callback { get; set; }
+        public MenuCallback ItemSelectCallback { get; set; }
         [JsonIgnore]
         public MenuListCallback ListCallback { get; set; }
         [JsonIgnore]
-        public MenuCurrentIndex CurrentItemCallback { get; set; }
+        public MenuCurrentIndex IndexChangeCallback { get; set; }
         [JsonIgnore]
         public MenuCheckbox CallbackCheckBox { get; set; }
         [JsonIgnore]
@@ -133,7 +136,7 @@ namespace ResurrectionRP_Server
 
             _data = new Dictionary<string, object>();
             _items = new List<MenuItem>();
-            Callback = null;
+            ItemSelectCallback = null;
             Finalizer = null;
         }
         #endregion

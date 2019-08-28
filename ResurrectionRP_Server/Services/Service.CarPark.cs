@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Models;
 using VehicleHandler = ResurrectionRP_Server.Entities.Vehicles.VehicleHandler;
 
 namespace ResurrectionRP_Server.Services
@@ -27,14 +28,15 @@ namespace ResurrectionRP_Server.Services
             if (Parking != null)
             {
                 await Parking.Load(alpha: 150, scale: 0.7f, name: "Parkings", blip: true);
-                this.Parking.OnVehicleStored = OnVehicleStored;
-                this.Parking.OnVehicleOut = OnVehicleOut;
-                this.Parking.OnSaveNeeded = async () =>await Update();
+                Parking.OnVehicleStored = OnVehicleStored;
+                Parking.OnVehicleOut = OnVehicleOut;
+                Parking.ParkingType = ParkingType.Public;
+                Parking.OnSaveNeeded = async () => await Update();
 
-                List<Models.ParkedCar> _poundList = Parking.ListVehicleStored.FindAll(veh => DateTime.Now > veh.parkTime.AddMonths(1));
+                List<Models.ParkedCar> _poundList = Parking.ListVehicleStored.FindAll(veh => DateTime.Now > veh.ParkTime.AddMonths(1));
                 foreach(Models.ParkedCar ve in _poundList.ToList())
                 {
-                    ve.parkTime = DateTime.Now;
+                    ve.ParkTime = DateTime.Now;
                     Alt.Server.LogError("Service CarPark | Checking for too long parked car is not done yet, consider finishing it (Service.Carpark.cs)");
                     //GameMode.Instance?.PoundManager.AddVehicleInPound(ve);
                     //Parking.RemoveVehicle(ve); TODO
@@ -46,14 +48,8 @@ namespace ResurrectionRP_Server.Services
 
         private async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Models.Location Spawn)
         {
-            Entities.Players.PlayerHandler player = client.GetPlayerHandler();
-            if (player == null)
-                return;
-            if (!player.ListVehicleKey.Exists(p => p.Plate == vehicle.Plate))
-                return;
             await Update();
             await client.SendNotificationSuccess($"Vous avez sorti votre {vehicle.VehicleManifest.LocalizedName}!"); 
-
         }
 
         private async Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
@@ -70,28 +66,31 @@ namespace ResurrectionRP_Server.Services
             {
                 if (GameMode.Instance.IsDebug)
                     Alt.Server.LogColored("~b~Service CarPark ~w~| Saving parkings ()");
+
                 await Database.MongoDB.Update(this, "carparks", ID);
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Alt.Server.LogError($"Service.CarPark.cs | {ex.ToString()}");
             } 
         }
         #endregion
 
-        #region MEthods static
+        #region Static methods
         public static async Task<CarPark> LoadCarPark(int id, Vector3 borne, Models.Location spawn1, Models.Location spawn2)
         {
-            CarPark _carpark = await Database.MongoDB.GetCollectionSafe<CarPark>("carparks").Find(p => p.ID == id).FirstAsync();
-            _carpark.ID = id;
-            _carpark.Parking.Location = borne;
-            _carpark.Parking.Spawn1 = spawn1;
-            _carpark.Parking.Spawn2 = spawn2;
-
-            await _carpark.Load();
-            return _carpark;
+            CarPark carpark = await Database.MongoDB.GetCollectionSafe<CarPark>("carparks").Find(p => p.ID == id).FirstAsync();
+            carpark.ID = id;
+            carpark.Parking.Location = borne;
+            carpark.Parking.Spawn1 = spawn1;
+            carpark.Parking.Spawn2 = spawn2;
+            await carpark.Load();
+            return carpark;
         }
+
         public static async Task<bool> HasCarPark(int id) =>
             await Database.MongoDB.GetCollectionSafe<CarPark>("carparks").Find(p => p.ID == id).AnyAsync();
+
         public static async Task<CarPark> CreateCarPark(int ID, string name, Vector3 borne, Models.Location spawn1, Models.Location spawn2)
         {
             var _carpark = new CarPark();
@@ -101,7 +100,6 @@ namespace ResurrectionRP_Server.Services
             await _carpark.Load();
             return _carpark;
         }
-
         #endregion
     }
 }

@@ -12,7 +12,7 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Events
-        public delegate Task OnMenuItemCallBackDelegate(IPlayer client, Menu menu = null, IMenuItem menuItem = null, int itemIndex = 0, dynamic data = null);
+        public delegate Task OnMenuItemCallBackDelegate(IPlayer client, Menu menu = null, IMenuItem menuItem = null, int itemIndex = 0);
 
         [JsonIgnore]
         public OnMenuItemCallBackDelegate OnMenuItemCallback { get; set; } = null;
@@ -27,7 +27,6 @@ namespace ResurrectionRP_Server
         public BadgeStyle? RightBadge { get; set; }
         public string RightLabel { get; set; }
         public bool ExecuteCallback { get; set; }
-        public bool ExecuteCallbackIndexChange { get; set; }
         public bool InputSetRightLabel { get; set; }
         public string InputValue { get; set; }
         public byte? InputMaxLength { get; set; }
@@ -64,7 +63,6 @@ namespace ResurrectionRP_Server
                 RightLabel = rightLabel;
 
             ExecuteCallback = executeCallback;
-            ExecuteCallbackIndexChange = executeCallbackIndexChange;
             InputSetRightLabel = false;
             InputValue = null;
             InputMaxLength = null;

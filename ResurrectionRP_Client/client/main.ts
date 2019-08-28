@@ -10,6 +10,7 @@ import { Game } from 'client/player/Game';
 import { OpenCharCreator } from 'client/Creator/Creator';
 import { Streamer } from 'client/Streamer/Streamer';
 import { Notify } from 'client/Notify/Notify';
+import { Voice } from './Voice/VoiceChat';
 
 chat.initialize()
 speedometer.initialize();

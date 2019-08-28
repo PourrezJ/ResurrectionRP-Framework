@@ -51,6 +51,9 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public List<IPlayer> PlayerList = new List<IPlayer>();
 
+        [BsonIgnore]
+        public IVoiceChannel GlobalVoiceChannel { get; private set; }
+
 
         public static short GlobalDimension = short.MaxValue;
 
@@ -169,6 +172,11 @@ namespace ResurrectionRP_Server
                 var vehicle = player.GetNearestVehicle();
                 player.Emit("TestOut", 10000);
             });
+
+            Alt.Server.LogColored("~g~Initialisation du système vocal");
+            GlobalVoiceChannel = Alt.CreateVoiceChannel(true, 50);
+            Alt.Server.LogColored("~g~Initialisation du système vocal terminé");
+
             ServerLoaded = true;
         }
 

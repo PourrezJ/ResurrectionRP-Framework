@@ -13,6 +13,7 @@ import { Interaction as InteractionLib } from 'client/Player/Interaction';
 import { Doors as DoorsManagerLib } from 'client/Env/Doors';
 import { PhoneManager } from 'client/phone/PhoneManager';
 import { DrivingSchool } from 'client/DrivingSchool';
+import { VoiceChat } from 'client/Voice/VoiceChat';
 import { RadioManager } from 'client/menus/RadioManager';
 
 export class Game {
@@ -65,6 +66,9 @@ export class Game {
     private _Inventory: RPGInventoryManager;
     public get Inventory(): RPGInventoryManager { return this._Inventory; }
 
+    private _Voice: VoiceChat;
+    public get Voice(): VoiceChat { return this._Voice; }
+
     private _Radio: RadioManager;
     public get Radio(): RadioManager { return this._Radio; }
 
@@ -114,6 +118,7 @@ export class Game {
             alt.log('Données chargées');
 
             alt.log('Chargement des pools');
+            this._Voice = new VoiceChat();
             this._Hud = new HudLib(Money);
             this._Doors = new DoorsManagerLib();
             this._Inventory = new RPGInventoryManager();
@@ -143,7 +148,6 @@ export class Game {
         alt.on("update", () => {
             //game.disableControlAction(0, 75, true);
             //game.disableControlAction(0, 58, true);
-
             this._Time.OnTick();
 
             // HUD

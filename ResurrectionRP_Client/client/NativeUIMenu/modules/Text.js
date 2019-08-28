@@ -1,16 +1,10 @@
-import Color from "includes/NativeUIMenu/utils/Color";
-import Point from "includes/NativeUIMenu/utils/Point";
-import IElement from "includes/NativeUIMenu/modules/IElement";
+import Color from "client/NativeUIMenu/utils/Color.js";
+import Point from "client/NativeUIMenu/utils/Point.js";
+import IElement from "client/NativeUIMenu/modules/IElement.js";
 import * as alt from 'alt';
 import * as game from 'natives';
-export default class Text extends IElement {
-    public caption;
-    public pos;
-    public scale;
-    public color;
-    public font;
-    public centered;
 
+export default class Text extends IElement {
     constructor(caption, pos, scale, color, font, centered) {
         super();
         this.caption = caption;

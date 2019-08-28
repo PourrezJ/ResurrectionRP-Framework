@@ -1,43 +1,18 @@
-import BadgeStyle from "includes/NativeUIMenu/enums/BadgeStyle";
-import Font from "includes/NativeUIMenu/enums/Font";
-import ResRectangle from "includes/NativeUIMenu/modules/ResRectangle";
-import ResText, { Alignment } from "includes/NativeUIMenu/modules/ResText";
-import Sprite from "includes/NativeUIMenu/modules/Sprite";
-import Color from "includes/NativeUIMenu/utils/Color";
-import Point from "includes/NativeUIMenu/utils/Point";
-import Size from "includes/NativeUIMenu/utils/Size";
-import UUIDV4 from "includes/NativeUIMenu/utils/UUIDV4";
-export default class UIMenuItem {
-    private _rectangle;
-    private _text;
-    private _selectedSprite;
-    private _badgeLeft;
-    private _badgeRight;
-    private _labelText;
-    private _event;
-    public static DefaultBackColor;
-    public static DefaultHighlightedBackColor;
-    public static DefaultForeColor;
-    public static DefaultHighlightedForeColor;
-    public Id;
-    public BackColor;
-    public HighlightedBackColor;
-    public ForeColor;
-    public HighlightedForeColor;
-    public RightLabel;
-    public LeftBadge;
-    public RightBadge;
-    public Enabled;
-    public Description;
-    public Offset;
-    public Parent;
-    public Hovered;
-    public Selected;
+import BadgeStyle from "client/NativeUIMenu/enums/BadgeStyle.js";
+import Font from "client/NativeUIMenu/enums/Font.js";
+import ResRectangle from "client/NativeUIMenu/modules/ResRectangle.js";
+import ResText, { Alignment } from "client/NativeUIMenu/modules/ResText.js";
+import Sprite from "client/NativeUIMenu/modules/Sprite.js";
+import Color from "client/NativeUIMenu/utils/Color.js";
+import Point from "client/NativeUIMenu/utils/Point.js";
+import Size from "client/NativeUIMenu/utils/Size.js";
+import UUIDV4 from "client/NativeUIMenu/utils/UUIDV4.js";
 
-    constructor(text, description = "") {
+export default class UIMenuItem {
+    constructor(text, description = "", backColor = UIMenuItem.DefaultBackColor, highlightColor = UIMenuItem.DefaultHighlightedBackColor) {
         this.Id = UUIDV4();
-        this.BackColor = UIMenuItem.DefaultBackColor;
-        this.HighlightedBackColor = UIMenuItem.DefaultHighlightedBackColor;
+        this.BackColor = backColor;
+        this.HighlightedBackColor = highlightColor;
         this.ForeColor = UIMenuItem.DefaultForeColor;
         this.HighlightedForeColor = UIMenuItem.DefaultHighlightedForeColor;
         this.RightLabel = "";

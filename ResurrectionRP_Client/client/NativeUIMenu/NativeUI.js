@@ -1,86 +1,33 @@
-import BadgeStyle from "includes/NativeUIMenu/enums/BadgeStyle";
-import Font from "includes/NativeUIMenu/enums/Font";
+import BadgeStyle from "client/NativeUIMenu/enums/BadgeStyle.js";
+import Font from "client/NativeUIMenu/enums/Font.js";
 
-import Container from "includes/NativeUIMenu/modules/Container";
-import ItemsCollection from "includes/NativeUIMenu/modules/ItemsCollection";
-import ResRectangle from "includes/NativeUIMenu/modules/ResRectangle";
-import ResText, { Alignment } from "includes/NativeUIMenu/modules/ResText";
-import Sprite from "includes/NativeUIMenu/modules/Sprite";
+import Container from "client/NativeUIMenu/modules/Container.js";
+import ItemsCollection from "client/NativeUIMenu/modules/ItemsCollection.js";
+import ResRectangle from "client/NativeUIMenu/modules/ResRectangle.js";
+import ResText, { Alignment } from "client/NativeUIMenu/modules/ResText.js";
+import Sprite from "client/NativeUIMenu/modules/Sprite.js";
 
-import ListItem from "includes/NativeUIMenu/modules/ListItem";
+import ListItem from "client/NativeUIMenu/modules/ListItem.js";
 
-import Color from "includes/NativeUIMenu/utils/Color";
-import Common from "includes/NativeUIMenu/utils/Common";
-import LiteEvent from "includes/NativeUIMenu/utils/LiteEvent";
-import Point from "includes/NativeUIMenu/utils/Point";
-import Size from "includes/NativeUIMenu/utils/Size";
-import StringMeasurer from "includes/NativeUIMenu/modules/StringMeasurer";
-import UUIDV4 from "includes/NativeUIMenu/utils/UUIDV4";
-import { Screen } from "includes/NativeUIMenu/utils/Screen";
+import Color from "client/NativeUIMenu/utils/Color.js";
+import Common from "client/NativeUIMenu/utils/Common.js";
+import LiteEvent from "client/NativeUIMenu/utils/LiteEvent.js";
+import Point from "client/NativeUIMenu/utils/Point.js";
+import Size from "client/NativeUIMenu/utils/Size.js";
+import StringMeasurer from "client/NativeUIMenu/modules/StringMeasurer.js";
+import UUIDV4 from "client/NativeUIMenu/utils/UUIDV4.js";
+import { Screen } from "client/NativeUIMenu/utils/Screen.js";
 
-import UIMenuItem from "includes/NativeUIMenu/items/UIMenuItem";
-import UIMenuCheckboxItem from "includes/NativeUIMenu/items/UIMenuCheckboxItem";
-import UIMenuListItem from "includes/NativeUIMenu/items/UIMenuListItem";
-import UIMenuSliderItem from "includes/NativeUIMenu/items/UIMenuSliderItem";
+import UIMenuItem from "client/NativeUIMenu/items/UIMenuItem.js";
+import UIMenuCheckboxItem from "client/NativeUIMenu/items/UIMenuCheckboxItem.js";
+import UIMenuListItem from "client/NativeUIMenu/items/UIMenuListItem.js";
+import UIMenuSliderItem from "client/NativeUIMenu/items/UIMenuSliderItem.js";
 
 import * as alt from 'alt';
 import * as game from 'natives';
 
 export default class NativeUI {
-    private _activeItem;
-    private _justOpened;
-    private _minItem;
-    private _maxItem;
-    private _mainMenu;
-    private _logo;
-    private _title;
-    private _subtitle;
-    private _counterText;
-    private _upAndDownSprite;
-    private _extraRectangleUp;
-    private _extraRectangleDown;
-    private _descriptionBar;
-    private _descriptionRectangle;
-    private _descriptionText;
-    private _background;
-    public Id;
-    public AUDIO_LIBRARY;
-    public AUDIO_UPDOWN;
-    public AUDIO_LEFTRIGHT;
-    public AUDIO_SELECT;
-    public AUDIO_BACK;
-    public AUDIO_ERROR;
-    public counterPretext;
-    public counterOverride;
-    public lastUpDownNavigation;
-    public lastLeftRightNavigation;
-    public extraOffset;
-    public WidthOffset;
-    public Visible;
-    public MouseControlsEnabled;
-    public safezoneOffset;
-    public MaxItemsOnScreen;
-    public gui_cursor_visible;
-    public MenuItems;
-    public IndexChange;
-    public ListChange;
-    public SliderChange;
-    public SliderSelect;
-    public CheckboxChange;
-    public ItemSelect;
-    public MenuOpen;
-    public MenuClose;
-    public MenuChange;
-    public MouseEdgeEnabled;
-    public title;
-    public subtitle;
-    public spriteLibrary;
-    public spriteName;
-    public offset;
-    public Children;
-    public ParentMenu;
-
-	constructor(title, subtitle, offset, spriteLibrary, spriteName) {
+    constructor(title, subtitle, offset, spriteLibrary, spriteName) {
         this.Id = UUIDV4();
         this.counterPretext = "";
         this.counterOverride = undefined;
@@ -151,9 +98,9 @@ export default class NativeUI {
             this.extraOffset), new Size(431, 18), new Color(0, 0, 0, 200));
         this._descriptionBar = new ResRectangle(new Point(this.offset.X, 123), new Size(431, 4), Color.Black);
         this._descriptionRectangle = new Sprite("commonmenu", "gradient_bgd", new Point(this.offset.X, 127), new Size(431, 30));
-        this._descriptionText = new ResText("Description", new Point(this.offset.X + 5, 125), 0.35, new Color(255, 255, 255, 255), Font.ChaletLondon, Alignment.Left);
+        this._descriptionText = new ResText("Description", new Point(this.offset.X + 5, 125), 0.35, new Color(255, 255, 255, 255), Font.ChaletLondon, Alignment.Left, true);
         this._background = new Sprite("commonmenu", "gradient_bgd", new Point(this.offset.X, 144 + this.offset.Y - 37 + this.extraOffset), new Size(290, 25));
-		alt.on("update", this.render.bind(this));
+        alt.on("update", this.render.bind(this));
         alt.log("Created Native UI Menu! (" + this.title + ")");
     }
     get CurrentSelection() {
@@ -186,7 +133,7 @@ export default class NativeUI {
     }
     SetMenuWidthOffset(widthOffset) {
         this.WidthOffset = widthOffset;
-        if (this._logo != null) {
+        if (this._logo !== null) {
             this._logo.size = new Size(431 + this.WidthOffset, 107);
         }
         this._mainMenu.Items[0].pos = new Point((this.WidthOffset + this.offset.X + 431) / 2, 20 + this.offset.Y);
@@ -210,7 +157,7 @@ export default class NativeUI {
         this.RecalculateDescriptionPosition();
     }
     RefreshIndex() {
-        if (this.MenuItems.length == 0) {
+        if (this.MenuItems.length === 0) {
             this._activeItem = 1000;
             this._maxItem = this.MaxItemsOnScreen;
             this._minItem = 0;
@@ -248,7 +195,7 @@ export default class NativeUI {
             return;
         if (this.MenuItems[this.CurrentSelection] instanceof UIMenuListItem) {
             const it = this.MenuItems[this.CurrentSelection];
-            if (it.Collection.length == 0)
+            if (it.Collection.length === 0)
                 return;
             it.Index--;
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
@@ -267,7 +214,7 @@ export default class NativeUI {
             return;
         if (this.MenuItems[this.CurrentSelection] instanceof UIMenuListItem) {
             const it = this.MenuItems[this.CurrentSelection];
-            if (it.Collection.length == 0)
+            if (it.Collection.length === 0)
                 return;
             it.Index++;
             Common.PlaySound(this.AUDIO_LEFTRIGHT, this.AUDIO_LIBRARY);
@@ -309,9 +256,9 @@ export default class NativeUI {
         const screenw = Screen.width;
         const screenh = Screen.height;
         const cursor = alt.getCursorPos();
-        let [mouseX, mouseY] = [cursor["x"], cursor["y"]];
+        let [mouseX, mouseY] = [cursor.x, cursor.y];
         if (relative)
-            [mouseX, mouseY] = [cursor["x"] / screenw, cursor["y"] / screenh];
+            [mouseX, mouseY] = [cursor.x / screenw, cursor.y / screenh];
         return [mouseX, mouseY];
     }
     GetScreenResolutionMantainRatio() {
@@ -350,7 +297,7 @@ export default class NativeUI {
     ProcessMouse() {
         if (!this.Visible ||
             this._justOpened ||
-            this.MenuItems.length == 0 ||
+            this.MenuItems.length === 0 ||
             !this.MouseControlsEnabled) {
             this.MenuItems.filter(i => i.Hovered).forEach(i => (i.Hovered = false));
             return;
@@ -398,7 +345,7 @@ export default class NativeUI {
                                     break;
                                 case 2:
                                     var it = this.MenuItems[i];
-                                    if ((it.Collection == null
+                                    if ((it.Collection === null
                                         ? it.Items.Count
                                         : it.Collection.Count) > 0) {
                                         it.Index++;
@@ -469,7 +416,7 @@ export default class NativeUI {
         if (game.isControlJustReleased(0, 177)) {
             this.GoBack();
         }
-        if (this.MenuItems.length == 0)
+        if (this.MenuItems.length === 0)
             return;
         if (game.isControlPressed(0, 172) &&
             this.lastUpDownNavigation + 120 < Date.now()) {
@@ -521,7 +468,7 @@ export default class NativeUI {
         let output = "";
         const words = input.split(" ");
         for (const word of words) {
-			const offset = StringMeasurer.MeasureString(word);
+            const offset = StringMeasurer.MeasureString(word);
             aggregatePixels += offset;
             if (aggregatePixels > maxPixelsPerLine) {
                 output += "\n" + word + " ";
@@ -538,7 +485,7 @@ export default class NativeUI {
         if (this.MenuItems.length <= this.MaxItemsOnScreen + 1)
             return;
         if (this._activeItem % this.MenuItems.length <= this._minItem) {
-            if (this._activeItem % this.MenuItems.length == 0) {
+            if (this._activeItem % this.MenuItems.length === 0) {
                 this._minItem = this.MenuItems.length - this.MaxItemsOnScreen - 1;
                 this._maxItem = this.MenuItems.length - 1;
                 this.MenuItems[this._activeItem % this.MenuItems.length].Selected = false;
@@ -575,8 +522,7 @@ export default class NativeUI {
         if (this.MenuItems.length <= this.MaxItemsOnScreen + 1)
             return;
         if (this._activeItem % this.MenuItems.length >= this._maxItem) {
-            if (this._activeItem % this.MenuItems.length ==
-                this.MenuItems.length - 1) {
+            if (this._activeItem % this.MenuItems.length === this.MenuItems.length - 1) {
                 this._minItem = 0;
                 this._maxItem = this.MaxItemsOnScreen;
                 this.MenuItems[this._activeItem % this.MenuItems.length].Selected = false;
@@ -611,7 +557,7 @@ export default class NativeUI {
     GoBack() {
         Common.PlaySound(this.AUDIO_BACK, this.AUDIO_LIBRARY);
         this.Visible = false;
-        if (this.ParentMenu != null) {
+        if (this.ParentMenu !== null && this.ParentMenu !== undefined) {
             this.ParentMenu.Visible = true;
             this.ParentMenu._justOpened = true;
             this.ParentMenu.MenuOpen.emit();
@@ -635,10 +581,10 @@ export default class NativeUI {
     }
     render() {
         if (!this.Visible)
-			return;
+            return;
 
         if (this._justOpened) {
-            if (this._logo != null && !this._logo.IsTextureDictionaryLoaded)
+            if (this._logo !== null && !this._logo.IsTextureDictionaryLoaded)
                 this._logo.LoadTextureDictionary();
             if (!this._background.IsTextureDictionaryLoaded)
                 this._background.LoadTextureDictionary();

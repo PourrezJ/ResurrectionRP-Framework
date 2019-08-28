@@ -1,18 +1,11 @@
-import ResRectangle from "includes/NativeUIMenu/modules/ResRectangle";
-import Sprite from "includes/NativeUIMenu/modules/Sprite";
-import Color from "includes/NativeUIMenu/utils/Color";
-import Point from "includes/NativeUIMenu/utils/Point";
-import Size from "includes/NativeUIMenu/utils/Size";
-import UIMenuItem from "includes/NativeUIMenu/items/UIMenuItem";
-export default class UIMenuSliderItem extends UIMenuItem {
-    private _index;
-    private _items;
-    private _arrowLeft;
-    private _arrowRight;
-    private _rectangleBackground;
-    private _rectangleSlider;
-    private _rectangleDivider;
+import ResRectangle from "client/NativeUIMenu/modules/ResRectangle.js";
+import Sprite from "client/NativeUIMenu/modules/Sprite.js";
+import Color from "client/NativeUIMenu/utils/Color.js";
+import Point from "client/NativeUIMenu/utils/Point.js";
+import Size from "client/NativeUIMenu/utils/Size.js";
+import UIMenuItem from "client/NativeUIMenu/items/UIMenuItem.js";
 
+export default class UIMenuSliderItem extends UIMenuItem {
     get Index() {
         return this._index % this._items.length;
     }

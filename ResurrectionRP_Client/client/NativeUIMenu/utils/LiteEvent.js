@@ -1,6 +1,4 @@
 export default class LiteEvent {
-    public handlers;
-
     constructor() {
         this.handlers = [];
     }

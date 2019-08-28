@@ -1,7 +1,6 @@
-import ListItem from "includes/NativeUIMenu/modules/ListItem";
-export default class ItemsCollection {
-    public items;
+import ListItem from "client/NativeUIMenu/modules/ListItem.js";
 
+export default class ItemsCollection {
     constructor(items) {
         if (items.length === 0)
             throw new Error("ItemsCollection cannot be empty");

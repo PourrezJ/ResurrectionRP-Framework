@@ -1,14 +1,4 @@
 export default class Color {
-    public static Empty;
-    public static Transparent;
-    public static Black;
-    public static White;
-    public static WhiteSmoke;
-    public R;
-    public G;
-    public B;
-    public A;
-
     constructor(r, g, b, a = 255) {
         this.R = r;
         this.G = g;
@@ -16,7 +6,6 @@ export default class Color {
         this.A = a;
     }
 }
-
 Color.Empty = new Color(0, 0, 0, 0);
 Color.Transparent = new Color(0, 0, 0, 0);
 Color.Black = new Color(0, 0, 0, 255);

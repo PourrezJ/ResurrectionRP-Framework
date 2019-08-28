@@ -1,7 +1,4 @@
 export default class Point {
-    public X;
-    public Y;
-
     constructor(x, y) {
         this.X = 0;
         this.Y = 0;

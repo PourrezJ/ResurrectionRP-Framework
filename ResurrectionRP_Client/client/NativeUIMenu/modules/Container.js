@@ -1,16 +1,10 @@
-import Size from "includes/NativeUIMenu/utils/Size";
-import Rectangle from "includes/NativeUIMenu/modules/Rectangle";
-import { Screen } from "includes/NativeUIMenu/utils/Screen";
+import Size from "client/NativeUIMenu/utils/Size.js";
+import Rectangle from "client/NativeUIMenu/modules/Rectangle.js";
+import { Screen } from "client/NativeUIMenu/utils/Screen.js";
 
 import * as alt from 'alt';
 import * as game from 'natives';
 export default class Container extends Rectangle {
-    public Items;
-    public enabled;
-    public size;
-    public pos;
-    public color;
-
     constructor(pos, size, color) {
         super(pos, size, color);
         this.Items = [];

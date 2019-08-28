@@ -1,14 +1,11 @@
-import Sprite from "includes/NativeUIMenu/modules/Sprite";
-import Color from "includes/NativeUIMenu/utils/Color";
-import LiteEvent from "includes/NativeUIMenu/utils/LiteEvent";
-import Point from "includes/NativeUIMenu/utils/Point";
-import Size from "includes/NativeUIMenu/utils/Size";
-import UIMenuItem from "includes/NativeUIMenu/items/UIMenuItem";
-export default class UIMenuCheckboxItem extends UIMenuItem {
-    private _checkedSprite;
-    public Checked;
-    public OnCheckedChanged;
+import Sprite from "client/NativeUIMenu/modules/Sprite.js";
+import Color from "client/NativeUIMenu/utils/Color.js";
+import LiteEvent from "client/NativeUIMenu/utils/LiteEvent.js";
+import Point from "client/NativeUIMenu/utils/Point.js";
+import Size from "client/NativeUIMenu/utils/Size.js";
+import UIMenuItem from "client/NativeUIMenu/items/UIMenuItem.js";
 
+export default class UIMenuCheckboxItem extends UIMenuItem {
     constructor(text, check = false, description = "") {
         super(text, description);
         this.OnCheckedChanged = new LiteEvent();

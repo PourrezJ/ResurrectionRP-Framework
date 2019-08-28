@@ -1,16 +1,9 @@
-import Color from "includes/NativeUIMenu/utils/Color";
-import { Screen } from "includes/NativeUIMenu/utils/Screen";
+import Color from "client/NativeUIMenu/utils/Color.js";
+import { Screen } from "client/NativeUIMenu/utils/Screen.js";
 import * as alt from 'alt';
 import * as game from 'natives';
-export default class Sprite {
-    private _textureDict;
-    public TextureName;
-    public pos;
-    public size;
-    public heading;
-    public color;
-    public visible;
 
+export default class Sprite {
    constructor(textureDict, textureName, pos, size, heading = 0, color = new Color(255, 255, 255)) {
         this.TextureDict = textureDict;
         this.TextureName = textureName;
@@ -66,6 +59,6 @@ export default class Sprite {
 			const h = this.size.Height / height;
 			const x = this.pos.X / width + w * 0.5;
 			const y = this.pos.Y / height + h * 0.5;
-			game.drawSprite(textureDictionary, textureName, x, y, w, h, heading, color.R, color.G, color.B, color.A);
+        game.drawSprite(textureDictionary, textureName, x, y, w, h, heading, color.R, color.G, color.B, color.A);
     }
 }

@@ -1,25 +1,16 @@
-import Font from "includes/NativeUIMenu/enums/Font";
-import ItemsCollection from "includes/NativeUIMenu/modules/ItemsCollection";
-import ListItem from "includes/NativeUIMenu/modules/ListItem";
-import ResText, { Alignment } from "includes/NativeUIMenu/modules/ResText";
-import Sprite from "includes/NativeUIMenu/modules/Sprite";
-import Color from "includes/NativeUIMenu/utils/Color";
-import LiteEvent from "includes/NativeUIMenu/utils/LiteEvent";
-import Point from "includes/NativeUIMenu/utils/Point";
-import Size from "includes/NativeUIMenu/utils/Size";
-import StringMeasurer from "includes/NativeUIMenu/modules/StringMeasurer";
-import UIMenuItem from "includes/NativeUIMenu/items/UIMenuItem";
+import Font from "client/NativeUIMenu/enums/Font.js";
+import ItemsCollection from "client/NativeUIMenu/modules/ItemsCollection.js";
+import ListItem from "client/NativeUIMenu/modules/ListItem.js";
+import ResText, { Alignment } from "client/NativeUIMenu/modules/ResText.js";
+import Sprite from "client/NativeUIMenu/modules/Sprite.js";
+import Color from "client/NativeUIMenu/utils/Color.js";
+import LiteEvent from "client/NativeUIMenu/utils/LiteEvent.js";
+import Point from "client/NativeUIMenu/utils/Point.js";
+import Size from "client/NativeUIMenu/utils/Size.js";
+import StringMeasurer from "client/NativeUIMenu/modules/StringMeasurer.js";
+import UIMenuItem from "client/NativeUIMenu/items/UIMenuItem.js";
+
 export default class UIMenuListItem extends UIMenuItem {
-    private _itemText;
-    private _index;
-    private _arrowLeft;
-    private _arrowRight;
-    public currOffset;
-    public collection;
-    public ScrollingEnabled;
-    public HoldTimeBeforeScroll;
-    public OnListChanged;
-    
     constructor(text, description = "", collection = new ItemsCollection([]), startIndex = 0) {
         super(text, description);
         this.currOffset = 0;

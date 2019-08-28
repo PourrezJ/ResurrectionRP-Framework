@@ -1,10 +1,11 @@
-import Color from "includes/NativeUIMenu/utils/Color";
-import Point from "includes/NativeUIMenu/utils/Point";
-import Size from "includes/NativeUIMenu/utils/Size";
-import Text from "includes/NativeUIMenu/modules/Text";
-import { Screen } from "includes/NativeUIMenu/utils/Screen";
+import Color from "client/NativeUIMenu/utils/Color.js";
+import Point from "client/NativeUIMenu/utils/Point.js";
+import Size from "client/NativeUIMenu/utils/Size.js";
+import Text from "client/NativeUIMenu/modules/Text.js";
+import { Screen } from "client/NativeUIMenu/utils/Screen.js";
 import * as alt from 'alt';
 import * as game from 'natives';
+
 export var Alignment;
 (function (Alignment) {
     Alignment[Alignment["Left"] = 0] = "Left";
@@ -12,18 +13,13 @@ export var Alignment;
     Alignment[Alignment["Right"] = 2] = "Right";
 })(Alignment || (Alignment = {}));
 export default class ResText extends Text {
-    public TextAlignment;
-    public DropShadow;
-    public Outline;
-    public WordWrap;
-
     constructor(caption, pos, scale, color, font, justify) {
         super(caption, pos, scale, color || new Color(255, 255, 255), font || 0, false);
         this.TextAlignment = Alignment.Left;
         if (justify)
 			this.TextAlignment = justify;
     }
-    Draw2(arg1, pos, scale, color, font, arg2, dropShadow, outline, wordWrap) {
+    Draw(arg1, pos, scale, color, font, arg2, dropShadow, outline, wordWrap) {
         let caption = arg1;
         let centered = arg2;
         let textAlignment = arg2;

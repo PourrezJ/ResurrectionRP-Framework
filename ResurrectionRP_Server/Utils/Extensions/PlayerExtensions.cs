@@ -78,11 +78,9 @@ namespace ResurrectionRP_Server
         {
             await client.EmitAsync("successNotify", "Succès", text, 7000);
         }
-        public static async Task SendNotificationPicture(this IPlayer client, string message, Utils.Enums.CharPicture picture, bool flash, int icontype, string title, string description) =>
-                await client.EmitAsync("SetNotificationMessage", message, picture.ToString(), flash, icontype, title, description);
 
-        public static async Task SendNotificationPicture(this IPlayer client, string message, string picture, bool flash, int icontype, string title, string description) =>
-            await client.EmitAsync("SetNotificationMessage", message, picture.ToString(), flash, icontype, title, description);
+        public static async Task SendNotificationPicture(this IPlayer client, Utils.Enums.CharPicture img, string sender, string subject, string message) =>
+            await client.EmitAsync("SetNotificationMessage", img.ToString(), sender, subject, message);
 
         public async static Task NotifyAsync(this IPlayer client, string text) => await client.SendNotification(text);
         public static List<IVehicle> GetVehiclesInRange(this IPlayer client, int Range)

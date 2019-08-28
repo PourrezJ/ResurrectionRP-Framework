@@ -16,7 +16,6 @@ function connect() {
         console.log(ex);
     }
 
-
     webSocket.onmessage = function (evt) {
         let object = JSON.parse(evt.data);
 
@@ -49,7 +48,7 @@ function connect() {
         alt.emit("SaltyChat_OnDisconnected");
 
         connect();
-    }
+    };
 
     webSocket.onerror = function (error) {
         console.error(error);

@@ -11,10 +11,23 @@ var loading;
 
 export function initialize() {
     alt.onServer("setWaypoint", (posx: number, posy: number, override: boolean) => {
-        game.setNewWaypoint(posx, posy);
-/*        if (game.isWaypointActive() && override == true || !game.isWaypointActive() && override == false)
-            game.setNewWaypoint(posx, posy);*/
+        if (game.isWaypointActive() && override)
+            game.setWaypointOff();
+        if (override && !game.isWaypointActive())
+            game.setNewWaypoint(posx, posy);
     });
+    alt.onServer("deleteWaypoint", () => {
+        game.setWaypointOff();
+    })
+
+    alt.onServer('showNotification', (imageName, headerMsg, detailsMsg, message) => {
+        game.setNotificationTextEntry('STRING');
+        game.addTextComponentSubstringPlayerName(message);
+        game.setNotificationMessageClanTag(imageName.toUpperCase(), imageName.toUpperCase(), false, 4, headerMsg, detailsMsg, 1.0, '');
+        game.drawNotification(false, false);
+    });
+
+
     alt.onServer('SetPlayerIntoVehicle', (vehicle, seat) => {
         alt.setTimeout(() => {
             game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle.scriptID, seat);
@@ -77,13 +90,21 @@ export function initialize() {
 
     alt.on('SET_NOTIFICATION_BACKGROUND_COLOR', (args: any[]) => game.setNotificationBackgroundColor(parseInt(args[0])))
 
-    alt.onServer("SetNotificationMessage", (args: any[]) =>
+    alt.onServer("SetNotificationMessage", (img, sender, subject, message) =>
     {
-        UiHelper.SetNotificationPicture(args[0], args[1], args[1], args[2], args[3], args[4], args[5]);
+        alt.log(img);
+        game.setNotificationTextEntry("STRING");
+        game.addTextComponentSubstringPlayerName(message);
+        game.setNotificationMessage2(img.toUpperCase(), img.toUpperCase(), false, 4, sender, subject);
+        game.drawNotification(false, false);
     });
-    alt.on("SetNotificationMessage", (args: any[]) =>
+    alt.on("SetNotificationMessage", (img, sender, subject, message) =>
     {
-        UiHelper.SetNotificationPicture(args[0], args[1], args[1], args[2], args[3], args[4], args[5]);
+        alt.log(img);
+        game.setNotificationTextEntry("STRING");
+        game.addTextComponentSubstringPlayerName(message);
+        game.setNotificationMessage2(img.toUpperCase(), img.toUpperCase(), false, 4, sender, subject);
+        game.drawNotification(false, false);
     });
 
     alt.on('RemoveLoadingPrompt', () => game.removeLoadingPrompt());

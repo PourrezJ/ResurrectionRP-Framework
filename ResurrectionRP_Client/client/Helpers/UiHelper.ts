@@ -49,8 +49,10 @@ export function SetNotificationPicture(message: string, dict: string, img: strin
     game.setNotificationTextEntry("STRING");
     game.addTextComponentSubstringPlayerName(message);
 
-    game.setNotificationMessage2(dict, img, flash, iconType, sender, subject);
-    game.drawNotification(true, false);
+    //game.setNotificationMessage2(dict, img, flash, iconType, sender, subject);
+    game.setNotificationMessageClanTag(img.toUpperCase(), img.toUpperCase(), false, 4, subject, sender, 1.0, '');
+    game.drawNotification(false, false);
+
 }
 
 export function ShowSubTitle(subtitle, duration = 5000, drawImmediatly = true) {

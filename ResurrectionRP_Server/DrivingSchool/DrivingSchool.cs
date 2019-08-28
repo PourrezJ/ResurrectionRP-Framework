@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.DrivingSchool
             //await MP.Markers.NewAsync(29, Position, new Vector3(), new Vector3(), 1f, Color.FromArgb(150, 5, 168, 0), true);
             //IColshape colshape = await MP.Colshapes.NewTubeAsync(Position, 1f, 1f);
             //colshape.SetSharedData("DrivingSchool", ID);
-            Alt.OnColShape += OnEntityColShape;
+            EventHandlers.Events.OnPlayerEnterColShape += OnPlayerEnterColshape;
             string schoolName = "Auto-École";
 
             switch (SchoolType)
@@ -120,16 +120,13 @@ namespace ResurrectionRP_Server.DrivingSchool
         #endregion
 
         #region Menu
-        public void OnEntityColShape(IColShape colShape, IEntity Client, bool state)
+        public async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
         {
-            if (!state)
-                return;
             if (colShape.Position != this.colshape.Position)
                 return;
             colShape.GetData("DrivingSchool", out int ID);
-            if (ID == null || ID != this.ID)
+            if ( ID != this.ID)
                 return;
-            IPlayer client = Client as IPlayer;
             OpenMenuDrivingSchool(client);
         }
         public async void OpenMenuDrivingSchool(IPlayer client)
@@ -137,33 +134,33 @@ namespace ResurrectionRP_Server.DrivingSchool
 
             Entities.Players.PlayerHandler ph = Entities.Players.PlayerManager.GetPlayerByClient(client);
 
-            /*            if (ph != null) TODO
-                        {
-                            Menu drivingschoolmenu = new Menu("ID_DrivingShoolMenu", "Auto-école", "", 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
-                            drivingschoolmenu.Callback = DrivingMenuCallBack;
+            if (ph != null) 
+            {
+                Menu drivingschoolmenu = new Menu("ID_DrivingShoolMenu", "Auto-école", "", 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
+                drivingschoolmenu.ItemSelectCallback = DrivingMenuCallBack;
 
-                            if (await ClientIsInExamen(client))
-                            {
-                                await client.SendNotificationPicture("Vous êtes déjà en examen! Vous voulez abandonner et rester où est la voiture!?", CharPicture.CHAR_ANTONIA, false, 0, "Auto-école", "Secrétaire");
-                                drivingschoolmenu.Add(new MenuItem("Abandonner l'examen.", "Permet de recommencer l'examen.", "ID_Cancel", true));
-                            }
-                            else
-                            {
-                                if (!ph.HasLicense(LicenseType.Car) && SchoolType == LicenseType.Car)
-                                    drivingschoolmenu.Add(new MenuItem("Permis Voiture", $"Passer le permis voiture pour la somme de ~r~${Price} ~w~prélevée au début de l'examen.", "ID_Car", true, rightLabel: $"${Price}"));
-                                else
-                                {
-                                    await client.SendNotificationPicture("MAIS VOUS AVEZ DEJA VOTRE PERMIS ?!", CharPicture.CHAR_ANTONIA, false, 0, "Auto-école", "Secrétaire");
-                                    return;
-                                }
-                            }
+                if (await ClientIsInExamen(client))
+                {
+                    await client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANTONIA, "Auto-école", "Secrétaire", "Vous êtes déjà en examen! Vous voulez abandonner et rester où est la voiture!?");
+                    drivingschoolmenu.Add(new MenuItem("Abandonner l'examen.", "Permet de recommencer l'examen.", "ID_Cancel", true));
+                }
+                else
+                {
+                    if (!ph.HasLicense(Models.LicenseType.Car) && SchoolType == Models.LicenseType.Car)
+                        drivingschoolmenu.Add(new MenuItem("Permis Voiture", $"Passer le permis voiture pour la somme de ~r~${Price} ~w~prélevée au début de l'examen.", "ID_Car", true, rightLabel: $"${Price}"));
+                    else
+                    {
+                        await client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANTONIA, "Auto-école", "Secrétaire", "MAIS VOUS AVEZ DEJA VOTRE PERMIS ?!");
+                        return;
+                    }
+                }
 
-                            await drivingschoolmenu.OpenMenu(client);
-                        }*/
+                await drivingschoolmenu.OpenMenu(client);
+            }
 
         }
 
-/*        private async Task DrivingMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex) TODO
+        private async Task DrivingMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             await MenuManager.CloseMenu(client);
             Entities.Players.PlayerHandler ph = Entities.Players.PlayerManager.GetPlayerByClient(client);
@@ -184,11 +181,11 @@ namespace ResurrectionRP_Server.DrivingSchool
             }
             else if (menuItem.Id == "ID_Car")
             {
-                if (!await Entities.Vehicles.VehiclesManager.GetVehicleInSpawn(SpawnVeh, 2))
+                if (!Entities.Vehicles.VehiclesManager.IsVehicleInSpawn(SpawnVeh, 2))
                 {
                     if (await ph.HasMoney(Price))
                     {
-                        await client.SendNotificationPicture("Votre examen de conduite commence! Vous avez le droit à ~r~5 erreurs~w~.", Utils.Enums.CharPicture.CHAR_ANDREAS, false, 0, "Auto-école", "Examinateur");
+                        await client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANDREAS, "Auto-école", "Examinateur", "Votre examen de conduite commence! Vous avez le droit à ~r~5 erreurs~w~.");
                         await BeginDrivingExamen(client);
                     }
                     else
@@ -197,7 +194,7 @@ namespace ResurrectionRP_Server.DrivingSchool
                 else
                     await client.SendNotificationError("Un véhicule gêne la sorti du garage.");
             }
-        }*/
+        }
         #endregion
     }
 }

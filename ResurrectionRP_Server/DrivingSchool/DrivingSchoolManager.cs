@@ -40,8 +40,8 @@ namespace ResurrectionRP_Server.DrivingSchool
                 new Trajet(){ Position = new Vector3(86.93179f, -1436.302f, 28), Speed = 70 } //15
             };
 
-            //var schoolcar = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 29.29165f), new Models.Location(new Vector3(87.29823f, -1436.695f, 28.59703f), new Vector3(0.03492294f, 0.02653446f, 142.6451f)), Models.LicenseType.Car, 2500, schooltrajetcar, VehicleModel.Asea);
-            var schoolcar = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 29.29165f), new Models.Location(new Vector3(84.56703f, - 1456.5231f,28.487915f), new Vector3(0.03492294f, 0.02653446f, -2f)), Models.LicenseType.Car, 2500, schooltrajetcar, VehicleModel.Asea);
+            var schoolcar = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 29.29165f), new Models.Location(new Vector3(87.29823f, -1436.695f, 28.59703f), new Vector3(0.03492294f, 0.02653446f, 142.6451f)), Models.LicenseType.Car, 2500, schooltrajetcar, VehicleModel.Asea);
+            //var schoolcar = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 29.29165f), new Models.Location(new Vector3(84.56703f, - 1456.5231f,28.487915f), new Vector3(0.03492294f, 0.02653446f, -2f)), Models.LicenseType.Car, 2500, schooltrajetcar, VehicleModel.Asea);
 
             drivingSchools.Add(schoolcar);
 

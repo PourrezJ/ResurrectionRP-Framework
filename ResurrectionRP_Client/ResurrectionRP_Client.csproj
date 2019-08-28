@@ -440,9 +440,11 @@ rmdir  /S /Q %25ClientDir%25\lib
 mkdir %25ClientDir%25
 mkdir %25ClientDir%25\cef
 mkdir %25ClientDir%25\lib
+mkdir %25ClientDir%25\NativeUIMenu
 xcopy /E /Y  $(TargetDir)\client %25ClientDir%25
 xcopy /E /Y  $(ProjectDir)\cef %25ClientDir%25\cef
-xcopy /E /Y  $(ProjectDir)\lib %25ClientDir%25\lib</PostBuildEvent>
+xcopy /E /Y  $(ProjectDir)\lib %25ClientDir%25\lib
+xcopy /E /Y  $(ProjectDir)\client\NativeUIMenu %25ClientDir%25\NativeUIMenu</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>rmdir  /S /Q $(TargetDir)\client

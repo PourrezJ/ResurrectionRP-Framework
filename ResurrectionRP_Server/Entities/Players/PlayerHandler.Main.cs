@@ -243,7 +243,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 await GameMode.Instance.VoiceController.OnPlayerConnected(client);
                 //await GameMode.Instance.IllegalManager.OnPlayerConnected(client);
 
-                GameMode.Instance.GlobalVoiceChannel.AddPlayer(Client);
+                //GameMode.Instance.GlobalVoiceChannel.AddPlayer(Client);
 
                 await Task.Delay(500);
 

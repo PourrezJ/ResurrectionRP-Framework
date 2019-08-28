@@ -32,7 +32,7 @@ export class VoiceChat
             }
 
             alt.setInterval(() => {
-
+                this.PlayerStateUpdate();
             }, 300);
         });
 

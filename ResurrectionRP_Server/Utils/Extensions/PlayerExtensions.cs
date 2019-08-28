@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using AltV.Net.Data;
 using AltV.Net.Elements.Args;
+using MongoDB.Driver;
 
 namespace ResurrectionRP_Server
 {
@@ -225,5 +226,54 @@ namespace ResurrectionRP_Server
         public static async Task Resurrect(this IPlayer client)
             => await client.EmitAsync("ResurrectPlayer");
 
+        public static async Task OpenCreator(this IPlayer client)
+        {
+            await client.SetPositionAsync(new Vector3(402.8664f, -996.4108f, -99.00027f));
+            client.Rotation = new Vector3(0, 0, -185f);
+            await client.EmitAsync("OpenCreator");
+        }
+
+        public static async Task<bool> PlayerHandlerExist(this IPlayer player)
+        {
+            if (!player.Exists)
+                return false;
+            try
+            {
+                player.GetData("SocialClub", out string social);
+                return await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID == social).AnyAsync();
+            }
+            catch (Exception ex)
+            {
+                // await player.SendNotificationError("Erreur avec votre compte, contactez un membre du staff.");
+                Alt.Server.LogError("PlayerHandlerExist" + ex);
+            }
+            return false;
+        }
+
+        public static async Task Revive(this IPlayer client)
+        {
+            await AltAsync.Do(async () =>
+            {
+                await client.SpawnAsync(new Position(client.GetPosition().X, client.GetPosition().Y, client.GetPosition().Z));
+                await client.SetRotationAsync(client.Rotation);
+                await client.SetHealthAsync(5);
+            });
+
+            await client.Resurrect();
+            var ph = client.GetPlayerHandler();
+            //if (ph != null)
+            //await ph.SetDead(false); TODO
+            /*
+                        if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
+                        {
+                            foreach (var medecin in await GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
+                            {
+                                await medecin.CallAsync("ONU_BlesseEnd", client.Id);
+                            }
+                        }*/
+        }
+
+        public static bool HasVehicleKey(this IPlayer client, string plate)
+            => client.GetPlayerHandler().ListVehicleKey.Exists(x => x.Plate == plate);
     }
 }

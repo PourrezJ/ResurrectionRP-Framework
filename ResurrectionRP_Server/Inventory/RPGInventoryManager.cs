@@ -549,7 +549,7 @@ namespace ResurrectionRP_Server.Inventory
                     Models.ItemStack stack = null;
                     Models.Item item = null;
 
-                    Entities.Players.PlayerHandler player = Entities.Players.PlayerManager.GetPlayerByClient(client);
+                    Entities.Players.PlayerHandler player = client.GetPlayerHandler();
                     if (player == null)
                         return;
 

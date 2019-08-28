@@ -76,7 +76,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         await AnimationsMenu.OpenAnimationsMenu(Client);
                         break;
                     case "ID_WalkingStyles":
-                        if (PlayerManager.GetPlayerByClient(client).PlayerSync.Injured)
+                        if ( client.GetPlayerHandler().PlayerSync.Injured)
                         {
                             await client.NotifyAsync("Vous êtes blessé, vous ne pouvez pas changer votre style de marche");
                             return;

@@ -110,7 +110,7 @@ namespace ResurrectionRP_Server.Models
 
         public virtual async Task OnPickup(IPlayer client, ResuPickup pickup)
         {
-            Entities.Players.PlayerHandler ph = Entities.Players.PlayerManager.GetPlayerByClient(client);
+            Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
             if (ph != null)
             {
                 if (!ph.InventoryIsFull(pickup.Quantite * pickup.Item.weight))

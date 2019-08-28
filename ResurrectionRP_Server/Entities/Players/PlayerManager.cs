@@ -246,7 +246,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 await wpclient.RequestJWToken(data.login, data.password);
                 if (await wpclient.IsValidJWToken())
                 {
-                    await client.EmitAsync("LoginOK", await PlayerHandlerExist(client));
+                    await client.EmitAsync("LoginOK", await client.PlayerHandlerExist());
                 }
                 else
                 {
@@ -265,7 +265,7 @@ namespace ResurrectionRP_Server.Entities.Players
             if (!client.Exists)
                 return;
 
-            PlayerHandler ph = GetPlayerByClient(client);
+            PlayerHandler ph = client.GetPlayerHandler();
 
             if (ph != null)
             {
@@ -285,7 +285,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public static async Task ConnectPlayer(IPlayer client)
         {
-            if (await PlayerHandlerExist(client))
+            if (await client.PlayerHandlerExist())
             {
                 await client.EmitAsync("FadeOut",0);
                 client.GetData("SocialClub", out string social);
@@ -294,7 +294,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 await player.LoadPlayer(client);
             }
             else
-                await OpenCreator(client);
+                await client.OpenCreator();
         }
 
         private async Task OnKeyPress(IPlayer client, object[] args)
@@ -310,46 +310,9 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region Methods 
-        public static async Task OpenCreator(IPlayer client)
-        {
-            await client.SetPositionAsync(new Vector3(402.8664f, -996.4108f, -99.00027f));
-            client.Rotation = new Vector3(0, 0, -185f);
-            client.Emit("OpenCreator");
-        }
 
         public static async Task<PlayerHandler> GetPlayerHandlerDatabase(string socialClub) =>
             await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == socialClub.ToLower()).FirstOrDefaultAsync();
-
-        public static async Task<bool> PlayerHandlerExist(IPlayer player)
-        {
-            try
-            {
-                player.GetData("SocialClub", out string social);
-                return await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID == social).AnyAsync();
-            }
-            catch (Exception ex)
-            {
-                // await player.SendNotificationError("Erreur avec votre compte, contactez un membre du staff.");
-                Alt.Server.LogError("PlayerHandlerExist" + ex);
-            }
-            return false;
-        }
-
-        public static PlayerHandler GetPlayerByClient(IPlayer player)
-        {
-            if (!player.Exists)
-                return null;
-
-            if (player.GetData("PlayerHandler", out object data))
-            {
-                return data as PlayerHandler;
-            }
-            else if (PlayerHandler.PlayerHandlerList.TryGetValue(player, out PlayerHandler value))
-            {
-                return value;
-            }
-            return null;
-        }
 
         private async void IWantToDie(IPlayer client, object[] args)
         {
@@ -379,31 +342,10 @@ namespace ResurrectionRP_Server.Entities.Players
             if (!client.Exists)
                 return;
 
-            await Revive(client);
+            await client.Revive();
         }
 
-        public static async Task Revive(IPlayer client)
-        {
-            await AltAsync.Do(async () =>
-            {
-                await client.SpawnAsync(new Position(client.GetPosition().X, client.GetPosition().Y, client.GetPosition().Z));
-                await client.SetRotationAsync(client.Rotation);
-                await client.SetHealthAsync(5);
-            });
 
-            await client.Resurrect();
-            var ph = GetPlayerByClient(client);
-            //if (ph != null)
-                //await ph.SetDead(false); TODO
-/*
-            if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
-            {
-                foreach (var medecin in await GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
-                {
-                    await medecin.CallAsync("ONU_BlesseEnd", client.Id);
-                }
-            }*/
-        }
 
         public static async Task<bool> IsBan(IPlayer player, string social)
         {
@@ -430,14 +372,12 @@ namespace ResurrectionRP_Server.Entities.Players
                 foreach(IPlayer player in players)
                 {
                     if(player.Id == playerID)
-                        if (player != null) await GetPlayerByClient(client)?.OpenXtremPlayer(player);
+                        if (player != null) await client.GetPlayerHandler()?.OpenXtremPlayer(player);
                 }
                 
             }
         }
 
-        public static bool HasVehicleKey(IPlayer client, string plate) 
-            => client.GetPlayerHandler().ListVehicleKey.Exists(x => x.Plate == plate);
         #endregion
     }
 }

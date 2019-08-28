@@ -22,7 +22,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         private PlayerHandler PlayerHandler;
         public async Task OpenXtremMenu(IPlayer client)
         {
-            PlayerHandler = PlayerManager.GetPlayerByClient(client);
+            PlayerHandler = client.GetPlayerHandler();
 
             if (PlayerHandler == null || Vehicle == null) return;
 
@@ -275,7 +275,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             {
                                 Vehicle.TryGetData("CarDealerPrice", out carPrice);
                                 Loader.CarDealerLoader.CarDealerPlace _place = _data;
-                                PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
+                                PlayerHandler ph = client.GetPlayerHandler();
                                 if (ph != null)
                                 {
                                     if (await ph.HasBankMoney(carPrice, $"Achat de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
@@ -302,7 +302,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             if (Vehicle.TryGetData("RentShop", out dynamic _data) == true)
                             {
                                 Loader.VehicleRentLoader.VehicleRentPlace _place = _data;
-                                PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
+                                PlayerHandler ph = client.GetPlayerHandler();
                                 if (ph != null)
                                 {
                                     if (await ph.HasBankMoney(_place.VehicleInfo.Price, $"Location de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))

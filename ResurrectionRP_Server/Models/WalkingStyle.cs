@@ -62,7 +62,7 @@ namespace ResurrectionRP_Server.Models
         {
             if (menuItem == null)
             {
-                await PlayerManager.GetPlayerByClient(client)?.OpenPlayerMenu();
+                await client.GetPlayerHandler()?.OpenPlayerMenu();
                 return;
             }
 

@@ -18,9 +18,9 @@ namespace ResurrectionRP_Server.Items
             client.Health =  (ushort)((healthActual + (ushort)Life < 100) ? healthActual + Life : 100); 
 
             if (inventoryType == Utils.Enums.InventoryTypes.Pocket)
-                Entities.Players.PlayerManager.GetPlayerByClient(client)?.PocketInventory?.Delete(slot, 1);
+                client.GetPlayerHandler()?.PocketInventory?.Delete(slot, 1);
             else if (inventoryType == Utils.Enums.InventoryTypes.Bag)
-                Entities.Players.PlayerManager.GetPlayerByClient(client)?.BagInventory?.Delete(slot, 1);
+                client.GetPlayerHandler()?.BagInventory?.Delete(slot, 1);
             if (Life > 0)
                 await client.NotifyAsync("Vous vous êtes appliqué un bandage");
         }

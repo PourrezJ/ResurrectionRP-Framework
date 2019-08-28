@@ -18,7 +18,7 @@ namespace ResurrectionRP_Server.Items
 
         public override async Task Use(IPlayer client, string inventoryType, int slot)
         {
-            Entities.Players.PlayerHandler ph = Entities.Players.PlayerManager.GetPlayerByClient(client);
+            Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
             if (ph != null)
             {
                 if (ph.DeleteItem(slot, inventoryType, 1))

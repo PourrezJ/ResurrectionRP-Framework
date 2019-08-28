@@ -206,7 +206,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             VehicleHandler VH = VehiclesManager.GetHandlerByVehicle(Vehicle);
 
-            if (PlayerManager.HasVehicleKey(client, await Vehicle.GetNumberplateTextAsync()) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())
+            if (client.HasVehicleKey(await Vehicle.GetNumberplateTextAsync()) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())
             {
                 Locked = statut;
                 await Vehicle.SetLockStateAsync(statut ? VehicleLockState.Locked : VehicleLockState.Unlocked);
@@ -218,7 +218,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             VehicleHandler VH = VehiclesManager.GetHandlerByVehicle(Vehicle);
 
-            if (PlayerManager.HasVehicleKey(client, await Vehicle.GetNumberplateTextAsync()) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())
+            if (client.HasVehicleKey( await Vehicle.GetNumberplateTextAsync()) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())
             {
                 Locked = await Vehicle.GetLockStateAsync() == VehicleLockState.Locked ? false : true;
                 await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);

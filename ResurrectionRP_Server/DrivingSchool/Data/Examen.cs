@@ -109,7 +109,7 @@ namespace ResurrectionRP_Server.DrivingSchool
         public async Task End()
         {
             await VehicleExam.Delete();
-            Entities.Players.PlayerManager.GetPlayerByClient(PlayerExam)?.RemoveKey(VehicleExam);
+            PlayerExam.GetPlayerHandler()?.RemoveKey(VehicleExam);
             Dispose();
         }
         #endregion

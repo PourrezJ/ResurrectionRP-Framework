@@ -1,6 +1,5 @@
 ﻿namespace ResurrectionRP_Server.Utils.Enums
 {
-
     public enum WeaponHash : uint
     {
         SniperRifle = 100416529,
@@ -95,6 +94,5 @@
         RayPistol = 2939590305,
         RayCarbine = 1198256469,
         RayMinigun = 3056410471,
-
     }
 }

@@ -11,7 +11,7 @@ using OutfitInventory = ResurrectionRP_Server.Inventory.OutfitInventory;
 namespace ResurrectionRP_Server.Models
 {
     [BsonKnownTypes(typeof(Items.Alcohol), typeof(Items.Axe), typeof(Items.BuildingItem), typeof(ClothItem), typeof(Items.CrateTools), typeof(Items.Defibrilator), typeof(Items.Eat) ,typeof(Items.GasJerrycan), typeof(Items.HandCuff), typeof(Items.HealItem),
-        typeof(Items.IdentityCard), /*typeof(Items.MaskItem),*/ typeof(Items.PhoneItem), typeof(Items.RadioItem), typeof(Items.BagItem), typeof(Items.Unusable), typeof(Items.Weapons), typeof(Items.SeedItem), typeof(Items.LockPick))]
+        typeof(Items.IdentityCard), typeof(Items.MaskItem), typeof(Items.PhoneItem), typeof(Items.RadioItem), typeof(Items.BagItem), typeof(Items.Unusable), typeof(Items.Weapons), typeof(Items.SeedItem), typeof(Items.LockPick))]
     public class Item : ICloneable
     {
         [JsonProperty("id")]

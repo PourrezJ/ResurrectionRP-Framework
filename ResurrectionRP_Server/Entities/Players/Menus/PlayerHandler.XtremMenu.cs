@@ -116,13 +116,13 @@ namespace ResurrectionRP_Server.Entities.Players
                     var invmenu = new Inventory.RPGInventoryMenu(TargetHandler.PocketInventory, TargetHandler.OutfitInventory, TargetHandler.BagInventory);
                     invmenu.OnMove += async (p, m) =>
                     {
-                        await UpdatePlayerInfo();
+                        await Update();
                     };
 
                     invmenu.OnClose += async (p, m) =>
                     {
-                        await UpdatePlayerInfo();
-                        await TargetHandler.UpdatePlayerInfo();
+                        await Update();
+                        await TargetHandler.Update();
                     };
                     await invmenu.OpenMenu(client);
                     break;
@@ -140,37 +140,32 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (TargetHandler.IsCuff())
                     {
                         IVehicle vehicle = await Entities.Vehicles.VehiclesManager.GetNearestVehicle(Client);
+
                         if (vehicle != null)
                         {
                             if (vehicle.LockState == AltV.Net.Enums.VehicleLockState.Locked)
-                            {
                                 await Client.SendNotificationError("Le véhicule est fermé");
-                            }
                             else
                             {
                                 VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get(vehicle.Model);
+
                                 if (manifest != null)
-                                {
                                     TargetClient.Emit("TrySetPlayerIntoVehicle", vehicle);
-                                }
                                 else
-                                {
                                     await Client.SendNotificationError("Impossible de le mettre dans ce véhicule");
-                                }
                             }
                         }
                         else
-                        {
                             await Client.SendNotificationError("Aucun véhicule proche de vous");
-                        }
                     }
                     break;
-/*
+                /*
                 case "ID_Faction": TODO
                     menu.ClearItems();
                     FactionManager.AddFactionTargetMenu(Client, TargetClient, menu);
                     await menu.OpenXMenu(client);
-                    break;*/
+                    break;
+                */
             }
         }
     }

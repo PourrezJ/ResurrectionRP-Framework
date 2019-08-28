@@ -19,12 +19,12 @@ namespace ResurrectionRP_Server.Items
         {
             if (!used)
             {
-                //await client.SetClothAsync(AlternateLife.RageMP.Net.Enums.ClothSlot.Mask, new AlternateLife.RageMP.Net.Data.ClothData(Mask.variation, Mask.texture, 0)); TODO
+                await client.SetClothAsync(Models.ClothSlot.Mask, Mask.variation, Mask.texture, 0);
                 used = true;
             }
             else
             {
-                //await client.SetClothAsync(AlternateLife.RageMP.Net.Enums.ClothSlot.Mask, new AlternateLife.RageMP.Net.Data.ClothData(0,0,0));
+                await client.SetClothAsync(Models.ClothSlot.Mask, 0, 0, 0);
                 used = false;
             }
                 

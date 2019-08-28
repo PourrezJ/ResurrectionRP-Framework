@@ -40,9 +40,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Server Events
         private async Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
-            await player.GetPlayerHandler()?.UpdatePlayerInfo();
+            await player.GetPlayerHandler()?.Update();
             await player.EmitAsync("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32(seat), 50, 50);
         }
+
         public static Task OpenXtremVehicle(IPlayer client, object[] args)
         {
             if (!client.Exists)
@@ -50,37 +51,40 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return client.GetNearestVehicleHandler()?.OpenXtremMenu(client);
         }
 
-
         private async Task LockUnlockVehicle(IPlayer player, object[] args)
         {
             if (GameMode.Instance.IsDebug)
                 Alt.Server.LogColored("~b~VehicleManager ~w~| " + player.GetSocialClub() + " is trying to lock/unlock a car");
+
             var vehicle = args[0] as IVehicle;
 
             if (!vehicle.Exists)
                 return;
 
             VehicleHandler veh = GetHandlerByVehicle(vehicle);
-            if (veh == null) return;
+
+            if (veh == null)
+                return;
             
             if (await veh.LockUnlock(player))
             {
-
                 var receverList =  vehicle.GetPlayersInRange(5f);
 
                 foreach (IPlayer recever in receverList)
                 {
                     if (!recever.Exists)
                         continue;
+
                     await recever.PlaySoundFromEntity(veh.Vehicle, 0, "5_SEC_WARNING", "HUD_MINI_GAME_SOUNDSET");
                 }
 
                 await veh.Update();
             }
         }
+
         private async Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
-            await player.GetPlayerHandler()?.UpdatePlayerInfo();
+            await player.GetPlayerHandler()?.Update();
             await player.EmitAsync("OnPlayerLeaveVehicle");
         }
         #endregion
@@ -105,7 +109,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                     if (vehicle == null)
                         continue;
-                    if (vehicle.isParked)
+                    if (vehicle.IsParked)
                         continue;
 
                     //await DeleteVehicleInAllParking(vehicle.Plate);
@@ -170,16 +174,16 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
             }
             return null;
         }
-        public static async Task<bool> GetVehicleInSpawn(Models.Location location, float distance = 4, uint dimension = (uint)ushort.MaxValue) =>
-            await GetVehicleInSpawn(location.Pos, distance, dimension);
+        public static bool IsVehicleInSpawn(Models.Location location, float distance = 4, uint dimension = ushort.MaxValue) =>
+            IsVehicleInSpawn(location.Pos, distance, dimension);
 
-        public static async Task<bool> GetVehicleInSpawn(Vector3 location, float distance = 4, uint dimension = (uint)ushort.MaxValue)
+        public static bool IsVehicleInSpawn(Vector3 location, float distance = 4, uint dimension = ushort.MaxValue)
         {
-            var vehhandler = await GetNearestVehicle(location, distance, dimension);
-            if (vehhandler != null)
-            {
+            var vehHandler = GetNearestVehicle(location, distance, dimension);
+
+            if (vehHandler != null)
                 return true;
-            }
+
             return false;
         }
 
@@ -199,26 +203,25 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
                 return generatedPlate = new string(stringChars);
             } while (!IsPlateUnique(generatedPlate));
         }
-        public static async Task<IVehicle> GetNearestVehicle(IPlayer client, float distance = 3.0f, uint dimension = (uint)short.MaxValue) => await GetNearestVehicle(await client.GetPositionAsync(), distance, dimension);
-        //private static object lockobj = new object();
-        public static async Task<IVehicle> GetNearestVehicle(Vector3 position, float distance = 3.0f, uint dimension = (uint)short.MaxValue)
-        {
-            // lock (lockobj)
-            // return MP.Vehicles.FirstOrDefault(p => p.Position.DistanceTo2D(position) <= distance && p.Dimension == dimension && p.Exists) ?? null;
+        public static async Task<IVehicle> GetNearestVehicle(IPlayer client, float distance = 3.0f, uint dimension = (uint)short.MaxValue) =>
+            GetNearestVehicle(await client.GetPositionAsync(), distance, dimension);
 
+        public static IVehicle GetNearestVehicle(Vector3 position, float distance = 3.0f, uint dimension = (uint)short.MaxValue)
+        {
             ICollection<IVehicle> vehs = Alt.GetAllVehicles();
             IVehicle nearest = null;
+
             foreach(IVehicle veh in vehs)
             {
                 if (position.DistanceTo2D(veh.Position) > distance)
                     continue;
-                if (nearest == null)
+                else if (nearest == null)
                     nearest = veh;
-                if (position.DistanceTo2D(veh.Position) < position.DistanceTo(nearest.Position))
+                else if (position.DistanceTo2D(veh.Position) < position.DistanceTo(nearest.Position))
                     nearest = veh;
             }
-            return nearest;
 
+            return nearest;
         }
 
 

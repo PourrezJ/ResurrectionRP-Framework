@@ -151,14 +151,16 @@ namespace ResurrectionRP_Server.Phone
 
         private async Task PhoneMenuCallBack(IPlayer client, object[] args)
         {
-            if (!client.Exists)
+            if (client == null || !client.Exists)
                 return;
 
-
             Entities.Players.PlayerHandler ph = Entities.Players.PlayerManager.GetPlayerByClient(client);
-            if (!_ClientPhoneMenu.TryGetValue(client, out Phone phone)) return;
 
-            if (phone == null || ph == null) return;
+            if (!_ClientPhoneMenu.TryGetValue(client, out Phone phone))
+                return;
+
+            if (phone == null || ph == null)
+                return;
 
             switch (args[0])
             {
@@ -166,38 +168,26 @@ namespace ResurrectionRP_Server.Phone
                     phone.Settings = JsonConvert.DeserializeObject<PhoneSettings>(args[1].ToString()) ?? new PhoneSettings();
                     break;
 
-
                 case "GetContacts":
                     await phone?.SendContactListToClient(client);
                     break;
 
                 case "AddOrEditContact":
-
                     Address contact = JsonConvert.DeserializeObject<Address>(args[1].ToString());
 
-                    if (string.IsNullOrEmpty(contact.originalNumber))
-                    {
-                        if (await phone.TryAddNewContact(client, contact.contactName, contact.phoneNumber))
-                        {
-                            await client.SendNotificationSuccess($"Vous avez ajouté le contact {contact.contactName}");
-                        }
-                    }
-                    else
-                    {
-                        if (await phone.TryEditContact(client, contact.contactName, contact.phoneNumber, contact.originalNumber))
-                        {
-                            await client.SendNotificationSuccess($"Vous avez édité le contact {contact.contactName}");
-                        }
-                    }
+                    if (string.IsNullOrEmpty(contact.originalNumber) && await phone.TryAddNewContact(client, contact.contactName, contact.phoneNumber))
+                        await client.SendNotificationSuccess($"Vous avez ajouté le contact {contact.contactName}");
+                    else if (await phone.TryEditContact(client, contact.contactName, contact.phoneNumber, contact.originalNumber))
+                        await client.SendNotificationSuccess($"Vous avez édité le contact {contact.contactName}");
 
-                    await ph.Save();
+                    await ph.Update();
                     break;
 
                 case "RemoveContact":
                     if (await phone.RemoveContactFromAddressBook(args[1].ToString()))
                         await client.SendNotificationSuccess("Contact Supprimé!!");
-                    await ph.Save();
 
+                    await ph.Update();
                     break;
 
                 case "getConversationsV2":

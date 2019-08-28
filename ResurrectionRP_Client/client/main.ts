@@ -10,13 +10,15 @@ import { Game } from 'client/player/Game';
 import { OpenCharCreator } from 'client/Creator/Creator';
 import { Streamer } from 'client/Streamer/Streamer';
 import { Notify } from 'client/Notify/Notify';
+import menuManager from 'client/MenuManager/MenuManager';
 
-chat.initialize()
+chat.initialize();
 speedometer.initialize();
 utils.initialize();
 login.init();
 xtreamMenu.init();
 new Streamer();
+menuManager();
 
 alt.onServer("PlayerInitialised", (
     StaffRank: number,
@@ -35,7 +37,6 @@ alt.onServer("PlayerInitialised", (
     PlayerCustomization.init();
     new Notify();
     var GameClass: Game = new Game(StaffRank, IdentiteName, Money, Thirst, Hunger, AnimSettings, Time, Weather, WeatherWind, WeatherWindDirection, isDebug, Location);
-
 });
 
 alt.onServer('OpenCreator', () => {

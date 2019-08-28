@@ -18,7 +18,8 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             try
             {
-                if (PlayerManager.GetPlayerByClient(player).StaffRank <= AdminRank.Player) return;
+                if (PlayerManager.GetPlayerByClient(player).StaffRank <= AdminRank.Player)
+                    return;
 
                 player.Position = (new Vector3(float.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
             }

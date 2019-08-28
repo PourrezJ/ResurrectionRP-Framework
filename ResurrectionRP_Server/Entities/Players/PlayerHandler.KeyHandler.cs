@@ -38,7 +38,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (ph.IsCuff())
                     {
-                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menottés.");
+                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
                         return;
                     }
 
@@ -55,35 +55,38 @@ namespace ResurrectionRP_Server.Entities.Players
                         await client.StopAnimationAsync();
                     }
                     break;
-
+            */
                 case ConsoleKey.F2:
                     if (ph.IsCuff())
                     {
-                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menottés.");
+                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
                         return;
                     }
-                    await ph.OpenPlayerMenu();
+
+                    if (!MenuManager.HasOpenMenu(client))
+                        await ph.OpenPlayerMenu();
+
                     break;
-                    */
+                    
                 case ConsoleKey.F3:
                     if (vehicle == null || !vehicle.Exists)
                         return;
 
                     if (!vehicle.Exists)
                         return;
-                    /*
+                    
                     if (ph.IsCuff())
                     {
-                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menottés.");
+                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
                         return;
-                    }*/
+                    }
                     await vh.OpenXtremMenu(client);
                     break;
                     /*
                 case ConsoleKey.F4:
                     if (ph.IsCuff())
                     {
-                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menottés.");
+                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
                         return;
                     }
                     await ph.OpenAdminMenu();
@@ -156,7 +159,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (ph.IsCuff())
                     {
-                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menottés.");
+                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
                         return;
                     }
 
@@ -170,7 +173,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (ph.IsCuff())
                     {
-                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menottés.");
+                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
                         return;
                     }
 
@@ -186,13 +189,13 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (ph.IsCuff())
                     {
-                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menottés.");
+                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
                         return;
                     }
 
                     if (ph.RadioSelected == null)
                     {
-                        await client.SendNotificationError("Vous n'avez pas de radio d'équiper sur vous.");
+                        await client.SendNotificationError("Vous n'avez pas de radio d'équipée sur vous.");
                         return;
                     }
 
@@ -204,18 +207,18 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.UpArrow:
-/*                    if (MenuManager.HasOpenMenu(client))
-                        return;*/
+                    if (MenuManager.HasOpenMenu(client))
+                        return;
 
                     if (ph.IsCuff())
                     {
-                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menottés.");
+                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
                         return;
                     }
 
                     if (ph.PhoneSelected == null)
                     {
-                        await client.SendNotificationError("Vous n'avez pas de téléphone d'équiper sur vous.");
+                        await client.SendNotificationError("Vous n'avez pas de téléphone d'équipé sur vous.");
                         return;
                     }
 

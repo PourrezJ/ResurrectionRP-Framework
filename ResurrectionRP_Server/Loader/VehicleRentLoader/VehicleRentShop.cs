@@ -41,10 +41,8 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
             {
                 foreach (var place in VehicleRentPlaces)
                 {
-                    if (place.VehicleHandler == null && !await Entities.Vehicles.VehiclesManager.GetVehicleInSpawn(place.Location.Pos, 4))
-                    {
+                    if (place.VehicleHandler == null && !Entities.Vehicles.VehiclesManager.IsVehicleInSpawn(place.Location.Pos, 4))
                         await Respawn(place);
-                    }
                 }
             });
         }

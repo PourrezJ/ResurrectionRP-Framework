@@ -155,24 +155,24 @@ namespace ResurrectionRP_Server.Entities.Players
 
         #endregion
 
-        #region Method
+        #region Methods
 
         #region Load
-
         public async Task LoadPlayer(IPlayer client, bool firstspawn = false)
         {
-
             Client = client;
             client.SetData("PlayerHandler", this);
+
             if (PlayerHandlerList.TryAdd(client, this))
             {
                 if (BankAccount == null)
-                    BankAccount = new Bank.BankAccount(Bank.AccountType.Personnal, await Bank.BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
+                    BankAccount = new Bank.BankAccount(Bank.AccountType.Personal, await Bank.BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
+
                 await GameMode.Instance.Streamer.LoadStreamPlayer(client);
+                BankAccount.Owner = this;
 
                 if (firstspawn)
                 {
-                    
                     PocketInventory.AddItem(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.JambonBeurre), 1);
                     PocketInventory.AddItem(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.Eau), 1);
 
@@ -185,8 +185,8 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     Location = GameMode.FirstSpawn;
                 }
-
-                var inventoriesPhones = this.GetStacksItems(Models.InventoryData.ItemID.Phone);
+                
+                var inventoriesPhones = GetStacksItems(Models.InventoryData.ItemID.Phone);
 
                 if (inventoriesPhones.Count > 0)
                 {
@@ -200,7 +200,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         }
                     }
                 }
-
+                
                 await AltAsync.Do( () =>
                 {
                     this.IP = Client.Ip;
@@ -232,11 +232,11 @@ namespace ResurrectionRP_Server.Entities.Players
 
                await UpdateClothing();
 
-                /*if (PlayerSync.IsCuff)
+                if (PlayerSync.IsCuff)
                     await SetCuff(true);
 
                 PlayerSync.IsDead = (Health <= 0);
-                */
+                
                 //await GameMode.Instance.HouseManager.OnPlayerConnected(client);
                 await GameMode.Instance.DoorManager.OnPlayerConnected(client);
                 //await GameMode.Instance.PedManager.OnPlayerConnected(client);
@@ -248,7 +248,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 await Task.Delay(500);
 
                 if (firstspawn)
-                    await Save();
+                    await Update();
 
                 OnKeyPressed += OnKeyPressedCallback;
             }
@@ -264,39 +264,43 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Money
         public async Task AddMoney(double somme)
         {
-            if (somme < 0) return;
+            if (somme < 0)
+                return;
+
             Money += somme;
             Client?.Emit(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money));
-            await UpdatePlayerInfo();
+            await Update();
         }
-
 
         public async Task<bool> HasMoney(double somme)
         {
-            if (somme < 0) return false;
+            if (somme < 0)
+                return false;
+
             if (Money >= somme)
             {
                 Money -= somme;
                 await Client?.EmitAsync(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money)) ;
-                await UpdatePlayerInfo();
+                await Update();
                 return true;
             }
+
             return false;
         }
 
         public async Task<bool> HasBankMoney(double somme, string reason)
         {
-            if (somme < 0) return false;
+            if (somme < 0)
+                return false;
+
             if (BankAccount.Balance >= somme)
             {
-                BankAccount.GetBankMoney(somme, reason);
-                await Client?.EmitAsync(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money));
-                await UpdatePlayerInfo();
+                await BankAccount.GetBankMoney(somme, reason);
                 return true;
             }
+
             return false;
         }
-
         #endregion
 
         #endregion
@@ -309,7 +313,7 @@ namespace ResurrectionRP_Server.Entities.Players
             Thirst = (thirst == -1) ? Thirst : thirst;
             Hunger = (hunger == -1) ? Hunger : hunger;
             await  Client?.EmitAsync("UpdateHungerThirst", Hunger, Thirst);
-            await UpdatePlayerInfo();
+            await Update();
         }
         #endregion
 
@@ -474,7 +478,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     var rpg = RPGInventoryManager.GetRPGInventory(this.Client);
                     if (rpg != null)
-                        RPGInventoryManager.Refresh(this.Client, rpg);
+                        await RPGInventoryManager.Refresh(this.Client, rpg);
                 }
                 await item.OnPlayerGetItem(this.Client);
 
@@ -486,7 +490,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     var rpg = RPGInventoryManager.GetRPGInventory(this.Client);
                     if (rpg != null)
-                        RPGInventoryManager.Refresh(this.Client, rpg);
+                        await RPGInventoryManager.Refresh(this.Client, rpg);
                 }
                 await item.OnPlayerGetItem(this.Client);
                 return true;
@@ -603,13 +607,18 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             Dictionary<string, Models.ItemStack[]> items = new Dictionary<string, Models.ItemStack[]>();
 
-            var pocket = PocketInventory.FindAllItemWithType(itemID);
-            if (pocket != null && pocket.Length > 0)
-                items.Add(Utils.Enums.InventoryTypes.Pocket, pocket);
+            if (PocketInventory != null)
+            {
+                var pocket = PocketInventory.FindAllItemWithType(itemID);
+
+                if (pocket != null && pocket.Length > 0)
+                    items.Add(Utils.Enums.InventoryTypes.Pocket, pocket);
+            }
 
             if (BagInventory != null)
             {
                 var bag = BagInventory.FindAllItemWithType(itemID);
+
                 if (bag != null && bag.Length > 0)
                     items.Add(Utils.Enums.InventoryTypes.Bag, bag);
             }
@@ -617,12 +626,12 @@ namespace ResurrectionRP_Server.Entities.Players
             if (OutfitInventory != null)
             {
                 var outfit = OutfitInventory.FindAllItemWithType(itemID);
+
                 if (outfit != null && outfit.Length > 0)
                     items.Add(Utils.Enums.InventoryTypes.Outfit, outfit);
             }
             return items;
         }
-
         #endregion
 
         #region Methods

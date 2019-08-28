@@ -2,7 +2,7 @@
 import * as game from 'natives';
 import Raycast, * as raycast from 'client/Utils/Raycast';
 import * as chat from 'client/chat/chat';
-import * as Utils from 'client/utils';
+import * as Utils from 'client/Utils/utils';
 
 /*
  * POUR LE RAY CAST LES FLAGS
@@ -31,7 +31,7 @@ export class Interaction {
         alt.log(`Entity Type: ${result.entityType}`);
         alt.log(`Entity Hash: ${result.entityHash}`);
         alt.log(`Key pressed: ${key}`);*/
-            if (key === 69) {// e // F3 : 114
+            if (key == 69) {// e // F3 : 114
                 if (resultVeh.isHit && resultVeh.entityType == 2) {
                     alt.emitServer('OpenXtremVehicle');
                 }
@@ -39,7 +39,7 @@ export class Interaction {
                     alt.emitServer('OpenXtremPlayer');
                 }
             }
-            else if (key === 85) { // U
+            else if (key == 85) { // U
                 if (resultVeh.isHit && resultVeh.entityType == 2) {
                     var vehicle = alt.Vehicle.all.find(p => p.scriptID == resultVeh.hitEntity);
                     alt.emitServer('LockUnlockVehicle', vehicle);

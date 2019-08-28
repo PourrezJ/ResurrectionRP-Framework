@@ -3,25 +3,14 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using MongoDB.Bson.Serialization.Attributes;
-using System;
 using System.Threading.Tasks;
-using System.Numerics;
-using MongoDB.Bson.Serialization.Conventions;
-using ResurrectionRP_Server.Models;
-using MongoDB.Bson.Serialization;
-using System.Drawing;
-using MongoDB.Bson.Serialization.Serializers;
-using ResurrectionRP_Server.Database;
-using MongoDB.Bson.Serialization.Options;
-using Microsoft.Extensions.Configuration;
-using System.IO;
 
 namespace ResurrectionRP_Server
 {
     public class Startup : AsyncResource
     {
         private GameMode gamemode = null;
+
         public async override void OnStart()
         {
             AltAsync.OnPlayerConnect += AltAsync_OnPlayerConnect;
@@ -59,6 +48,7 @@ namespace ResurrectionRP_Server
         private async Task AltAsync_OnPlayerConnect(IPlayer player, string reason)
         {
             player.Emit("FadeOut", 0);
+
             while (gamemode == null)
                 await Task.Delay(50);
 

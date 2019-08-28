@@ -4,13 +4,10 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.Options;
 using Newtonsoft.Json;
-using ResurrectionRP.Server.Entities.Vehicles.Data;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles.Data;
 using ResurrectionRP_Server.Models;
-using ResurrectionRP_Server.Utils.Extensions;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -45,7 +42,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         [BsonIgnore, JsonIgnore]
         public IVehicle Vehicle { get; set; }
 
-        public bool isParked { get; set; } = false;
+        public bool IsParked { get; set; } = false;
 
         public bool SpawnVeh { get; set; }
         public bool Locked { get; set; } = true;
@@ -104,7 +101,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Method
-        public async Task<IVehicle> SpawnVehicle(Location location = null)
+        public async Task<IVehicle> SpawnVehicle(Location location = null, bool setLastUse = true)
         {
             if (Dimension.ToString() == "-1")
                 Dimension = short.MaxValue;
@@ -114,7 +111,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 try
                 {
                     if(location == null)
-                        Vehicle = Alt.CreateVehicle(Model,  Location.Pos , Location.GetRotation() );
+                        Vehicle = Alt.CreateVehicle(Model,  Location.Pos , Location.GetRotation());
                     else
                         Vehicle = Alt.CreateVehicle(Model, location.Pos, location.GetRotation());
                 }
@@ -122,12 +119,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 {
                     Alt.Server.LogError("SpawnVehicle: " + ex);
                 }
+
                 if (Vehicle == null)
                     return;
 
-                Vehicle = Vehicle;
                 Vehicle.SetData("VehicleHandler", this);
-
                 Vehicle.Dimension = Dimension;
                 Vehicle.NumberplateText = Plate;
                 Vehicle.PrimaryColor = PrimaryColor;
@@ -138,16 +134,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     foreach (KeyValuePair<int, int> mod in Mods)
                     {
                         Vehicle.SetMod((byte)mod.Key, (byte)mod.Value);
+
                         if (mod.Key == 69)
-                        {
                             Vehicle.WindowTint = (byte)mod.Value;
-                        }
                     }
                 }
 
                 if (NeonsColor != null && NeonsColor != new Color())
                     Vehicle.NeonColor = NeonsColor;
-
 
                 Vehicle.DirtLevel = Dirt;
                 Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
@@ -155,20 +149,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.EngineHealth = EngineHealth;
                 Vehicle.BodyHealth = BodyHealth;
                 Vehicle.RadioStation = RadioID;
+                IsParked = false;
 
                 await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
                 await Vehicle.SetEngineOnAsync(Engine);
 
-
-                LastUse = DateTime.Now;
+                if (setLastUse)
+                    LastUse = DateTime.Now;
 
                 if (location != null)
-                {
                     Location = location;
-                }
 
                 VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
-
                 GameMode.Instance.VehicleManager.VehicleHandlerList.TryAdd(Vehicle, this);
             });
             /*

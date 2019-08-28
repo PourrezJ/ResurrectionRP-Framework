@@ -12,18 +12,20 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using ResurrectionRP_Server;
+using ResurrectionRP_Server.EventHandlers;
+using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Utils.Extensions;
 using AltV.Net.Enums;
+using SaltyServer;
 
 namespace ResurrectionRP_Server
 {
     public class GameMode
     {
+        #region Variables
         public ObjectId _id;
 
-        #region Variables
         [BsonIgnore]
         public static GameMode Instance { get; private set; }
 
@@ -51,6 +53,9 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public List<IPlayer> PlayerList = new List<IPlayer>();
 
+        [BsonIgnore]
+        public IVoiceChannel GlobalVoiceChannel { get; private set; }
+
 
         public static short GlobalDimension = short.MaxValue;
 
@@ -65,6 +70,8 @@ namespace ResurrectionRP_Server
         public Jobs.JobsManager JobsManager { get; private set; }
 
         // Menus
+        [BsonIgnore]
+        public MenuManager MenuManager { get; private set; }
         [BsonIgnore]
         public XMenuManager.XMenuManager XMenuManager { get; private set; }
 
@@ -81,10 +88,14 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public Phone.PhoneManager PhoneManager { get; private set; }
 
+        [BsonIgnore]
+        public Voice VoiceController { get; private set; }
+
         public static bool ServerLock;
 
         public Time Time { get; set; }
         public bool ModeAutoFourriere { get; internal set; }
+        
         #endregion
 
         #region Static
@@ -108,7 +119,6 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Events
-
         private async void OnServerStop()
         {
             var players = GameMode.Instance.PlayerList;
@@ -120,9 +130,9 @@ namespace ResurrectionRP_Server
 
             //await HouseManager.House_Exit();
         }
+
         public async Task OnStartAsync()
         {
-
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
             Streamer = new Streamer.Streamer();
@@ -132,10 +142,12 @@ namespace ResurrectionRP_Server
             VehicleManager = new VehiclesManager();
             PhoneManager = new Phone.PhoneManager();
             RPGInventory = new Inventory.RPGInventoryManager();
+            MenuManager = new MenuManager();
             XMenuManager = new XMenuManager.XMenuManager();
             WeatherManager = new Weather.WeatherManager();
             DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
             JobsManager = new Jobs.JobsManager();
+            VoiceController = new Voice();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
             if (Time == null)
@@ -150,9 +162,11 @@ namespace ResurrectionRP_Server
             await WeatherManager.InitWeather();
             await JobsManager.Init();
             await DrivingSchoolManager.InitAll();
+
+            VoiceController.OnResourceStart();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
-            new EventsHandler.Events();
+            Events.Initialize();
 
             Alt.OnPlayerConnect += OnPlayerConnected;
             Alt.OnPlayerDisconnect += OnPlayerDisconnected;
@@ -161,7 +175,16 @@ namespace ResurrectionRP_Server
             Chat.RegisterCmd("veh", CommandVeh);
             Chat.RegisterCmd("coords", (IPlayer player, string[] args) =>
             {
-                Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z);
+                if (player.Vehicle != null)
+                {
+                    Chat.SendChatMessage(player, "X: " + player.Vehicle.Position.X + " Y: " + player.Vehicle.Position.Y + " Z: " + player.Vehicle.Position.Z);
+                    Chat.SendChatMessage(player, "RX: " + player.Vehicle.Rotation.Roll + " RY: " + player.Vehicle.Rotation.Pitch + " RZ: " + player.Vehicle.Rotation.Yaw);
+                }
+                else
+                {
+                    Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z);
+                    Chat.SendChatMessage(player, "RX: " + player.Rotation.Roll + " RY: " + player.Rotation.Pitch + " RZ: " + player.Rotation.Yaw);
+                }
             });
             Chat.RegisterCmd("getCoords", (IPlayer player, string[] args) =>
             {
@@ -173,33 +196,27 @@ namespace ResurrectionRP_Server
                 var vehicle = player.GetNearestVehicle();
                 player.Emit("TestOut", 10000);
             });
-            Chat.RegisterCmd("setCoords", (IPlayer player, string[] args) =>
-            {
-                player.Position = new Vector3(float.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2]));
-            });
             ServerLoaded = true;
         }
 
 
         private void OnPlayerConnected(IPlayer player, string reason)
         {
-
             if (PlayerList.Find(b => b == player) == null)
                 PlayerList.Add(player);
+
             Alt.Log($"==> {player.Name} has connected.");
-
-
         }
+
         private void OnPlayerDisconnected(IPlayer player, string reason)
         {
-
             if (PlayerList.Find(b => b == player) != null)
                 PlayerList.Remove(player);
-            Alt.Log($"==> {player.Name} has disconnected.");
+
             RPGInventory.OnPlayerQuit(player);
-
+            PlayerHandler.PlayerHandlerList.TryRemove(player, out _);
+            Alt.Log($"==> {player.Name} has disconnected.");
         }
-
         #endregion
 
         #region Methods
@@ -211,27 +228,32 @@ namespace ResurrectionRP_Server
                 return;
             }
 
+            Chat.SendChatMessage(player, "Count avant: " + Alt.GetAllVehicles().Count);
             VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), new Vector3(player.Position.X+5, player.Position.Y, player.Position.Z), player.Rotation, locked:false);
+
             Task.Run(async () =>
             {
                 await vh.SpawnVehicle(null);
-                var ph = player.GetPlayerHandler();
+                PlayerHandler ph = player.GetPlayerHandler();
 
                 if (ph != null)
                 {
                     ph.ListVehicleKey.Add(new VehicleKey(vh.VehicleManifest.DisplayName, vh.Plate));
+
                     if (vh.Vehicle != null)
                         player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);
 
-                    await ph.UpdatePlayerInfo();
+                    await vh.InsertVehicle();
+                    await ph.Update();
                 }
+                Chat.SendChatMessage(player, "Count après: " + Alt.GetAllVehicles().Count);
             });
         }
+
         public async Task Save()
         {
             await Database.MongoDB.Update(this, "gamemode", _id);
         }
-
         #endregion
     }
 }

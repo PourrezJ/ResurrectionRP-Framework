@@ -63,8 +63,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (GameMode.Instance.PlayerList.Any(v => v.Id == ph.Key.Id))
                     {
                         if (ph.Value != null)
-                            await ph.Value.UpdatePlayerInfo();
+                            await ph.Value.Update();
                     }
+
                     await Task.Delay(500);
                 }
 
@@ -118,7 +119,6 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region ServerEvents
-
         private async Task Events_PlayerDeath(IPlayer player, IEntity killer, uint weapon)
         {
             if (!player.Exists)
@@ -266,11 +266,12 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
 
             PlayerHandler ph = GetPlayerByClient(client);
+
             if (ph != null)
             {
                 ph.Hunger = Convert.ToInt32(arg[0]);
                 ph.Thirst = Convert.ToInt32(arg[1]);
-                await ph.UpdatePlayerInfo();
+                await ph.Update();
             }
         }
 
@@ -288,14 +289,12 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 await client.EmitAsync("FadeOut",0);
                 client.GetData("SocialClub", out string social);
-                PlayerHandler player = await GetPlayerHandlerDatabase( social );
+                PlayerHandler player = await GetPlayerHandlerDatabase(social);
                 player.LastUpdate = DateTime.Now;
                 await player.LoadPlayer(client);
             }
             else
-            {
                 await OpenCreator(client);
-            }
         }
 
         private async Task OnKeyPress(IPlayer client, object[] args)
@@ -317,6 +316,7 @@ namespace ResurrectionRP_Server.Entities.Players
             client.Rotation = new Vector3(0, 0, -185f);
             client.Emit("OpenCreator");
         }
+
         public static async Task<PlayerHandler> GetPlayerHandlerDatabase(string socialClub) =>
             await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == socialClub.ToLower()).FirstOrDefaultAsync();
 
@@ -329,7 +329,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
             catch (Exception ex)
             {
-                //await player.SendNotificationError("Erreur avec votre compte, contactez un membre du staff.");
+                // await player.SendNotificationError("Erreur avec votre compte, contactez un membre du staff.");
                 Alt.Server.LogError("PlayerHandlerExist" + ex);
             }
             return false;
@@ -381,6 +381,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             await Revive(client);
         }
+
         public static async Task Revive(IPlayer client)
         {
             await AltAsync.Do(async () =>
@@ -418,6 +419,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             return false;
         }
+
         private async void OpenXtremPlayer(IPlayer client, object[] args)
         {
             if (uint.TryParse(args[0].ToString(), out uint playerID))
@@ -436,7 +438,6 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public static bool HasVehicleKey(IPlayer client, string plate) 
             => client.GetPlayerHandler().ListVehicleKey.Exists(x => x.Plate == plate);
-
         #endregion
     }
 }

@@ -89,6 +89,7 @@
     <TypeScriptCompile Include="client\login\Login.ts" />
     <TypeScriptCompile Include="client\main.ts" />
     <TypeScriptCompile Include="client\Medical.ts" />
+    <TypeScriptCompile Include="client\MenuManager\MenuManager.ts" />
     <TypeScriptCompile Include="client\menus\rpgInventory\RPGInventory.ts" />
     <TypeScriptCompile Include="client\menus\xtreamMenu\xtreamMenuManager.ts" />
     <TypeScriptCompile Include="client\Models\Camera.ts" />
@@ -104,9 +105,10 @@
     <TypeScriptCompile Include="client\Streamer\Streamer.ts" />
     <TypeScriptCompile Include="client\Utils\Enums\Enums.ts" />
     <TypeScriptCompile Include="client\Utils\Raycast.ts" />
+    <TypeScriptCompile Include="client\Voice\VoiceChat.ts" />
     <TypeScriptCompile Include="typings\altv-client.d.ts" />
     <TypeScriptCompile Include="typings\natives.d.ts" />
-    <TypeScriptCompile Include="client\utils.ts" />
+    <TypeScriptCompile Include="client\Utils\Utils.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="cef\chat\app.js" />
@@ -287,6 +289,7 @@
     <Content Include="cef\radio\img\talkbg.png" />
     <Content Include="cef\radio\index.html" />
     <Content Include="cef\radio\js\app.js" />
+    <Content Include="cef\SaltyWebSocket.html" />
     <Content Include="cef\speedometer\css\style.css" />
     <Content Include="cef\speedometer\img\compteur-on.png" />
     <Content Include="cef\speedometer\img\compteur.png" />
@@ -303,6 +306,30 @@
     <Content Include="cef\xtrem\css\style.css" />
     <Content Include="cef\xtrem\js\app.js" />
     <Content Include="cef\xtrem\playerMenu.html" />
+    <Content Include="client\NativeUIMenu\enums\BadgeStyle.js" />
+    <Content Include="client\NativeUIMenu\enums\Font.js" />
+    <Content Include="client\NativeUIMenu\items\UIMenuCheckboxItem.js" />
+    <Content Include="client\NativeUIMenu\items\UIMenuItem.js" />
+    <Content Include="client\NativeUIMenu\items\UIMenuListItem.js" />
+    <Content Include="client\NativeUIMenu\items\UIMenuSliderItem.js" />
+    <Content Include="client\NativeUIMenu\modules\Container.js" />
+    <Content Include="client\NativeUIMenu\modules\IElement.js" />
+    <Content Include="client\NativeUIMenu\modules\ItemsCollection.js" />
+    <Content Include="client\NativeUIMenu\modules\ListItem.js" />
+    <Content Include="client\NativeUIMenu\modules\Rectangle.js" />
+    <Content Include="client\NativeUIMenu\modules\ResRectangle.js" />
+    <Content Include="client\NativeUIMenu\modules\ResText.js" />
+    <Content Include="client\NativeUIMenu\modules\Sprite.js" />
+    <Content Include="client\NativeUIMenu\modules\StringMeasurer.js" />
+    <Content Include="client\NativeUIMenu\modules\Text.js" />
+    <Content Include="client\NativeUIMenu\NativeUI.js" />
+    <Content Include="client\NativeUIMenu\utils\Color.js" />
+    <Content Include="client\NativeUIMenu\utils\Common.js" />
+    <Content Include="client\NativeUIMenu\utils\LiteEvent.js" />
+    <Content Include="client\NativeUIMenu\utils\Point.js" />
+    <Content Include="client\NativeUIMenu\utils\Screen.js" />
+    <Content Include="client\NativeUIMenu\utils\Size.js" />
+    <Content Include="client\NativeUIMenu\utils\UUIDV4.js" />
     <Content Include="lib\css\angular-confirm.min.css" />
     <Content Include="lib\css\bootstrap.min.css" />
     <Content Include="lib\css\fontawesome.5.0.13.min.css" />

@@ -140,7 +140,7 @@ namespace ResurrectionRP_Server.Jobs
 
             Utils.Utils.Delay((int)TimeSpan.FromMinutes(2).TotalMilliseconds, false, async () =>
             {
-                if (VehicleSpawnLocation != null && await VehicleManager.GetVehicleInSpawn(VehicleSpawnLocation.Pos))
+                if (VehicleSpawnLocation != null && VehicleManager.IsVehicleInSpawn(VehicleSpawnLocation.Pos))
                 {
                     //var vehs = await MP.Vehicles.GetInRangeAsync(VehicleSpawnLocation.Pos, 4, MP.GlobalDimension);
                     var vehs = VehicleSpawnLocation.Pos.GetVehiclesInRange(4);

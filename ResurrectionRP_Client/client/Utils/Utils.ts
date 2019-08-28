@@ -312,3 +312,11 @@ export function GetCameraDirection() {
     }
     return new alt.Vector3(x, y, z);
 }
+
+export function ArrayRemove(arr, value) {
+
+    return arr.filter(function (ele) {
+        return ele != value;
+    });
+
+}

@@ -143,7 +143,7 @@ namespace ResurrectionRP_Server.Inventory
             try
             {
                 string inventoryType = Convert.ToString(args[0]);
-                Models.InventoryData.ItemID itemID = (Models.InventoryData.ItemID)args[1];
+                ItemID itemID = (ItemID)args[1];
                 int slot = Convert.ToInt32(args[2]);
                 int quantity = Convert.ToInt32(args[3]);
 
@@ -316,7 +316,7 @@ namespace ResurrectionRP_Server.Inventory
                     }
 
                     // Temporary solution to save inventory after object drop. Doesn't update inventory when dropping from distant inventory.
-                    await ph.UpdatePlayerInfo();
+                    await ph.Update();
                     await Refresh(client, menu);
                 }
             }
@@ -504,8 +504,8 @@ namespace ResurrectionRP_Server.Inventory
                     }
 
                     // Temporary solution to save inventory after object drop
-                    await ph.UpdatePlayerInfo();
-                    await phDistant.UpdatePlayerInfo();
+                    await ph.Update();
+                    await phDistant.Update();
                     await Refresh(client, menu);
                 }
             }
@@ -927,13 +927,12 @@ namespace ResurrectionRP_Server.Inventory
                                 }
 
                                 await player.Clothing.UpdatePlayerClothing();
-                                await player.UpdatePlayerInfo();
+                                await player.Update();
                             }
                             #endregion
 
                         }
                     }
-
 
                     if (menu.OnMove != null)
                         await menu.OnMove.Invoke(client, menu);

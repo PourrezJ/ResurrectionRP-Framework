@@ -9,15 +9,18 @@ namespace ResurrectionRP_Server
 {
     static class Chat
     {
+        #region Delegates
         public delegate void CmdCallback(IPlayer player, string[] args = null);
+        #endregion
 
+        #region Static fields
         static Dictionary<string, CmdCallback> _cmdHandlers = new Dictionary<string, CmdCallback>();
+        #endregion
 
         #region Client events
         public static void Initialize()
         {
             Alt.OnClient("chatmessage", OnChatMessage);
-            
         }
         #endregion
 

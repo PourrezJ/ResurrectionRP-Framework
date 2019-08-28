@@ -1,76 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MongoDB.Bson;
+﻿using AltV.Net;
+using AltV.Net.Async;
+using AltV.Net.Elements.Entities;
+using MongoDB.Bson.Serialization.Attributes;
+using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Models;
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
-using AltV.Net;
-using AltV.Net.Async;
-using AltV.Net.Elements.Entities;
-using ResurrectionRP_Server.Utils.Extensions;
-using ResurrectionRP_Server.Models;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
     public partial class PlayerHandler
     {
-        
-        public async Task Save()
-        {
-            //Alt.Server.LogWarning("Save is disabled for now, waiting to be more complete.");
-            //return;
-            if (GameMode.Instance.IsDebug)
-                Alt.Server.LogColored("~b~PlayerHandler ~w~| Save Player()");
-            try
-            {
-                if (Location.Pos == Vector3.Zero)
-                    return;
-                await Database.MongoDB.Update(this, "players", PID);
-            }
-            catch (Exception ex)
-            {
-                Alt.Server.LogError($"PlayerHandler Save { Client.SocialClubId.ToString()} {Identite?.Name ?? ""}" + ex.Data);
-            }
-        }
+        #region Fields
+        [BsonIgnore]
+        private static readonly double _updateWaitTime = 1000.0;
+        [BsonIgnore]
+        private DateTime _lastUpdateRequest;
+        [BsonIgnore]
+        private bool _updateWaiting = false;
+        [BsonIgnore]
+        private int _nbUpdateRequests;
+        #endregion
 
-        public async Task UpdatePlayerInfo()
+        #region Methods
+        public async Task Update()
         {
-            if (Client == null) return;
+            if (Client == null || !Client.Exists)
+                return;
 
             try
             {
-                if (!Client.Exists)
-                    return;
+                VehicleHandler veh = null;
 
-                var vehicle = await Client.GetVehicleAsync();
-
-                if (vehicle != null && !vehicle.GetVehicleHandler().isParked)
+                // lock (Client)
                 {
-                    if (await vehicle.GetDriverAsync() == Client)
+                    Health = await Client.GetHealthAsync();
+                    IVehicle vehicle = await Client.GetVehicleAsync();
+
+                    if (vehicle != null && vehicle.Exists)
                     {
-                        var veh = vehicle.GetVehicleHandler();
-                        
-                        if (veh != null)
-                            await veh.Update();
+                        if (await vehicle.GetDriverAsync() == Client)
+                            veh = vehicle.GetVehicleHandler();
+
+                        Location = new Location(await vehicle.GetPositionAsync(), await vehicle.GetRotationAsync());
                     }
-                    Location = new Location(await vehicle.GetPositionAsync(), await vehicle.GetRotationAsync());
+                    // else if (HouseManager.IsInHouse(Client))
+                    //     Location = new Location(HouseManager.GetHouse(Client).Position, new Vector3());
+                    else
+                        Location = new Location(await Client.GetPositionAsync(), await Client.GetRotationAsync());
                 }
-                else
-                {
-                    Location = new Location(await Client.GetPositionAsync(), await Client.GetRotationAsync());
-                }
 
-                /*
-                if (HouseManager.IsInHouse(Client))
-                {
-                    Location = new Location(HouseManager.GetHouse(Client).Position, new Vector3());
-                }*/
-
-                if (!Client.Exists)
-                    return;
-
-                Health = await Client.GetHealthAsync();
+                if (veh != null)
+                    await veh.Update();
 
                 if ((DateTime.Now - LastUpdate).Minutes >= 1)
                 {
@@ -78,12 +60,60 @@ namespace ResurrectionRP_Server.Entities.Players
                     LastUpdate = DateTime.Now;
                 }
 
-                await Save();
+                SaveAsync();
             }
             catch (Exception ex)
             {
-                Alt.Server.LogError("UpdatePlayerInfo: " + ex);
+                Alt.Server.LogError($"PlayerHandler.Update() - {Client.GetSocialClub()}, {Identite.Name} - {ex}");
             }
-        } 
+        }
+
+        private void SaveAsync()
+        {
+            _lastUpdateRequest = DateTime.Now;
+
+            if (_updateWaiting)
+            {
+                _nbUpdateRequests++;
+                return;
+            }
+
+            _updateWaiting = true;
+            _nbUpdateRequests = 1;
+
+            Task.Run(async () =>
+            {
+                DateTime updateTime = _lastUpdateRequest.AddMilliseconds(_updateWaitTime);
+
+                while (DateTime.Now < updateTime)
+                {
+                    TimeSpan waitTime = updateTime - DateTime.Now;
+
+                    if (waitTime.TotalMilliseconds < 1)
+                        waitTime = new TimeSpan(0, 0, 0, 0, 1);
+
+                    await Task.Delay((int)waitTime.TotalMilliseconds);
+                    updateTime = _lastUpdateRequest.AddMilliseconds(_updateWaitTime);
+                }
+
+                try
+                {
+                    if (Location.Pos == Vector3.Zero)
+                        return;
+
+                    var result = await Database.MongoDB.Update(this, "players", PID, _nbUpdateRequests);
+
+                    if (result.MatchedCount == 0)
+                        Alt.Server.LogWarning($"Player update error for: {Client.GetSocialClub()} - {Identite.Name}");
+
+                    _updateWaiting = false;
+                }
+                catch (Exception ex)
+                {
+                    Alt.Server.LogError($"PlayerHandler.SaveAsync() - {Client.GetSocialClub()}, {Identite.Name} - {ex}");
+                }
+            });
+        }
+        #endregion
     }
 }

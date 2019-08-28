@@ -3,6 +3,7 @@ using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
 using System;
 using System.Linq;
@@ -43,7 +44,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Method
-        public Models.ItemStack[] FindAllItemWithType(ItemID itemID)
+        public ItemStack[] FindAllItemWithType(ItemID itemID)
         {
             return Array.FindAll(InventoryList, x => x?.Item.id == itemID);
         }
@@ -51,11 +52,13 @@ namespace ResurrectionRP_Server.Inventory
         public double CurrentSize()
         {
             double currentSize = 0;
+
             foreach (Models.ItemStack itemStack in InventoryList)
             {
                 if (itemStack != null && itemStack.Item != null)
                     currentSize += (itemStack.Item.weight * itemStack.Quantity);
             }
+
             return (currentSize);
         }
 
@@ -63,6 +66,7 @@ namespace ResurrectionRP_Server.Inventory
         {
             if (CurrentSize() + itemsize <= MaxSize)
                 return false;
+
             return true;
         }
 
@@ -70,8 +74,10 @@ namespace ResurrectionRP_Server.Inventory
         {
             foreach (Models.ItemStack itemStack in InventoryList)
             {
-                if (itemStack != null) return false;
+                if (itemStack != null)
+                    return false;
             }
+
             return true;
         }
 
@@ -81,9 +87,11 @@ namespace ResurrectionRP_Server.Inventory
             {
                 if (message)
                     client.Emit("Display_Help", "Vous venez d'ajouter " + quantity + " " + item.name + " dans l'inventaire", 10000);
-                await PlayerManager.GetPlayerByClient(client)?.UpdatePlayerInfo();
+
+                await PlayerManager.GetPlayerByClient(client)?.Update();
                 return true;
             }
+
             return false;
         }
 
@@ -95,7 +103,9 @@ namespace ResurrectionRP_Server.Inventory
         public bool AddItem(Models.Item item, int quantity, out int slot)
         {
             slot = -1;
-            if (CurrentSize() + (item.weight * quantity) > MaxSize) return false;
+
+            if (CurrentSize() + (item.weight * quantity) > MaxSize)
+                return false;
 
             if (InventoryList.Any(x => x?.Item.id == item.id) && item.isStackable)
             {
@@ -105,11 +115,13 @@ namespace ResurrectionRP_Server.Inventory
             else
             {
                 slot = GetEmptySlot();
+
                 if (slot == -1)
                     return false;
 
                 InventoryList[slot] = new Models.ItemStack(item, quantity, slot);
             }
+
             return true;
         }
 
@@ -123,9 +135,10 @@ namespace ResurrectionRP_Server.Inventory
         }
 
         public void Clear() => new Inventory(MaxSize, MaxSlot);
+
         public void Clear(int newsize, int maxSlot) => new Inventory(newsize, maxSlot);
 
-        public bool Delete(Models.ItemStack itemStack, int quantity = 1)
+        public bool Delete(ItemStack itemStack, int quantity = 1)
         {
             try
             {
@@ -149,6 +162,7 @@ namespace ResurrectionRP_Server.Inventory
             try
             {
                 var itemStack = InventoryList[slot];
+
                 if (itemStack.Quantity > quantity)
                     itemStack.Quantity -= quantity;
                 else
@@ -156,6 +170,7 @@ namespace ResurrectionRP_Server.Inventory
                     itemStack.Quantity = 0;
                     InventoryList[slot] = null;
                 }
+
                 return true;
             }
             catch (Exception ex)
@@ -168,6 +183,7 @@ namespace ResurrectionRP_Server.Inventory
         public int DeleteAll(ItemID itemID, int quantityNeeded)
         {
             var value = quantityNeeded;
+
             for (int i = 0; i < InventoryList.Length; i++)
             {
                 if (InventoryList[i] != null)
@@ -190,6 +206,7 @@ namespace ResurrectionRP_Server.Inventory
                     }
                 }
             }
+
             return quantityNeeded - value; // valeur supprimer
         }
 
@@ -200,6 +217,7 @@ namespace ResurrectionRP_Server.Inventory
                 if (item.id == id)
                     return item;
             }
+
             return null;
         }
 
@@ -216,38 +234,42 @@ namespace ResurrectionRP_Server.Inventory
         public bool HasItemID(ItemID id)
         {
             if (InventoryList.Any(x => x?.Item.id == id))
-            {
                 return true;
-            }
+
             return false;
         }
 
         public bool HasItem(Models.Item item)
         {
             if (InventoryList.Any(x => x?.Item.id == item?.id))
-            {
                 return true;
-            }
+
             return false;
         }
 
         public int CountItem(Models.Item item)
         {
             int a = 0;
+
             foreach (Models.ItemStack invItem in InventoryList)
             {
-                if (invItem != null && invItem.Item.id == item.id) a += invItem.Quantity;
+                if (invItem != null && invItem.Item.id == item.id)
+                    a += invItem.Quantity;
             }
+
             return a;
         }
 
         public int CountItem(ItemID itemID)
         {
             int a = 0;
+
             foreach (Models.ItemStack invItem in InventoryList)
             {
-                if (invItem != null && invItem.Item.id == itemID) a += invItem.Quantity;
+                if (invItem != null && invItem.Item.id == itemID)
+                    a += invItem.Quantity;
             }
+
             return a;
         }
 
@@ -258,6 +280,7 @@ namespace ResurrectionRP_Server.Inventory
                 if (InventoryList[i] == stack)
                     return i;
             }
+
             return -1;
         }
         #endregion

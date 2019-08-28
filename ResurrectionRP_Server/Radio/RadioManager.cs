@@ -156,7 +156,7 @@ namespace ResurrectionRP_Server.Radio
                     try
                     {
                         radio.SaveFrequeceRadio(Convert.ToInt32(args[2].ToString()), Convert.ToDouble(args[3]));
-                        await player.GetPlayerHandler()?.Save();
+                        await player.GetPlayerHandler()?.Update();
                     }
                     catch
                     {

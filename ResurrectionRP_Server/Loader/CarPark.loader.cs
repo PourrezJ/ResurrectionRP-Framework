@@ -17,14 +17,14 @@ namespace ResurrectionRP_Server.Loader
     }
     class CarParkLoader
     {
-
         private static string _basePath = $"parkings{Path.DirectorySeparatorChar}";
 
         public static async Task LoadAllCarPark()
         {
             Alt.Server.LogColored("~w~----- ~b~ Parkings ~w~| Loading all parking ... ------");
 
-            if (!Directory.Exists(MakePath())) Directory.CreateDirectory(MakePath());
+            if (!Directory.Exists(MakePath()))
+                Directory.CreateDirectory(MakePath());
 
             string[] files = Directory.GetFiles(MakePath(), "*.json");
 
@@ -37,15 +37,14 @@ namespace ResurrectionRP_Server.Loader
                         string _name = Path.GetFileNameWithoutExtension(file).Replace('_', ' ');
                         CarParkModel _carParkModel = JsonConvert.DeserializeObject<CarParkModel>(File.ReadAllText(file));
                         Services.CarPark carpark = null;
+
                         if (await Services.CarPark.HasCarPark(_carParkModel.ID))
-                        {
                             carpark = await Services.CarPark.LoadCarPark(_carParkModel.ID, _carParkModel.Borne, _carParkModel.Spawn1, _carParkModel.Spawn2);
-                        }
                         else
                         {
                             carpark = await Services.CarPark.CreateCarPark(_carParkModel.ID, _name, _carParkModel.Borne, _carParkModel.Spawn1, _carParkModel.Spawn2);
                             Alt.Server.LogColored("~b~CarPark.Loader.cs ~w~| New carpark()");
-                            //MP.Logger.Info($"Car Park {_name} vient d'être ajouté!");
+                            //Alt.Server.LogInfo($"Car Park {_name} vient d'être ajouté!");
                         }
                         Models.Parking.ParkingList.Add(carpark.Parking);
                     }

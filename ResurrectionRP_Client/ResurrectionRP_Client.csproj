@@ -288,7 +288,6 @@
     <Content Include="cef\radio\img\talkbg.png" />
     <Content Include="cef\radio\index.html" />
     <Content Include="cef\radio\js\app.js" />
-    <Content Include="cef\SaltyWebSocket.html" />
     <Content Include="cef\speedometer\css\style.css" />
     <Content Include="cef\speedometer\img\compteur-on.png" />
     <Content Include="cef\speedometer\img\compteur.png" />
@@ -302,6 +301,8 @@
     <Content Include="cef\speedometer\img\speed-bg.png" />
     <Content Include="cef\speedometer\js\app.js" />
     <Content Include="cef\speedometer\speedometer.html" />
+    <Content Include="cef\voice\app.js" />
+    <Content Include="cef\voice\index.html" />
     <Content Include="cef\xtrem\css\style.css" />
     <Content Include="cef\xtrem\js\app.js" />
     <Content Include="cef\xtrem\playerMenu.html" />

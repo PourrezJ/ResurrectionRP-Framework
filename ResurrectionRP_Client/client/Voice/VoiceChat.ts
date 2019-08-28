@@ -28,7 +28,7 @@ export class VoiceChat
             this.ingameChannelPassword = ingameChannelPassword;
 
             if (this.view == null) {
-                this.view = new alt.WebView("http://resources/resurrectionrp/client/cef/SaltyWebSocket.html");
+                this.view = new alt.WebView("http://resources/resurrectionrp/client/cef/voice/index.html");
             }
 
             alt.setInterval(() => {

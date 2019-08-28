@@ -12,8 +12,8 @@ var loading;
 export function initialize() {
     alt.onServer("setWaypoint", (posx: number, posy: number, override: boolean) => {
         game.setNewWaypoint(posx, posy);
-        if (game.isWaypointActive() && override == true || !game.isWaypointActive() && override == false)
-            game.setNewWaypoint(posx, posy);
+/*        if (game.isWaypointActive() && override == true || !game.isWaypointActive() && override == false)
+            game.setNewWaypoint(posx, posy);*/
     });
     alt.onServer('SetPlayerIntoVehicle', (vehicle, seat) => {
         alt.setTimeout(() => {
@@ -53,6 +53,9 @@ export function initialize() {
     });
 
     alt.onServer('Display_subtitle', (text, time) => {
+        new Subtitle(text, time);
+    });
+    alt.on('Display_subtitle', (text, time) => {
         new Subtitle(text, time);
     });
 
@@ -308,4 +311,12 @@ export function GetCameraDirection() {
         z = z / len;
     }
     return new alt.Vector3(x, y, z);
+}
+
+export function ArrayRemove(arr, value) {
+
+    return arr.filter(function (ele) {
+        return ele != value;
+    });
+
 }

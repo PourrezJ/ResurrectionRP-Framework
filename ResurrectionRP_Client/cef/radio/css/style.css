@@ -1,0 +1,257 @@
+/* style.css */
+
+@font-face {
+    font-family: 'OpenDisplaySt';
+    src: url('../fonts/OpenDisplaySt.ttf');
+}
+
+.talky {
+    background: url('../img/talkbg.png') no-repeat center top;
+    height: 741px;
+    width: 261px;
+    bottom: 30px;
+    position: absolute;
+    right: 30px;
+}
+
+.content {
+    height: 383px;
+    width: 171px;
+    position: absolute;
+    bottom: 86px;
+    left: 45px;
+}
+
+.clavier {
+    height: 145px;
+    top: 130px;
+    width: 100%;
+    position: absolute;
+    text-align: center;
+    padding-top: 9px;
+}
+
+.frequence {
+    font-family: 'OpenDisplaySt';
+    font-size: 35px;
+    color: #08170c;
+    width: 139px;
+    height: 103px;
+    top: 26px;
+    left: 16px;
+    position: absolute;
+    /*line-height: 103px;*/
+    text-align: center;
+}
+
+.frequence.blink_me {
+    animation: blink 0.7s linear 0s 2;
+}
+
+.frequence label {
+    width: 20px;
+    font-size: 35px;
+    padding: 0;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    margin: 0;
+    position: absolute;
+    top: 28px;
+    left: 0px;
+    text-align: right;
+}
+
+.frequence label span {
+    text-align: left;
+}
+
+.frequence input {
+    background-color: transparent;
+    border: 0;
+    font-size: 35px;
+    font-family: 'OpenDisplaySt';
+    color: #08170c;
+    width: 90px;
+    height: 40px;
+    text-align: center;
+    position: absolute;
+    top: 28px;
+    left: 25px;
+    padding: 0;
+    margin: 0;
+    outline: none;
+}
+
+.frequence input::-webkit-outer-spin-button,
+.frequence input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.frequence input::placeholder {
+    background-color: transparent;
+    color: #08170c;
+}
+
+.col-but {
+    width: 138px;
+    margin: 0 auto;
+    height: 39px;
+}
+
+.col-but a.button {
+height: 39px;
+float: left;
+}
+
+.col-but a.button.grey.up {
+    margin-left: 0;
+}
+
+.col-but a.button.grey.up i {
+    margin-top: 12px;
+}
+
+.col-but a.button.grey i {
+    vertical-align: middle;
+}
+
+.col-but a.button.grey {
+    width: 26%;
+    background: #141414;
+    margin: 0 1.3333%;
+    /*line-height: 39px;*/
+    vertical-align: middle;
+    font-size: 23px;
+}
+
+.col-but a.button.color, .col-main a.button.color {
+    width: 20%;
+    line-height: 39px;
+    margin: 0 1.3333%;
+    font-size: 9px;
+    box-shadow: 0px 3px 2.58px 0.42px rgba(0, 0, 0), inset 0px 2px 1.66px 0.34px rgba(255, 255, 255, 0.25);
+}
+
+.col-main a.button.grey {
+    background: #141414;
+    margin: 0 1.3333%;
+    float: left;
+    height: 79px;
+    width: 67px;
+    line-height: 79px;
+}
+
+.col-main a.button.grey.on {
+    margin-left: 0;
+}
+
+.col-main a.button.grey.muted {
+    margin-right: 0;
+}
+
+.col-but a.button.color.yellow {
+    background-color: #d0b63b;
+}
+
+.col-but a.button.color.red {
+    margin-right: 0;
+    background-color: #cb3d3d;
+}
+
+a.button {
+    border: 0;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0px 3px 2.58px 0.42px rgba(0, 0, 0),inset 0px 2px 1.66px 0.34px rgba(255, 255, 255, 0.1);
+}
+
+a.button:active {
+    box-shadow: 0px 3px 2.58px 0.42px rgba(0, 0, 0, 0), inset 0px 2px 1.66px 0.34px rgb(0, 0, 0);
+}
+
+a.button.color:active {
+    box-shadow: 0px 3px 2.58px 0.42px rgba(0, 0, 0, 0.45), inset 0px 2px 1.66px 0.34px rgba(0, 0, 0, 0.56);
+}
+
+.col-main {
+    width: 138px;
+    margin: 0 auto;
+    height: 39px;
+    margin-top: 10px;
+}
+
+.col-main svg {
+    margin-bottom: -5px;
+    width: 20px;
+    height: auto;
+}
+
+.col-main svg path, rect {
+    fill: #fff;
+}
+
+.volume {
+    position: absolute;
+    bottom: 526px;
+    right: 188px;
+}
+
+.volume a.moins {
+    height: 18px;
+    width: 26px;
+    background: url('../img/-.png') center top no-repeat;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.volume a.moins:active {
+    height: 14px;
+}
+
+.volume a.plus {
+    height: 18px;
+    width: 26px;
+    background: url('../img/+.png') center top no-repeat;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.volume a.plus:active {
+    height: 14px;
+}
+
+.jack {
+    position: absolute;
+    right: 120px;
+}
+
+a.jack:hover {
+    top: 81px;
+}
+
+.jax .cache {
+    height: 75px;
+    width: 31px;
+    left: 114px;
+    top: 193px;
+    z-index: 9999;
+    position: absolute;
+    background: url('../img/cache.png');
+}
+
+@keyframes blink {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: .5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

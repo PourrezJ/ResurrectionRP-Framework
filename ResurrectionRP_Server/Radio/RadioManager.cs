@@ -91,12 +91,8 @@ namespace ResurrectionRP_Server.Radio
         public static async Task Close(IPlayer client)
         {
             Radio radio = null;
-            _clientMenus.TryGetValue(client, out radio);
-
-            if (radio == null)
-                return;
-
-            await radio.HideRadio(client);
+            if (_clientMenus.TryGetValue(client, out radio))
+                await radio.HideRadio(client);
         }
 
         public static async Task<bool> OpenRadio(IPlayer client, Radio radio)
@@ -112,7 +108,7 @@ namespace ResurrectionRP_Server.Radio
             if (_clientMenus.TryAdd(client, radio))
             {
                 await radio.OpenRadio(client);
-                await client.EmitAsync("showCursor", true);
+               // await client.EmitAsync("showCursor", true);
                 return true;
             }
             return false;

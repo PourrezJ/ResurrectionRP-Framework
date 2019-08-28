@@ -84,7 +84,6 @@ namespace ResurrectionRP_Server.DrivingSchool
 
         private async void VehicleChecker(IPlayer client, object[] args)
         {
-            Alt.Server.LogColored("~grey~DrivingSchool ~w~| Trigger the checker | " + args[0]);
             if ( (Int64) args[0] > this.Trajectoire[this.CurrentCheckpoint].Speed)
             {
                 await client.SendNotificationError("Votre vitesse est bien trop excessive ! Ralentissez bon sang !");

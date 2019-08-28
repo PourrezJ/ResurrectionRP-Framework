@@ -17,6 +17,7 @@ using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Utils.Extensions;
 using AltV.Net.Enums;
+using SaltyServer;
 
 namespace ResurrectionRP_Server
 {
@@ -52,6 +53,9 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public List<IPlayer> PlayerList = new List<IPlayer>();
 
+        [BsonIgnore]
+        public IVoiceChannel GlobalVoiceChannel { get; private set; }
+
 
         public static short GlobalDimension = short.MaxValue;
 
@@ -62,6 +66,8 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public VehiclesManager VehicleManager { get; private set; }
 
+        [BsonIgnore]
+        public Jobs.JobsManager JobsManager { get; private set; }
 
         // Menus
         [BsonIgnore]
@@ -82,10 +88,14 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public Phone.PhoneManager PhoneManager { get; private set; }
 
+        [BsonIgnore]
+        public Voice VoiceController { get; private set; }
+
         public static bool ServerLock;
 
         public Time Time { get; set; }
         public bool ModeAutoFourriere { get; internal set; }
+        
         #endregion
 
         #region Static
@@ -136,6 +146,8 @@ namespace ResurrectionRP_Server
             XMenuManager = new XMenuManager.XMenuManager();
             WeatherManager = new Weather.WeatherManager();
             DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
+            JobsManager = new Jobs.JobsManager();
+            VoiceController = new Voice();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
             if (Time == null)
@@ -148,7 +160,10 @@ namespace ResurrectionRP_Server
             await VehicleManager.LoadAllVehiclesActive();
             await Loader.ClothingLoader.LoadAllCloth();
             await WeatherManager.InitWeather();
+            await JobsManager.Init();
             await DrivingSchoolManager.InitAll();
+
+            VoiceController.OnResourceStart();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
             Events.Initialize();

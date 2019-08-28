@@ -47,14 +47,14 @@ namespace ResurrectionRP_Server.Radio
         {
             Owner = client;
             if (Favoris == null) return;
-            await Owner.EmitAsync("OpenRadio", JsonConvert.SerializeObject(this));
+            await Owner.EmitAsync("OpenRadio", JsonConvert.SerializeObject(Favoris), Frequence);
 
             Owner.GetPlayerHandler()?.PlayAnimation((await Owner.GetVehicleAsync() != null) ? "cellphone@in_car@ds" : (await Owner.GetModelAsync() == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_read_base", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.Loop | AnimationFlags.SecondaryTask));
         }
 
         public async Task HideRadio(IPlayer client)
         {
-            await client.EmitAsync("RadioManager_Hide");
+            await client.EmitAsync("HideRadio");
             await client.GetPlayerHandler().PlayAnimation((await Owner.GetVehicleAsync() != null) ? "cellphone@in_car@ds" : (await client.GetModelAsync() == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_out", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody));
         }
 

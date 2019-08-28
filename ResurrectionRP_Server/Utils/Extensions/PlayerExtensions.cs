@@ -49,6 +49,9 @@ namespace ResurrectionRP_Server
         public async static Task setWaypoint(this IPlayer client, Vector3 pos, bool overrideOld = true) => 
             await client.EmitAsync("setWaypoint", pos.X, pos.Y, overrideOld);
 
+        public async static Task displayHelp(this IPlayer client, string text, int timems) =>
+            await client.EmitAsync("Display_Help", text, timems);
+
         public static PlayerHandler GetPlayerHandler(this IPlayer client)
         {
             if (client == null || !client.Exists)

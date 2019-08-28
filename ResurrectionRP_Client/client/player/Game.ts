@@ -13,7 +13,9 @@ import { Interaction as InteractionLib } from 'client/Player/Interaction';
 import { Doors as DoorsManagerLib } from 'client/Env/Doors';
 import { PhoneManager } from 'client/phone/PhoneManager';
 import { DrivingSchool } from 'client/DrivingSchool';
-
+import { RadioManager } from 'client/menus/RadioManager';
+import { DustManManager } from 'client/Jobs/DustManManager';
+import { VoiceChat } from 'client/Voice/VoiceChat';
 
 export class Game {
     //region Static Var
@@ -65,6 +67,12 @@ export class Game {
     private _Inventory: RPGInventoryManager;
     public get Inventory(): RPGInventoryManager { return this._Inventory; }
 
+    private _Voice: VoiceChat;
+    public get Voice(): VoiceChat { return this._Voice; }
+
+    private _Radio: RadioManager;
+    public get Radio(): RadioManager { return this._Radio; }
+
     //End region pools
     //constructor
     constructor(
@@ -96,6 +104,7 @@ export class Game {
             new InteractionLib();
             new PhoneManager();
             new DrivingSchool();
+            new DustManManager();
 
             game.setAudioFlag('LoadMPData', true);
             game.setAudioFlag('DisableFlightMusic', true);
@@ -111,10 +120,12 @@ export class Game {
             alt.log('Données chargées');
 
             alt.log('Chargement des pools');
+            this._Voice = new VoiceChat();
             this._Hud = new HudLib(Money);
             this._Doors = new DoorsManagerLib();
             this._Inventory = new RPGInventoryManager();
             this._Weather = new WeatherLib(Weather, WeatherWind, WeatherWindDirection);
+            this._Radio = new RadioManager();
             alt.log('Chargement des pools done');
 
             alt.log("Chargement des stats");
@@ -139,7 +150,6 @@ export class Game {
         alt.on("update", () => {
             //game.disableControlAction(0, 75, true);
             //game.disableControlAction(0, 58, true);
-
             this._Time.OnTick();
 
             // HUD

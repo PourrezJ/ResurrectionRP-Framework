@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Launcher - GTA RP</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+
+
+    <script src="../../lib/js/jquery.min.js"></script>
+    <script src="js/app.js"></script>
+</head>
+<body>
+    <div class="talky">
+        <div class="content">
+            <div class="frequence" style="display:none;">
+                <label id="lblFrequence"><span id="channelFrequence">1</span>:</label>
+                <input type="number" maxlength="6" min="136" max="174" step="0.01" id="inputFrequence" onchange="changeFrequence()" onfocus="mp.trigger('CanClose', false);"/>
+            </div>
+            <div class="clavier">
+                <div class="col-but" id="btnFrequence">
+                    <a class="grey up button" id="upFrequence" onclick="upFrequence(); mp.trigger('CanClose', true);"><i class="fas fa-sort-up"></i></a>
+                    <a class="grey down button" id="downFrequence" onclick="downFrequence(); mp.trigger('CanClose', true);"><i class="fas fa-sort-down"></i></a>
+                    <a class="color spefunction yellow button" onclick="saveFrequence(); mp.trigger('CanClose', true);"><i class="fas fa-star"></i></a>
+                    <a class="color spefunction red button" onclick="deleteFrequence(); mp.trigger('CanClose', true);"><i class="fas fa-trash"></i></a>
+                </div>
+                <div class="col-main">
+                    <a class="button grey on" onclick="onOffRadio(); mp.trigger('CanClose', true);"><i class="fas fa-power-off"></i></a>
+                    <a class="button grey muted"><svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 381.73 353.33"><title>muted</title><path d="M392,135V407.86c0,17.41-21.07,26-33.27,13.78l-72.27-72.25H203.53A19.48,19.48,0,0,1,184,329.9v-117a19.49,19.49,0,0,1,19.49-19.49h82.89l72.27-72.25C370.88,109,392,117.55,392,135Z" transform="translate(-133.34 -99.44)" /><rect x="303.21" y="36.95" width="42" height="478.31" transform="translate(176.42 -248.94) rotate(47.64)" /></svg></a>
+                </div>
+            </div>
+        </div>
+        <div class="volume">
+            <a class="plus" onclick="volumeUP();"></a>
+            <a class="moins" onclick="volumeDown();"></a>
+        </div>
+        <!--<div class="jax">
+            <div class="cache"></div>
+            <a class="jack"><img src="img/jack.png"></a>
+        </div>-->
+    </div>
+
+    <script src="https://unpkg.com/ionicons@4.1.2/dist/ionicons.js"></script>
+
+</body>
+</html>

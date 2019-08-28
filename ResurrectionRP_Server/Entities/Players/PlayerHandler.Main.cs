@@ -243,9 +243,6 @@ namespace ResurrectionRP_Server.Entities.Players
                 await GameMode.Instance.VoiceController.OnPlayerConnected(client);
                 //await GameMode.Instance.IllegalManager.OnPlayerConnected(client);
 
-                GameMode.Instance.GlobalVoiceChannel.AddPlayer(Client);
-
->>>>>>> Stashed changes
                 await Task.Delay(500);
 
                 if (firstspawn)

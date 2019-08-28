@@ -141,7 +141,7 @@ namespace ResurrectionRP_Server.DrivingSchool
 
                 if (await ClientIsInExamen(client))
                 {
-                    await client.SendNotificationPicture("Vous êtes déjà en examen! Vous voulez abandonner et rester où est la voiture!?", Utils.Enums.CharPicture.CHAR_ANTONIA, false, 0, "Auto-école", "Secrétaire");
+                    await client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANTONIA, "Auto-école", "Secrétaire", "Vous êtes déjà en examen! Vous voulez abandonner et rester où est la voiture!?");
                     drivingschoolmenu.Add(new MenuItem("Abandonner l'examen.", "Permet de recommencer l'examen.", "ID_Cancel", true));
                 }
                 else
@@ -150,7 +150,7 @@ namespace ResurrectionRP_Server.DrivingSchool
                         drivingschoolmenu.Add(new MenuItem("Permis Voiture", $"Passer le permis voiture pour la somme de ~r~${Price} ~w~prélevée au début de l'examen.", "ID_Car", true, rightLabel: $"${Price}"));
                     else
                     {
-                        await client.SendNotificationPicture("MAIS VOUS AVEZ DEJA VOTRE PERMIS ?!", Utils.Enums.CharPicture.CHAR_ANTONIA, false, 0, "Auto-école", "Secrétaire");
+                        await client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANTONIA, "Auto-école", "Secrétaire", "MAIS VOUS AVEZ DEJA VOTRE PERMIS ?!");
                         return;
                     }
                 }
@@ -185,7 +185,7 @@ namespace ResurrectionRP_Server.DrivingSchool
                 {
                     if (await ph.HasMoney(Price))
                     {
-                        await client.SendNotificationPicture("Votre examen de conduite commence! Vous avez le droit à ~r~5 erreurs~w~.", Utils.Enums.CharPicture.CHAR_ANDREAS, false, 0, "Auto-école", "Examinateur");
+                        await client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANDREAS, "Auto-école", "Examinateur", "Votre examen de conduite commence! Vous avez le droit à ~r~5 erreurs~w~.");
                         await BeginDrivingExamen(client);
                     }
                     else

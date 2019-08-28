@@ -1,6 +1,6 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import * as Utils from 'utils';
+import * as Utils from 'client/Utils/utils';
 
 export class VoiceChat
 {
@@ -15,11 +15,27 @@ export class VoiceChat
 
     public deadplayers: string[];
     public radioChannel: string;
-    public nextUpdate: Date;
 
     constructor()
     {
-        alt.onServer('Voice_Initialize', this.Voice_Initialize);
+        alt.onServer('Voice_Initialize', (serverUniqueIdentifier: string, requiredBranch: string, minimumVersion: string, soundPack: string, ingameChannel: number, ingameChannelPassword: string) =>
+        {
+            this.serverUniqueIdentifier = serverUniqueIdentifier;
+            this.requiredBranch = requiredBranch;
+            this.minimumVersion = minimumVersion;
+            this.soundPack = soundPack;
+            this.ingameChannel = ingameChannel;
+            this.ingameChannelPassword = ingameChannelPassword;
+
+            if (this.view == null) {
+                this.view = new alt.WebView("http://resources/resurrectionrp/client/cef/SaltyWebSocket.html");
+            }
+
+            alt.setInterval(() => {
+
+            }, 300);
+        });
+
         alt.onServer('Player_Disconnected', this.Player_Disconnected);
         alt.onServer('Voice_IsTalking', this.OnPlayerTalking);
         alt.onServer('Voice_EstablishedCall', this.OnEstablishCall);
@@ -28,25 +44,6 @@ export class VoiceChat
         alt.onServer('Voice_TalkingOnRadio', this.OnPlayerTalkingOnRadio);
         alt.onServer('Player_Died', this.OnPlayerDied);
         alt.onServer('Player_Revived', this.OnPlayerRevived);
-    }
-
-    private Voice_Initialize(serverUniqueIdentifier: string, requiredBranch: string, minimumVersion: string, soundPack: string, ingameChannel: number, ingameChannelPassword: string)
-    {
-        this.serverUniqueIdentifier = serverUniqueIdentifier;
-        this.requiredBranch = requiredBranch;
-        this.minimumVersion = minimumVersion;
-        this.soundPack = soundPack;
-        this.ingameChannel = ingameChannel;
-        this.ingameChannelPassword = ingameChannelPassword;
-
-        if (this.view == null) {
-            this.view = new alt.WebView("http://resources/resurrectionrp/client/cef/SaltyWebSocket.html");
-        }
-
-        alt.setInterval(() =>
-        {
-            
-        }, 300);
     }
 
     private Player_Disconnected(playerName : string)

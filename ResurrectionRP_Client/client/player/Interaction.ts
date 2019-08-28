@@ -2,7 +2,7 @@
 import * as game from 'natives';
 import Raycast, * as raycast from 'client/Utils/Raycast';
 import * as chat from 'client/chat/chat';
-import * as Utils from 'client/utils';
+import * as Utils from 'client/Utils/utils';
 
 /*
  * POUR LE RAY CAST LES FLAGS

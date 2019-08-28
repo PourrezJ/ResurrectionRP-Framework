@@ -103,7 +103,7 @@
     <TypeScriptCompile Include="client\Voice\VoiceChat.ts" />
     <TypeScriptCompile Include="typings\altv-client.d.ts" />
     <TypeScriptCompile Include="typings\natives.d.ts" />
-    <TypeScriptCompile Include="client\utils.ts" />
+    <TypeScriptCompile Include="client\Utils\Utils.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="cef\chat\app.js" />

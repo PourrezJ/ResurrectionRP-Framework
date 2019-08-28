@@ -21,8 +21,13 @@
         let packetsReceived = 0;
         let lastCommand = "";
 
-        function connect(){
-            window.webSocket = new window.WebSocket(`ws://${pluginAddress}/`);
+        function connect() {
+            try {
+                 window.webSocket = new window.WebSocket(`ws://${pluginAddress}/`);
+            } catch (ex) {
+                console.log(ex);
+            }
+           
 
             webSocket.onmessage = function (evt) {
                 let object = JSON.parse(evt.data);
@@ -59,6 +64,10 @@
 
                 connect();
             }
+
+            webSocket.onerror = function(error) {
+                console.error(error);
+            };
         }
 
         function setWebSocketAddress(address)

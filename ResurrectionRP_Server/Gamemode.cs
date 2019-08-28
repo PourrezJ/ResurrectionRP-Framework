@@ -16,6 +16,7 @@ using ResurrectionRP_Server;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Utils.Extensions;
 using AltV.Net.Enums;
+using SaltyServer;
 
 namespace ResurrectionRP_Server
 {
@@ -82,10 +83,14 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public Phone.PhoneManager PhoneManager { get; private set; }
 
+        [BsonIgnore]
+        public Voice VoiceController { get; private set; }
+
         public static bool ServerLock;
 
         public Time Time { get; set; }
         public bool ModeAutoFourriere { get; internal set; }
+        
         #endregion
 
         #region Static
@@ -136,6 +141,7 @@ namespace ResurrectionRP_Server
             XMenuManager = new XMenuManager.XMenuManager();
             WeatherManager = new Weather.WeatherManager();
             DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
+            VoiceController = new Voice();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
             if (Time == null)
@@ -149,6 +155,8 @@ namespace ResurrectionRP_Server
             await Loader.ClothingLoader.LoadAllCloth();
             await WeatherManager.InitWeather();
             await DrivingSchoolManager.InitAll();
+
+            VoiceController.OnResourceStart();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
             new EventsHandler.Events();

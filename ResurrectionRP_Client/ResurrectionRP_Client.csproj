@@ -39,7 +39,7 @@
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptOutFile />
-    <TypeScriptOutDir>C:\altv\server-files\resources\resurrectionrp\client</TypeScriptOutDir>
+    <TypeScriptOutDir>bin\</TypeScriptOutDir>
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptSourceMap>False</TypeScriptSourceMap>
@@ -407,6 +407,9 @@
   <ItemGroup>
     <Content Include="cef\radio\fonts\OpenDisplaySt.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="post-build.bat" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -434,19 +437,11 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>set ClientDir=C:\altv\server-files\resources\resurrectionrp\client
-rmdir  /S /Q %25ClientDir%25\cef
-rmdir  /S /Q %25ClientDir%25\lib
-mkdir %25ClientDir%25
-mkdir %25ClientDir%25\cef
-mkdir %25ClientDir%25\lib
-xcopy /E /Y  $(TargetDir)\client %25ClientDir%25
-xcopy /E /Y  $(ProjectDir)\cef %25ClientDir%25\cef
-xcopy /E /Y  $(ProjectDir)\lib %25ClientDir%25\lib</PostBuildEvent>
+    <PostBuildEvent>$(ProjectDir)post-build.bat
+</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>rmdir  /S /Q $(TargetDir)\client
-
 </PreBuildEvent>
   </PropertyGroup>
 </Project>

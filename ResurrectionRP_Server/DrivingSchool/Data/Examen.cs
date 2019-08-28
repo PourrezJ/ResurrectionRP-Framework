@@ -79,6 +79,7 @@ namespace ResurrectionRP_Server.DrivingSchool
         {
             await this.PlayerExam.EmitAsync("DrivingSchool_End");
             await this.End();
+            await this.PlayerExam.EmitAsync("deleteWaypoint");
             Alt.Emit("DrivingSchool_End", this.PlayerExam, this.id, this.avert);
         }
 

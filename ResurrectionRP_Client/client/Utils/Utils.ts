@@ -11,10 +11,14 @@ var loading;
 
 export function initialize() {
     alt.onServer("setWaypoint", (posx: number, posy: number, override: boolean) => {
-        game.setNewWaypoint(posx, posy);
-/*        if (game.isWaypointActive() && override == true || !game.isWaypointActive() && override == false)
-            game.setNewWaypoint(posx, posy);*/
+        if (game.isWaypointActive() && override)
+            game.setWaypointOff();
+        if (override && !game.isWaypointActive())
+            game.setNewWaypoint(posx, posy);
     });
+    alt.onServer("deleteWaypoint", () => {
+        game.setWaypointOff();
+    })
     alt.onServer('SetPlayerIntoVehicle', (vehicle, seat) => {
         alt.setTimeout(() => {
             game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle.scriptID, seat);

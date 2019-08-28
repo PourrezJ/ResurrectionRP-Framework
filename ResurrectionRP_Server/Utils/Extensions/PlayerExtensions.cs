@@ -87,7 +87,10 @@ namespace ResurrectionRP_Server
         public async static Task NotifyAsync(this IPlayer client, string text) => await client.SendNotification(text);
         public static List<IVehicle> GetVehiclesInRange(this IPlayer client, int Range)
         {
-            var vehs = Alt.GetAllVehicles();
+            // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
+            // var vehs = Alt.GetAllVehicles();
+            var vehs = Entities.Vehicles.VehiclesManager.GetAllVehicles();
+
             List<IVehicle> endup = new List<IVehicle>();
             var position = client.GetPosition();
             Vector3 osition = new Vector3(position.X, position.Y, position.Z);
@@ -162,7 +165,10 @@ namespace ResurrectionRP_Server
         }
         public static IVehicle GetNearestVehicle(this IPlayer client)
         {
-            var vehs = Alt.GetAllVehicles();
+            // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
+            // var vehs = Alt.GetAllVehicles();
+            var vehs = Entities.Vehicles.VehiclesManager.GetAllVehicles();
+
             IVehicle endup = null;
             var position = client.GetPosition();
             Vector3 osition = new Vector3(position.X, position.Y, position.Z);

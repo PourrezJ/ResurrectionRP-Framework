@@ -362,6 +362,9 @@ namespace ResurrectionRP_Server.Models
 
         public async Task StoreVehicle(IPlayer client, IVehicle vh)
         {
+            if (vh == null)
+                return;
+
             await client.EmitAsync("toggleControl", false);
 
             try

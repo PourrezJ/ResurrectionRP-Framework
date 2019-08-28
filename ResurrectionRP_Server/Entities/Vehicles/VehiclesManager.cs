@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Numerics;
 
@@ -208,11 +209,17 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
 
         public static IVehicle GetNearestVehicle(Vector3 position, float distance = 3.0f, uint dimension = (uint)short.MaxValue)
         {
-            ICollection<IVehicle> vehs = Alt.GetAllVehicles();
+            // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
+            // ICollection<IVehicle> vehs = Alt.GetAllVehicles();
+            ICollection<IVehicle> vehs = GetAllVehicles();
+
             IVehicle nearest = null;
 
             foreach(IVehicle veh in vehs)
             {
+                if (!veh.Exists)
+                    break;
+
                 if (position.DistanceTo2D(veh.Position) > distance)
                     continue;
                 else if (nearest == null)
@@ -224,6 +231,10 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
             return nearest;
         }
 
+        public static ICollection<IVehicle> GetAllVehicles()
+        {
+            return GameMode.Instance.VehicleManager.VehicleHandlerList.Select(v => v.Value.Vehicle).ToArray();
+        }
 
         public static bool IsPlateUnique(string plate) => !GameMode.Instance.PlateList.Exists(x => x == plate);
 

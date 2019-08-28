@@ -228,7 +228,6 @@ namespace ResurrectionRP_Server
                 return;
             }
 
-            Chat.SendChatMessage(player, "Count avant: " + Alt.GetAllVehicles().Count);
             VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), new Vector3(player.Position.X+5, player.Position.Y, player.Position.Z), player.Rotation, locked:false);
 
             Task.Run(async () =>
@@ -246,7 +245,6 @@ namespace ResurrectionRP_Server
                     await vh.InsertVehicle();
                     await ph.Update();
                 }
-                Chat.SendChatMessage(player, "Count après: " + Alt.GetAllVehicles().Count);
             });
         }
 

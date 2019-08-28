@@ -20,6 +20,11 @@ export function initialize() {
             game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle.scriptID, seat);
         }, 20);
     });
+
+    alt.onServer('SetPlayerOutOfVehicle', (force: boolean) => {
+        game.taskLeaveVehicle(alt.Player.local.scriptID, alt.Player.local.vehicle.scriptID, force ? 16 : 0);
+    });
+
     alt.onServer('TrySetPlayerIntoVehicle', (vehicle: alt.Vehicle) => {
         var success: boolean = false;
         var seat: number = game.getVehicleModelNumberOfSeats(vehicle.model);

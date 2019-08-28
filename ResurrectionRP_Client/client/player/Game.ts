@@ -13,8 +13,9 @@ import { Interaction as InteractionLib } from 'client/Player/Interaction';
 import { Doors as DoorsManagerLib } from 'client/Env/Doors';
 import { PhoneManager } from 'client/phone/PhoneManager';
 import { DrivingSchool } from 'client/DrivingSchool';
-import { VoiceChat } from 'client/Voice/VoiceChat';
 import { RadioManager } from 'client/menus/RadioManager';
+import { DustManManager } from 'client/Jobs/DustManManager';
+import { VoiceChat } from 'client/Voice/VoiceChat';
 
 export class Game {
     //region Static Var
@@ -103,6 +104,7 @@ export class Game {
             new InteractionLib();
             new PhoneManager();
             new DrivingSchool();
+            new DustManManager();
 
             game.setAudioFlag('LoadMPData', true);
             game.setAudioFlag('DisableFlightMusic', true);

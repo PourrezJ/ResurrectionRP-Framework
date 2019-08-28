@@ -65,6 +65,8 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public VehiclesManager VehicleManager { get; private set; }
 
+        [BsonIgnore]
+        public Jobs.JobsManager JobsManager { get; private set; }
 
         // Menus
         [BsonIgnore]
@@ -141,6 +143,7 @@ namespace ResurrectionRP_Server
             XMenuManager = new XMenuManager.XMenuManager();
             WeatherManager = new Weather.WeatherManager();
             DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
+            JobsManager = new Jobs.JobsManager();
             VoiceController = new Voice();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
@@ -154,6 +157,7 @@ namespace ResurrectionRP_Server
             await VehicleManager.LoadAllVehiclesActive();
             await Loader.ClothingLoader.LoadAllCloth();
             await WeatherManager.InitWeather();
+            await JobsManager.Init();
             await DrivingSchoolManager.InitAll();
 
             VoiceController.OnResourceStart();
@@ -180,11 +184,6 @@ namespace ResurrectionRP_Server
                 var vehicle = player.GetNearestVehicle();
                 player.Emit("TestOut", 10000);
             });
-
-            Alt.Server.LogColored("~g~Initialisation du système vocal");
-            GlobalVoiceChannel = Alt.CreateVoiceChannel(true, 50);
-            Alt.Server.LogColored("~g~Initialisation du système vocal terminé");
-
             ServerLoaded = true;
         }
 

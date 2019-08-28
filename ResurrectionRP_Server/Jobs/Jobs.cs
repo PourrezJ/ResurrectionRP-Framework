@@ -127,7 +127,7 @@ namespace ResurrectionRP_Server.Jobs
                     client.SendNotificationError("Vous ne pouvez pas avoir de tenue avec ce personnage");
                     break;
             }*/
-            if (VehicleSpawnLocation != null && await VehicleManager.GetVehicleInSpawn(VehicleSpawnLocation.Pos))
+            if (VehicleSpawnLocation != null && VehicleManager.IsVehicleInSpawn(VehicleSpawnLocation.Pos))
             {
                 await client.SendNotificationError($"Un véhicule gêne la sortie de votre véhicule de fonction");
                 return false;

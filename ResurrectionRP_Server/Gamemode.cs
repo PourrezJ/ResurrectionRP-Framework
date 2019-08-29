@@ -63,6 +63,10 @@ namespace ResurrectionRP_Server
 
 
         #region Pools
+
+        [BsonIgnore]
+        public Economy.Economy Economy { get; private set; }
+
         [BsonIgnore]
         public VehiclesManager VehicleManager { get; private set; }
 
@@ -148,6 +152,7 @@ namespace ResurrectionRP_Server
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
             Streamer = new Streamer.Streamer();
+            Economy = new Economy.Economy();
             DoorManager = new Utils.DoorManager();
             PlayerManager = new PlayerManager();
             BanManager = new BanManager();

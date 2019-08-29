@@ -76,6 +76,9 @@ namespace ResurrectionRP_Server
         public XMenuManager.XMenuManager XMenuManager { get; private set; }
 
         [BsonIgnore]
+        public Entities.Peds.PedsManager PedManager { get; private set; }
+
+        [BsonIgnore]
         public DrivingSchool.DrivingSchoolManager DrivingSchoolManager { get; private set; }
 
         [BsonIgnore]
@@ -140,6 +143,7 @@ namespace ResurrectionRP_Server
             PlayerManager = new Entities.Players.PlayerManager();
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();
+            PedManager = new Entities.Peds.PedsManager();
             PhoneManager = new Phone.PhoneManager();
             RPGInventory = new Inventory.RPGInventoryManager();
             MenuManager = new MenuManager();

@@ -31,12 +31,15 @@ export class Interaction {
         alt.log(`Entity Type: ${result.entityType}`);
         alt.log(`Entity Hash: ${result.entityHash}`);
         alt.log(`Key pressed: ${key}`);*/
-            if (key == 69) {// e // F3 : 114
+            if (key == 69) {// E // F3 : 114
                 if (resultVeh.isHit && resultVeh.entityType == 2) {
                     alt.emitServer('OpenXtremVehicle');
                 }
                 if (resultPed.isHit && resultPed.entityType == 1) {
-                    alt.emitServer('OpenXtremPlayer');
+                    var player:alt.Player = alt.Player.all.find(p => p.scriptID == resultPed.hitEntity);
+                    if (player == null || player == undefined)
+                        return;
+                    alt.emitServer('OpenXtremPlayer', player.id);
                 }
             }
             else if (key == 85) { // U

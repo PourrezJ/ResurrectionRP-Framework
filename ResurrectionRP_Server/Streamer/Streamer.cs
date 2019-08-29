@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Numerics;
 using System.Text;
 using Newtonsoft.Json;
-using Ped = ResurrectionRP_Server.Streamer.Data.Ped;
 using Object = ResurrectionRP_Server.Streamer.Data.Object;
 using TextLabel = ResurrectionRP_Server.Streamer.Data.TextLabel;
 using PedType = ResurrectionRP_Server.Streamer.Data.PedType;
@@ -27,7 +26,7 @@ namespace ResurrectionRP_Server.Streamer
         public int StaticEntityNumber = 0;
         public Dictionary<int, object> ListStaticEntities = new Dictionary<int, object>();
 
-        public Streamer()
+        public  Streamer()
         {
             try
             {
@@ -38,7 +37,6 @@ namespace ResurrectionRP_Server.Streamer
 
                 AltNetworking.OnEntityStreamIn = (entity, client) =>
                 {
-
                 };
 
                 AltNetworking.OnEntityStreamOut = (entity, client) =>
@@ -51,29 +49,26 @@ namespace ResurrectionRP_Server.Streamer
                 AltV.Net.Alt.Server.LogError(ex.ToString());
             }
 
-
-
         }
 
-        public int addEntityPed(PedType type, string model, Vector3 pos, float heading)
+        public int addEntityPed(Entities.Peds.Ped ped)
         {
-            var data = new Ped(model, type, heading, this.EntityNumber++);
-            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());
-            this.ListEntities.Add(this.EntityNumber, item);
+            INetworkingEntity item = AltNetworking.CreateEntity(ped.Position.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, ped.export());
+            this.ListEntities.TryAdd(this.EntityNumber, item);
             return this.EntityNumber;
         }
         public int addEntityObject(string model, Vector3 pos)
         {
             var data = new Object(model,  this.EntityNumber++);
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());
-            this.ListEntities.Add(this.EntityNumber, item);
+            this.ListEntities.TryAdd(this.EntityNumber, item);
             return this.EntityNumber;
         }
         public int addEntityTextLabel(string label, Vector3 pos, int font = 1, int r = 255, int g = 255, int b = 255, int a = 255)
         {
             var data = new TextLabel(label, font, r, g, b, a, this.EntityNumber++);
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance / 25, data.export());
-            this.ListEntities.Add(this.EntityNumber, item);
+            this.ListEntities.TryAdd(this.EntityNumber, item);
             return this.EntityNumber;
         }
 
@@ -93,13 +88,13 @@ namespace ResurrectionRP_Server.Streamer
         {
             var data = new Marker(type, scale, r,g,b,a, this.EntityNumber++);
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());
-            this.ListEntities.Add(this.EntityNumber, item);
+            this.ListEntities.TryAdd(this.EntityNumber, item);
             return this.EntityNumber;
         }
 
         public int addStaticEntityBlip(string name, Vector3 pos, int color, int sprite, float scale = 1, bool shortRange = true)
         {
-            this.ListStaticEntities.Add(this.StaticEntityNumber, new Blips(name, pos,color, sprite, scale, shortRange, this.StaticEntityNumber++).export());
+            this.ListStaticEntities.TryAdd(this.StaticEntityNumber, new Blips(name, pos,color, sprite, scale, shortRange, this.StaticEntityNumber++).export());
             return this.StaticEntityNumber;
         }
 

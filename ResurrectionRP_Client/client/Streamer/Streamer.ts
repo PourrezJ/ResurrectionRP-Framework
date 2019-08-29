@@ -1,5 +1,8 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
+import PhoneManager from 'client/phone/PhoneManager';
+import * as chat from 'client/chat/chat';
+import Raycast, * as raycast from 'client/Utils/Raycast';
 
 export class Streamer {
     public StaticEntityList: any[] = [];
@@ -50,12 +53,12 @@ export class Streamer {
                 }
             });
         });
+        alt.on("keydown", this.OnKeyPressed);
     }
 
 
 
     onStreamIn = async (entity: object) => {
-
         switch (entity["data"]["entityType"]["intValue"]) {
             case 0:
                 await alt.loadModelAsync(entity["data"]["model"]["uintValue"]);
@@ -66,7 +69,9 @@ export class Streamer {
                     entity["position"]["x"],
                     entity["position"]["y"],
                     entity["position"]["z"],
-                    entity["data"]["heading"]
+                    entity["data"]["heading"],
+                    entity["data"]["freeze"],
+                    entity["data"]["invicible"]
                 );
                 break;
             case 1:
@@ -124,14 +129,16 @@ export class Streamer {
     private unloadStream = async () => {
         this.EntityList.forEach((item, index) => {
             game.deleteEntity(item);
+            game.deletePed(item);
             this.EntityList[index] = null;
         });
     }
 
-    private streamPed = async (id: number,type: number, model: any, x: number, y: number, z: number, heading: number) => {
-        var entityId = game.createPed(type, model, x,y,z, heading, false, true);
+    private streamPed = async (id: number, type: number, model: any, x: number, y: number, z: number, heading: number, freeze: boolean, invicible: boolean) => {
+        var entityId = game.createPed(type, model, x, y, z, heading, false, true);
+        game.setEntityInvincible(entityId, invicible);
+        //game.freezeEntityPosition(entityId, freeze); // REND LE PED INVISIBLE ???
         this.EntityList[id] = entityId;
-
     }
     private streamObject = async (id: number, model: any, x: number, y: number, z: number) => {
         var entityId = game.createObject(model, x, y, z, false, true, false);
@@ -154,6 +161,40 @@ export class Streamer {
         test.shortRange = shortRange;
         this.StaticEntityList[id] = test;
     }
+
+    private OnKeyPressed = (key: number) => {
+        if (game.isPauseMenuActive() || PhoneManager.IsPhoneOpen() || chat.isOpened())
+            return;
+        if (key != 69 && key != 87)
+            return;
+        let resultPed = Raycast.line(5, 4, alt.Player.local.scriptID);
+        if (!resultPed.isHit)
+            return;
+        alt.log("OnKeyPrssed streamer:");
+        alt.log("Entity script: " + resultPed.hitEntity);
+        alt.log("Entity ID: " + this.getPedId(resultPed.hitEntity));
+        alt.log("Key: " + key);
+        if (key == 69) // E
+        {
+            alt.emitServer("Ped_Interact", this.getPedId(resultPed.hitEntity));
+        }
+        if (key == 87) // W
+        {
+            alt.emitServer("Ped_SecondaryInteract", this.getPedId(resultPed.hitEntity));
+
+        }
+
+    }
+
+    private getPedId = (scriptid: number) => {
+        var indexer = 0;
+        this.EntityList.find((p, index) => {
+            indexer = index;
+            return p == scriptid;
+        });
+        return indexer;
+    }
+
 
     public onStreamDataChange = (entity: object, data: object) => {
         switch (entity["data"]["entityType"]["intValue"]) {

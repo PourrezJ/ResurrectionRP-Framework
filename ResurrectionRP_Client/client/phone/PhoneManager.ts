@@ -2,7 +2,8 @@
 import * as game from 'natives';
 import * as Game from 'client/player/game';
 
-export class PhoneManager {
+var isPhoneOpen: boolean = false;
+export default class PhoneManager {
 
     public browser: alt.WebView = null;
     public LockControls: boolean = false;
@@ -18,6 +19,8 @@ export class PhoneManager {
         alt.logWarning("Opened Phone");
         if (game.isPauseMenuActive())
             return;
+        isPhoneOpen = true;
+        game.freezePedCameraRotation(alt.Player.local.scriptID);
         //Game.Game.closeAllMenus();
         
         game.playEntityAnim(
@@ -121,7 +124,12 @@ export class PhoneManager {
         alt.showCursor(false);
         this.browser.destroy();
         this.browser = null;
-
+        game.freezePedCameraRotation(alt.Player.local.scriptID);
+        isPhoneOpen = false;
         alt.emit("toggleChatAdminRank");
+    }
+
+    public static IsPhoneOpen() {
+        return isPhoneOpen;
     }
 }

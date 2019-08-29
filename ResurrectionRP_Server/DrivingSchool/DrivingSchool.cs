@@ -83,7 +83,7 @@ namespace ResurrectionRP_Server.DrivingSchool
             Examen Examitem = new Examen(client, veh, Circuit, this.ID);
             //Examitem.endExam = End();
             clientsInExamenList.GetOrAdd(client.GetSocialClub(), Examitem);
-            Entities.Players.PlayerManager.GetPlayerByClient(client)?.AddKey(veh, "Auto école");
+            client.GetPlayerHandler()?.AddKey(veh, "Auto école");
             //await client.EmitAsync("BeginDrivingExamen", veh.Vehicle.Id, Circuit, ID);
             
         }
@@ -103,7 +103,7 @@ namespace ResurrectionRP_Server.DrivingSchool
                 {
                     //await client.SendNotificationPicture($"~g~ Vous réussi votre examen avec {advert} faute(s).", Utils.Enums.CharPicture.CHAR_ANDREAS, false, 0, "Auto-école", "Examinateur");
                     await client.SendNotificationSuccess($"~g~ Vous réussi votre examen avec {advert} faute(s).");
-                    Entities.Players.PlayerManager.GetPlayerByClient(client)?.Licenses.Add(new Models.License(SchoolType));
+                    client.GetPlayerHandler()?.Licenses.Add(new Models.License(SchoolType));
                 }
             }
         }
@@ -132,7 +132,7 @@ namespace ResurrectionRP_Server.DrivingSchool
         public async void OpenMenuDrivingSchool(IPlayer client)
         {
 
-            Entities.Players.PlayerHandler ph = Entities.Players.PlayerManager.GetPlayerByClient(client);
+            Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
 
             if (ph != null) 
             {
@@ -163,7 +163,7 @@ namespace ResurrectionRP_Server.DrivingSchool
         private async Task DrivingMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             await MenuManager.CloseMenu(client);
-            Entities.Players.PlayerHandler ph = Entities.Players.PlayerManager.GetPlayerByClient(client);
+            Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
 
             if (ph == null)
                 return;

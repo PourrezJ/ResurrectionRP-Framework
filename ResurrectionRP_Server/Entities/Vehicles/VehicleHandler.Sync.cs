@@ -16,58 +16,6 @@ using System.Threading.Tasks;
 using VehicleInfoLoader.Data;
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
-    public enum WindowID
-    {
-        WindowFrontRight,
-        WindowFrontLeft,
-        WindowRearRight,
-        WindowRearLeft
-    }
-
-    public enum WindowState
-    {
-        WindowFixed,
-        WindowDown,
-        WindowBroken
-    }
-
-    public enum DoorID
-    {
-        DoorFrontLeft,
-        DoorFrontRight,
-        DoorRearLeft,
-        DoorRearRight,
-        DoorHood,
-        DoorTrunk
-    }
-
-    public enum DoorState
-    {
-        DoorClosed,
-        DoorOpen,
-        DoorBroken,
-    }
-
-    public enum WheelID
-    {
-        Wheel0,
-        Wheel1,
-        Wheel2,
-        Wheel3,
-        Wheel4,
-        Wheel5,
-        Wheel6,
-        Wheel7,
-        Wheel8,
-        Wheel9
-    }
-
-    public enum WheelState
-    {
-        WheelFixed,
-        WheelBurst,
-        WheelOnRim,
-    }
 
     public partial class VehicleHandler
     {
@@ -109,9 +57,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public byte RearBumperDamage { get; set; } = 0;
 
 
-        public VehicleDoorState[] Door { get; set; } = new VehicleDoorState[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
+        public VehicleDoorState[] Door { get; set; } = new VehicleDoorState[7];
         public WindowState[] Window { get; set; } = new WindowState[4] { 0, 0, 0, 0 };
-        public WheelState[] Wheel { get; set; } = new WheelState[10] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+        public WheelsStruct Wheel { get; set; } = new WheelsStruct();
+
 
         public Location LastKnowLocation;
         public Location Location
@@ -138,28 +88,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public Attachment Attachment { get; set; }
 
 
-        public VehicleDoorState GetDoorState(VehicleDoor door) => Door[(byte)door];
+        public VehicleDoorState GetDoorState(VehicleDoor door) =>  (VehicleDoorState)Door[(byte)door]; 
 
         public async Task SetDoorState(VehicleDoor door, VehicleDoorState state)
         {
+            Door[(byte)door] = (VehicleDoorState)state;
             await Vehicle.SetDoorStateAsync(door, state);
-            
-            Door[(byte)door] = state;
-            /*
-            if (Vehicle != null && Vehicle.Exists)
-            {
-                var players = AltV.Net.Server.
 
-
-                var players = await MP.Players.GetInRangeAsync(await Vehicle.GetPositionAsync(), Config.GetInt("stream-distance"));
-
-                foreach (var player in players)
-                {
-                    if (!player.Exists)
-                        continue;
-                    await player.CallAsync("VehStream_SetDoorsStatus", Vehicle.Id, door, state);
-                }
-            }*/
         }
     }
 }

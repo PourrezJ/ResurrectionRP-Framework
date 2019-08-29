@@ -194,8 +194,10 @@ namespace ResurrectionRP_Server
             Chat.RegisterCmd("task", async (IPlayer player, string[] args) =>
             {
 
-                //await player.SendNotificationPicture("Vous êtes déjà en examen! Vous voulez abandonner et rester où est la voiture!?", Utils.Enums.CharPicture.CHAR_ANTONIA, false, 0, "Auto-école", "Secrétaire");
-                await player.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANTONIA, "Auto-Ecole", "Secrétaire", "Vous êtes déjà en examen! Vous voulez abandonner et rester où est la voiture!?");
+                if (player.Vehicle == null)
+                    return;
+                Alt.Server.LogError(args[0]);
+                player.Emit("test", args[0]);
 
             });
             ServerLoaded = true;

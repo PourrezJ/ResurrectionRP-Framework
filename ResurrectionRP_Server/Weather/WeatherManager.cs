@@ -53,6 +53,8 @@ namespace ResurrectionRP_Server.Weather
             var players = Alt.GetAllPlayers();
             foreach(IPlayer player in players)
             {
+                if (!player.Exists)
+                    return;
                 await player.EmitAsync("WeatherChange", this.Actual_weather.ToString(), this.Wind, this.WindDirection, this.WeatherTransition);
             }
         }

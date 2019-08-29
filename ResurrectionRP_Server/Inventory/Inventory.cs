@@ -88,7 +88,7 @@ namespace ResurrectionRP_Server.Inventory
                 if (message)
                     client.Emit("Display_Help", "Vous venez d'ajouter " + quantity + " " + item.name + " dans l'inventaire", 10000);
 
-                await PlayerManager.GetPlayerByClient(client)?.Update();
+                await client.GetPlayerHandler()?.Update();
                 return true;
             }
 

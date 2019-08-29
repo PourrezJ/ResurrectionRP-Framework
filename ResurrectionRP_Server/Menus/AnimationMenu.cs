@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Menus
             menu.ClearItems();
             menu.Id = "AnimCategories";
             menu.SubTitle = $"Catégorie pour la touche {_keySelected + 1} : ";
-            PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
+            PlayerHandler ph = client.GetPlayerHandler();
 
             if (ph != null)
             {
@@ -57,7 +57,7 @@ namespace ResurrectionRP_Server.Menus
         {
             if (menuItem == null && menu.Id == "Animation")
             {
-                PlayerManager.GetPlayerByClient(client)?.OpenPlayerMenu();
+                client.GetPlayerHandler()?.OpenPlayerMenu();
                 return;
             }
             else if (menuItem == null && menu.Id == "AnimCategories")
@@ -71,7 +71,7 @@ namespace ResurrectionRP_Server.Menus
                 return;
             }
 
-            PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
+            PlayerHandler ph = client.GetPlayerHandler();
 
             // Callback du choix de la touche
             if (menuItem.Id == "ID_Key")

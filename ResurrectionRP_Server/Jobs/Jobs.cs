@@ -144,7 +144,7 @@ namespace ResurrectionRP_Server.Jobs
                     _veh.SpawnVeh = true;
                     //_veh.OnPlayerEnterVehicle = OnPlayerEnterVehicleJob;
                     AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicleJob;
-                    Entities.Players.PlayerManager.GetPlayerByClient(client)?.AddKey(_veh, "JOB DustMan");
+                    client.GetPlayerHandler()?.AddKey(_veh, "JOB DustMan");
                     _vehicleList.TryAdd(social, _veh);
                 }
                 return true;
@@ -154,7 +154,7 @@ namespace ResurrectionRP_Server.Jobs
 
         public virtual async Task QuitterService(IPlayer client)
         {
-            Entities.Players.PlayerManager.GetPlayerByClient(client)?.Character.ApplyCharacter(client);
+            client.GetPlayerHandler()?.Character.ApplyCharacter(client);
             if (await IsInService(client))
             {
                 var job = await GetJobService(client);
@@ -196,7 +196,7 @@ namespace ResurrectionRP_Server.Jobs
         public async Task RemoveVehiclePlayer(IPlayer client)
         {
             VehicleHandler _veh = await GetJobVehiclePlayer(client);
-            Entities.Players.PlayerManager.GetPlayerByClient(client)?.RemoveKey(_veh);
+            client.GetPlayerHandler()?.RemoveKey(_veh);
             _vehicleList.Remove(client.GetSocialClub());
             await _veh.Delete();
         }

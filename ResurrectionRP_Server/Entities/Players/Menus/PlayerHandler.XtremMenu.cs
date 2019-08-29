@@ -20,7 +20,7 @@ namespace ResurrectionRP_Server.Entities.Players
         public async Task OpenXtremPlayer(IPlayer targetClient)
         {
             TargetClient = targetClient;
-            TargetHandler = PlayerManager.GetPlayerByClient(targetClient);
+            TargetHandler = targetClient.GetPlayerHandler();
             if (TargetHandler == null) return;
 
             XMenu xmenu = new XMenu("PlayerMenu");

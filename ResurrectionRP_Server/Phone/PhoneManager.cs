@@ -154,7 +154,7 @@ namespace ResurrectionRP_Server.Phone
             if (client == null || !client.Exists)
                 return;
 
-            Entities.Players.PlayerHandler ph = Entities.Players.PlayerManager.GetPlayerByClient(client);
+            Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
 
             if (!_ClientPhoneMenu.TryGetValue(client, out Phone phone))
                 return;

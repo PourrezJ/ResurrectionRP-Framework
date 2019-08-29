@@ -154,8 +154,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 for (byte i = 0; i < await Vehicle.GetWheelsCountAsync(); i++)
                 {
-                    Vehicle.SetWheelBurst( i, Wheel.Wheels[i].Burst );
-                    Vehicle.SetWheelHealth(i, Wheel.Wheels[i].Health);
+                    // Vehicle.SetWheelBurst(i, Wheel.Wheels[i].Burst );
+                    // Vehicle.SetWheelHealth(i, Wheel.Wheels[i].Health);
                 }
 
                 for(byte i = 0; i < (byte)VehicleDoor.Trunk; i++)
@@ -192,14 +192,24 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (Vehicle.Exists)
                 await Vehicle.RemoveAsync();
 
-            if (GameMode.Instance.VehicleManager.VehicleHandlerList.Remove(Vehicle, out VehicleHandler _))
+            bool removeOK;
+
+            lock (GameMode.Instance.VehicleManager.VehicleHandlerList)
+            {
+                removeOK = GameMode.Instance.VehicleManager.VehicleHandlerList.Remove(Vehicle, out VehicleHandler _);
+            }
+
+            if (removeOK)
             {
                 if (perm && !SpawnVeh)
                 {
                     if (!await RemoveInDatabase())
                         return false;
 
-                    GameMode.Instance.PlateList.Remove(Plate);
+                    lock (GameMode.Instance.PlateList)
+                    {
+                        GameMode.Instance.PlateList.Remove(Plate);
+                    }
                 }
 
                 return true;

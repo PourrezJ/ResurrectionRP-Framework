@@ -32,9 +32,9 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
 
             for (int i = 0; i < LocationList.Count; i++)
             {
-                var _cardealer = new CarDealerPlace(i, LocationList[i], this);
-                await Respawn(_cardealer);
-                CarDealerPlaces.Add(_cardealer);
+                var place = new CarDealerPlace(i, LocationList[i], this);
+                await Respawn(place);
+                CarDealerPlaces.Add(place);
             }
 
             // Boucle pour vérifier si la place est vide.
@@ -48,7 +48,6 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
             });
         }
 
-
         public async Task Respawn(CarDealerPlace place)
         {
             place.VehicleInfo = VehicleInfoList[Utils.Utils.RandomNumber(VehicleInfoList.Count)];
@@ -57,6 +56,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
             int color1 = (int)colorArray.GetValue(Utils.Utils.RandomNumber(colorArray.Length));
             int color2 = (int)colorArray.GetValue(Utils.Utils.RandomNumber(colorArray.Length));
             VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get((uint)place.VehicleInfo.VehicleHash);
+
             if (manifest != null)
             {
                 place.VehicleHandler = await Entities.Vehicles.VehiclesManager.SpawnVehicle("", (uint)place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot, color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
@@ -80,9 +80,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
                 place.VehicleHandler.Vehicle.SetData("CarDealer", place);
                 place.VehicleHandler.Vehicle.SetData("CarDealerPrice", place.VehicleInfo.Price);
             }
-
         }
-
 
         public async Task BuyCar(CarDealerPlace vehicleplace, Entities.Players.PlayerHandler ph)
         {
@@ -100,6 +98,5 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
             await ph.Client.SendNotificationSuccess($"Vous avez acheté un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");
             CarDealerPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;
         }
-
     }
 }

@@ -161,7 +161,7 @@ namespace ResurrectionRP_Server
             await Loader.ClothingLoader.LoadAllCloth();
             await WeatherManager.InitWeather();
             await JobsManager.Init();
-            await DrivingSchoolManager.InitAll();
+            DrivingSchoolManager.InitAll();
 
             VoiceController.OnResourceStart();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");

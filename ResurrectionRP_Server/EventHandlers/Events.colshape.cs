@@ -11,8 +11,8 @@ namespace ResurrectionRP_Server.EventHandlers
     public static partial class Events
     {
         #region Delegates
-        public delegate Task ColShapePlayerEventHandler(IColShape colShape, IPlayer client);
-        public delegate Task ColShapeVehicleEventHandler(IColShape colShape, IVehicle vehicle);
+        public delegate void ColShapePlayerEventHandler(IColShape colShape, IPlayer client);
+        public delegate void ColShapeVehicleEventHandler(IColShape colShape, IVehicle vehicle);
         #endregion
 
         #region Public events

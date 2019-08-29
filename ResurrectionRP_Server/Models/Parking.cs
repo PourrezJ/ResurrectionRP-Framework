@@ -121,7 +121,7 @@ namespace ResurrectionRP_Server.Models
         #endregion
 
         #region Event handlers
-        private async Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        private async void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
             if (colShape != ParkingColshape || !client.Exists)
                 return;
@@ -130,7 +130,7 @@ namespace ResurrectionRP_Server.Models
                 await OpenParkingMenu(client);
         }
 
-        private async Task OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
+        private async void OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
         {
             if (colShape != ParkingColshape || !client.Exists)
                 return;
@@ -139,20 +139,20 @@ namespace ResurrectionRP_Server.Models
                 await MenuManager.CloseMenu(client);
         }
 
-        private async Task OnVehicleEnterColShape(IColShape colShape, IVehicle vehicle)
+        private void OnVehicleEnterColShape(IColShape colShape, IVehicle vehicle)
         {
             if (colShape != ParkingColshape || !vehicle.Exists || vehicle.Driver == null)
                 return;
 
-            await OnPlayerEnterColShape(colShape, vehicle.Driver);
+            OnPlayerEnterColShape(colShape, vehicle.Driver);
         }
 
-        private async Task OnVehicleLeaveColShape(IColShape colShape, IVehicle vehicle)
+        private void OnVehicleLeaveColShape(IColShape colShape, IVehicle vehicle)
         {
             if (colShape != ParkingColshape || !vehicle.Exists || vehicle.Driver == null)
                 return;
 
-            await OnPlayerLeaveColShape(colShape, vehicle.Driver);
+            OnPlayerLeaveColShape(colShape, vehicle.Driver);
         }
         #endregion
 

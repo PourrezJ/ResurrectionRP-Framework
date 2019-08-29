@@ -1,4 +1,9 @@
-﻿using ResurrectionRP_Server.Models;
+﻿using AltV.Net.Elements.Entities;
+using AltV.Net.Async;
+using AltV.Net;
+using AltV.Net.Enums;
+using ResurrectionRP_Server.EventHandlers;
+using ResurrectionRP_Server.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
@@ -6,10 +11,6 @@ using System.Drawing;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using AltV.Net.Elements.Entities;
-using AltV.Net.Async;
-using AltV.Net;
-using AltV.Net.Enums;
 
 namespace ResurrectionRP_Server.DrivingSchool
 {
@@ -61,25 +62,29 @@ namespace ResurrectionRP_Server.DrivingSchool
         public void Load()
         {
             _markerId = GameMode.Instance.Streamer.addEntityMarker(Streamer.Data.MarkerType.MarkerTypeCarSymbol, _position, new Vector3(1f, 1f, 1f), 150, 5, 168);
-            _colshape = Alt.CreateColShapeCylinder(_position - new Vector3(0,0,1), 1, 3);
-            _colshape.SetData("DrivingSchool", Id);
+            _colshape = Alt.CreateColShapeCylinder(_position - new Vector3(0, 0, 1), 2, 3);
             //await MP.Markers.NewAsync(29, Position, new Vector3(), new Vector3(), 1f, Color.FromArgb(150, 5, 168, 0), true);
             //IColshape colshape = await MP.Colshapes.NewTubeAsync(Position, 1f, 1f);
             //colshape.SetSharedData("DrivingSchool", ID);
-            EventHandlers.Events.OnPlayerEnterColShape += OnPlayerEnterColshape;
-            string schoolName = "Auto-École";
+            Events.OnPlayerEnterColShape += OnPlayerEnterColshape;
+            Events.OnPlayerLeaveColShape += OnPlayerLeaveColshape;
+            string schoolName = string.Empty;
 
             switch (_schoolType)
             {
-                case Models.LicenseType.Air:
+                case LicenseType.Car:
+                    schoolName = "Auto-École";
+                    break;
+
+                case LicenseType.Air:
                     schoolName = "École de pilotage";
                     break;
 
-                case Models.LicenseType.Bike:
+                case LicenseType.Bike:
                     schoolName = "Moto-École";
                     break;
 
-                case Models.LicenseType.Boat:
+                case LicenseType.Boat:
                     schoolName = "Bateau-École";
                     break;
             }
@@ -117,17 +122,20 @@ namespace ResurrectionRP_Server.DrivingSchool
         #endregion
 
         #region Menu
-        public async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
+        public void OnPlayerEnterColshape(IColShape colShape, IPlayer client)
         {
-            if (colShape.Position != _colshape.Position)
-                return;
-
-            colShape.GetData("DrivingSchool", out int id);
-
-            if (id != Id)
+            if (colShape != _colshape)
                 return;
 
             OpenMenuDrivingSchool(client);
+        }
+
+        public async void OnPlayerLeaveColshape(IColShape colShape, IPlayer client)
+        {
+            if (colShape != _colshape)
+                return;
+
+            await MenuManager.CloseMenu(client);
         }
 
         public async void OpenMenuDrivingSchool(IPlayer client)

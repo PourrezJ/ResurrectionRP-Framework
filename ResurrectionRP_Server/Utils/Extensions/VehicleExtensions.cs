@@ -4,6 +4,7 @@ using AltV.Net.Async;
 using ResurrectionRP_Server.Entities.Vehicles;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server
 {
@@ -64,10 +65,9 @@ namespace ResurrectionRP_Server
             client.SetData(key, null);
         }
 
-        public static async void TryPutPlayerInVehicle(this IVehicle client, IPlayer target)
+        public static async Task TryPutPlayerInVehicle(this IVehicle client, IPlayer target)
         {
             await target.EmitAsync("TrySetPlayerIntoVehicle", client);
         }
-
     }
 }

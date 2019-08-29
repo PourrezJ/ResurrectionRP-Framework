@@ -41,7 +41,8 @@
         Text,
         Number,
         UNumber,
-        Float
+        Float,
+        UFloat
     }
     #endregion
 }

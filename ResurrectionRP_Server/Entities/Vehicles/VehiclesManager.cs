@@ -212,15 +212,11 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
             // ICollection<IVehicle> vehs = Alt.GetAllVehicles();
             ICollection<IVehicle> vehs = GetAllVehicles();
-
             IVehicle nearest = null;
 
             foreach(IVehicle veh in vehs)
             {
-                if (!veh.Exists)
-                    break;
-
-                if (position.DistanceTo2D(veh.Position) > distance)
+                if (!veh.Exists || veh.Dimension != dimension || position.DistanceTo2D(veh.Position) > distance)
                     continue;
                 else if (nearest == null)
                     nearest = veh;

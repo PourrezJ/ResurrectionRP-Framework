@@ -82,16 +82,11 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                     await vh.OpenXtremMenu(client);
                     break;
-                    /*
-                case ConsoleKey.F4:
-                    if (ph.IsCuff())
-                    {
-                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
-                        return;
-                    }
+                    
+                case ConsoleKey.F5:
                     await ph.OpenAdminMenu();
                     break;
-                    */
+                    
                 case ConsoleKey.Backspace:
                     await XMenuManager.XMenuManager.CloseMenu(client);
                     /*

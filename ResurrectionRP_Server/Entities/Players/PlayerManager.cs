@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AltV.Net;
+﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
-using System.Threading.Tasks;
 using MongoDB.Driver;
-using AltV.Net.Async;
-using AltV.Net.Async.Events;
-using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
-using System.Collections.Concurrent;
+using ResurrectionRP_Server.Models;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks;
 using WordPressPCL;
 using WordPressPCL.Models;
-using ResurrectionRP_Server.Utils.Extensions;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -130,11 +126,17 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public async void Events_PlayerJoin(IPlayer player, object[] args)
         {
-
             if (!player.Exists)
                 return;
 
             string socialclub = args[0].ToString();
+
+            if (IsBan(socialclub))
+            {
+                await player.KickAsync("Vous êtes banni!");
+                return;
+            }
+
             player.SetData("SocialClub", socialclub);
             player.Model = (uint)AltV.Net.Enums.PedModel.FreemodeMale01;
             player.Spawn(new Vector3(-1072.886f, -2729.607f, 0.8148939f), 0);
@@ -158,15 +160,10 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (!Config.GetSetting<bool>("WhitelistOpen"))
                     {
                         await player.EmitAsync("OpenLogin");
+                        return;
+                    }
 
-                        return;
-                    }
-                    if (await IsBan(player, socialclub))
-                    {
-                        await player.KickAsync("Vous êtes bannis!");
-                        return;
-                    }
-                    Models.Whitelist whitelist = await Models.Whitelist.GetWhitelistFromAPI(socialclub);
+                   Models.Whitelist whitelist = await Models.Whitelist.GetWhitelistFromAPI(socialclub);
 
                     if (whitelist != null && whitelist.Whitelisted)
                     {
@@ -405,16 +402,15 @@ namespace ResurrectionRP_Server.Entities.Players
             }*/
         }
 
-        public static async Task<bool> IsBan(IPlayer player, string social)
+        public static bool IsBan(string social)
         {
             if (GameMode.Instance.BanManager == null)
                 return false;
 
-            for (int a = 0; a < GameMode.Instance.BanManager.BanList.Count; a++)
+            foreach(Ban ban in GameMode.Instance.BanManager.BanList)
             {
-                if (GameMode.Instance.BanManager.BanList[a].SocialClub == social)
+                if (ban.SocialClub == social)
                     return true;
-
             }
 
             return false;
@@ -438,6 +434,21 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public static bool HasVehicleKey(IPlayer client, string plate) 
             => client.GetPlayerHandler().ListVehicleKey.Exists(x => x.Plate == plate);
+
+        public static List<PlayerHandler> GetPlayersList()
+        {
+            List<PlayerHandler> phList = new List<PlayerHandler>();
+
+            foreach (IPlayer player in Alt.GetAllPlayers().Where(x => x.Exists && x.GetPlayerHandler() != null))
+            {
+                if (!player.Exists)
+                    continue;
+                // TODO Need to add a veritable check
+                phList.Add(player.GetPlayerHandler());
+            }
+
+            return phList;
+        }
         #endregion
     }
 }

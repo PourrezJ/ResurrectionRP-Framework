@@ -176,19 +176,25 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return Vehicle;
         }
 
-        public async Task Delete(bool perm = false)
+        public async Task<bool> Delete(bool perm = false)
         {
             if (Vehicle.Exists)
                 await Vehicle.RemoveAsync();
 
-            if (GameMode.Instance.VehicleManager.VehicleHandlerList.Remove(Vehicle, out VehicleHandler value))
+            if (GameMode.Instance.VehicleManager.VehicleHandlerList.Remove(Vehicle, out VehicleHandler _))
             {
-                if (perm)
+                if (perm && !SpawnVeh)
                 {
-                    await RemoveInDatabase();
+                    if (!await RemoveInDatabase())
+                        return false;
+
                     GameMode.Instance.PlateList.Remove(Plate);
                 }
+
+                return true;
             }
+
+            return false;
         }
         
         public async Task LockUnlock(IPlayer client, bool statut)

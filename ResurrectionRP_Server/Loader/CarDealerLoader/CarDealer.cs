@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
                 CarDealerPlaces.Add(_cardealer);
             }
 
-            // Boucle pour vérifié si place est vide.
+            // Boucle pour vérifier si la place est vide.
             Utils.Utils.Delay(30000, false, async () =>
             {
                 foreach (var place in CarDealerPlaces)

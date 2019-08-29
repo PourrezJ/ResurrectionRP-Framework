@@ -69,12 +69,17 @@ namespace ResurrectionRP_Server
 
                 foreach (MenuItem menuItem in menu.Items)
                 {
-                    if (menuItem.Type == MenuItemType.CheckboxItem)
-                        ((CheckboxItem)menuItem).Checked = data[menuItem.Id];
-                    else if (menuItem.Type == MenuItemType.ListItem)
-                        ((ListItem)menuItem).SelectedItem = data[menuItem.Id]["Index"];
-                    else if (menuItem.InputMaxLength > 0)
-                        menuItem.InputValue = data[menuItem.Id];
+                    try
+                    {
+                        if (menuItem.Type == MenuItemType.CheckboxItem)
+                            ((CheckboxItem)menuItem).Checked = data[menuItem.Id];
+                        else if (menuItem.Type == MenuItemType.ListItem)
+                            ((ListItem)menuItem).SelectedItem = data[menuItem.Id]["Index"];
+                        else if (menuItem.InputMaxLength > 0)
+                            menuItem.InputValue = data[menuItem.Id];
+                    }
+                    catch (Exception)
+                    { }
                 }
 
                 try

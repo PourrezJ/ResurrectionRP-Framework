@@ -67,6 +67,7 @@ namespace ResurrectionRP_Server
             InputValue = null;
             InputMaxLength = null;
             InputType = null;
+            InputErrorResetValue = false;
             _data = new Dictionary<string, object>();
         }
         #endregion
@@ -102,11 +103,12 @@ namespace ResurrectionRP_Server
             _data[key] = value;
         }
 
-        public void SetInput(string defaultText, byte maxLength, InputType inputType)
+        public void SetInput(string defaultText, byte maxLength, InputType inputType, bool inputErrorResetValue = false)
         {
             InputValue = defaultText;
             InputMaxLength = maxLength;
             InputType = inputType;
+            InputErrorResetValue = inputErrorResetValue;
         }
 
         public ListItem CastToListItem()

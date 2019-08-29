@@ -1,15 +1,16 @@
-using System;
+using AltV.Net;
+using AltV.Net.Async;
+using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
+using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Inventory;
+using System;
 using System.Collections.Concurrent;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using AltV.Net;
-using AltV.Net.Data;
-using AltV.Net.Async;
-using AltV.Net.Elements.Entities;
-using RPGInventoryManager = ResurrectionRP_Server.Inventory.RPGInventoryManager;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -43,29 +44,29 @@ namespace ResurrectionRP_Server.Entities.Players
                 Client?.EmitAsync("SetRank", _adminrank);
             }
         }
-        public Models.Identite Identite { get; set; }
+        public Identite Identite { get; set; }
         public int TimeSpent { get; set; }
         
-        public List<Models.VehicleKey> ListVehicleKey { get; private set; }
-                = new List<Models.VehicleKey>();
+        public List<VehicleKey> ListVehicleKey { get; private set; }
+                = new List<VehicleKey>();
 
-        public List<Models.License> Licenses { get; set; }
-            = new List<Models.License>();
+        public List<License> Licenses { get; set; }
+            = new List<License>();
 
         [BsonIgnore]
-        public Models.Clothings Clothing { get; set; }
-        public Models.Animation[] AnimSettings { get; set; }
-            = new Models.Animation[9];
+        public Clothings Clothing { get; set; }
+        public Animation[] AnimSettings { get; set; }
+            = new Animation[9];
         public string IP { get; set; }
 
         [BsonIgnore]
         public bool IsOnline { get; set; }
             = false;
 
-        public Models.Location Location { get; set; }
-            = new Models.Location(new Vector3(), new Vector3()); // Default spawn
+        public Location Location { get; set; }
+            = new Location(new Vector3(), new Vector3()); // Default spawn
 
-        public Models.PlayerCustomization Character { get; set; }
+        public PlayerCustomization Character { get; set; }
         
         public Inventory.Inventory PocketInventory { get; set; } = new Inventory.Inventory(6, 4);
 
@@ -176,10 +177,10 @@ namespace ResurrectionRP_Server.Entities.Players
                     PocketInventory.AddItem(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.JambonBeurre), 1);
                     PocketInventory.AddItem(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.Eau), 1);
 
-                    OutfitInventory.Slots[11] = new Models.ItemStack(new ClothItem(Models.InventoryData.ItemID.Shoes, "Chaussure", "", new Models.ClothData((Character.Gender == 0) ? (byte)1 : (byte)3, 0, 0), 0, true, false, false, true, false, 0, classes: "shoes", icon: "shoes"), 1, 11);
-                    OutfitInventory.Slots[9] = new Models.ItemStack(new ClothItem(Models.InventoryData.ItemID.Pant, "Pantalon", "", new Models.ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "pants", icon: "pants"), 1, 9);
-                    OutfitInventory.Slots[5] = new Models.ItemStack(new ClothItem(Models.InventoryData.ItemID.Jacket, "Resurrection", "", new Models.ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "jacket", icon: "jacket"), 1, 9);
-                    //OutfitInventory.Slots[13] = new ItemStack(new BagItem(ItemID.Bag, "Backpack", "", new Models.ClothData(1, 0, 0), new Inventory(25, 20, InventoryType.Bag),0, true, false, false, true, false, 0, classes: "backpack", icon: "backpack"), 1, 9);
+                    OutfitInventory.Slots[11] = new ItemStack(new ClothItem(Models.InventoryData.ItemID.Shoes, "Chaussure", "", new ClothData((Character.Gender == 0) ? (byte)1 : (byte)3, 0, 0), 0, true, false, false, true, false, 0, classes: "shoes", icon: "shoes"), 1, 11);
+                    OutfitInventory.Slots[9] = new ItemStack(new ClothItem(Models.InventoryData.ItemID.Pant, "Pantalon", "", new ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "pants", icon: "pants"), 1, 9);
+                    OutfitInventory.Slots[5] = new ItemStack(new ClothItem(Models.InventoryData.ItemID.Jacket, "Resurrection", "", new ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "jacket", icon: "jacket"), 1, 9);
+                    //OutfitInventory.Slots[13] = new ItemStack(new BagItem(ItemID.Bag, "Backpack", "", new ClothData(1, 0, 0), new Inventory(25, 20, InventoryType.Bag),0, true, false, false, true, false, 0, classes: "backpack", icon: "backpack"), 1, 9);
                     
                     await AddMoney(PlayerManager.StartMoney);
 
@@ -318,7 +319,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Inventory
         public async Task UpdateClothing()
         {
-            Clothing = new Models.Clothings(Client);
+            Clothing = new Clothings(Client);
 
             for (int i = 0; i < OutfitInventory.Slots.Length; i++)
             {
@@ -333,23 +334,23 @@ namespace ResurrectionRP_Server.Entities.Players
                     switch (i)
                     {
                         case 0: // glasses
-                            Clothing.Glasses = (cloth != null) ? new Models.PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture) : (Character.Gender == 0) ? new Models.PropData(14, 0) : new Models.PropData(13, 0);
+                            Clothing.Glasses = (cloth != null) ? new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture) : (Character.Gender == 0) ? new PropData(14, 0) : new PropData(13, 0);
                             break;
 
                         case 1: // cap
-                            Clothing.Hats = (cloth != null) ? new Models.PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture) : (Character.Gender == 0) ? new Models.PropData(121, 0) : new Models.PropData(120, 0);
+                            Clothing.Hats = (cloth != null) ? new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture) : (Character.Gender == 0) ? new PropData(121, 0) : new PropData(120, 0);
                             break;
 
                         case 2: // necklace
-                            Clothing.Accessory = (cloth != null) ? cloth.Clothing : new Models.ClothData();
+                            Clothing.Accessory = (cloth != null) ? cloth.Clothing : new ClothData();
                             break;
 
                         case 3: // mask
-                            Clothing.Mask = (cloth != null) ? cloth.Clothing : new Models.ClothData();
+                            Clothing.Mask = (cloth != null) ? cloth.Clothing : new ClothData();
                             break;
 
                         case 4: // earring
-                            Clothing.Ears = (cloth != null) ? new Models.PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture) : (Character.Gender == 0) ? new Models.PropData(33, 0) : new Models.PropData(12, 0);
+                            Clothing.Ears = (cloth != null) ? new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture) : (Character.Gender == 0) ? new PropData(33, 0) : new PropData(12, 0);
                             break;
 
                         case 5: // jacket
@@ -364,44 +365,44 @@ namespace ResurrectionRP_Server.Entities.Players
                                 else
                                     torso = Loader.ClothingLoader.ClothingsFemaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
 
-                                Clothing.Torso = new Models.ClothData((byte)torso, 0, 0);
+                                Clothing.Torso = new ClothData((byte)torso, 0, 0);
                             }
                             else
                             {
-                                Clothing.Tops = new Models.ClothData(15, 0, 0);
-                                Clothing.Torso = new Models.ClothData(15, 0, 0);
+                                Clothing.Tops = new ClothData(15, 0, 0);
+                                Clothing.Torso = new ClothData(15, 0, 0);
                             }
                             break;
 
                         case 6: // watch
-                            if (cloth != null) Clothing.Watches = new Models.PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                            if (cloth != null) Clothing.Watches = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
                             break;
 
                         case 7: // shirt
-                            Clothing.Undershirt = (cloth != null) ? cloth.Clothing : new Models.ClothData(15, 0, 0);
+                            Clothing.Undershirt = (cloth != null) ? cloth.Clothing : new ClothData(15, 0, 0);
                             break;
 
                         case 8: // bracelet
-                            if (cloth != null) Clothing.Bracelets = new Models.PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                            if (cloth != null) Clothing.Bracelets = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
                             break;
 
                         case 9: // pants
-                            Clothing.Legs = (cloth != null) ? cloth.Clothing : (Character.Gender == 0) ? new Models.ClothData(14, 0, 0) : new Models.ClothData(15, 0, 0);
+                            Clothing.Legs = (cloth != null) ? cloth.Clothing : (Character.Gender == 0) ? new ClothData(14, 0, 0) : new ClothData(15, 0, 0);
                             break;
 
                         case 10: // gloves
                             /*
                             Clothing.Torso = (cloth != null) ? cloth.Clothing : (Character.Gender == 0) ?
-                                    new Models.ClothData((byte)ClothingLoader.ClothingsMaleTopsList.DrawablesList[Clothing.Tops.Drawable].Torso[0], 0, 0) :
-                                    new Models.ClothData((byte)ClothingLoader.ClothingsFemaleTopsList.DrawablesList[Clothing.Tops.Drawable].Torso[0], 0, 0);*/
+                                    new ClothData((byte)ClothingLoader.ClothingsMaleTopsList.DrawablesList[Clothing.Tops.Drawable].Torso[0], 0, 0) :
+                                    new ClothData((byte)ClothingLoader.ClothingsFemaleTopsList.DrawablesList[Clothing.Tops.Drawable].Torso[0], 0, 0);*/
                             break;
 
                         case 11: // shoes
-                            Clothing.Feet = (cloth != null) ? cloth.Clothing : (Character.Gender == 0) ? new Models.ClothData(34, 0, 0) : new Models.ClothData(35, 0, 0);
+                            Clothing.Feet = (cloth != null) ? cloth.Clothing : (Character.Gender == 0) ? new ClothData(34, 0, 0) : new ClothData(35, 0, 0);
                             break;
 
                         case 12: // kevlar
-                            Clothing.BodyArmor = (cloth != null) ? cloth.Clothing : new Models.ClothData();
+                            Clothing.BodyArmor = (cloth != null) ? cloth.Clothing : new ClothData();
                             break;
 
                         case 13: // backpack
@@ -417,7 +418,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             else
                             {
                                 BagInventory = null;
-                                Clothing.Bags = new Models.ClothData();
+                                Clothing.Bags = new ClothData();
                             }
                             break;
 
@@ -467,7 +468,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        public async Task<bool> AddItem(Models.Item item, int quantity = 1)
+        public async Task<bool> AddItem(Item item, int quantity = 1)
         {
 
             if (PocketInventory.AddItem(item, quantity))
@@ -503,19 +504,19 @@ namespace ResurrectionRP_Server.Entities.Players
             else return false;
         }
 
-        public List<Models.ItemStack> GetAllItems()
+        public List<ItemStack> GetAllItems()
         {
 
-            List<Models.ItemStack> _stacks = new List<Models.ItemStack>();
+            List<ItemStack> _stacks = new List<ItemStack>();
 
-            foreach (Models.ItemStack stack in PocketInventory.InventoryList)
+            foreach (ItemStack stack in PocketInventory.InventoryList)
             {
                 _stacks.Add(stack);
             }
 
             if (BagInventory != null)
             {
-                foreach (Models.ItemStack stack in BagInventory.InventoryList)
+                foreach (ItemStack stack in BagInventory.InventoryList)
                 {
                     _stacks.Add(stack);
                 }
@@ -588,7 +589,7 @@ namespace ResurrectionRP_Server.Entities.Players
             return somme;
         }
 
-        public int CountItem(Models.Item item)
+        public int CountItem(Item item)
         {
             int somme = 0;
             somme += PocketInventory.CountItem(item);
@@ -601,9 +602,9 @@ namespace ResurrectionRP_Server.Entities.Players
             return somme;
         }
 
-        public Dictionary<string, Models.ItemStack[]> GetStacksItems(Models.InventoryData.ItemID itemID)
+        public Dictionary<string, ItemStack[]> GetStacksItems(Models.InventoryData.ItemID itemID)
         {
-            Dictionary<string, Models.ItemStack[]> items = new Dictionary<string, Models.ItemStack[]>();
+            Dictionary<string, ItemStack[]> items = new Dictionary<string, ItemStack[]>();
 
             if (PocketInventory != null)
             {
@@ -637,13 +638,13 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region Keys
-        public void AddKey(Entities.Vehicles.VehicleHandler veh, string keyVehicleName = null)
+        public void AddKey(VehicleHandler veh, string keyVehicleName = null)
         {
-            if (keyVehicleName == null) ListVehicleKey.Add(new Models.VehicleKey(veh.VehicleManifest.DisplayName, veh.Plate));
-            else ListVehicleKey.Add(new Models.VehicleKey(keyVehicleName, veh.Plate));
+            if (keyVehicleName == null) ListVehicleKey.Add(new VehicleKey(veh.VehicleManifest.DisplayName, veh.Plate));
+            else ListVehicleKey.Add(new VehicleKey(keyVehicleName, veh.Plate));
         }
 
-        public bool HasKey(Entities.Vehicles.VehicleHandler veh)
+        public bool HasKey(VehicleHandler veh)
         {
             if (ListVehicleKey.Exists(k => k.Plate == veh.Plate))
             {
@@ -655,9 +656,9 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        public void RemoveKey(Entities.Vehicles.VehicleHandler veh)
+        public void RemoveKey(VehicleHandler veh)
         {
-            Models.VehicleKey _key = ListVehicleKey.Find(k => k.Plate == veh.Plate);
+            VehicleKey _key = ListVehicleKey.Find(k => k.Plate == veh.Plate);
             if (_key != null)
             {
                 ListVehicleKey.Remove(_key);
@@ -666,7 +667,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region Licences
-        public bool HasLicense(Models.LicenseType type) =>
+        public bool HasLicense(LicenseType type) =>
             Licenses.Exists(l => l.Type == type);
         #endregion
 

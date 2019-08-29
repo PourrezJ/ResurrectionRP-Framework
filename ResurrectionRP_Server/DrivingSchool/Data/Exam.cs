@@ -11,23 +11,21 @@ using System.Numerics;
 
 namespace ResurrectionRP_Server.DrivingSchool
 {
-    public class Examen : IDisposable
+    public class Exam : IDisposable
     {
         #region Fields
         public IPlayer PlayerExam;
         public Entities.Vehicles.VehicleHandler VehicleExam;
         public int CurrentCheckpoint = -1;
-        public List<Trajet> Trajectoire;
+        public List<Ride> Trajectoire;
         public ICheckpoint checkpoint;
         public IColShape colshape = null;
         public int avert = 0;
         public int id = 0;
-
-
         #endregion
 
         #region Constructor
-        public Examen(IPlayer client, Entities.Vehicles.VehicleHandler vehicle, List<Trajet> traj, int SchooldId)
+        public Exam(IPlayer client, Entities.Vehicles.VehicleHandler vehicle, List<Ride> traj, int SchooldId)
         {
             PlayerExam = client;
             VehicleExam = vehicle;

@@ -1,7 +1,7 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,7 +14,7 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Static fields
-        static Dictionary<string, CmdCallback> _cmdHandlers = new Dictionary<string, CmdCallback>();
+        static ConcurrentDictionary<string, CmdCallback> _cmdHandlers = new ConcurrentDictionary<string, CmdCallback>();
         #endregion
 
         #region Client events
@@ -82,13 +82,12 @@ namespace ResurrectionRP_Server
 
         public static bool RegisterCmd(string cmd, CmdCallback callback)
         {
-            if (_cmdHandlers.ContainsKey(cmd))
+            if (!_cmdHandlers.TryAdd(cmd, callback))
             {
                 Alt.Log($"[Error]Failed to register command /{cmd}, already registered");
                 return false;
             }
 
-            _cmdHandlers.Add(cmd, callback);
             return true;
         }
 

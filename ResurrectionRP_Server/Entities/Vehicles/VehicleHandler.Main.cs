@@ -192,14 +192,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (Vehicle.Exists)
                 await Vehicle.RemoveAsync();
 
-            bool removeOK;
-
-            lock (GameMode.Instance.VehicleManager.VehicleHandlerList)
-            {
-                removeOK = GameMode.Instance.VehicleManager.VehicleHandlerList.Remove(Vehicle, out VehicleHandler _);
-            }
-
-            if (removeOK)
+            if (GameMode.Instance.VehicleManager.VehicleHandlerList.TryRemove(Vehicle, out VehicleHandler _))
             {
                 if (perm && !SpawnVeh)
                 {

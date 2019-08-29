@@ -89,7 +89,7 @@ namespace ResurrectionRP_Server.DrivingSchool
                     break;
             }
 
-            _blipId = GameMode.Instance.Streamer.addStaticEntityBlip(schoolName, _position, 69, 535, 0.5f);
+            _blipId    = Entities.Blips.BlipsManager.CreateBlip(schoolName, _position, 69, 535, 0.5f);
             //IBlip blip = await MP.Blips.NewAsync(535, Position, 0.5f, 69, schoolName, 255, 10, true, 0);
         }
 

@@ -1,4 +1,4 @@
-﻿using AltV.Net;
+using AltV.Net;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
@@ -79,6 +79,10 @@ namespace ResurrectionRP_Server
         public Entities.Peds.PedsManager PedManager { get; private set; }
 
         [BsonIgnore]
+        public Entities.Blips.BlipsManager BlipsManager { get; private set; }
+
+
+        [BsonIgnore]
         public DrivingSchool.DrivingSchoolManager DrivingSchoolManager { get; private set; }
 
         [BsonIgnore]
@@ -136,14 +140,18 @@ namespace ResurrectionRP_Server
 
         public async Task OnStartAsync()
         {
+            Alt.OnPlayerConnect += OnPlayerConnected;
+            Alt.OnPlayerDisconnect += OnPlayerDisconnected;
+
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
             Streamer = new Streamer.Streamer();
             DoorManager = new Utils.DoorManager();
-            PlayerManager = new Entities.Players.PlayerManager();
+            PlayerManager = new PlayerManager();
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();
             PedManager = new Entities.Peds.PedsManager();
+            BlipsManager = new Entities.Blips.BlipsManager();
             PhoneManager = new Phone.PhoneManager();
             RPGInventory = new Inventory.RPGInventoryManager();
             MenuManager = new MenuManager();
@@ -172,9 +180,6 @@ namespace ResurrectionRP_Server
 
             Events.Initialize();
 
-            Alt.OnPlayerConnect += OnPlayerConnected;
-            Alt.OnPlayerDisconnect += OnPlayerDisconnected;
-
             Chat.Initialize();
             Chat.RegisterCmd("veh", CommandVeh);
             Chat.RegisterCmd("coords", (IPlayer player, string[] args) =>
@@ -197,11 +202,7 @@ namespace ResurrectionRP_Server
             });
             Chat.RegisterCmd("task", async (IPlayer player, string[] args) =>
             {
-
-                if (player.Vehicle == null)
-                    return;
-                Alt.Server.LogError(args[0]);
-                player.Emit("test", args[0]);
+                Entities.Blips.BlipsManager.SetColor(int.Parse(args[0]), 71);
 
             });
             ServerLoaded = true;

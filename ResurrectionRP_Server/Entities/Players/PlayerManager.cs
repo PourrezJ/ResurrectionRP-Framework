@@ -342,7 +342,33 @@ namespace ResurrectionRP_Server.Entities.Players
             await client.Revive();
         }
 
+        public static async Task<PlayerHandler> GetPlayerBySCN(string socialClubName)
+        {
+            try
+            {
+                var players = GameMode.Instance.PlayerList;
+                for (int a = 0; a < players.Count; a++)
+                {
+                    if (players[a] == null)
+                        continue;
 
+                    if (!players[a].Exists)
+                        continue;
+
+                    if ((players[a].GetSocialClub()).ToLower() == socialClubName.ToLower())
+                        return players[a].GetPlayerHandler();
+                }
+            }
+            catch (Exception ex)
+            {
+                Alt.Server.LogError("GetPlayerBySCN: " + socialClubName + ex);
+            }
+
+            return null;
+        }
+
+        public static PlayerHandler GetPlayerByName(string name)
+            => GameMode.Instance.PlayerList.FirstOrDefault(x => x.Exists && x.GetPlayerHandler()?.Identite?.Name.ToLower() == name.ToLower())?.GetPlayerHandler() ?? null;
 
         public static bool IsBan(string social)
         {

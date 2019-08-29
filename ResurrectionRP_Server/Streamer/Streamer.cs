@@ -6,6 +6,7 @@ using AltV.Net.NetworkingEntity;
 using AltV.Net.NetworkingEntity.Elements.Entities;
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using System.Numerics;
 using System.Text;
@@ -14,17 +15,18 @@ using Object = ResurrectionRP_Server.Streamer.Data.Object;
 using TextLabel = ResurrectionRP_Server.Streamer.Data.TextLabel;
 using PedType = ResurrectionRP_Server.Streamer.Data.PedType;
 using Marker = ResurrectionRP_Server.Streamer.Data.Marker;
-using Blips = ResurrectionRP_Server.Streamer.Data.Blips;
+using Blips = ResurrectionRP_Server.Entities.Blips.Blips;
+
 
 namespace ResurrectionRP_Server.Streamer
 {
     public partial class Streamer
     {
         public int EntityNumber = 0;
-        public Dictionary<int,INetworkingEntity> ListEntities = new Dictionary<int, INetworkingEntity>();
+        public ConcurrentDictionary<int,INetworkingEntity> ListEntities = new ConcurrentDictionary<int, INetworkingEntity>();
 
         public int StaticEntityNumber = 0;
-        public Dictionary<int, object> ListStaticEntities = new Dictionary<int, object>();
+        public ConcurrentDictionary<int, dynamic> ListStaticEntities = new ConcurrentDictionary<int, dynamic>();
 
         public  Streamer()
         {
@@ -92,10 +94,31 @@ namespace ResurrectionRP_Server.Streamer
             return this.EntityNumber;
         }
 
-        public int addStaticEntityBlip(string name, Vector3 pos, int color, int sprite, float scale = 1, bool shortRange = true)
+        public int addStaticEntityBlip(Blips blip)
         {
-            this.ListStaticEntities.TryAdd(this.StaticEntityNumber, new Blips(name, pos,color, sprite, scale, shortRange, this.StaticEntityNumber++).export());
-            return this.StaticEntityNumber;
+            this.ListStaticEntities.TryAdd(blip.id, blip.export());
+            if (GameMode.Instance.PlayerList.Count > 0)
+                AltAsync.EmitAllClients("createStaticEntity", ListStaticEntities[blip.id]);
+            return blip.id;
+        }
+
+        public async Task updateStaticEntityBlip( Blips blip)
+        {
+            this.ListStaticEntities[blip.id] = blip;
+            GameMode.Instance.PlayerList.ForEach(async (player) =>
+            {
+                await AltAsync.EmitAsync(player, "deleteStaticEntity", blip.id, (int)blip.type);
+                await AltAsync.EmitAsync(player, "createStaticEntity", blip.export());
+            });
+        }
+
+        public async Task destroyStaticEntityBlip(Blips blip)
+        {
+            GameMode.Instance.PlayerList.ForEach(async (player) =>
+            {
+                await AltAsync.EmitAsync(player, "deleteStaticEntity", blip.id, (int)blip.type);
+            });
+            this.ListStaticEntities.TryRemove(blip.id, out dynamic bliped);
         }
 
         public async Task LoadStreamPlayer(IPlayer player)

@@ -13,23 +13,8 @@ export class Streamer {
         alt.on("onStreamDataChange", this.onStreamDataChange);
         alt.on("disconnect", this.unloadStream);
 
-        alt.onServer('createStaticEntity', (data: any[]) => {
-            switch (data["entityType"]) {
-                case 4:
-                    this.streamBlip(
-                        data["id"],
-                        data["posx"],
-                        data["posy"],
-                        data["posz"],
-                        data["sprite"],
-                        data["color"],
-                        data["name"],
-                        data["scale"],
-                        data["shortRange"]
-                    );
-                    break;
-            }
-        });
+        alt.onServer('createStaticEntity', this.createStaticEntity);
+        alt.onServer("deleteStaticEntity", this.deleteStaticEntity);
 
 
         alt.on("update", () => {
@@ -162,6 +147,32 @@ export class Streamer {
         this.StaticEntityList[id] = test;
     }
 
+    private deleteStaticEntity = (entityid: number, type:number) => {
+        switch (type) {
+            case 4:
+                this.StaticEntityList[entityid].destroy();
+                break;
+        }
+    }
+
+    private createStaticEntity = (data: any[]) => {
+        switch (data["entityType"]) {
+            case 4:
+                this.streamBlip(
+                    data["id"],
+                    data["posx"],
+                    data["posy"],
+                    data["posz"],
+                    data["sprite"],
+                    data["color"],
+                    data["name"],
+                    data["scale"],
+                    data["shortRange"]
+                );
+                break;
+        }
+    }
+
     private OnKeyPressed = (key: number) => {
         if (game.isPauseMenuActive() || PhoneManager.IsPhoneOpen() || chat.isOpened())
             return;
@@ -200,18 +211,24 @@ export class Streamer {
         switch (entity["data"]["entityType"]["intValue"]) {
             case 0:
                 game.deletePed(this.EntityList[entity["data"]["id"]["intValue"]])
+         this.onStreamIn(entity);
                 break;
             case 1:
                 game.deleteObject(this.EntityList[entity["data"]["id"]["intValue"]])
+                this.onStreamIn(entity);
                 break;
             case 2:
                 this.EntityList[entity["data"]["id"]["intValue"]] = undefined;
+                this.onStreamIn(entity);
                 break;
             case 3:
                 this.EntityList[entity["data"]["id"]["intValue"]] = undefined;
+                this.onStreamIn(entity);
+                break;
+            case 4:
+                this.StaticEntityList[entity["data"]["id"]["intValue"]].destroy();
                 break;
         }
-         this.onStreamIn(entity);
     }
 
 }

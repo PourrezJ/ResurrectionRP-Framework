@@ -177,6 +177,7 @@ namespace ResurrectionRP_Server
             await Loader.CarParkLoader.LoadAllCarPark();
             await Loader.CarDealerLoaders.LoadAllCardealer();
             await Loader.VehicleRentLoaders.LoadAllVehicleRent();
+            await Loader.TatooLoader.TatooLoader.LoadAllTatoo();
             await VehicleManager.LoadAllVehiclesActive();
             await Loader.ClothingLoader.LoadAllCloth();
             await Loader.BusinessesLoader.LoadAllBusinesses();

@@ -5,20 +5,20 @@ using System.IO;
 using System.Threading.Tasks;
 using AltV.Net;
 
-namespace ResurrectionRP_Server.Loader.TatooLoader
+namespace ResurrectionRP_Server.Loader.TattooLoader
 {
-    class TatooLoader
+    class TattooLoader
     {
         private static string basePath = $"tattoos{Path.DirectorySeparatorChar}";
 
-        public static List<Tatoo> TorsoTatooList = new List<Tatoo>();
-        public static List<Tatoo> HeadTatooList = new List<Tatoo>();
-        public static List<Tatoo> LeftArmTatooList = new List<Tatoo>();
-        public static List<Tatoo> RightArmTatooList = new List<Tatoo>();
-        public static List<Tatoo> LeftLegTatooList = new List<Tatoo>();
-        public static List<Tatoo> RightLegTatooList = new List<Tatoo>();
+        public static List<Tattoo> TorsoTattooList = new List<Tattoo>();
+        public static List<Tattoo> HeadTattooList = new List<Tattoo>();
+        public static List<Tattoo> LeftArmTattooList = new List<Tattoo>();
+        public static List<Tattoo> RightArmTattooList = new List<Tattoo>();
+        public static List<Tattoo> LeftLegTattooList = new List<Tattoo>();
+        public static List<Tattoo> RightLegTattooList = new List<Tattoo>();
 
-        public static Task LoadAllTatoo()
+        public static Task LoadAllTattoo()
         {
             Alt.Server.LogInfo("[TatooManager] Loading all tatoo...");
 
@@ -27,10 +27,10 @@ namespace ResurrectionRP_Server.Loader.TatooLoader
             {
                 try
                 {
-                    Tatoo[] tatoolist = Get(Path.GetFileName(file));
+                    Tattoo[] tatoolist = Get(Path.GetFileName(file));
                     if (tatoolist == null) continue;
 
-                    foreach (Tatoo tatoo in tatoolist)
+                    foreach (Tattoo tatoo in tatoolist)
                     {
                         if (tatoo != null)
                         {
@@ -79,7 +79,7 @@ namespace ResurrectionRP_Server.Loader.TatooLoader
             return Task.CompletedTask;
         }
 
-        private static Tatoo[] Get(string filename)
+        private static Tattoo[] Get(string filename)
         {
             string path = MakePath(filename);
             if (!File.Exists(path))
@@ -90,7 +90,7 @@ namespace ResurrectionRP_Server.Loader.TatooLoader
 
             try
             {
-                Tatoo[] tatooManifest = JsonConvert.DeserializeObject<Tatoo[]>(File.ReadAllText(path));
+                Tattoo[] tatooManifest = JsonConvert.DeserializeObject<Tattoo[]>(File.ReadAllText(path));
                 foreach (var tatoo in tatooManifest)
                 {
                     tatoo.Collection = filename.Split('.')[0];

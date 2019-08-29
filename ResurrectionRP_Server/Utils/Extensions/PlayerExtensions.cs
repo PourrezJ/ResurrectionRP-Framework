@@ -162,6 +162,24 @@ namespace ResurrectionRP_Server
             }
             return endup;
         }
+        public static List<IPlayer> GetNearestPlayers(this IPlayer client, float range)
+        {
+            var vehs = Alt.GetAllPlayers();
+            List<IPlayer> endup = null;
+            var position = client.GetPosition();
+            Vector3 osition = new Vector3(position.X, position.Y, position.Z);
+            foreach (IPlayer veh in vehs)
+            {
+                if (!veh.Exists)
+                    continue;
+                var vehpos = veh.GetPosition();
+                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= range)
+                {
+                    endup.Add(veh);
+                }
+            }
+            return endup;
+        }
         public static IVehicle GetNearestVehicle(this IPlayer client)
         {
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
@@ -221,6 +239,28 @@ namespace ResurrectionRP_Server
         public async static Task PlaySoundFromEntity(this IPlayer client, IEntity initiator, int id, string dict, string anim)
         {
             await Task.CompletedTask;
+        }
+
+        public async static Task SetDecorationAsync(this IPlayer client, uint collection, uint overlay)
+        {
+            // TODO
+        }
+        public async static Task RemoveDecorationAsync(this IPlayer client, uint collection, uint overlay)
+        {
+            // TODO
+        }
+        public static void SetDecoration(this IPlayer client, uint collection, uint overlay)
+        {
+            // TODO
+        }
+
+        public static void ClearDecorations(this IPlayer client)
+        {
+            // TODO
+        }
+        public async static Task ClearDecorationsAsync(this IPlayer client)
+        {
+            // TODO
         }
 
         public static async Task Resurrect(this IPlayer client)

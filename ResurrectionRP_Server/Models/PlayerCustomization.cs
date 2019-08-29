@@ -114,5 +114,21 @@ namespace ResurrectionRP_Server.Models
                 }
             });
         }
+
+
+        public bool HasDecoration(int overlay)
+        {
+            if (Decorations == null)
+                return false;
+
+            foreach (Decoration decoration in Decorations)
+            {
+                if (decoration.Overlay == overlay)
+                    return true;
+            }
+
+            return false;
+        }
     }
+}
 }

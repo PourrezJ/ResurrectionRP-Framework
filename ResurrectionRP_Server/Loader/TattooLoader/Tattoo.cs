@@ -1,4 +1,4 @@
-﻿namespace ResurrectionRP_Server.Loader.TatooLoader
+﻿namespace ResurrectionRP_Server.Loader.TattooLoader
 {
     /*
  * ZONE_TORSO = 0
@@ -10,7 +10,7 @@
  */
 
 
-    public class Tatoo
+    public class Tattoo
     {
         public string Collection { get; set; }
         public string Name { get; set; }

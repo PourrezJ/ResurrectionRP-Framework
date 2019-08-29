@@ -374,6 +374,20 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
+        public static List<PlayerHandler> GetPlayersList()
+        {
+            List<PlayerHandler> phList = new List<PlayerHandler>();
+
+            foreach (IPlayer player in Alt.GetAllPlayers().Where(x => x.Exists && x.GetPlayerHandler() != null))
+            {
+                if (!player.Exists)
+                    continue;
+                // TODO Need to add a veritable check
+                phList.Add(player.GetPlayerHandler());
+            }
+
+            return phList;
+        }
         #endregion
     }
 }

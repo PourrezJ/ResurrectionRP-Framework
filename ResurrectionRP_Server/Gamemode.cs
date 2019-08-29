@@ -1,4 +1,4 @@
-using AltV.Net;
+﻿using AltV.Net;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
@@ -81,6 +81,8 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public Entities.Blips.BlipsManager BlipsManager { get; private set; }
 
+        [BsonIgnore]
+        public Loader.BusinessesLoader BusinessesManager { get; private set; }
 
         [BsonIgnore]
         public DrivingSchool.DrivingSchoolManager DrivingSchoolManager { get; private set; }
@@ -155,6 +157,7 @@ namespace ResurrectionRP_Server
             PhoneManager = new Phone.PhoneManager();
             RPGInventory = new Inventory.RPGInventoryManager();
             MenuManager = new MenuManager();
+            BusinessesManager = new Loader.BusinessesLoader();
             XMenuManager = new XMenuManager.XMenuManager();
             WeatherManager = new Weather.WeatherManager();
             DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
@@ -171,6 +174,7 @@ namespace ResurrectionRP_Server
             await Loader.VehicleRentLoaders.LoadAllVehicleRent();
             await VehicleManager.LoadAllVehiclesActive();
             await Loader.ClothingLoader.LoadAllCloth();
+            await Loader.BusinessesLoader.LoadAllBusinesses();
             await WeatherManager.InitWeather();
             await JobsManager.Init();
             DrivingSchoolManager.InitAll();

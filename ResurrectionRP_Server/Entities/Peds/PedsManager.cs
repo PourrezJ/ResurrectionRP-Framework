@@ -42,7 +42,7 @@ namespace ResurrectionRP_Server.Entities.Peds
                 return;
             if (GameMode.Instance.IsDebug)
                 Alt.Server.LogInfo("PedsManager | Interaction Secondary with Ped");
-            Ped npc = GetNPCbyID((int)args[0]);
+            Ped npc = GetNPCbyID(int.Parse(args[0] + ""));
             if (npc != null || npc?.NpcInteractCallBack != null)
             {
                 await npc.NpcSecInteractCallBack?.Invoke(client, npc);

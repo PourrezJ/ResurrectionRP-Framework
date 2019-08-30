@@ -2,6 +2,7 @@
 import * as game from 'natives';
 import Raycast, * as raycast from 'client/Utils/Raycast';
 import * as chat from 'client/chat/chat';
+import * as MenuManager from 'client/MenuManager/MenuManager';
 import * as Utils from 'client/Utils/utils';
 
 /*
@@ -20,8 +21,8 @@ import * as Utils from 'client/Utils/utils';
 
 export class Interaction {
     constructor() {
-        alt.on("keydown", (key) => {
-            if (game.isPauseMenuActive() || chat.isOpened())
+        alt.on('keydown', (key) => {
+            if (game.isPauseMenuActive() || chat.isOpened() || MenuManager.hasMenuOpen())
                 return;
 
             let resultVeh = Raycast.line(5, 2, alt.Player.local.scriptID);
@@ -31,7 +32,7 @@ export class Interaction {
         alt.log(`Entity Type: ${result.entityType}`);
         alt.log(`Entity Hash: ${result.entityHash}`);
         alt.log(`Key pressed: ${key}`);*/
-            if (key == 69) {// e // F3 : 114
+            if (key == 69) { // e // F3 : 114
                 if (resultVeh.isHit && resultVeh.entityType == 2) {
                     alt.emitServer('OpenXtremVehicle');
                 }
@@ -48,16 +49,14 @@ export class Interaction {
             else {
                 alt.emitServer('OnKeyPress', key);
             }
-
         });
 
-        alt.on("update", () => {
+        alt.on('update', () => {
             let result = Raycast.line(4, 2, alt.Player.local.scriptID);
 
             if (result.isHit && result.entityType == 2 && alt.Player.local.vehicle == null) {
                 alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le véhicule.", 100)
             }
         });
-
     }
 }

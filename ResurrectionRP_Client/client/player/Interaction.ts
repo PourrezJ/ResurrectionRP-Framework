@@ -25,7 +25,7 @@ export class Interaction {
             IsInColshape = state;
         });
         alt.on("keydown", (key) => {
-            if (game.isPauseMenuActive() || chat.isOpened())
+            if (game.isPauseMenuActive() || chat.isOpened() || MenuManager.hasMenuOpen())
                 return;
 
             let resultVeh = Raycast.line(5, 2, alt.Player.local.scriptID);

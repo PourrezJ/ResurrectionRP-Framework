@@ -8,7 +8,7 @@ namespace ResurrectionRP_Server.Models
         public int Quantity { get; set; }
         public int Price { get; set; }
 
-        public Dictionary<dynamic, dynamic> Variables = new Dictionary<dynamic, dynamic>();
+        public Dictionary<string, dynamic> Variables = new Dictionary<string, dynamic>();
 
         public ItemStack(Item item, int quantity, int price = 0)
         {

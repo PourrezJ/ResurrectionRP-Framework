@@ -104,7 +104,7 @@ namespace ResurrectionRP_Server.Streamer
 
         public async Task updateStaticEntityBlip( Blips blip)
         {
-            this.ListStaticEntities[blip.id] = blip;
+            this.ListStaticEntities[blip.id] = blip.export();
             GameMode.Instance.PlayerList.ForEach(async (player) =>
             {
                 await AltAsync.EmitAsync(player, "deleteStaticEntity", blip.id, (int)blip.type);

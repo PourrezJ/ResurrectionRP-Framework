@@ -20,48 +20,48 @@ namespace ResurrectionRP_Server.Loader.TattooLoader
 
         public static Task LoadAllTattoo()
         {
-            Alt.Server.LogInfo("[TatooManager] Loading all tatoo...");
+            Alt.Server.LogInfo("[TattooManager] Loading all Tattoo...");
 
             string[] files = Directory.GetFiles(MakePath(""), "*.json");
             foreach (var file in files)
             {
                 try
                 {
-                    Tattoo[] tatoolist = Get(Path.GetFileName(file));
-                    if (tatoolist == null) continue;
+                    Tattoo[] Tattoolist = Get(Path.GetFileName(file));
+                    if (Tattoolist == null) continue;
 
-                    foreach (Tattoo tatoo in tatoolist)
+                    foreach (Tattoo Tattoo in Tattoolist)
                     {
-                        if (tatoo != null)
+                        if (Tattoo != null)
                         {
-                            switch (tatoo.ZoneID)
+                            switch (Tattoo.ZoneID)
                             {
                                 case 0:
-                                    TorsoTatooList.Add(tatoo);
+                                    TorsoTattooList.Add(Tattoo);
                                     break;
 
                                 case 1:
-                                    HeadTatooList.Add(tatoo);
+                                    HeadTattooList.Add(Tattoo);
                                     break;
 
                                 case 2:
-                                    LeftArmTatooList.Add(tatoo);
+                                    LeftArmTattooList.Add(Tattoo);
                                     break;
 
                                 case 3:
-                                    RightArmTatooList.Add(tatoo);
+                                    RightArmTattooList.Add(Tattoo);
                                     break;
 
                                 case 4:
-                                    LeftLegTatooList.Add(tatoo);
+                                    LeftLegTattooList.Add(Tattoo);
                                     break;
 
                                 case 5:
-                                    RightLegTatooList.Add(tatoo);
+                                    RightLegTattooList.Add(Tattoo);
                                     break;
 
                                 default:
-                                    Alt.Server.LogError ("[TatooManager] ID unknown.");
+                                    Alt.Server.LogError ("[TattooManager] ID unknown.");
                                     break;
                             }
                         }
@@ -70,12 +70,12 @@ namespace ResurrectionRP_Server.Loader.TattooLoader
                 }
                 catch (Exception ex)
                 {
-                    Alt.Server.LogError("[TatooManager] ERROR: " + ex);
+                    Alt.Server.LogError("[TattooManager] ERROR: " + ex);
                     continue;
                 }
             }
 
-            Alt.Server.LogInfo ("[TatooManager] Loading completed!");
+            Alt.Server.LogInfo ("[TattooManager] Loading completed!");
             return Task.CompletedTask;
         }
 
@@ -84,23 +84,23 @@ namespace ResurrectionRP_Server.Loader.TattooLoader
             string path = MakePath(filename);
             if (!File.Exists(path))
             {
-                Alt.Server.LogError("[TatooManager] Could not find '" + path + "'");
+                Alt.Server.LogError("[TattooManager] Could not find '" + path + "'");
                 return null;
             }
 
             try
             {
-                Tattoo[] tatooManifest = JsonConvert.DeserializeObject<Tattoo[]>(File.ReadAllText(path));
-                foreach (var tatoo in tatooManifest)
+                Tattoo[] TattooManifest = JsonConvert.DeserializeObject<Tattoo[]>(File.ReadAllText(path));
+                foreach (var Tattoo in TattooManifest)
                 {
-                    tatoo.Collection = filename.Split('.')[0];
+                    Tattoo.Collection = filename.Split('.')[0];
                 }
 
-                return tatooManifest;
+                return TattooManifest;
             }
             catch (JsonReaderException e)
             {
-                Alt.Server.LogError("[TatooManager] An error occured while reading '" + path + "': " + e.Message);
+                Alt.Server.LogError("[TattooManager] An error occured while reading '" + path + "': " + e.Message);
                 return null;
             }
         }

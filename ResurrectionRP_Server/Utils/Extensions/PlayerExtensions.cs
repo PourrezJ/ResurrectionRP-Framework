@@ -263,6 +263,23 @@ namespace ResurrectionRP_Server
             // TODO
         }
 
+        public async static Task SetHeadOverlayAsync(this IPlayer client, int overlayId, Businesses.Barber.HeadOverlayData overlayData)
+        {
+            // TODO
+        }
+        public static void SetHeadOverlay(this IPlayer client, int overlayId, Businesses.Barber.HeadOverlayData overlayData)
+        {
+            // TODO
+        }
+
+        public static void SetHairColor(this IPlayer client, uint color, uint highlightColor)
+        {
+            // TOOD
+        }
+        public async static Task SetHairColorAsync(this IPlayer client,  uint color, uint hightlightColor)
+        {
+
+        }
         public static async Task Resurrect(this IPlayer client)
             => await client.EmitAsync("ResurrectPlayer");
 

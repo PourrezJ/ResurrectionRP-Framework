@@ -238,6 +238,24 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return false;
         }
 
+
+        public async Task SetFuel(float fuel)
+        {
+            Fuel = fuel;
+            await Update();
+        }
+
+        public async Task AddFuel(float fuel)
+        {
+            if (Fuel + fuel > FuelMax)
+            {
+                Fuel = FuelMax;
+            }
+            else
+                Fuel += fuel;
+
+            await Update();
+        }
         public async Task UpdateProperties()
         {
             if (Door == null)

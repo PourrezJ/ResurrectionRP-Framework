@@ -48,5 +48,10 @@ namespace ResurrectionRP_Server.Entities.Blips
             data["id"] = this.id;
             return data;
         }
+
+        public async void setColorAsyc(int color)
+        {
+            await BlipsManager.SetColor(this.id, color);
+        }
     }
 }

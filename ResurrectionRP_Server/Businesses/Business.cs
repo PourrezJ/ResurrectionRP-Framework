@@ -17,6 +17,7 @@ using ResurrectionRP_Server.Entities.Peds;
 
 namespace ResurrectionRP_Server.Businesses
 {
+    [BsonKnownTypes(typeof(Market), typeof(TattoosStore), typeof(Barber.BarberStore), typeof(WeaponsShop), typeof(ClothingStore), typeof(PawnShop), typeof(DigitalDeen), typeof(PropsStore))]
     public partial class Business
     {
 

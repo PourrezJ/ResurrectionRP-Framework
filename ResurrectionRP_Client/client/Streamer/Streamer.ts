@@ -147,7 +147,9 @@ export class Streamer {
         this.StaticEntityList[id] = test;
     }
 
-    private deleteStaticEntity = (entityid: number, type:number) => {
+    private deleteStaticEntity = (entityid: number, type: number) => {
+        if (this.StaticEntityList[entityid] == undefined)
+            return;
         switch (type) {
             case 4:
                 this.StaticEntityList[entityid].destroy();

@@ -11,7 +11,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
 using ResurrectionRP_Server.Loader;
-
+using MongoDB.Bson;
 
 namespace ResurrectionRP_Server.Businesses
 {
@@ -89,35 +89,35 @@ namespace ResurrectionRP_Server.Businesses
             await base.Init();
             await AltAsync.Do(async () =>
             {
-                ColthingColshape = Alt.CreateColShapeCylinder(ClothingPos, 4f, 3f);
+                ColthingColshape = Alt.CreateColShapeCylinder(ClothingPos - new Vector3(0,0,1), 4f, 3f);
                 ColthingColshape.SetData("ClothingID", this._id);
                 GameMode.Instance.Streamer.addEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 4f), new Vector3(0, 0, 3f), 80, 255, 255, 255);
                 await Entities.Blips.BlipsManager.SetColor(Blip, 25);
             });
 
-
-            AltAsync.OnClient("ClothingID_Open", ClothingID_Open);
+            EventHandlers.Events.OnPlayerEnterColShape += OnPlayerEnterColShape;
+            EventHandlers.Events.OnPlayerInteractClothingShop += ClothingID_Open;
         }
 
-        private async Task ClothingID_Open(IPlayer client, object[] args)
+        private async void ClothingID_Open(BsonObjectId ID, IPlayer client)
         {
             if (!client.Exists)
                 return;
 
-            if (args[0] == null)
+            if (ID == null)
                 return;
 
-            if (args[0].ToString() != this._id.ToString())
+            if (ID.ToString() != this._id.ToString())
                 return;
 
             await OpenClothingMenu(client);
         }
 
-        public override void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        public override async void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
             if (ColthingColshape == null)
                 return;
-
+             await client.displayHelp("Appuyer sur ~INPUT_CONTEXT~ pour interagir.", 5000);
              base.OnPlayerEnterColShape(colShape, client);
         }
 
@@ -393,11 +393,13 @@ namespace ResurrectionRP_Server.Businesses
             int drawable = menuItem.GetData("drawable");
             int variation = menuItem.GetData("variation");
             double price = menuItem.GetData("price");
+            string clothName = menuItem.Text;
 
             var ph = client.GetPlayerHandler();
 
             if (ph == null)
                 return;
+
 
             if (await ph.HasBankMoney(price, $"Achat vêtement {menuItem.Text}"))
             {

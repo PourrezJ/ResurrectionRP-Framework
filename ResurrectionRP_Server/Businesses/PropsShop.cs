@@ -313,6 +313,7 @@ namespace ResurrectionRP_Server.Businesses
             if (ph == null)
                 return;
 
+
             if (await ph.HasBankMoney(price, $"Achat vêtement {menuItem.Text}"))
             {
                 if (await ph.AddItem(item, 1))

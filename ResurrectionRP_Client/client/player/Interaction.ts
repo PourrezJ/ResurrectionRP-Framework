@@ -17,9 +17,12 @@ import * as Utils from 'client/Utils/utils';
     256: Intersect with vegetation (plants, coral. trees not included)
 
  * */
-
+var IsInColshape: boolean = false;
 export class Interaction {
     constructor() {
+        alt.onServer("setStateInColShape", (state: boolean) => {
+            IsInColshape = state;
+        });
         alt.on("keydown", (key) => {
             if (game.isPauseMenuActive() || chat.isOpened())
                 return;
@@ -31,24 +34,26 @@ export class Interaction {
         alt.log(`Entity Type: ${result.entityType}`);
         alt.log(`Entity Hash: ${result.entityHash}`);
         alt.log(`Key pressed: ${key}`);*/
-            if (key == 69) {// E // F3 : 114
+            if (key == 69 && resultVeh.isHit || key == 69 && resultPed.isHit ) {// E // F3 : 114
                 if (resultVeh.isHit && resultVeh.entityType == 2) {
                     alt.emitServer('OpenXtremVehicle');
                 }
-                if (resultPed.isHit && resultPed.entityType == 1) {
-                    var player:alt.Player = alt.Player.all.find(p => p.scriptID == resultPed.hitEntity);
+                else if (resultPed.isHit && resultPed.entityType == 1) {
+                    var player: alt.Player = alt.Player.all.find(p => p.scriptID == resultPed.hitEntity);
                     if (player == null || player == undefined)
                         return;
                     alt.emitServer('OpenXtremPlayer', player.id);
                 }
             }
-            else if (key == 85) { // U
+            else if (key == 85 && resultVeh.isHit) { // U
                 if (resultVeh.isHit && resultVeh.entityType == 2) {
                     var vehicle = alt.Vehicle.all.find(p => p.scriptID == resultVeh.hitEntity);
                     alt.emitServer('LockUnlockVehicle', vehicle);
                 }
+            } else if (IsInColshape && (key == 85 || key == 69 || key == 85 || key == 89 || key == 78 )) { // U / E / W / Y / N
+                alt.emitServer("InteractionInColshape", key);
             }
-            else {
+            else if(key == 85 || key == 69 || key == 85 || key == 89 || key == 78){ // Optimiser ce call ? En envoyant que les clés qui sont succeptibles d'être utilisée pour une interaction
                 alt.emitServer('OnKeyPress', key);
             }
 

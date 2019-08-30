@@ -18,6 +18,7 @@ export class Streamer {
 
 
         alt.on("update", () => {
+
             this.EntityList.forEach((item, index) => {
                 if (item != null && item["Text"] != null) {
                     displayTextLabel(item);
@@ -54,9 +55,9 @@ export class Streamer {
                     entity["position"]["x"],
                     entity["position"]["y"],
                     entity["position"]["z"],
-                    entity["data"]["heading"],
-                    entity["data"]["freeze"],
-                    entity["data"]["invicible"]
+                    entity["data"]["heading"]["doubleValue"],
+                    entity["data"]["freeze"]["boolValue"],
+                    entity["data"]["invicible"]["boolValue"]
                 );
                 break;
             case 1:
@@ -121,8 +122,13 @@ export class Streamer {
 
     private streamPed = async (id: number, type: number, model: any, x: number, y: number, z: number, heading: number, freeze: boolean, invicible: boolean) => {
         var entityId = game.createPed(type, model, x, y, z, heading, false, true);
-        game.setEntityInvincible(entityId, invicible);
-        //game.freezeEntityPosition(entityId, freeze); // REND LE PED INVISIBLE ???
+        if (entityId != 0) {/*
+            game.setEntityInvincible(entityId, invicible);
+            game.freezeEntityPosition(entityId, freeze); // REND LE PED INVISIBLE ??*/
+        }
+        alt.logWarning("Streaming in new ped, entity ID " + entityId + " | id global : " + id + "| heading : " + JSON.stringify(heading));
+        alt.logWarning("Entity type: " + type + " Model : " + model);
+        alt.logWarning("Ped is invicible : " + JSON.stringify(invicible) + " | is frozen : " + JSON.stringify(freeze));
         this.EntityList[id] = entityId;
     }
     private streamObject = async (id: number, model: any, x: number, y: number, z: number) => {
@@ -183,10 +189,6 @@ export class Streamer {
         let resultPed = Raycast.line(5, 4, alt.Player.local.scriptID);
         if (!resultPed.isHit)
             return;
-        alt.log("OnKeyPrssed streamer:");
-        alt.log("Entity script: " + resultPed.hitEntity);
-        alt.log("Entity ID: " + this.getPedId(resultPed.hitEntity));
-        alt.log("Key: " + key);
         if (key == 69) // E
         {
             alt.emitServer("Ped_Interact", this.getPedId(resultPed.hitEntity));

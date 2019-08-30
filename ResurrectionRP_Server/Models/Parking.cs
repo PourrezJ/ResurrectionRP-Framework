@@ -240,7 +240,7 @@ namespace ResurrectionRP_Server.Models
             GameMode.Instance.Streamer.addEntityTextLabel(this.Name + "\n~o~Approchez pour interagir", Location, 4);
 
             if (blip)
-                GameMode.Instance.Streamer.addStaticEntityBlip(name, Location,color,(int) sprite);
+                Entities.Blips.BlipsManager.CreateBlip(name, Location,color,(int) sprite);
 
             Events.OnPlayerEnterColShape += OnPlayerEnterColShape;
             Events.OnPlayerLeaveColShape += OnPlayerLeaveColShape;

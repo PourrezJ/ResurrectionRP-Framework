@@ -13,6 +13,7 @@ namespace ResurrectionRP_Server.EventHandlers
         {
             Alt.OnColShape += OnEntityColshape;
             Alt.OnServerCustomEvent += Alt_OnServerCustomEvent;
+            AltAsync.OnClient("InteractionInColshape", OnEntityInteractInColShape);
         }
 
         private static void Alt_OnServerCustomEvent(string eventName, ref AltV.Net.Native.MValueArray mValueArray)

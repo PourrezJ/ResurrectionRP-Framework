@@ -927,7 +927,6 @@ namespace ResurrectionRP_Server.Inventory
                                 }
 
                                 await player.Clothing.UpdatePlayerClothing();
-                                await player.Update();
                             }
                             #endregion
 
@@ -937,6 +936,7 @@ namespace ResurrectionRP_Server.Inventory
                     if (menu.OnMove != null)
                         await menu.OnMove.Invoke(client, menu);
 
+                    await player.Update();
                     await Refresh(client, menu);
                 }
             }
@@ -989,6 +989,7 @@ namespace ResurrectionRP_Server.Inventory
                         cloneItem.Quantity = splitCount;
 
                         inv.InventoryList[newSlot] = cloneItem;
+                        await client.GetPlayerHandler()?.Update();
                     }
                 }
             }

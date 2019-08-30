@@ -1,5 +1,8 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
+import PhoneManager from 'client/phone/PhoneManager';
+import * as chat from 'client/chat/chat';
+import Raycast, * as raycast from 'client/Utils/Raycast';
 
 export class Streamer {
     public StaticEntityList: any[] = [];
@@ -10,26 +13,12 @@ export class Streamer {
         alt.on("onStreamDataChange", this.onStreamDataChange);
         alt.on("disconnect", this.unloadStream);
 
-        alt.onServer('createStaticEntity', (data: any[]) => {
-            switch (data["entityType"]) {
-                case 4:
-                    this.streamBlip(
-                        data["id"],
-                        data["posx"],
-                        data["posy"],
-                        data["posz"],
-                        data["sprite"],
-                        data["color"],
-                        data["name"],
-                        data["scale"],
-                        data["shortRange"]
-                    );
-                    break;
-            }
-        });
+        alt.onServer('createStaticEntity', this.createStaticEntity);
+        alt.onServer("deleteStaticEntity", this.deleteStaticEntity);
 
 
         alt.on("update", () => {
+
             this.EntityList.forEach((item, index) => {
                 if (item != null && item["Text"] != null) {
                     displayTextLabel(item);
@@ -50,12 +39,12 @@ export class Streamer {
                 }
             });
         });
+        alt.on("keydown", this.OnKeyPressed);
     }
 
 
 
     onStreamIn = async (entity: object) => {
-
         switch (entity["data"]["entityType"]["intValue"]) {
             case 0:
                 await alt.loadModelAsync(entity["data"]["model"]["uintValue"]);
@@ -66,7 +55,9 @@ export class Streamer {
                     entity["position"]["x"],
                     entity["position"]["y"],
                     entity["position"]["z"],
-                    entity["data"]["heading"]
+                    entity["data"]["heading"]["doubleValue"],
+                    entity["data"]["freeze"]["boolValue"],
+                    entity["data"]["invicible"]["boolValue"]
                 );
                 break;
             case 1:
@@ -124,14 +115,21 @@ export class Streamer {
     private unloadStream = async () => {
         this.EntityList.forEach((item, index) => {
             game.deleteEntity(item);
+            game.deletePed(item);
             this.EntityList[index] = null;
         });
     }
 
-    private streamPed = async (id: number,type: number, model: any, x: number, y: number, z: number, heading: number) => {
-        var entityId = game.createPed(type, model, x,y,z, heading, false, true);
+    private streamPed = async (id: number, type: number, model: any, x: number, y: number, z: number, heading: number, freeze: boolean, invicible: boolean) => {
+        var entityId = game.createPed(type, model, x, y, z, heading, false, true);
+        if (entityId != 0) {/*
+            game.setEntityInvincible(entityId, invicible);
+            game.freezeEntityPosition(entityId, freeze); // REND LE PED INVISIBLE ??*/
+        }
+        alt.logWarning("Streaming in new ped, entity ID " + entityId + " | id global : " + id + "| heading : " + JSON.stringify(heading));
+        alt.logWarning("Entity type: " + type + " Model : " + model);
+        alt.logWarning("Ped is invicible : " + JSON.stringify(invicible) + " | is frozen : " + JSON.stringify(freeze));
         this.EntityList[id] = entityId;
-
     }
     private streamObject = async (id: number, model: any, x: number, y: number, z: number) => {
         var entityId = game.createObject(model, x, y, z, false, true, false);
@@ -155,22 +153,86 @@ export class Streamer {
         this.StaticEntityList[id] = test;
     }
 
+    private deleteStaticEntity = (entityid: number, type: number) => {
+        if (this.StaticEntityList[entityid] == undefined)
+            return;
+        switch (type) {
+            case 4:
+                this.StaticEntityList[entityid].destroy();
+                break;
+        }
+    }
+
+    private createStaticEntity = (data: any[]) => {
+        switch (data["entityType"]) {
+            case 4:
+                this.streamBlip(
+                    data["id"],
+                    data["posx"],
+                    data["posy"],
+                    data["posz"],
+                    data["sprite"],
+                    data["color"],
+                    data["name"],
+                    data["scale"],
+                    data["shortRange"]
+                );
+                break;
+        }
+    }
+
+    private OnKeyPressed = (key: number) => {
+        if (game.isPauseMenuActive() || PhoneManager.IsPhoneOpen() || chat.isOpened())
+            return;
+        if (key != 69 && key != 87)
+            return;
+        let resultPed = Raycast.line(5, 4, alt.Player.local.scriptID);
+        if (!resultPed.isHit)
+            return;
+        if (key == 69) // E
+        {
+            alt.emitServer("Ped_Interact", this.getPedId(resultPed.hitEntity));
+        }
+        if (key == 87) // W
+        {
+            alt.emitServer("Ped_SecondaryInteract", this.getPedId(resultPed.hitEntity));
+
+        }
+
+    }
+
+    private getPedId = (scriptid: number) => {
+        var indexer = 0;
+        this.EntityList.find((p, index) => {
+            indexer = index;
+            return p == scriptid;
+        });
+        return indexer;
+    }
+
+
     public onStreamDataChange = (entity: object, data: object) => {
         switch (entity["data"]["entityType"]["intValue"]) {
             case 0:
                 game.deletePed(this.EntityList[entity["data"]["id"]["intValue"]])
+         this.onStreamIn(entity);
                 break;
             case 1:
                 game.deleteObject(this.EntityList[entity["data"]["id"]["intValue"]])
+                this.onStreamIn(entity);
                 break;
             case 2:
                 this.EntityList[entity["data"]["id"]["intValue"]] = undefined;
+                this.onStreamIn(entity);
                 break;
             case 3:
                 this.EntityList[entity["data"]["id"]["intValue"]] = undefined;
+                this.onStreamIn(entity);
+                break;
+            case 4:
+                this.StaticEntityList[entity["data"]["id"]["intValue"]].destroy();
                 break;
         }
-         this.onStreamIn(entity);
     }
 
 }

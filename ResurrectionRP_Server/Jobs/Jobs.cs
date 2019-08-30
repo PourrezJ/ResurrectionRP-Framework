@@ -42,7 +42,7 @@ namespace ResurrectionRP_Server.Jobs
             {
                 // Blip
                 //_blip = await MP.Blips.NewAsync(BlipSprite, ServicePos, 1, (byte)BlipColor, Name, 255, 0, true, 0);
-                _blip = GameMode.Instance.Streamer.addStaticEntityBlip(Name, ServicePos, 1, (int)BlipSprite, 1, true);
+                _blip = Entities.Blips.BlipsManager.CreateBlip(Name, ServicePos, 1, (int)BlipSprite, 1, true);
 
                 //_serviceColshape = await MP.Colshapes.NewTubeAsync(ServicePos, 1f, 1f);
                 _serviceColshape = Alt.CreateColShapeCylinder(ServicePos, 1f, 1f);

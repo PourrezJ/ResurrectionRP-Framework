@@ -27,7 +27,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
 
         public async Task Load()
         {
-            GameMode.Instance.Streamer.addStaticEntityBlip(Name, BlipPosition, 0, (int)BlipSprite);
+            Entities.Blips.BlipsManager.CreateBlip(Name, BlipPosition, 0, (int)BlipSprite);
             //await MP.Blips.NewAsync(BlipSprite, BlipPosition, 1, 0, Name, 255, 10, true);
 
             for (int i = 0; i < LocationList.Count; i++)

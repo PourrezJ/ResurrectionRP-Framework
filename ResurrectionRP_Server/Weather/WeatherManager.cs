@@ -50,7 +50,7 @@ namespace ResurrectionRP_Server.Weather
 
         public async Task UpdatePlayersWeather()
         {
-            var players = Alt.GetAllPlayers();
+            var players = GameMode.Instance.PlayerList;
             foreach(IPlayer player in players)
             {
                 if (!player.Exists)

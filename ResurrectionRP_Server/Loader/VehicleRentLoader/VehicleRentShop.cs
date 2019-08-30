@@ -26,7 +26,7 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
         public async Task Load()
         {
             //await MP.Blips.NewAsync(BlipSprite, BlipPosition, 1, 0, $"[Location] {Name}", 255, 10, true);
-            GameMode.Instance.Streamer.addStaticEntityBlip($"[Location] {Name}", BlipPosition, 0, BlipSprite);
+            Entities.Blips.BlipsManager.CreateBlip($"[Location] {Name}", BlipPosition, 0, BlipSprite);
 
 
             for (int i = 0; i < LocationList.Count; i++)

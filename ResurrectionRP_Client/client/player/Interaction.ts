@@ -18,25 +18,40 @@ import * as Utils from 'client/Utils/utils';
     256: Intersect with vegetation (plants, coral. trees not included)
 
  * */
+var isInColshape: boolean = false;
 
 export class Interaction {
     constructor() {
-        alt.on('keydown', (key) => {
+        alt.onServer("SetStateInColShape", (state: boolean) => {
+            isInColshape = state;
+        });
+
+        alt.on("keydown", (key) => {
             if (game.isPauseMenuActive() || chat.isOpened() || MenuManager.hasMenuOpen())
                 return;
 
-/*        alt.logWarning(`Hit Pos: ${JSON.stringify(result.pos)}`);
-        alt.log(`Entity hit: ${result.hitEntity}`);
-        alt.log(`Entity Type: ${result.entityType}`);
-        alt.log(`Entity Hash: ${result.entityHash}`);
-        alt.log(`Key pressed: ${key}`);*/
-            if (key == 69) { // E // F3 : 114
+            if (key == 69) { // E
+                if (isInColshape) {
+                    alt.emitServer("InteractionInColshape", key);
+                    return;
+                }
+
                 let result = Raycast.line(5, 22, alt.Player.local.scriptID);
 
                 if (result.isHit && result.entityType == 2) {
-                    alt.emitServer('OpenXtremVehicle');
+                    var vehicle: alt.Vehicle = alt.Vehicle.all.find(v => v.scriptID == result.hitEntity);
+
+                    if (player == null || player == undefined)
+                        return;
+
+                    alt.emitServer('OpenXtremVehicle', vehicle.id);
                 } else if (result.isHit && result.entityType == 1) {
-                    alt.emitServer('OpenXtremPlayer');
+                    var player: alt.Player = alt.Player.all.find(p => p.scriptID == result.hitEntity);
+
+                    if (player == null || player == undefined)
+                        return;
+
+                    alt.emitServer('OpenXtremPlayer', player.id);
                 } else if (result.isHit && result.entityType == 3) {
                     if (Interaction.isAtm(result.entityHash)) {
                         alt.emitServer('OpenAtmMenu');
@@ -47,11 +62,11 @@ export class Interaction {
                 let resultVeh = Raycast.line(5, 2, alt.Player.local.scriptID);
 
                 if (resultVeh.isHit && resultVeh.entityType == 2) {
-                    var vehicle = alt.Vehicle.all.find(p => p.scriptID == resultVeh.hitEntity);
+                    var vehicle: alt.Vehicle = alt.Vehicle.all.find(p => p.scriptID == resultVeh.hitEntity);
                     alt.emitServer('LockUnlockVehicle', vehicle);
                 }
             }
-            else {
+            else { // Optimiser ce call ? En envoyant que les clés qui sont succeptibles d'être utilisée pour une interaction
                 alt.emitServer('OnKeyPress', key);
             }
         });

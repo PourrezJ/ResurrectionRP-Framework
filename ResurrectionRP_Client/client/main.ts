@@ -37,6 +37,7 @@ alt.onServer("PlayerInitialised", (
     PlayerCustomization.init();
     new Notify();
     var GameClass: Game = new Game(StaffRank, IdentiteName, Money, Thirst, Hunger, AnimSettings, Time, Weather, WeatherWind, WeatherWindDirection, isDebug, Location);
+    game.freezeEntityPosition(alt.Player.local.scriptID, false);
 });
 
 alt.onServer('OpenCreator', () => {

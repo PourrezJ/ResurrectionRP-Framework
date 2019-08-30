@@ -163,6 +163,24 @@ namespace ResurrectionRP_Server
             }
             return endup;
         }
+        public static List<IPlayer> GetNearestPlayers(this IPlayer client, float range)
+        {
+            var vehs = Alt.GetAllPlayers();
+            List<IPlayer> endup = null;
+            var position = client.GetPosition();
+            Vector3 osition = new Vector3(position.X, position.Y, position.Z);
+            foreach (IPlayer veh in vehs)
+            {
+                if (!veh.Exists)
+                    continue;
+                var vehpos = veh.GetPosition();
+                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= range)
+                {
+                    endup.Add(veh);
+                }
+            }
+            return endup;
+        }
         public static IVehicle GetNearestVehicle(this IPlayer client)
         {
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
@@ -224,6 +242,45 @@ namespace ResurrectionRP_Server
             await Task.CompletedTask;
         }
 
+        public async static Task SetDecorationAsync(this IPlayer client, uint collection, uint overlay)
+        {
+            // TODO
+        }
+        public async static Task RemoveDecorationAsync(this IPlayer client, uint collection, uint overlay)
+        {
+            // TODO
+        }
+        public static void SetDecoration(this IPlayer client, uint collection, uint overlay)
+        {
+            // TODO
+        }
+
+        public static void ClearDecorations(this IPlayer client)
+        {
+            // TODO
+        }
+        public async static Task ClearDecorationsAsync(this IPlayer client)
+        {
+            // TODO
+        }
+
+        public async static Task SetHeadOverlayAsync(this IPlayer client, int overlayId, Businesses.Barber.HeadOverlayData overlayData)
+        {
+            // TODO
+        }
+        public static void SetHeadOverlay(this IPlayer client, int overlayId, Businesses.Barber.HeadOverlayData overlayData)
+        {
+            // TODO
+        }
+
+        public static void SetHairColor(this IPlayer client, uint color, uint highlightColor)
+        {
+            // TOOD
+        }
+        public async static Task SetHairColorAsync(this IPlayer client,  uint color, uint hightlightColor)
+        {
+
+        }
         public static async Task Resurrect(this IPlayer client)
             => await client.EmitAsync("ResurrectPlayer");
 

@@ -633,10 +633,6 @@ namespace ResurrectionRP_Server.Entities.Players
         }
         #endregion
 
-        #region Methods
-
-        #endregion
-
         #region Keys
         public void AddKey(VehicleHandler veh, string keyVehicleName = null)
         {
@@ -670,6 +666,5 @@ namespace ResurrectionRP_Server.Entities.Players
         public bool HasLicense(LicenseType type) =>
             Licenses.Exists(l => l.Type == type);
         #endregion
-
     }
 }

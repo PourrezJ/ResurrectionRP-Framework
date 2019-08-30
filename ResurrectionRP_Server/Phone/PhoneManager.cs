@@ -43,7 +43,6 @@ namespace ResurrectionRP_Server.Phone
         {
             PhoneClientList = new Dictionary<IPlayer, List<Phone>>();
             AltAsync.OnClient("PhoneMenuCallBack", PhoneMenuCallBack);
-
             AltAsync.OnClient("CallOpenPhone", EventTrigered);
             AltAsync.OnClient("ClosePhone", EventTrigered);
         }

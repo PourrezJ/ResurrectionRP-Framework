@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -7,11 +8,8 @@ using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Enums;
 using AltV.Net.Elements.Entities;
-using VehicleHandler = ResurrectionRP_Server.Entities.Vehicles.VehicleHandler;
-using VehicleManager = ResurrectionRP_Server.Entities.Vehicles.VehiclesManager;
-using PlayerHandler = ResurrectionRP_Server.Entities.Players.PlayerHandler;
-using PlayerManager = ResurrectionRP_Server.Entities.Players.PlayerManager;
-using Location = ResurrectionRP_Server.Models.Location;
+using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Models;
 
 namespace ResurrectionRP_Server.Jobs
 {
@@ -32,7 +30,7 @@ namespace ResurrectionRP_Server.Jobs
     public class DustMan : Jobs
     {
         #region Public Static Variables
-        public Dictionary<DustManManager, VehicleHandler> TrashVehiclesList = new Dictionary<DustManManager, VehicleHandler>();
+        public ConcurrentDictionary<DustManManager, VehicleHandler> TrashVehiclesList = new ConcurrentDictionary<DustManManager, VehicleHandler>();
         public List<TrashZone> TrashZoneList = new List<TrashZone>();
         #endregion
 
@@ -140,7 +138,7 @@ namespace ResurrectionRP_Server.Jobs
 
             Utils.Utils.Delay((int)TimeSpan.FromMinutes(2).TotalMilliseconds, false, async () =>
             {
-                if (VehicleSpawnLocation != null && VehicleManager.IsVehicleInSpawn(VehicleSpawnLocation.Pos))
+                if (VehicleSpawnLocation != null && VehiclesManager.IsVehicleInSpawn(VehicleSpawnLocation.Pos))
                 {
                     //var vehs = await MP.Vehicles.GetInRangeAsync(VehicleSpawnLocation.Pos, 4, MP.GlobalDimension);
                     var vehs = VehicleSpawnLocation.Pos.GetVehiclesInRange(4);
@@ -173,14 +171,16 @@ namespace ResurrectionRP_Server.Jobs
             {
                 if (!client.Exists || !vehicle.Exists)
                     return;
-                foreach (KeyValuePair<DustManManager, VehicleHandler> item in this.TrashVehiclesList)
+
+                foreach (KeyValuePair<DustManManager, VehicleHandler> item in TrashVehiclesList)
                 {
                     if (item.Key.DustManClient == client)
                         return;
                 }
+
                 //TrashZoneList[Utils.Utils.RandomNumber(TrashZoneList.Count)]
                 DustManManager DustManmanager = new DustManManager(client, TrashZoneList[0], _depotZone);
-                this.TrashVehiclesList.Add(DustManmanager, vehicle.GetVehicleHandler());
+                TrashVehiclesList.TryAdd(DustManmanager, vehicle.GetVehicleHandler());
                 //await client.EmitAsync("Jobs_Dustman", "Init", vehicle.Id, TrashZoneList[Utils.Utils.RandomNumber(TrashZoneList.Count)], _depotZone);
             }
         }

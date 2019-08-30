@@ -65,6 +65,11 @@ namespace ResurrectionRP_Server
             client.SetData(key, null);
         }
 
+        public static async Task SetPlayerIntoVehicle(this IVehicle client, IPlayer target)
+        {
+            await target.EmitAsync("SetPlayerIntoVehicle", client, -1);
+        }
+
         public static async Task TryPutPlayerInVehicle(this IVehicle client, IPlayer target)
         {
             await target.EmitAsync("TrySetPlayerIntoVehicle", client);

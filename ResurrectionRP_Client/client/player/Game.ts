@@ -11,7 +11,7 @@ import { RPGInventoryManager } from 'client/menus/rpgInventory/RPGinventory';
 import { Weather as WeatherLib } from 'client/Env/Weather';
 import { Interaction as InteractionLib } from 'client/Player/Interaction';
 import { Doors as DoorsManagerLib } from 'client/Env/Doors';
-import { PhoneManager } from 'client/phone/PhoneManager';
+import PhoneManager from 'client/phone/PhoneManager';
 import { DrivingSchool } from 'client/DrivingSchool';
 import { RadioManager } from 'client/menus/RadioManager';
 import { DustManManager } from 'client/Jobs/DustManManager';

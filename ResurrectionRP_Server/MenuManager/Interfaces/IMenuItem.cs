@@ -23,6 +23,6 @@
         bool IsInput();
         void ResetData(string key);
         void SetData(string key, object value);
-        void SetInput(string defaultText, byte maxLength, InputType inputType);
+        void SetInput(string defaultText, byte maxLength, InputType inputType, bool inputErrorResetValue);
     }
 }

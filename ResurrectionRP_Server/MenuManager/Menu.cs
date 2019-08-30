@@ -32,7 +32,6 @@ namespace ResurrectionRP_Server
 
         #region Private fields
         private Dictionary<string, object> _data;
-        private List<MenuItem> _items;
         private int _selectedIndex;
         private MenuItem _selectedItem;
         #endregion
@@ -53,25 +52,18 @@ namespace ResurrectionRP_Server
         {
             get { return IndexChangeCallback != null; }
         }
-        public List<MenuItem> Items
-        {
-            get => _items;
-            set
-            {
-                _items = value;
-            }
-        }
+        public MenuItemList Items { get; set; }
 
         public int SelectedIndex
         {
             get { return _selectedIndex; }
             set
             {
-                if (value >= _items.Count)
+                if (value >= Items.Count)
                     return;
 
                 _selectedIndex = value;
-                _selectedItem = _items[(value != -1) ? value : 0];
+                _selectedItem = Items[(value != -1) ? value : 0];
             }
         }
         public bool BackCloseMenu { get; set; }
@@ -84,11 +76,11 @@ namespace ResurrectionRP_Server
             get { return _selectedItem; }
             set
             {
-                if (!_items.Contains(value))
+                if (!Items.Contains(value))
                     return;
 
                 _selectedItem = value;
-                _selectedIndex = _items.IndexOf(value);
+                _selectedIndex = Items.IndexOf(value);
             }
         }
         [JsonIgnore]
@@ -135,7 +127,7 @@ namespace ResurrectionRP_Server
             BackCloseMenu = backCloseMenu;
 
             _data = new Dictionary<string, object>();
-            _items = new List<MenuItem>();
+            Items = new MenuItemList();
             ItemSelectCallback = null;
             Finalizer = null;
         }
@@ -146,7 +138,7 @@ namespace ResurrectionRP_Server
         {
             get
             {
-                foreach (MenuItem menuItem in _items)
+                foreach (MenuItem menuItem in Items)
                 {
                     if (menuItem.Id == id)
                         return menuItem;
@@ -160,17 +152,17 @@ namespace ResurrectionRP_Server
         #region Public methods
         public void Add(MenuItem menuItem)
         {
-            _items.Add(menuItem);
+            Items.Add(menuItem);
         }
 
         public void ClearItems()
         {
-            _items.Clear();
+            Items.Clear();
         }
 
         public bool Contains(string id)
         {
-            foreach (MenuItem menuItem in _items)
+            foreach (MenuItem menuItem in Items)
             {
                 if (menuItem.Id == id)
                     return true;
@@ -181,7 +173,7 @@ namespace ResurrectionRP_Server
 
         public bool Contains(MenuItem menuItem)
         {
-            return _items.Contains(menuItem);
+            return Items.Contains(menuItem);
         }
 
         public dynamic GetData(string key)
@@ -199,7 +191,7 @@ namespace ResurrectionRP_Server
 
         public void Insert(int index, MenuItem menuItem)
         {
-            _items.Insert(index, menuItem);
+            Items.Insert(index, menuItem);
 
             if (index <= _selectedIndex)
                 _selectedIndex++;
@@ -207,7 +199,7 @@ namespace ResurrectionRP_Server
 
         public bool Remove(string id)
         {
-            foreach (MenuItem menuItem in _items)
+            foreach (MenuItem menuItem in Items)
             {
                 if (menuItem.Id == id)
                     return Remove(menuItem);
@@ -218,23 +210,23 @@ namespace ResurrectionRP_Server
 
         public bool Remove(MenuItem menuItem)
         {
-            int pos = _items.IndexOf(menuItem);
-            bool result = _items.Remove(menuItem);
+            int pos = Items.IndexOf(menuItem);
+            bool result = Items.Remove(menuItem);
 
             if (pos == -1 || !result)
                 return false;
 
-            if (_items.Count == 0)
+            if (Items.Count == 0)
             {
                 _selectedIndex = -1;
                 _selectedItem = null;
             }
             else if (menuItem == _selectedItem)
             {
-                if (_selectedIndex == _items.Count)
+                if (_selectedIndex == Items.Count)
                     _selectedIndex--;
 
-                _selectedItem = _items[_selectedIndex];
+                _selectedItem = Items[_selectedIndex];
             }
             else if (pos < _selectedIndex)
                 _selectedIndex--;
@@ -244,19 +236,19 @@ namespace ResurrectionRP_Server
 
         public void RemoveAt(int index)
         {
-            _items.RemoveAt(index);
+            Items.RemoveAt(index);
 
-            if (_items.Count == 0)
+            if (Items.Count == 0)
             {
                 _selectedIndex = -1;
                 _selectedItem = null;
             }
             else if (index == _selectedIndex)
             {
-                if (_selectedIndex == _items.Count)
+                if (_selectedIndex == Items.Count)
                     _selectedIndex--;
 
-                _selectedItem = _items[_selectedIndex];
+                _selectedItem = Items[_selectedIndex];
             }
             else if (index < _selectedIndex)
                 _selectedIndex--;
@@ -264,7 +256,7 @@ namespace ResurrectionRP_Server
 
         public void Reset()
         {
-            _items.Clear();
+            Items.Clear();
             _data.Clear();
         }
 
@@ -279,6 +271,7 @@ namespace ResurrectionRP_Server
         }
 
         public async Task<bool> OpenMenu(IPlayer client) => await MenuManager.OpenMenu(client, this);
+
         public async Task CloseMenu(IPlayer client) => await MenuManager.CloseMenu(client);
         #endregion
     }

@@ -4,9 +4,9 @@ using System.Text;
 using AltV.Net;
 using System.Numerics;
 
-namespace ResurrectionRP_Server.Streamer.Data
+namespace ResurrectionRP_Server.Entities.Blips
 {
-    public struct Blips
+    public class Blips
     {
         public int id;
         public string name;
@@ -17,6 +17,7 @@ namespace ResurrectionRP_Server.Streamer.Data
         public float posz;
         public float scale;
         public bool shortRange;
+        public Streamer.Data.EntityType type = Streamer.Data.EntityType.Blip;
 
         public Blips(string name, Vector3 pos, int color, int sprite, float scale, bool shortRange, int entityId)
         {
@@ -43,9 +44,14 @@ namespace ResurrectionRP_Server.Streamer.Data
             data["sprite"] = this.sprite;
             data["scale"] = this.scale;
             data["shortRange"] = this.shortRange;
-            data["entityType"] = (int)EntityType.Blip;
+            data["entityType"] = (int)this.type;
             data["id"] = this.id;
             return data;
+        }
+
+        public async void setColorAsyc(int color)
+        {
+            await BlipsManager.SetColor(this.id, color);
         }
     }
 }

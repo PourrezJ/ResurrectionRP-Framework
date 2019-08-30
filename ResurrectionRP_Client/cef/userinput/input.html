@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Untitled</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/Google-Style-Text-Input.css">
+    <link rel="stylesheet" href="css/styles_input.css">
+</head>
+<body style="background-color:transparent">
+    <div class="group input_center">
+        <input type="text" required style="background-color:lightgray;" onkeydown="submit(event)" id="text_input" autofocus>
+        <span class="highlight"></span>
+        <span class="bar"></span>
+        <label id="text_label" style="color:darkblue"></label>
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        function submit(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+
+            if (keycode == 13) {
+                alt.emit('Input_Submit', document.getElementById('text_input').value);
+            }
+        }
+
+        alt.on('Input_Data', (length, msg) => {
+            document.getElementById('text_input').maxlength = length;
+
+            if (msg === "")
+                msg = "Entrez le texte";
+
+            document.getElementById('text_label').innerHTML = msg;
+        });
+    </script>
+</body>
+</html>

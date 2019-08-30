@@ -43,7 +43,6 @@ namespace ResurrectionRP_Server.Phone
         {
             PhoneClientList = new Dictionary<IPlayer, List<Phone>>();
             AltAsync.OnClient("PhoneMenuCallBack", PhoneMenuCallBack);
-
             AltAsync.OnClient("CallOpenPhone", EventTrigered);
             AltAsync.OnClient("ClosePhone", EventTrigered);
         }
@@ -110,7 +109,7 @@ namespace ResurrectionRP_Server.Phone
             return phoneNumber;
         }
 
-        public static bool HasOpenMenu(IPlayer client, out Phone phone)
+        public static bool HasOpenPhone(IPlayer client, out Phone phone)
         {
             phone = null;
             if (_ClientPhoneMenu.ContainsKey(client))
@@ -154,7 +153,7 @@ namespace ResurrectionRP_Server.Phone
             if (client == null || !client.Exists)
                 return;
 
-            Entities.Players.PlayerHandler ph = Entities.Players.PlayerManager.GetPlayerByClient(client);
+            Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
 
             if (!_ClientPhoneMenu.TryGetValue(client, out Phone phone))
                 return;

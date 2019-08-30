@@ -26,5 +26,15 @@ namespace ResurrectionRP_Server.Models
 
         public Rotation GetRotation()
             => new Rotation(Rot.X, Rot.Y, Rot.Z);
+        /*
+                public Rotation GetRotationFromRadianToDegree()
+                    => new Rotation(Rot.X * (180 / 3.14159f), Rot.Y * (180 / 3.14159f), Rot.Z * (180 / 3.14159f ));
+
+
+                public Rotation GetRotation()
+                    => new Rotation(Rot.X, Rot.Y, Rot.Z);
+
+                public Rotation GetRotationFromDegreeToRadian()
+                    => new Rotation(Rot.X * (3.14159f/180) , Rot.Y * (3.14159f / 180), Rot.Z * (3.14159f / 180));*/
     }
 }

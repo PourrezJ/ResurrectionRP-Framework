@@ -92,41 +92,34 @@ namespace ResurrectionRP_Server.Models
 
             var cloths = new Dictionary<ClothSlot, ClothData>()
             {
-                {ClothSlot.Accessory, new ClothData(Accessory.Drawable, Accessory.Texture, Accessory.Palette) },
-                {ClothSlot.Mask, new ClothData(Mask.Drawable, Mask.Texture, Mask.Palette) },
-                {ClothSlot.Tops, new ClothData(Tops.Drawable, Tops.Texture, Tops.Palette)},
-                {ClothSlot.Undershirt, new ClothData(Undershirt.Drawable, Undershirt.Texture, Undershirt.Palette)},
-                {ClothSlot.Legs, new ClothData(Legs.Drawable, Legs.Texture, Legs.Palette)},
-                {ClothSlot.Feet, new ClothData(Feet.Drawable, Feet.Texture, Feet.Palette)},
-                {ClothSlot.BodyArmor, new ClothData(BodyArmor.Drawable, BodyArmor.Texture, BodyArmor.Palette)},
-                {ClothSlot.Bags, new ClothData(Bags.Drawable, Bags.Texture, Bags.Palette) },
-                {ClothSlot.Torso, new ClothData(Torso.Drawable, Torso.Texture, Torso.Palette) }
+                { ClothSlot.Accessory, new ClothData(Accessory.Drawable, Accessory.Texture, Accessory.Palette) },
+                { ClothSlot.Mask, new ClothData(Mask.Drawable, Mask.Texture, Mask.Palette) },
+                { ClothSlot.Tops, new ClothData(Tops.Drawable, Tops.Texture, Tops.Palette) },
+                { ClothSlot.Undershirt, new ClothData(Undershirt.Drawable, Undershirt.Texture, Undershirt.Palette) },
+                { ClothSlot.Legs, new ClothData(Legs.Drawable, Legs.Texture, Legs.Palette) },
+                { ClothSlot.Feet, new ClothData(Feet.Drawable, Feet.Texture, Feet.Palette) },
+                { ClothSlot.BodyArmor, new ClothData(BodyArmor.Drawable, BodyArmor.Texture, BodyArmor.Palette) },
+                { ClothSlot.Bags, new ClothData(Bags.Drawable, Bags.Texture, Bags.Palette) },
+                { ClothSlot.Torso, new ClothData(Torso.Drawable, Torso.Texture, Torso.Palette) }
             };
 
-            await AltAsync.Do( async () =>
-            {
-                foreach (KeyValuePair<ClothSlot, ClothData> entry in cloths)
-                {
-                    await Player.SetClothAsync(entry.Key, entry.Value.Drawable, entry.Value.Texture, entry.Value.Palette);
-                }
+            foreach (KeyValuePair<ClothSlot, ClothData> entry in cloths)
+                await Player.SetClothAsync(entry.Key, entry.Value.Drawable, entry.Value.Texture, entry.Value.Palette);
 
-                if (Bracelets != null)
-                    await Player.SetPropAsync(PropSlot.Bracelets, Bracelets.Value);
+            if (Bracelets != null)
+                await Player.SetPropAsync(PropSlot.Bracelets, Bracelets.Value);
 
-                if (Ears != null)
-                    await Player.SetPropAsync(PropSlot.Ears, Ears.Value);
+            if (Ears != null)
+                await Player.SetPropAsync(PropSlot.Ears, Ears.Value);
 
-                if (Glasses != null)
-                    await Player.SetPropAsync(PropSlot.Glasses, Glasses.Value);
+            if (Glasses != null)
+                await Player.SetPropAsync(PropSlot.Glasses, Glasses.Value);
 
-                if (Watches != null)
-                    await Player.SetPropAsync(PropSlot.Watches, Watches.Value);
+            if (Watches != null)
+                await Player.SetPropAsync(PropSlot.Watches, Watches.Value);
 
-                if (Hats != null)
-                    await Player.SetPropAsync(PropSlot.Hats, Hats.Value);
-
-            });
+            if (Hats != null)
+                await Player.SetPropAsync(PropSlot.Hats, Hats.Value);
         }
-
     }
 }

@@ -22,7 +22,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         private PlayerHandler PlayerHandler;
         public async Task OpenXtremMenu(IPlayer client)
         {
-            PlayerHandler = PlayerManager.GetPlayerByClient(client);
+            PlayerHandler = client.GetPlayerHandler();
 
             if (PlayerHandler == null || Vehicle == null) return;
 
@@ -39,10 +39,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (await client.IsInVehicleAsync() && await client.GetSeatAsync() == 1)
                 {
                     xmenu.Add(new XMenuItem($"{(client.Vehicle.EngineOn ? "Eteindre" : "Allumer")} le véhicule", "", "ID_start", XMenuItemIcons.KEY_SOLID, executeCallback: true));
-                    /*
+                    
                     if (locked == VehicleLockState.Unlocked)
                         xmenu.Add(new XMenuItem("Gestion des portes", "", "ID_doors", XMenuItemIcons.DOOR_CLOSED_SOLID, executeCallback: true));
-                        */
+                        
                     if (NeonsColor != Color.Empty && (VehicleManifest?.Neon == true))
                         xmenu.Add(new XMenuItem($"{(NeonState.Item1 ? "Eteindre" : "Allumer")} les neons", "", "ID_neons", XMenuItemIcons.LIGHTBULB_SOLID, executeCallback: true));
                 }
@@ -105,14 +105,27 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             XMenu menu = new XMenu("DoorMenu");
             menu.Callback = VehicleXMenuCallback;
             
-            menu.Add(new XMenuItem("Porte avant gauche", "", "ID_frontLeft", ((this.GetDoorState(VehicleDoor.DriverFront) >= VehicleDoorState.OpenedLevel1) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-            menu.Add(new XMenuItem("Porte avant droite", "", "ID_frontRight", ((this.GetDoorState(VehicleDoor.PassengerFront) >= VehicleDoorState.OpenedLevel1) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-            menu.Add(new XMenuItem("Porte arrière gauche", "", "ID_backLeft", ((this.GetDoorState(VehicleDoor.DriverRear) >= VehicleDoorState.OpenedLevel1) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-            menu.Add(new XMenuItem("Porte arrière droite", "", "ID_backRight", ((this.GetDoorState(VehicleDoor.PassengerRear) >= VehicleDoorState.OpenedLevel1) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-            menu.Add(new XMenuItem("Capot", "", "ID_hood", ((this.GetDoorState(VehicleDoor.Hood) >= VehicleDoorState.OpenedLevel1) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
-            menu.Add(new XMenuItem("Coffre", "", "ID_trunk", ((this.GetDoorState(VehicleDoor.Trunk) >= VehicleDoorState.OpenedLevel1) ? XMenuItemIcons.DOOR_OPEN_SOLID : XMenuItemIcons.DOOR_CLOSED_SOLID)));
+            menu.Add(new XMenuItem("Porte avant gauche", "", "ID_frontLeft",  GetXMenuIconDoor( this.GetDoorState(VehicleDoor.DriverFront) ) )    );
+            menu.Add(new XMenuItem("Porte avant droite", "", "ID_frontRight", GetXMenuIconDoor(this.GetDoorState(VehicleDoor.PassengerFront))));
+            menu.Add(new XMenuItem("Porte arrière gauche", "", "ID_backLeft", GetXMenuIconDoor(this.GetDoorState(VehicleDoor.DriverRear))));
+            menu.Add(new XMenuItem("Porte arrière droite", "", "ID_backRight", GetXMenuIconDoor(this.GetDoorState(VehicleDoor.PassengerRear))));
+            menu.Add(new XMenuItem("Capot", "", "ID_hood", GetXMenuIconDoor(this.GetDoorState(VehicleDoor.Hood))));
+            menu.Add(new XMenuItem("Coffre", "", "ID_trunk", GetXMenuIconDoor(this.GetDoorState(VehicleDoor.Trunk) )));
             
             await menu.OpenXMenu(client);
+        }
+
+        public XMenuItemIconDesc GetXMenuIconDoor(VehicleDoorState state)
+        {
+            if (state == VehicleDoorState.Closed)
+                return XMenuItemIcons.DOOR_CLOSED_SOLID;
+            else if (state > VehicleDoorState.Closed && state <= VehicleDoorState.OpenedLevel7)
+                return XMenuItemIcons.DOOR_OPEN_SOLID;
+            else if (state == VehicleDoorState.DoesNotExists)
+                return XMenuItemIcons.BROKEN_IMAGE;
+            return XMenuItemIcons.DEVICE_UNKNOWN;
+
+
         }
 
         #region Callback
@@ -166,33 +179,33 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         break;
                             */
                     #warning DOOR SYSTEM DESACTIVER SONT COMPORTEMENT EST ETRANGE SUR ALTV
-                    /* 
+                    
                 case "ID_doors":
                     await OpenDoorsMenu(client);
                     break;
 
                 case "ID_frontLeft":
-                    await SetDoorState(VehicleDoor.DriverFront, (this.GetDoorState(VehicleDoor.DriverFront) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel2));
+                    await SetDoorState(VehicleDoor.DriverFront, (this.GetDoorState(VehicleDoor.DriverFront) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
                     await OpenDoorsMenu(client);
                     break;
                 case "ID_frontRight":
-                    await SetDoorState(VehicleDoor.PassengerFront, (this.GetDoorState(VehicleDoor.PassengerFront) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel1));
+                    await SetDoorState(VehicleDoor.PassengerFront, (this.GetDoorState(VehicleDoor.PassengerFront) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
                     await OpenDoorsMenu(client);
                     break;
                 case "ID_backLeft":
-                    await SetDoorState(VehicleDoor.DriverRear, (this.GetDoorState(VehicleDoor.DriverRear) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel1));
+                    await SetDoorState(VehicleDoor.DriverRear, (this.GetDoorState(VehicleDoor.DriverRear) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
                     await OpenDoorsMenu(client);
                     break;
                 case "ID_backRight":
-                    await SetDoorState(VehicleDoor.PassengerRear, (this.GetDoorState(VehicleDoor.PassengerRear) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel1));
+                    await SetDoorState(VehicleDoor.PassengerRear, (this.GetDoorState(VehicleDoor.PassengerRear) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
                     await OpenDoorsMenu(client);
                     break;
                 case "ID_hood":
-                    await SetDoorState(VehicleDoor.Hood, (this.GetDoorState(VehicleDoor.Hood) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel1));
+                    await SetDoorState(VehicleDoor.Hood, (this.GetDoorState(VehicleDoor.Hood) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
                     await OpenDoorsMenu(client);
                     break;
                 case "ID_trunk":
-                    await SetDoorState(VehicleDoor.Trunk, (this.GetDoorState(VehicleDoor.Trunk) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel1));
+                    await SetDoorState(VehicleDoor.Trunk, (this.GetDoorState(VehicleDoor.Trunk) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
                     await OpenDoorsMenu(client);
                     break;
                     /*
@@ -262,7 +275,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             {
                                 Vehicle.TryGetData("CarDealerPrice", out carPrice);
                                 Loader.CarDealerLoader.CarDealerPlace _place = _data;
-                                PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
+                                PlayerHandler ph = client.GetPlayerHandler();
                                 if (ph != null)
                                 {
                                     if (await ph.HasBankMoney(carPrice, $"Achat de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
@@ -289,7 +302,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             if (Vehicle.TryGetData("RentShop", out dynamic _data) == true)
                             {
                                 Loader.VehicleRentLoader.VehicleRentPlace _place = _data;
-                                PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
+                                PlayerHandler ph = client.GetPlayerHandler();
                                 if (ph != null)
                                 {
                                     if (await ph.HasBankMoney(_place.VehicleInfo.Price, $"Location de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
@@ -308,11 +321,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             Alt.Server.LogError("VehicleHandler.Menu.cs : " + ex.ToString() );
                         }
                         break;
-                    /*
+                    
                     case "ID_delete":
                         await this.Delete(true);
                         break;
-
+                    /*
                     case "ID_lockpick":
                         var lockPicks = PlayerHandler.GetStacksItems(ItemID.LockPick);
                         if (lockPicks.Count > 0)

@@ -4,6 +4,7 @@ using AltV.Net.Async;
 using ResurrectionRP_Server.Entities.Vehicles;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server
 {
@@ -21,7 +22,10 @@ namespace ResurrectionRP_Server
 
         public static List<IVehicle> GetVehiclesInRange(this IVehicle client, int Range)
         {
-            var vehs = Alt.GetAllVehicles();
+            // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
+            // var vehs = Alt.GetAllVehicles();
+            var vehs = Entities.Vehicles.VehiclesManager.GetAllVehicles();
+
             List<IVehicle> endup = new List<IVehicle>();
             var position = client.GetPosition();
             Vector3 osition = new Vector3(position.X, position.Y, position.Z);
@@ -61,10 +65,14 @@ namespace ResurrectionRP_Server
             client.SetData(key, null);
         }
 
-        public static async void TryPutPlayerInVehicle(this IVehicle client, IPlayer target)
+        public static async Task SetPlayerIntoVehicle(this IVehicle client, IPlayer target)
+        {
+            await target.EmitAsync("SetPlayerIntoVehicle", client, -1);
+        }
+
+        public static async Task TryPutPlayerInVehicle(this IVehicle client, IPlayer target)
         {
             await target.EmitAsync("TrySetPlayerIntoVehicle", client);
         }
-
     }
 }

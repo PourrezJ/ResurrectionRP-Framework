@@ -63,7 +63,10 @@ namespace ResurrectionRP_Server
 
         public static List<IVehicle> GetVehiclesInRange(this Vector3 pos, float range)
         {
-            ICollection<IVehicle> vehicles = Alt.GetAllVehicles();
+            // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
+            // ICollection<IVehicle> vehicles = Alt.GetAllVehicles();
+            ICollection<IVehicle> vehicles = Entities.Vehicles.VehiclesManager.GetAllVehicles();
+
             List<IVehicle> end = new List<IVehicle>();
             foreach(IVehicle veh in vehicles)
             {

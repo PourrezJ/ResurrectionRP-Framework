@@ -50,9 +50,11 @@ namespace ResurrectionRP_Server.Weather
 
         public async Task UpdatePlayersWeather()
         {
-            var players = Alt.GetAllPlayers();
+            var players = GameMode.Instance.PlayerList;
             foreach(IPlayer player in players)
             {
+                if (!player.Exists)
+                    return;
                 await player.EmitAsync("WeatherChange", this.Actual_weather.ToString(), this.Wind, this.WindDirection, this.WeatherTransition);
             }
         }

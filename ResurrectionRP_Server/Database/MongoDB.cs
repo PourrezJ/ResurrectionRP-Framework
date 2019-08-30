@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.Database
             else if (objet.GetType() == typeof(VehicleHandler))
             {
                 VehicleHandler vehicle = (VehicleHandler)objet;
-                return $"Vehicle: {vehicle.Plate} - Owner: {vehicle.OwnerID}";
+                return $"Vehicle: {vehicle.Plate} - Owner: {vehicle.OwnerID} - Last driver: {vehicle.LastDriver}";
             }
             /*
             else if (objet.GetType() == typeof(CarPark))

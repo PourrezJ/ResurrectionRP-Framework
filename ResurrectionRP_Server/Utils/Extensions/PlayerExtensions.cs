@@ -2,12 +2,14 @@
 using AltV.Net;
 using AltV.Net.Async;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.XMenuManager;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Numerics;
 using AltV.Net.Data;
 using AltV.Net.Elements.Args;
+using MongoDB.Driver;
 
 namespace ResurrectionRP_Server
 {
@@ -78,16 +80,17 @@ namespace ResurrectionRP_Server
         {
             await client.EmitAsync("successNotify", "Succès", text, 7000);
         }
-        public static async Task SendNotificationPicture(this IPlayer client, string message, Utils.Enums.CharPicture picture, bool flash, int icontype, string title, string description) =>
-                await client.EmitAsync("SetNotificationMessage", message, picture.ToString(), flash, icontype, title, description);
 
-        public static async Task SendNotificationPicture(this IPlayer client, string message, string picture, bool flash, int icontype, string title, string description) =>
-            await client.EmitAsync("SetNotificationMessage", message, picture.ToString(), flash, icontype, title, description);
+        public static async Task SendNotificationPicture(this IPlayer client, Utils.Enums.CharPicture img, string sender, string subject, string message) =>
+            await client.EmitAsync("SetNotificationMessage", img.ToString(), sender, subject, message);
 
         public async static Task NotifyAsync(this IPlayer client, string text) => await client.SendNotification(text);
         public static List<IVehicle> GetVehiclesInRange(this IPlayer client, int Range)
         {
-            var vehs = Alt.GetAllVehicles();
+            // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
+            // var vehs = Alt.GetAllVehicles();
+            var vehs = Entities.Vehicles.VehiclesManager.GetAllVehicles();
+
             List<IVehicle> endup = new List<IVehicle>();
             var position = client.GetPosition();
             Vector3 osition = new Vector3(position.X, position.Y, position.Z);
@@ -160,9 +163,30 @@ namespace ResurrectionRP_Server
             }
             return endup;
         }
+        public static List<IPlayer> GetNearestPlayers(this IPlayer client, float range)
+        {
+            var vehs = Alt.GetAllPlayers();
+            List<IPlayer> endup = null;
+            var position = client.GetPosition();
+            Vector3 osition = new Vector3(position.X, position.Y, position.Z);
+            foreach (IPlayer veh in vehs)
+            {
+                if (!veh.Exists)
+                    continue;
+                var vehpos = veh.GetPosition();
+                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= range)
+                {
+                    endup.Add(veh);
+                }
+            }
+            return endup;
+        }
         public static IVehicle GetNearestVehicle(this IPlayer client)
         {
-            var vehs = Alt.GetAllVehicles();
+            // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
+            // var vehs = Alt.GetAllVehicles();
+            var vehs = Entities.Vehicles.VehiclesManager.GetAllVehicles();
+
             IVehicle endup = null;
             var position = client.GetPosition();
             Vector3 osition = new Vector3(position.X, position.Y, position.Z);
@@ -218,8 +242,101 @@ namespace ResurrectionRP_Server
             await Task.CompletedTask;
         }
 
+        public async static Task SetDecorationAsync(this IPlayer client, uint collection, uint overlay)
+        {
+            // TODO
+        }
+        public async static Task RemoveDecorationAsync(this IPlayer client, uint collection, uint overlay)
+        {
+            // TODO
+        }
+        public static void SetDecoration(this IPlayer client, uint collection, uint overlay)
+        {
+            // TODO
+        }
+
+        public static void ClearDecorations(this IPlayer client)
+        {
+            // TODO
+        }
+        public async static Task ClearDecorationsAsync(this IPlayer client)
+        {
+            // TODO
+        }
+
+        public async static Task SetHeadOverlayAsync(this IPlayer client, int overlayId, Businesses.Barber.HeadOverlayData overlayData)
+        {
+            // TODO
+        }
+        public static void SetHeadOverlay(this IPlayer client, int overlayId, Businesses.Barber.HeadOverlayData overlayData)
+        {
+            // TODO
+        }
+
+        public static void SetHairColor(this IPlayer client, uint color, uint highlightColor)
+        {
+            // TOOD
+        }
+        public async static Task SetHairColorAsync(this IPlayer client,  uint color, uint hightlightColor)
+        {
+
+        }
         public static async Task Resurrect(this IPlayer client)
             => await client.EmitAsync("ResurrectPlayer");
 
+        public static async Task OpenCreator(this IPlayer client)
+        {
+            await client.SetPositionAsync(new Vector3(402.8664f, -996.4108f, -99.00027f));
+            client.Rotation = new Vector3(0, 0, -185f);
+            await client.EmitAsync("OpenCreator");
+        }
+
+        public static async Task<bool> PlayerHandlerExist(this IPlayer player)
+        {
+            if (!player.Exists)
+                return false;
+            try
+            {
+                player.GetData("SocialClub", out string social);
+                return await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID == social).AnyAsync();
+            }
+            catch (Exception ex)
+            {
+                // await player.SendNotificationError("Erreur avec votre compte, contactez un membre du staff.");
+                Alt.Server.LogError("PlayerHandlerExist" + ex);
+            }
+            return false;
+        }
+
+        public static async Task Revive(this IPlayer client)
+        {
+            await AltAsync.Do(async () =>
+            {
+                await client.SpawnAsync(new Position(client.GetPosition().X, client.GetPosition().Y, client.GetPosition().Z));
+                await client.SetRotationAsync(client.Rotation);
+                await client.SetHealthAsync(5);
+            });
+
+            await client.Resurrect();
+            var ph = client.GetPlayerHandler();
+            //if (ph != null)
+            //await ph.SetDead(false); TODO
+            /*
+                        if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
+                        {
+                            foreach (var medecin in await GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
+                            {
+                                await medecin.CallAsync("ONU_BlesseEnd", client.Id);
+                            }
+                        }*/
+        }
+
+        public static bool HasVehicleKey(this IPlayer client, string plate)
+            => client.GetPlayerHandler().ListVehicleKey.Exists(x => x.Plate == plate);
+
+        public static async Task SetPlayerIntoVehicle(this IPlayer target, IVehicle client)
+        {
+            await target.EmitAsync("SetPlayerIntoVehicle", client, -1);
+        }
     }
 }

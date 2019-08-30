@@ -33,7 +33,7 @@ namespace ResurrectionRP_Server.Entities.Players
             switch (Keycode)
             {/**
                 case ConsoleKey.NumPad0:
-                    if (MenuManager.HasOpenMenu(client))
+                    if (ph.HasOpenMenu())
                         return;
 
                     if (ph.IsCuff())
@@ -63,7 +63,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    if (!MenuManager.HasOpenMenu(client))
+                    if (!ph.HasOpenMenu())
                         await ph.OpenPlayerMenu();
 
                     break;
@@ -82,26 +82,21 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                     await vh.OpenXtremMenu(client);
                     break;
-                    /*
-                case ConsoleKey.F4:
-                    if (ph.IsCuff())
-                    {
-                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
+                    
+                case ConsoleKey.F5:
+                    if (ph.HasOpenMenu())
                         return;
-                    }
+
                     await ph.OpenAdminMenu();
                     break;
-                    */
+                    
                 case ConsoleKey.Backspace:
                     await XMenuManager.XMenuManager.CloseMenu(client);
-                    /*
-                    if (MenuManager.HasOpenMenu(client))
-                        await MenuManager.CloseMenu(client);*/
                     await RPGInventoryManager.CloseMenu(client);
                     break;
                     /*
                 case ConsoleKey.M:
-                    if (MenuManager.HasOpenMenu(client))
+                    if (ph.HasOpenMenu())
                         return;
 
                     await MP.Utility.Schedule(() =>
@@ -129,7 +124,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.G:
-                    if (MenuManager.HasOpenMenu(client))
+                    if (ph.HasOpenMenu())
                         return;
 
                     if (vehicle == null)
@@ -154,7 +149,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.X:
-                    if (MenuManager.HasOpenMenu(client))
+                    if (ph.HasOpenMenu())
                         return;
 
                     if (ph.IsCuff())
@@ -168,8 +163,8 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
                 **/
                 case ConsoleKey.I:
-/*                    if (MenuManager.HasOpenMenu(client))
-                        return;*/
+                    if (ph.HasOpenMenu())
+                        return;
 
                     if (ph.IsCuff())
                     {
@@ -177,15 +172,14 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    Inventory.RPGInventoryMenu menu = new Inventory.RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, null);
+                    RPGInventoryMenu menu = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, null);
 
                     await menu.OpenMenu(client);
                     break;
 
                 case ConsoleKey.PageUp:
-                    /*
-                    if (MenuManager.HasOpenMenu(client))
-                        return;*/
+                    if (ph.HasOpenMenu())
+                        return;
 
                     if (ph.IsCuff())
                     {
@@ -203,11 +197,14 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.PageDown:
+                    if (ph.HasOpenMenu())
+                        return;
+
                     await RadioManager.Close(client);
                     break;
 
                 case ConsoleKey.UpArrow:
-                    if (MenuManager.HasOpenMenu(client))
+                    if (ph.HasOpenMenu())
                         return;
 
                     if (ph.IsCuff())
@@ -227,26 +224,29 @@ namespace ResurrectionRP_Server.Entities.Players
 
 
                 case ConsoleKey.DownArrow:
+                    if (ph.HasOpenMenu())
+                        return;
+
                     Phone.PhoneManager.ClosePhone(client);
                     break;
                     /*
 
                 case ConsoleKey.D1:
-                    if (MenuManager.HasOpenMenu(client))
+                    if (ph.HasOpenMenu())
                         return;
 
                     await SwitchWeapon(1);
                     break;
 
                 case ConsoleKey.D2:
-                    if (MenuManager.HasOpenMenu(client))
+                    if (client.HasOpenMenu())
                         return;
 
                     await SwitchWeapon(2);
                     break;
 
                 case ConsoleKey.D3:
-                    if (MenuManager.HasOpenMenu(client))
+                    if (client.HasOpenMenu())
                         return;
 
                     await SwitchWeapon(3);

@@ -37,6 +37,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public async Task Update(Location location = null)
         {
+            
             _lastUpdateRequest = DateTime.Now;
 
             if (SpawnVeh)
@@ -50,14 +51,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 if (!Vehicle.Exists)
                     return;
-
-                Location.Pos = await Vehicle.GetPositionAsync();
-                Location.Rot = await Vehicle.GetRotationAsync();
-                Engine = await Vehicle.IsEngineOnAsync();
-                BodyHealth = await Vehicle.GetBodyHealthAsync();
-                EngineHealth = await Vehicle.GetEngineHealthAsync();
-                Dirt = await Vehicle.GetDirtLevelAsync();
-                RadioID = await Vehicle.GetRadioStationAsync();
+                Utils.Utils.Delay(1000, true, async () =>
+                {
+                    await UpdateProperties();
+                });
 
             }
 

@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Numerics;
 
@@ -140,7 +141,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
 IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = null, bool spawnVeh = false, uint dimension = (uint)short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
         {
-            if (model == 0) return null;
+            if (model == 0)
+                return null;
+
             VehicleHandler veh = new VehicleHandler(socialClubName, model, position, rotation, (byte)primaryColor, (byte)secondaryColor, fuel, fuelMax, plate, engineStatus, locked, client, mods, neon, spawnVeh, (short)dimension, inventory, freeze, dirt, health);
             await veh.SpawnVehicle(new Models.Location(position, rotation));
 
@@ -159,19 +162,17 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
                 if (vehicle != null && vehicle.Exists)
                 {
                     if (vehicle.GetData("VehicleHandler", out object data))
-                    {
                         return data as VehicleHandler;
-                    }
 
                     if (GameMode.Instance.VehicleManager.VehicleHandlerList.TryGetValue(vehicle, out VehicleHandler value))
                         return value;
                 }
-
             }
             catch (Exception ex)
             {
                 Alt.Server.LogInfo($"GetVehicleByVehicle with plate {vehicle.GetNumberplateTextAsync()}: " + ex);
             }
+
             return null;
         }
         public static bool IsVehicleInSpawn(Models.Location location, float distance = 4, uint dimension = ushort.MaxValue) =>
@@ -208,12 +209,14 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
 
         public static IVehicle GetNearestVehicle(Vector3 position, float distance = 3.0f, uint dimension = (uint)short.MaxValue)
         {
-            ICollection<IVehicle> vehs = Alt.GetAllVehicles();
+            // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
+            // ICollection<IVehicle> vehs = Alt.GetAllVehicles();
+            ICollection<IVehicle> vehs = GetAllVehicles();
             IVehicle nearest = null;
 
             foreach(IVehicle veh in vehs)
             {
-                if (position.DistanceTo2D(veh.Position) > distance)
+                if (!veh.Exists || veh.Dimension != dimension || position.DistanceTo2D(veh.Position) > distance)
                     continue;
                 else if (nearest == null)
                     nearest = veh;
@@ -224,6 +227,10 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
             return nearest;
         }
 
+        public static ICollection<IVehicle> GetAllVehicles()
+        {
+            return GameMode.Instance.VehicleManager.VehicleHandlerList.Select(v => v.Value.Vehicle).ToArray();
+        }
 
         public static bool IsPlateUnique(string plate) => !GameMode.Instance.PlateList.Exists(x => x == plate);
 

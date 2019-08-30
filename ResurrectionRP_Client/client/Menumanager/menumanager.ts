@@ -2,6 +2,14 @@
 import * as NativeUI from 'client/NativeUIMenu/NativeUI.js';
 import * as chat from 'client/chat/chat';
 
+enum InputType {
+    Text,
+    Number,
+    UNumber,
+    Float,
+    UFloat
+}
+
 var menu = null;
 var menuItems = null;
 var menuData = null;
@@ -154,14 +162,14 @@ export default () => {
                 inputIndex = index;
                 inputItem = item;
 
-                inputView = new alt.WebView("http://resources/client/webview/input.html");
+                inputView = new alt.WebView("http://resources/resurrectionrp/client/cef/userinput/input.html");
                 inputView.focus();
                 alt.showCursor(true);
                 alt.toggleGameControls(false);
 
-                inputView.emit('INPUT_Data', menuItem.InputMaxLength, menuItem.InputValue);
+                inputView.emit('Input_Data', menuItem.InputMaxLength, menuItem.InputValue);
 
-                inputView.on('INPUT_Submit', (text) => {
+                inputView.on('Input_Submit', (text) => {
                     saveInput(text);
                 });
             }
@@ -247,7 +255,7 @@ function saveInput(inputText) {
         let menuItem = menuData.Items[inputIndex];
         let valid = true;
 
-        if (menuItem.InputType == 1) {
+        if (menuItem.InputType == InputType.Number) {
             inputText = inputText.trim();
 
             if (inputText.length != 0) {
@@ -259,7 +267,7 @@ function saveInput(inputText) {
                     inputText = inputText.toString();
                 }
             }
-        } else if (menuItem.InputType == 2) {
+        } else if (menuItem.InputType == InputType.UNumber) {
             inputText = inputText.trim();
 
             if (inputText.length != 0) {
@@ -271,13 +279,25 @@ function saveInput(inputText) {
                     inputText = inputText.toString();
                 }
             }
-        } else if (menuItem.InputType == 3) {
+        } else if (menuItem.InputType == InputType.Float) {
             inputText = inputText.trim();
 
             if (inputText.length != 0) {
                 let con_inputText = parseFloat(inputText);
 
                 if (isNaN(con_inputText)) {
+                    valid = false;
+                } else {
+                    inputText = inputText.toString();
+                }
+            }
+        } else if (menuItem.InputType == InputType.UFloat) {
+            inputText = inputText.trim();
+
+            if (inputText.length != 0) {
+                let con_inputText = parseFloat(inputText);
+
+                if (isNaN(con_inputText) || con_inputText < 0) {
                     valid = false;
                 } else {
                     inputText = inputText.toString();

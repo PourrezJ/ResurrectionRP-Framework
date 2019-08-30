@@ -65,6 +65,10 @@ namespace ResurrectionRP_Server
 
 
         #region Pools
+
+        [BsonIgnore]
+        public Economy.Economy Economy { get; private set; }
+
         [BsonIgnore]
         public VehiclesManager VehicleManager { get; private set; }
 
@@ -76,6 +80,15 @@ namespace ResurrectionRP_Server
         public MenuManager MenuManager { get; private set; }
         [BsonIgnore]
         public XMenuManager.XMenuManager XMenuManager { get; private set; }
+
+        [BsonIgnore]
+        public Entities.Peds.PedsManager PedManager { get; private set; }
+
+        [BsonIgnore]
+        public Entities.Blips.BlipsManager BlipsManager { get; private set; }
+
+        [BsonIgnore]
+        public Loader.BusinessesLoader BusinessesManager { get; private set; }
 
         [BsonIgnore]
         public DrivingSchool.DrivingSchoolManager DrivingSchoolManager { get; private set; }
@@ -135,16 +148,23 @@ namespace ResurrectionRP_Server
 
         public async Task OnStartAsync()
         {
+            Alt.OnPlayerConnect += OnPlayerConnected;
+            Alt.OnPlayerDisconnect += OnPlayerDisconnected;
+
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
             Streamer = new Streamer.Streamer();
+            Economy = new Economy.Economy();
             DoorManager = new Utils.DoorManager();
-            PlayerManager = new Entities.Players.PlayerManager();
+            PlayerManager = new PlayerManager();
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();
+            PedManager = new Entities.Peds.PedsManager();
+            BlipsManager = new Entities.Blips.BlipsManager();
             PhoneManager = new Phone.PhoneManager();
             RPGInventory = new Inventory.RPGInventoryManager();
             MenuManager = new MenuManager();
+            BusinessesManager = new Loader.BusinessesLoader();
             XMenuManager = new XMenuManager.XMenuManager();
             WeatherManager = new Weather.WeatherManager();
             DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
@@ -160,19 +180,18 @@ namespace ResurrectionRP_Server
             await Loader.CarParkLoader.LoadAllCarPark();
             await Loader.CarDealerLoaders.LoadAllCardealer();
             await Loader.VehicleRentLoaders.LoadAllVehicleRent();
+            await Loader.TattooLoader.TattooLoader.LoadAllTattoo();
             await VehicleManager.LoadAllVehiclesActive();
             await Loader.ClothingLoader.LoadAllCloth();
+            await Loader.BusinessesLoader.LoadAllBusinesses();
             await WeatherManager.InitWeather();
             await JobsManager.Init();
-            await DrivingSchoolManager.InitAll();
+            DrivingSchoolManager.InitAll();
 
             VoiceController.OnResourceStart();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
             Events.Initialize();
-
-            Alt.OnPlayerConnect += OnPlayerConnected;
-            Alt.OnPlayerDisconnect += OnPlayerDisconnected;
 
             Chat.Initialize();
             Chat.RegisterCmd("veh", CommandVeh);
@@ -196,8 +215,8 @@ namespace ResurrectionRP_Server
             });
             Chat.RegisterCmd("task", async (IPlayer player, string[] args) =>
             {
-                var vehicle = player.GetNearestVehicle();
-                player.Emit("TestOut", 10000);
+                Entities.Blips.BlipsManager.SetColor(int.Parse(args[0]), 71);
+
             });
             ServerLoaded = true;
         }
@@ -231,7 +250,6 @@ namespace ResurrectionRP_Server
                 return;
             }
 
-            Chat.SendChatMessage(player, "Count avant: " + Alt.GetAllVehicles().Count);
             VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), new Vector3(player.Position.X+5, player.Position.Y, player.Position.Z), player.Rotation, locked:false);
 
             Task.Run(async () =>
@@ -249,7 +267,6 @@ namespace ResurrectionRP_Server
                     await vh.InsertVehicle();
                     await ph.Update();
                 }
-                Chat.SendChatMessage(player, "Count après: " + Alt.GetAllVehicles().Count);
             });
         }
 

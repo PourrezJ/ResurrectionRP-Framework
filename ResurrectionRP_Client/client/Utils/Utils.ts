@@ -19,17 +19,33 @@ export function initialize() {
     alt.onServer("deleteWaypoint", () => {
         game.setWaypointOff();
     })
+
+    alt.onServer('showNotification', (imageName, headerMsg, detailsMsg, message) => {
+        game.setNotificationTextEntry('STRING');
+        game.addTextComponentSubstringPlayerName(message);
+        game.setNotificationMessageClanTag(imageName.toUpperCase(), imageName.toUpperCase(), false, 4, headerMsg, detailsMsg, 1.0, '');
+        game.drawNotification(false, false);
+    });
+
+
     alt.onServer('SetPlayerIntoVehicle', (vehicle, seat) => {
         alt.setTimeout(() => {
             game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle.scriptID, seat);
         }, 20);
     });
+
+    alt.onServer('SetPlayerOutOfVehicle', (force: boolean) => {
+        game.taskLeaveVehicle(alt.Player.local.scriptID, alt.Player.local.vehicle.scriptID, force ? 16 : 0);
+    });
+
     alt.onServer('TrySetPlayerIntoVehicle', (vehicle: alt.Vehicle) => {
         var success: boolean = false;
         var seat: number = game.getVehicleModelNumberOfSeats(vehicle.model);
+
         for (var i = seat - 2; i > -1; i--) {
-            alt.log("Nombre de siège: " + seat)
-            alt.log("Vérificatin actuelle: " + i)
+            alt.log("Nombre de siège: " + seat);
+            alt.log("Vérificatin actuelle: " + i);
+
             if (game.isVehicleSeatFree(vehicle.scriptID, i) && success == false) {
                 game.taskEnterVehicle(alt.Player.local.scriptID, vehicle.scriptID, 10000, i, 1, 1, 0);
                 success = true;
@@ -76,13 +92,21 @@ export function initialize() {
 
     alt.on('SET_NOTIFICATION_BACKGROUND_COLOR', (args: any[]) => game.setNotificationBackgroundColor(parseInt(args[0])))
 
-    alt.onServer("SetNotificationMessage", (args: any[]) =>
+    alt.onServer("SetNotificationMessage", (img, sender, subject, message) =>
     {
-        UiHelper.SetNotificationPicture(args[0], args[1], args[1], args[2], args[3], args[4], args[5]);
+        alt.log(img);
+        game.setNotificationTextEntry("STRING");
+        game.addTextComponentSubstringPlayerName(message);
+        game.setNotificationMessage2(img.toUpperCase(), img.toUpperCase(), false, 4, sender, subject);
+        game.drawNotification(false, false);
     });
-    alt.on("SetNotificationMessage", (args: any[]) =>
+    alt.on("SetNotificationMessage", (img, sender, subject, message) =>
     {
-        UiHelper.SetNotificationPicture(args[0], args[1], args[1], args[2], args[3], args[4], args[5]);
+        alt.log(img);
+        game.setNotificationTextEntry("STRING");
+        game.addTextComponentSubstringPlayerName(message);
+        game.setNotificationMessage2(img.toUpperCase(), img.toUpperCase(), false, 4, sender, subject);
+        game.drawNotification(false, false);
     });
 
     alt.on('RemoveLoadingPrompt', () => game.removeLoadingPrompt());

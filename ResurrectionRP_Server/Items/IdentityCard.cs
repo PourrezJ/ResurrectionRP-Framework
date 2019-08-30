@@ -14,7 +14,7 @@ namespace ResurrectionRP_Server.Items
 
         public override async Task Use(IPlayer client, string inventoryType, int slot)
         {
-            Models.Identite identite = Entities.Players.PlayerManager.GetPlayerByClient(client).Identite;
+            Models.Identite identite = client.GetPlayerHandler().Identite;
 
             List<Entities.Players.PlayerHandler> players = client.GetPlayersHandlerInRange(5f);
             foreach (Entities.Players.PlayerHandler player in players)

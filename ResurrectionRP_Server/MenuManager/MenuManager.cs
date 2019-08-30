@@ -69,12 +69,17 @@ namespace ResurrectionRP_Server
 
                 foreach (MenuItem menuItem in menu.Items)
                 {
-                    if (menuItem.Type == MenuItemType.CheckboxItem)
-                        ((CheckboxItem)menuItem).Checked = data[menuItem.Id];
-                    else if (menuItem.Type == MenuItemType.ListItem)
-                        ((ListItem)menuItem).SelectedItem = data[menuItem.Id]["Index"];
-                    else if (menuItem.InputMaxLength > 0)
-                        menuItem.InputValue = data[menuItem.Id];
+                    try
+                    {
+                        if (menuItem.Type == MenuItemType.CheckboxItem)
+                            ((CheckboxItem)menuItem).Checked = data[menuItem.Id];
+                        else if (menuItem.Type == MenuItemType.ListItem)
+                            ((ListItem)menuItem).SelectedItem = data[menuItem.Id]["Index"];
+                        else if (menuItem.InputMaxLength > 0)
+                            menuItem.InputValue = data[menuItem.Id];
+                    }
+                    catch (Exception)
+                    { }
                 }
 
                 try
@@ -84,11 +89,11 @@ namespace ResurrectionRP_Server
                     if (menuItem == null)
                         return;
 
-                    if (menuItem.OnMenuItemCallback != null)
-                        await menuItem.OnMenuItemCallback.Invoke(player, menu, menuItem, itemIndex);
-
                     if (menu.ItemSelectCallback != null)
                         await menu.ItemSelectCallback.Invoke(player, menu, menu.Items[itemIndex], itemIndex);
+
+                    if (menuItem.OnMenuItemCallback != null)
+                        await menuItem.OnMenuItemCallback.Invoke(player, menu, menuItem, itemIndex);
                 }
                 catch (Exception ex)
                 {

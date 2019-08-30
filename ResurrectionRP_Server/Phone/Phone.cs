@@ -155,7 +155,7 @@ namespace ResurrectionRP_Server.Phone
                     var phoneDistant = GetPhoneWithPhoneNumber(phoneNumber);
                     string callerName = phoneDistant.GetNameForNumber(PhoneNumber);
 
-                    if (PhoneManager.HasOpenMenu(client, out Phone phone))
+                    if (PhoneManager.HasOpenPhone(client, out Phone phone))
                     {
                         await PhoneManager.OpenPhone(_client, phoneDistant, true, PhoneNumber, callerName);
                     }

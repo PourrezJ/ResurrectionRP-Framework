@@ -109,7 +109,7 @@ namespace ResurrectionRP_Server.Phone
             return phoneNumber;
         }
 
-        public static bool HasOpenMenu(IPlayer client, out Phone phone)
+        public static bool HasOpenPhone(IPlayer client, out Phone phone)
         {
             phone = null;
             if (_ClientPhoneMenu.ContainsKey(client))

@@ -135,7 +135,9 @@ namespace ResurrectionRP_Server.Models
             if (colShape != ParkingColshape || !client.Exists)
                 return;
 
-            if (MenuManager.HasOpenMenu(client))
+            PlayerHandler player = client.GetPlayerHandler();
+
+            if (player != null && player.HasOpenMenu())
                 await MenuManager.CloseMenu(client);
         }
 

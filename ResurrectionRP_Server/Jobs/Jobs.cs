@@ -97,12 +97,12 @@ namespace ResurrectionRP_Server.Jobs
                     {
                         await client.SendNotificationSuccess("Vous avez pris votre service.");
                     }
-                    if (MenuManager.HasOpenMenu(client)) await MenuManager.CloseMenu(client);
+                    if (client.HasOpenMenu()) await MenuManager.CloseMenu(client);
                 }
                 else if (menuItem.Id == "ID_QuitService")
                 {
                     await QuitterService(client);
-                    if (MenuManager.HasOpenMenu(client)) await MenuManager.CloseMenu(client);
+                    if (client.HasOpenMenu()) await MenuManager.CloseMenu(client);
                 }
             }
         }*/

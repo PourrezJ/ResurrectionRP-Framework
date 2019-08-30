@@ -89,11 +89,11 @@ namespace ResurrectionRP_Server
                     if (menuItem == null)
                         return;
 
-                    if (menuItem.OnMenuItemCallback != null)
-                        await menuItem.OnMenuItemCallback.Invoke(player, menu, menuItem, itemIndex);
-
                     if (menu.ItemSelectCallback != null)
                         await menu.ItemSelectCallback.Invoke(player, menu, menu.Items[itemIndex], itemIndex);
+
+                    if (menuItem.OnMenuItemCallback != null)
+                        await menuItem.OnMenuItemCallback.Invoke(player, menu, menuItem, itemIndex);
                 }
                 catch (Exception ex)
                 {

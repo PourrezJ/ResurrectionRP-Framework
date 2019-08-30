@@ -293,7 +293,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public void SetOwner(IPlayer player) => OwnerID = player.GetSocialClub();
         public void SetOwner(PlayerHandler player) => OwnerID = player.Client.GetSocialClub();
-
         #endregion
     }
 }

@@ -314,6 +314,11 @@ namespace ResurrectionRP_Server.Entities.Players
             await  Client?.EmitAsync("UpdateHungerThirst", Hunger, Thirst);
             await Update();
         }
+
+        public bool HasOpenMenu()
+        {
+            return MenuManager.HasOpenMenu(Client);
+        }
         #endregion
 
         #region Inventory

@@ -4,6 +4,7 @@ using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using MongoDB.Driver;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Models;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,7 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.OnClient("setGender", (IPlayer client, object[] args) => { client.Model = ((Convert.ToInt32( args[0]) == 1) ? Alt.Hash("mp_f_freemode_01") : Alt.Hash("mp_m_freemode_01")); });
             Alt.OnClient("setCreatorPos", async (IPlayer client, object[] args) => { await client.SetPositionAsync(new Vector3(402.8664f, -996.4108f, -99.00027f)); });
             Alt.OnClient("OpenXtremPlayer", OpenXtremPlayer);
+            Alt.OnClient("OpenAtmMenu", OpenAtmMenuPlayer);
 
             AltAsync.OnClient("OnKeyPress", OnKeyPress);
 
@@ -307,7 +309,6 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region Methods 
-
         public static async Task<PlayerHandler> GetPlayerHandlerDatabase(string socialClub) =>
             await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == socialClub.ToLower()).FirstOrDefaultAsync();
 
@@ -342,8 +343,6 @@ namespace ResurrectionRP_Server.Entities.Players
             await client.Revive();
         }
 
-
-
         public static bool IsBan(string social)
         {
             if (GameMode.Instance.BanManager == null)
@@ -364,14 +363,31 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 if (!client.Exists)
                     return;
+
                 var players = Alt.GetAllPlayers();
+
                 foreach(IPlayer player in players)
                 {
-                    if(player.Id == playerID)
-                        if (player != null) await client.GetPlayerHandler()?.OpenXtremPlayer(player);
+                    if (player.Id == playerID)
+                    {
+                        if (player != null)
+                            await client.GetPlayerHandler()?.OpenXtremPlayer(player);
+                    }
                 }
-                
             }
+        }
+
+        private async void OpenAtmMenuPlayer(IPlayer client, object[] args)
+        {
+            if (!client.Exists)
+                return;
+
+            PlayerHandler player = client.GetPlayerHandler();
+
+            if (player == null || player.HasOpenMenu())
+                return;
+
+            await BankMenu.OpenBankMenu(player, player.BankAccount);
         }
 
         public static List<PlayerHandler> GetPlayersList()

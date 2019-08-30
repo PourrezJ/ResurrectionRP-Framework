@@ -138,18 +138,18 @@ namespace ResurrectionRP_Server.Radio
                     if (radio.Statut != RadioModes.OFF)
                     {
                         //await GameMode.Instance.VoiceController.OnSetRadioChannel(player, radio.Frequence.ToString());
-                        //await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.Frequence.ToString(), false);
+                        await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
                     }
                     else
                     {
                         //radio.Statut = RadioModes.OFF;
-                        //await SaltyServer.Voice.RemovePlayerRadioChannel(player);
+                        await SaltyServer.Voice.RemovePlayerRadioChannel(player);
                     }
                     break;
 
-                case "Close":
-                    await radio.HideRadio(player);
-                    _clientMenus.TryRemove(player, out radio);
+                case "Close":     
+                    if(_clientMenus.TryRemove(player, out radio))
+                        await radio.HideRadio(player);
                     break;
 
                 case "SaveFrequence":
@@ -165,7 +165,7 @@ namespace ResurrectionRP_Server.Radio
                     break;
 
                 case "ChangeFrequence":
-                    radio.Frequence = radio.Favoris[(int)args[2]];
+                    radio.CurrentFrequence = (byte)args[2];
                     //await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.Frequence.ToString(), false);
                     break;
                 default:

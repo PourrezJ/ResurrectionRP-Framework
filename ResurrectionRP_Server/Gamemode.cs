@@ -56,6 +56,8 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public IVoiceChannel GlobalVoiceChannel { get; private set; }
 
+       // [BsonIgnore]
+       // public FactionManager FactionManager { get; private set; }
 
         public static short GlobalDimension = short.MaxValue;
 
@@ -148,6 +150,7 @@ namespace ResurrectionRP_Server
             DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
             JobsManager = new Jobs.JobsManager();
             VoiceController = new Voice();
+            //FactionManager = new FactionManager();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
             if (Time == null)

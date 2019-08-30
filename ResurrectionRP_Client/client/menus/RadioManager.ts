@@ -21,7 +21,7 @@ export class RadioManager
             alt.log(favoris);
 
             if (this.view == null) {
-                this.view = new alt.WebView("http://resources/resurrectionrp/client/cef/radio/index.html");
+                this.view = new alt.WebView("http://resources/resurrectionrp/client/cef/radio/index.html"); 
                 this.view.emit('loadFavoris', favoris, this.frequence);
             }
             else
@@ -44,8 +44,8 @@ export class RadioManager
                 game.playSoundFrontend(-1, "End_Squelch", "CB_RADIO_SFX", true);
             });
 
-            this.view.on('SaveFrequence', (frequence: number) => {
-                alt.emitServer('TurnON_Radio', frequence);
+            this.view.on('SaveFrequence', (channel: number, frequence: number) => {
+                alt.emitServer('RadioManager', 'SaveFrequence', channel, frequence);
             });
 
             /*

@@ -20,7 +20,7 @@ namespace ResurrectionRP_Server.Radio
         public RadioModes Statut = RadioModes.OFF;
         #endregion
 
-        public double Frequence;
+        public byte CurrentFrequence = 0;
         public double[] Favoris = new double[6]
         {
             55.2,
@@ -46,8 +46,10 @@ namespace ResurrectionRP_Server.Radio
         public async Task OpenRadio(IPlayer client)
         {
             Owner = client;
-            if (Favoris == null) return;
-            await Owner.EmitAsync("OpenRadio", JsonConvert.SerializeObject(Favoris), Frequence);
+            if (Favoris == null)
+                return;
+
+            await Owner.EmitAsync("OpenRadio", JsonConvert.SerializeObject(Favoris), CurrentFrequence);
 
             Owner.GetPlayerHandler()?.PlayAnimation((await Owner.GetVehicleAsync() != null) ? "cellphone@in_car@ds" : (await Owner.GetModelAsync() == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_read_base", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.Loop | AnimationFlags.SecondaryTask));
         }
@@ -104,5 +106,7 @@ namespace ResurrectionRP_Server.Radio
         {
             Favoris[channel] = frequence;
         }
+
+        public double GetCurrentFrequence() => Favoris[CurrentFrequence];
     }
 }

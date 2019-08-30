@@ -15,6 +15,9 @@ export class VoiceChat
 
     public deadplayers: string[];
     public radioChannel: string;
+    public isConnected: boolean;
+
+    public nextUpdate: number;
 
     constructor()
     {
@@ -27,107 +30,117 @@ export class VoiceChat
             this.ingameChannel = ingameChannel;
             this.ingameChannelPassword = ingameChannelPassword;
 
+            this.nextUpdate = Date.now() + 300;
+            this.deadplayers = [];
+
             if (this.view == null) {
                 this.view = new alt.WebView("http://resources/resurrectionrp/client/cef/voice/index.html");
             }
+
+            this.view.on('SaltyChat_OnConnected', () => {
+                this.isConnected = true;
+                this.InitiatePlugin();
+            });
+
+            this.view.on('SaltyChat_OnError', (data: string) => {
+                alt.log(data);
+            });
+
+            this.view.on('SaltyChat_OnMessage', (arg) =>
+            {
+                let pluginCommand: PluginCommand = JSON.parse(arg);
+                if (pluginCommand.Command == Command.Ping && Date.now() > this.nextUpdate)
+                {
+                    this.ExecuteCommand(new PluginCommand(Command.Pong, this.serverUniqueIdentifier, undefined));
+                    this.nextUpdate = Date.now() + 300;
+                    return;
+                }
+            });
+
 
             alt.setInterval(() => {
                 this.PlayerStateUpdate();
             }, 300);
         });
 
-        alt.onServer('Player_Disconnected', this.Player_Disconnected);
-        alt.onServer('Voice_IsTalking', this.OnPlayerTalking);
-        alt.onServer('Voice_EstablishedCall', this.OnEstablishCall);
-        alt.onServer('Voice_EndCall', this.OnEndCall);
-        alt.onServer('Voice_SetRadioChannel', this.OnSetRadioChannel);
-        alt.onServer('Voice_TalkingOnRadio', this.OnPlayerTalkingOnRadio);
-        alt.onServer('Player_Died', this.OnPlayerDied);
-        alt.onServer('Player_Revived', this.OnPlayerRevived);
-    }
+        alt.onServer('Player_Disconnected', ((playerName: string) => {
+            if (this.deadplayers.find(p => p == playerName))
+                Utils.ArrayRemove(this.deadplayers, playerName);
 
-    private Player_Disconnected(playerName : string)
-    {
-        if (this.deadplayers.find(p => p == playerName))
-            Utils.ArrayRemove(this.deadplayers, playerName);
+            this.ExecuteCommand(new PluginCommand(Command.RemovePlayer, this.serverUniqueIdentifier, new PlayerState(playerName)));
+        }));
 
-        this.ExecuteCommand(new PluginCommand(Command.RemovePlayer, this.serverUniqueIdentifier, new PlayerState(playerName)));
-    }
+        alt.onServer('Voice_IsTalking', (playerName: string, isTalking: boolean) => {
+            alt.Player.all.forEach((player: alt.Player) => {
+                if (player.getSyncedMeta("Voice_TeamSpeakName") == playerName) {
+                    if (isTalking)
+                        game.playFacialAnim(player.scriptID, "mic_chatter", "mp_facial");
+                    else
+                        game.playFacialAnim(player.scriptID, "mood_normal_1", "facials@gen_male@variations@normal");
 
-    private OnPlayerTalking(playerName: string, isTalking: boolean)
-    {
-        alt.Player.all.forEach((player: alt.Player) =>
-        {
-            if (player.getSyncedMeta("Voice_TeamSpeakName") == playerName)
-            {
-                if (isTalking)
-                    game.playFacialAnim(player.scriptID, "mic_chatter", "mp_facial");
-                else
-                    game.playFacialAnim(player.scriptID, "mood_normal_1", "facials@gen_male@variations@normal");
-
-                return;
-            }
+                    return;
+                }
+            });
         });
-    }
 
-    private OnEstablishCall(playerName: string)
-    {
-        alt.Player.all.forEach((player: alt.Player) => {
-            if (player.getSyncedMeta("Voice_TeamSpeakName") == playerName)
-            {
-                this.ExecuteCommand(new PluginCommand(Command.PhoneCommunicationUpdate, this.serverUniqueIdentifier, new PhoneCommunication(playerName, 0, 0, true)))
+        alt.onServer('Voice_EstablishedCall', (playerName: string) => {
+            alt.Player.all.forEach((player: alt.Player) => {
+                if (player.getSyncedMeta("Voice_TeamSpeakName") == playerName) {
+                    this.ExecuteCommand(new PluginCommand(Command.PhoneCommunicationUpdate, this.serverUniqueIdentifier, new PhoneCommunication(playerName, 0, 0, true)))
 
-                return;
-            }
+                    return;
+                }
+            });
         });
-    }
 
-    private OnEndCall(playerName: string)
-    {
-        this.ExecuteCommand(new PluginCommand(Command.StopPhoneCommunication, this.serverUniqueIdentifier, new PhoneCommunication(playerName)));
-    }
+        alt.onServer('Voice_EndCall', (playerName: string) => {
+            this.ExecuteCommand(new PluginCommand(Command.StopPhoneCommunication, this.serverUniqueIdentifier, new PhoneCommunication(playerName)));
+        });
 
-    private OnSetRadioChannel(radioChannel: string)
-    {
-        if (radioChannel == "")
-        {
-            this.radioChannel = "";
-            this.PlaySound("leaveRadioChannel", false, "radio");
-        }
-        else
-        {
-            this.radioChannel = radioChannel;
-            this.PlaySound("enterRadioChannel", false, "radio");
-        }
-    }
-
-    private OnPlayerTalkingOnRadio(playerName: string, isOnRadio: boolean)
-    {
-        if (alt.Player.local.getSyncedMeta("Voice_TeamSpeakName") == playerName) {
-            this.PlaySound("selfMicClick", false, "MicClick");
-        }
-        else {
-            if (isOnRadio) {
-                this.ExecuteCommand(
-                    new PluginCommand(Command.RadioCommunicationUpdate, this.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, 0, true, null)))
+        alt.onServer('Voice_SetRadioChannel', (radioChannel: string) => {
+            if (radioChannel == "") {
+                this.radioChannel = "";
+                this.PlaySound("leaveRadioChannel", false, "radio");
             }
             else {
-                this.ExecuteCommand(
-                    new PluginCommand(Command.StopRadioCommunication, this.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, 0, true, null)))
+                this.radioChannel = radioChannel;
+                this.PlaySound("enterRadioChannel", false, "radio");
             }
-        }
+        });
+
+        alt.onServer('Voice_TalkingOnRadio', (playerName: string, isOnRadio: boolean) => {
+            if (alt.Player.local.getSyncedMeta("Voice_TeamSpeakName") == playerName) {
+                this.PlaySound("selfMicClick", false, "MicClick");
+            }
+            else {
+                if (isOnRadio) {
+                    this.ExecuteCommand(
+                        new PluginCommand(Command.RadioCommunicationUpdate, this.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, 0, true, null)))
+                }
+                else {
+                    this.ExecuteCommand(
+                        new PluginCommand(Command.StopRadioCommunication, this.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, 0, true, null)))
+                }
+            }
+        });
+    
+        alt.onServer('Player_Died', (playerName: string) => {
+            if (!this.deadplayers.find(p => p == playerName))
+                this.deadplayers.push(playerName);
+        });
+
+        alt.onServer('Player_Revived', (playerName: string) => {
+            if (this.deadplayers.find(p => p == playerName))
+                Utils.ArrayRemove(this.deadplayers, playerName);
+        });
     }
 
-    private OnPlayerDied(playerName: string)
+    private InitiatePlugin()
     {
-        if (!this.deadplayers.find(p => p == playerName))
-            this.deadplayers.push(playerName);
-    }
-
-    private OnPlayerRevived(playerName: string)
-    {
-        if (this.deadplayers.find(p => p == playerName))
-            Utils.ArrayRemove(this.deadplayers, playerName);
+        let tsname = alt.Player.local.getSyncedMeta("Voice_TeamSpeakName");
+        if (tsname != null) {
+            this.ExecuteCommand(new PluginCommand(Command.Initiate, this.serverUniqueIdentifier, new GameInstance(this.serverUniqueIdentifier, tsname, this.ingameChannel, this.ingameChannelPassword, this.soundPack)));
+        } 
     }
 
     private PlaySound(fileName: string, loop: boolean = false, handle: string)
@@ -150,7 +163,6 @@ export class VoiceChat
         {
             let nPlayerName = nPlayer.getSyncedMeta("Voice_TeamSpeakName");
             if (nPlayer != alt.Player.local && nPlayerName != null) {
-
                 let voiceRange = 12;
 
                 if (nPlayer.getSyncedMeta("Voice_VoiceRange") !== undefined) {
@@ -170,14 +182,15 @@ export class VoiceChat
                             voiceRange = 4;
                             break;
                     }
-
+                    alt.log(`name: ${nPlayerName} | pos: ${JSON.stringify(nPlayer.pos)} | range: ${voiceRange} | dead: ${this.deadplayers.find(p => p == nPlayerName)}`);
+                    
                     this.ExecuteCommand(new PluginCommand(Command.PlayerStateUpdate, this.serverUniqueIdentifier,
-                        new PlayerState(nPlayerName, nPlayer.pos, voiceRange, undefined, this.deadplayers.find(p => p == nPlayerName) !== undefined)));
+                        new PlayerState(nPlayerName, TSVector.Convert(nPlayer.pos), voiceRange, undefined, (this.deadplayers.find(p => p == nPlayerName) !== undefined))));
                 }
             }
         });
 
-        this.ExecuteCommand(new PluginCommand(Command.SelfStateUpdate, this.serverUniqueIdentifier, new PlayerState(undefined, playerPos, game.getGameplayCamRot(0).z)));
+        this.ExecuteCommand(new PluginCommand(Command.SelfStateUpdate, this.serverUniqueIdentifier, new PlayerState(alt.Player.local.getSyncedMeta("Voice_VoiceRange"), TSVector.Convert(playerPos), game.getGameplayCamRot(0).z)));
     }
 
     private ExecuteCommand(pluginCommand: PluginCommand)
@@ -217,13 +230,13 @@ class PluginCommand
 class PlayerState
 {
     public Name: string;
-    public Position: alt.Vector3 = new alt.Vector3(0,0,0);
+    public Position: TSVector = TSVector.Zero;
     public Rotation: number;
     public VoiceRange: number;
     public IsAlive: boolean;
     public VolumeOverride: number;
 
-    constructor(name: string = undefined, position: alt.Vector3 = undefined, voiceRange: number = undefined, rotation: number = undefined, isAlive: boolean = undefined, volumeOverride: number = undefined)
+    constructor(name: string = undefined, position: TSVector = undefined, voiceRange: number = undefined, rotation: number = undefined, isAlive: boolean = undefined, volumeOverride: number = undefined)
     {
         if (name != undefined)
             this.Name = name;
@@ -242,6 +255,23 @@ class PlayerState
 
         if (volumeOverride !== undefined)
             this.VolumeOverride = volumeOverride;
+    }
+}
+
+class GameInstance
+{
+    public ServerUniqueIdentifier: string;
+    public Name: string;
+    public ChannelId: number;
+    public ChannelPassword: string;
+    public SoundPack : string;
+
+    constructor(serverUniqueIdentifier: string, name: string, channelId: number, channelPassword: string, soundPack: string) {
+        this.ServerUniqueIdentifier = serverUniqueIdentifier;
+        this.Name = name;
+        this.ChannelId = channelId;
+        this.ChannelPassword = channelPassword;
+        this.SoundPack = soundPack;
     }
 }
 
@@ -289,6 +319,25 @@ class PhoneCommunication
             this.RelayedBy = relayedBy;
 
         this.Direct = direct;
+    }
+}
+
+class TSVector {
+
+    public X: Number;
+    public Y: Number;
+    public Z: Number;
+
+    public static readonly Zero: TSVector = new TSVector(0, 0, 0);
+
+    constructor(x: Number, y: Number, z: Number) {
+        this.X = x;
+        this.Y = y;
+        this.Z = z;
+    }
+
+    public static Convert(position: alt.Vector3) {
+        return new TSVector(position.x, position.y, position.z);
     }
 }
 

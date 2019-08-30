@@ -332,5 +332,10 @@ namespace ResurrectionRP_Server
 
         public static bool HasVehicleKey(this IPlayer client, string plate)
             => client.GetPlayerHandler().ListVehicleKey.Exists(x => x.Plate == plate);
+
+        public static async Task SetPlayerIntoVehicle(this IPlayer target, IVehicle client)
+        {
+            await target.EmitAsync("SetPlayerIntoVehicle", client, -1);
+        }
     }
 }

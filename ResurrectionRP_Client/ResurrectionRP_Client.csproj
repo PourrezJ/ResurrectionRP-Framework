@@ -302,6 +302,12 @@
     <Content Include="cef\speedometer\img\speed-bg.png" />
     <Content Include="cef\speedometer\js\app.js" />
     <Content Include="cef\speedometer\speedometer.html" />
+    <Content Include="cef\userinput\css\bootstrap.min.css" />
+    <Content Include="cef\userinput\css\Google-Style-Text-Input.css" />
+    <Content Include="cef\userinput\css\styles_input.css" />
+    <Content Include="cef\userinput\input.html" />
+    <Content Include="cef\userinput\js\bootstrap.min.js" />
+    <Content Include="cef\userinput\js\jquery.min.js" />
     <Content Include="cef\voice\app.js" />
     <Content Include="cef\voice\index.html" />
     <Content Include="cef\xtrem\css\style.css" />

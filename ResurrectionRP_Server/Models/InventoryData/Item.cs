@@ -43,7 +43,7 @@ namespace ResurrectionRP_Server.Models
         [JsonProperty("dock")]
         public bool isDockable { get; set; }
 
-        public Dictionary<dynamic, dynamic> Variables = new Dictionary<dynamic, dynamic>();
+        public Dictionary<string, dynamic> Variables = new Dictionary<string, dynamic>();
 
         public Item(ItemID id, string name, string description, double weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, double itemPrice = 0,
             string type = "item", string icon = "unknown-item", string classes = "basic")

@@ -178,7 +178,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (veh != null)
                 {    
                     await veh.SetLockStateAsync(veh.LockState == VehicleLockState.Locked ? VehicleLockState.Unlocked : VehicleLockState.Locked);
-                    await client.SendNotificationSuccess($"Vous venez de {(veh.LockState == VehicleLockState.Locked ? "fermer" : "ouvrir")} le véhicule {veh.NumberplateText}");
+                    await client.SendNotificationSuccess($"Vous venez {(veh.LockState == VehicleLockState.Locked ? "de fermer" : "d'ouvrir")} le véhicule {veh.NumberplateText}");
                     //LogManager.Log($"~r~[ADMIN]~w~ {client.Name} viens d'ouvrir ou fermer " + VehiclesManager.GetNearestVehicle(client).NumberPlate);
                 }
                 else
@@ -221,30 +221,42 @@ namespace ResurrectionRP_Server.Entities.Players
             #endregion
 
             #region Weapon
-            var weapon = new MenuItem("Prendre une arme", "", "", true);
+            var weapon = new MenuItem("Prendre une arme", "", "ID_Weapon", true);
             weapon.SetInput("", 30, InputType.Text);
             weapon.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                if (Enum.TryParse(menuItem.InputValue, true, out WeaponHash hash) == false)
+                string name = menuItem.InputValue;
+
+                if (string.IsNullOrEmpty(name))
+                    return;
+
+                if (Enum.TryParse(name, true, out WeaponHash hash) == false)
                 {
                     await client.SendNotificationError($"Weapon {menuItem.InputValue} is invalid!");
                     return;
                 }
+
                 await _playerSelected.Client.GiveWeaponAsync((uint)hash, 200, true);
             };
             mainMenu.Add(weapon);
             #endregion
 
             #region Ped
-            var peditem = new MenuItem("Prendre l'apparence d'un ped", "", "", true);
+            var peditem = new MenuItem("Prendre l'apparence d'un ped", "", "ID_Ped", true);
             peditem.SetInput("", 30, InputType.Text);
             peditem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                if (Enum.TryParse(menuItem.InputValue, true, out PedModel hash) == false)
+                string name = menuItem.InputValue;
+
+                if (string.IsNullOrEmpty(name))
+                    return;
+
+                if (Enum.TryParse(name, true, out PedModel hash) == false)
                 {
                     await client.SendNotificationError($"Ped {menuItem.InputValue} is invalid!");
                     return;
                 }
+
                 await _playerSelected.Client.SetModelAsync((uint)hash);
             };
             mainMenu.Add(peditem);
@@ -285,8 +297,8 @@ namespace ResurrectionRP_Server.Entities.Players
             #endregion
 
             #region Money
-            var moneyitem = new MenuItem("Give de l'argent", "", "", true);
-            moneyitem.SetInput("", 99, InputType.UFloat, true);
+            var moneyitem = new MenuItem("Give de l'argent", "", "ID_GiveMoney", true);
+            moneyitem.SetInput("", 10, InputType.UFloat, true);
             moneyitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) => 
             {
                 double money = 0;
@@ -294,17 +306,15 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (double.TryParse(menuItem.InputValue, out money) && money > 0)
                 {
                     await _playerSelected.AddMoney(money);
-                    await client.SendNotificationSuccess($"Vous venez de donner  à {_playerSelected.Identite.Name}");
+                    await client.SendNotificationSuccess($"Vous venez de donner {money} à {_playerSelected.Identite.Name}");
                 }
-
-                await OpenAdminMenu();
             };
             mainMenu.Add(moneyitem);
             #endregion
 
             #region Remove Money
-            var delmoneyitem = new MenuItem("Retirer de l'argent", "", "", true);
-            delmoneyitem.SetInput("", 99, InputType.UFloat, true);
+            var delmoneyitem = new MenuItem("Retirer de l'argent", "", "ID_RemoveMoney", true);
+            delmoneyitem.SetInput("", 10, InputType.UFloat, true);
             delmoneyitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 double money = 0;
@@ -314,8 +324,6 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (await _playerSelected.HasMoney(money))
                         await client.SendNotificationSuccess($"Vous venez de retirer ${money} à {_playerSelected.Identite.Name}");
                 }
-
-                await OpenAdminMenu();
             };
             mainMenu.Add(delmoneyitem);
             #endregion
@@ -339,7 +347,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #endregion
 
             #region Spawn Provisoire
-            var spawn = new MenuItem("Spawn voiture temporaire", "Spawn une voiture avec le nom rentré, jusqu'au reboot.", "", true);
+            var spawn = new MenuItem("Spawn voiture temporaire", "Spawn une voiture avec le nom rentré, jusqu'au reboot.", "ID_SpawnVeh", true);
             spawn.SetInput("", 30, InputType.Text);
             spawn.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
@@ -360,7 +368,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (vehicle != null)
                     {
-                        await vehicle.Vehicle.TryPutPlayerInVehicle(_playerSelected.Client);
+                        await _playerSelected.Client.SetPlayerIntoVehicle(vehicle.Vehicle);
                         _playerSelected.ListVehicleKey.Add(new VehicleKey(manifest.DisplayName, vehicle.Plate));
                         //LogManager.Log($"~r~[ADMIN]~w~ {client.Name} a spawn le véhicule {_vehs.Model} {_vehs.Plate}");
                     }
@@ -376,14 +384,17 @@ namespace ResurrectionRP_Server.Entities.Players
             #endregion
 
             #region Spawn Perm
-            var spawnPerm = new MenuItem("Spawn voiture", "Spawn une voiture avec le nom rentré.", "", true);
+            var spawnPerm = new MenuItem("Spawn voiture", "Spawn une voiture avec le nom rentré.", "ID_SpawnVehPerm", true);
             spawnPerm.SetInput("", 30, InputType.Text);
             spawnPerm.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 try
                 {
                     string name = menuItem.InputValue;
-                    if (string.IsNullOrEmpty(name)) return;
+
+                    if (string.IsNullOrEmpty(name))
+                        return;
+
                     uint hash = Alt.Hash(name);
                     VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get(hash);
 
@@ -397,7 +408,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (vehicle != null)
                     {
-                        await vehicle.Vehicle.TryPutPlayerInVehicle(_playerSelected.Client);
+                        await _playerSelected.Client.SetPlayerIntoVehicle(vehicle.Vehicle);
                         await vehicle.InsertVehicle();
                         _playerSelected.ListVehicleKey.Add(new VehicleKey(manifest.DisplayName, vehicle.Plate));
                         //LogManager.Log($"~r~[ADMIN]~w~ {client.Name} a spawn le véhicule {_vehs.Model} {_vehs.Plate}");

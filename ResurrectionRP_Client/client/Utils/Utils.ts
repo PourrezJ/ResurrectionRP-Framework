@@ -41,9 +41,11 @@ export function initialize() {
     alt.onServer('TrySetPlayerIntoVehicle', (vehicle: alt.Vehicle) => {
         var success: boolean = false;
         var seat: number = game.getVehicleModelNumberOfSeats(vehicle.model);
+
         for (var i = seat - 2; i > -1; i--) {
-            alt.log("Nombre de siège: " + seat)
-            alt.log("Vérificatin actuelle: " + i)
+            alt.log("Nombre de siège: " + seat);
+            alt.log("Vérificatin actuelle: " + i);
+
             if (game.isVehicleSeatFree(vehicle.scriptID, i) && success == false) {
                 game.taskEnterVehicle(alt.Player.local.scriptID, vehicle.scriptID, 10000, i, 1, 1, 0);
                 success = true;

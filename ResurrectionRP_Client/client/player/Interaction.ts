@@ -2,6 +2,7 @@
 import * as game from 'natives';
 import Raycast, * as raycast from 'client/Utils/Raycast';
 import * as chat from 'client/chat/chat';
+import * as MenuManager from 'client/MenuManager/MenuManager';
 import * as Utils from 'client/Utils/utils';
 
 /*
@@ -56,16 +57,14 @@ export class Interaction {
             else if(key == 85 || key == 69 || key == 85 || key == 89 || key == 78){ // Optimiser ce call ? En envoyant que les clés qui sont succeptibles d'être utilisée pour une interaction
                 alt.emitServer('OnKeyPress', key);
             }
-
         });
 
-        alt.on("update", () => {
+        alt.on('update', () => {
             let result = Raycast.line(4, 2, alt.Player.local.scriptID);
 
             if (result.isHit && result.entityType == 2 && alt.Player.local.vehicle == null) {
                 alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le véhicule.", 100)
             }
         });
-
     }
 }

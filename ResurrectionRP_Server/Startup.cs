@@ -37,7 +37,6 @@ namespace ResurrectionRP_Server
             }
             else
             {
-
                 // Fresh Server
                 gamemode = new GameMode();
                 await gamemode.OnStartAsync();

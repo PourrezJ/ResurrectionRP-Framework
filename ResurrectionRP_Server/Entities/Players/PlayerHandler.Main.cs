@@ -656,6 +656,17 @@ namespace ResurrectionRP_Server.Entities.Players
                 return false;
             }
         }
+        public bool HasKey(string plate)
+        {
+            if (ListVehicleKey.Exists(k => k.Plate == plate))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public void RemoveKey(VehicleHandler veh)
         {

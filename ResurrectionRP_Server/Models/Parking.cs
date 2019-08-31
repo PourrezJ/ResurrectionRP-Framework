@@ -283,7 +283,7 @@ namespace ResurrectionRP_Server.Models
                 if (!vehplayer.Exists)
                     return;
 
-                VehicleHandler vehicle = VehicleManager.GetHandlerByVehicle(vehplayer);
+                VehicleHandler vehicle = vehplayer.GetVehicleHandler();
 
                 if (vehicle == null)
                     return;
@@ -377,7 +377,7 @@ namespace ResurrectionRP_Server.Models
                     return;
                 }
 
-                VehicleHandler veh = VehicleManager.GetHandlerByVehicle(vh);
+                VehicleHandler veh = vh.GetVehicleHandler();
 
                 if (veh != null)
                 {

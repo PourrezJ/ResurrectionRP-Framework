@@ -430,7 +430,7 @@ namespace ResurrectionRP_Server.Entities.Players
             var deletepermvehitem = new MenuItem("Supprimer le véhicule (PERM).", "~r~ATTENTION CECI LE RETIRE DE LA BASE DE DONNÉES!", "", true);
             deletepermvehitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                VehicleHandler vehicle = VehiclesManager.GetHandlerByVehicle(await VehiclesManager.GetNearestVehicle(client));
+                VehicleHandler vehicle = (await VehiclesManager.GetNearestVehicle(client)).GetVehicleHandler();
 
                 if (vehicle == null)
                     await client.SendNotificationError("Aucun véhicule a proximité");
@@ -447,7 +447,7 @@ namespace ResurrectionRP_Server.Entities.Players
             var deletevehitem = new MenuItem("Supprimer le véhicule.", "", "", true);
             deletevehitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                VehicleHandler vehicle = VehiclesManager.GetHandlerByVehicle(await VehiclesManager.GetNearestVehicle(client));
+                VehicleHandler vehicle = (await VehiclesManager.GetNearestVehicle(client)).GetVehicleHandler();
 
                 if (vehicle == null)
                     await client.SendNotificationError("Aucun véhicule a proximité");
@@ -473,7 +473,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
                 else
                 {
-                    VehicleHandler vehfourriere = VehiclesManager.GetHandlerByVehicle(await VehiclesManager.GetNearestVehicle(client));
+                    VehicleHandler vehfourriere = (await VehiclesManager.GetNearestVehicle(client)).GetVehicleHandler();
 
                     if (vehfourriere.SpawnVeh)
                         return;

@@ -36,7 +36,7 @@ namespace ResurrectionRP_Server.Businesses
 
             foreach (IVehicle vehicle in VehicleList)
             {
-                Entities.Vehicles.VehicleHandler vh = Entities.Vehicles.VehiclesManager.GetHandlerByVehicle(vehicle);
+                Entities.Vehicles.VehicleHandler vh = vehicle.GetVehicleHandler() ;
 
                 MenuItem item = new MenuItem(vh.VehicleManifest.DisplayName, rightLabel: vh.Plate, executeCallback: true);
                 item.SetData("Vehicle", vh);

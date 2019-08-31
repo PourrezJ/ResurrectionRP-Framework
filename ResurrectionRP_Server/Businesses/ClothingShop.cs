@@ -1,17 +1,18 @@
-﻿using System;
-using System.Drawing;
-using System.Numerics;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using AltV.Net;
+﻿using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.EventHandlers;
+using ResurrectionRP_Server.Loader;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
-using ResurrectionRP_Server.Loader;
-using MongoDB.Bson;
+using System;
+using System.Numerics;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ResurrectionRP_Server.Businesses
 {
@@ -21,14 +22,13 @@ namespace ResurrectionRP_Server.Businesses
         public Vector3 ClothingPos;
 
         [BsonIgnore]
-        public IColShape ColthingColshape;
+        private IColShape _clothingColShape;
 
         public Banner BannerStyle;
 
         #region All
         public int[] Mask;
         public int[] BackPack;
-
         #endregion
 
         #region Men
@@ -87,16 +87,15 @@ namespace ResurrectionRP_Server.Businesses
         public override async Task Init()
         {
             await base.Init();
-            await AltAsync.Do(async () =>
-            {
-                ColthingColshape = Alt.CreateColShapeCylinder(ClothingPos - new Vector3(0,0,1), 4f, 3f);
-                ColthingColshape.SetData("ClothingID", this._id);
-                GameMode.Instance.Streamer.addEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 4f), new Vector3(0, 0, 3f), 80, 255, 255, 255);
-                await Entities.Blips.BlipsManager.SetColor(Blip, 25);
-            });
 
-            EventHandlers.Events.OnPlayerEnterColShape += OnPlayerEnterColShape;
-            EventHandlers.Events.OnPlayerInteractClothingShop += ClothingID_Open;
+            _clothingColShape = Alt.CreateColShapeCylinder(ClothingPos - new Vector3(0, 0, 1), 4f, 3f);
+            _clothingColShape.SetData("ClothingID", _id);
+            GameMode.Instance.Streamer.addEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 4f), new Vector3(0, 0, 3f), 80, 255, 255, 255);
+            await Entities.Blips.BlipsManager.SetColor(Blip, 25);
+
+            Events.OnPlayerEnterColShape += OnPlayerEnterColShape;
+            Events.OnPlayerLeaveColShape += OnPlayerLeaveColShape;
+            Events.OnPlayerInteractClothingShop += ClothingID_Open;
         }
 
         private async void ClothingID_Open(BsonObjectId ID, IPlayer client)
@@ -107,18 +106,27 @@ namespace ResurrectionRP_Server.Businesses
             if (ID == null)
                 return;
 
-            if (ID.ToString() != this._id.ToString())
+            if (ID.ToString() != _id.ToString())
                 return;
 
             await OpenClothingMenu(client);
         }
 
-        public override async void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        public async void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
-            if (ColthingColshape == null)
+            if (colShape == _clothingColShape)
+                await client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
+        }
+
+        public virtual async void OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
+        {
+            PlayerHandler player = client.GetPlayerHandler();
+
+            if (player == null)
                 return;
-             await client.displayHelp("Appuyer sur ~INPUT_CONTEXT~ pour interagir.", 5000);
-             base.OnPlayerEnterColShape(colShape, client);
+
+            if (player.HasOpenMenu())
+                await MenuManager.CloseMenu(client);
         }
 
         public override Task OpenMenu(IPlayer client, Entities.Peds.Ped npc)
@@ -192,7 +200,6 @@ namespace ResurrectionRP_Server.Businesses
                 if (await ph.AddItem(item, 1))
                 {
                     await client.SendNotificationSuccess($"Vous avez acheté le vêtement {clothName} pour la somme de ${price}");
-                    // await ph.Clothing.UpdatePlayerClothing();
                     await ph.Update();
                 }
                 else
@@ -209,7 +216,6 @@ namespace ResurrectionRP_Server.Businesses
             Menu menu = new Menu("ClothingMenu", "", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true, BannerStyle);
             menu.ItemSelectCallback = MenuCallBack;
             menu.Finalizer = MenuClose;
-            //menu.Add(new MenuItem("Chapeau", "", "ID_Chapeau"));
 
             if (Mask != null && Mask.Length > 0)
             {
@@ -249,7 +255,6 @@ namespace ResurrectionRP_Server.Businesses
                 await client.SendNotificationError("Vous n'êtes pas autorisé à utiliser la boutique de vêtements avec ce skin.");
             }
 
-
             await menu.OpenMenu(client);
         }
 
@@ -288,7 +293,6 @@ namespace ResurrectionRP_Server.Businesses
                 return;
 
             menu.ItemSelectCallback = OnTopsCategorieCallBack;
-            //menu.CallbackOnIndexChange = false; ???
             menu.IndexChangeCallback = null;
 
             var compoList = (await client.GetModelAsync() == (uint)PedModel.FreemodeMale01) ? MenTops : GirlTops;
@@ -299,8 +303,7 @@ namespace ResurrectionRP_Server.Businesses
                     continue;
 
                 var drawables = data.Value.DrawablesList[compo];
-
-                var price = (drawables.Price / 3);
+                var price = drawables.Price / 3;
 
                 for (int b = 0; b < drawables.Variations.Count; b++)
                 {
@@ -330,7 +333,6 @@ namespace ResurrectionRP_Server.Businesses
             var compoList = (await client.GetModelAsync() == (uint)PedModel.FreemodeMale01) ? MenTops : GirlTops;
             menu.SubTitle = menuItem.Text.ToUpper();
             menu.ItemSelectCallback = OnTopsCallBack;
-            //menu.CallbackCurrentItem = true;
             menu.IndexChangeCallback = PreviewTopsItem;
 
             ClothManifest? clothdata = await ClothingLoader.FindTops(client);
@@ -376,10 +378,11 @@ namespace ResurrectionRP_Server.Businesses
             int variation = (int)menuItem.GetData("variation");
             int torso = (int)menuItem.GetData("torso");
 
-            // Fix for preview not working everytime
-            await Task.Delay(10);
-            await client.EmitAsync("ComponentVariation", 11, drawable, variation, 0);
-            await client.EmitAsync("ComponentVariation", 3, torso, 0, 0);
+            await AltAsync.Do(async () =>
+            {
+                await client.SetClothAsync(ClothSlot.Tops, drawable, variation, 0);
+                await client.SetClothAsync(ClothSlot.Torso, torso, 0, 0);
+            });
         }
 
         private async Task OnTopsCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -393,20 +396,17 @@ namespace ResurrectionRP_Server.Businesses
             int drawable = menuItem.GetData("drawable");
             int variation = menuItem.GetData("variation");
             double price = menuItem.GetData("price");
-            string clothName = menuItem.Text;
 
             var ph = client.GetPlayerHandler();
 
             if (ph == null)
                 return;
 
-
             if (await ph.HasBankMoney(price, $"Achat vêtement {menuItem.Text}"))
             {
                 if (await ph.AddItem(new ClothItem(ItemID.Jacket, menuItem.Text, "", new ClothData((byte)drawable, (byte)variation, 0), 0.2, true, false, false, true, false, classes: "jacket", icon: "jacket"), 1))
                 {
                     await client.SendNotificationSuccess($"Vous avez acheté le vêtement {menuItem.Text} pour la somme de ${price}");
-                    // await ph.Clothing.UpdatePlayerClothing();
                     await ph.Update();
                 }
                 else
@@ -554,7 +554,6 @@ namespace ResurrectionRP_Server.Businesses
             int variation = menuItem.GetData("variation");
             double price = menuItem.GetData("price");
             string clothName = menuItem.Text;
-
             BuyCloth(client, componentID, drawable, variation, price, clothName);
         }
 
@@ -566,9 +565,8 @@ namespace ResurrectionRP_Server.Businesses
                 int drawable = menuItem.GetData("drawable");
                 int variation = menuItem.GetData("variation");
 
-                // Fix for preview not working everytime
-                await Task.Delay(10);
-                await client.EmitAsync("ComponentVariation", componentID, drawable, variation, 0);
+                await AltAsync.Do(async () =>
+                    await client.SetClothAsync((ClothSlot)componentID, drawable, variation, 0));
             }
             catch (Exception ex)
             {

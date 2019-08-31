@@ -1,15 +1,15 @@
 ﻿
-using MongoDB.Bson.Serialization.Attributes;
-using System.Collections.Generic;
 using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
-using System.Numerics;
+using AltV.Net.Enums;
+using MongoDB.Bson.Serialization.Attributes;
+using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Models;
 using System;
-using System.Drawing;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
-using AltV.Net.Enums;
 
 namespace ResurrectionRP_Server.Businesses
 {
@@ -19,9 +19,9 @@ namespace ResurrectionRP_Server.Businesses
         public Vector3 ClothingPos;
 
         [BsonIgnore]
-        public IColShape ColthingColshape;
+        private IColShape _clothingColshape;
 
-        public Banner BannerStyle;
+        private Banner BannerStyle;
 
         public int[] MenHats;
         public int[] GirlHats;
@@ -72,8 +72,8 @@ namespace ResurrectionRP_Server.Businesses
             await base.Init();
             await AltAsync.Do(async () =>
             {
-                ColthingColshape = Alt.CreateColShapeCylinder(ClothingPos, 4f, 3f);
-                ColthingColshape.SetData("ClothingID", this._id);
+                _clothingColshape = Alt.CreateColShapeCylinder(ClothingPos, 4f, 3f);
+                _clothingColshape.SetData("ClothingID", this._id);
                 GameMode.Instance.Streamer.addEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ClothingPos - new Vector3(0,0,4f), new Vector3(0,0,3f), 80, 255, 255, 255);
                 //MP.Markers.New(MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 4f), new Vector3(0, 0, 180), new Vector3(), 3f, Color.FromArgb(80, 255, 255, 255), true, MP.GlobalDimension);
                 
@@ -98,12 +98,21 @@ namespace ResurrectionRP_Server.Businesses
             await OpenPropsStoreMenu(client);
         }
 
-        public override void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        public void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
-            if (ColthingColshape == null)
+            if (_clothingColshape == null)
+                return;
+        }
+
+        public virtual async void OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
+        {
+            PlayerHandler player = client.GetPlayerHandler();
+
+            if (player == null)
                 return;
 
-            base.OnPlayerEnterColShape(colShape, client);
+            if (player.HasOpenMenu())
+                await MenuManager.CloseMenu(client);
         }
 
         private async Task MenuClose(IPlayer client, Menu menu)
@@ -172,30 +181,30 @@ namespace ResurrectionRP_Server.Businesses
             switch (menuItem.Id)
             {
                 case "ID_Hats":
-                    await OpenCompomentMenuWithoutCat(client, menu, 0);
+                    await OpenComponentMenuWithoutCat(client, menu, 0);
                     break;
 
                 case "ID_Glasses":
-                    await OpenCompomentMenuWithoutCat(client, menu, 1);
+                    await OpenComponentMenuWithoutCat(client, menu, 1);
                     break;
 
                 case "ID_Ears":
-                    await OpenCompomentMenuWithoutCat(client, menu, 2);
+                    await OpenComponentMenuWithoutCat(client, menu, 2);
                     break;
 
                 case "ID_Watches":
-                    await OpenCompomentMenuWithoutCat(client, menu, 6);
+                    await OpenComponentMenuWithoutCat(client, menu, 6);
                     break;
 
                 case "ID_Bracelets":
-                    await OpenCompomentMenuWithoutCat(client, menu, 7);
+                    await OpenComponentMenuWithoutCat(client, menu, 7);
                     break;
             }
         }
         #endregion
 
         #region WithoutCategorie
-        private async Task OpenCompomentMenuWithoutCat(IPlayer client, Menu menu, byte compomentID)
+        private async Task OpenComponentMenuWithoutCat(IPlayer client, Menu menu, byte compomentID)
         {
             var data = await Loader.ClothingLoader.FindProps(client, compomentID) ?? null;
 
@@ -319,7 +328,6 @@ namespace ResurrectionRP_Server.Businesses
                 if (await ph.AddItem(item, 1))
                 {
                     await client.SendNotificationSuccess($"Vous avez acheté {menuItem.Text} pour la somme de ${price}");
-                    await ph.Clothing.UpdatePlayerClothing();
                     await ph.Update();
                 }
                 else
@@ -337,10 +345,7 @@ namespace ResurrectionRP_Server.Businesses
                 byte compomentID = menu.GetData("compomentID");
                 int drawable = menuItem.GetData("drawable");
                 int variation = menuItem.GetData("variation");
-
-                // Fix for preview not working everytime
-                await Task.Delay(10);
-                await client.EmitAsync("PropVariation", compomentID, drawable, variation);
+                await client.SetPropAsync((PropSlot)compomentID, new PropData(drawable, variation));
             }
             catch (Exception ex)
             {

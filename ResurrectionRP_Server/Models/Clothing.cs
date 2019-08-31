@@ -103,23 +103,25 @@ namespace ResurrectionRP_Server.Models
                 { ClothSlot.Torso, new ClothData(Torso.Drawable, Torso.Texture, Torso.Palette) }
             };
 
-            foreach (KeyValuePair<ClothSlot, ClothData> entry in cloths)
-                await Player.SetClothAsync(entry.Key, entry.Value.Drawable, entry.Value.Texture, entry.Value.Palette);
+            // await AltAsync.Do(async () => {
+                foreach (KeyValuePair<ClothSlot, ClothData> entry in cloths)
+                     await Player.SetClothAsync(entry.Key, entry.Value.Drawable, entry.Value.Texture, entry.Value.Palette);
 
-            if (Bracelets != null)
-                await Player.SetPropAsync(PropSlot.Bracelets, Bracelets.Value);
+                if (Bracelets != null)
+                    await Player.SetPropAsync(PropSlot.Bracelets, Bracelets.Value);
 
-            if (Ears != null)
-                await Player.SetPropAsync(PropSlot.Ears, Ears.Value);
+                if (Ears != null)
+                    await Player.SetPropAsync(PropSlot.Ears, Ears.Value);
 
-            if (Glasses != null)
-                await Player.SetPropAsync(PropSlot.Glasses, Glasses.Value);
+                if (Glasses != null)
+                    await Player.SetPropAsync(PropSlot.Glasses, Glasses.Value);
 
-            if (Watches != null)
-                await Player.SetPropAsync(PropSlot.Watches, Watches.Value);
+                if (Watches != null)
+                    await Player.SetPropAsync(PropSlot.Watches, Watches.Value);
 
-            if (Hats != null)
-                await Player.SetPropAsync(PropSlot.Hats, Hats.Value);
+                if (Hats != null)
+                    await Player.SetPropAsync(PropSlot.Hats, Hats.Value);
+            // });
         }
     }
 }

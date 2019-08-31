@@ -12,6 +12,7 @@ namespace ResurrectionRP_Server.Entities.Players
         public PlayerCommands()
         {
             Chat.RegisterCmd("tp", TpCoord);
+            Chat.RegisterCmd("cls", Cls);
         }
 
         private void TpCoord(IPlayer player, string[] args)
@@ -27,6 +28,10 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 player.SendChatMessage("Erreur dans la saisie des coordonnées");
             }
+        }
+        public void Cls(IPlayer player, string[] args)
+        {
+            player.Emit("EmptyChat");
         }
     }
 }

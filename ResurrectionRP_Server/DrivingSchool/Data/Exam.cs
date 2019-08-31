@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.DrivingSchool
 
             this.checkpoint = Alt.CreateCheckpoint(this.PlayerExam, (byte)CheckpointType.Cyclinder2, this.Trajectoire[this.CurrentCheckpoint].Position, 3, 6, new Rgba(255, 255, 255, 128));
             this.colshape = Alt.CreateColShapeCylinder(this.Trajectoire[this.CurrentCheckpoint].Position, 3, 6);
-            await this.PlayerExam.setWaypoint(this.Trajectoire[this.CurrentCheckpoint].Position);
+            await this.PlayerExam.SetWaypoint(this.Trajectoire[this.CurrentCheckpoint].Position);
             this.colshape.SetData("DrivingSchool", true);
 
 
@@ -77,7 +77,7 @@ namespace ResurrectionRP_Server.DrivingSchool
         {
             await this.PlayerExam.EmitAsync("DrivingSchool_End");
             await this.End();
-            await this.PlayerExam.EmitAsync("deleteWaypoint");
+            await this.PlayerExam.EmitAsync("DeleteWaypoint");
             Alt.Emit("DrivingSchool_End", this.PlayerExam, this.id, this.avert);
         }
 

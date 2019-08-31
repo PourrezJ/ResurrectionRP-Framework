@@ -74,7 +74,7 @@ namespace ResurrectionRP_Server.Businesses
                 }
                 else
                 {
-                    await client.displayHelp("Votre citerne est vide, vous avez rien à faire ici !", 15000);
+                    await client.DisplayHelp("Votre citerne est vide, vous avez rien à faire ici !", 15000);
                 }
             }
         }
@@ -91,7 +91,7 @@ namespace ResurrectionRP_Server.Businesses
                 _utilisateurRavi = null;
                 // API.Shared.OnProgressBar(client, false);
                 await Update();
-                await client.displayHelp("Vous venez de sortir de la zone de ravitaillement!", 30000);
+                await client.DisplayHelp("Vous venez de sortir de la zone de ravitaillement!", 30000);
 
             }
         }

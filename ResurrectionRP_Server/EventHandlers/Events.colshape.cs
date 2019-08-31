@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using AltV.Net;
+﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
-using AltV.Net.Async;
-using MongoDB.Bson.Serialization.Attributes;
-using System.Collections.Concurrent;
-using Newtonsoft.Json;
-using Event = ResurrectionRP_Server.Utils.Enums.Events;
 using MongoDB.Bson;
+using ResurrectionRP_Server.Utils.Extensions;
 
 namespace ResurrectionRP_Server.EventHandlers
 {
@@ -35,9 +27,12 @@ namespace ResurrectionRP_Server.EventHandlers
         {
             if(targetEntity.Type == BaseObjectType.Player && colShape.Exists)
                 (targetEntity as IPlayer).Emit("SetStateInColShape", state);
+
             if (state)
             {
-                colShape.putPlayerInColshape((targetEntity as IPlayer));
+                // V752 : Bug ColShape.IsEntityIn() returns always false
+                colShape.AddEntity(targetEntity);
+
                 if (targetEntity.Type == BaseObjectType.Vehicle)
                     OnVehicleEnterColShape?.Invoke(colShape, (IVehicle)targetEntity);
                 else if (targetEntity.Type == BaseObjectType.Player)
@@ -45,7 +40,9 @@ namespace ResurrectionRP_Server.EventHandlers
             }
             else
             {
-                colShape.RemovePlayerInColshape((targetEntity as IPlayer));
+                // V752 : Bug ColShape.IsEntityIn() returns always false
+                colShape.RemoveEntity(targetEntity as IPlayer);
+
                 if (targetEntity.Type == BaseObjectType.Vehicle)
                     OnVehicleLeaveColShape?.Invoke(colShape, (IVehicle)targetEntity);
                 else if (targetEntity.Type == BaseObjectType.Player)
@@ -53,23 +50,25 @@ namespace ResurrectionRP_Server.EventHandlers
             }
         }
 
-        private static async Task OnEntityInteractInColShape(IPlayer client, object[] args)
+        private static void OnEntityInteractInColShape(IPlayer client, object[] args)
         {
-            int key = int.Parse(args[0] + "");
+            int key = int.Parse(args[0].ToString());
+
             foreach (IColShape colshape in Alt.GetAllColShapes())
             {
-                if(await colshape.IsPlayerInColshape(client))
+                // V752 : Bug ColShape.IsEntityIn() returns always false
+                if (colshape.IsEntityInColShape(client))
                 {
                     if (colshape.GetData("ClothingID", out BsonObjectId clothing) && clothing != null)
                     {
                         if (key != 69)
                             return;
+
                         OnPlayerInteractClothingShop?.Invoke(clothing, client);
                     }
                 }
             }
         }
-
         #endregion
     }
 }

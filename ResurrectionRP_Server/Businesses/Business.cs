@@ -12,8 +12,9 @@ using AltV.Net.Enums;
 using AltV.Net;
 using AltV.Net.Async;
 using ResurrectionRP_Server.Bank;
-using ResurrectionRP_Server.Inventory;
+using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Entities.Peds;
+using ResurrectionRP_Server.Entities.Players;
 
 namespace ResurrectionRP_Server.Businesses
 {
@@ -41,17 +42,15 @@ namespace ResurrectionRP_Server.Businesses
         [BsonRepresentation(BsonType.Int64, AllowOverflow = true)]
         public PedModel PedHash { get; private set; }
 
-                public int MaxEmployee { get; set; } = 5;
+        public int MaxEmployee { get; set; } = 5;
         public bool CanEmploy = false;
         public bool Buyable = false; // Commerce achetable?
         public bool OnSale = false;
         public Dictionary<string, string> Employees = new Dictionary<string, string>();
         public BankAccount BankAccount;
         public int BusinessPrice = 150000;
-
         public bool Resell = false;
         public DateTime Inactivity = DateTime.Now;
-
         public Inventory.Inventory Inventory = new Inventory.Inventory(500, 40);
         #endregion
 
@@ -72,8 +71,6 @@ namespace ResurrectionRP_Server.Businesses
                 BankAccount = new BankAccount(AccountType.Business, await BankAccount.GenerateNewAccountNumber(), 0);
                 BankAccount.Owner = this;
             });
-
-            EventHandlers.Events.OnPlayerEnterColShape += this.OnPlayerEnterColShape;
         }
         #endregion
 
@@ -82,14 +79,14 @@ namespace ResurrectionRP_Server.Businesses
         {
             if (PedHash != 0)
             {
-                Entities.Peds.Ped _npc = await Entities.Peds.Ped.CreateNPC(PedHash, Streamer.Data.PedType.Human, Location.Pos, Location.Rot.Z);
-                
-
-                _npc.NpcInteractCallBack = OnNpcFirstInteract; // E
-                _npc.NpcSecInteractCallBack = OnNpcSecondaryInteract; // W
-                this.Ped = _npc;
+                Ped ped = await Ped.CreateNPC(PedHash, Streamer.Data.PedType.Human, Location.Pos, Location.Rot.Z);
+                ped.NpcInteractCallBack = OnNpcFirstInteract; // E
+                ped.NpcSecInteractCallBack = OnNpcSecondaryInteract; // W
+                Ped = ped;
             }
-            Blip = Entities.Blips.BlipsManager.CreateBlip(BusinnessName, Location.Pos, (Owner == null || OnSale) ? (byte)35 : (byte)2, (int)BlipSprite);
+
+            Blip = Entities.Blips.BlipsManager.CreateBlip(BusinnessName, Location.Pos, (Owner == null || OnSale) ? 35 : 2, (int)BlipSprite);
+
             if (Employees == null)
                 Employees = new Dictionary<string, string>();
 
@@ -99,8 +96,7 @@ namespace ResurrectionRP_Server.Businesses
         #endregion
 
         #region Methods
-
-        public bool HaveOwner()
+        public bool HasOwner()
         {
             if (Owner == null || string.IsNullOrEmpty(Owner) || Owner == "")
                 return false;
@@ -114,9 +110,7 @@ namespace ResurrectionRP_Server.Businesses
         public bool IsOwner(IPlayer client)
             => client.GetSocialClub() == Owner;
 
-
         public static async Task<bool> CanIHaveABusiness(string owner) => (GameMode.Instance.BusinessesManager.BusinessesList.Find(x => x.Owner == owner) == null || (await Entities.Players.PlayerManager.GetPlayerBySCN(owner)).StaffRank >= Utils.Enums.AdminRank.Moderator) ? true : false;
-
         #endregion
 
         #region Events
@@ -130,14 +124,8 @@ namespace ResurrectionRP_Server.Businesses
             Menu menu = new Menu("ID_SellMenu", BusinnessName, "Administration du magasin", backCloseMenu: true);
             await OpenSellMenu(client, menu);
         }
-        public virtual void OnPlayerEnterColShape(IColShape colShape, IPlayer client) { }
-
 
         public virtual Task OpenMenu(IPlayer client, Ped npc) => Task.CompletedTask;
         #endregion
-
-
-
-
     }
 }

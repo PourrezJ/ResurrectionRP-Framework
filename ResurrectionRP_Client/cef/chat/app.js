@@ -174,6 +174,12 @@ function closeChat() {
 	}
 }
 
+function emptyChat() {
+    while (messagesBlock.children.length > 0) {
+        messagesBlock.removeChild(messagesBlock.children[0]);
+    }
+}
+
 function highlightChat() {
 
 	scrollTo(document.querySelector('.msglist'), document.querySelector('.msglist').scrollHeight, 0);
@@ -231,7 +237,8 @@ document.querySelector('.msginput input').addEventListener('keydown', function(e
 if('alt' in window) {
 	alt.on('addString', addString);
 	alt.on('addMessage', addMessage);
-	alt.on('openChat', openChat);
+    alt.on('openChat', openChat);
+    alt.on('emptyChat', emptyChat);
 	alt.on('closeChat', closeChat);
 	alt.on('hideChat', hideChat);
 }

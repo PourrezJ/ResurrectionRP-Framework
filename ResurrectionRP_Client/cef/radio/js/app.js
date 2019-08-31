@@ -68,7 +68,7 @@ function changeFrequence() {
 
     frequence = $('#inputFrequence').val();
     favoris[channel] = frequence;
-    mp.trigger("SaveFrequence", channel, frequence);
+    mp.trigger("SaveFrequence", channel);
 }
 
 
@@ -77,9 +77,8 @@ function saveFrequence() {
         return;
 
     $('.frequence').addClass("blink_me");
-    //favoris[channel] = frequence;
     favoris[channel] = $('#inputFrequence').val();
-    alt.emit("SaveFrequence", channel, favoris[channel]);
+    alt.emit("SaveFrequence", channel, $('#inputFrequence').val());
     setTimeout(function () { $('.frequence').removeClass("blink_me"); }, 2000);
 }
 

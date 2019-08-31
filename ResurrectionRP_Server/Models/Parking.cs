@@ -49,7 +49,7 @@ namespace ResurrectionRP_Server.Models
         #endregion
     }
 
-    class Parking
+    public class Parking
     {
         #region Fields and Properties
         public static List<Parking> ParkingList = new List<Parking>();

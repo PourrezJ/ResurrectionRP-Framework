@@ -71,6 +71,7 @@ namespace ResurrectionRP_Server
 
         [BsonIgnore]
         public VehiclesManager VehicleManager { get; private set; }
+        public Services.Pound PoundManager { get; set; }
 
         [BsonIgnore]
         public Jobs.JobsManager JobsManager { get; private set; }
@@ -176,6 +177,9 @@ namespace ResurrectionRP_Server
             if (Time == null)
                 Time = new Time();
 
+            if (PoundManager == null)
+                PoundManager = new Services.Pound();
+
             Alt.Server.LogColored("~g~Initialisations des controlleurs...");
             await Loader.CarParkLoader.LoadAllCarPark();
             await Loader.CarDealerLoaders.LoadAllCardealer();
@@ -186,11 +190,16 @@ namespace ResurrectionRP_Server
             await Loader.BusinessesLoader.LoadAllBusinesses();
             await WeatherManager.InitWeather();
             await JobsManager.Init();
+            await PoundManager.LoadPound();
             DrivingSchoolManager.InitAll();
 
             VoiceController.OnResourceStart();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
+
+            ModeAutoFourriere = Config.GetSetting<bool>("ModeAutoFourriere");
+            if (ModeAutoFourriere)
+                PoundManager.Price = 0;
             Events.Initialize();
 
             Chat.Initialize();
@@ -215,8 +224,6 @@ namespace ResurrectionRP_Server
             });
             Chat.RegisterCmd("task", async (IPlayer player, string[] args) =>
             {
-                Entities.Blips.BlipsManager.SetColor(int.Parse(args[0]), 71);
-
             });
             ServerLoaded = true;
         }

@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+import * as alt from 'alt';
 import * as game from 'natives';
 import Raycast, * as raycast from 'client/Utils/Raycast';
 import * as chat from 'client/chat/chat';
@@ -40,7 +40,7 @@ export class Interaction {
                 if (raycastResult.isHit && raycastResult.entityType == 2) {
                     var vehicle: alt.Vehicle = alt.Vehicle.all.find(v => v.scriptID == raycastResult.hitEntity);
 
-                    if (player == null || player == undefined)
+                    if (vehicle == null || vehicle == undefined)
                         return;
 
                     alt.emitServer('OpenXtremVehicle', vehicle.id);
@@ -76,7 +76,7 @@ export class Interaction {
                 return;
             }
 
-            raycastResult = Raycast.line(2, 22, alt.Player.local.scriptID);
+            raycastResult = Raycast.line(2, -1, alt.Player.local.scriptID);
 
             if (raycastResult.isHit && raycastResult.entityType == 2 && alt.Player.local.vehicle == null) {
                 alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le véhicule", 100)

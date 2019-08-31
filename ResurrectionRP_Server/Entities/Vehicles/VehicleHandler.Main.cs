@@ -43,6 +43,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public IVehicle Vehicle { get; set; }
 
         public bool IsParked { get; set; } = false;
+        public bool IsInPound { get; set; } = false;
 
         public bool SpawnVeh { get; set; }
         public bool Locked { get; set; } = true;
@@ -174,15 +175,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
                 GameMode.Instance.VehicleManager.VehicleHandlerList.TryAdd(Vehicle, this);
             });
-            /*
+            
             if (HaveTowVehicle())
             {
-                IVehicle _vehtowed = VehicleManager.GetVehicleWithPlate(VehicleSync.TowTruck.VehPlate);
+                IVehicle _vehtowed = VehiclesManager.GetVehicleWithPlate(TowTruck.VehPlate);
                 if (_vehtowed != null)
                 {
                     await TowVehicle(_vehtowed);
                 }
-            }*/
+            }
 
             return Vehicle;
         }
@@ -213,7 +214,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         
         public async Task LockUnlock(IPlayer client, bool statut)
         {
-            VehicleHandler VH = VehiclesManager.GetHandlerByVehicle(Vehicle);
+            VehicleHandler VH = Vehicle.GetVehicleHandler();
 
             if (client.HasVehicleKey(await Vehicle.GetNumberplateTextAsync()) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())
             {
@@ -225,7 +226,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public async Task<bool> LockUnlock(IPlayer client)
         {
-            VehicleHandler VH = VehiclesManager.GetHandlerByVehicle(Vehicle);
+            VehicleHandler VH = Vehicle.GetVehicleHandler() ;
 
             if (client.HasVehicleKey( await Vehicle.GetNumberplateTextAsync()) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())
             {
@@ -308,6 +309,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             //this.NeonState.Add(NeonState.Item1);
 
         }
+
+        
 
         public void SetOwner(IPlayer player) => OwnerID = player.GetSocialClub();
         public void SetOwner(PlayerHandler player) => OwnerID = player.Client.GetSocialClub();

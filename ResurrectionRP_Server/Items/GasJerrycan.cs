@@ -17,7 +17,7 @@ namespace ResurrectionRP_Server.Items
         public override async Task Use(IPlayer client, string inventoryType, int slot)
         {
             var vehs = client.GetVehiclesInRange(5);
-            Entities.Vehicles.VehicleHandler _vehicle = Entities.Vehicles.VehiclesManager.GetHandlerByVehicle(vehs.FirstOrDefault());
+            Entities.Vehicles.VehicleHandler _vehicle = (vehs.FirstOrDefault()).GetVehicleHandler();
             if (_vehicle != null)
             {
                 _vehicle.Fuel += 20;

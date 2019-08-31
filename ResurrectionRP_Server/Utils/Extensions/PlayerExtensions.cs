@@ -198,11 +198,11 @@ namespace ResurrectionRP_Server
             {
                 if (!veh.Exists)
                     continue;
-                if (endup == null)
+                if (endup == null && veh != client.Vehicle)
                     endup = veh;
                 var vehpos = veh.GetPosition();
                 var enduppos = endup.GetPosition();
-                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= osition.DistanceTo2D(new Vector3(enduppos.X, enduppos.Y, enduppos.Z)))
+                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= osition.DistanceTo2D(new Vector3(enduppos.X, enduppos.Y, enduppos.Z)) && veh != client.Vehicle)
                 {
                     endup = veh;
                 }

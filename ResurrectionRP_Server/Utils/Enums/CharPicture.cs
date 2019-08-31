@@ -87,6 +87,7 @@ namespace ResurrectionRP_Server.Utils.Enums
         CHAR_TAXI,
         CHAR_YOUTUBE,
         DIA_LOST,
-        DIA_MIC
+        DIA_MIC,
+        DIA_GARDENER
     }
 }

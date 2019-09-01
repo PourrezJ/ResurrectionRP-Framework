@@ -57,6 +57,8 @@ namespace ResurrectionRP_Server
 
         public async static Task DisplayHelp(this IPlayer client, string text, int timeMs) =>
             await client.EmitAsync("Display_Help", text, timeMs);
+        public async static Task DisplaySubtitle(this IPlayer client, string text, int timeMs) =>
+            await client.EmitAsync("Display_subtitle", text, timeMs);
 
         public static PlayerHandler GetPlayerHandler(this IPlayer client)
         {

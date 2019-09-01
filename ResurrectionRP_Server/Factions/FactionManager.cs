@@ -75,14 +75,14 @@ namespace ResurrectionRP_Server.Factions
                 return GameMode.Instance.FactionManager.Onu.HasPlayerIntoFaction(client);
             return false;
         }
-/*
+
         public static async Task<bool> IsLspd(IPlayer client)
         {
             if (GameMode.Instance.FactionManager.Lspd != null)
                 return await GameMode.Instance.FactionManager.Lspd.HasPlayerIntoFaction(client);
             return false;
         }
-
+        /*
         public static async Task<bool> IsRebelle(IPlayer client)
         {
             if (GameMode.Instance.FactionManager.Rebelle != null)

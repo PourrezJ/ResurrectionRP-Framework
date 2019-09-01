@@ -20,6 +20,7 @@ namespace ResurrectionRP_Server.EventHandlers
         public static event ColShapeVehicleEventHandler OnVehicleLeaveColShape;
 
         public static event ColShapePlayerInteract OnPlayerInteractClothingShop;
+        public static event ColShapePlayerEventHandler OnPlayerInteractTeleporter;
         #endregion
 
         #region Private methods
@@ -63,8 +64,12 @@ namespace ResurrectionRP_Server.EventHandlers
                     {
                         if (key != 69)
                             return;
-
                         OnPlayerInteractClothingShop?.Invoke(clothing, client);
+                    } else if (colshape.GetData("Teleport", out string TeleportID) && TeleportID != null)
+                    {
+                        if (key != 69)
+                            return;
+                        OnPlayerInteractTeleporter?.Invoke(colshape, client);
                     }
                 }
             }

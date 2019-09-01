@@ -1,4 +1,4 @@
-﻿using AltV.Net.Elements.Entities;
+using AltV.Net.Elements.Entities;
 using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Data;
@@ -285,6 +285,17 @@ namespace ResurrectionRP_Server
         {
 
         }
+
+        public static void Freeze(this IPlayer client, bool state)
+        {
+            // TODO
+        }
+
+        public static void RequestCollisionAtCoords(this IPlayer client, Vector3 pos)
+        {
+            client.Emit("RequestCollisionAtCoords", pos.X, pos.Y, pos.Z);
+        }
+
         public static async Task Resurrect(this IPlayer client)
             => await client.EmitAsync("ResurrectPlayer");
 

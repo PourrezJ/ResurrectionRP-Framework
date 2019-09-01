@@ -20,6 +20,10 @@ export function initialize() {
         game.setWaypointOff();
     })
 
+    alt.onServer("RequestCollisionAtCoords", (x: number, y: number, z: number) => {
+        game.requestCollisionAtCoord(x,y,z);
+    });
+
     alt.onServer('ShowNotification', (imageName, headerMsg, detailsMsg, message) => {
         game.setNotificationTextEntry('STRING');
         game.addTextComponentSubstringPlayerName(message);

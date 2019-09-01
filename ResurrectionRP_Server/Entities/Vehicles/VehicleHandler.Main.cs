@@ -310,6 +310,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         }
 
+        public async Task PutPlayerInVehicle( IPlayer client )
+        {
+            //TODO
+        }
+
         
 
         public void SetOwner(IPlayer player) => OwnerID = player.GetSocialClub();

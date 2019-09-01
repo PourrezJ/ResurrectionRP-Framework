@@ -42,6 +42,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         [BsonIgnore, JsonIgnore]
         public IVehicle Vehicle { get; set; }
 
+        public Inventory.Inventory Inventory { get; set; }
+
         public bool IsParked { get; set; } = false;
         public bool IsInPound { get; set; } = false;
 
@@ -92,9 +94,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             SpawnVeh = spawnVeh;
             Dimension = dimension;
             Location = new Location(position, rotation);
-            /*
+            
             if (inventory != null)
-                Inventory = inventory;*/
+                Inventory = inventory;
 
             if (OilTank == null)
                 OilTank = new OilTank();

@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server.Factions
         public uint BlipSprite;
 
         [BsonIgnore]
-        public BlipColor BlipColor;
+        public Entities.Blips.BlipColor BlipColor;
 
         [BsonIgnore]
         public Vector3 BlipPosition;
@@ -116,15 +116,17 @@ namespace ResurrectionRP_Server.Factions
         {
             if (ServiceLocation != null)
             {
-                Vestiaire_colShape = await MP.Colshapes.NewTubeAsync(ServiceLocation, 1.0f, 1.0f);
-                await MP.Markers.NewAsync(MarkerType.VerticalCylinder, ServiceLocation - new Vector3(0.0f, 0.0f, 1f), new Vector3(), new Vector3(), 1f, Color.FromArgb(128, 255, 255, 255), true, MP.GlobalDimension);
+                Vestiaire_colShape = Alt.CreateColShapeCylinder(ServiceLocation, 1.0f, 1f);
+                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.HorizontalCircleArrow, ServiceLocation - new Vector3(0, 0, 0), new Vector3(1, 1, 1), 128);
             }
 
             if (ParkingLocation != null)
             {
                 if (Parking == null) Parking = new Parking(ParkingLocation.Pos, ParkingLocation);
-                Parking_colShape = await MP.Colshapes.NewTubeAsync(ParkingLocation.Pos, 3.0f, 1.0f);
-                await MP.Markers.NewAsync(MarkerType.VerticalCylinder, ParkingLocation.Pos - new Vector3(0.0f, 0.0f, 3f), new Vector3(), new Vector3(), 3f, Color.FromArgb(128, 255, 255, 255), true, MP.GlobalDimension);
+
+
+                Parking_colShape = Alt.CreateColShapeCylinder(ParkingLocation.Pos, 3.0f, 1f);
+                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.HorizontalCircleArrow, ServiceLocation - new Vector3(0, 0, 0), new Vector3(1, 1, 1), 128);
 
                 Parking.OnVehicleStored = OnVehicleStore;
                 Parking.OnVehicleOut = OnVehicleOut;
@@ -133,9 +135,9 @@ namespace ResurrectionRP_Server.Factions
                 Parking.Spawn1 = ParkingLocation;
 
                 // TEMPORARY CODE TO REMOVE DUPLICATE VEHICLES
-                List<VehicleHandler> vehicleList = new List<VehicleHandler>();
+/*                List<VehicleHandler> vehicleList = new List<VehicleHandler>();
 
-                foreach (VehicleHandler veh in Parking.ListVehicleStored)
+                foreach (ParkedCar veh in Parking.ListVehicleStored)
                 {
                     bool duplicate = false;
 
@@ -156,29 +158,30 @@ namespace ResurrectionRP_Server.Factions
                 {
                     Parking.ListVehicleStored = vehicleList;
                     await UpdateDatabase();
-                }
+                }*/
                 // END TEMPORARY CODE
             }
 
             if (HeliportLocation != null)
             {
                 if (Parking == null) Parking = new Parking(HeliportLocation.Pos, HeliportLocation);
-                Heliport_colShape = await MP.Colshapes.NewTubeAsync(HeliportLocation.Pos, 3.0f, 1.0f);
-                await MP.Markers.NewAsync(MarkerType.VerticalCylinder, HeliportLocation.Pos - new Vector3(0.0f, 0.0f, 3f), new Vector3(), new Vector3(), 3f, Color.FromArgb(128, 255, 255, 255), true, MP.GlobalDimension);
+                Parking_colShape = Alt.CreateColShapeCylinder(HeliportLocation.Pos, 3.0f, 1f);
+                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, HeliportLocation.Pos - new Vector3(0, 0, 0), new Vector3(3, 3, 3), 128);
             }
 
             if (ShopLocation != null)
             {
-                Shop_colShape = await MP.Colshapes.NewTubeAsync(ShopLocation, 1.0f, 2.0f);
-                await MP.Markers.NewAsync(MarkerType.VerticalCylinder, ShopLocation, new Vector3(), new Vector3(), 1f, Color.FromArgb(128, 255, 255, 255), true, MP.GlobalDimension);
+                Parking_colShape = Alt.CreateColShapeCylinder(ShopLocation, 1.0f, 2f);
+                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ShopLocation - new Vector3(0, 0, 0), new Vector3(1, 1, 1), 128);
             }
 
-            if (BlipPosition != Vector3.Zero) await MP.Blips.NewAsync(BlipSprite, BlipPosition, 1f, (uint)BlipColor, FactionName, 255, 10, true);
+            if (BlipPosition != Vector3.Zero)
+                Entities.Blips.BlipsManager.CreateBlip(FactionName, BlipPosition, (int)BlipColor, (int)BlipSprite, 1);
 
             ServicePlayerList = new List<string>();
             BankAccount.Owner = this;
 
-            if (!string.IsNullOrEmpty(FactionName)) { MP.Logger.Info(FactionName + " is started."); }
+            if (!string.IsNullOrEmpty(FactionName)) { Alt.Server.LogInfo(FactionName + " is started."); }
             GameMode.Instance.FactionManager.FactionList.Add(this);
             return this;
         }
@@ -214,29 +217,29 @@ namespace ResurrectionRP_Server.Factions
 
         public virtual async Task OnPlayerConnected(IPlayer client)
         {
-            if (ServicePlayerList.Contains(client.GetSocialClubName()))
+            if (ServicePlayerList.Contains(client.GetSocialClub()))
             {
-                FactionPlayerList[client.GetSocialClubName()].LastPayCheck = (DateTime.Now).AddMinutes(PayCheckMinutes);
+                FactionPlayerList[client.GetSocialClub()].LastPayCheck = (DateTime.Now).AddMinutes(PayCheckMinutes);
                 await OnPlayerServiceEnter(client, GetRangPlayer(client));
             }
         }
 
-        public virtual void OnPlayerDisconnected(IPlayer client, DisconnectReason type, string reason)
+        public virtual void OnPlayerDisconnected(IPlayer client)
         {
-            string socialClub = client.GetSocialClubName();
+            string socialClub = client.GetSocialClub();
             Utils.Utils.Delay(60000 * 10, true, () =>
             {
-                if (!MP.Players.Any(p => p.GetSocialClubName() == socialClub))
+                if (!GameMode.Instance.PlayerList.Any(p => p.GetSocialClub() == socialClub))
                     ServicePlayerList.Remove(socialClub);
             });
         }
 
-        public virtual Task OnEnterColshape(IPlayer player, IColshape colshapePointer)
+        public virtual Task OnPlayerEnterColShape(IColShape colShape, IPlayer player)
         {
             return Task.CompletedTask;
         }
 
-        public virtual Task OnExitColshape(IPlayer player, IColshape colshapePointer)
+        public virtual Task OnPlayerExitColShape(IColShape colShape, IPlayer player)
         {
             return Task.CompletedTask;
         }
@@ -249,7 +252,7 @@ namespace ResurrectionRP_Server.Factions
 
                 if (ph != null && FactionPlayerList.ContainsKey(socialClub) && DateTime.Now >= FactionPlayerList[socialClub].LastPayCheck)
                 {
-                    double salaire = FactionRang[await GetRangPlayer(ph.Client)].Salaire;
+                    double salaire = FactionRang[ GetRangPlayer(ph.Client)].Salaire;
 
                     if (salaire == 0)
                         return;
@@ -271,7 +274,7 @@ namespace ResurrectionRP_Server.Factions
         #region Method
         public virtual async Task<bool> TryAddIntoFaction(IPlayer client, int rang = 1)
         {
-            bool add = FactionPlayerList.TryAdd(client.GetSocialClubName(), new FactionPlayer(client.GetSocialClubName(), rang));
+            bool add = FactionPlayerList.TryAdd(client.GetSocialClub(), new FactionPlayer(client.GetSocialClub(), rang));
             if (add)
             {
                 await client.NotifyAsync($"Vous êtes désormais membre de {FactionName}");
@@ -279,7 +282,7 @@ namespace ResurrectionRP_Server.Factions
                 await UpdateDatabase();
                 await PlayerFactionAdded(client);
             }
-            else if (FactionPlayerList.ContainsKey(client.GetSocialClubName()))
+            else if (FactionPlayerList.ContainsKey(client.GetSocialClub()))
             {
                 await client.SendNotificationError($"Vous êtes déjà dans la faction {FactionName}");
             }
@@ -299,23 +302,23 @@ namespace ResurrectionRP_Server.Factions
                 return;
 
             await MenuManager.CloseMenu(client);
-            if (ServicePlayerList.Contains(client.GetSocialClubName()))
+            if (ServicePlayerList.Contains(client.GetSocialClub()))
             {
                 await client.SendNotificationSuccess("Vous avez quitté votre service");
-                ServicePlayerList.Remove(client.GetSocialClubName());
+                ServicePlayerList.Remove(client.GetSocialClub());
                 await OnPlayerServiceQuit(client, GetRangPlayer(client));
             }
             else
             {
                 await client.SendNotificationSuccess("Vous avez pris votre service");
-                FactionPlayerList[client.GetSocialClubName()].LastPayCheck = (DateTime.Now).AddMinutes(PayCheckMinutes);
-                ServicePlayerList.Add(client.GetSocialClubName());
+                FactionPlayerList[client.GetSocialClub()].LastPayCheck = (DateTime.Now).AddMinutes(PayCheckMinutes);
+                ServicePlayerList.Add(client.GetSocialClub());
                 await OnPlayerServiceEnter(client, GetRangPlayer(client));
             }
         }
 
         public bool IsOnService(IPlayer client)
-            => ServicePlayerList.Contains(client.GetSocialClubName());
+            => ServicePlayerList.Contains(client.GetSocialClub());
 
         public List<IPlayer> GetEmployeeOnline()
         {
@@ -331,7 +334,7 @@ namespace ResurrectionRP_Server.Factions
             {
                 if (!client.Exists)
                     continue;
-                if (ServicePlayerList.Contains(client.GetSocialClubName()))
+                if (ServicePlayerList.Contains(client.GetSocialClub()))
                 {
                     _employeeOnline.Add(client);
                 }
@@ -365,13 +368,13 @@ namespace ResurrectionRP_Server.Factions
         public bool IsRecruteur(IPlayer client) => FactionRang[GetRangPlayer(client)].Recrute;
 
         public void SetRangPlayer(IPlayer client, int rang)
-            => FactionPlayerList[client.GetSocialClubName()] = new FactionPlayer(client.GetSocialClubName(), rang);
+            => FactionPlayerList[client.GetSocialClub()] = new FactionPlayer(client.GetSocialClub(), rang);
 
         public int GetRangPlayer(IPlayer client)
-            => FactionPlayerList[client.GetSocialClubName()].Rang;
+            => FactionPlayerList[client.GetSocialClub()].Rang;
 
         public bool HasPlayerIntoFaction(IPlayer client)
-            => FactionPlayerList.ContainsKey(client.GetSocialClubName());
+            => FactionPlayerList.ContainsKey(client.GetSocialClub());
 
         public ICollection<string> GetAllSocialClubName()
             => FactionPlayerList.Keys;

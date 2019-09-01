@@ -68,6 +68,16 @@ namespace ResurrectionRP_Server
 
             return null;
         }
+        public static bool IsDead(this IPlayer player)
+        {
+            var ph = player.GetPlayerHandler();
+
+            if (ph == null)
+                return false;
+
+            return ph.PlayerSync.IsDead;
+        }
+
 
         public async static Task SendNotification(this IPlayer client, string text)
         {

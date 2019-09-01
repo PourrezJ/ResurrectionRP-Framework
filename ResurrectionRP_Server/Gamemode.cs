@@ -76,6 +76,9 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public Jobs.JobsManager JobsManager { get; private set; }
 
+        [BsonIgnore]
+        public Factions.FactionManager FactionManager { get; private set; }
+
         // Menus
         [BsonIgnore]
         public MenuManager MenuManager { get; private set; }
@@ -93,6 +96,9 @@ namespace ResurrectionRP_Server
 
         [BsonIgnore]
         public DrivingSchool.DrivingSchoolManager DrivingSchoolManager { get; private set; }
+
+        [BsonIgnore]
+        public Teleport.TeleportManager TeleportManager { get; private set; }
 
         [BsonIgnore]
         public Utils.DoorManager DoorManager { get; private set; }
@@ -163,8 +169,10 @@ namespace ResurrectionRP_Server
             PedManager = new Entities.Peds.PedsManager();
             BlipsManager = new Entities.Blips.BlipsManager();
             PhoneManager = new Phone.PhoneManager();
+            FactionManager = new Factions.FactionManager();
             RPGInventory = new Inventory.RPGInventoryManager();
             MenuManager = new MenuManager();
+            TeleportManager = new Teleport.TeleportManager();
             BusinessesManager = new Loader.BusinessesLoader();
             XMenuManager = new XMenuManager.XMenuManager();
             WeatherManager = new Weather.WeatherManager();
@@ -186,6 +194,7 @@ namespace ResurrectionRP_Server
             await Loader.VehicleRentLoaders.LoadAllVehicleRent();
             await Loader.TattooLoader.TattooLoader.LoadAllTattoo();
             await VehicleManager.LoadAllVehiclesActive();
+            await FactionManager.InitAllFactions();
             await Loader.ClothingLoader.LoadAllCloth();
             await Loader.BusinessesLoader.LoadAllBusinesses();
             await WeatherManager.InitWeather();
@@ -200,7 +209,15 @@ namespace ResurrectionRP_Server
             ModeAutoFourriere = Config.GetSetting<bool>("ModeAutoFourriere");
             if (ModeAutoFourriere)
                 PoundManager.Price = 0;
+
             Events.Initialize();
+
+
+            Utils.Utils.Delay(15000, false, async () => await Save());
+
+            Utils.Utils.Delay(1000, false, () => Time.Update());
+
+            Utils.Utils.Delay(60000, false, async () => await FactionManager.Update());
 
             Chat.Initialize();
             Chat.RegisterCmd("veh", CommandVeh);

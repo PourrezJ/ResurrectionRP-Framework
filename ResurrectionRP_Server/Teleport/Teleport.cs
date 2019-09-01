@@ -72,7 +72,7 @@ namespace ResurrectionRP_Server.Teleport
             // Entrée
 
             var enterColshape =Alt.CreateColShapeCylinder(entree.Pos, scale, 3f);
-            GameMode.Instance.Streamer.addEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, entree.Pos - new Vector3(0.0f, 0.0f, 1.5f), new Vector3(1, 1, 1), 255, 255, 255, 80);
+            GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, entree.Pos - new Vector3(0.0f, 0.0f, 1.5f), new Vector3(1, 1, 1), 255, 255, 255, 80);
             enterColshape.SetData("Teleport", new
             {
                 ID = teleport.ID,
@@ -83,7 +83,7 @@ namespace ResurrectionRP_Server.Teleport
             foreach (var sortipos in sorti)
             {
                 var sortiColshape = Alt.CreateColShapeCylinder(sortipos.Location.Pos, scale, 1f);
-                GameMode.Instance.Streamer.addEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, sortipos.Location.Pos - new Vector3(0, 0, 1f), new Vector3(1, 1, 1), 255, 255, 255, opacite);
+                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, sortipos.Location.Pos - new Vector3(0, 0, 1f), new Vector3(1, 1, 1), 255, 255, 255, opacite);
                 sortiColshape.SetData("Teleport", new
                 {
                     ID = teleport.ID,

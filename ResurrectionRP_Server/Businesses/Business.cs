@@ -15,6 +15,7 @@ using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Entities.Peds;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Utils.Enums;
 
 namespace ResurrectionRP_Server.Businesses
 {
@@ -110,7 +111,7 @@ namespace ResurrectionRP_Server.Businesses
         public bool IsOwner(IPlayer client)
             => client.GetSocialClub() == Owner;
 
-        public static async Task<bool> CanIHaveABusiness(string owner) => (GameMode.Instance.BusinessesManager.BusinessesList.Find(x => x.Owner == owner) == null || (await Entities.Players.PlayerManager.GetPlayerBySCN(owner)).StaffRank >= Utils.Enums.AdminRank.Moderator) ? true : false;
+        public static async Task<bool> CanIHaveABusiness(string owner) => (GameMode.Instance.BusinessesManager.BusinessesList.Find(x => x.Owner == owner) == null || (await PlayerManager.GetPlayerBySCN(owner)).StaffRank >= AdminRank.Moderator) ? true : false;
         #endregion
 
         #region Events

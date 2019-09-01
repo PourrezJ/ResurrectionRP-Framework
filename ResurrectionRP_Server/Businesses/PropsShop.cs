@@ -74,10 +74,10 @@ namespace ResurrectionRP_Server.Businesses
             {
                 _clothingColshape = Alt.CreateColShapeCylinder(ClothingPos, 4f, 3f);
                 _clothingColshape.SetData("ClothingID", this._id);
-                GameMode.Instance.Streamer.addEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ClothingPos - new Vector3(0,0,4f), new Vector3(0,0,3f), 80, 255, 255, 255);
+                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ClothingPos - new Vector3(0,0,4f), new Vector3(0,0,3f), 80, 255, 255, 255);
                 //MP.Markers.New(MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 4f), new Vector3(0, 0, 180), new Vector3(), 3f, Color.FromArgb(80, 255, 255, 255), true, MP.GlobalDimension);
                 
-                await Entities.Blips.BlipsManager.SetColor(Blip, 25);
+                Entities.Blips.BlipsManager.SetColor(Blip, 25);
             });
 
 

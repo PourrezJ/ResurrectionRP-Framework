@@ -53,6 +53,8 @@ function runCommand(command) {
     if (!isConnected || typeof command !== "string")
         return;
 
+    console.log(command);
+
     webSocket.send(command);
 
     packetsSent++;

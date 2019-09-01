@@ -58,7 +58,7 @@ namespace ResurrectionRP_Server.Entities.Peds
                 PedType = pedType
             };
 
-            GameMode.Instance.Streamer.addEntityPed(ped);
+            GameMode.Instance.Streamer.AddEntityPed(ped);
 
             PedsManager.NPCList.Add(ped);
             return ped;

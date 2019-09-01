@@ -43,7 +43,7 @@ export class VoiceChat
             });
 
             this.view.on('SaltyChat_OnError', (data: string) => {
-                alt.log(data);
+                //alt.log(data);
             });
 
             this.view.on('SaltyChat_OnMessage', (arg) =>
@@ -182,15 +182,13 @@ export class VoiceChat
                             voiceRange = 4;
                             break;
                     }
-                    alt.log(`name: ${nPlayerName} | pos: ${JSON.stringify(nPlayer.pos)} | range: ${voiceRange} | dead: ${this.deadplayers.find(p => p == nPlayerName)}`);
-                    
-                    this.ExecuteCommand(new PluginCommand(Command.PlayerStateUpdate, this.serverUniqueIdentifier,
-                        new PlayerState(nPlayerName, TSVector.Convert(nPlayer.pos), voiceRange, undefined, (this.deadplayers.find(p => p == nPlayerName) !== undefined))));
+
+                    this.ExecuteCommand(new PluginCommand(Command.PlayerStateUpdate, this.serverUniqueIdentifier, new PlayerState(nPlayerName, TSVector.Convert(nPlayer.pos), voiceRange, null, true, null)));
                 }
             }
         });
 
-        this.ExecuteCommand(new PluginCommand(Command.SelfStateUpdate, this.serverUniqueIdentifier, new PlayerState(alt.Player.local.getSyncedMeta("Voice_VoiceRange"), TSVector.Convert(playerPos), game.getGameplayCamRot(0).z)));
+        this.ExecuteCommand(new PluginCommand(Command.SelfStateUpdate, this.serverUniqueIdentifier, new PlayerState(null, TSVector.Convert(playerPos), null, game.getGameplayCamRot(0).z, false, null)));
     }
 
     private ExecuteCommand(pluginCommand: PluginCommand)
@@ -229,31 +227,31 @@ class PluginCommand
 
 class PlayerState
 {
-    public Name: string;
+    public Name: string = null;
     public Position: TSVector = TSVector.Zero;
-    public Rotation: number;
-    public VoiceRange: number;
-    public IsAlive: boolean;
-    public VolumeOverride: number;
+    public Rotation: number = null;
+    public VoiceRange: number = null;
+    public IsAlive: boolean = false;
+    public VolumeOverride: number = null;
 
-    constructor(name: string = undefined, position: TSVector = undefined, voiceRange: number = undefined, rotation: number = undefined, isAlive: boolean = undefined, volumeOverride: number = undefined)
+    constructor(name: string = null, position: TSVector = null, voiceRange: number = null, rotation: number = null, isAlive: boolean = null, volumeOverride: number = null)
     {
-        if (name != undefined)
+        if (name != null)
             this.Name = name;
 
-        if (position !== undefined)
+        if (position != null)
             this.Position = position;
 
-        if (voiceRange !== undefined)
+        if (voiceRange != null)
             this.VoiceRange = voiceRange;
 
-        if (rotation !== undefined)
+        if (rotation != null)
             this.Rotation = rotation;
 
-        if (isAlive !== undefined)
+        if (isAlive != null)
             this.IsAlive = isAlive;
 
-        if (volumeOverride !== undefined)
+        if (volumeOverride != null)
             this.VolumeOverride = volumeOverride;
     }
 }

@@ -1,7 +1,7 @@
 ﻿@echo off
-set ClientDir=E:\Sources\AltV\Server-Beta\resources\resurrectionrp\client
-set TargetDir=E:\Sources\AltV\ResurrectionRP\ResurrectionRP_Client\bin
-set ProjectDir=E:\Sources\AltV\ResurrectionRP\ResurrectionRP_Client
+set ClientDir=C:\altv\server-files\resources\resurrectionrp\client
+set TargetDir=C:\Users\Administrateur\source\repos\ALTV_ResurrectionRP\ResurrectionRP_Client\bin
+set ProjectDir=C:\Users\Administrateur\source\repos\ALTV_ResurrectionRP\ResurrectionRP_Client
 
 del %TargetDir%\*.dll
 del %TargetDir%\*.pdb

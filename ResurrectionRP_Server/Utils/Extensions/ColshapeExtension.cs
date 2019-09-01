@@ -1,68 +1,51 @@
 ﻿using AltV.Net.Elements.Entities;
-using AltV.Net;
-using AltV.Net.Async;
-using ResurrectionRP_Server.Entities.Players;
-using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Numerics;
-using AltV.Net.Data;
-using AltV.Net.Elements.Args;
-using MongoDB.Driver;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using Newtonsoft.Json;
 
 namespace ResurrectionRP_Server
 {
+    // BUG v752 : ColShape.IsEntityIn() returns always false
     public static class ColshapeExtension
     {
-        public static async void putPlayerInColshape(this IColShape colshape, IPlayer client)
+        public static void AddEntity(this IColShape colshape, IEntity entity)
         {
-            if (!client.Exists && client.Type == BaseObjectType.Player)
-                return;
-            colshape.GetData<List<string>>("PlayersIn",out List<string> data);
-
-            if ( data == null)
-                 data = new List<string>();
-
-            if (data.Exists(p => p == client.GetSocialClub()))
+            if (!entity.Exists)
                 return;
 
-            data.Add(client.GetSocialClub());
-            colshape.SetData("PlayersIn", data);
-            colshape.GetData("PlayersIn", out List<string> test);
-        }
-
-        public static async void RemovePlayerInColshape(this IColShape colshape, IPlayer client)
-        {
-            if (!client.Exists && client.Type == BaseObjectType.Player)
-                return;
-            colshape.GetData<List<string>>("PlayersIn", out List<string> data);
-
-            if (data == null)
+            lock (colshape)
             {
-                colshape.SetData("PlayersIn", new List<string>());
-                return;
+                colshape.GetData("Entities", out List<IEntity> entities);
+
+                if (entities != null && !entities.Contains(entity))
+                    entities.Add(entity);
+                else if (entities == null)
+                {
+                    entities = new List<IEntity>();
+                    entities.Add(entity);
+                    colshape.SetData("Entities", entities);
+                }
             }
-
-            colshape.GetData<List<string>>("PlayersIn", out data);
-            if (data.Exists(p => p == client.GetSocialClub()))
-                data.Remove(client.GetSocialClub());
-            colshape.SetData("PlayersIn", data);
-            colshape.GetData("PlayersIn", out List<string> test);
-
         }
 
-        public static async Task<bool> IsPlayerInColshape(this IColShape colshape, IPlayer client)
+        public static void RemoveEntity(this IColShape colshape, IPlayer entity)
         {
-            if (!client.Exists && client.Type == BaseObjectType.Player)
-                return false;
-            colshape.GetData<List<string>>("PlayersIn", out List<string> data);
-            if (data != null && data.Exists(p => client.GetSocialClub() == p))
-                return true;
-            return false;
+            lock (colshape)
+            {
+                colshape.GetData("Entities", out List<IEntity> entities);
+
+                if (entities.Contains(entity))
+                    entities.Remove(entity);
+            }
         }
 
+        public static bool IsEntityInColShape(this IColShape colshape, IEntity client)
+        {
+            colshape.GetData("Entities", out List<IEntity> entities);
+
+            if (entities == null || !entities.Contains(client))
+                return false;
+
+            return true;
+        }
     }
 }

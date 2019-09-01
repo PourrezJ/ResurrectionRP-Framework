@@ -39,7 +39,7 @@ namespace ResurrectionRP_Server.Services
                     ve.ParkTime = DateTime.Now;
                     Alt.Server.LogError("Service CarPark | Checking for too long parked car is not done yet, consider finishing it (Service.Carpark.cs)");
                     //GameMode.Instance?.PoundManager.AddVehicleInPound(ve);
-                    //Parking.RemoveVehicle(ve); TODO
+                    //Parking.RemoveVehicle(ve); TODO Add after done pound 
                 }
                 /*if (_poundList.Count != 0)
                     await Update();*/

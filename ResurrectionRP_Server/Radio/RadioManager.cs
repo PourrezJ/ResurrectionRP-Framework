@@ -108,7 +108,7 @@ namespace ResurrectionRP_Server.Radio
             if (_clientMenus.TryAdd(client, radio))
             {
                 await radio.OpenRadio(client);
-               // await client.EmitAsync("showCursor", true);
+               // await client.EmitAsync("ShowCursor", true);
                 return true;
             }
             return false;

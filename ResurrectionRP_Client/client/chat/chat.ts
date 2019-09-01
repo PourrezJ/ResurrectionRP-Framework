@@ -31,7 +31,11 @@ export function initialize() {
         alt.toggleGameControls(true);
     });
 
-    alt.onServer('chatmessage', pushMessage);
+    alt.onServer('ChatMessage', pushMessage);
+
+    alt.onServer('EmptyChat', () => {
+        view.emit('emptyChat');
+    });
 
     alt.on('toggleChat', (state: boolean = null) => {
         if (!opened && state == null || state ) {

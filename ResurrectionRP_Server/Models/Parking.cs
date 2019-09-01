@@ -235,9 +235,9 @@ namespace ResurrectionRP_Server.Models
         #region Public methods
         public async Task Load(float markerscale = 3f, int opacite = 128, bool blip = false, uint sprite = 50, float scale = 1f, byte color = 0, uint alpha = 255, string name = "", uint dimension = (uint)short.MaxValue)
         {
-            GameMode.Instance.Streamer.addEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale-1), new Vector3(3,3,3), 180);
+            GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale-1), new Vector3(3,3,3), 180);
             ParkingColshape = Alt.CreateColShapeCylinder(new AltV.Net.Data.Position(Location.X, Location.Y, Location.Z -1), markerscale, 4);
-            GameMode.Instance.Streamer.addEntityTextLabel(this.Name + "\n~o~Approchez pour interagir", Location, 4);
+            GameMode.Instance.Streamer.AddEntityTextLabel(this.Name + "\n~o~Approchez pour interagir", Location, 4);
 
             if (blip)
                 Entities.Blips.BlipsManager.CreateBlip(name, Location,color,(int) sprite);
@@ -283,7 +283,7 @@ namespace ResurrectionRP_Server.Models
                 if (!vehplayer.Exists)
                     return;
 
-                VehicleHandler vehicle = VehicleManager.GetHandlerByVehicle(vehplayer);
+                VehicleHandler vehicle = vehplayer.GetVehicleHandler();
 
                 if (vehicle == null)
                     return;
@@ -377,7 +377,7 @@ namespace ResurrectionRP_Server.Models
                     return;
                 }
 
-                VehicleHandler veh = VehicleManager.GetHandlerByVehicle(vh);
+                VehicleHandler veh = vh.GetVehicleHandler();
 
                 if (veh != null)
                 {

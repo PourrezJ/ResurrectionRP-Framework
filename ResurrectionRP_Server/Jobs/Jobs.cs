@@ -47,7 +47,7 @@ namespace ResurrectionRP_Server.Jobs
                 //_serviceColshape = await MP.Colshapes.NewTubeAsync(ServicePos, 1f, 1f);
                 _serviceColshape = Alt.CreateColShapeCylinder(ServicePos, 1f, 1f);
                 //_marker = await MP.Markers.NewAsync(MarkerType.VerticalCylinder, ServicePos - new Vector3(0, 0, 1), new Vector3(), new Vector3(), 1f, System.Drawing.Color.White, true);
-                _marker = GameMode.Instance.Streamer.addEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ServicePos - new Vector3(0, 0, 1), new Vector3(1, 1, 1), 255, 255, 255, 128);
+                _marker = GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ServicePos - new Vector3(0, 0, 1), new Vector3(1, 1, 1), 255, 255, 255, 128);
             }
         }
         #endregion

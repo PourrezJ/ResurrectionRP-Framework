@@ -14,6 +14,8 @@ using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
 using VehicleInfoLoader.Data;
+using AltV.Net.Elements.Entities;
+
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
 
@@ -95,6 +97,51 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             Door[(byte)door] = (VehicleDoorState)state;
             await Vehicle.SetDoorStateAsync(door, state);
 
+        }
+
+        public bool HaveTowVehicle() => TowTruck != null;
+
+        public async Task Freeze(bool statut)
+        {
+            FreezePosition = statut;
+            await UpdateProperties();
+        }
+
+        public async Task TowVehicle(IVehicle vehicle)
+        {
+            if (await Vehicle.GetModelAsync() != (int)VehicleModel.Flatbed && !HaveTowVehicle())
+                return;
+
+            TowTruck = new TowTruck(vehicle.NumberplateText, new Vector3(0, -2, 1));
+#pragma warning disable CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
+            Task.Run(async () =>
+            {
+                await UpdateAsync();
+                while (HaveTowVehicle())
+                {
+                    if (!vehicle.Exists)
+                        return;
+                    await Task.Delay(500);
+                    if (HaveTowVehicle())
+                        await vehicle.SetPositionAsync(await Vehicle.GetPositionAsync());
+                }
+            });
+#pragma warning restore CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
+        }
+
+        public async Task<IVehicle> UnTowVehicle(Location position)
+        {
+            if (Vehicle.Model != (int)VehicleModel.Flatbed && TowTruck == null) return null;
+
+            IVehicle temp = VehiclesManager.GetVehicleWithPlate(TowTruck.VehPlate);
+            TowTruck = null;
+            await UpdateProperties();
+
+            await temp.SetPositionAsync(position.Pos);
+            await temp.SetRotationAsync(position.Rot);
+            await temp.GetVehicleHandler()?.Update();
+
+            return temp;
         }
     }
 }

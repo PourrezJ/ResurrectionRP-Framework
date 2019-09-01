@@ -10,17 +10,17 @@ var loading;
 
 
 export function initialize() {
-    alt.onServer("setWaypoint", (posx: number, posy: number, override: boolean) => {
+    alt.onServer('SetWaypoint', (posx: number, posy: number, override: boolean) => {
         if (game.isWaypointActive() && override)
             game.setWaypointOff();
         if (override && !game.isWaypointActive())
             game.setNewWaypoint(posx, posy);
     });
-    alt.onServer("deleteWaypoint", () => {
+    alt.onServer('DeleteWaypoint', () => {
         game.setWaypointOff();
     })
 
-    alt.onServer('showNotification', (imageName, headerMsg, detailsMsg, message) => {
+    alt.onServer('ShowNotification', (imageName, headerMsg, detailsMsg, message) => {
         game.setNotificationTextEntry('STRING');
         game.addTextComponentSubstringPlayerName(message);
         game.setNotificationMessageClanTag(imageName.toUpperCase(), imageName.toUpperCase(), false, 4, headerMsg, detailsMsg, 1.0, '');
@@ -75,16 +75,20 @@ export function initialize() {
     alt.onServer('Display_subtitle', (text, time) => {
         new Subtitle(text, time);
     });
+
     alt.on('Display_subtitle', (text, time) => {
         new Subtitle(text, time);
     });
 
-    alt.onServer('showLoading', (text, time, type, toggled) => {
+    alt.onServer('ShowLoading', (text, time, type, toggled) => {
         new Loading(text, time, type, toggled);
     });
 
-    alt.onServer("showCursor", (state: boolean) => alt.showCursor(state));
-    alt.onServer('showNotification', (text) => {
+    alt.onServer('ShowCursor', (state: boolean) => {
+        alt.showCursor(state);
+    });
+
+    alt.onServer('ShowNotification', (text) => {
         game.setNotificationTextEntry("STRING");
         game.addTextComponentSubstringPlayerName(text);
         game.drawNotification(true, false);
@@ -100,6 +104,7 @@ export function initialize() {
         game.setNotificationMessage2(img.toUpperCase(), img.toUpperCase(), false, 4, sender, subject);
         game.drawNotification(false, false);
     });
+
     alt.on("SetNotificationMessage", (img, sender, subject, message) =>
     {
         alt.log(img);
@@ -110,7 +115,6 @@ export function initialize() {
     });
 
     alt.on('RemoveLoadingPrompt', () => game.removeLoadingPrompt());
-
 
     alt.onServer('FadeIn', (args: number) => game.doScreenFadeIn(args));
     alt.onServer('FadeOut', (args: number) => game.doScreenFadeOut(args));

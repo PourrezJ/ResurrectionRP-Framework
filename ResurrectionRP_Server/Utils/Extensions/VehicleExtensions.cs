@@ -5,6 +5,7 @@ using ResurrectionRP_Server.Entities.Vehicles;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
+using System;
 
 namespace ResurrectionRP_Server
 {
@@ -12,7 +13,7 @@ namespace ResurrectionRP_Server
     {
         public static VehicleHandler GetVehicleHandler(this IVehicle vehicle)
         {
-            return VehiclesManager.GetHandlerByVehicle(vehicle);
+            return VehiclesManager.GetVehicleHandlerWithPlate(vehicle.NumberplateText);
         }
         public static Vector3 GetVehicleVector(this IVehicle vehicle)
         {
@@ -73,6 +74,27 @@ namespace ResurrectionRP_Server
         public static async Task TryPutPlayerInVehicle(this IVehicle client, IPlayer target)
         {
             await target.EmitAsync("TrySetPlayerIntoVehicle", client);
+        }
+
+        public static VehicleHandler GetHandlerByVehicle(IVehicle vehicle)
+        {
+            try
+            {
+                if (vehicle != null && vehicle.Exists)
+                {
+                    if (vehicle.GetData("VehicleHandler", out object data))
+                        return data as VehicleHandler;
+
+                    if (GameMode.Instance.VehicleManager.VehicleHandlerList.TryGetValue(vehicle, out VehicleHandler value))
+                        return value;
+                }
+            }
+            catch (Exception ex)
+            {
+                Alt.Server.LogInfo($"GetVehicleByVehicle with plate {vehicle.GetNumberplateTextAsync()}: " + ex);
+            }
+
+            return null;
         }
     }
 }

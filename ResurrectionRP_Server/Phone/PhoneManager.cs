@@ -70,7 +70,7 @@ namespace ResurrectionRP_Server.Phone
      */
                     long newMessagesCount = GetNewMessagesOnConversationsCount(phone.PhoneNumber);
                     await client.EmitAsync("OpenPhone", newMessagesCount, JsonConvert.SerializeObject(phone.Settings), incomingCall, contactNumber, contactName);
-                    await client.EmitAsync("showCursor", true);
+                    await client.EmitAsync("ShowCursor", true);
 
                     return true;
                 }

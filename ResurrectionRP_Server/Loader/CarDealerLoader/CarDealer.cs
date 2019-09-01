@@ -75,7 +75,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
                 $"Places: {manifest.MaxNumberOfPassengers + 1} \n";
 
                 //place.TextLabel = await MP.TextLabels.NewAsync(place.Location.Pos + new Vector3(0, 0, 1.0f), str, 1, Color.FromArgb(180, 255, 255, 255), 15);
-                place.TextLabelId = GameMode.Instance.Streamer.addEntityTextLabel(str, place.Location.Pos, 1, 180, 255, 255, 255);
+                place.TextLabelId = GameMode.Instance.Streamer.AddEntityTextLabel(str, place.Location.Pos, 1, 180, 255, 255, 255);
 
                 place.VehicleHandler.Vehicle.SetData("CarDealer", place);
                 place.VehicleHandler.Vehicle.SetData("CarDealerPrice", place.VehicleInfo.Price);
@@ -85,7 +85,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
         public async Task BuyCar(CarDealerPlace vehicleplace, Entities.Players.PlayerHandler ph)
         {
             if (vehicleplace.TextLabelId > 0)
-                GameMode.Instance.Streamer.destroyEntityLabel(vehicleplace.TextLabelId);
+                GameMode.Instance.Streamer.DestroyEntityLabel(vehicleplace.TextLabelId);
 
             //GameMode.Instance.Economy.CaissePublique += Economy.CalculPriceTaxe(vehicleplace.VehicleInfo.Price, GameMode.Instance.Economy.Taxe_Market);
 

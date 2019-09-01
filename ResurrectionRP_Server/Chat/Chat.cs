@@ -77,7 +77,7 @@ namespace ResurrectionRP_Server
         #region Public static methods
         public static void Broadcast(string msg)
         {
-            Alt.EmitAllClients("chatmessage", msg);
+            Alt.EmitAllClients("ChatMessage", msg);
         }
 
         public static bool RegisterCmd(string cmd, CmdCallback callback)
@@ -93,7 +93,7 @@ namespace ResurrectionRP_Server
 
         public static void Send(IPlayer player, string msg)
         {
-            player.Emit("chatmessage", msg);
+            player.Emit("ChatMessage", msg);
         }
         #endregion
 

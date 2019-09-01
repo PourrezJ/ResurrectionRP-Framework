@@ -1,15 +1,14 @@
 ﻿using AltV.Net.Elements.Entities;
 using AltV.Net;
 using AltV.Net.Async;
+using AltV.Net.Data;
+using MongoDB.Driver;
 using ResurrectionRP_Server.Entities.Players;
-using ResurrectionRP_Server.XMenuManager;
+using ResurrectionRP_Server.Models;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Numerics;
-using AltV.Net.Data;
-using AltV.Net.Elements.Args;
-using MongoDB.Driver;
 
 namespace ResurrectionRP_Server
 {
@@ -18,7 +17,7 @@ namespace ResurrectionRP_Server
     {
         public static string GetSocialClub(this IPlayer player)
         {
-            if (player.GetData<string>("SocialClub", out string data))
+            if (player.GetData("SocialClub", out string data))
                 return data;
 
             throw new NullReferenceException("SocialClubMising");
@@ -42,17 +41,22 @@ namespace ResurrectionRP_Server
             return ID;
         }
 
-        public async static Task SetClothAsync(this IPlayer client, Models.ClothSlot level, int drawable, int texture, int palette) =>
-            await client.EmitAsync("ComponentVariation", ((int)level), drawable, texture, palette);
+        public async static Task SetClothAsync(this IPlayer client, ClothSlot level, int drawable, int texture, int palette)
+        {
+            await Task.Run(() =>
+                client.Emit("ComponentVariation", (int)level, drawable, texture, palette));
+        }
 
-        public async static Task SetPropAsync(this IPlayer client, Models.PropSlot slot, Models.PropData item) =>
-            await client.EmitAsync("PropVariation", (int)slot, item.Drawable, item.Texture);
+        public async static Task SetPropAsync(this IPlayer client, PropSlot slot, PropData item)
+        {
+            await Task.Run(() =>
+                client.Emit("PropVariation", (int)slot, item.Drawable, item.Texture));
+        }
+        public async static Task SetWaypoint(this IPlayer client, Vector3 pos, bool overrideOld = true) => 
+            await client.EmitAsync("SetWaypoint", pos.X, pos.Y, overrideOld);
 
-        public async static Task setWaypoint(this IPlayer client, Vector3 pos, bool overrideOld = true) => 
-            await client.EmitAsync("setWaypoint", pos.X, pos.Y, overrideOld);
-
-        public async static Task displayHelp(this IPlayer client, string text, int timems) =>
-            await client.EmitAsync("Display_Help", text, timems);
+        public async static Task DisplayHelp(this IPlayer client, string text, int timeMs) =>
+            await client.EmitAsync("Display_Help", text, timeMs);
 
         public static PlayerHandler GetPlayerHandler(this IPlayer client)
         {
@@ -194,11 +198,11 @@ namespace ResurrectionRP_Server
             {
                 if (!veh.Exists)
                     continue;
-                if (endup == null)
+                if (endup == null && veh != client.Vehicle)
                     endup = veh;
                 var vehpos = veh.GetPosition();
                 var enduppos = endup.GetPosition();
-                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= osition.DistanceTo2D(new Vector3(enduppos.X, enduppos.Y, enduppos.Z)))
+                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= osition.DistanceTo2D(new Vector3(enduppos.X, enduppos.Y, enduppos.Z)) && veh != client.Vehicle)
                 {
                     endup = veh;
                 }

@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.Phone
             {
                 return AddressBook.Single(x => x.phoneNumber.Equals(number)).contactName ?? number;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return number;
             }

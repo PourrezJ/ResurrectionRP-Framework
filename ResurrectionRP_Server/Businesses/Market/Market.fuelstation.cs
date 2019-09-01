@@ -36,7 +36,7 @@ namespace ResurrectionRP_Server.Businesses
 
             foreach (IVehicle vehicle in VehicleList)
             {
-                Entities.Vehicles.VehicleHandler vh = Entities.Vehicles.VehiclesManager.GetHandlerByVehicle(vehicle);
+                Entities.Vehicles.VehicleHandler vh = vehicle.GetVehicleHandler() ;
 
                 MenuItem item = new MenuItem(vh.VehicleManifest.DisplayName, rightLabel: vh.Plate, executeCallback: true);
                 item.SetData("Vehicle", vh);
@@ -88,7 +88,7 @@ namespace ResurrectionRP_Server.Businesses
                 {
                     if (_ravitaillement || _utilisateurRavi != null)
                     {
-                        await client.displayHelp("Il y a déjà un ravitaillement en cours !", 15000);
+                        await client.DisplayHelp("Il y a déjà un ravitaillement en cours !", 15000);
                         return;
                     }
                     _utilisateurRavi = client;
@@ -102,7 +102,7 @@ namespace ResurrectionRP_Server.Businesses
                         currentmax = LitrageMax;
 
                     //API.Shared.OnProgressBar(client, true, 0, currentmax, 750);
-                    await client.displayHelp("Le ravitaillement vient de démarrer.\n Patientez", 15000);
+                    await client.DisplayHelp("Le ravitaillement vient de démarrer.\n Patientez", 15000);
                     while (_ravitaillement)
                     {
                         await Task.Delay(750);
@@ -110,7 +110,7 @@ namespace ResurrectionRP_Server.Businesses
                         fueltruck.SetData("RefuelRaffine", currentmax - 1);
                         if (Litrage >= LitrageMax)
                         {
-                            await client.displayHelp("~r~[Abandon] Le réservoir de la station est plein!", 15000);
+                            await client.DisplayHelp("~r~[Abandon] Le réservoir de la station est plein!", 15000);
                             //API.Shared.OnProgressBar(client, false);
                             _ravitaillement = false;
                             _utilisateurRavi = null;
@@ -119,7 +119,7 @@ namespace ResurrectionRP_Server.Businesses
 
                         if (currentmax <= 0)
                         {
-                            await client.displayHelp("Ravitaillement terminé, merci !", 15000);
+                            await client.DisplayHelp("Ravitaillement terminé, merci !", 15000);
                             //API.Shared.OnProgressBar(client, false);
                             _ravitaillement = false;
                             _utilisateurRavi = null;
@@ -131,7 +131,7 @@ namespace ResurrectionRP_Server.Businesses
                 }
                 else
                 {
-                    await client.displayHelp("Impossible, votre citerne est vide !", 15000);
+                    await client.DisplayHelp("Impossible, votre citerne est vide !", 15000);
                     return;
                 }
             }

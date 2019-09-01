@@ -88,7 +88,7 @@ namespace ResurrectionRP_Server.Inventory
                     JsonConvert.SerializeObject(menu.DistantItems),
                     JsonConvert.SerializeObject(menu.OutfitItems),
                     (menu.DistantPlayer == null) ? false : true);
-                //await client.EmitAsync("showCursor", true);
+                //await client.EmitAsync("ShowCursor", true);
 
 
                 return true;

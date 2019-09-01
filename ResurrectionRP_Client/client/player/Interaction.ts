@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+import * as alt from 'alt';
 import * as game from 'natives';
 import Raycast, * as raycast from 'client/Utils/Raycast';
 import * as chat from 'client/chat/chat';
@@ -19,6 +19,7 @@ import * as Utils from 'client/Utils/utils';
 
  * */
 var isInColshape: boolean = false;
+var raycastResult = null;
 
 export class Interaction {
     constructor() {
@@ -36,24 +37,22 @@ export class Interaction {
                     return;
                 }
 
-                let result = Raycast.line(5, 22, alt.Player.local.scriptID);
+                if (raycastResult.isHit && raycastResult.entityType == 2) {
+                    var vehicle: alt.Vehicle = alt.Vehicle.all.find(v => v.scriptID == raycastResult.hitEntity);
 
-                if (result.isHit && result.entityType == 2) {
-                    var vehicle: alt.Vehicle = alt.Vehicle.all.find(v => v.scriptID == result.hitEntity);
-
-                    if (player == null || player == undefined)
+                    if (vehicle == null || vehicle == undefined)
                         return;
 
                     alt.emitServer('OpenXtremVehicle', vehicle.id);
-                } else if (result.isHit && result.entityType == 1) {
-                    var player: alt.Player = alt.Player.all.find(p => p.scriptID == result.hitEntity);
+                } else if (raycastResult.isHit && raycastResult.entityType == 1) {
+                    var player: alt.Player = alt.Player.all.find(p => p.scriptID == raycastResult.hitEntity);
 
                     if (player == null || player == undefined)
                         return;
 
                     alt.emitServer('OpenXtremPlayer', player.id);
-                } else if (result.isHit && result.entityType == 3) {
-                    if (Interaction.isAtm(result.entityHash)) {
+                } else if (raycastResult.isHit && raycastResult.entityType == 3) {
+                    if (Interaction.isAtm(raycastResult.entityHash)) {
                         alt.emitServer('OpenAtmMenu');
                     }
                 }
@@ -72,10 +71,17 @@ export class Interaction {
         });
 
         alt.on('update', () => {
-            let result = Raycast.line(4, 2, alt.Player.local.scriptID);
+            if (isInColshape) {
+                alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 100);
+                return;
+            }
 
-            if (result.isHit && result.entityType == 2 && alt.Player.local.vehicle == null) {
-                alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le véhicule.", 100)
+            raycastResult = Raycast.line(2, -1, alt.Player.local.scriptID);
+
+            if (raycastResult.isHit && raycastResult.entityType == 2 && alt.Player.local.vehicle == null) {
+                alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le véhicule", 100)
+            } else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isAtm(raycastResult.entityHash)) {
+                alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec l'ATM", 100)
             }
         });
     }

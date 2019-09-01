@@ -62,7 +62,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (!vehicle.Exists)
                 return;
 
-            VehicleHandler veh = GetHandlerByVehicle(vehicle);
+            VehicleHandler veh = vehicle.GetVehicleHandler();
 
             if (veh == null)
                 return;
@@ -112,6 +112,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         continue;
                     if (vehicle.IsParked)
                         continue;
+                    if (vehicle.IsInPound)
+                        continue;
 
                     //await DeleteVehicleInAllParking(vehicle.Plate);
                     //DeleteVehicleInPound(vehicle.Plate);
@@ -154,26 +156,6 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
             }
 
             return veh;
-        }
-        public static VehicleHandler GetHandlerByVehicle(IVehicle vehicle)
-        {
-            try
-            {
-                if (vehicle != null && vehicle.Exists)
-                {
-                    if (vehicle.GetData("VehicleHandler", out object data))
-                        return data as VehicleHandler;
-
-                    if (GameMode.Instance.VehicleManager.VehicleHandlerList.TryGetValue(vehicle, out VehicleHandler value))
-                        return value;
-                }
-            }
-            catch (Exception ex)
-            {
-                Alt.Server.LogInfo($"GetVehicleByVehicle with plate {vehicle.GetNumberplateTextAsync()}: " + ex);
-            }
-
-            return null;
         }
         public static bool IsVehicleInSpawn(Models.Location location, float distance = 4, uint dimension = ushort.MaxValue) =>
             IsVehicleInSpawn(location.Pos, distance, dimension);
@@ -243,6 +225,45 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
             }
             return null;
         }
+
+        public static async Task DeleteVehicleFromAllParkings(string Plate )
+        {
+            foreach (Models.Parking parking in Models.Parking.ParkingList)
+            {
+                bool saveNeeded = false;
+                lock (parking.ListVehicleStored)
+                {
+                    if (!parking.ListVehicleStored.Exists(p => p.Plate == Plate))
+                        continue;
+
+                    parking.ListVehicleStored.RemoveAll(p => p.Plate == Plate);
+                    saveNeeded = true;
+                }
+                if(saveNeeded)
+                    await parking.OnSaveNeeded.Invoke();
+            }
+        }
+
+        public static VehicleHandler GetVehicleHandlerWithPlate(string Plate)
+        {
+            foreach(KeyValuePair<IVehicle, VehicleHandler> veh in GameMode.Instance.VehicleManager.VehicleHandlerList)
+            {
+                if (veh.Value.Plate == Plate)
+                    return veh.Value;
+            }
+            return null;
+        }
+        public static IVehicle GetVehicleWithPlate(string Plate)
+        {
+            foreach(KeyValuePair<IVehicle, VehicleHandler> veh in GameMode.Instance.VehicleManager.VehicleHandlerList)
+            {
+                if (veh.Value.Plate == Plate)
+                    return veh.Key;
+            }
+            return null;
+        }
+
+
         #endregion
     }
 }

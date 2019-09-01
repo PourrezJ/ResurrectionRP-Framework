@@ -20,14 +20,10 @@ var newMenu = true;
 var inputView = null;
 var inputItem = null;
 var inputIndex = -1;
-var call = 0;
 
 export default () => {
     alt.onServer("MenuManager_OpenMenu", (data) => {
         // alt.log(data);
-        call += 1;
-        alt.log('Call: ' + call);
-
         menuItems = new Array();
         menuData = JSON.parse(data);
 
@@ -120,7 +116,7 @@ export default () => {
                 eval(menuData.OnIndexChange);
             }
 
-            if (menuData.CallbackCurrentItem) {
+            if (menuData.CallbackOnIndexChange) {
                 alt.emitServer('MenuManager_IndexChanged', index);
             }
         });

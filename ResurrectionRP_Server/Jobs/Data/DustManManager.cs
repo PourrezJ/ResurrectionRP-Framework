@@ -36,7 +36,7 @@ namespace ResurrectionRP_Server.Jobs
         {
             await this.DustManClient.SendNotificationSuccess($"Vous devez vous rendre dans la zone de ~g~{this.Zone.NameZone}~w~.");
             if (GameMode.Instance.IsDebug)
-            await this.DustManClient.setWaypoint(this.Zone.ZonePosition, true);
+            await this.DustManClient.SetWaypoint(this.Zone.ZonePosition, true);
             await this.DustManClient.EmitAsync("Jobs_Dustman", JsonConvert.SerializeObject(this.Zone.ZonePosition), JsonConvert.SerializeObject(this.Zone.TrashList));
         }
 
@@ -46,7 +46,7 @@ namespace ResurrectionRP_Server.Jobs
                 return;
             this.depotColShape = Alt.CreateColShapeCircle(this.DepotZone, 8);
             Alt.OnColShape += this.onEnterColShape;
-            await client.setWaypoint(this.DepotZone);
+            await client.SetWaypoint(this.DepotZone);
         }
 
         public async void onEnterColShape(IColShape colShape, IEntity entity, bool state)
@@ -58,7 +58,7 @@ namespace ResurrectionRP_Server.Jobs
             {
                 this.depotInProgress = true;
                 await client.SendNotificationSuccess("Génial ! Restez ici pour vider votre camion !");
-                await client.displayHelp("Déchargement de la remorque en cours, veuillez patenter! ", 30000);
+                await client.DisplayHelp("Déchargement de la remorque en cours, veuillez patenter! ", 30000);
                 this.timer = Utils.Utils.Delay(30000, false, async () =>
                 {
                     if (!depotInProgress)
@@ -69,15 +69,15 @@ namespace ResurrectionRP_Server.Jobs
                             this.ProgressState++;
                             break;
                         case 1:
-                            await client.displayHelp("On décharge ! Attendez encore un peu ! ", 30000);
+                            await client.DisplayHelp("On décharge ! Attendez encore un peu ! ", 30000);
                             this.ProgressState++;
                             break;
                         case 2:
-                            await client.displayHelp("On y est presque, un p'tit peu plus, et vous êtes libre ! ", 30000);
+                            await client.DisplayHelp("On y est presque, un p'tit peu plus, et vous êtes libre ! ", 30000);
                             this.ProgressState++;
                             break;
                         default:
-                            await client.displayHelp("~g~C'est bon! ~w~Tu es libre ! ", 10000);
+                            await client.DisplayHelp("~g~C'est bon! ~w~Tu es libre ! ", 10000);
                             this.ProgressState = 0;
                             this.timer.Stop();
                             this.timer = null;

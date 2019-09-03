@@ -20,7 +20,7 @@ using AltV.Net;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 
-namespace ResurrectionRP_Server.Factions.LSPD
+namespace ResurrectionRP_Server.Factions
 {
 
     public partial class LSPD : Faction

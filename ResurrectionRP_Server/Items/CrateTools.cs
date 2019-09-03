@@ -10,9 +10,9 @@ namespace ResurrectionRP_Server.Items
         {
         }
 
-/*        public static async Task RepairVehicle(IPlayer player, IVehicle vehicle)
+        public static async Task RepairVehicle(IPlayer player, IVehicle vehicle)
         {
-            if (!player.Exists || !vehicle.Exists)
+/*            if (!player.Exists || !vehicle.Exists)
                 return;
 
             var vehicleHandler = vehicle.GetVehicleHandler();
@@ -52,9 +52,9 @@ namespace ResurrectionRP_Server.Items
 
             await vehicleHandler.UpdateSync();
             await vehicleHandler.Update();
-            await player.SendNotificationSuccess("Vous avez réparé le moteur du véhicule provisoirement");
+            await player.SendNotificationSuccess("Vous avez réparé le moteur du véhicule provisoirement");*/
         }
-
+/*
         public static async Task StopRepair(IPlayer player)
         {
             await player.StopAnimationAsync();

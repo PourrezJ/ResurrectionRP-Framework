@@ -4,6 +4,7 @@ using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using AltV.Net;
 using System.Collections.Generic;
+using AltV.Net.Enums;
 
 namespace ResurrectionRP_Server
 {
@@ -85,6 +86,17 @@ namespace ResurrectionRP_Server
             }
             return end;
         }
-        
+
+
+        public static IVehicle GetTowTruckInZone(this Position pos, float distance)
+        {
+            foreach(IVehicle veh in Alt.GetAllVehicles())
+            {
+                if (veh.Position.Distance(pos) <= distance && veh.Model == (uint)VehicleModel.Flatbed)
+                    return veh;
+            }
+            return null;
+        }
+
     }
 }

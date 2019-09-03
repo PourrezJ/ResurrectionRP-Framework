@@ -15,11 +15,10 @@ using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.XMenuManager;
 using ResurrectionRP_Server.Inventory;
 using AltV.Net;
-using ResurrectionRP_Server.Factions.LSPD.Models;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 
-namespace ResurrectionRP_Server.Factions.LSPD
+namespace ResurrectionRP_Server.Factions
 {
 
     public partial class LSPD : Faction

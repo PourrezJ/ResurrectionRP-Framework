@@ -303,6 +303,11 @@ namespace ResurrectionRP_Server
             // TODO
         }
 
+        public static async Task StopAnimationAsync(this IPlayer client)
+        {
+            //TODO
+        }
+
         public static void RequestCollisionAtCoords(this IPlayer client, Vector3 pos)
         {
             client.Emit("RequestCollisionAtCoords", pos.X, pos.Y, pos.Z);

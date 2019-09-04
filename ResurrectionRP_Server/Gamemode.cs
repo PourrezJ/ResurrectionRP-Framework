@@ -18,6 +18,7 @@ using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Utils.Extensions;
 using AltV.Net.Enums;
 using SaltyServer;
+using ResurrectionRP_Server.Radio;
 
 namespace ResurrectionRP_Server
 {
@@ -48,7 +49,7 @@ namespace ResurrectionRP_Server
         public BanManager BanManager { get; private set; }
 
         [BsonIgnore]
-        public Entities.Players.PlayerManager PlayerManager { get; private set; }
+        public PlayerManager PlayerManager { get; private set; }
 
         [BsonIgnore]
         public List<IPlayer> PlayerList = new List<IPlayer>();
@@ -106,6 +107,8 @@ namespace ResurrectionRP_Server
 
         [BsonIgnore]
         public Voice VoiceController { get; private set; }
+        [BsonIgnore]
+        public RadioManager RadioManager { get; private set; }
 
         public static bool ServerLock;
 
@@ -171,6 +174,9 @@ namespace ResurrectionRP_Server
             DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
             JobsManager = new Jobs.JobsManager();
             VoiceController = new Voice();
+
+            RadioManager = new RadioManager();
+
             //FactionManager = new FactionManager();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 

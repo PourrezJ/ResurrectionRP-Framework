@@ -3,6 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server
@@ -13,6 +14,11 @@ namespace ResurrectionRP_Server
 
         public async override void OnStart()
         {
+            var ci = new CultureInfo("fr-FR");
+            CultureInfo.DefaultThreadCurrentCulture = ci;
+            System.Threading.Thread.CurrentThread.CurrentCulture = ci;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
+
             AltAsync.OnPlayerConnect += AltAsync_OnPlayerConnect;
 
             Database.MongoDB.Init();

@@ -250,6 +250,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     await Update();
 
                 OnKeyPressed += OnKeyPressedCallback;
+                OnKeyReleased += OnKeyReleasedCallback;
             }
             else
             {

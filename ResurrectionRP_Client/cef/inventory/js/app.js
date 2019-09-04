@@ -407,7 +407,7 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
      * onUseDrop
      */
     $scope.onUseDrop = () => {
-        //mp.trigger("inventoryUseItem", $scope.selectedItem.id, $scope.selectedItem.name, $scope.displayInventory);
+        //alt.emit("inventoryUseItem", $scope.selectedItem.id, $scope.selectedItem.name, $scope.displayInventory);
         $scope.selectedItem = null;
     };
 
@@ -473,7 +473,7 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
             outfitSlot.item.inventorySlot = item.outfitPosition - 1;
         }
 
-        //mp.trigger("inventoryEquipItem", $scope.selectedItem.id, $scope.displayInventory, $scope.selectedItem.inventorySlot);
+        //alt.emit("inventoryEquipItem", $scope.selectedItem.id, $scope.displayInventory, $scope.selectedItem.inventorySlot);
 
         $scope.selectedItem = null;
     }

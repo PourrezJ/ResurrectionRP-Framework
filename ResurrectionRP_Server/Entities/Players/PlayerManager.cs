@@ -44,6 +44,7 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.OnClient("OpenAtmMenu", OpenAtmMenuPlayer);
 
             AltAsync.OnClient("OnKeyPress", OnKeyPress);
+            AltAsync.OnClient("OnKeyUp", OnKeyReleased);
 
             AltAsync.OnPlayerDead += Events_PlayerDeath;
 
@@ -305,6 +306,17 @@ namespace ResurrectionRP_Server.Entities.Players
 
             if (ph != null && ph.OnKeyPressed != null)
                 await ph.OnKeyPressed.Invoke(client, (ConsoleKey)(Int64)args[0]);
+        }
+
+        private async Task OnKeyReleased(IPlayer client, object[] args)
+        {
+            if (!client.Exists)
+                return;
+
+            var ph = client.GetPlayerHandler();
+
+            if (ph != null && ph.OnKeyPressed != null)
+                await ph.OnKeyReleased.Invoke(client, (ConsoleKey)(Int64)args[0]);
         }
         #endregion
 

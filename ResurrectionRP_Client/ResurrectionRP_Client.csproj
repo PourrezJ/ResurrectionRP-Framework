@@ -90,8 +90,8 @@
     <TypeScriptCompile Include="client\main.ts" />
     <TypeScriptCompile Include="client\Medical.ts" />
     <TypeScriptCompile Include="client\MenuManager\MenuManager.ts" />
-    <TypeScriptCompile Include="client\menus\rpgInventory\RPGInventory.ts" />
-    <TypeScriptCompile Include="client\menus\xtreamMenu\xtreamMenuManager.ts" />
+    <TypeScriptCompile Include="client\Menus\rpgInventory\RPGInventory.ts" />
+    <TypeScriptCompile Include="client\Menus\xtreamMenu\xtreamMenuManager.ts" />
     <TypeScriptCompile Include="client\Models\Camera.ts" />
     <TypeScriptCompile Include="client\notify\notify.ts" />
     <TypeScriptCompile Include="client\phone\PhoneManager.ts" />
@@ -100,7 +100,7 @@
     <TypeScriptCompile Include="client\player\Interaction.ts" />
     <TypeScriptCompile Include="client\player\PlayerCustomization.ts" />
     <TypeScriptCompile Include="client\player\Survival.ts" />
-    <TypeScriptCompile Include="client\menus\RadioManager.ts" />
+    <TypeScriptCompile Include="client\Menus\RadioManager.ts" />
     <TypeScriptCompile Include="client\Streamer\Streamer.ts" />
     <TypeScriptCompile Include="client\Streamer\Streamer.ts" />
     <TypeScriptCompile Include="client\Utils\Enums\Enums.ts" />

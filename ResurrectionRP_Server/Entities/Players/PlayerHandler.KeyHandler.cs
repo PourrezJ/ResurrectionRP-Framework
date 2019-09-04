@@ -14,8 +14,11 @@ namespace ResurrectionRP_Server.Entities.Players
     public partial class PlayerHandler
     {
         public delegate Task KeyPressedDelegate(IPlayer client, ConsoleKey Keycode);
+        public delegate Task KeyReleasedDelegate(IPlayer client, ConsoleKey Keycode);
         [BsonIgnore]
         public KeyPressedDelegate OnKeyPressed { get; set; }
+        [BsonIgnore]
+        public KeyPressedDelegate OnKeyReleased { get; set; }
 
         private async Task OnKeyPressedCallback(IPlayer client, ConsoleKey Keycode)
         {
@@ -229,6 +232,14 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     Phone.PhoneManager.ClosePhone(client);
                     break;
+
+                case (ConsoleKey)20:
+                    if (ph.HasOpenMenu())
+                        return;
+
+                    await ph.RadioSelected?.UseRadio(client);
+                    break;
+
                     /*
 
                 case ConsoleKey.D1:
@@ -263,6 +274,28 @@ namespace ResurrectionRP_Server.Entities.Players
                 case ConsoleKey.NumPad9:
                     await OnAnimationKeyPressed(Keycode);
                     break;*/
+            }
+        }
+
+        private async Task OnKeyReleasedCallback(IPlayer client, ConsoleKey Keycode)
+        {
+            if (!client.Exists)
+                return;
+
+            PlayerHandler ph = client.GetPlayerHandler();
+
+            if (ph == null)
+                return;
+
+
+            switch (Keycode)
+            {
+                case (ConsoleKey)20:
+                    if (ph.HasOpenMenu())
+                        return;
+
+                    await ph.RadioSelected?.DontUse(client);
+                    break;
             }
         }
     }

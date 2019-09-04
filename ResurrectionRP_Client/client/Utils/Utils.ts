@@ -375,3 +375,38 @@ export function DisEnableControls(enabled: boolean) {
     });
 
 }
+
+export function playAnimation(dictionary, name, speed, durationInMS, flag) {
+    let res = loadAnim(dictionary);
+
+    res.then(() => {
+        alt.log('Playing Animation');
+        game.taskPlayAnim(
+            alt.Player.local.scriptID,
+            dictionary,
+            name,
+            speed,
+            -1,
+            durationInMS,
+            flag,
+            1.0,
+            true,
+            true,
+            true
+        );
+    });
+}
+
+async function loadAnim(dict) {
+    return new Promise(resolve => {
+        game.requestAnimDict(dict);
+
+        let inter = alt.setInterval(() => {
+            if (game.hasAnimDictLoaded(dict)) {
+                resolve(true);
+                alt.clearInterval(inter);
+                return;
+            }
+        }, 5);
+    });
+}

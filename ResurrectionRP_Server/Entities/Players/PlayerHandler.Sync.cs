@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Async;
+using Newtonsoft.Json;
 using ResurrectionRP_Server.Utils.Enums;
 using System.Threading.Tasks;
 
@@ -43,25 +44,25 @@ namespace ResurrectionRP_Server.Entities.Players
             };
 
             PlayerSync.AnimationsSync = animsync;
+            
+            await Client.EmitAsync("PlayAnimation", JsonConvert.SerializeObject(animsync));
             // LES ANIMATIONS SONT SYNCHRO DONC OSEF
-/*            foreach (IPlayer player in GameMode.Instance.PlayerList)
-            {
-                if (!Client.Exists)
-                    continue;
+            /*            foreach (IPlayer player in GameMode.Instance.PlayerList)
+                        {
+                            if (!Client.Exists)
+                                continue;
 
-                if (!player.Exists)
-                    continue;
+                            if (!player.Exists)
+                                continue;
 
-                var ClientPosition = await Client.GetPositionAsync();
-                
-                if ((await player.GetPositionAsync()).DistanceTo2D(ClientPosition) <= GameMode.Instance.StreamDistance)
-                {
-                    await player.CallAsync("PlayerSync_PlayAnimation", Client.Id, JsonConvert.SerializeObject(animsync));
-                }
-            }*/
+                            var ClientPosition = await Client.GetPositionAsync();
+
+                            if ((await player.GetPositionAsync()).DistanceTo2D(ClientPosition) <= GameMode.Instance.StreamDistance)
+                            {
+                                await player.CallAsync("PlayerSync_PlayAnimation", Client.Id, JsonConvert.SerializeObject(animsync));
+                            }
+                        }*/
 
         }
-
-
     }
 }

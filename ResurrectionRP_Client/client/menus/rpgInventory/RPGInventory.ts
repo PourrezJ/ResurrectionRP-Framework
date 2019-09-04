@@ -25,7 +25,7 @@ export class RPGInventoryManager {
             this.loading = true;
 
             if (this.view == null) {
-                this.view = new alt.WebView("http://resources/resurrectionrp/client/cef/inventory/index.html");
+                this.view = new alt.WebView("http://resource/client/cef/inventory/index.html");
                 this.view.on("loaditem", () => {
                     if (!this.view)
                         return;

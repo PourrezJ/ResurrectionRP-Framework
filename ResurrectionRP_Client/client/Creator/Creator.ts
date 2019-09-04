@@ -33,7 +33,7 @@ export function OpenCharCreator() {
         game.freezeEntityPosition(playerId, true);
 
 
-        view = new alt.WebView("http://resources/resurrectionrp/client/cef/charcreator/index.html");
+        view = new alt.WebView("http://resource/client/cef/charcreator/index.html");
         view.emit("CharCreatorLoad");
         view.focus();
         alt.toggleGameControls(false);

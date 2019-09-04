@@ -78,8 +78,9 @@ namespace ResurrectionRP_Server.Factions
 
         public static async Task<bool> IsLspd(IPlayer client)
         {
-            if (GameMode.Instance.FactionManager.Lspd != null)
-                return await GameMode.Instance.FactionManager.Lspd.HasPlayerIntoFaction(client);
+            /*
+            if (GameMode.Instance.FactionManager.ls != null)
+                return await GameMode.Instance.FactionManager.Lspd.HasPlayerIntoFaction(client);*/
             return false;
         }
         /*

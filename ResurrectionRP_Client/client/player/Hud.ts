@@ -26,7 +26,7 @@ export class Hud {
 
     constructor(money: number) {
         this._money = Math.round(money);
-        this.Browser = new alt.WebView("http://resources/resurrectionrp/client/cef/hud/index.html");
+        this.Browser = new alt.WebView("http://resource/client/cef/hud/index.html");
 
         alt.onServer("UpdateMoneyHUD", (val: number) => {
             this._money = Math.round(val);

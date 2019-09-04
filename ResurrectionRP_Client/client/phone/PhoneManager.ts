@@ -36,9 +36,9 @@ export default class PhoneManager {
         );
 
         if (incomingCall == true)
-            this.browser = new alt.WebView('http://resources/resurrectionrp/client/cef/phone/oncall.html?incomingCall=true&number=' + contactNumber + '&name=' + contactName);
+            this.browser = new alt.WebView('http://resource/client/cef/phone/oncall.html?incomingCall=true&number=' + contactNumber + '&name=' + contactName);
         else
-            this.browser = new alt.WebView('http://resources/resurrectionrp/client/cef/phone/home.html?newMessages=' + idk0 + '?phoneSettings=' + JSON.stringify(idk1));
+            this.browser = new alt.WebView('http://resource/client/cef/phone/home.html?newMessages=' + idk0 + '?phoneSettings=' + JSON.stringify(idk1));
 
         this.browser.focus();
         alt.setTimeout(() => {
@@ -49,7 +49,7 @@ export default class PhoneManager {
 
         this.browser.on("GetContacts", (arg) => alt.emitServer("PhoneMenuCallBack","GetContacts", arg));
         alt.onServer("ContactReturned", (arg) => this.browser.emit("loadContacts", arg));
-        alt.onServer("ContactEdited", (args) => { if (this.browser != null) { this.browser.url = "http://resources/resurrectionrp/client/cef/phone/contacts.html" } });
+        alt.onServer("ContactEdited", (args) => { if (this.browser != null) { this.browser.url = "http://resource/client/cef/phone/contacts.html" } });
         alt.onServer("ConversationsReturnedV2", (args) => { if (this.browser != null) { this.browser.emit("loadConversations", JSON.stringify(args)) } });
         this.browser.on("AddOrEditContact", (arg) => alt.emitServer("PhoneMenuCallBack","AddOrEditContact", arg));
         this.browser.on("RemoveContact", (arg) => alt.emitServer("PhoneMenuCallBack","RemoveContact", arg));
@@ -62,7 +62,7 @@ export default class PhoneManager {
 
         this.browser.on("getMessages", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","getMessages", arg2));
         this.browser.on("sendMessage", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","SendMessage", arg, arg2));
-        this.browser.on("deleteConversation", (arg, arg2) => { if (this.browser != null) { this.browser.url = "http://resources/resurrectionrp/client/cef/phone/messages.html" } });
+        this.browser.on("deleteConversation", (arg, arg2) => { if (this.browser != null) { this.browser.url = "http://resource/client/cef/phone/messages.html" } });
         this.browser.on("deleteConversation", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","DeleteConversation",arg));
 
         alt.on("ClosePhone", () => this.ClosePhone());
@@ -70,7 +70,7 @@ export default class PhoneManager {
 
 
         this.browser.on("initiateCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","initiateCall", arg));
-        this.browser.on("initiatedCall", (arg, arg2) => { if (this.browser != null) { this.browser.url = 'http://resources/resurrectionrp/client/cef/phone/oncall.html?incomingCall=true&number=' + arg + '&name=' + arg2 } } );
+        this.browser.on("initiatedCall", (arg, arg2) => { if (this.browser != null) { this.browser.url = 'http://resource/client/cef/phone/oncall.html?incomingCall=true&number=' + arg + '&name=' + arg2 } } );
         this.browser.on("acceptCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","acceptCall", arg));
         this.browser.on("cancelCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","cancelCall", arg));
         this.browser.on("canceledCall", (arg, arg2) => {

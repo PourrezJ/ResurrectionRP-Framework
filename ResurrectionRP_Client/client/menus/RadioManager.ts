@@ -24,7 +24,7 @@ export class RadioManager
             this.status = status;
 
             if (this.view == null) {
-                this.view = new alt.WebView("http://resources/resurrectionrp/client/cef/radio/index.html");       
+                this.view = new alt.WebView("http://resource/client/cef/radio/index.html");       
             }
             else
                 this.view.emit('unhide');

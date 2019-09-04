@@ -34,7 +34,7 @@ export class VoiceChat
             this.deadplayers = [];
 
             if (this.view == null) {
-                this.view = new alt.WebView("http://resources/resurrectionrp/client/cef/voice/index.html");
+                this.view = new alt.WebView("http://resource/client/cef/voice/index.html");
             }
 
             this.view.on('SaltyChat_OnConnected', () => {

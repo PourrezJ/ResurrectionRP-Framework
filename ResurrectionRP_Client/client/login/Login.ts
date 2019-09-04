@@ -33,7 +33,7 @@ export function init() {
             var _cam = cameras[getRandomInt(5)];
             _cam.SetActiveCamera(true);
 
-            let browser = new alt.WebView('http://resources/resurrectionrp/client/cef/login/index.html')
+            let browser = new alt.WebView('http://resource/client/cef/login/index.html')
             browser.emit('callEvent', social);
             browser.focus();
 

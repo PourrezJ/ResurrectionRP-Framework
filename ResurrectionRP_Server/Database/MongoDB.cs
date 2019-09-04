@@ -11,6 +11,7 @@ using ResurrectionRP_Server.Models;
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
+using ResurrectionRP_Server.Businesses;
 
 namespace ResurrectionRP_Server.Database
 {
@@ -205,15 +206,15 @@ namespace ResurrectionRP_Server.Database
             {
                 if (Config.GetSetting<bool>("DBProfiling"))
                     Alt.Server.LogDebug($"{caller}() in {file.Substring(file.LastIndexOf('\\') + 1)} line {line} - Bank account: {bankAccount.AccountNumber} - Type: {bankAccount.AccountType.ToString()}");
-                /*
+                
                 if (bankAccount.AccountType == AccountType.Business)
                 {
-                    var collection = GetCollectionSafe<Businesses>("businesses");
-                    var filter = Builders<Businesses>.Filter.Eq("_id", ((Businesses)bankAccount.Owner)._id);
-                    var update = Builders<Businesses>.Update.Set("BankAccount", bankAccount);
+                    var collection = GetCollectionSafe<Business>("businesses");
+                    var filter = Builders<Business>.Filter.Eq("_id", ((Business)bankAccount.Owner)._id);
+                    var update = Builders<Business>.Update.Set("BankAccount", bankAccount);
                     return await collection.UpdateOneAsync(filter, update);
                 }
-                else if (bankAccount.AccountType == AccountType.Faction)
+                /*else if (bankAccount.AccountType == AccountType.Faction)
                 {
                     var collection = GetCollectionSafe<Faction>("factions");
                     var filter = Builders<Faction>.Filter.Eq("_id", ((Faction)bankAccount.Owner).FactionName);
@@ -226,8 +227,8 @@ namespace ResurrectionRP_Server.Database
                     var filter = Builders<Society>.Filter.Eq("_id", ((Society)bankAccount.Owner)._id);
                     var update = Builders<Society>.Update.Set("BankAccount", bankAccount);
                     return await collection.UpdateOneAsync(filter, update);
-                }
-                else */ if (bankAccount.AccountType == AccountType.Personal)
+                }*/
+                else  if (bankAccount.AccountType == AccountType.Personal)
                 {
                     var collection = GetCollectionSafe<PlayerHandler>("players");
                     var filter = Builders<PlayerHandler>.Filter.Eq("_id", ((PlayerHandler)bankAccount.Owner).PID);

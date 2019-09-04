@@ -1,4 +1,4 @@
-﻿using AltV.Net.Elements.Entities;
+using AltV.Net.Elements.Entities;
 using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Data;
@@ -57,6 +57,8 @@ namespace ResurrectionRP_Server
 
         public async static Task DisplayHelp(this IPlayer client, string text, int timeMs) =>
             await client.EmitAsync("Display_Help", text, timeMs);
+        public async static Task DisplaySubtitle(this IPlayer client, string text, int timeMs) =>
+            await client.EmitAsync("Display_subtitle", text, timeMs);
 
         public static PlayerHandler GetPlayerHandler(this IPlayer client)
         {
@@ -68,6 +70,16 @@ namespace ResurrectionRP_Server
 
             return null;
         }
+        public static bool IsDead(this IPlayer player)
+        {
+            var ph = player.GetPlayerHandler();
+
+            if (ph == null)
+                return false;
+
+            return ph.PlayerSync.IsDead;
+        }
+
 
         public async static Task SendNotification(this IPlayer client, string text)
         {
@@ -285,6 +297,17 @@ namespace ResurrectionRP_Server
         {
 
         }
+
+        public static void Freeze(this IPlayer client, bool state)
+        {
+            // TODO
+        }
+
+        public static void RequestCollisionAtCoords(this IPlayer client, Vector3 pos)
+        {
+            client.Emit("RequestCollisionAtCoords", pos.X, pos.Y, pos.Z);
+        }
+
         public static async Task Resurrect(this IPlayer client)
             => await client.EmitAsync("ResurrectPlayer");
 

@@ -4,12 +4,15 @@ using System.Threading.Tasks;
 using VehicleInfoLoader.Data;
 using System.Linq;
 using AltV.Net.Async;
+using AltV.Net;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Utils.Enums;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Factions.Model;
 using ResurrectionRP_Server.Inventory;
+using ResurrectionRP_Server.XMenuManager;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -23,7 +26,7 @@ namespace ResurrectionRP_Server.Factions
         #region TargetMenu
         public async Task<XMenu> AddFactionTargetMenu(IPlayer client, IPlayer target, XMenu xMenu, XMenuItemIconDesc icon)
         {
-            if (await HasPlayerIntoFaction(client))
+            if ( HasPlayerIntoFaction(client))
             {
                 var item = new XMenuItem(FactionName, "", "", icon, true);
                 item.OnMenuItemCallback = AddFactionTargetMenu_Callback;
@@ -53,9 +56,9 @@ namespace ResurrectionRP_Server.Factions
         public virtual async Task<XMenu> InteractPlayerMenu(IPlayer client, IPlayer target, XMenu xmenu)
         {
             xmenu.SetData("Player", target);
-            if (await IsRecruteur(client))
+            if ( IsRecruteur(client))
             {
-                if (FactionPlayerList.Keys.Contains(await target.GetSocialClubNameAsync()))
+                if (FactionPlayerList.Keys.Contains( target.GetSocialClub()))
                 {
                     var promote = new XMenuItem($"Changer le rang", "", "", XMenuItemIcons.HAND_PAPER_SOLID, true);
                     promote.OnMenuItemCallback = RankChangeChoise;
@@ -77,7 +80,7 @@ namespace ResurrectionRP_Server.Factions
             IPlayer _target = menu.GetData("Player");
             if (_target == null) return;
 
-            var clientRank = await GetRangPlayer(client);
+            var clientRank =  GetRangPlayer(client);
 
             menu = new XMenu("");
             menu.SetData("Player", _target);
@@ -104,7 +107,7 @@ namespace ResurrectionRP_Server.Factions
             IPlayer _target = menu.GetData("Player");
             if (_target == null) return;
 
-            FactionPlayerList.Remove(await _target.GetSocialClubNameAsync(), out FactionPlayer value);
+            FactionPlayerList.Remove( _target.GetSocialClub(), out FactionPlayer value);
             await _target.NotifyAsync($"Vous avez été renvoyé de {FactionName}.");
             await UpdateDatabase();
         }
@@ -114,7 +117,7 @@ namespace ResurrectionRP_Server.Factions
             IPlayer _target = menu.GetData("Player");
             if (_target == null) return;
 
-            var clientRank = await GetRangPlayer(client);
+            var clientRank =  GetRangPlayer(client);
 
             menu = new XMenu("");
             menu.SetData("Player", _target);
@@ -160,7 +163,7 @@ namespace ResurrectionRP_Server.Factions
             IPlayer _target = menu.GetData("Player");
             if (_target == null) return;
             FactionRang rang = menuItem.GetData("Rang");
-            var social = await _target.GetSocialClubNameAsync();
+            var social =  _target.GetSocialClub();
 
             FactionPlayerList.GetOrAdd(social, new FactionPlayer(social, rang.Rang));
 
@@ -177,7 +180,7 @@ namespace ResurrectionRP_Server.Factions
         #region VehicleMenu
         public async Task<XMenu> AddFactionVehicleMenu(IPlayer client, IVehicle vehicle, XMenu xMenu, XMenuItemIconDesc icon)
         {
-            if (await HasPlayerIntoFaction(client))
+            if ( HasPlayerIntoFaction(client))
             {
                 var item = new XMenuItem(FactionName, "", "", icon, true);
                 item.OnMenuItemCallback = AddFactionVehicleMenu_Callback;
@@ -216,11 +219,11 @@ namespace ResurrectionRP_Server.Factions
             {
                 Menu menu = new Menu("ID_ServiceMenu", this.FactionName, "", 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
 
-                MenuItem item = new MenuItem($"{(ServicePlayerList.Contains(client.GetSocialClubName()) ? "Quitter" : "Prendre")} son service", "", "ID_PriseService", true);
+                MenuItem item = new MenuItem($"{(ServicePlayerList.Contains(client.GetSocialClub()) ? "Quitter" : "Prendre")} son service", "", "ID_PriseService", true);
                 item.OnMenuItemCallback = ServiceMenuCallBack;
                 menu.Add(item);
 
-                var staffRank = PlayerManager.GetPlayerByClient(client).StaffRank;
+                var staffRank = client.GetPlayerHandler()?.StaffRank;
 
                 // If is Owner ...
                 if (CanTakeMoney(client) || staffRank >= AdminRank.Moderator)
@@ -251,7 +254,7 @@ namespace ResurrectionRP_Server.Factions
 
                 var demission = new MenuItem("Démissioner", "", "ID_demissioner", executeCallback: true);
                 demission.OnMenuItemCallback = GestionMemberCallback;
-                demission.SetData("playerId", client.GetSocialClubName());
+                demission.SetData("playerId", client.GetSocialClub());
                 menu.Add(demission);
                 await menu.OpenMenu(client);
 
@@ -276,7 +279,7 @@ namespace ResurrectionRP_Server.Factions
             ajouter.SetInput("Prénom Nom", 60, InputType.Text);
             menu.Add(ajouter);
 
-            string ownerName = PlayerManager.GetPlayerByClient(client).Identite.Name;
+            string ownerName = client.GetPlayerHandler()?.Identite.Name;
 
             if (FactionPlayerList.Count > 0)
             {
@@ -393,7 +396,7 @@ namespace ResurrectionRP_Server.Factions
             if (_player == null)
                 return;
 
-            var invmenu = new RPGInventoryMenu(_player.PocketInventory, _player.OutfitInventory, _player.BagInventory, FactionPlayerList[client.GetSocialClubName()].Inventory);
+            var invmenu = new RPGInventoryMenu(_player.PocketInventory, _player.OutfitInventory, _player.BagInventory, FactionPlayerList[client.GetSocialClub()].Inventory);
             invmenu.OnMove += async (p, m) =>
             {
                 await _player.Update();
@@ -435,7 +438,7 @@ namespace ResurrectionRP_Server.Factions
         // Récupérer l'argent dans la caisse.
         private async Task FinanceMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            await BankMenu.OpenBankMenu(client, BankAccount, AtmType.Faction, menu, ServiceMenuCallBack);
+            await Bank.BankMenu.OpenBankMenu(client, BankAccount, Bank.AtmType.Faction, menu, ServiceMenuCallBack);
         }
 
         public virtual async Task<Menu> OpenShopMenu(IPlayer client)
@@ -507,7 +510,7 @@ namespace ResurrectionRP_Server.Factions
             IPlayer target = menu.GetData("Target");
             if (target != null)
             {
-                this.FactionPlayerList.Remove(await target.GetSocialClubNameAsync(), out FactionPlayer value);
+                this.FactionPlayerList.Remove( target.GetSocialClub(), out FactionPlayer value);
                 await target?.NotifyAsync($"Vous avez été congédié de {FactionName}.");
                 await UpdateDatabase();
             }
@@ -527,7 +530,7 @@ namespace ResurrectionRP_Server.Factions
         private async Task ShopMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             FactionShop item = menuItem.GetData("Item");
-            PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
+            PlayerHandler ph =  client.GetPlayerHandler();
 
             if (item == null || ph == null)
                 return;
@@ -550,7 +553,7 @@ namespace ResurrectionRP_Server.Factions
                 }
                 catch (Exception ex)
                 {
-                    MP.Logger.Error("ShopMenuCallBack ", ex);
+                    Alt.Server.LogError("ShopMenuCallBack " + ex);
                     await client.SendNotificationError($"Une erreur s'est produite avec l'item: {item.Item.name}");
                 }
             }
@@ -597,7 +600,7 @@ namespace ResurrectionRP_Server.Factions
                         menu.Title = "Concessionnaire";
                         menu.SubTitle = "Quel véhicule souhaitez-vous acheter :";
                         menu.SetData("Faction_Location", location);
-                        menu.Callback = ConcessCallBack;
+                        menu.ItemSelectCallback = ConcessCallBack;
 
                         foreach (FactionVehicle veh in VehicleAllowed)
                         {
@@ -644,11 +647,11 @@ namespace ResurrectionRP_Server.Factions
                 }
 
                 FactionVehicle fv = (FactionVehicle)menuItem.GetData("Veh");
-                PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
+                PlayerHandler ph = client.GetPlayerHandler();
                 string vhname = (string)menuItem.GetData("Manifest");
                 if (await BankAccount.GetBankMoney(fv.Price, $"Achat véhicule {vhname} par {ph.Identite.Name}"))
                 {
-                    VehicleHandler vh = await VehicleManager.SpawnVehicle(await client.GetSocialClubNameAsync(), fv.Hash, location.Pos, location.Rot, inventory: new Inventory(fv.Weight, fv.MaxSlot));
+                    VehicleHandler vh = await VehiclesManager.SpawnVehicle( client.GetSocialClub(), (uint)fv.Hash, location.Pos, location.Rot, inventory: new Inventory.Inventory(fv.Weight, fv.MaxSlot));
                     await vh.InsertVehicle();
                     await vh.PutPlayerInVehicle(client);
                     await OnVehicleOut(client, vh);

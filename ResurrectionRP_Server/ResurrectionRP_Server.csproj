@@ -8,11 +8,6 @@
     <StartupObject />
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Factions\**" />
-    <EmbeddedResource Remove="Factions\**" />
-    <None Remove="Factions\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AltV.Net" Version="1.13.0" />

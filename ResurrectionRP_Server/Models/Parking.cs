@@ -20,6 +20,7 @@ namespace ResurrectionRP_Server.Models
     {
         Public,
         House,
+        Faction,
         Society
     }
 

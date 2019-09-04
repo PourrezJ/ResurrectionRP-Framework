@@ -78,10 +78,6 @@ export class Interaction {
         });
 
         alt.on('update', () => {
-            if (isInColshape) {
-                alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 100);
-                return;
-            }
 
             raycastResult = Raycast.line(2, -1, alt.Player.local.scriptID);
 

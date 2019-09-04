@@ -115,7 +115,8 @@ namespace ResurrectionRP_Server.Radio
                     }
                     else
                     {
-                        await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
+                        await GameMode.Instance.VoiceController.OnSetRadioChannel(player, radio.GetCurrentFrequence().ToString());
+                        //await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
                     }
                     break;
 
@@ -142,7 +143,7 @@ namespace ResurrectionRP_Server.Radio
                     break;
 
                 case "ChangeFrequence":
-                    radio.CurrentFrequence = (byte)args[2];
+                    radio.CurrentFrequence = int.Parse(args[1].ToString());
                     await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
                     break;
                 default:

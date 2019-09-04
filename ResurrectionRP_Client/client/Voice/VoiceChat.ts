@@ -121,7 +121,6 @@ export class VoiceChat
                     game.stopSound(1);
                     game.playSoundFrontend(-1, "Start_Squelch", "CB_RADIO_SFX", true);
                     game.playSoundFrontend(1, "Background_Loop", "CB_RADIO_SFX", true);
-
                 }
                 else {
                     this.ExecuteCommand(

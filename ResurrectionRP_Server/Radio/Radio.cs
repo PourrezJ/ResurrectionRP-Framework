@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.Radio
             {
                 Statut = RadioModes.SPEAKING;
 
-                //await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, Frequence.ToString(), true); TOOD
+                await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), true); 
 
                 var ph = client.GetPlayerHandler();
 
@@ -84,7 +84,7 @@ namespace ResurrectionRP_Server.Radio
             if (Statut == RadioModes.SPEAKING || Statut == RadioModes.LISTENING)
             {
                 Statut = RadioModes.LISTENING;
-                //await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, Frequence.ToString(), false); TODO
+                await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), false);
 
                 var ph = client.GetPlayerHandler();
 
@@ -98,7 +98,7 @@ namespace ResurrectionRP_Server.Radio
         public async Task ShutdownRadio(IPlayer client)
         {
             Statut = RadioModes.OFF;
-            //await SaltyServer.Voice.RemovePlayerRadioChannel(client); TODO
+            await SaltyServer.Voice.RemovePlayerRadioChannel(client);
         }
 
         public void SaveFrequeceRadio(int channel, double frequence)

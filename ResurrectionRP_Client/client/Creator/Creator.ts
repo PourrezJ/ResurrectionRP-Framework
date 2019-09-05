@@ -30,14 +30,15 @@ export function OpenCharCreator() {
         game.displayHud(false);
         game.displayRadar(false);
         game.setCursorSprite(6);
-        game.freezeEntityPosition(playerId, true);
+        
 
 
         view = new alt.WebView("http://resource/client/cef/charcreator/index.html");
         view.emit("CharCreatorLoad");
         view.focus();
         alt.toggleGameControls(false);
-        game.setEntityRotation(alt.Player.local.scriptID, 0,0,-185, 0, true);
+        game.setEntityRotation(alt.Player.local.scriptID, 0, 0, -185, 0, true);
+        game.freezeEntityPosition(playerId, true);
         view.on("setGender", (gender: any) => {
             alt.emitServer("setGender", gender);
             alt.emitServer("setCreatorPos");

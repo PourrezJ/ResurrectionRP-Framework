@@ -143,7 +143,7 @@ namespace ResurrectionRP_Server.Inventory
             try
             {
                 string inventoryType = Convert.ToString(args[0]);
-                ItemID itemID = (ItemID)args[1];
+                ItemID itemID = (ItemID)Convert.ToInt32(args[1]);
                 int slot = Convert.ToInt32(args[2]);
                 int quantity = Convert.ToInt32(args[3]);
 

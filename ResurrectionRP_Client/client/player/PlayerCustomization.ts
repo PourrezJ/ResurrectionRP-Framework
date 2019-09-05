@@ -13,7 +13,7 @@ export function init() {
     });
 
     alt.onServer('HairVariation', (arg0: number, arg1: number) => {
-        game.setPedHairColor(alt.Player.local.scriptID, arg0, arg1)
+        game.setPedHairColor(alt.Player.local.scriptID, arg0, arg1);
     });
 
     alt.onServer('EyeColorVariation', (arg: number) => {
@@ -30,8 +30,7 @@ export function init() {
 
     alt.onServer('HeadOverlayVariation', (args0: number, args1: number, args2: number, args3: number, args4: number) => {
         game.setPedHeadOverlay(alt.Player.local.scriptID, args0, args1, args2);
-        game.setPedHeadOverlayColor(alt.Player.local.scriptID, args0, 0, args3, args4);
-        
+        game.setPedHeadOverlayColor(alt.Player.local.scriptID, args0, 1, args2, args3);
     });
 
     alt.onServer('DecorationVariation', (args0: number, args1: number) => {
@@ -40,8 +39,6 @@ export function init() {
 
     alt.onServer('PlayAnimation', (args0: string) =>
     {
-        //{"AnimDict":"random@arrests","AnimName":"generic_radio_chatter","BlendInSpeed":4.0,"BlendOutSpeed":-8.0,"Duraction":-1,"Flag":48,"PlaybackRate":0.0}
-
         let sync = JSON.parse(args0);
         utils.playAnimation(sync.AnimDict, sync.AnimName, sync.BlendInSpeed, sync.Duraction, sync.Flag);
     });

@@ -254,7 +254,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
             else
             {
-                //await client.SendNotificationError("Erreur avec votre personnage.");
+                await client.SendNotificationError("Erreur avec votre personnage.");
                 //await client.FadeIn(0);
                 await client.KickAsync("Une erreur s'est produite");
             }

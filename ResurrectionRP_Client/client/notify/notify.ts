@@ -10,7 +10,7 @@ export class Notify {
         };
     constructor() {
 
-        this.notify.view = new alt.WebView('http://resources/resurrectionrp/client/cef/notify/index.html');
+        this.notify.view = new alt.WebView('http://resource/client/cef/notify/index.html');
         this.notify.view.on('notify:loaded', () => {
             this.notify.isLoaded = true;
         });

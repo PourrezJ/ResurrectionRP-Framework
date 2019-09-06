@@ -158,7 +158,7 @@ export default () => {
                 inputIndex = index;
                 inputItem = item;
 
-                inputView = new alt.WebView("http://resources/resurrectionrp/client/cef/userinput/input.html");
+                inputView = new alt.WebView("http://resource/client/cef/userinput/input.html");
                 inputView.focus();
                 alt.showCursor(true);
                 alt.toggleGameControls(false);

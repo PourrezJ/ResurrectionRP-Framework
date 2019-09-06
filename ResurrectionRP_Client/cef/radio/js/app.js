@@ -4,7 +4,6 @@ var favoris = [];
 function loadFavoris(frequencesList, chan) {
     favoris = frequencesList;
     channel = chan;
-    console.log(favoris);
     if (channel !== null) {
         $('.frequence').show();
         $('#channelFrequence').html(channel + 1);
@@ -50,7 +49,7 @@ function upFrequence() {
 
     changeChannel(true);
     frequence = $('#inputFrequence').val();
-    alt.emit("ConnectFrequence", channel);
+    alt.emit("ChangeFrequence", channel);
 }
 
 function downFrequence() {
@@ -59,7 +58,7 @@ function downFrequence() {
 
     changeChannel(false);
     frequence = $('#inputFrequence').val();
-    alt.emit("ConnectFrequence", channel);
+    alt.emit("ChangeFrequence", channel);
 }
 
 function changeFrequence() {
@@ -68,7 +67,7 @@ function changeFrequence() {
 
     frequence = $('#inputFrequence').val();
     favoris[channel] = frequence;
-    mp.trigger("SaveFrequence", channel);
+    alt.emit("SaveFrequence", channel);
 }
 
 

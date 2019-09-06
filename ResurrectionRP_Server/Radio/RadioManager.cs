@@ -6,6 +6,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using RadioModes = ResurrectionRP_Server.Radio.Data.RadioModes;
+using System.Globalization;
 
 namespace ResurrectionRP_Server.Radio
 {
@@ -55,39 +56,8 @@ namespace ResurrectionRP_Server.Radio
 
         public RadioManager()
         {
-            Alt.OnClient("RadioManager", EventTrigered);
-            Alt.OnClient("RadioManager", RadioChange);
+            AltAsync.OnClient("RadioManager", EventTrigered);
         }
-
-        private async void RadioChange(IPlayer client, object[] args)
-        {
-            if (!client.Exists)
-                return;
-
-            var player = client;
-
-            var ph = player.GetPlayerHandler();
-            if (ph == null)
-                return;
-
-            switch (args[0])
-            {
-                case "Open":
-                    await OpenRadio(player, ph.RadioSelected);
-                    break;
-
-                case "Use":
-                    await ph.RadioSelected?.UseRadio(player);
-                    break;
-                case "DoesntUse":
-                    await ph.RadioSelected?.DontUse(player);
-                    break;
-                default:
-                    Alt.Server.LogError("RadioManager RadioChange Hm args[0] is not valid... problem in client side ? args 0 mmust be the event name");
-                    break;
-            }
-        }
-
         public static async Task Close(IPlayer client)
         {
             Radio radio = null;
@@ -114,7 +84,7 @@ namespace ResurrectionRP_Server.Radio
             return false;
         }
 
-        private async void EventTrigered(IPlayer client, object[] args)
+        private async Task EventTrigered(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -133,17 +103,20 @@ namespace ResurrectionRP_Server.Radio
 
             switch (args[0])
             {
+                case "Open":
+                    await OpenRadio(player, ph.RadioSelected);
+                    break;
+
                 case "OnOff":
-                    radio.Statut = (RadioModes)args[2];
-                    if (radio.Statut != RadioModes.OFF)
+                    radio.Statut = ((bool)args[1]) ? RadioModes.LISTENING : RadioModes.OFF;
+                    if (radio.Statut == RadioModes.OFF)
                     {
-                        //await GameMode.Instance.VoiceController.OnSetRadioChannel(player, radio.Frequence.ToString());
-                        await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
+                        await SaltyServer.Voice.RemovePlayerRadioChannel(player);
                     }
                     else
                     {
-                        //radio.Statut = RadioModes.OFF;
-                        await SaltyServer.Voice.RemovePlayerRadioChannel(player);
+                        await GameMode.Instance.VoiceController.OnSetRadioChannel(player, radio.GetCurrentFrequence().ToString());
+                        //await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
                     }
                     break;
 
@@ -155,18 +128,23 @@ namespace ResurrectionRP_Server.Radio
                 case "SaveFrequence":
                     try
                     {
-                        radio.SaveFrequeceRadio(Convert.ToInt32(args[2].ToString()), Convert.ToDouble(args[3]));
-                        await player.GetPlayerHandler()?.Update();
+                        if (double.TryParse(args[2].ToString(),  NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double frequence)){
+
+                            radio.SaveFrequeceRadio(Convert.ToInt32(args[1]), frequence);
+                            await player.GetPlayerHandler()?.Update();
+                            await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
+                        }
                     }
-                    catch
+                    catch(Exception ex)
                     {
+                        Alt.Server.LogError(ex.ToString());
                         await player.SendNotificationError("Erreur dans la saisie");
                     }
                     break;
 
                 case "ChangeFrequence":
-                    radio.CurrentFrequence = (byte)args[2];
-                    //await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.Frequence.ToString(), false);
+                    radio.CurrentFrequence = int.Parse(args[1].ToString());
+                    await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
                     break;
                 default:
                     Alt.Server.LogError("RadioManager RadioChange Hm args[0] is not valid... problem in client side ? args 0 mmust be the event name");

@@ -44,8 +44,6 @@ namespace ResurrectionRP_Server.Models
         public int SecondaryColor;
     }
 
-
-
     public class PlayerCustomization
     {
         // Player
@@ -72,8 +70,12 @@ namespace ResurrectionRP_Server.Models
         {
             Gender = 0;
             Parents = new HeadBlend();
-            for (int i = 0; i < Features.Length; i++) Features[i] = 0;
-            for (int i = 0; i < Appearance.Length; i++) Appearance[i] = new HeadOverlay();
+
+            for (int i = 0; i < Features.Length; i++)
+                Features[i] = 0;
+            for (int i = 0; i < Appearance.Length; i++)
+                Appearance[i] = new HeadOverlay();
+
             Hair = new HairData(0, 0, 0);
         }
 
@@ -82,39 +84,33 @@ namespace ResurrectionRP_Server.Models
             if (!player.Exists)
                 return;
 
-             AltAsync.Do(() =>
+            try
             {
-                try
+                if (player.Model != ((Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01))
+                    player.Model = (Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01;
+
+                player.Emit("HeadVariation", Parents.ShapeFirst, Parents.ShapeSecond, Parents.ShapeThird, Parents.SkinFirst, Parents.SkinSecond, Parents.SkinThird, Parents.ShapeMix, Parents.SkinMix, Parents.ThirdMix);
+
+                for (int i = 0; i < Features.Length; i++)
+                    player.Emit("FaceFeatureVariation", i, Features[i]);
+
+                for (int i = 0; i < Appearance.Length; i++)
                 {
-                    if (player.Model != ((Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01))
-                        player.Model = (Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01;
-
-                    //player.SetCloth(ClothSlot.Hair, new ClothData(Hair.Hair, 0, 0));
-                    player.Emit("ComponentVariation", 2, Hair.Hair, 0, 0);
-                    //player.SetHairColor(Hair.Color, Hair.HighlightColor);
-                    player.Emit("HairVariation", Hair.Color, Hair.HighlightColor);
-                    //player.SetEyeColor((uint)EyeColor);
-                    player.Emit("EyeColorVariation", (uint)EyeColor);
-                    //player.SetHeadBlend(new HeadBlendData(Parents.ShapeFirst, Parents.ShapeSecond, Parents.ShapeThird, Parents.SkinFirst, Parents.SkinSecond, Parents.SkinThird, Parents.ShapeMix, Parents.SkinMix, Parents.ThirdMix));
-                    player.Emit("HeadVariation", Parents.ShapeFirst, Parents.ShapeSecond, Parents.ShapeThird, Parents.SkinFirst, Parents.SkinSecond, Parents.SkinThird, (float)Parents.ShapeMix, (float)Parents.SkinMix, (float)Parents.ThirdMix);
-                    for (int i = 0; i < Features.Length; i++)
-                        //player.SetFaceFeature(i, Features[i]);
-                        player.Emit("FaceFeatureVariation", i, Features[i]);
-
-                    for (int i = 0; i < Appearance.Length; i++)
-                        //player.SetHeadOverlay(i, new HeadOverlayData(Appearance[i].Index, Appearance[i].Opacity, Appearance[i].Color, Appearance[i].SecondaryColor));
-                        player.Emit("HeadOverlayVariation", Appearance[i].Index, Appearance[i].Opacity, Appearance[i].Color, Appearance[i].SecondaryColor);
-
-                    foreach (Decoration decoration in Decorations)
-                        player.Emit("DecorationVariation", decoration.Collection, decoration.Overlay);
+                    player.Emit("HeadOverlayVariation", Appearance[i].Index, Appearance[i].Opacity, Appearance[i].Color, Appearance[i].SecondaryColor, i);
                 }
-                catch (Exception ex)
-                {
-                    Alt.Server.LogInfo("ApplyCharacter" +ex.Data);
-                }
-            });
+
+                foreach (Decoration decoration in Decorations)
+                    player.Emit("DecorationVariation", decoration.Collection, decoration.Overlay);
+
+                player.Emit("EyeColorVariation", (uint)EyeColor);
+                player.Emit("ComponentVariation", 2, Hair.Hair, 0, 0);
+                player.Emit("HairVariation", Hair.Color, Hair.HighlightColor);
+            }
+            catch (Exception ex)
+            {
+                Alt.Server.LogInfo("ApplyCharacter" + ex.Data);
+            }
         }
-
 
         public bool HasDecoration(int overlay)
         {

@@ -19,6 +19,8 @@ namespace ResurrectionRP_Server.Entities.Players
     public class PlayerManager
     {
         #region Variables 
+        private readonly static Location charpos = new Location(new Vector3(402.8664f, -996.4108f, -99.00027f), new Vector3(0,0,60));
+
         private static short Dimension = short.MaxValue;
         public static int StartMoney = 0;
         public static int StartBankMoney = 0;
@@ -39,11 +41,11 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.OnClient("IWantToDie", IWantToDie);
             Alt.OnClient("ImGod", ReviveEvent);
             Alt.OnClient("setGender", (IPlayer client, object[] args) => { client.Model = ((Convert.ToInt32( args[0]) == 1) ? Alt.Hash("mp_f_freemode_01") : Alt.Hash("mp_m_freemode_01")); });
-            Alt.OnClient("setCreatorPos", async (IPlayer client, object[] args) => { await client.SetPositionAsync(new Vector3(402.8664f, -996.4108f, -99.00027f)); });
             Alt.OnClient("OpenXtremPlayer", OpenXtremPlayer);
             Alt.OnClient("OpenAtmMenu", OpenAtmMenuPlayer);
 
             AltAsync.OnClient("OnKeyPress", OnKeyPress);
+            AltAsync.OnClient("OnKeyUp", OnKeyReleased);
 
             AltAsync.OnPlayerDead += Events_PlayerDeath;
 
@@ -71,26 +73,6 @@ namespace ResurrectionRP_Server.Entities.Players
             });
 
         }
-
-
-
-        /**private async Task OnKeyPress(object sender, Models.PlayerRemoteEventEventArgs eventArgs)
-        {
-            if (!eventArgs.Player.Exists)
-                return;
-
-            try
-            {
-                var ph = eventArgs.Player.GetPlayerHandler();
-
-                if (ph != null && ph.OnKeyPressed != null)
-                    await ph.OnKeyPressed.Invoke(eventArgs.Player, (ConsoleKey)eventArgs.Arguments[0]);
-            }
-            catch (Exception ex)
-            {
-                Alt.Server.LogError("OnKeyPress" + ex.Data);
-            }
-        }**/
 
         /**
         private async Task PlayerSync_TaskStartScenarioAtPosition(object sender, Models.PlayerRemoteEventEventArgs eventArgs)
@@ -293,7 +275,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 await player.LoadPlayer(client);
             }
             else
-                await client.OpenCreator();
+                await client.EmitAsync("OpenCreator");
         }
 
         private async Task OnKeyPress(IPlayer client, object[] args)
@@ -305,6 +287,17 @@ namespace ResurrectionRP_Server.Entities.Players
 
             if (ph != null && ph.OnKeyPressed != null)
                 await ph.OnKeyPressed.Invoke(client, (ConsoleKey)(Int64)args[0]);
+        }
+
+        private async Task OnKeyReleased(IPlayer client, object[] args)
+        {
+            if (!client.Exists)
+                return;
+
+            var ph = client.GetPlayerHandler();
+
+            if (ph != null && ph.OnKeyPressed != null)
+                await ph.OnKeyReleased.Invoke(client, (ConsoleKey)(Int64)args[0]);
         }
         #endregion
 

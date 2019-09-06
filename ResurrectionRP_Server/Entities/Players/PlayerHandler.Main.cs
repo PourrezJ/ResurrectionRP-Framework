@@ -250,10 +250,11 @@ namespace ResurrectionRP_Server.Entities.Players
                     await Update();
 
                 OnKeyPressed += OnKeyPressedCallback;
+                OnKeyReleased += OnKeyReleasedCallback;
             }
             else
             {
-                //await client.SendNotificationError("Erreur avec votre personnage.");
+                await client.SendNotificationError("Erreur avec votre personnage.");
                 //await client.FadeIn(0);
                 await client.KickAsync("Une erreur s'est produite");
             }

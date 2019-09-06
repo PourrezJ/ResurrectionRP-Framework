@@ -23,7 +23,7 @@ namespace ResurrectionRP_Server.Services
 
         public int Price = 0;
 
-        public IColShape _colshape = null;
+        private IColShape _colshape = null;
 
         public async Task LoadPound()
         {

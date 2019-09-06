@@ -357,20 +357,56 @@ export function ArrayRemove(arr, value) {
 
 }
 
-export function compareDate(date1: Date, date2: Date): number
-{
-    // With Date object we can compare dates them using the >, <, <= or >=.
-    // The ==, !=, ===, and !== operators require to use date.getTime(),
-    // so we need to create a new instance of Date with 'new Date()'
-    let d1 = new Date(date1); let d2 = new Date(date2);
+//let _necessaryControlsForController = [2,1,25,24];
+let _necessaryControlsForKeyboard = [201,195,196,187,188,189,190,202,217,242,241,239,240,31,30,21,22,23,75,71,72,89,9,8,90,76];
 
-    // Check if the dates are equal
-    let same = d1.getTime() === d2.getTime();
-    if (same) return 0;
+export function DisEnableControls(enabled: boolean) {
 
-    // Check if the first is greater than second
-    if (d1 > d2) return 1;
+    if (enabled)
+        game.enableAllControlActions(2);
+    else
+        game.disableAllControlActions(2);
 
-    // Check if the first is less than second
-    if (d1 < d2) return -1;
+    if (enabled)
+        return;
+
+    _necessaryControlsForKeyboard.forEach((control) => {
+        game.enableControlAction(2, control, true);
+    });
+
+}
+
+export function playAnimation(dictionary, name, speed, durationInMS, flag) {
+    let res = loadAnim(dictionary);
+
+    res.then(() => {
+        alt.log('Playing Animation');
+        game.taskPlayAnim(
+            alt.Player.local.scriptID,
+            dictionary,
+            name,
+            speed,
+            -1,
+            durationInMS,
+            flag,
+            1.0,
+            true,
+            true,
+            true
+        );
+    });
+}
+
+async function loadAnim(dict) {
+    return new Promise(resolve => {
+        game.requestAnimDict(dict);
+
+        let inter = alt.setInterval(() => {
+            if (game.hasAnimDictLoaded(dict)) {
+                resolve(true);
+                alt.clearInterval(inter);
+                return;
+            }
+        }, 5);
+    });
 }

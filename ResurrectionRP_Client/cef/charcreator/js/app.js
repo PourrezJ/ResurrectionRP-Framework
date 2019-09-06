@@ -7,8 +7,14 @@ app.config(['$compileProvider', function ($compileProvider) {
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|package):/);
 }]);
 
-alt.on("CharCreatorLoad", loadChar);
-function loadChar(char) {
+$(() => {
+    if ('alt' in window) {
+        alt.on("CharCreatorLoad", loadChar);
+    }
+});
+
+
+function loadChar() {
     var $scope = angular.element($("body")).scope();
     $scope.$apply(function () {
         $scope.setGender(0);
@@ -246,6 +252,8 @@ app.controller("CharCtrl", function ($scope, $ngConfirm, $timeout) {
 
         $scope.ParentsName[0] = fatherNames[$scope.Parents[0].findIndex((parent) => parent === $scope.char.Parents.ShapeFirst)];
         $scope.ParentsName[1] = motherNames[$scope.Parents[1].findIndex((parent) => parent === $scope.char.Parents.ShapeSecond)];
+
+        console.log(`debug: ${$scope.ParentsName[0]} || ${$scope.ParentsName[1]}`);
     };
 
     $scope.saveChar = function () {
@@ -478,7 +486,7 @@ app.controller("CharCtrl", function ($scope, $ngConfirm, $timeout) {
                 }
             }, 1);
         }, true);
-
+        console.log("charLoaded !");
         //$scope.$watch('char.Appearance', function () {
         //    $scope.updateHeadOverlay();
         //}, true);

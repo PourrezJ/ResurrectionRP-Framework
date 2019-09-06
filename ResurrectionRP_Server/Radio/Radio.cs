@@ -8,7 +8,6 @@ using AnimationFlags = ResurrectionRP_Server.Utils.Enums.AnimationFlags;
 using RadioModes = ResurrectionRP_Server.Radio.Data.RadioModes;
 namespace ResurrectionRP_Server.Radio
 {
-
     public class Radio
     {
         #region JsonIgnore
@@ -20,7 +19,7 @@ namespace ResurrectionRP_Server.Radio
         public RadioModes Statut = RadioModes.OFF;
         #endregion
 
-        public byte CurrentFrequence = 0;
+        public int CurrentFrequence = 0;
         public double[] Favoris = new double[6]
         {
             55.2,
@@ -49,7 +48,7 @@ namespace ResurrectionRP_Server.Radio
             if (Favoris == null)
                 return;
 
-            await Owner.EmitAsync("OpenRadio", JsonConvert.SerializeObject(Favoris), CurrentFrequence);
+            await Owner.EmitAsync("OpenRadio", JsonConvert.SerializeObject(Favoris), CurrentFrequence, (int)Statut);
 
             Owner.GetPlayerHandler()?.PlayAnimation((await Owner.GetVehicleAsync() != null) ? "cellphone@in_car@ds" : (await Owner.GetModelAsync() == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_read_base", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.Loop | AnimationFlags.SecondaryTask));
         }
@@ -68,7 +67,7 @@ namespace ResurrectionRP_Server.Radio
             {
                 Statut = RadioModes.SPEAKING;
 
-                //await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, Frequence.ToString(), true); TOOD
+                await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), true); 
 
                 var ph = client.GetPlayerHandler();
 
@@ -85,7 +84,7 @@ namespace ResurrectionRP_Server.Radio
             if (Statut == RadioModes.SPEAKING || Statut == RadioModes.LISTENING)
             {
                 Statut = RadioModes.LISTENING;
-                //await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, Frequence.ToString(), false); TODO
+                await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), false);
 
                 var ph = client.GetPlayerHandler();
 
@@ -99,11 +98,11 @@ namespace ResurrectionRP_Server.Radio
         public async Task ShutdownRadio(IPlayer client)
         {
             Statut = RadioModes.OFF;
-            //await SaltyServer.Voice.RemovePlayerRadioChannel(client); TODO
+            await SaltyServer.Voice.RemovePlayerRadioChannel(client);
         }
 
         public void SaveFrequeceRadio(int channel, double frequence)
-        {
+        { 
             Favoris[channel] = frequence;
         }
 

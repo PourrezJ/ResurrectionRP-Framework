@@ -1,61 +1,59 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
 import * as chat from 'client/chat/chat';
+import * as utils from 'client/Utils/Utils';
 
 export class RadioManager
 {
-    public view: alt.WebView;
-    public favoris: object;
-    public frequence: number;
+    private view: alt.WebView;
+    private favoris: object;
+    private frequence: number;
+    private lastcheck: number;
+    private pressed: boolean;
+    private status: RadioModes;
 
     constructor()
     {
-        alt.onServer('OpenRadio', (favoris: string, frequence: number) =>
+        alt.onServer('OpenRadio', (favoris: string, frequence: number, status: RadioModes) =>
         {
             if (chat.isOpened() || game.isPauseMenuActive())
                 return;
 
             this.favoris = JSON.parse(favoris);
             this.frequence = frequence;
-
-            alt.log(favoris);
+            this.status = status;
 
             if (this.view == null) {
-                this.view = new alt.WebView("http://resources/resurrectionrp/client/cef/radio/index.html"); 
-                this.view.emit('loadFavoris', favoris, this.frequence);
+                this.view = new alt.WebView("http://resource/client/cef/radio/index.html");       
             }
             else
                 this.view.emit('unhide');
 
             this.view.focus();
             alt.showCursor(true);
-            alt.toggleGameControls(false);
-
+            
             /*
              * Events
              */
-            this.view.on('ConnectFrequence', (frequence: number) => {
-                alt.emitServer('TurnON_Radio', frequence);
+            this.view.on('ChangeFrequence', (frequence: number) => {
+                alt.emitServer('RadioManager','ChangeFrequence', frequence);
                 game.playSoundFrontend(-1, "Start_Squelch", "CB_RADIO_SFX", true);
-            });
-
-            this.view.on('DisconnectFrequence', () => {
-                alt.emitServer('TurnOFF_Radio');
-                game.playSoundFrontend(-1, "End_Squelch", "CB_RADIO_SFX", true);
             });
 
             this.view.on('SaveFrequence', (channel: number, frequence: number) => {
                 alt.emitServer('RadioManager', 'SaveFrequence', channel, frequence);
             });
-
-            /*
-            this.view.on('', () => {
-
+   
+            this.view.on('GetFavoris', () => {
+                alt.setTimeout(() => {
+                    this.view.emit('loadFavoris', this.favoris, (this.status == RadioModes.OFF) ? null : this.frequence);
+                }, 100);
             });
 
-            this.view.on('', () => {
-
-            });*/
+            this.view.on('RadioOnOff', (on: boolean) => {
+                this.status = on ? RadioModes.LISTENING : RadioModes.OFF;
+                alt.emitServer('RadioManager', 'OnOff', on);
+            });
         });
 
         alt.onServer('HideRadio', (favoris: string, frequence: number) => {
@@ -74,6 +72,17 @@ export class RadioManager
 
             this.CloseRadio();
         });
+
+        alt.on("update", () =>
+        {
+            //if (this.lastcheck > alt.getMsPerGameMinute()) {
+
+            //}
+            if (this.view != null)
+            {
+                utils.DisEnableControls(false);
+            }
+        });
     }
 
     public CloseRadio() {
@@ -86,4 +95,10 @@ export class RadioManager
         alt.showCursor(false);
         alt.emit("toggleChatAdminRank");
     }
+}
+
+enum RadioModes {
+    OFF = 0,
+    LISTENING = 1,
+    SPEAKING = 2,
 }

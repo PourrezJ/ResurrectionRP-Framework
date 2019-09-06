@@ -27,6 +27,13 @@ export class Interaction {
             isInColshape = state;
         });
 
+        alt.on('keyup', (key) => {
+            if (game.isPauseMenuActive() || chat.isOpened() || MenuManager.hasMenuOpen())
+                return;
+
+            alt.emitServer('OnKeyUp', key);
+        });
+
         alt.on("keydown", (key) => {
             if (game.isPauseMenuActive() || chat.isOpened() || MenuManager.hasMenuOpen())
                 return;

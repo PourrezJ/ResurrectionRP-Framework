@@ -34,7 +34,7 @@ export class VoiceChat
             this.deadplayers = [];
 
             if (this.view == null) {
-                this.view = new alt.WebView("http://resources/resurrectionrp/client/cef/voice/index.html");
+                this.view = new alt.WebView("http://resource/client/cef/voice/index.html");
             }
 
             this.view.on('SaltyChat_OnConnected', () => {
@@ -116,10 +116,19 @@ export class VoiceChat
                 if (isOnRadio) {
                     this.ExecuteCommand(
                         new PluginCommand(Command.RadioCommunicationUpdate, this.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, 0, true, null)))
+
+                    game.stopSound(-1);
+                    game.stopSound(1);
+                    game.playSoundFrontend(-1, "Start_Squelch", "CB_RADIO_SFX", true);
+                    game.playSoundFrontend(1, "Background_Loop", "CB_RADIO_SFX", true);
                 }
                 else {
                     this.ExecuteCommand(
                         new PluginCommand(Command.StopRadioCommunication, this.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, 0, true, null)))
+
+                    game.stopSound(-1);
+                    game.stopSound(1);
+                    game.playSoundFrontend(1, "End_Squelch", "CB_RADIO_SFX", true);
                 }
             }
         });

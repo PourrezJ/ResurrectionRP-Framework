@@ -4,7 +4,7 @@ import * as game from 'natives';
 let player = alt.Player.local;
 let fuelMax = 100;
 let fuelCur = 100;
-let speedoWindow = new alt.WebView('http://resources/resurrectionrp/client/cef/speedometer/speedometer.html');
+let speedoWindow = new alt.WebView('http://resource/client/cef/speedometer/speedometer.html');
 let lastSent = Date.now();
 
 export function initialize() {

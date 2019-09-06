@@ -125,7 +125,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 if (Vehicle == null)
                     return;
-
+                
                 Vehicle.SetData("VehicleHandler", this);
                 Vehicle.Dimension = Dimension;
                 Vehicle.NumberplateText = Plate;

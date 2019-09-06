@@ -5,7 +5,7 @@ let loaded = false;
 let opened = false;
 let hidden = false;
 let buffer = new Array<string>();
-let view = new alt.WebView('http://resources/resurrectionrp/client/cef/chat/index.html');
+let view = new alt.WebView('http://resource/client/cef/chat/index.html');
 
 function addMessage(text: string): void {
     view.emit('addString', text);

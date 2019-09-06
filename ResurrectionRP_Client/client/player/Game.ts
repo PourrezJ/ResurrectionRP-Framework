@@ -170,9 +170,6 @@ export class Game {
         });
 
         alt.on("toggleChatAdminRank", this.toggleChatAdminRank);
-
-
-
     }
     //end constructor
     //methods

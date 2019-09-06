@@ -168,6 +168,17 @@
     <Content Include="cef\chat\app.js" />
     <Content Include="cef\chat\index.html" />
     <Content Include="cef\chat\style.css" />
+    <Content Include="cef\hud\css\style.css" />
+    <Content Include="cef\hud\img\bg-money.png" />
+    <Content Include="cef\hud\img\BG.jpg" />
+    <Content Include="cef\hud\img\burger-icon.png" />
+    <Content Include="cef\hud\img\burger.png" />
+    <Content Include="cef\hud\img\jauge-icon.png" />
+    <Content Include="cef\hud\img\water-icon.png" />
+    <Content Include="cef\hud\img\water.png" />
+    <Content Include="cef\hud\index.html" />
+    <Content Include="cef\hud\js\app.js" />
+    <Content Include="cef\hud\js\progressbar.min.js" />
     <Content Include="cef\inventory\css\style.css" />
     <Content Include="cef\inventory\img\icons\apple.png" />
     <Content Include="cef\inventory\img\icons\backpack.png" />

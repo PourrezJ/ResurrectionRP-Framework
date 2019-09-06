@@ -311,13 +311,6 @@ namespace ResurrectionRP_Server
         public static async Task Resurrect(this IPlayer client)
             => await client.EmitAsync("ResurrectPlayer");
 
-        public static async Task OpenCreator(this IPlayer client)
-        {
-            await client.SetPositionAsync(new Vector3(402.8664f, -996.4108f, -99.00027f));
-            client.Rotation = new Vector3(0, 0, -185f);
-            await client.EmitAsync("OpenCreator");
-        }
-
         public static async Task<bool> PlayerHandlerExist(this IPlayer player)
         {
             if (!player.Exists)

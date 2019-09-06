@@ -2,6 +2,11 @@
 import * as game from 'natives';
 import { Camera } from 'client/Models/Camera';
 
+const playerPoint = {
+    x:  402.8664,
+    y: -996.4108,
+    z: -100.00027
+};
 
 export function OpenCharCreator() {
     class HeadBlend {
@@ -19,10 +24,10 @@ export function OpenCharCreator() {
     var view: alt.WebView;
 
     try {
-        var playerId = alt.Player.local.scriptID;
         alt.showCursor(true);
         alt.emit("toggleChat");
 
+        game.destroyAllCams(true);
         _camera = new Camera({ x: 402.6751, y: -997.00025, z: -98.30025 }, { x: 0, y: 0, z: 0 })
         _camera.SetActiveCamera(true);
 
@@ -30,19 +35,30 @@ export function OpenCharCreator() {
         game.displayHud(false);
         game.displayRadar(false);
         game.setCursorSprite(6);
-        
 
+        game.requestModel(game.getHashKey('mp_m_freemode_01'));
+        game.requestModel(game.getHashKey('mp_f_freemode_01'));
+        
+        game.setEntityCoords(alt.Player.local.scriptID, playerPoint.x, playerPoint.y, playerPoint.z, false, false, false, false);
+        game.setEntityHeading(alt.Player.local.scriptID, 180);
+
+        //game.setPedDefaultComponentVariation(alt.Player.local.scriptID);
+        game.setPedHeadBlendData(alt.Player.local.scriptID, 0, 0, 0, 0, 0, 0, 0, 0, 0, false);
+
+        game.freezeEntityPosition(alt.Player.local.scriptID, true);
 
         view = new alt.WebView("http://resource/client/cef/charcreator/index.html");
-        view.emit("CharCreatorLoad");
+
+        alt.setTimeout(() => view.emit("CharCreatorLoad"), 1000);
+
         view.focus();
         alt.toggleGameControls(false);
-        game.setEntityRotation(alt.Player.local.scriptID, 0, 0, -185, 0, true);
-        game.freezeEntityPosition(playerId, true);
+        
         view.on("setGender", (gender: any) => {
-            alt.emitServer("setGender", gender);
-            alt.emitServer("setCreatorPos");
-            game.setPedDefaultComponentVariation(alt.Player.local.scriptID);
+            alt.setModel(gender == 1 ? 'mp_f_freemode_01' : 'mp_m_freemode_01');
+            game.setEntityCoords(alt.Player.local.scriptID, playerPoint.x, playerPoint.y, playerPoint.z, false, false, false, false);
+            game.setEntityHeading(alt.Player.local.scriptID, 180);
+
             if (gender == 0)
                 game.setPedHeadBlendData(alt.Player.local.scriptID, 0, 0, 0, 0, 0, 0, 0, 0, 0, false);
             else

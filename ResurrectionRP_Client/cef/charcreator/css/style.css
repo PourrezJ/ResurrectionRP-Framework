@@ -9,7 +9,8 @@ body {
     width: 100%;
     overflow: hidden;
     background: none;
-    color:#fff;
+    color: #fff;
+    user-select: none;
 }
 
 a {
@@ -294,7 +295,6 @@ li.active.menu ul {
   width: 99%;
 } input.slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    appearance: none;
     width: 25px;
     height: 25px;
     border-radius: 60px;

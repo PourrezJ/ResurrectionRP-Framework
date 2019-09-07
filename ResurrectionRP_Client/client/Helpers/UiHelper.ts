@@ -70,5 +70,69 @@ export function SetMaxTextComponentSubstringMessage(msg) {
 export function LoadingPromptText(text) {
     game.setNoLoadingScreen(true);
     game.removeLoadingPrompt();
+}
 
+export function DrawText3d(
+    msg,
+    x,
+    y,
+    z,
+    scale,
+    fontType,
+    r,
+    g,
+    b,
+    a,
+    useOutline = true,
+    useDropShadow = true,
+    layer = 0
+) {
+    game.setDrawOrigin(x, y, z, 0);
+    game.setUiLayer(layer);
+    game.beginTextCommandDisplayText('STRING');
+    game.addTextComponentSubstringPlayerName(msg);
+    game.setTextFont(fontType);
+    game.setTextScale(1, scale);
+    game.setTextWrap(0.0, 1.0);
+    game.setTextCentre(true);
+    game.setTextColour(r, g, b, a);
+
+    if (useOutline) game.setTextOutline();
+
+    if (useDropShadow) game.setTextDropShadow();
+
+    game.endTextCommandDisplayText(0, 0);
+    game.clearDrawOrigin();
+}
+
+export function DrawText2d(
+    msg,
+    x,
+    y,
+    scale,
+    fontType,
+    r,
+    g,
+    b,
+    a,
+    useOutline = true,
+    useDropShadow = true,
+    layer = 0,
+    align = 0
+) {
+    game.setUiLayer(layer);
+    game.beginTextCommandDisplayText('STRING');
+    game.addTextComponentSubstringPlayerName(msg);
+    game.setTextFont(fontType);
+    game.setTextScale(1, scale);
+    game.setTextWrap(0.0, 1.0);
+    game.setTextCentre(true);
+    game.setTextColour(r, g, b, a);
+    game.setTextJustification(align);
+
+    if (useOutline) game.setTextOutline();
+
+    if (useDropShadow) game.setTextDropShadow();
+
+    game.endTextCommandDisplayText(x, y);
 }

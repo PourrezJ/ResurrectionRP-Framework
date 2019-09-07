@@ -20,6 +20,12 @@ xtreamMenu.init();
 new Streamer();
 menuManager();
 
+var GameClass: Game;
+
+export function Instance(): Game {
+    return GameClass;
+}
+
 alt.onServer("PlayerInitialised", (
     StaffRank: number,
     IdentiteName: string,
@@ -36,7 +42,7 @@ alt.onServer("PlayerInitialised", (
 ) => {
     PlayerCustomization.init();
     new Notify();
-    var GameClass: Game = new Game(StaffRank, IdentiteName, Money, Thirst, Hunger, AnimSettings, Time, Weather, WeatherWind, WeatherWindDirection, isDebug, Location);
+    GameClass = new Game(StaffRank, IdentiteName, Money, Thirst, Hunger, AnimSettings, Time, Weather, WeatherWind, WeatherWindDirection, isDebug, Location);
     game.freezeEntityPosition(alt.Player.local.scriptID, false);
 });
 

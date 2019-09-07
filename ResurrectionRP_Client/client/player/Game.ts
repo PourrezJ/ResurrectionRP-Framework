@@ -26,7 +26,6 @@ export class Game {
     private _LevelRank: enums.AdminRank = enums.AdminRank.Player;
     public get LevelRank(): number { return this._LevelRank }
 
-
     private _PlayerName: string;
     public get PlayerName(): string { return this._PlayerName }
 
@@ -39,14 +38,13 @@ export class Game {
     private _Doors: DoorsManagerLib = null;
     public get Doors(): DoorsManagerLib { return this._Doors; }
 
-    private static _IsConnected: boolean;
-    public static get IsConnected(): boolean { return this._IsConnected; }
+    private _IsConnected: boolean;
+    public get IsConnected(): boolean { return this._IsConnected; }
 
     private _IsCuffed: boolean;
     public get IsCuffed(): boolean { return this._IsCuffed; }
 
-    private _IsDebug: boolean;
-    public get IsDebug(): boolean { return this._IsDebug; }
+    public static isDebug: boolean = false;
 
     public GetDoor: boolean;
 
@@ -89,6 +87,7 @@ export class Game {
         Location: string
     ) {
         try {
+            alt.Player.local.setMeta("IsConnected", false);
             alt.log("Chargement de vos données");
             var playerId = alt.Player.local.scriptID;
 
@@ -97,7 +96,8 @@ export class Game {
             this._Survival = new SurvivalLib(Hunger, Thirst);
             var time = JSON.parse(Time);
             this._Time = new TimeLib(time.Hours, time.Minutes, time.Seconds);
-            this._IsDebug = isDebug;
+            Game.isDebug = isDebug;
+            alt.Player.local.setMeta("IsDebug", isDebug);
 
             new InteractionLib();
             new PhoneManager();
@@ -139,7 +139,7 @@ export class Game {
 
             alt.log("Stats terminées");
 
-            Game._IsConnected = true;
+            alt.Player.local.setMeta("IsConnected", true);
         } catch (ex) {
             alt.log(ex);
         }

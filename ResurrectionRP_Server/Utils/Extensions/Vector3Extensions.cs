@@ -44,6 +44,8 @@ namespace ResurrectionRP_Server
             return (float)(angle + Math.Ceiling(-angle / 360) * 360);
         }
 
+        public static Position ToPosition(this Vector3 vector3) => new Position(vector3.X, vector3.Y, vector3.Z); 
+
         public static float DistanceTo(this Vector3 point, Vector3 position) => (position - point).Length();
 
         public static float DistanceTo2D(this Vector3 point, Vector3 position)
@@ -97,6 +99,5 @@ namespace ResurrectionRP_Server
             }
             return null;
         }
-
     }
 }

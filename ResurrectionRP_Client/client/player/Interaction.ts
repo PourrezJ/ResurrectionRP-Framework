@@ -63,6 +63,8 @@ export class Interaction {
                         alt.emitServer('OpenAtmMenu');
                     }
                 }
+                else
+                    alt.emitServer('OnKeyPress', key);
             }
             else if (key == 85) { // U
                 let resultVeh = Raycast.line(5, 2, alt.Player.local.scriptID);

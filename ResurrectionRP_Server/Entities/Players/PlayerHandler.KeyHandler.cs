@@ -3,6 +3,7 @@ using AltV.Net.Async.Events;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Farms;
 using ResurrectionRP_Server.Inventory;
 using ResurrectionRP_Server.Radio;
 using ResurrectionRP_Server.Utils.Extensions;
@@ -96,6 +97,18 @@ namespace ResurrectionRP_Server.Entities.Players
                 case ConsoleKey.Backspace:
                     await XMenuManager.XMenuManager.CloseMenu(client);
                     await RPGInventoryManager.CloseMenu(client);
+                    break;
+
+                case ConsoleKey.E:
+
+                    Farm farm = await Farms.FarmManager.PlayerInFarmZone(client);
+                    if (farm != null)
+                    {
+                        await farm.StartFarming(client);
+                        return;
+                    }
+
+
                     break;
                     /*
                 case ConsoleKey.M:

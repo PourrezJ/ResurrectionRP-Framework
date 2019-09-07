@@ -19,6 +19,7 @@ using ResurrectionRP_Server.Utils.Extensions;
 using AltV.Net.Enums;
 using SaltyServer;
 using ResurrectionRP_Server.Radio;
+using ResurrectionRP_Server.Farms;
 
 namespace ResurrectionRP_Server
 {
@@ -208,6 +209,7 @@ namespace ResurrectionRP_Server
             await WeatherManager.InitWeather();
             await JobsManager.Init();
             await PoundManager.LoadPound();
+            await FarmManager.InitAll();
             DrivingSchoolManager.InitAll();
 
             VoiceController.OnResourceStart();

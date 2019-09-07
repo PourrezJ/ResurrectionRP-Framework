@@ -16,8 +16,10 @@ export class VoiceChat
     public deadplayers: string[];
     public radioChannel: string;
     public isConnected: boolean;
-
     public nextUpdate: number;
+
+    public static isTalking: boolean;
+    public static isMicrophoneMuted: boolean;
 
     constructor()
     {
@@ -55,8 +57,17 @@ export class VoiceChat
                     this.nextUpdate = Date.now() + 300;
                     return;
                 }
-            });
+                /*
+                let pluginState = pluginCommand.TryGetState();
+                if (pluginState == null) {
+                    alt.log("plugin command et null");
+                    return;
+                }
 
+                alt.log(JSON.stringify(pluginState));
+                
+                alt.log(JSON.stringify(pluginCommand.TryGetState()));*/
+            });
 
             alt.setInterval(() => {
                 this.PlayerStateUpdate();
@@ -232,6 +243,22 @@ class PluginCommand
         this.ServerUniqueIdentifier = serverUniqueIdentifier;
         this.Parameter = parameter;
     }
+
+    public TryGetState()
+    {
+        let pluginState: PluginState = null;
+        if (this.Command == Command.StateUpdate) {
+            try {
+                pluginState = this.Parameter as PluginState;
+            }
+            catch
+            {
+                // do nothing
+            }
+        }
+
+        return pluginState;
+    }   
 }
 
 class PlayerState
@@ -346,6 +373,16 @@ class TSVector {
     public static Convert(position: alt.Vector3) {
         return new TSVector(position.x, position.y, position.z);
     }
+}
+
+class PluginState {
+    public UpdateBranch: string
+    public Version: string
+    public IsConnectedToServer: boolean
+    public IsReady: boolean
+    public IsTalking : boolean
+    public IsMicrophoneMuted: boolean
+    public IsSoundMuted: boolean
 }
 
 enum Command {

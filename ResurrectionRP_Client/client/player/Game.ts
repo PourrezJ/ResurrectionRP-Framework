@@ -18,8 +18,7 @@ import { DustManManager } from 'client/Jobs/DustManManager';
 import { VoiceChat } from 'client/Voice/VoiceChat';
 
 export class Game {
-    //region Static Var
-    
+    //region Static Var   
     firstCheck: number[] = [0, 100, 200, 300, 400, 500600, 700, 800, 900, 1000];
     //endregion Static Var
 
@@ -90,7 +89,6 @@ export class Game {
         Location: string
     ) {
         try {
-
             alt.log("Chargement de vos données");
             var playerId = alt.Player.local.scriptID;
 
@@ -151,22 +149,6 @@ export class Game {
             //game.disableControlAction(0, 75, true);
             //game.disableControlAction(0, 58, true);
             this._Time.OnTick();
-
-            // HUD
-            if (!this.Hud.Hide) {
-                if (this.Hud.Browser != null)
-                    this.Hud.Browser.emit("setHUD", this.Survival.Hunger,
-                        this.Survival.Thirst,
-                        0, //Salty is talking SaltyClient.Voice.IsTalking
-                        0, //Salty range
-/*                                        var range = "Parler";
-                if (RAGE.Elements.Player.LocalPlayer.GetSharedData(SaltyShared.SharedData.Voice_VoiceRange) != null)
-                    range = (string)RAGE.Elements.Player.LocalPlayer.GetSharedData(SaltyShared.SharedData.Voice_VoiceRange);*/
-                        this.Hud.Money,
-                        0   //Is mic muted SaltyClient.Voice.IsMicrophoneMuted
-                    );
-            }
-
         });
 
         alt.on("toggleChatAdminRank", this.toggleChatAdminRank);

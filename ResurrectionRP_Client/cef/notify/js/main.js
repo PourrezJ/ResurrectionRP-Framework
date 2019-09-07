@@ -8,10 +8,10 @@ class Notification {
   constructor({
     text = '',
     timeout = 5000,
-    textColor = '#000000',
-    backgroundColor = 'rgba(236,236,255,0.85)',
-    lineColor = '#6c7ae0'
-  }) {
+      textColor = '#fff',
+      backgroundColor = 'rgba(0,0,0,0.85)',
+      lineColor = '#ff6535'
+    }) {
     const clone = template.cloneNode(true);
     clone.hidden = false;
     clone.style.backgroundColor = backgroundColor;

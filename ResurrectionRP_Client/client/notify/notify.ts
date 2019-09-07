@@ -22,30 +22,30 @@ export class Notify {
         alt.on      ("alertNotify", this.alertNotify);
     }
 
-    Notify = (title: string, content: string, time: number=5000, r: number = 236, g: number = 236, b: number = 255) => {
+    Notify = (title: string, content: string, time: number=5000, r: number = 0, g: number = 0, b: number = 0) => {
         this.notify.view.emit('notify:send', {
             text: "<h1>" + title + "</h1><br/><b>" + content + "</b>",
             timeout: time,
-            textColor: '#000000',
+            textColor: '#fff',
             backgroundColor: 'rgba(' + r + ',' + g + ',' + b + ',0.85)',
-            lineColor: '#6c7ae0'
+            lineColor: '#ff6535'
         });
     }
 
-    successNotify = (title:string, content: string, time: number = 5000, r: number = 236, g:number = 236, b: number = 255) => {
+    successNotify = (title:string, content: string, time: number = 5000, r: number = 0, g:number = 0, b: number = 0) => {
         this.notify.view.emit('notify:send', {
             text: "<h1>"+title+"</h1><br/><b>" + content + "</b>",
             timeout: time,
-            textColor: '#000000',
+            textColor: '#fff',
             backgroundColor: 'rgba('+r+','+g+','+b+',0.85)',
             lineColor: '#009900'
         });
     }
-    alertNotify = (title: string, content: string, time: number = 5000, r: number = 236, g: number = 236, b: number = 255) => {
+    alertNotify = (title: string, content: string, time: number = 5000, r: number = 0, g: number = 0, b: number = 0) => {
         this.notify.view.emit('notify:send', {
             text: "<h1>" + title + "</h1><br/><b>" + content + "</b>",
             timeout: time,
-            textColor: '#000000',
+            textColor: '#fff',
             backgroundColor: 'rgba(' + r + ',' + g + ',' + b + ',0.85)',
             lineColor: '#b30000'
         });

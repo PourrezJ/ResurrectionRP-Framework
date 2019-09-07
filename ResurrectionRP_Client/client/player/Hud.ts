@@ -56,7 +56,6 @@ export class Hud {
 
             if (!VoiceChat.isConnected && !alt.Player.local.getMeta("IsDebug")) {
                 this._advert++;
-                alt.log(this._advert);
                 if (this._advert >= 2000) {
                     let screenRes = game.getScreenResolution(0, 0);
                     let screenX = screenRes[1];

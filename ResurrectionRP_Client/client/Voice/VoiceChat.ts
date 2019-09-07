@@ -81,6 +81,11 @@ export class VoiceChat
                     if (pluginState.IsSoundMuted != VoiceChat.isSoundMuted) {
                         VoiceChat.isSoundMuted = pluginState.IsSoundMuted;
                     }
+
+                    if (pluginState.IsTalking)
+                        game.playFacialAnim(alt.Player.local.scriptID, "mic_chatter", "mp_facial");
+                    else
+                        game.playFacialAnim(alt.Player.local.scriptID, "mood_normal_1", "facials@gen_male@variations@normal");
                 }     
             });
 
@@ -97,6 +102,7 @@ export class VoiceChat
         }));
 
         alt.onServer('Voice_IsTalking', (playerName: string, isTalking: boolean) => {
+            /*
             alt.Player.all.forEach((player: alt.Player) => {
                 if (player.getSyncedMeta("Voice_TeamSpeakName") == playerName) {
                     if (isTalking)
@@ -106,7 +112,7 @@ export class VoiceChat
 
                     return;
                 }
-            });
+            });*/
         });
 
         alt.onServer('Voice_EstablishedCall', (playerName: string) => {

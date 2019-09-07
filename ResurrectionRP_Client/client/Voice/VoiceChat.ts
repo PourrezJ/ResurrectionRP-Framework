@@ -6,41 +6,44 @@ export class VoiceChat
 {
     public view: alt.WebView;
 
-    public serverUniqueIdentifier: string;
-    public requiredBranch: string;
-    public minimumVersion: string;
-    public soundPack: string;
-    public ingameChannel: number;
-    public ingameChannelPassword: string;
+    public static serverUniqueIdentifier: string;
+    public static requiredBranch: string;
+    public static minimumVersion: string;
+    public static soundPack: string;
+    public static ingameChannel: number;
+    public static ingameChannelPassword: string;
 
-    public deadplayers: string[];
-    public radioChannel: string;
-    public isConnected: boolean;
-    public nextUpdate: number;
+    public static deadplayers: string[];
+    public static radioChannel: string;
+    public static isConnected: boolean;
+    public static nextUpdate: number;
 
     public static isTalking: boolean;
     public static isMicrophoneMuted: boolean;
+    public static isSoundMuted: boolean;
+
+    private static _isIngame: boolean;
 
     constructor()
     {
         alt.onServer('Voice_Initialize', (serverUniqueIdentifier: string, requiredBranch: string, minimumVersion: string, soundPack: string, ingameChannel: number, ingameChannelPassword: string) =>
         {
-            this.serverUniqueIdentifier = serverUniqueIdentifier;
-            this.requiredBranch = requiredBranch;
-            this.minimumVersion = minimumVersion;
-            this.soundPack = soundPack;
-            this.ingameChannel = ingameChannel;
-            this.ingameChannelPassword = ingameChannelPassword;
+            VoiceChat.serverUniqueIdentifier = serverUniqueIdentifier;
+            VoiceChat.requiredBranch = requiredBranch;
+            VoiceChat.minimumVersion = minimumVersion;
+            VoiceChat.soundPack = soundPack;
+            VoiceChat.ingameChannel = ingameChannel;
+            VoiceChat.ingameChannelPassword = ingameChannelPassword;
 
-            this.nextUpdate = Date.now() + 300;
-            this.deadplayers = [];
+            VoiceChat.nextUpdate = Date.now() + 300;
+            VoiceChat.deadplayers = [];
 
             if (this.view == null) {
                 this.view = new alt.WebView("http://resource/client/cef/voice/index.html");
             }
 
             this.view.on('SaltyChat_OnConnected', () => {
-                this.isConnected = true;
+                VoiceChat.isConnected = true;
                 this.InitiatePlugin();
             });
 
@@ -51,22 +54,34 @@ export class VoiceChat
             this.view.on('SaltyChat_OnMessage', (arg) =>
             {
                 let pluginCommand: PluginCommand = JSON.parse(arg);
-                if (pluginCommand.Command == Command.Ping && Date.now() > this.nextUpdate)
+                if (pluginCommand.Command == Command.Ping && Date.now() > VoiceChat.nextUpdate)
                 {
-                    this.ExecuteCommand(new PluginCommand(Command.Pong, this.serverUniqueIdentifier, undefined));
-                    this.nextUpdate = Date.now() + 300;
+                    this.ExecuteCommand(new PluginCommand(Command.Pong, VoiceChat.serverUniqueIdentifier, undefined));
+                    VoiceChat.nextUpdate = Date.now() + 300;
                     return;
                 }
-                /*
-                let pluginState = pluginCommand.TryGetState();
-                if (pluginState == null) {
-                    alt.log("plugin command et null");
-                    return;
-                }
-
-                alt.log(JSON.stringify(pluginState));
                 
-                alt.log(JSON.stringify(pluginCommand.TryGetState()));*/
+                if (pluginCommand.Command == Command.StateUpdate) {
+                    let pluginState = pluginCommand.Parameter as PluginState;
+
+                    if (pluginState == null)
+                        return;
+
+                    if (pluginState.IsReady != VoiceChat._isIngame)
+                        VoiceChat._isIngame = pluginState.IsReady;
+
+                    if (pluginState.IsTalking != VoiceChat.isTalking) {
+                        VoiceChat.isTalking = pluginState.IsTalking;
+                    }
+
+                    if (pluginState.IsMicrophoneMuted != VoiceChat.isMicrophoneMuted) {
+                        VoiceChat.isMicrophoneMuted = pluginState.IsMicrophoneMuted;
+                    }
+
+                    if (pluginState.IsSoundMuted != VoiceChat.isSoundMuted) {
+                        VoiceChat.isSoundMuted = pluginState.IsSoundMuted;
+                    }
+                }     
             });
 
             alt.setInterval(() => {
@@ -75,10 +90,10 @@ export class VoiceChat
         });
 
         alt.onServer('Player_Disconnected', ((playerName: string) => {
-            if (this.deadplayers.find(p => p == playerName))
-                Utils.ArrayRemove(this.deadplayers, playerName);
+            if (VoiceChat.deadplayers.find(p => p == playerName))
+                Utils.ArrayRemove(VoiceChat.deadplayers, playerName);
 
-            this.ExecuteCommand(new PluginCommand(Command.RemovePlayer, this.serverUniqueIdentifier, new PlayerState(playerName)));
+            this.ExecuteCommand(new PluginCommand(Command.RemovePlayer, VoiceChat.serverUniqueIdentifier, new PlayerState(playerName)));
         }));
 
         alt.onServer('Voice_IsTalking', (playerName: string, isTalking: boolean) => {
@@ -97,7 +112,7 @@ export class VoiceChat
         alt.onServer('Voice_EstablishedCall', (playerName: string) => {
             alt.Player.all.forEach((player: alt.Player) => {
                 if (player.getSyncedMeta("Voice_TeamSpeakName") == playerName) {
-                    this.ExecuteCommand(new PluginCommand(Command.PhoneCommunicationUpdate, this.serverUniqueIdentifier, new PhoneCommunication(playerName, 0, 0, true)))
+                    this.ExecuteCommand(new PluginCommand(Command.PhoneCommunicationUpdate, VoiceChat.serverUniqueIdentifier, new PhoneCommunication(playerName, 0, 0, true)))
 
                     return;
                 }
@@ -105,16 +120,16 @@ export class VoiceChat
         });
 
         alt.onServer('Voice_EndCall', (playerName: string) => {
-            this.ExecuteCommand(new PluginCommand(Command.StopPhoneCommunication, this.serverUniqueIdentifier, new PhoneCommunication(playerName)));
+            this.ExecuteCommand(new PluginCommand(Command.StopPhoneCommunication, VoiceChat.serverUniqueIdentifier, new PhoneCommunication(playerName)));
         });
 
         alt.onServer('Voice_SetRadioChannel', (radioChannel: string) => {
             if (radioChannel == "") {
-                this.radioChannel = "";
+                VoiceChat.radioChannel = "";
                 this.PlaySound("leaveRadioChannel", false, "radio");
             }
             else {
-                this.radioChannel = radioChannel;
+                VoiceChat.radioChannel = radioChannel;
                 this.PlaySound("enterRadioChannel", false, "radio");
             }
         });
@@ -126,7 +141,7 @@ export class VoiceChat
             else {
                 if (isOnRadio) {
                     this.ExecuteCommand(
-                        new PluginCommand(Command.RadioCommunicationUpdate, this.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, 0, true, null)))
+                        new PluginCommand(Command.RadioCommunicationUpdate, VoiceChat.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, 0, true, null)))
 
                     game.stopSound(-1);
                     game.stopSound(1);
@@ -135,7 +150,7 @@ export class VoiceChat
                 }
                 else {
                     this.ExecuteCommand(
-                        new PluginCommand(Command.StopRadioCommunication, this.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, 0, true, null)))
+                        new PluginCommand(Command.StopRadioCommunication, VoiceChat.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, 0, true, null)))
 
                     game.stopSound(-1);
                     game.stopSound(1);
@@ -145,13 +160,13 @@ export class VoiceChat
         });
     
         alt.onServer('Player_Died', (playerName: string) => {
-            if (!this.deadplayers.find(p => p == playerName))
-                this.deadplayers.push(playerName);
+            if (!VoiceChat.deadplayers.find(p => p == playerName))
+                VoiceChat.deadplayers.push(playerName);
         });
 
         alt.onServer('Player_Revived', (playerName: string) => {
-            if (this.deadplayers.find(p => p == playerName))
-                Utils.ArrayRemove(this.deadplayers, playerName);
+            if (VoiceChat.deadplayers.find(p => p == playerName))
+                Utils.ArrayRemove(VoiceChat.deadplayers, playerName);
         });
     }
 
@@ -159,7 +174,7 @@ export class VoiceChat
     {
         let tsname = alt.Player.local.getSyncedMeta("Voice_TeamSpeakName");
         if (tsname != null) {
-            this.ExecuteCommand(new PluginCommand(Command.Initiate, this.serverUniqueIdentifier, new GameInstance(this.serverUniqueIdentifier, tsname, this.ingameChannel, this.ingameChannelPassword, this.soundPack)));
+            this.ExecuteCommand(new PluginCommand(Command.Initiate, VoiceChat.serverUniqueIdentifier, new GameInstance(VoiceChat.serverUniqueIdentifier, tsname, VoiceChat.ingameChannel, VoiceChat.ingameChannelPassword, VoiceChat.soundPack)));
         } 
     }
 
@@ -168,11 +183,11 @@ export class VoiceChat
         if (fileName == "")
             handle = fileName;
 
-        this.ExecuteCommand(new PluginCommand(Command.PlaySound, this.serverUniqueIdentifier, new Sound(fileName, loop, handle)))
+        this.ExecuteCommand(new PluginCommand(Command.PlaySound, VoiceChat.serverUniqueIdentifier, new Sound(fileName, loop, handle)))
     }
 
     private StopSound(handle: string) {
-        this.ExecuteCommand(new PluginCommand(Command.PlaySound, this.serverUniqueIdentifier, new Sound(handle)))
+        this.ExecuteCommand(new PluginCommand(Command.PlaySound, VoiceChat.serverUniqueIdentifier, new Sound(handle)))
     }
 
     private PlayerStateUpdate()
@@ -203,12 +218,12 @@ export class VoiceChat
                             break;
                     }
 
-                    this.ExecuteCommand(new PluginCommand(Command.PlayerStateUpdate, this.serverUniqueIdentifier, new PlayerState(nPlayerName, TSVector.Convert(nPlayer.pos), voiceRange, null, true, null)));
+                    this.ExecuteCommand(new PluginCommand(Command.PlayerStateUpdate, VoiceChat.serverUniqueIdentifier, new PlayerState(nPlayerName, TSVector.Convert(nPlayer.pos), voiceRange, null, true, null)));
                 }
             }
         });
 
-        this.ExecuteCommand(new PluginCommand(Command.SelfStateUpdate, this.serverUniqueIdentifier, new PlayerState(null, TSVector.Convert(playerPos), null, game.getGameplayCamRot(0).z, false, null)));
+        this.ExecuteCommand(new PluginCommand(Command.SelfStateUpdate, VoiceChat.serverUniqueIdentifier, new PlayerState(null, TSVector.Convert(playerPos), null, game.getGameplayCamRot(0).z, false, null)));
     }
 
     private ExecuteCommand(pluginCommand: PluginCommand)
@@ -242,23 +257,7 @@ class PluginCommand
         this.Command = command;
         this.ServerUniqueIdentifier = serverUniqueIdentifier;
         this.Parameter = parameter;
-    }
-
-    public TryGetState()
-    {
-        let pluginState: PluginState = null;
-        if (this.Command == Command.StateUpdate) {
-            try {
-                pluginState = this.Parameter as PluginState;
-            }
-            catch
-            {
-                // do nothing
-            }
-        }
-
-        return pluginState;
-    }   
+    } 
 }
 
 class PlayerState

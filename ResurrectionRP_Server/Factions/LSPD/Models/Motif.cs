@@ -1,5 +1,5 @@
 ﻿using System;
-namespace ResurrectionRP_Server.Factions.LSPD.Models
+namespace ResurrectionRP_Server.Factions
 {
     public class Motif
     {

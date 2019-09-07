@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using MongoDB.Bson.Serialization.Attributes;
 
 
-namespace ResurrectionRP_Server.Factions.LSPD
+namespace ResurrectionRP_Server.Factions
 {
     public class Invoice
     {

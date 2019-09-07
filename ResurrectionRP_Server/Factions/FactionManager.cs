@@ -12,9 +12,9 @@ namespace ResurrectionRP_Server.Factions
         public List<Faction> FactionList = new List<Faction>();
 
         public ONU Onu { get; private set; }
-/*        public LSPD Lspd { get; private set; }
+        public LSPD Lspd { get; private set; }
         public LSCustom LSCustom { get; private set; }
-        public Division Rebelle { get; private set; }
+        /*public Division Rebelle { get; private set; }
         public Gouv Gouvernement { get; private set; }
         public Dock Dock { get; private set; }
 
@@ -78,25 +78,25 @@ namespace ResurrectionRP_Server.Factions
 
         public static async Task<bool> IsLspd(IPlayer client)
         {
-            /*
-            if (GameMode.Instance.FactionManager.ls != null)
-                return await GameMode.Instance.FactionManager.Lspd.HasPlayerIntoFaction(client);*/
+            if (GameMode.Instance.FactionManager.Lspd != null)
+                return GameMode.Instance.FactionManager.Lspd.HasPlayerIntoFaction(client);
             return false;
         }
-        /*
-        public static async Task<bool> IsRebelle(IPlayer client)
+        
+/*        public static async Task<bool> IsRebelle(IPlayer client)
         {
             if (GameMode.Instance.FactionManager.Rebelle != null)
                 return await GameMode.Instance.FactionManager.Rebelle.HasPlayerIntoFaction(client);
             return false;
         }
-
+*/
         public static async Task<bool> IsLSCustom(IPlayer client)
         {
             if (GameMode.Instance.FactionManager.LSCustom != null)
-                return await GameMode.Instance.FactionManager.LSCustom.HasPlayerIntoFaction(client);
+                return GameMode.Instance.FactionManager.LSCustom.HasPlayerIntoFaction(client);
             return false;
         }
+        /*
         public static async Task<bool> IsDock(IPlayer client)
         {
             if (GameMode.Instance.FactionManager.Dock != null)

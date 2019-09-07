@@ -96,5 +96,11 @@ namespace ResurrectionRP_Server
 
             return null;
         }
+
+        public static async Task RepairAsync(this IVehicle vehicle)
+        {
+            // TODO
+        }
     }
+
 }

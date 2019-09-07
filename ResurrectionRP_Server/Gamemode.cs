@@ -158,6 +158,8 @@ namespace ResurrectionRP_Server
 
         public async Task OnStartAsync()
         {
+            IsDebug = Config.GetSetting<bool>("Debug");
+
             Alt.OnPlayerConnect += OnPlayerConnected;
             Alt.OnPlayerDisconnect += OnPlayerDisconnected;
 

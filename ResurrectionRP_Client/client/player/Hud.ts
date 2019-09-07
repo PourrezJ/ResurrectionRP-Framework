@@ -6,7 +6,7 @@ import { VoiceChat } from 'client/Voice/VoiceChat';
 
 export class Hud {
 
-    private _advert: number;
+    private _advert: number = 0;
 
     private _hide: boolean;
     public get Hide(): boolean { return this._hide; }

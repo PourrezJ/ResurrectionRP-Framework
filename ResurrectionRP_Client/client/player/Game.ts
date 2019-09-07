@@ -39,8 +39,8 @@ export class Game {
     private _Doors: DoorsManagerLib = null;
     public get Doors(): DoorsManagerLib { return this._Doors; }
 
-    private _IsConnected: boolean;
-    public get IsConnected(): boolean { return this._IsConnected; }
+    private static _IsConnected: boolean;
+    public static get IsConnected(): boolean { return this._IsConnected; }
 
     private _IsCuffed: boolean;
     public get IsCuffed(): boolean { return this._IsCuffed; }
@@ -139,7 +139,7 @@ export class Game {
 
             alt.log("Stats terminées");
 
-            this._IsConnected = true;
+            Game._IsConnected = true;
         } catch (ex) {
             alt.log(ex);
         }

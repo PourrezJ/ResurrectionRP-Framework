@@ -46,7 +46,10 @@ export class Hud {
 
             if (this.Hide)
                 return;
-            
+
+            if (!game.isPedSittingInAnyVehicle(alt.Player.local.scriptID))
+                game.drawSprite("srange_gen", "hits_dot", 0.5, 0.5, 0.005, 0.007, 0, 255, 255, 255, 10);
+
             if (this.Browser != null)
             {
                 let range = "Parler";

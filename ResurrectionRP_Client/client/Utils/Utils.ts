@@ -102,7 +102,6 @@ export function initialize() {
 
     alt.onServer("SetNotificationMessage", (img, sender, subject, message) =>
     {
-        alt.log(img);
         game.setNotificationTextEntry("STRING");
         game.addTextComponentSubstringPlayerName(message);
         game.setNotificationMessage2(img.toUpperCase(), img.toUpperCase(), false, 4, sender, subject);
@@ -111,7 +110,6 @@ export function initialize() {
 
     alt.on("SetNotificationMessage", (img, sender, subject, message) =>
     {
-        alt.log(img);
         game.setNotificationTextEntry("STRING");
         game.addTextComponentSubstringPlayerName(message);
         game.setNotificationMessage2(img.toUpperCase(), img.toUpperCase(), false, 4, sender, subject);

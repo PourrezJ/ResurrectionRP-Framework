@@ -10,7 +10,6 @@ export function init()
 {
     alt.onServer('XMenuManager_OpenMenu', (menu) => {
 
-        alt.log(browser);
         if (browser !== null)
             closeMenu();
 

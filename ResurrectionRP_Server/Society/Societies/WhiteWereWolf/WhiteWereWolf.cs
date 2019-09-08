@@ -38,7 +38,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                 await client.SendNotificationError("Aucun véhicule devant l'établi.");
         }
 
-        public override async Task OnEntityEnterColShape(IColShape colShape, IPlayer client)
+        public override async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -49,7 +49,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                     _vehicleBench = await client.GetVehicleAsync();
             }
 
-            await base.OnEntityEnterColShape(colShape, client);
+            await base.OnPlayerEnterColshape(colShape, client);
         }
         #endregion
 
@@ -101,7 +101,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             Door door = menu.GetData("Door");
             if (door != null)
             {
-                door.SetDoorLockState(!door.Locked);
+                 door.SetDoorLockState(!door.Locked);
             }
 
             await XMenuManager.XMenuManager.CloseMenu(client);

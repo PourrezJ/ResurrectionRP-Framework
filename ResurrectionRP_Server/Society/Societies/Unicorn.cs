@@ -65,7 +65,7 @@ namespace ResurrectionRP_Server.Society.Societies
             Door door = menu.GetData("Door");
             if (door != null)
             {
-                door.SetDoorLockState(!door.Locked);
+                 door.SetDoorLockState(!door.Locked);
             }
 
             await XMenuManager.XMenuManager.CloseMenu(client);

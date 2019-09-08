@@ -10,7 +10,7 @@ using AltV.Net.Async;
 using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Entities.Players;
 
-namespace ResurrectionRP_Server.Factions.Gouv
+namespace ResurrectionRP_Server.Factions
 {
 
     public partial class Gouv : Faction

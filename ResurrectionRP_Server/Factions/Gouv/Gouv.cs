@@ -19,7 +19,7 @@ using ResurrectionRP_Server.XMenuManager;
 using ResurrectionRP_Server.Entities.Vehicles;
 using AltV.Net.Enums;
 
-namespace ResurrectionRP_Server.Factions.Gouv
+namespace ResurrectionRP_Server.Factions
 {
 
     public partial class Gouv : Faction

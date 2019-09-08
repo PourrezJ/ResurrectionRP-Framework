@@ -17,7 +17,7 @@ export class Streamer {
         alt.onServer("deleteStaticEntity", this.deleteStaticEntity);
 
 
-        alt.on("update", () => {
+        alt.everyTick(() => {
 
             this.EntityList.forEach((item, index) => {
                 if (item != null && item["Text"] != null) {

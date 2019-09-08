@@ -7,11 +7,14 @@
             $scope.conversations = JSON.parse(ev.detail);
         });
     });
+});
 
-    $(function () {
-        alt.emit("getConversations");
+$(() => {
+    if ('alt' in window) {
         alt.on("loadConversations", loadConversations);
-    });
+        alt.on("loadMessages", loadMessages);
+        alt.emit("getConversations");
+    }
 });
 
 function loadConversations(conversations) {
@@ -56,10 +59,10 @@ app.controller("MessageViewCtrl", function ($scope) {
 });
 
 function loadMessages(response) {
-    //response = JSON.parse(response);
+    response = JSON.parse(response);
     var event = new CustomEvent("MessagesReturned", { "detail": { conversationId: response.convId, messages: response.messages}});
     window.dispatchEvent(event);
-};
+}
 
 app.controller("MsgOptionsCtrl", function ($scope) {
     let urlParams = (new URL(document.location)).searchParams;

@@ -41,7 +41,7 @@ export class Hud {
             this.Browser.emit("FinishCB");
         });
 
-        alt.on("update", () => {
+        alt.everyTick(() => {
 
             if (alt.Player.local.getMeta("IsConnected") == null)
                 return;

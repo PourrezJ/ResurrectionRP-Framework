@@ -33,11 +33,13 @@ app.controller("ContactsCtrl", function ($scope) {
 });
 
 function loadContacts(contacts) {
-    var event = new CustomEvent("ContactsReturned", {"detail": contacts});
+    var event = new CustomEvent("ContactsReturned", { "detail": JSON.parse(contacts)});
     window.dispatchEvent(event);
 }
 
-$(function () {
-    alt.emit("GetContacts");
-    alt.on("loadContacts", loadContacts);
+$(() => {
+    if ('alt' in window) {
+        alt.on("loadContacts", loadContacts);
+        alt.emit("GetContacts");        
+    }
 });

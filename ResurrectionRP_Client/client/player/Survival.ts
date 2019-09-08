@@ -27,7 +27,7 @@ export class Survival {
         alt.on("UpdateHungerThirst", this.UpdateHungerThirst);
         alt.onServer("UpdateHungerThirst", this.UpdateHungerThirst);
 
-        alt.on("update", () => {
+        alt.everyTick(() => {
             if (this.RefreshHunger < Date.now()) {
                 if (Survival.Hunger > 0) Survival.Hunger--;
                 if (Survival.Hunger <= 0) {

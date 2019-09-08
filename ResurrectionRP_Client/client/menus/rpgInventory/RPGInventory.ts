@@ -68,7 +68,7 @@ export class RPGInventoryManager {
         alt.onServer("InventoryManager_CloseMenu", () => this.CloseMenu());
         alt.on("InventoryManager_CloseMenu", () => this.CloseMenu());
 
-        alt.on("update", () => {
+        alt.everyTick(() => {
             if (this.view != null)
                 alt.toggleGameControls(false)
         });

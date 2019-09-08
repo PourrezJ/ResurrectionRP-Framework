@@ -144,8 +144,7 @@ export class Game {
             alt.log(ex);
         }
         
-
-        alt.on("update", () => {
+        alt.everyTick(() => {
             //game.disableControlAction(0, 75, true);
             //game.disableControlAction(0, 58, true);
             this._Time.OnTick();

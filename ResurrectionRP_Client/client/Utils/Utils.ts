@@ -125,7 +125,16 @@ export function initialize() {
     alt.on('FadeIn', (args: number) => game.doScreenFadeIn(args));
     alt.on('FadeOut', (args: number) => game.doScreenFadeOut(args));
 
-    alt.on('SetNotificationMessage', (args: any[]) => SetNotificationPicture(args[0], args[1], args[1], args[2], args[3], args[4], args[5]))
+    alt.on('SetNotificationMessage', (args: any[]) => SetNotificationPicture(args[0], args[1], args[1], args[2], args[3], args[4], args[5]));
+
+    /*
+     * Vehicle
+    */
+    alt.onServer('VehicleSetSirenSound', (vehicle: alt.Vehicle, status: boolean) => {
+        game.disableVehicleImpactExplosionActivation(vehicle.scriptID, status);
+    });
+
+
 
     function SetNotificationPicture(message: string, dict: string, img: string, flash: boolean, iconType: number, sender: string, subject: string) {
         game.setNotificationTextEntry("STRING");

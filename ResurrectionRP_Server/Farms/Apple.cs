@@ -53,6 +53,8 @@ namespace ResurrectionRP_Server.Farms
             ItemIDProcess = ItemID.Apple;
             ItemIDBrute = ItemID.Apple;
             ItemPrice = 18;
+
+            Debug = true;
         }
 
         public override async Task StartFarming(IPlayer client)

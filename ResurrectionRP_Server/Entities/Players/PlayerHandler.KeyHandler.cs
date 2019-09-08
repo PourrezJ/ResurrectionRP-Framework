@@ -110,33 +110,30 @@ namespace ResurrectionRP_Server.Entities.Players
 
 
                     break;
-                    /*
+                    
                 case ConsoleKey.M:
                     if (ph.HasOpenMenu())
                         return;
 
-                    await MP.Utility.Schedule(() =>
+                    if (client.GetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, out object data))
                     {
-                        if (client.TryGetSharedData(SaltyShared.SharedData.Voice_VoiceRange, out object data))
+                        string voiceRange = (string)data;
+
+                        switch (voiceRange)
                         {
-                            string voiceRange = (string)data;
-
-                            switch (voiceRange)
-                            {
-                                case "Parler":
-                                    voiceRange = "Crier";
-                                    break;
-                                case "Crier":
-                                    voiceRange = "Chuchoter";
-                                    break;
-                                case "Chuchoter":
-                                    voiceRange = "Parler";
-                                    break;
-                            }
-
-                            client.SetSharedData(SaltyShared.SharedData.Voice_VoiceRange, voiceRange);
+                            case "Parler":
+                                voiceRange = "Crier";
+                                break;
+                            case "Crier":
+                                voiceRange = "Chuchoter";
+                                break;
+                            case "Chuchoter":
+                                voiceRange = "Parler";
+                                break;
                         }
-                    });
+
+                        await client.SetSyncedMetaDataAsync(SaltyShared.SharedData.Voice_VoiceRange, voiceRange);
+                    }
                     break;
 
                 case ConsoleKey.G:
@@ -149,21 +146,15 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (!vehicle.Exists)
                         return;
 
-                    if (await client.GetSeatAsync() != -1)
+                    if (await client.GetSeatAsync() != 1)
                         return;
 
-                    var players = await MP.Players.GetInRangeAsync(await vehicle.GetPositionAsync(), MP.Config.GetInt("stream-distance"), vh.Dimension);
+                    vh.SirenSound = !vh.SirenSound;
 
-                    vh.VehicleSync.SirenSound = !vh.VehicleSync.SirenSound;
+                    await client.EmitAsync("VehicleSetSirenSound", vehicle, vh.SirenSound);
 
-                    foreach (var player in players)
-                    {
-                        if (!player.Exists)
-                            continue;
-                        await player.CallAsync("VehStream_SetSirenSoundCTL", vehicle.Id, vh.VehicleSync.SirenSound);
-                    }
                     break;
-
+                    /*
                 case ConsoleKey.X:
                     if (ph.HasOpenMenu())
                         return;

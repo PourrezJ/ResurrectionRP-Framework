@@ -147,7 +147,6 @@ namespace ResurrectionRP_Server.Farms
                 foreach (Vector3 position in Harvest_Position)
                 {
                     Harvest_ColShape = Alt.CreateColShapeCylinder(position, Harvest_Range, 4);
-                    Harvest_ColShape.SetData("FarmZone", Harvest_Name);
 
                     if (Debug)
                     {

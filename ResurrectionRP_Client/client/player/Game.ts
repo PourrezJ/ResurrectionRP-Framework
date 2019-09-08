@@ -145,8 +145,11 @@ export class Game {
         }
         
         alt.everyTick(() => {
-            //game.disableControlAction(0, 75, true);
-            //game.disableControlAction(0, 58, true);
+            for (let i = 12; i <= 19; i++)
+                game.disableControlAction(2, i, true);
+
+            game.disableControlAction(2, 23, true);
+
             this._Time.OnTick();
         });
 

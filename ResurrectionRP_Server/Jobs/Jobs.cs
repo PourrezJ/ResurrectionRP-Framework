@@ -21,7 +21,7 @@ namespace ResurrectionRP_Server.Jobs
         public Models.Location VehicleSpawnLocation;
         public VehicleModel VehicleSpawnHash;
 
-        private int _blip;
+        private Entities.Blips.Blips _blip;
         private int _marker;
         private IColShape _serviceColshape;
         private Dictionary<string, VehicleHandler> _vehicleList = new Dictionary<string, VehicleHandler>();

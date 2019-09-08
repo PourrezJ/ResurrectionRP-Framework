@@ -25,7 +25,7 @@ namespace ResurrectionRP_Server.DrivingSchool
         private List<Ride> _circuit;
         private VehicleModel _vehicleModel;
         private int _markerId;
-        private int _blipId;
+        private Entities.Blips.Blips _blipId;
         private IColShape _colshape;
         private ConcurrentDictionary<string, Exam> _clientsInExamen = new ConcurrentDictionary<string, Exam>();
         private List<IPlayer> _clientsInEchec = new List<IPlayer>();

@@ -82,7 +82,7 @@ namespace ResurrectionRP_Server.Farms
         [JsonIgnore]
         public IColShape Harvest_ColShape { get; set; }
         [JsonIgnore]
-        public int Harvest_Blip { get; set; }
+        public Entities.Blips.Blips Harvest_Blip { get; set; }
 
         public string Harvest_Name { get; set; }
         public byte Harvest_BlipSprite { get; set; }
@@ -94,7 +94,7 @@ namespace ResurrectionRP_Server.Farms
 
         /*                  Process                     */
         [JsonIgnore]
-        public int Process_Blip { get; set; }
+        public Entities.Blips.Blips Process_Blip { get; set; }
         [JsonIgnore]
         public Ped Process_Ped { get; set; }
 
@@ -109,7 +109,7 @@ namespace ResurrectionRP_Server.Farms
         public string DoubleProcess_Name { get; set; }
         public int DoubleProcess_BlipSprite { get; set; }
         [JsonIgnore]
-        public int DoubleProcess_Blip { get; set; }
+        public Entities.Blips.Blips DoubleProcess_Blip { get; set; }
         public Location DoubleProcess_PosRot { get; set; }
         [JsonIgnore]
         public Ped DoubleProcess_Ped { get; set; }
@@ -118,7 +118,7 @@ namespace ResurrectionRP_Server.Farms
 
         /*                  Selling                     */
         public string Selling_Name { get; set; }
-        public int Selling_Blip { get; set; }
+        public Entities.Blips.Blips Selling_Blip { get; set; }
         public int Selling_BlipSprite { get; set; }
         [JsonIgnore]
         public Ped Selling_Ped { get; set; }

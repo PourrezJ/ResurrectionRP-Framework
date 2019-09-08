@@ -1,4 +1,4 @@
-﻿using AltV.Net;
+using AltV.Net;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
@@ -91,6 +91,9 @@ namespace ResurrectionRP_Server
         public Loader.BusinessesLoader BusinessesManager { get; private set; }
 
         [BsonIgnore]
+        public Society.SocietyManager SocietyManager { get; private set; }
+
+        [BsonIgnore]
         public DrivingSchool.DrivingSchoolManager DrivingSchoolManager { get; private set; }
 
         [BsonIgnore]
@@ -171,6 +174,7 @@ namespace ResurrectionRP_Server
             PhoneManager = new Phone.PhoneManager();
             FactionManager = new Factions.FactionManager();
             RPGInventory = new Inventory.RPGInventoryManager();
+            SocietyManager = new Society.SocietyManager();
             MenuManager = new MenuManager();
             TeleportManager = new Teleport.TeleportManager();
             BusinessesManager = new Loader.BusinessesLoader();
@@ -201,6 +205,7 @@ namespace ResurrectionRP_Server
             await Loader.ClothingLoader.LoadAllCloth();
             await Loader.BusinessesLoader.LoadAllBusinesses();
             await WeatherManager.InitWeather();
+            await Society.SocietyManager.LoadAllSociety();
             await JobsManager.Init();
             await PoundManager.LoadPound();
             await FarmManager.InitAll();
@@ -243,8 +248,14 @@ namespace ResurrectionRP_Server
                 Alt.Server.LogColored($" X: {player.Position.X}  Y: {player.Position.Y} Z: {player.Position.Z} ");
                 Alt.Server.LogColored($" RX: {player.Rotation.Roll}  RY: {player.Rotation.Pitch} RZ: {player.Rotation.Yaw} ");
             });
-            Chat.RegisterCmd("task", async (IPlayer player, string[] args) =>
+            Chat.RegisterCmd("dimension", async (IPlayer player, string[] args) =>
             {
+                Alt.Server.LogInfo("My dimension: " + player.Dimension) ;
+            });
+            Chat.RegisterCmd("save", async (IPlayer player, string[] args) =>
+            {
+                player.GetPlayerHandler()?.Update();
+                player.Vehicle?.GetVehicleHandler()?.Update();
             });
             ServerLoaded = true;
         }

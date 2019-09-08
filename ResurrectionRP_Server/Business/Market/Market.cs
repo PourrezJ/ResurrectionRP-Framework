@@ -21,7 +21,8 @@ namespace ResurrectionRP_Server.Businesses
         public int EssencePrice = 1;
         public float Litrage = 0;
         public int LitrageMax = 1000;
-        public int StationBlip;
+        [BsonIgnore]
+        public Entities.Blips.Blips StationBlip;
         [BsonIgnore]
         public IColShape FuelPumpColshape { get; private set; }
 

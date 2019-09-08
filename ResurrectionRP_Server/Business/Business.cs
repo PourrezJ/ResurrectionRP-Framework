@@ -33,7 +33,7 @@ namespace ResurrectionRP_Server.Businesses
         public string Owner { get; set; } = null;
 
         [BsonIgnore, JsonIgnore]
-        public int Blip;
+        public Entities.Blips.Blips Blip;
         public uint BlipSprite { get; private set; }
 
 

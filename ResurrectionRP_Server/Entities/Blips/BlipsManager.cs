@@ -13,7 +13,7 @@ namespace ResurrectionRP_Server.Entities.Blips
     {
         public ConcurrentDictionary<int, Blips> BlipList = new ConcurrentDictionary<int, Blips>();
 
-        public static int CreateBlip(string name, Vector3 pos, int color, int sprite, float scale = 1f, bool shortRange = true)
+        public static Blips CreateBlip(string name, Vector3 pos, int color, int sprite, float scale = 1f, bool shortRange = true)
         {
             Blips blip = null;
 
@@ -25,22 +25,22 @@ namespace ResurrectionRP_Server.Entities.Blips
             GameMode.Instance.Streamer.AddStaticEntityBlip(blip);
             GameMode.Instance.BlipsManager.BlipList.TryAdd(blip.id, blip);
 
-            return blip.id;
+            return blip;
 
         }
-        public static int SetColor(int entityId, int color)
+        public static Blips SetColor(Blips entity, int color)
         {
-            Blips blip = GameMode.Instance.BlipsManager.BlipList[entityId];
+            Blips blip = GameMode.Instance.BlipsManager.BlipList[entity.id];
             blip.color = color;
             GameMode.Instance.Streamer.UpdateStaticEntityBlip(blip);
-            return entityId;
+            return entity;
         }
 
-        public static bool Destroy(int entityId)
+        public static bool Destroy(Blips entity)
         {
-            GameMode.Instance.Streamer.DestroyStaticEntityBlip(GameMode.Instance.BlipsManager.BlipList[entityId]);
+            GameMode.Instance.Streamer.DestroyStaticEntityBlip(GameMode.Instance.BlipsManager.BlipList[entity.id]);
 
-            if (GameMode.Instance.BlipsManager.BlipList.TryRemove(entityId, out Blips blip))
+            if (GameMode.Instance.BlipsManager.BlipList.TryRemove(entity.id, out Blips blip))
                 return true;
             else
                 return false;

@@ -33,7 +33,6 @@ export class Doors {
         alt.onServer("SetAllDoorStatut", (items: string) => {
             var tDoorsList = JSON.parse(items);
             tDoorsList.forEach((item: Door, index) => {
-                alt.log(item);
                 this.DoorsList[index] = new Door(item.ID, item.Hash, item.Position, item.Locked);
                 this.DoorsList[index].setDoorLockStatus(item.Locked);
             });

@@ -35,7 +35,7 @@ namespace ResurrectionRP_Server.Streamer
                 AltNetworking.Configure(options =>
                 {
                     if (!string.IsNullOrEmpty(Config.GetSetting<string>("StreamerIP")))
-                        options.Ip = "192.168.1.28";
+                        options.Ip = Config.GetSetting<string>("StreamerIP");
                     options.Port = 46429;
                 });
 

@@ -34,7 +34,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
                 await client.SendNotificationError("Aucun véhicule devant l'établi.");
         }
 
-        public override async Task OnEntityEnterColShape(IColShape colShape, IPlayer client)
+        public override async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
                     _vehicleBench = client.Vehicle;
             }
 
-            await base.OnEntityEnterColShape(colShape, client);
+            await base.OnPlayerEnterColshape(colShape, client);
         }
         #endregion
 

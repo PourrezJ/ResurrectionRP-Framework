@@ -137,7 +137,7 @@ namespace ResurrectionRP_Server.Society
         #endregion
 
         #region Events
-        public virtual async Task OnEntityEnterColShape(IColShape colShape, IPlayer client)
+        public virtual async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
         {
             if (colShape == ServiceColshape)
             {

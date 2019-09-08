@@ -15,7 +15,11 @@ namespace ResurrectionRP_Server.Society
             Alt.Server.LogInfo("--- Start loading all businesses in database ---");
             var societyList = await Database.MongoDB.GetCollectionSafe<Society>("society").AsQueryable().ToListAsync();
             foreach (var society in societyList)
+            {
                 await society.Load();
+                EventHandlers.Events.OnPlayerEnterColShape += society.OnPlayerEnterColshape;
+            }
+
 
             Utils.Utils.Delay((int)TimeSpan.FromMinutes(7).TotalMilliseconds, false, async () =>
             {
@@ -28,12 +32,5 @@ namespace ResurrectionRP_Server.Society
             Alt.Server.LogInfo($"--- Finish loading all businesses in database: {societyList.Count} ---");
         }
 
-        public async Task OnEnterColshape(IPlayer client, IColShape colshape)
-        {
-            foreach (var society in SocietyList)
-            {
-                await society.OnEntityEnterColShape(colshape, client);
-            }
-        }
     }
 }

@@ -55,12 +55,7 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public List<IPlayer> PlayerList = new List<IPlayer>();
 
-        [BsonIgnore]
-        public IVoiceChannel GlobalVoiceChannel { get; private set; }
-
-       // [BsonIgnore]
-       // public FactionManager FactionManager { get; private set; }
-
+ 
         public static short GlobalDimension = short.MaxValue;
 
         public List<string> PlateList = new List<string>();

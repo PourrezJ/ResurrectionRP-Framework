@@ -21,7 +21,7 @@ export class Weather {
         game.setWeatherTypeNowPersist(this.WeatherType);
         game.setOverrideWeather(this.WeatherType);
 
-        game.setWind(this.WindSpeed);
+        game.setWindSpeed(this.WindSpeed);
         game.setWindDirection(this.WindDirection);
 
 
@@ -35,7 +35,8 @@ export class Weather {
         this.WindDirection = windDirection;
         this.WeatherTransition = transition;
         game.setWeatherTypeTransition(game.getHashKey(this.OldWeather), game.getHashKey(this.WeatherType), this.WeatherTransition);
-
+        game.setWindSpeed(this.WindSpeed);
+        game.setWindDirection(this.WindDirection);
     }
     private lastcheck: number;
     OnUpdate = () => {
@@ -48,7 +49,7 @@ export class Weather {
             game.setWeatherTypeNowPersist(this.WeatherType);
             game.setOverrideWeather(this.WeatherType);
         }
-        game.setWind(this.WindSpeed);
+        game.setWindSpeed(this.WindSpeed);
         game.setWindDirection(this.WindDirection);
     }
 }

@@ -26,8 +26,8 @@ namespace ResurrectionRP_Server.Weather
                 if (Config.GetSetting<bool>("Winter"))
                 {
                     Actual_weather = WeatherType.Xmas;
-                    //await MP.World.SetWeatherAsync(WeatherType.Xmas);
-                    await this.UpdatePlayersWeather();
+                    Forced = true;
+                    this.UpdatePlayersWeather();
                 }
                 var apikey = Config.GetSetting<string>("OpenWeatherAPIKey");
                 if (string.IsNullOrEmpty(apikey)) throw new ArgumentException("Vous devez renseigner l'api key de OpenWeather");
@@ -48,15 +48,9 @@ namespace ResurrectionRP_Server.Weather
             }
         }
 
-        public async Task UpdatePlayersWeather()
+        public void UpdatePlayersWeather()
         {
-            var players = GameMode.Instance.PlayerList;
-            foreach(IPlayer player in players)
-            {
-                if (!player.Exists)
-                    return;
-                await player.EmitAsync("WeatherChange", this.Actual_weather.ToString(), this.Wind, this.WindDirection, this.WeatherTransition);
-            }
+            Alt.EmitAllClients("WeatherChange", this.Actual_weather.ToString(), this.Wind, this.WindDirection, this.WeatherTransition);
         }
 
         private Timer timer = null;
@@ -66,7 +60,7 @@ namespace ResurrectionRP_Server.Weather
                 return;
 
             this.Wind = wind;
-            this.WindDirection = winddirection;
+            this.WindDirection = winddirection / 4;
 
             if (timer != null)
             {
@@ -89,7 +83,7 @@ namespace ResurrectionRP_Server.Weather
                         timer.Close();
                     }
                     //await .CallAsync("WeatherManager_Change", weather.ToString(), wind, winddirection, WeatherTransition);
-                    await this.UpdatePlayersWeather();
+                    this.UpdatePlayersWeather();
 
                     await Task.Delay(2500);
                 });
@@ -98,7 +92,7 @@ namespace ResurrectionRP_Server.Weather
             }
             else if (WeatherTransition > 1.0)
             {
-                await this.UpdatePlayersWeather();
+                this.UpdatePlayersWeather();
             }
         }
 

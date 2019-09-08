@@ -8,8 +8,8 @@ export default class PhoneManager {
     public browser: alt.WebView = null;
     public LockControls: boolean = false;
 
-    constructor() {
-
+    constructor()
+    {
         alt.onServer("OpenPhone", this.OpenPhone);
     }
 

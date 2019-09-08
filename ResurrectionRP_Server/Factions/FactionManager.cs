@@ -160,7 +160,6 @@ namespace ResurrectionRP_Server.Factions
 
         public async Task OnEnterColShape(IColShape colshape, IPlayer client)
         {
-            Alt.Server.LogError("Enter in colshape");
             for (int i = 0; i < FactionList?.Count; i++) await FactionList[i].OnPlayerEnterColShape(colshape, client);
 
             var faction = FactionList.Find(f => f?.Parking_colShape == colshape || f?.Heliport_colShape == colshape || f?.Shop_colShape == colshape || f?.Vestiaire_colShape == colshape);

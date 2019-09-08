@@ -6,6 +6,7 @@ using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Farms;
 using ResurrectionRP_Server.Inventory;
 using ResurrectionRP_Server.Radio;
+using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.Utils.Extensions;
 using System;
 using System.Threading.Tasks;
@@ -101,13 +102,16 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 case ConsoleKey.E:
 
-                    Farm farm = await Farms.FarmManager.PlayerInFarmZone(client);
+                    Farm farm = await FarmManager.PlayerInFarmZone(client);
                     if (farm != null)
                     {
                         await farm.StartFarming(client);
                         return;
                     }
 
+                    Door door = GameMode.Instance.DoorManager.DoorList.Find(p => p.Position.DistanceTo2D(client.Position) <= 1.5f);
+                    if (door != null)
+                        await door.Interact?.Invoke(client, door);
 
                     break;
                     

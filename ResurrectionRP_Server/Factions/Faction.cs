@@ -125,8 +125,8 @@ namespace ResurrectionRP_Server.Factions
                 if (Parking == null) Parking = new Parking(ParkingLocation.Pos, ParkingLocation);
 
 
-                Parking_colShape = Alt.CreateColShapeCylinder(ParkingLocation.Pos - new Vector3(0, 0, 1), 3.0f, 1f);
-                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.HorizontalCircleArrow, ParkingLocation.Pos - new Vector3(0, 0, 1), new Vector3(1, 1, 1), 128);
+                Parking_colShape = Alt.CreateColShapeCylinder(ParkingLocation.Pos - new Vector3(0, 0, 1), 3.0f, 3f);
+                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ParkingLocation.Pos - new Vector3(0, 0, 1), new Vector3(2, 2, 2), 128);
 
                 Parking.OnVehicleStored = OnVehicleStore;
                 Parking.OnVehicleOut = OnVehicleOut;
@@ -134,32 +134,6 @@ namespace ResurrectionRP_Server.Factions
                 Parking.Limite = 3;
                 Parking.Spawn1 = ParkingLocation;
 
-                // TEMPORARY CODE TO REMOVE DUPLICATE VEHICLES
-/*                List<VehicleHandler> vehicleList = new List<VehicleHandler>();
-
-                foreach (ParkedCar veh in Parking.ListVehicleStored)
-                {
-                    bool duplicate = false;
-
-                    foreach (VehicleHandler vehicle in vehicleList)
-                    {
-                        if (veh.Plate == vehicle.Plate)
-                        {
-                            duplicate = true;
-                            break;
-                        }
-                    }
-
-                    if (!duplicate)
-                        vehicleList.Add(veh);
-                }
-
-                if (Parking.ListVehicleStored.Count != vehicleList.Count)
-                {
-                    Parking.ListVehicleStored = vehicleList;
-                    await UpdateDatabase();
-                }*/
-                // END TEMPORARY CODE
             }
 
             if (HeliportLocation != null)

@@ -1,4 +1,4 @@
-﻿using AltV.Net.Elements.Entities;
+using AltV.Net.Elements.Entities;
 using MongoDB.Driver;
 using ResurrectionRP_Server.XMenuManager;
 using System;
@@ -162,16 +162,23 @@ namespace ResurrectionRP_Server.Factions
         {
             for (int i = 0; i < FactionList?.Count; i++) await FactionList[i].OnPlayerEnterColShape(colshape, client);
 
-            var faction = FactionList.Find(f => f?.Parking_colShape == colshape || f?.Heliport_colShape == colshape || f?.Shop_colShape == colshape || f?.Vestiaire_colShape == colshape);
+            FactionList.ForEach(async (Faction faction) =>
+            {
+                Alt.Server.LogError(faction.Parking_colShape?.IsEntityInColShape(client).ToString());
+                Alt.Server.LogError(faction.Heliport_colShape?.IsEntityInColShape(client).ToString());
+                Alt.Server.LogError(faction.Shop_colShape?.IsEntityInColShape(client).ToString());
 
-            if (colshape == faction?.Parking_colShape)
-                await faction?.OpenConcessMenu(client, Faction.ConcessType.Vehicle, faction.ParkingLocation, faction.FactionName);
-            else if (colshape == faction?.Heliport_colShape)
-                await faction?.OpenConcessMenu(client, Faction.ConcessType.Helico, faction.HeliportLocation, faction.FactionName);
-            else if (colshape == faction?.Shop_colShape)
-                await faction?.OpenShopMenu(client);
-            else if (colshape == faction?.Vestiaire_colShape)
-                await faction?.PriseServiceMenu(client);
+                if (faction.Parking_colShape != null && faction.Parking_colShape.IsEntityInColShape(client))
+                    await faction.OpenConcessMenu(client, Faction.ConcessType.Vehicle, faction.ParkingLocation, faction.FactionName);
+                else if (faction.Heliport_colShape != null &&faction.Heliport_colShape.IsEntityInColShape(client))
+                    await faction.OpenConcessMenu(client, Faction.ConcessType.Helico, faction.HeliportLocation, faction.FactionName);
+                else if (faction.Shop_colShape != null && faction.Shop_colShape.IsEntityInColShape(client))
+                    await faction.OpenShopMenu(client);
+                else if (faction.Vestiaire_colShape != null && faction.Vestiaire_colShape.IsEntityInColShape(client))
+                    await faction.PriseServiceMenu(client);
+            });
+
+
         }
 
         public static async Task OnExitColShape(IPlayer player, IColShape colshapePointer)

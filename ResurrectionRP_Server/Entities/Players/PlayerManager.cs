@@ -5,6 +5,7 @@ using AltV.Net.Elements.Entities;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Bank;
+using ResurrectionRP_Server.Factions;
 using ResurrectionRP_Server.Models;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,7 @@ namespace ResurrectionRP_Server.Entities.Players
         public PlayerManager()
         {
             var PlayerCommands = new PlayerCommands();
+            var FactionsCommands = new FactionsCommands();
 
             AltAsync.OnClient("LogPlayer", LogPlayer);
             AltAsync.OnClient("MakePlayer", MakePlayer);

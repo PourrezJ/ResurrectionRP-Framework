@@ -11,7 +11,7 @@ namespace ResurrectionRP_Server
         public static Config LoadConfig()
         {
             var config = new Config();
-            var baseDir = "resources" + Path.DirectorySeparatorChar + "resurrectionrp" + Path.DirectorySeparatorChar + "Server" + Path.DirectorySeparatorChar + "appsettings.json";
+            var baseDir = "resources" + Path.DirectorySeparatorChar + "resurrectionrp" + Path.DirectorySeparatorChar + "server" + Path.DirectorySeparatorChar + "appsettings.json";
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())

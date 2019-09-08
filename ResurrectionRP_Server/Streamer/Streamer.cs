@@ -49,7 +49,6 @@ namespace ResurrectionRP_Server.Streamer
             {
                 Alt.Server.LogError(ex.ToString());
             }
-
         }
 
         public int AddEntityPed(Entities.Peds.Ped ped)

@@ -11,10 +11,8 @@ export default class PhoneManager {
     constructor() {
 
         alt.onServer("OpenPhone", this.OpenPhone);
-
-
     }
-    // REGION pHONE RELATIVE ON OPEN
+
     OpenPhone = (idk0: any, idk1: any, incomingCall: boolean, contactNumber: string, contactName: string) => {
         alt.logWarning("Opened Phone");
         if (game.isPauseMenuActive())
@@ -43,31 +41,29 @@ export default class PhoneManager {
         this.browser.focus();
         alt.setTimeout(() => {
             this.browser.emit("loadPhoneSettings", JSON.stringify(idk1));
-        }, 100);
+        }, 1000);
 
         this.browser.on("SavePhoneSettings", (arg) => alt.emitServer("PhoneMenuCallBack","SavePhoneSettings", arg));
-
         this.browser.on("GetContacts", (arg) => alt.emitServer("PhoneMenuCallBack","GetContacts", arg));
-        alt.onServer("ContactReturned", (arg) => this.browser.emit("loadContacts", arg));
-        alt.onServer("ContactEdited", (args) => { if (this.browser != null) { this.browser.url = "http://resource/client/cef/phone/contacts.html" } });
-        alt.onServer("ConversationsReturnedV2", (args) => { if (this.browser != null) { this.browser.emit("loadConversations", JSON.stringify(args)) } });
         this.browser.on("AddOrEditContact", (arg) => alt.emitServer("PhoneMenuCallBack","AddOrEditContact", arg));
         this.browser.on("RemoveContact", (arg) => alt.emitServer("PhoneMenuCallBack","RemoveContact", arg));
         this.browser.on("getConversations", (arg) => alt.emitServer("PhoneMenuCallBack","getConversationsV2"));
-
 
         this.browser.on("callTaxi", () => alt.emit("alertNotify", "Les services de taxi ne sont pas encore en ville !", 10000));
         this.browser.on("callUrgences", () => alt.emitServer("ONU_CallUrgenceMedic"));
         //this.browser.on("callPolice", () => alt.emitServer("ONU_CallUrgenceMedic")); NEED MENU MANAGER
 
-        this.browser.on("getMessages", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","getMessages", arg2));
+        this.browser.on("getMessages", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","GetMessages", arg2));
         this.browser.on("sendMessage", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","SendMessage", arg, arg2));
         this.browser.on("deleteConversation", (arg, arg2) => { if (this.browser != null) { this.browser.url = "http://resource/client/cef/phone/messages.html" } });
-        this.browser.on("deleteConversation", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","DeleteConversation",arg));
-
-        alt.on("ClosePhone", () => this.ClosePhone());
+        this.browser.on("deleteConversation", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "DeleteConversation", arg));
+        alt.onServer("ContactEdited", (args) => { if (this.browser != null) { this.browser.url = "http://resource/client/cef/phone/contacts.html" } });
+        alt.onServer("ConversationsReturnedV2", (args) => { if (this.browser != null) { this.browser.emit("loadConversations", args) } });
+        alt.onServer("MessagesReturned", (args) => { if (this.browser != null) { this.browser.emit("loadMessages", args) } });
+        alt.onServer("ContactReturned", (args) => { if (this.browser != null) { this.browser.emit("loadContacts", args) } });
         alt.onServer("ClosePhone", () => this.ClosePhone());
 
+        alt.on("ClosePhone", () => this.ClosePhone());
 
         this.browser.on("initiateCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","initiateCall", arg));
         this.browser.on("initiatedCall", (arg, arg2) => { if (this.browser != null) { this.browser.url = 'http://resource/client/cef/phone/oncall.html?incomingCall=true&number=' + arg + '&name=' + arg2 } } );

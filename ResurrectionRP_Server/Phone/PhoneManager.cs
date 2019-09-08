@@ -168,7 +168,7 @@ namespace ResurrectionRP_Server.Phone
                     break;
 
                 case "GetContacts":
-                    await phone?.SendContactListToClient(client);
+                    await phone.SendContactListToClient(client);
                     break;
 
                 case "AddOrEditContact":
@@ -206,7 +206,7 @@ namespace ResurrectionRP_Server.Phone
                     }
                     break;
 
-                case "getMessages":
+                case "GetMessages":
                     await phone.GetMessages(client, (string)args[1]);
                     break;
 

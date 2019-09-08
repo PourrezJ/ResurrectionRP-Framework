@@ -136,7 +136,7 @@ namespace ResurrectionRP_Server.Phone
             Conversation checkConv = await PhoneManager.FindOrCreateConversation(PhoneNumber, phoneNumber, false);
             //checkConv.messages.Reverse();
             if (checkConv != null)
-                await client.EmitAsync("messagesReturned", checkConv);
+                await client.EmitAsync("MessagesReturned", JsonConvert.SerializeObject(checkConv));
         }
 
         #endregion

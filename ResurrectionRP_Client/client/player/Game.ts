@@ -50,10 +50,6 @@ export class Game {
 
     private _stats: string[] = [ "SP0_STAMINA", "SP0_STRENGTH", "SP0_LUNG_CAPACITY", "SP0_WHEELIE_ABILITY", "SP0_FLYING_ABILITY", "SP0_SHOOTING_ABILITY", "SP0_STEALTH_ABILITY" ]
     private lastCheck: number;
-    //endregion variables
-
-
-    //REGION Pools
 
     private _Survival: SurvivalLib;
     public get Survival(): SurvivalLib { return this._Survival; }
@@ -70,8 +66,6 @@ export class Game {
     private _Radio: RadioManager;
     public get Radio(): RadioManager { return this._Radio; }
 
-    //End region pools
-    //constructor
     constructor(
         StaffRank: number,
         IdentiteName: string,
@@ -130,9 +124,6 @@ export class Game {
             game.setPedConfigFlag(playerId, 35, false);
             game.setPedConfigFlag(playerId, 429, true);
 
-            game.setRelationshipBetweenGroups(2, game.getHashKey("SYNCPED"), game.getHashKey("SYNCPED_TEAMMATES"));
-            game.setRelationshipBetweenGroups(2, game.getHashKey("SYNCPED_TEAMMATES"), game.getHashKey("SYNCPED"));
-
             game.startAudioScene("FBI_HEIST_H5_MUTE_AMBIENCE_SCENE");
             game.setPedConfigFlag(alt.Player.local.scriptID, 35, true);
             game.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
@@ -155,8 +146,6 @@ export class Game {
 
         alt.on("toggleChatAdminRank", this.toggleChatAdminRank);
     }
-    //end constructor
-    //methods
 
     public toggleChatAdminRank = () => {
         if (this.LevelRank > enums.AdminRank.Player)
@@ -167,6 +156,4 @@ export class Game {
         alt.emit("InventoryManager_CloseMenu");
         alt.emit("toggleChat");
     }
-
-    //endmethods
 }

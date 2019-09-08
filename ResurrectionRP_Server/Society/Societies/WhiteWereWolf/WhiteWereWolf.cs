@@ -101,7 +101,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             Door door = menu.GetData("Door");
             if (door != null)
             {
-                await door.SetDoorLockState(!door.Locked);
+                door.SetDoorLockState(!door.Locked);
             }
 
             await XMenuManager.XMenuManager.CloseMenu(client);

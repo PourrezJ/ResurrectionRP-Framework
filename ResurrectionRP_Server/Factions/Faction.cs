@@ -116,8 +116,8 @@ namespace ResurrectionRP_Server.Factions
         {
             if (ServiceLocation != null)
             {
-                Vestiaire_colShape = Alt.CreateColShapeCylinder(ServiceLocation, 1.0f, 1f);
-                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.HorizontalCircleArrow, ServiceLocation - new Vector3(0, 0, 0), new Vector3(1, 1, 1), 128);
+                Vestiaire_colShape = Alt.CreateColShapeCylinder(ServiceLocation - new Vector3(0, 0, 1), 1.0f, 1f);
+                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.HorizontalCircleArrow, ServiceLocation - new Vector3(0, 0, 1), new Vector3(1, 1, 1), 128);
             }
 
             if (ParkingLocation != null)
@@ -125,8 +125,8 @@ namespace ResurrectionRP_Server.Factions
                 if (Parking == null) Parking = new Parking(ParkingLocation.Pos, ParkingLocation);
 
 
-                Parking_colShape = Alt.CreateColShapeCylinder(ParkingLocation.Pos, 3.0f, 1f);
-                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.HorizontalCircleArrow, ServiceLocation - new Vector3(0, 0, 0), new Vector3(1, 1, 1), 128);
+                Parking_colShape = Alt.CreateColShapeCylinder(ParkingLocation.Pos - new Vector3(0, 0, 1), 3.0f, 1f);
+                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.HorizontalCircleArrow, ParkingLocation.Pos - new Vector3(0, 0, 1), new Vector3(1, 1, 1), 128);
 
                 Parking.OnVehicleStored = OnVehicleStore;
                 Parking.OnVehicleOut = OnVehicleOut;

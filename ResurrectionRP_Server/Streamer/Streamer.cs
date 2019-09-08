@@ -53,25 +53,25 @@ namespace ResurrectionRP_Server.Streamer
             }
         }
 
-        public int AddEntityPed(Entities.Peds.Ped ped)
+        public int AddEntityPed(Entities.Peds.Ped ped, int dimension = GameMode.GlobalDimension)
         {
-            INetworkingEntity item = AltNetworking.CreateEntity(ped.Position.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, ped.export());
+            INetworkingEntity item = AltNetworking.CreateEntity(ped.Position.ConvertToEntityPosition(), dimension, GameMode.Instance.StreamDistance, ped.export());
             ListEntities.TryAdd(EntityNumber, item);
             return EntityNumber;
         }
 
-        public int AddEntityObject(string model, Vector3 pos)
+        public int AddEntityObject(string model, Vector3 pos, int dimension = GameMode.GlobalDimension)
         {
             var data = new Object(model,  EntityNumber++);
-            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());
+            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, GameMode.Instance.StreamDistance, data.export());
             ListEntities.TryAdd(EntityNumber, item);
             return EntityNumber;
         }
 
-        public int AddEntityTextLabel(string label, Vector3 pos, int font = 1, int r = 255, int g = 255, int b = 255, int a = 255)
+        public int AddEntityTextLabel(string label, Vector3 pos, int font = 1, int r = 255, int g = 255, int b = 255, int a = 255, int drawDistance = 20, int dimension = GameMode.GlobalDimension)
         {
             var data = new TextLabel(label, font, r, g, b, a, EntityNumber++);
-            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance / 25, data.export());
+            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, drawDistance, data.export());
             ListEntities.TryAdd(EntityNumber, item);
             return EntityNumber;
         }
@@ -88,10 +88,10 @@ namespace ResurrectionRP_Server.Streamer
             ListEntities[entityid] = null;
             return 0;
         }
-        public int AddEntityMarker(Data.MarkerType type, Vector3 pos, Vector3 scale, int r = 225, int g = 225, int b = 225, int a = 255)
+        public int AddEntityMarker(Data.MarkerType type, Vector3 pos, Vector3 scale, int r = 225, int g = 225, int b = 225, int a = 255, int dimension = GameMode.GlobalDimension)
         {
             var data = new Marker(type, scale, r,g,b,a, this.EntityNumber++);
-            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());
+            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, GameMode.Instance.StreamDistance, data.export());
             ListEntities.TryAdd(EntityNumber, item);
             return EntityNumber;
         }

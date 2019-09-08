@@ -25,6 +25,21 @@ namespace ResurrectionRP_Server.Utils
 
         }
 
+        public async static Task<Door> CreateDoor(int hash, Vector3 position, bool locked = false, bool hide = false)
+        {
+            var door = new Door()
+            {
+                ID = Utils.RandomNumber(int.MinValue, int.MaxValue),
+                Hash = hash,
+                Position = position,
+                Locked = locked,
+                Hide = hide
+            };
+            door.TextLabel = GameMode.Instance.Streamer.AddEntityTextLabel($"Porte: {((door.Locked) ? "Verrouillée" : "Deverrouillée")}", door.Position, 1);
+            GameMode.Instance.DoorManager?.DoorList.Add(door);
+            await door.SetDoorLockState(locked);
+            return door;
+        }
 
         public async static Task<Door> CreateDoor(uint hash, Vector3 position, bool locked = false, bool hide = false)
         {
@@ -37,7 +52,6 @@ namespace ResurrectionRP_Server.Utils
                 Hide = hide
             };
             door.TextLabel = GameMode.Instance.Streamer.AddEntityTextLabel($"Porte: {((door.Locked) ? "Verrouillée" : "Deverrouillée")}", door.Position, 1);
-            //door.TextLabel = await MP.TextLabels.NewAsync(door.Position, $"Porte: {((door.Locked) ? "Verrouiller" : "Deverrouiller")}", 1, System.Drawing.Color.White, 2);
             GameMode.Instance.DoorManager?.DoorList.Add(door);
             await door.SetDoorLockState(locked);
             return door;

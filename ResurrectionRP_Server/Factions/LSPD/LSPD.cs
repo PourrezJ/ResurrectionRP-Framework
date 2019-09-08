@@ -16,6 +16,7 @@ using ResurrectionRP_Server.Items;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -30,14 +31,12 @@ namespace ResurrectionRP_Server.Factions
         private IColShape ColShapePortique;
         //private IObject _obj;
 
-        public Vector3 PortiquePos = new Vector3(438.4902f, -981.9595f, 30.76797f);
+        private readonly Vector3 _portiquePos = new Vector3(438.4902f, -981.9595f, 30.76797f);
 
         public List<Invoice> InvoiceList = new List<Invoice>();
         private Ped armurerie;
         private Ped accueil;
         private Ped portiqueSecu;
-
-        public List<Door> Doors { get; private set; }
 
         public LSPD(string FactionName, FactionType FactionType) : base(FactionName, FactionType)
         {
@@ -106,7 +105,7 @@ namespace ResurrectionRP_Server.Factions
 
             #region Portique
 
-            ColShapePortique = Alt.CreateColShapeCylinder(PortiquePos, 1f,  2f);
+            ColShapePortique = Alt.CreateColShapeCylinder(_portiquePos, 1f,  2f);
             //_obj = await MP.Objects.NewAsync(MP.Utility.Joaat("hei_prop_carrier_docklight_01"), new Vector3(PortiquePos.X, PortiquePos.Y, PortiquePos.Z + 2), new Vector3());
             //await _obj.SetAlphaAsync(0);
             #endregion
@@ -128,25 +127,25 @@ namespace ResurrectionRP_Server.Factions
             Cellule3 = await Door.CreateDoor(631614199, new Vector3(461.8065f, -1001.302f, 25.06443f), true);
             Cellule4 = await Door.CreateDoor(631614199, new Vector3(464.5701f, -992.6641f, 25.06443f), true);
 
-            Doors = new List<Door>()
+            var doors = new List<Door>()
             {
                 Cellule1,
                 Cellule2,
                 Cellule3,
                 Cellule4,
                 await Door.CreateDoor(320433149, new Vector3(434.7479f, -983.2151f, 30.83926f), false, false),     // Porte devant
-                await Door.CreateDoor(Convert.ToUInt32(-1215222675), new Vector3(434.7479f, -980.6184f, 30.83926f), false, false),    // Porte devant
-                await Door.CreateDoor(Convert.ToUInt32(-2023754432), new Vector3(469.9679f, -1014.452f, 26.53623f), true, false),    // Porte arrière
-                await Door.CreateDoor(Convert.ToUInt32(-2023754432), new Vector3(467.3716f, -1014.452f, 26.53623f), true, false),    // Porte arrière            
+                await Door.CreateDoor(-1215222675, new Vector3(434.7479f, -980.6184f, 30.83926f), false, false),    // Porte devant
+                await Door.CreateDoor(-2023754432, new Vector3(469.9679f, -1014.452f, 26.53623f), true, false),    // Porte arrière
+                await Door.CreateDoor(-2023754432, new Vector3(467.3716f, -1014.452f, 26.53623f), true, false),    // Porte arrière            
                 await Door.CreateDoor(749848321, new Vector3(453.0793f, -983.1895f, 30.83926f), true, false),    // Armurerie
                 await Door.CreateDoor(749848321, new Vector3(461.2865f, -985.3206f, 30.83926f), true, false), // Toit
-                await Door.CreateDoor(Convert.ToUInt32(-131296141), new Vector3(443.0298f, -991.941f, 30.8393f), true, false), // Briefing
-                await Door.CreateDoor(Convert.ToUInt32(-1320876379), new Vector3(446.5728f, -980.0106f, 30.8393f), true, false), // bureau
-                await Door.CreateDoor((uint)3079744621, new Vector3(445.3772f, -998.8503f, 30.73355f), false, false), // Porte garage
+                await Door.CreateDoor(-131296141, new Vector3(443.0298f, -991.941f, 30.8393f), true, false), // Briefing
+                await Door.CreateDoor(-1320876379, new Vector3(446.5728f, -980.0106f, 30.8393f), true, false), // bureau
+                await Door.CreateDoor(3079744621, new Vector3(445.3772f, -998.8503f, 30.73355f), false, false), // Porte garage
                 await Door.CreateDoor(320433149, new Vector3(446.853f, -998.8173f, 30.73125f), false, false),    // Porte garage
             };
 
-            foreach (var door in Doors)
+            foreach (var door in doors)
                 door.Interact = OpenCelluleDoor;
             #endregion
 

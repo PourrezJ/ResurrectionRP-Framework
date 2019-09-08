@@ -24,7 +24,8 @@ namespace ResurrectionRP_Server.Factions
         {
             FactionManager fm = GameMode.Instance.FactionManager;
             fm.Onu = (ONU)await (await LoadFaction<ONU>("ONU") ?? new ONU("ONU", FactionType.ONU)).OnFactionInit();
-/*            fm.Lspd = (LSPD)await (await LoadFaction<LSPD>("LSPD") ?? new LSPD("LSPD", FactionType.LSPD)).OnFactionInit();
+            fm.Lspd = (LSPD)await (await LoadFaction<LSPD>("LSPD") ?? new LSPD("LSPD", FactionType.LSPD)).OnFactionInit();
+            /*
             fm.Rebelle = (Division)await (await LoadFaction<Division>("Division") ?? new Division("Division", FactionType.Division)).OnFactionInit();
             fm.LSCustom = (LSCustom)await (await LoadFaction<LSCustom>("LSCustom") ?? new LSCustom("LSCustom", FactionType.LSCustom)).OnFactionInit();
             fm.Gouvernement = (Gouv)await (await LoadFaction<Gouv>("Gouv") ?? new Gouv("Gouv", FactionType.Gouv)).OnFactionInit();

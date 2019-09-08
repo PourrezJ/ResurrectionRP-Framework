@@ -134,7 +134,7 @@ namespace ResurrectionRP_Server.Jobs
 
             #endregion
 
-            Alt.OnServer("DustMan_Callback", DustMan_Callback);
+            AltAsync.OnServer("DustMan_Callback", DustMan_Callback);
 
             Utils.Utils.Delay((int)TimeSpan.FromMinutes(2).TotalMilliseconds, false, async () =>
             {
@@ -185,7 +185,7 @@ namespace ResurrectionRP_Server.Jobs
             }
         }
 
-        private async void DustMan_Callback(object[] args)
+        private async Task DustMan_Callback(object[] args)
         {
             IPlayer client = args[0] as IPlayer;
             if (!client.Exists)

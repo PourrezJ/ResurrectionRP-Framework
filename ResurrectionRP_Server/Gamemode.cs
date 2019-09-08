@@ -139,7 +139,7 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Events
-        private async void OnServerStop()
+        private async Task OnServerStop()
         {
             var players = GameMode.Instance.PlayerList;
             for (int i = 0; i < players.Count; i++)

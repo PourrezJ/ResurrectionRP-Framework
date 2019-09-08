@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Utils
             };
             door.TextLabel = GameMode.Instance.Streamer.AddEntityTextLabel($"Porte: {((door.Locked) ? "Verrouillée" : "Deverrouillée")}", door.Position, 1, drawDistance:2);
             GameMode.Instance.DoorManager?.DoorList.Add(door);
-            await door.SetDoorLockState(locked);
+            door.SetDoorLockState(locked);
             return door;
         }
 
@@ -53,29 +53,22 @@ namespace ResurrectionRP_Server.Utils
             };
             door.TextLabel = GameMode.Instance.Streamer.AddEntityTextLabel($"Porte: {((door.Locked) ? "Verrouillée" : "Deverrouillée")}", door.Position, 1, drawDistance: 2);
             GameMode.Instance.DoorManager?.DoorList.Add(door);
-            await door.SetDoorLockState(locked);
+            door.SetDoorLockState(locked);
             return door;
         }
 
 
-        public async Task SetDoorLockState(bool lockStatut)
+        public void SetDoorLockState(bool lockStatut)
         {
             Locked = lockStatut;
             GameMode.Instance.Streamer.UpdateEntityTextLabel(this.TextLabel, $"Porte: {((Locked) ? "Verrouillée" : "Deverrouillée")}");
-            foreach(IPlayer player in Alt.GetAllPlayers())
-            {
-                await player.EmitAsync("SetDoorLockState", ID, Locked);
-            }
-            //await MP.Players.CallAsync("SetDoorLockState", ID, Locked);
+
+            Alt.EmitAllClients("SetDoorLockState", ID, Locked);
         }
 
-        public async Task SetDoorOpenState(float angle)
+        public void SetDoorOpenState(float angle)
         {
-            foreach (IPlayer player in Alt.GetAllPlayers())
-            {
-                await player.EmitAsync("SetDoorLockState", ID, angle);
-            }
-            //await MP.Players.CallAsync("SetDoorOpenState", ID, angle);
+            Alt.EmitAllClients("SetDoorLockState", ID, angle);
         }
     }
     public class DoorManager
@@ -84,7 +77,7 @@ namespace ResurrectionRP_Server.Utils
 
         public DoorManager()
         {
-            Alt.OnClient("DoorManager_Interact", DoorManager_Interact);
+            AltAsync.OnClient("DoorManager_Interact", DoorManager_Interact);
         }
 
         public async Task OnPlayerConnected(IPlayer client)
@@ -92,7 +85,7 @@ namespace ResurrectionRP_Server.Utils
             await client.EmitAsync("SetAllDoorStatut", JsonConvert.SerializeObject(DoorList));
         }
 
-        private async void DoorManager_Interact(IPlayer client, object[] args)
+        private async Task DoorManager_Interact(IPlayer client, object[] args)
         {
             Door door = DoorList.Find(d => d.ID == (int)args[0]);
             await door.Interact?.Invoke(client, door);

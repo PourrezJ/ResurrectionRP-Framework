@@ -27,29 +27,31 @@ namespace ResurrectionRP_Server.Jobs
             this.Zone = zone;
             this.Truck = client.Vehicle;
             this.DepotZone = pos;
-            this.Init();
-
-            Alt.OnClient("Jobs_Dustman_Depot", this.onDepot);
+            Task.Run(async () =>
+            {
+                await Init();      
+            });
         }
 
         public async Task Init()
         {
+            AltAsync.OnClient("Jobs_Dustman_Depot", this.onDepot);
             await this.DustManClient.SendNotificationSuccess($"Vous devez vous rendre dans la zone de ~g~{this.Zone.NameZone}~w~.");
             if (GameMode.Instance.IsDebug)
             await this.DustManClient.SetWaypoint(this.Zone.ZonePosition, true);
             await this.DustManClient.EmitAsync("Jobs_Dustman", JsonConvert.SerializeObject(this.Zone.ZonePosition), JsonConvert.SerializeObject(this.Zone.TrashList));
         }
 
-        public async void onDepot(IPlayer client, object[] args)
+        public async Task onDepot(IPlayer client, object[] args)
         {
             if (client.Id != this.DustManClient.Id)
                 return;
             this.depotColShape = Alt.CreateColShapeCircle(this.DepotZone, 8);
-            Alt.OnColShape += this.onEnterColShape;
+            AltAsync.OnColShape += this.onEnterColShape;
             await client.SetWaypoint(this.DepotZone);
         }
 
-        public async void onEnterColShape(IColShape colShape, IEntity entity, bool state)
+        public async Task onEnterColShape(IColShape colShape, IEntity entity, bool state)
         {
             if (!entity.Exists || entity.Type != BaseObjectType.Player)
                 return;

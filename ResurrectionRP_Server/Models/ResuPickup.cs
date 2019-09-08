@@ -69,7 +69,7 @@ namespace ResurrectionRP_Server.Models
         {
         }
 
-        public static async void CreatePickup(uint hash, Item item, int quantite, Vector3 position, bool hide, TimeSpan endlife, uint dimension = 2)
+        public static async Task CreatePickup(uint hash, Item item, int quantite, Vector3 position, bool hide, TimeSpan endlife, uint dimension = 2)
         {/**
             var obj = new ResuPickup()
             {

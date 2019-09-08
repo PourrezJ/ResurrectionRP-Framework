@@ -66,9 +66,9 @@ namespace ResurrectionRP_Server.Factions
 
             ServicePlayerList = new List<string>();
 
-            Alt.OnClient("ONU_CallUrgenceMedic", ONU_CallUrgenceMedic);
-            Alt.OnClient("ONU_ImAccept", ONU_IAccept);
-            Alt.OnClient("ONU_BlesseRemoveBlip", ONU_BlesseRemoveBlip);
+            AltAsync.OnClient("ONU_CallUrgenceMedic", ONU_CallUrgenceMedic);
+            AltAsync.OnClient("ONU_ImAccept", ONU_IAccept);
+            AltAsync.OnClient("ONU_BlesseRemoveBlip", ONU_BlesseRemoveBlip);
 
             ItemShop.Add(new FactionShop(new Weapons(ItemID.Pistol, "Pistol MK2", "", hash: WeaponHash.PistolMk2), 0, 1));
             ItemShop.Add(new FactionShop(new Weapons(ItemID.Carabine, "Special Carbine MK2", "", hash: WeaponHash.SpecialCarbineMk2), 0, 3));
@@ -115,7 +115,7 @@ namespace ResurrectionRP_Server.Factions
         private static List<EmergencyCall> EmergencyCalls = new List<EmergencyCall>();
 
 
-        private async void ONU_CallUrgenceMedic(IPlayer client, object[] args)
+        private async Task ONU_CallUrgenceMedic(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -143,7 +143,7 @@ namespace ResurrectionRP_Server.Factions
             await client.EmitAsync("ONU_Callback", ServicePlayerList.Count);
         }
 
-        private async void ONU_IAccept(IPlayer client, object[] args)
+        private async Task ONU_IAccept(IPlayer client, object[] args)
         {
 
             IPlayer victim = GameMode.Instance.PlayerList[(int)args[0]];
@@ -178,7 +178,7 @@ namespace ResurrectionRP_Server.Factions
             await victim.EmitAsync("ONU_CallbackAccept");
         }
 
-        private async void ONU_BlesseRemoveBlip(IPlayer client, object[] args)
+        private async Task ONU_BlesseRemoveBlip(IPlayer client, object[] args)
         {
             var blesseID = args[0].ToString();
             var players =  GetEmployeeOnline();

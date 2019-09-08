@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Numerics;
-using Newtonsoft.Json;
 using ResurrectionRP_Server.Models;
-using ResurrectionRP_Server.Teleport;
 using ResurrectionRP_Server.Utils.Enums;
 using ResurrectionRP_Server.Utils;
-using ResurrectionRP_Server.Entities.Peds;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.XMenuManager;
-using ResurrectionRP_Server.Inventory;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
-using AltV.Net.Enums;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -44,7 +36,7 @@ namespace ResurrectionRP_Server.Factions
             Door door = menu.GetData("Door");
             if (door != null)
             {
-                await door.SetDoorLockState(!door.Locked);
+                door.SetDoorLockState(!door.Locked);
             }
 
             await XMenuManager.XMenuManager.CloseMenu(client);

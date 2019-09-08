@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.DrivingSchool
 {
-
     public class DrivingSchool
     {
         #region Fields and properties
@@ -122,15 +121,15 @@ namespace ResurrectionRP_Server.DrivingSchool
         #endregion
 
         #region Menu
-        public void OnPlayerEnterColshape(IColShape colShape, IPlayer client)
+        public async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
         {
             if (colShape != _colshape)
                 return;
 
-            OpenMenuDrivingSchool(client);
+            await OpenMenuDrivingSchool(client);
         }
 
-        public async void OnPlayerLeaveColshape(IColShape colShape, IPlayer client)
+        public async Task OnPlayerLeaveColshape(IColShape colShape, IPlayer client)
         {
             if (colShape != _colshape)
                 return;
@@ -138,7 +137,7 @@ namespace ResurrectionRP_Server.DrivingSchool
             await MenuManager.CloseMenu(client);
         }
 
-        public async void OpenMenuDrivingSchool(IPlayer client)
+        public async Task OpenMenuDrivingSchool(IPlayer client)
         {
 
             Entities.Players.PlayerHandler ph = client.GetPlayerHandler();

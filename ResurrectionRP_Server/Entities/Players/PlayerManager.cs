@@ -33,16 +33,15 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             var PlayerCommands = new PlayerCommands();
 
-            Alt.OnClient("SendLogin", SendLogin );
-            Alt.OnClient("LogPlayer", LogPlayer);
-            Alt.OnClient("Events_PlayerJoin", Events_PlayerJoin);
-            Alt.OnClient("UpdateHungerThirst", UpdateHungerThirst);
-            Alt.OnClient("MakePlayer", MakePlayer);
-            Alt.OnClient("IWantToDie", IWantToDie);
-            Alt.OnClient("ImGod", ReviveEvent);
-            Alt.OnClient("setGender", (IPlayer client, object[] args) => { client.Model = ((Convert.ToInt32( args[0]) == 1) ? Alt.Hash("mp_f_freemode_01") : Alt.Hash("mp_m_freemode_01")); });
-            Alt.OnClient("OpenXtremPlayer", OpenXtremPlayer);
-            Alt.OnClient("OpenAtmMenu", OpenAtmMenuPlayer);
+            AltAsync.OnClient("LogPlayer", LogPlayer);
+            AltAsync.OnClient("MakePlayer", MakePlayer);
+            AltAsync.OnClient("SendLogin", SendLogin );         
+            AltAsync.OnClient("Events_PlayerJoin", Events_PlayerJoin);
+            AltAsync.OnClient("UpdateHungerThirst", UpdateHungerThirst);        
+            AltAsync.OnClient("IWantToDie", IWantToDie);
+            AltAsync.OnClient("ImGod", ReviveEvent);
+            AltAsync.OnClient("OpenXtremPlayer", OpenXtremPlayer);
+            AltAsync.OnClient("OpenAtmMenu", OpenAtmMenuPlayer);
 
             AltAsync.OnClient("OnKeyPress", OnKeyPress);
             AltAsync.OnClient("OnKeyUp", OnKeyReleased);
@@ -108,7 +107,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 //await GetPlayerByClient(player)?.SetDead(true); // For fix client.Dead is doesn't work actually 
         }
 
-        public async void Events_PlayerJoin(IPlayer player, object[] args)
+        public async Task Events_PlayerJoin(IPlayer player, object[] args)
         {
             if (!player.Exists)
                 return;
@@ -190,7 +189,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region RemoteEvents
-        private async void MakePlayer(IPlayer client, object[] args)
+        private async Task MakePlayer(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -211,7 +210,7 @@ namespace ResurrectionRP_Server.Entities.Players
             await ph.LoadPlayer(client, true);
         }
 
-        private async void SendLogin(IPlayer client, object[] args)
+        private async Task SendLogin(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -241,7 +240,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        private async void UpdateHungerThirst(IPlayer client, object[] arg)
+        private async Task UpdateHungerThirst(IPlayer client, object[] arg)
         {
             if (!client.Exists)
                 return;
@@ -256,7 +255,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        private async void LogPlayer(IPlayer client, object[] args)
+        private async Task LogPlayer(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -305,7 +304,7 @@ namespace ResurrectionRP_Server.Entities.Players
         public static async Task<PlayerHandler> GetPlayerHandlerDatabase(string socialClub) =>
             await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == socialClub.ToLower()).FirstOrDefaultAsync();
 
-        private async void IWantToDie(IPlayer client, object[] args)
+        private async Task IWantToDie(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -328,7 +327,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }*/
         }
 
-        public async void ReviveEvent(IPlayer client, object[] args )
+        public async Task ReviveEvent(IPlayer client, object[] args )
         {
             if (!client.Exists)
                 return;
@@ -378,7 +377,7 @@ namespace ResurrectionRP_Server.Entities.Players
             return false;
         }
 
-        private async void OpenXtremPlayer(IPlayer client, object[] args)
+        private async Task OpenXtremPlayer(IPlayer client, object[] args)
         {
             if (uint.TryParse(args[0].ToString(), out uint playerID))
             {
@@ -398,7 +397,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        private async void OpenAtmMenuPlayer(IPlayer client, object[] args)
+        private async Task OpenAtmMenuPlayer(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;

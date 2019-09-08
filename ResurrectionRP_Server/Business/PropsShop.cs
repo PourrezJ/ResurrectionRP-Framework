@@ -104,7 +104,7 @@ namespace ResurrectionRP_Server.Businesses
                 return;
         }
 
-        public virtual async void OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
+        public virtual async Task OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
         {
             PlayerHandler player = client.GetPlayerHandler();
 

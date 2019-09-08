@@ -24,13 +24,13 @@ namespace ResurrectionRP_Server.Inventory
         #region Constructor
         public RPGInventoryManager()
         {
-            Alt.OnClient("RPGInventory_UseItem", RPGInventory_UseItem);
-            Alt.OnClient("RPGInventory_DropItem", RPGInventory_DropItem);
-            Alt.OnClient("RPGInventory_GiveItem", RPGInventory_GiveItem);
-            Alt.OnClient("RPGInventory_SwitchItemInventory_SRV", RPGInventory_SwitchItemInventory_SRV);
-            Alt.OnClient("RPGInventory_SplitItemInventory_SRV", RPGInventory_SplitItemInventory_SRV);
-            Alt.OnClient("RPGInventory_ClosedMenu_SRV", RPGInventory_ClosedMenu_SRV);
-            Alt.OnClient("RPGInventory_PriceItemInventory_SRV", RPGInventory_PriceItemInventory_SRV);
+            AltAsync.OnClient("RPGInventory_UseItem", RPGInventory_UseItem);
+            AltAsync.OnClient("RPGInventory_DropItem", RPGInventory_DropItem);
+            AltAsync.OnClient("RPGInventory_GiveItem", RPGInventory_GiveItem);
+            AltAsync.OnClient("RPGInventory_SwitchItemInventory_SRV", RPGInventory_SwitchItemInventory_SRV);
+            AltAsync.OnClient("RPGInventory_SplitItemInventory_SRV", RPGInventory_SplitItemInventory_SRV);
+            AltAsync.OnClient("RPGInventory_ClosedMenu_SRV", RPGInventory_ClosedMenu_SRV);
+            AltAsync.OnClient("RPGInventory_PriceItemInventory_SRV", RPGInventory_PriceItemInventory_SRV);
         }
         #endregion
 
@@ -98,7 +98,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Use
-        private async void RPGInventory_UseItem(IPlayer client, object[] args)
+        private async Task RPGInventory_UseItem(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -138,7 +138,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Drop
-        private async void RPGInventory_DropItem(IPlayer client, object[] args)
+        private async Task RPGInventory_DropItem(IPlayer client, object[] args)
         {
             try
             {
@@ -329,7 +329,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Give
-        private async void RPGInventory_GiveItem(IPlayer client, object[] args)
+        private async Task RPGInventory_GiveItem(IPlayer client, object[] args)
         {
             try
             {
@@ -517,7 +517,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Switch
-        private async void RPGInventory_SwitchItemInventory_SRV(IPlayer client, object[] args)
+        private async Task RPGInventory_SwitchItemInventory_SRV(IPlayer client, object[] args)
         {
             try
             {
@@ -948,7 +948,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Split
-        private async void RPGInventory_SplitItemInventory_SRV(IPlayer client, object[] args)
+        private async Task RPGInventory_SplitItemInventory_SRV(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -999,7 +999,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Price
-        private async void RPGInventory_PriceItemInventory_SRV(IPlayer client, object[] args)
+        private async Task RPGInventory_PriceItemInventory_SRV(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -1115,7 +1115,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Close
-        private async void RPGInventory_ClosedMenu_SRV(IPlayer client, object[] args)
+        private async Task RPGInventory_ClosedMenu_SRV(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;

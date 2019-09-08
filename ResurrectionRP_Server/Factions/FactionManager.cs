@@ -158,7 +158,7 @@ namespace ResurrectionRP_Server.Factions
             }
         }
 
-            public async void OnEnterColShape(IColShape colshape, IPlayer client)
+        public async Task OnEnterColShape(IColShape colshape, IPlayer client)
         {
             Alt.Server.LogError("Enter in colshape");
             for (int i = 0; i < FactionList?.Count; i++) await FactionList[i].OnPlayerEnterColShape(colshape, client);

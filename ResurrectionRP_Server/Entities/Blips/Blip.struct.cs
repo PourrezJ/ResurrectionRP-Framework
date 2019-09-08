@@ -49,7 +49,7 @@ namespace ResurrectionRP_Server.Entities.Blips
             return data;
         }
 
-        public async void setColorAsyc(int color)
+        public void setColorAsyc(int color)
         {
             BlipsManager.SetColor(this.id, color);
         }

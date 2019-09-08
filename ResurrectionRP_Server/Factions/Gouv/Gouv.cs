@@ -210,7 +210,7 @@ namespace ResurrectionRP_Server.Factions
             Door door = menu.GetData("Door");
             if (door != null)
             {
-                await door.SetDoorLockState(!door.Locked);
+                door.SetDoorLockState(!door.Locked);
             }
 
             await XMenuManager.XMenuManager.CloseMenu(client);

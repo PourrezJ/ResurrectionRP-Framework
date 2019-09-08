@@ -101,7 +101,7 @@ namespace ResurrectionRP_Server.Streamer
             ListStaticEntities.TryAdd(blip.id, blip.export());
 
             if (GameMode.Instance.PlayerList.Count > 0)
-                AltAsync.EmitAllClients("createStaticEntity", ListStaticEntities[blip.id]);
+                Alt.EmitAllClients("createStaticEntity", ListStaticEntities[blip.id]);
 
             return blip.id;
         }
@@ -110,17 +110,13 @@ namespace ResurrectionRP_Server.Streamer
         {
             ListStaticEntities[blip.id] = blip.export();
 
-            GameMode.Instance.PlayerList.ForEach(async (player) =>
-            {
-                await AltAsync.EmitAsync(player, "deleteStaticEntity", blip.id, (int)blip.type);
-                await AltAsync.EmitAsync(player, "createStaticEntity", blip.export());
-            });
+            Alt.EmitAllClients("deleteStaticEntity", blip.id, (int)blip.type);
+            Alt.EmitAllClients("createStaticEntity", blip.export());
         }
 
         public void DestroyStaticEntityBlip(Blips blip)
         {
-            GameMode.Instance.PlayerList.ForEach(async (player) =>
-                await AltAsync.EmitAsync(player, "deleteStaticEntity", blip.id, (int)blip.type));
+            Alt.EmitAllClients("deleteStaticEntity", blip.id, (int)blip.type);
 
             ListStaticEntities.TryRemove(blip.id, out _);
         }

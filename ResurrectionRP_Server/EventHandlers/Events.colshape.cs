@@ -1,16 +1,16 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
-using ResurrectionRP_Server.Utils.Extensions;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.EventHandlers
 {
     public static partial class Events
     {
         #region Delegates
-        public delegate void ColShapePlayerEventHandler(IColShape colShape, IPlayer client);
-        public delegate void ColShapePlayerInteract(BsonObjectId ID, IPlayer client);
-        public delegate void ColShapeVehicleEventHandler(IColShape colShape, IVehicle vehicle);
+        public delegate Task ColShapePlayerEventHandler(IColShape colShape, IPlayer client);
+        public delegate Task ColShapePlayerInteract(BsonObjectId ID, IPlayer client);
+        public delegate Task ColShapeVehicleEventHandler(IColShape colShape, IVehicle vehicle);
         #endregion
 
         #region Public events
@@ -24,7 +24,7 @@ namespace ResurrectionRP_Server.EventHandlers
         #endregion
 
         #region Private methods
-        private static void OnEntityColshape(IColShape colShape, IEntity targetEntity, bool state)
+        private static async Task OnEntityColshape(IColShape colShape, IEntity targetEntity, bool state)
         {
             if(targetEntity.Type == BaseObjectType.Player && colShape.Exists)
                 (targetEntity as IPlayer).Emit("SetStateInColShape", state);
@@ -35,9 +35,9 @@ namespace ResurrectionRP_Server.EventHandlers
                 colShape.AddEntity(targetEntity);
 
                 if (targetEntity.Type == BaseObjectType.Vehicle)
-                    OnVehicleEnterColShape?.Invoke(colShape, (IVehicle)targetEntity);
+                    await OnVehicleEnterColShape?.Invoke(colShape, (IVehicle)targetEntity);
                 else if (targetEntity.Type == BaseObjectType.Player)
-                    OnPlayerEnterColShape?.Invoke(colShape, (IPlayer)targetEntity);
+                    await OnPlayerEnterColShape?.Invoke(colShape, (IPlayer)targetEntity);
             }
             else
             {
@@ -45,13 +45,13 @@ namespace ResurrectionRP_Server.EventHandlers
                 colShape.RemoveEntity(targetEntity as IPlayer);
 
                 if (targetEntity.Type == BaseObjectType.Vehicle)
-                    OnVehicleLeaveColShape?.Invoke(colShape, (IVehicle)targetEntity);
+                    await OnVehicleLeaveColShape?.Invoke(colShape, (IVehicle)targetEntity);
                 else if (targetEntity.Type == BaseObjectType.Player)
-                    OnPlayerLeaveColShape?.Invoke(colShape, (IPlayer)targetEntity);
+                    await OnPlayerLeaveColShape?.Invoke(colShape, (IPlayer)targetEntity);
             }
         }
 
-        private static void OnEntityInteractInColShape(IPlayer client, object[] args)
+        private static async Task OnEntityInteractInColShape(IPlayer client, object[] args)
         {
             int key = int.Parse(args[0].ToString());
 
@@ -64,12 +64,12 @@ namespace ResurrectionRP_Server.EventHandlers
                     {
                         if (key != 69)
                             return;
-                        OnPlayerInteractClothingShop?.Invoke(clothing, client);
+                        await OnPlayerInteractClothingShop?.Invoke(clothing, client);
                     } else if (colshape.GetData("Teleport", out string TeleportID) && TeleportID != null)
                     {
                         if (key != 69)
                             return;
-                        OnPlayerInteractTeleporter?.Invoke(colshape, client);
+                        await OnPlayerInteractTeleporter?.Invoke(colshape, client);
                     }
                 }
             }

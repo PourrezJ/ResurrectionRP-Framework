@@ -22,7 +22,7 @@ namespace ResurrectionRP_Server.Teleport
             EventHandlers.Events.OnPlayerInteractTeleporter += OnTeleportColshape;
         }
 
-        private async void OnTeleportColshape(IColShape colshape, IPlayer player)
+        private async Task OnTeleportColshape(IColShape colshape, IPlayer player)
         {
             if (!player.Exists)
                 return;

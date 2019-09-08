@@ -104,7 +104,7 @@ namespace ResurrectionRP_Server.Services
             Alt.Server.LogInfo($"--- [POUND] Finish loading all pounds in database: {PoundVehicleList.Count} ---");
         }
 
-        public async void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        public async Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
             if (colShape != this._colshape)
                 return;

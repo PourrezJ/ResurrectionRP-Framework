@@ -98,7 +98,7 @@ namespace ResurrectionRP_Server.Businesses
             Events.OnPlayerInteractClothingShop += ClothingID_Open;
         }
 
-        private async void ClothingID_Open(BsonObjectId ID, IPlayer client)
+        private async Task ClothingID_Open(BsonObjectId ID, IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -112,13 +112,13 @@ namespace ResurrectionRP_Server.Businesses
             await OpenClothingMenu(client);
         }
 
-        public async void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        public async Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
             if (colShape == _clothingColShape)
                 await client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
         }
 
-        public virtual async void OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
+        public virtual async Task OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
         {
             PlayerHandler player = client.GetPlayerHandler();
 
@@ -151,7 +151,7 @@ namespace ResurrectionRP_Server.Businesses
         #endregion
 
         #region Private methods
-        private async void BuyCloth(IPlayer client, byte componentID, int drawable, int variation, double price, string clothName)
+        private async Task BuyCloth(IPlayer client, byte componentID, int drawable, int variation, double price, string clothName)
         {
             Item item = null;
             var clothdata = await ClothingLoader.FindCloths(client, componentID) ?? null;

@@ -53,3 +53,10 @@ alt.onServer('OpenCreator', () => {
 alt.onServer("togglePlayerControl", (value: boolean) => {
     alt.toggleGameControls(value);
 });
+
+alt.on("disconnect", () =>
+{
+    alt.log("disconnect detected.");
+
+
+});

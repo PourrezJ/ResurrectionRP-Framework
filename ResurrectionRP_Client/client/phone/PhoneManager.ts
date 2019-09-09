@@ -2,7 +2,7 @@
 import * as game from 'natives';
 import * as Game from 'client/player/game';
 import * as utils from 'client/Utils/Utils';
-import { VoiceChat } from '../Voice/VoiceChat';
+import * as voice from 'client/Voice/VoiceChat';
 
 
 var isPhoneOpen: boolean = false;
@@ -23,8 +23,7 @@ export default class PhoneManager {
             return;
         isPhoneOpen = true;
         game.freezePedCameraRotation(alt.Player.local.scriptID);
-        Game.Game.closeAllMenus();
-        
+
         game.playEntityAnim(
             alt.Player.local.scriptID,
             (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : (alt.Player.local.model == 2627665880) ? "cellphone@female" : "cellphone@",
@@ -107,7 +106,7 @@ export default class PhoneManager {
             if (this.browser != null)
                 this.browser.emit("callEvent", "ended");
 
-            VoiceChat.OnEndCall(playerName)
+            voice.VoiceChat.OnEndCall(playerName)
         });
 
         alt.onServer("PlayRingPhone", (entity: any) => {
@@ -124,7 +123,7 @@ export default class PhoneManager {
         if (this.browser != null)
             this.browser.emit("callEvent", "started");
 
-        VoiceChat.OnEstablishCall(playerName);
+        voice.VoiceChat.OnEstablishCall(playerName);
     }
 
     public ClosePhone = () => {

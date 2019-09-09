@@ -161,7 +161,7 @@ namespace ResurrectionRP_Server.Factions
         public async Task OnEnterColShape(IColShape colshape, IPlayer client)
         {
             for (int i = 0; i < FactionList?.Count; i++) await FactionList[i].OnPlayerEnterColShape(colshape, client);
-
+            /* crash the server
             FactionList.ForEach(async (Faction faction) =>
             {
                 Alt.Server.LogError(faction.Parking_colShape?.IsEntityInColShape(client).ToString());
@@ -178,7 +178,7 @@ namespace ResurrectionRP_Server.Factions
                     await faction.PriseServiceMenu(client);
             });
 
-
+    */
         }
 
         public static async Task OnExitColShape(IPlayer player, IColShape colshapePointer)

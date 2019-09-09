@@ -50,7 +50,7 @@ export function initialize() {
             alt.log("Nombre de siège: " + seat);
             alt.log("Vérificatin actuelle: " + i);
 
-            if (game.isVehicleSeatFree(vehicle.scriptID, i) && success == false) {
+            if (game.isVehicleSeatFree(vehicle.scriptID, i, false) && success == false) {
                 game.taskEnterVehicle(alt.Player.local.scriptID, vehicle.scriptID, 10000, i, 1, 1, 0);
                 success = true;
             }
@@ -116,7 +116,7 @@ export function initialize() {
         game.drawNotification(false, false);
     });
 
-    alt.on('RemoveLoadingPrompt', () => game.removeLoadingPrompt());
+    alt.on('RemoveLoadingPrompt', () => game.busyspinnerOff());
 
     alt.onServer('FadeIn', (args: number) => game.doScreenFadeIn(args));
     alt.onServer('FadeOut', (args: number) => game.doScreenFadeOut(args));
@@ -129,7 +129,7 @@ export function initialize() {
      * Vehicle
     */
     alt.onServer('VehicleSetSirenSound', (vehicle: alt.Vehicle, status: boolean) => {
-        game.disableVehicleImpactExplosionActivation(vehicle.scriptID, status);
+        game.setDisableVehicleSirenSound(vehicle.scriptID, status);
     });
 
 
@@ -169,36 +169,36 @@ export function initialize() {
             100, 200, 300, 400, 500, 600, 700, 800, 900, 1000
         ];
 
-        game.getGroundZFor3dCoord(v[0], v[1], 1000, zcoord, false);
+        game.getGroundZFor3dCoord(v[0], v[1], 1000, zcoord, false, false);
 
         if (zcoord == 0) {
             for (let i = firstCheck.length - 1; i >= 0; i--)
             {
                 game.requestCollisionAtCoord(v[0], v[1], firstCheck[i])
-                game.wait(0);
+                //game.wait(0);
             }
 
-            game.getGroundZFor3dCoord(v[0], v[1], 1000, zcoord, false);
+            game.getGroundZFor3dCoord(v[0], v[1], 1000, zcoord, false, false);
         }
 
         if (zcoord == 0) {
             for (let i = secondCheck.length - 1; i >= 0; i--)
             {
                 game.requestCollisionAtCoord(v[0], v[1], secondCheck[i]);
-                game.wait(0);
+                //game.wait(0);
             }
             
-            game.getGroundZFor3dCoord(v[0], v[1], 1000, zcoord, false);
+            game.getGroundZFor3dCoord(v[0], v[1], 1000, zcoord, false, false);
         }
 
         if (zcoord == 0) {
             for (let i = thirdCheck.length - 1; i >= 0; i--)
             {
                 game.requestCollisionAtCoord(v[0], v[1], secondCheck[i]);
-                game.wait(0);
+                //game.wait(0);
             }
 
-            game.getGroundZFor3dCoord(v[0], v[1], 1000, zcoord, false);
+            game.getGroundZFor3dCoord(v[0], v[1], 1000, zcoord, false, false);
         }
         return [v[0], v[1], zcoord];
         //return new Vector3(v.X, v.Y, zcoord);
@@ -266,21 +266,21 @@ export function initialize() {
             }
 
             loading = this;
-            game.removeLoadingPrompt();
-            game.beginTextCommandBusyString('STRING');
+            game.busyspinnerOff();
+            game.beginTextCommandBusyspinnerOn('STRING');
             game.addTextComponentSubstringPlayerName(this.text);
-            game.endTextCommandBusyString(this.type);
+            game.endTextCommandBusyspinnerOn(this.type);
         }
 
         Draw() {
             if (this.time < Date.now()) {
                 loading = undefined;
-                game.removeLoadingPrompt();
+                game.busyspinnerOff();
             }
 
             if (this.toggled !== null && this.toggled !== undefined && !this.toggled) {
                 loading = undefined;
-                game.removeLoadingPrompt();
+                game.busyspinnerOff();
             }
         }
     }
@@ -292,7 +292,7 @@ export function initialize() {
  * @param y is a float 0 - 1.0
  */
     function drawText(msg, x, y, scale, fontType, r, g, b, a, useOutline = true, useDropShadow = true, layer = 0) {
-        game.setUiLayer(layer);
+        game.setScriptGfxDrawOrder(layer);
         game.beginTextCommandDisplayText('STRING');
         game.addTextComponentSubstringPlayerName(msg);
         game.setTextFont(fontType);
@@ -307,7 +307,7 @@ export function initialize() {
         if (useDropShadow)
             game.setTextDropShadow();
 
-        game.endTextCommandDisplayText(x, y);
+        game.endTextCommandDisplayText(x, y, 0);
     }
 
 
@@ -326,7 +326,7 @@ export function initialize() {
         game.freezeEntityPosition(alt.Player.local.scriptID, false);
 
         // Destroy All Cameras
-        game.renderScriptCams(false, false, 0, false, false);
+        game.renderScriptCams(false, false, 0, false, false, 0);
         game.destroyAllCams(true);
 
         // Turn off Screen Fades

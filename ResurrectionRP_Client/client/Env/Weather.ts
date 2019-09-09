@@ -24,8 +24,7 @@ export class Weather {
         game.setWindSpeed(this.WindSpeed);
         game.setWindDirection(this.WindDirection);
 
-
-        alt.on("update", this.OnUpdate);
+        alt.everyTick(this.OnUpdate);
         alt.onServer("WeatherChange", this.WeatherChange);
     }
 

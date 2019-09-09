@@ -22,7 +22,7 @@ export class Camera {
 
     SetActiveCamera(active: boolean) {
         game.setCamActive(this.Handle, active);
-        game.renderScriptCams(active, false, 0, true, false)
+        game.renderScriptCams(active, false, 0, true, false, 0)
         if (active)
             game.setFocusArea(this.Pos.x, this.Pos.y, this.Pos.z, 100, 100, 1000);
         else

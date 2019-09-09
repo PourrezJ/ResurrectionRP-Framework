@@ -9,7 +9,7 @@ export function init() {
     alt.onServer('OpenLogin', (args: any[]) => {
         try {
             alt.emit("FadeIn", 0);
-            let social = game.getSocialclubNickname();
+            let social = game.scGetNickname();
             game.setPlayerInvincible(game.playerId(), true);
             game.displayRadar(false);
             game.displayHud(false);
@@ -54,7 +54,7 @@ export function init() {
                 alt.toggleGameControls(true);
                 browser.destroy();
                 browser = null;
-                game.renderScriptCams(false, false, 0, true, false);
+                game.renderScriptCams(false, false, 0, true, false, 0);
                 game.destroyAllCams(true);
 
                 alt.emitServer("LogPlayer");
@@ -71,6 +71,6 @@ export function init() {
     });
 
     alt.onServer("GetSocialClub", (arg: string) => 
-        alt.emitServer(arg, game.getSocialclubNickname()));
+        alt.emitServer(arg, game.scGetNickname()));
 
 }

@@ -10,12 +10,12 @@ export class Blesse {
             //Game.Instance.KeyHandler.Remove((int)ConsoleKey.R);
 
             game.setPlayerHealthRechargeMultiplier(alt.Player.local.scriptID, 0);
-            game.stopScreenEffect("DeathFailMPIn")
+            game.animpostfxStop("DeathFailMPIn")
             game.setCamEffect(0);
 
             game.setFadeInAfterDeathArrest(false);
             game.setFadeOutAfterArrest(false);
-            game.disableAutomaticRespawn(true);
+            game.pauseDeathArrestRestart(true);
             game.setFadeInAfterLoad(false);
             game.setFadeOutAfterDeath(false);
         });

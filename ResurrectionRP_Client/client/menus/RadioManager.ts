@@ -73,7 +73,7 @@ export class RadioManager
             this.CloseRadio();
         });
 
-        alt.on("update", () =>
+        alt.everyTick( () =>
         {
             //if (this.lastcheck > alt.getMsPerGameMinute()) {
 

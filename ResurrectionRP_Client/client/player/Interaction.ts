@@ -20,11 +20,18 @@ import * as Utils from 'client/Utils/utils';
  * */
 var isInColshape: boolean = false;
 var raycastResult = null;
+var canClose: boolean;
 
 export class Interaction {
+
+
     constructor() {
         alt.onServer("SetStateInColShape", (state: boolean) => {
             isInColshape = state;
+        });
+
+        alt.on('CanClose', (status) => {
+            canClose = status;
         });
 
         alt.on('keyup', (key) => {
@@ -35,7 +42,7 @@ export class Interaction {
         });
 
         alt.on("keydown", (key) => {
-            if (game.isPauseMenuActive() || chat.isOpened() || MenuManager.hasMenuOpen())
+            if (game.isPauseMenuActive() || chat.isOpened() || MenuManager.hasMenuOpen() && !canClose)
                 return;
 
             if (key == 69) { // E

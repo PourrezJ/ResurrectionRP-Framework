@@ -8,7 +8,7 @@ export function EnableHuds(hud = true, radar = true) {
 
 export function SendNotification(msg, flash, textCol = -1, bgCol = -1, flashCol = null) {
     if (textCol > -1)
-        game.setNotificationColorNext(4160189315227336364) // 0x39BBF623FC803EAC to int
+        game.setColourOfNextTextComponent(4160189315227336364) // 0x39BBF623FC803EAC to int
     if (bgCol > -1)
         game.setNotificationBackgroundColor(10588202547000613000) // 0x92F0DA1E27DB96DC
 
@@ -26,7 +26,7 @@ export function SendNotification(msg, flash, textCol = -1, bgCol = -1, flashCol 
 
 export function SendPicNotification(title, sender, msg, notifPic, icon = 0, flash = false, textCol = -1, bgCol = -1, flashCol = null) {
     if (textCol > -1)
-        game.setNotificationColorNext(4160189315227336364) // 0x39BBF623FC803EAC to int
+        game.setColourOfNextTextComponent(4160189315227336364) // 0x39BBF623FC803EAC to int
     if (bgCol > -1)
         game.setNotificationBackgroundColor(10588202547000613000) // 0x92F0DA1E27DB96DC
 
@@ -69,7 +69,7 @@ export function SetMaxTextComponentSubstringMessage(msg) {
 
 export function LoadingPromptText(text) {
     game.setNoLoadingScreen(true);
-    game.removeLoadingPrompt();
+    game.busyspinnerOff();
 }
 
 export function DrawText3d(
@@ -88,7 +88,7 @@ export function DrawText3d(
     layer = 0
 ) {
     game.setDrawOrigin(x, y, z, 0);
-    game.setUiLayer(layer);
+    game.setScriptGfxDrawOrder(layer);
     game.beginTextCommandDisplayText('STRING');
     game.addTextComponentSubstringPlayerName(msg);
     game.setTextFont(fontType);
@@ -101,7 +101,7 @@ export function DrawText3d(
 
     if (useDropShadow) game.setTextDropShadow();
 
-    game.endTextCommandDisplayText(0, 0);
+    game.endTextCommandDisplayText(0, 0, 0);
     game.clearDrawOrigin();
 }
 
@@ -120,7 +120,7 @@ export function DrawText2d(
     layer = 0,
     align = 0
 ) {
-    game.setUiLayer(layer);
+    game.setScriptGfxDrawOrder(layer);
     game.beginTextCommandDisplayText('STRING');
     game.addTextComponentSubstringPlayerName(msg);
     game.setTextFont(fontType);
@@ -134,5 +134,5 @@ export function DrawText2d(
 
     if (useDropShadow) game.setTextDropShadow();
 
-    game.endTextCommandDisplayText(x, y);
+    game.endTextCommandDisplayText(x, y, 0);
 }

@@ -34,7 +34,7 @@ export function init() {
     });
 
     alt.onServer('DecorationVariation', (args0: number, args1: number) => {
-        game.setPedDecoration(alt.Player.local.scriptID, args0, args1);
+        game.addPedDecorationFromHashes(alt.Player.local.scriptID, args0, args1);
     });
 
     alt.onServer('PlayAnimation', (args0: string) =>

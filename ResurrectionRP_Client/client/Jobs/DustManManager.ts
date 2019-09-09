@@ -32,7 +32,7 @@ export class DustManManager {
             this.Trash[index] = new Trash(item);
         })
 
-        alt.on("update", this.update);
+        alt.everyTick(this.update);
         alt.on("keydown", this.onKeyDown);
     };
 

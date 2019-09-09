@@ -1,6 +1,8 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
 import * as Game from 'client/player/game';
+import * as utils from 'client/Utils/Utils';
+
 
 var isPhoneOpen: boolean = false;
 export default class PhoneManager {
@@ -64,6 +66,13 @@ export default class PhoneManager {
         alt.onServer("ClosePhone", () => this.ClosePhone());
 
         alt.on("ClosePhone", () => this.ClosePhone());
+
+        alt.everyTick(() => {
+            if (this.browser == null)
+                return;
+
+            utils.DisEnableControls(false);
+        });
 
         this.browser.on("initiateCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","initiateCall", arg));
         this.browser.on("initiatedCall", (arg, arg2) => { if (this.browser != null) { this.browser.url = 'http://resource/client/cef/phone/oncall.html?incomingCall=true&number=' + arg + '&name=' + arg2 } } );

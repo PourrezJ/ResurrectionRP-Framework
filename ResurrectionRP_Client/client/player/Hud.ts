@@ -61,7 +61,7 @@ export class Hud {
                     let screenX = screenRes[1];
                     let screenY = screenRes[2];
 
-                    game.drawRect(1, 1, screenX, screenY, 0, 0, 0, 255);
+                    game.drawRect(1, 1, screenX, screenY, 0, 0, 0, 255, false);
                     ui.DrawText2d("Veuillez-être connecté sur le Teamspeak: ~r~ts.resurrectionrp.fr ", 0.5, 0.5, 0.5, 4, 255, 255, 255, 255, true, true, 99);
                     ui.DrawText2d("~w~\n et avoir votre ~r~plugin activé~w~.", 0.5, 0.5, 0.5, 4, 255, 255, 255, 255, true, true, 99);
                 }
@@ -73,7 +73,7 @@ export class Hud {
                 return;
 
             if (!game.isPedSittingInAnyVehicle(alt.Player.local.scriptID))
-                game.drawSprite("srange_gen", "hits_dot", 0.5, 0.5, 0.005, 0.007, 0, 255, 255, 255, 30);
+                game.drawSprite("srange_gen", "hits_dot", 0.5, 0.5, 0.005, 0.007, 0, 255, 255, 255, 30, false);
 
             if (this.Browser != null)
             {

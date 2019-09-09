@@ -239,7 +239,8 @@ export class Streamer {
 
 function displayTextLabel(textLabel) {
     //alt.log(textLabel["PosX"] + " " +  textLabel["PosY"] + " " +  textLabel["PosZ"])
-    const [bol, _x, _y] = game.getScreenCoordFromWorldCoord(textLabel["PosX"], textLabel["PosY"], textLabel["PosZ"],0,0);
+
+    const [bol,_x, _y] = game.getScreenCoordFromWorldCoord(textLabel["PosX"], textLabel["PosY"], textLabel["PosZ"], 0, 0);
         const camCord = game.getGameplayCamCoords();
     const dist = game.getDistanceBetweenCoords(camCord.x, camCord.y, camCord.z, textLabel["PosX"], textLabel["PosY"], textLabel["PosZ"], true);
 
@@ -264,6 +265,6 @@ function displayTextLabel(textLabel) {
             game.setTextCentre(true);
             game.beginTextCommandDisplayText("STRING");
             game.addTextComponentSubstringPlayerName(textLabel["Text"]);
-            game.endTextCommandDisplayText(_x, _y + 0.025);
+            game.endTextCommandDisplayText(_x, _y + 0.025, 0);
     }
 }

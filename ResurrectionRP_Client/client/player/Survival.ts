@@ -32,7 +32,7 @@ export class Survival {
                 if (Survival.Hunger > 0) Survival.Hunger--;
                 if (Survival.Hunger <= 0) {
                     var health = game.getEntityHealth(playerId);
-                    game.setEntityHealth(playerId, health - 25);
+                    game.setEntityHealth(playerId, health - 25, 0);
                     if (health <= -1) {
                         alt.emit("Display_Help", "Vous êtes mort de faim!", 10000);
                         Survival.Hunger = 100;
@@ -49,7 +49,7 @@ export class Survival {
                 if (Survival.Thirst > 0) Survival.Thirst--;
                 if (Survival.Thirst <= 0) {
                     var health = game.getEntityHealth(playerId);
-                    game.setEntityHealth(playerId, health - 25);
+                    game.setEntityHealth(playerId, health - 25, 0);
                     if (health <= -1) {
                         alt.emit("Display_Help", "Vous êtes mort de faim!", 10000);
                         Survival.Thirst = 100;

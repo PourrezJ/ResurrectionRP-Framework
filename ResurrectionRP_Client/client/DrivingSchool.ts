@@ -24,7 +24,7 @@ export class DrivingSchool {
         alt.onServer("DrivingSchool_End", () => { this.begin = false; });
         alt.onServer("DrivingSchool_Start", this.start);
 
-        alt.on("update", this.onTick);
+        alt.everyTick(this.onTick);
     }
 
     public start = (vehicle) => {

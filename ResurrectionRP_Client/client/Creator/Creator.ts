@@ -31,10 +31,10 @@ export function OpenCharCreator() {
         _camera = new Camera({ x: 402.6751, y: -997.00025, z: -98.30025 }, { x: 0, y: 0, z: 0 })
         _camera.SetActiveCamera(true);
 
-        game.renderScriptCams(true, false, 0, true, false);
+        game.renderScriptCams(true, false, 0, true, false, 0);
         game.displayHud(false);
         game.displayRadar(false);
-        game.setCursorSprite(6);
+        game.setMouseCursorSprite(6);
 
         game.requestModel(game.getHashKey('mp_m_freemode_01'));
         game.requestModel(game.getHashKey('mp_f_freemode_01'));

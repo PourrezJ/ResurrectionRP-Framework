@@ -4,7 +4,7 @@ import * as Utils from 'client/Utils/utils';
 
 export class VoiceChat
 {
-    public view: alt.WebView;
+    public static view: alt.WebView;
 
     public static serverUniqueIdentifier: string;
     public static requiredBranch: string;
@@ -38,25 +38,25 @@ export class VoiceChat
             VoiceChat.nextUpdate = Date.now() + 300;
             VoiceChat.deadplayers = [];
 
-            if (this.view == null) {
-                this.view = new alt.WebView("http://resource/client/cef/voice/index.html");
+            if (VoiceChat.view == null) {
+                VoiceChat.view = new alt.WebView("http://resource/client/cef/voice/index.html");
             }
 
-            this.view.on('SaltyChat_OnConnected', () => {
+            VoiceChat.view.on('SaltyChat_OnConnected', () => {
                 VoiceChat.isConnected = true;
                 this.InitiatePlugin();
             });
 
-            this.view.on('SaltyChat_OnError', (data: string) => {
+            VoiceChat.view.on('SaltyChat_OnError', (data: string) => {
                 //alt.log(data);
             });
 
-            this.view.on('SaltyChat_OnMessage', (arg) =>
+            VoiceChat.view.on('SaltyChat_OnMessage', (arg) =>
             {
                 let pluginCommand: PluginCommand = JSON.parse(arg);
                 if (pluginCommand.Command == Command.Ping && Date.now() > VoiceChat.nextUpdate)
                 {
-                    this.ExecuteCommand(new PluginCommand(Command.Pong, VoiceChat.serverUniqueIdentifier, undefined));
+                    VoiceChat.ExecuteCommand(new PluginCommand(Command.Pong, VoiceChat.serverUniqueIdentifier, undefined));
                     VoiceChat.nextUpdate = Date.now() + 300;
                     return;
                 }
@@ -98,7 +98,7 @@ export class VoiceChat
             if (VoiceChat.deadplayers.find(p => p == playerName))
                 Utils.ArrayRemove(VoiceChat.deadplayers, playerName);
 
-            this.ExecuteCommand(new PluginCommand(Command.RemovePlayer, VoiceChat.serverUniqueIdentifier, new PlayerState(playerName)));
+            VoiceChat.ExecuteCommand(new PluginCommand(Command.RemovePlayer, VoiceChat.serverUniqueIdentifier, new PlayerState(playerName)));
         }));
 
         alt.onServer('Voice_IsTalking', (playerName: string, isTalking: boolean) => {
@@ -118,7 +118,7 @@ export class VoiceChat
         alt.onServer('Voice_EstablishedCall', (playerName: string) => {
             alt.Player.all.forEach((player: alt.Player) => {
                 if (player.getSyncedMeta("Voice_TeamSpeakName") == playerName) {
-                    this.ExecuteCommand(new PluginCommand(Command.PhoneCommunicationUpdate, VoiceChat.serverUniqueIdentifier, new PhoneCommunication(playerName, 0, 0, true)))
+                    VoiceChat.ExecuteCommand(new PluginCommand(Command.PhoneCommunicationUpdate, VoiceChat.serverUniqueIdentifier, new PhoneCommunication(playerName, 0, 0, true)))
 
                     return;
                 }
@@ -126,7 +126,7 @@ export class VoiceChat
         });
 
         alt.onServer('Voice_EndCall', (playerName: string) => {
-            this.ExecuteCommand(new PluginCommand(Command.StopPhoneCommunication, VoiceChat.serverUniqueIdentifier, new PhoneCommunication(playerName)));
+            VoiceChat.ExecuteCommand(new PluginCommand(Command.StopPhoneCommunication, VoiceChat.serverUniqueIdentifier, new PhoneCommunication(playerName)));
         });
 
         alt.onServer('Voice_SetRadioChannel', (radioChannel: string) => {
@@ -146,7 +146,7 @@ export class VoiceChat
             }
             else {
                 if (isOnRadio) {
-                    this.ExecuteCommand(
+                    VoiceChat.ExecuteCommand(
                         new PluginCommand(Command.RadioCommunicationUpdate, VoiceChat.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, 0, true, null)))
 
                     game.stopSound(-1);
@@ -155,7 +155,7 @@ export class VoiceChat
                     game.playSoundFrontend(1, "Background_Loop", "CB_RADIO_SFX", true);
                 }
                 else {
-                    this.ExecuteCommand(
+                    VoiceChat.ExecuteCommand(
                         new PluginCommand(Command.StopRadioCommunication, VoiceChat.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, 0, true, null)))
 
                     game.stopSound(-1);
@@ -180,7 +180,7 @@ export class VoiceChat
     {
         let tsname = alt.Player.local.getSyncedMeta("Voice_TeamSpeakName");
         if (tsname != null) {
-            this.ExecuteCommand(new PluginCommand(Command.Initiate, VoiceChat.serverUniqueIdentifier, new GameInstance(VoiceChat.serverUniqueIdentifier, tsname, VoiceChat.ingameChannel, VoiceChat.ingameChannelPassword, VoiceChat.soundPack)));
+            VoiceChat.ExecuteCommand(new PluginCommand(Command.Initiate, VoiceChat.serverUniqueIdentifier, new GameInstance(VoiceChat.serverUniqueIdentifier, tsname, VoiceChat.ingameChannel, VoiceChat.ingameChannelPassword, VoiceChat.soundPack)));
         } 
     }
 
@@ -189,11 +189,11 @@ export class VoiceChat
         if (fileName == "")
             handle = fileName;
 
-        this.ExecuteCommand(new PluginCommand(Command.PlaySound, VoiceChat.serverUniqueIdentifier, new Sound(fileName, loop, handle)))
+        VoiceChat.ExecuteCommand(new PluginCommand(Command.PlaySound, VoiceChat.serverUniqueIdentifier, new Sound(fileName, loop, handle)))
     }
 
     private StopSound(handle: string) {
-        this.ExecuteCommand(new PluginCommand(Command.PlaySound, VoiceChat.serverUniqueIdentifier, new Sound(handle)))
+        VoiceChat.ExecuteCommand(new PluginCommand(Command.PlaySound, VoiceChat.serverUniqueIdentifier, new Sound(handle)))
     }
 
     private PlayerStateUpdate()
@@ -224,15 +224,60 @@ export class VoiceChat
                             break;
                     }
 
-                    this.ExecuteCommand(new PluginCommand(Command.PlayerStateUpdate, VoiceChat.serverUniqueIdentifier, new PlayerState(nPlayerName, TSVector.Convert(nPlayer.pos), voiceRange, null, true, null)));
+                    VoiceChat.ExecuteCommand(new PluginCommand(Command.PlayerStateUpdate, VoiceChat.serverUniqueIdentifier, new PlayerState(nPlayerName, TSVector.Convert(nPlayer.pos), voiceRange, null, true, null)));
                 }
             }
         });
 
-        this.ExecuteCommand(new PluginCommand(Command.SelfStateUpdate, VoiceChat.serverUniqueIdentifier, new PlayerState(null, TSVector.Convert(playerPos), null, game.getGameplayCamRot(0).z, false, null)));
+        VoiceChat.ExecuteCommand(new PluginCommand(Command.SelfStateUpdate, VoiceChat.serverUniqueIdentifier, new PlayerState(null, TSVector.Convert(playerPos), null, game.getGameplayCamRot(0).z, false, null)));
     }
 
-    private ExecuteCommand(pluginCommand: PluginCommand)
+    /*
+     *         internal static void OnEstablishCall(string playerName)
+        {
+#warning There seems to be an issue where the "client"-object is not correctly referenced on the client, remove workaround if the issue is resolved
+
+            foreach (RAGE.Elements.Player player in RAGE.Elements.Entities.Players.All)
+            {
+                if (!player.TryGetSharedData(SaltyShared.SharedData.Voice_TeamSpeakName, out string tsName) || tsName != playerName)
+                    continue;
+
+                RAGE.Vector3 ownPosition = RAGE.Elements.Player.LocalPlayer.Position;
+                RAGE.Vector3 playerPosition = player.Position;
+
+                Voice.ExecuteCommand(
+                    new PluginCommand(
+                        Command.PhoneCommunicationUpdate,
+                        Voice._serverUniqueIdentifier,
+                        new PhoneCommunication(
+                            playerName,
+                            RAGE.Game.Zone.GetZoneScumminess(RAGE.Game.Zone.GetZoneAtCoords(ownPosition.X, ownPosition.Y, ownPosition.Z)) +
+                            RAGE.Game.Zone.GetZoneScumminess(RAGE.Game.Zone.GetZoneAtCoords(playerPosition.X, playerPosition.Y, playerPosition.Z))
+                        )
+                    )
+                );
+
+                break;
+            }
+        }
+     */
+
+    public static OnEstablishCall(playerName: string)
+    {
+        VoiceChat.ExecuteCommand(new PluginCommand(Command.PhoneCommunicationUpdate, VoiceChat.serverUniqueIdentifier, new PhoneCommunication(playerName, 0, 0)));
+
+        /*       parameters 0, 0 replace this, is for quality audio fucking useless
+                 RAGE.Game.Zone.GetZoneScumminess(RAGE.Game.Zone.GetZoneAtCoords(ownPosition.X, ownPosition.Y, ownPosition.Z)) +
+                 RAGE.Game.Zone.GetZoneScumminess(RAGE.Game.Zone.GetZoneAtCoords(playerPosition.X, playerPosition.Y, playerPosition.Z))
+        */
+    }
+
+    public static OnEndCall(playerName: string)
+    {
+        VoiceChat.ExecuteCommand(new PluginCommand(Command.StopPhoneCommunication, VoiceChat.serverUniqueIdentifier, new PhoneCommunication(playerName)));
+    }
+
+    private static ExecuteCommand(pluginCommand: PluginCommand)
     {
         this.view.emit('runCommand', JSON.stringify(pluginCommand));
     }

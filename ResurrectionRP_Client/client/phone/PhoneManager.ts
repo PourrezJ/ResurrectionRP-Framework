@@ -2,6 +2,7 @@
 import * as game from 'natives';
 import * as Game from 'client/player/game';
 import * as utils from 'client/Utils/Utils';
+import { VoiceChat } from '../Voice/VoiceChat';
 
 
 var isPhoneOpen: boolean = false;
@@ -9,6 +10,7 @@ export default class PhoneManager {
 
     public browser: alt.WebView = null;
     public LockControls: boolean = false;
+    private animStage: number = 0;
 
     constructor()
     {
@@ -16,12 +18,12 @@ export default class PhoneManager {
     }
 
     OpenPhone = (idk0: any, idk1: any, incomingCall: boolean, contactNumber: string, contactName: string) => {
-        alt.logWarning("Opened Phone");
+
         if (game.isPauseMenuActive())
             return;
         isPhoneOpen = true;
         game.freezePedCameraRotation(alt.Player.local.scriptID);
-        //Game.Game.closeAllMenus();
+        Game.Game.closeAllMenus();
         
         game.playEntityAnim(
             alt.Player.local.scriptID,
@@ -77,50 +79,52 @@ export default class PhoneManager {
         this.browser.on("initiateCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","initiateCall", arg));
         this.browser.on("initiatedCall", (arg, arg2) => { if (this.browser != null) { this.browser.url = 'http://resource/client/cef/phone/oncall.html?incomingCall=true&number=' + arg + '&name=' + arg2 } } );
         this.browser.on("acceptCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","acceptCall", arg));
-        this.browser.on("cancelCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","cancelCall", arg));
-        this.browser.on("canceledCall", (arg, arg2) => {
-/*            Events.CallRemote("canceledCall", args[0]);
-            _animStage = 0;
-            PlayerSyncManager.PlaySyncedAnimation((RAGE.Elements.Player.LocalPlayer.Vehicle != null) ? "cellphone@in_car@ds" : (RAGE.Elements.Player.LocalPlayer.Model == 2627665880) ? "cellphone@female" : "cellphone@", "cellphone_text_in", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody));
-            if (browser != null)
-                browser.ExecuteJs("callEvent('canceled')");*/
-            // CA ME CASSE LES COUILLES TOUS CES EVENTS
+
+        this.browser.on("cancelCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "cancelCall", arg));
+
+        this.browser.on("canceledCall", (arg, arg2) =>
+        {
+            game.playEntityAnim(
+                alt.Player.local.scriptID,
+                (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : (alt.Player.local.model == 2627665880) ? "cellphone@female" : "cellphone@",
+                "cellphone_text_in",
+                3,
+                false,
+                true,
+                true,
+                -1,
+                -1
+            );
+
+            this.animStage = 0;
+            if (this.browser != null)
+                this.browser.emit("callEvent", "canceled");
         });
+
         this.browser.on("endCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","endCall", arg));
 
-        /* ALLER HOP JE FINIRAI UN AUTRE JOUR ** Protocole
-         * 
-         *
-            Events.Add("endedCall", (args) =>
-            {
-                if (browser != null)
-                    browser.ExecuteJs("callEvent('ended')");
+        alt.onServer("endedCall", (playerName: string) => {
+            if (this.browser != null)
+                this.browser.emit("callEvent", "ended");
 
-                SaltyClient.Voice.OnEndCall((string)args[0]);
-            });
+            VoiceChat.OnEndCall(playerName)
+        });
 
-            Events.Add("PlayRingPhone", (args) =>
-            {
-                RAGE.Game.Audio.PlaySoundFromEntity(-1, "Beep_Green", (int)args[0], "DLC_HEIST_HACKING_SNAKE_SOUNDS", false, 0);
-            });
-         * 
-         * */
+        alt.onServer("PlayRingPhone", (entity: any) => {
+            game.playSoundFromEntity(-1, "Beep_Green", entity, "DLC_HEIST_HACKING_SNAKE_SOUNDS", false, 0);
+        });
 
         this.browser.on("StartedCall", this.StartedCall)
-
     }
 
-    public StartedCall = (args) => {
-/*        _animStage = 3; TODO
-        if (browser != null)
-            browser.ExecuteJs("callEvent('started')");
+    public StartedCall = (playerName: string) =>
+    {
+        this.animStage = 3;
 
-        if (ushort.TryParse(args[0].ToString(), out ushort id)) { SALTY TCHAT
-            var client = RAGE.Elements.Entities.Players.GetAtRemote(id);
-            if (client != null) {
-                SaltyClient.Voice.OnEstablishCall(client.GetSharedData(SaltyShared.SharedData.Voice_TeamSpeakName).ToString());
-            }
-        }*/
+        if (this.browser != null)
+            this.browser.emit("callEvent", "started");
+
+        VoiceChat.OnEstablishCall(playerName);
     }
 
     public ClosePhone = () => {

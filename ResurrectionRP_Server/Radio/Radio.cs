@@ -48,9 +48,9 @@ namespace ResurrectionRP_Server.Radio
             if (Favoris == null)
                 return;
 
-            await Owner.EmitAsync("OpenRadio", JsonConvert.SerializeObject(Favoris), CurrentFrequence, (int)Statut);
-            
             await Owner.PlayAnimation((await Owner.GetVehicleAsync() != null) ? "cellphone@in_car@ds" : (await Owner.GetModelAsync() == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_read_base", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.Loop | AnimationFlags.SecondaryTask));
+            await Task.Delay(500);
+            await Owner.EmitAsync("OpenRadio", JsonConvert.SerializeObject(Favoris), CurrentFrequence, (int)Statut);
         }
 
         public async Task HideRadio(IPlayer client)

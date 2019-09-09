@@ -387,7 +387,6 @@ export function playAnimation(dictionary, name, speed, durationInMS, flag) {
     let res = loadAnim(dictionary);
 
     res.then(() => {
-        alt.log('Playing Animation');
         game.taskPlayAnim(
             alt.Player.local.scriptID,
             dictionary,

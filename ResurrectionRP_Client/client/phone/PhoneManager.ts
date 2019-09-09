@@ -24,18 +24,6 @@ export default class PhoneManager {
         isPhoneOpen = true;
         game.freezePedCameraRotation(alt.Player.local.scriptID);
 
-        game.playEntityAnim(
-            alt.Player.local.scriptID,
-            (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : (alt.Player.local.model == 2627665880) ? "cellphone@female" : "cellphone@",
-            "cellphone_text_in",
-            3,
-            false,
-            true,
-            true,
-            -1,
-            -1
-        );
-
         if (incomingCall == true)
             this.browser = new alt.WebView('http://resource/client/cef/phone/oncall.html?incomingCall=true&number=' + contactNumber + '&name=' + contactName);
         else
@@ -68,13 +56,6 @@ export default class PhoneManager {
 
         alt.on("ClosePhone", () => this.ClosePhone());
 
-        alt.everyTick(() => {
-            if (this.browser == null)
-                return;
-
-            utils.DisEnableControls(false);
-        });
-
         this.browser.on("initiateCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","initiateCall", arg));
         this.browser.on("initiatedCall", (arg, arg2) => { if (this.browser != null) { this.browser.url = 'http://resource/client/cef/phone/oncall.html?incomingCall=true&number=' + arg + '&name=' + arg2 } } );
         this.browser.on("acceptCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack","acceptCall", arg));
@@ -83,16 +64,12 @@ export default class PhoneManager {
 
         this.browser.on("canceledCall", (arg, arg2) =>
         {
-            game.playEntityAnim(
-                alt.Player.local.scriptID,
+            utils.playAnimation(
                 (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : (alt.Player.local.model == 2627665880) ? "cellphone@female" : "cellphone@",
                 "cellphone_text_in",
-                3,
-                false,
-                true,
-                true,
+                8,
                 -1,
-                -1
+                0
             );
 
             this.animStage = 0;
@@ -113,22 +90,67 @@ export default class PhoneManager {
             game.playSoundFromEntity(-1, "Beep_Green", entity, "DLC_HEIST_HACKING_SNAKE_SOUNDS", false, 0);
         });
 
-        this.browser.on("StartedCall", this.StartedCall)
-    }
+        this.browser.on("StartedCall", (playerName: string) => {
+            this.animStage = 3;
 
-    public StartedCall = (playerName: string) =>
-    {
-        this.animStage = 3;
+            if (this.browser != null)
+                this.browser.emit("callEvent", "started");
 
-        if (this.browser != null)
-            this.browser.emit("callEvent", "started");
+            voice.VoiceChat.OnEstablishCall(playerName);
+        });
 
-        voice.VoiceChat.OnEstablishCall(playerName);
+        alt.everyTick(() => {
+            if (this.browser == null)
+                return;
+            // Ouverture du téléphone
+            if (this.animStage == 0 && (game.isEntityPlayingAnim(alt.Player.local.scriptID, "cellphone@in_car@ds", "cellphone_text_in", 3) || game.isEntityPlayingAnim(alt.Player.local.scriptID, (alt.Player.local.model == 2627665880) ? "cellphone@female" : "cellphone@", "cellphone_text_in", 3))) {
+                if (game.getEntityAnimCurrentTime(alt.Player.local.scriptID, (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : (alt.Player.local.model == 2627665880) ? "cellphone@female" : "cellphone@", "cellphone_text_in") >= 0.95) {
+                    this.animStage = 1;
+                }
+            }
+            // Animation en main
+            else if (this.animStage == 1) {
+
+                utils.playAnimation(
+                    (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : (alt.Player.local.model == 2627665880) ? "cellphone@female" : "cellphone@",
+                    "cellphone_text_read_base",
+                    8,
+                    -1,
+                    0
+                );
+
+                this.animStage = 2;
+            }
+            // Animation Appel
+            else if (this.animStage == 3) {
+
+                utils.playAnimation(
+                    (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : (alt.Player.local.model == 2627665880) ? "cellphone@female" : "cellphone@",
+                    "cellphone_call_listen_base",
+                    8,
+                    -1,
+                    0
+                );
+
+                this.animStage = 4;
+            }
+
+            utils.DisEnableControls(false);
+        });
     }
 
     public ClosePhone = () => {
         if (this.browser == null)
             return;
+
+        utils.playAnimation(
+            (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : (alt.Player.local.model == 2627665880) ? "cellphone@female" : "cellphone@",
+            "cellphone_text_out",
+            8,
+            -1,
+            0
+        );
+
         alt.showCursor(false);
         this.browser.destroy();
         this.browser = null;

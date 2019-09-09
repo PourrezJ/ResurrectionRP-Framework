@@ -9,6 +9,7 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Numerics;
+using Newtonsoft.Json;
 
 namespace ResurrectionRP_Server
 {
@@ -301,6 +302,22 @@ namespace ResurrectionRP_Server
         public static void Freeze(this IPlayer client, bool state)
         {
             // TODO
+        }
+
+        public static async Task PlayAnimation(this IPlayer client, string animDict, string animName, float blendInSpeed = 8f, float blendOutSpeed = -8f, int duration = -1, ResurrectionRP_Server.Utils.Enums.AnimationFlags flags = (ResurrectionRP_Server.Utils.Enums.AnimationFlags)0, float playbackRate = 0f)
+        {
+            var animsync = new AnimationsSync()
+            {
+                AnimName = animName,
+                AnimDict = animDict,
+                BlendInSpeed = blendInSpeed,
+                BlendOutSpeed = blendOutSpeed,
+                Duraction = duration,
+                Flag = (int)flags,
+                PlaybackRate = playbackRate
+            };
+
+            await client.EmitAsync("PlayAnimation", JsonConvert.SerializeObject(animsync));
         }
 
         public static async Task StopAnimationAsync(this IPlayer client)

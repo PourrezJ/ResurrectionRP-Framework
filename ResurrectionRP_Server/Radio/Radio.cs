@@ -49,14 +49,14 @@ namespace ResurrectionRP_Server.Radio
                 return;
 
             await Owner.EmitAsync("OpenRadio", JsonConvert.SerializeObject(Favoris), CurrentFrequence, (int)Statut);
-
-            Owner.GetPlayerHandler()?.PlayAnimation((await Owner.GetVehicleAsync() != null) ? "cellphone@in_car@ds" : (await Owner.GetModelAsync() == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_read_base", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.Loop | AnimationFlags.SecondaryTask));
+            
+            await Owner.PlayAnimation((await Owner.GetVehicleAsync() != null) ? "cellphone@in_car@ds" : (await Owner.GetModelAsync() == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_read_base", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.Loop | AnimationFlags.SecondaryTask));
         }
 
         public async Task HideRadio(IPlayer client)
         {
             await client.EmitAsync("HideRadio");
-            await client.GetPlayerHandler().PlayAnimation((await Owner.GetVehicleAsync() != null) ? "cellphone@in_car@ds" : (await client.GetModelAsync() == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_out", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody));
+            await client.PlayAnimation((await Owner.GetVehicleAsync() != null) ? "cellphone@in_car@ds" : (await client.GetModelAsync() == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_out", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody));
         }
 
         public async Task UseRadio(IPlayer client)
@@ -69,12 +69,7 @@ namespace ResurrectionRP_Server.Radio
 
                 await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), true); 
 
-                var ph = client.GetPlayerHandler();
-
-                if (ph == null)
-                    return;
-
-                await ph.PlayAnimation("random@arrests", "generic_radio_chatter", 4, -8, -1, (AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.AllowPlayerControl));
+                await client.PlayAnimation("random@arrests", "generic_radio_chatter", 4, -8, -1, (AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.AllowPlayerControl));
             }
         }
 

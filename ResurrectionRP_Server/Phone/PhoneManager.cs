@@ -68,6 +68,9 @@ namespace ResurrectionRP_Server.Phone
                      if (phone.props == null)
                          return false;
      */
+
+
+
                     long newMessagesCount = GetNewMessagesOnConversationsCount(phone.PhoneNumber);
                     await client.EmitAsync("OpenPhone", newMessagesCount, JsonConvert.SerializeObject(phone.Settings), incomingCall, contactNumber, contactName);
                     await client.EmitAsync("ShowCursor", true);

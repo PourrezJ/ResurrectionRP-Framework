@@ -69,7 +69,7 @@ export class RadioManager
         alt.onServer('CloseRadio', (favoris: string, frequence: number) => {
             if (this.view == null)
                 return;
-
+            alt.toggleGameControls(true);
             this.CloseRadio();
         });
 

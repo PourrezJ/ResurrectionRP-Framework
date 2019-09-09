@@ -354,10 +354,13 @@ namespace ResurrectionRP_Server.Factions
                     await _vh.SetDoorState(VehicleDoor.Hood, VehicleDoorState.OpenedLevel7);
                     await veh.SetEngineOnAsync(true);
 
-                    client.GetPlayerHandler()?.PlayAnimation("mini@repair", "fixing_a_ped", 4, -8, -1, (AnimationFlags.Loop | AnimationFlags.AllowPlayerControl));
+                    await client.PlayAnimation("mini@repair", "fixing_a_ped", 4, -8, -1, (AnimationFlags.Loop | AnimationFlags.AllowPlayerControl));
 
                     Utils.Utils.Delay(20000, true, async () =>
                     {
+                        if (!client.Exists)
+                            return;
+
                         string str = $"Body: {Math.Floor(await veh.GetBodyHealthAsync() * 0.1)}% \n" +
                         $"Engine: {Math.Floor(await veh.GetEngineHealthAsync() * 0.1)} %";
                         await client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Diagnostique: ~g~Terminé~w~.", str);

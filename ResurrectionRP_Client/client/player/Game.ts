@@ -16,6 +16,7 @@ import { DrivingSchool } from 'client/DrivingSchool';
 import { RadioManager } from 'client/menus/RadioManager';
 import { DustManManager } from 'client/Jobs/DustManManager';
 import { VoiceChat } from 'client/Voice/VoiceChat';
+import { Medical } from 'client/Medical';
 
 export class Game {
     //region Static Var   
@@ -97,6 +98,7 @@ export class Game {
             new PhoneManager();
             new DrivingSchool();
             new DustManManager();
+            new Medical();
 
             game.setAudioFlag('LoadMPData', true);
             game.setAudioFlag('DisableFlightMusic', true);

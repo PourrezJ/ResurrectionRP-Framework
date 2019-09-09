@@ -104,7 +104,8 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             if (!player.Exists)
                 return;
-            
+
+            await player.EmitAsync("ONU_PlayerDeath", weapon);
             //if (GetPlayerByClient(player) != null)
                 //await GetPlayerByClient(player)?.SetDead(true); // For fix client.Dead is doesn't work actually 
         }

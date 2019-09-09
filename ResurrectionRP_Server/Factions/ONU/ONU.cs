@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.Factions
             ServicePlayerList = new List<string>();
 
             AltAsync.OnClient("ONU_CallUrgenceMedic", ONU_CallUrgenceMedic);
-            AltAsync.OnClient("ONU_ImAccept", ONU_IAccept);
+            AltAsync.OnClient("ONU_IAccept_Accept", ONU_IAccept);
             AltAsync.OnClient("ONU_BlesseRemoveBlip", ONU_BlesseRemoveBlip);
 
             ItemShop.Add(new FactionShop(new Weapons(ItemID.Pistol, "Pistol MK2", "", hash: WeaponHash.PistolMk2), 0, 1));
@@ -137,7 +137,7 @@ namespace ResurrectionRP_Server.Factions
                 foreach (IPlayer player in players)
                 {
                     if (player.Exists && player != client)
-                        await player.EmitAsync("ONU_BlesseCalled", client.Id, "INCONNU", JsonConvert.SerializeObject(await client.GetPositionAsync()));
+                        await player.EmitAsync("ONU_BlesseCalled", client, "INCONNU", JsonConvert.SerializeObject(await client.GetPositionAsync()));
                 }
             }
             await client.EmitAsync("ONU_Callback", ServicePlayerList.Count);
@@ -158,12 +158,12 @@ namespace ResurrectionRP_Server.Factions
             EmergencyCall result = EmergencyCalls.FindLast(b => (b.player.Id == victim.Id));
             if (result != null && result.Taken == true)
             {
-                client.Emit("ONU_BlesseCallTaken", victim.Id);
+                client.Emit("ONU_BlesseCallTaken", victim);
                 return;
             }
 
             EmergencyCalls.FindLast(b => (b.player.Id == victim.Id))?.TakeCall();
-            client.Emit("ONU_ImAccept", victim.Id);
+            client.Emit("ONU_IAccept_Client", victim);
 
             var players =  GetEmployeeOnline();
 
@@ -172,7 +172,7 @@ namespace ResurrectionRP_Server.Factions
                 foreach (IPlayer medic in players)
                 {
                     if (medic.Exists && medic != client)
-                        medic.Emit("ONU_BlesseCalled_Accepted", victim.Id, client.GetPlayerHandler()?.Identite.Name);
+                        medic.Emit("ONU_BlesseCalled_Accepted", victim, client.GetPlayerHandler()?.Identite.Name);
                 }
             }
             await victim.EmitAsync("ONU_CallbackAccept");

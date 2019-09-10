@@ -235,10 +235,10 @@ namespace ResurrectionRP_Server.Factions
                     {
                         FactionPlayerList[socialClub].LastPayCheck = (DateTime.Now).AddMinutes(PayCheckMinutes);
                         ph.BankAccount.AddMoney(salaire, $"Salaire {FactionName}");
-                        await ph.Client.NotifyAsync($"Vous avez touché votre salaire ~g~${salaire}~w~.");
+                        ph.Client.SendNotification($"Vous avez touché votre salaire ~g~${salaire}~w~.");
                     }
                     else
-                        await ph.Client.SendNotificationError("Vous n'avez pas reçu votre salaire, les caisses sont vide!");
+                        ph.Client.SendNotificationError("Vous n'avez pas reçu votre salaire, les caisses sont vide!");
                 }
             }
         }
@@ -251,14 +251,14 @@ namespace ResurrectionRP_Server.Factions
             bool add = FactionPlayerList.TryAdd(client.GetSocialClub(), new FactionPlayer(client.GetSocialClub(), rang));
             if (add)
             {
-                await client.NotifyAsync($"Vous êtes désormais membre de {FactionName}");
+                client.SendNotification($"Vous êtes désormais membre de {FactionName}");
                 await client.GetPlayerHandler()?.Update();
                 await UpdateDatabase();
                 await PlayerFactionAdded(client);
             }
             else if (FactionPlayerList.ContainsKey(client.GetSocialClub()))
             {
-                await client.SendNotificationError($"Vous êtes déjà dans la faction {FactionName}");
+                client.SendNotificationError($"Vous êtes déjà dans la faction {FactionName}");
             }
             return add;
         }
@@ -278,13 +278,13 @@ namespace ResurrectionRP_Server.Factions
             await MenuManager.CloseMenu(client);
             if (ServicePlayerList.Contains(client.GetSocialClub()))
             {
-                await client.SendNotificationSuccess("Vous avez quitté votre service");
+                client.SendNotificationSuccess("Vous avez quitté votre service");
                 ServicePlayerList.Remove(client.GetSocialClub());
                 await OnPlayerServiceQuit(client, GetRangPlayer(client));
             }
             else
             {
-                await client.SendNotificationSuccess("Vous avez pris votre service");
+                client.SendNotificationSuccess("Vous avez pris votre service");
                 FactionPlayerList[client.GetSocialClub()].LastPayCheck = (DateTime.Now).AddMinutes(PayCheckMinutes);
                 ServicePlayerList.Add(client.GetSocialClub());
                 await OnPlayerServiceEnter(client, GetRangPlayer(client));

@@ -165,14 +165,14 @@ namespace ResurrectionRP_Server.Society
         public virtual async Task PriseService(IPlayer client)
         {
             InService.Add(client.GetSocialClub());
-            await client.SendNotificationSuccess("Vous avez pris votre service");
+            client.SendNotificationSuccess("Vous avez pris votre service");
         }
 
         public virtual async Task QuitterService(IPlayer client)
         {
             InService.Remove( client.GetSocialClub());
             client.GetPlayerHandler()?.Character?.ApplyCharacter(client);
-            await client.SendNotificationSuccess("Vous avez quitté votre service");
+            client.SendNotificationSuccess("Vous avez quitté votre service");
         }
 
         public virtual async Task<bool> IsEmployee(IPlayer client)

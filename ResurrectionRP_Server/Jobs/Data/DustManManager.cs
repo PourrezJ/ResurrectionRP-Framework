@@ -36,9 +36,9 @@ namespace ResurrectionRP_Server.Jobs
         public async Task Init()
         {
             AltAsync.OnClient("Jobs_Dustman_Depot", this.onDepot);
-            await this.DustManClient.SendNotificationSuccess($"Vous devez vous rendre dans la zone de ~g~{this.Zone.NameZone}~w~.");
+            this.DustManClient.SendNotificationSuccess($"Vous devez vous rendre dans la zone de ~g~{this.Zone.NameZone}~w~.");
             if (GameMode.Instance.IsDebug)
-            await this.DustManClient.SetWaypoint(this.Zone.ZonePosition, true);
+            this.DustManClient.SetWaypoint(this.Zone.ZonePosition, true);
             await this.DustManClient.EmitAsync("Jobs_Dustman", JsonConvert.SerializeObject(this.Zone.ZonePosition), JsonConvert.SerializeObject(this.Zone.TrashList));
         }
 
@@ -48,7 +48,7 @@ namespace ResurrectionRP_Server.Jobs
                 return;
             this.depotColShape = Alt.CreateColShapeCircle(this.DepotZone, 8);
             AltAsync.OnColShape += this.onEnterColShape;
-            await client.SetWaypoint(this.DepotZone);
+            client.SetWaypoint(this.DepotZone);
         }
 
         public async Task onEnterColShape(IColShape colShape, IEntity entity, bool state)
@@ -59,8 +59,8 @@ namespace ResurrectionRP_Server.Jobs
             if(state && this.depotInProgress == false)
             {
                 this.depotInProgress = true;
-                await client.SendNotificationSuccess("Génial ! Restez ici pour vider votre camion !");
-                await client.DisplayHelp("Déchargement de la remorque en cours, veuillez patenter! ", 30000);
+                client.SendNotificationSuccess("Génial ! Restez ici pour vider votre camion !");
+                client.DisplayHelp("Déchargement de la remorque en cours, veuillez patenter! ", 30000);
                 this.timer = Utils.Utils.Delay(30000, false, async () =>
                 {
                     if (!depotInProgress)
@@ -71,15 +71,15 @@ namespace ResurrectionRP_Server.Jobs
                             this.ProgressState++;
                             break;
                         case 1:
-                            await client.DisplayHelp("On décharge ! Attendez encore un peu ! ", 30000);
+                            client.DisplayHelp("On décharge ! Attendez encore un peu ! ", 30000);
                             this.ProgressState++;
                             break;
                         case 2:
-                            await client.DisplayHelp("On y est presque, un p'tit peu plus, et vous êtes libre ! ", 30000);
+                            client.DisplayHelp("On y est presque, un p'tit peu plus, et vous êtes libre ! ", 30000);
                             this.ProgressState++;
                             break;
                         default:
-                            await client.DisplayHelp("~g~C'est bon! ~w~Tu es libre ! ", 10000);
+                            client.DisplayHelp("~g~C'est bon! ~w~Tu es libre ! ", 10000);
                             this.ProgressState = 0;
                             this.timer.Stop();
                             this.timer = null;
@@ -93,7 +93,7 @@ namespace ResurrectionRP_Server.Jobs
                 if(depotInProgress)
                 {
                     this.depotInProgress = false;
-                    await client.SendNotificationError("Vous aviez pour mission de rester ici, revenez !");
+                    client.SendNotificationError("Vous aviez pour mission de rester ici, revenez !");
                 }
             }
                 

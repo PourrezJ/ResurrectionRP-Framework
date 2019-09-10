@@ -77,11 +77,11 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                     if (licenceStr == "")
                         licenceStr = "La personne n'a aucune license!";
-                    await TargetClient.NotifyAsync(licenceStr);
+                    TargetClient.SendNotification(licenceStr);
                     break;
 
                 case "ID_ShowPassport":
-                    await TargetClient.NotifyAsync($"Nom: {ph.Identite.LastName} <br/>Prenom: {ph.Identite.FirstName}<br/>Age: {ph.Identite.Age}");
+                    TargetClient.SendNotification($"Nom: {ph.Identite.LastName} <br/>Prenom: {ph.Identite.FirstName}<br/>Age: {ph.Identite.Age}");
                     break;
 
                 case "ID_GiveMoney":
@@ -102,17 +102,17 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (await HasMoney(money))
                     {
                         await TargetHandler.AddMoney(money);
-                        await Client.SendNotificationSuccess($"Vous avez donné la somme de ${money}.");
-                        await TargetClient.SendNotificationSuccess($"On vous a donné la somme de ${money}.");
+                        Client.SendNotificationSuccess($"Vous avez donné la somme de ${money}.");
+                        TargetClient.SendNotificationSuccess($"On vous a donné la somme de ${money}.");
                     }
                     else
                     {
-                        await Client.SendNotificationError("Vous n'avez pas la somme demandée.");
+                        Client.SendNotificationError("Vous n'avez pas la somme demandée.");
                     }
 
                     break;
                 case "ID_SearchInventory":
-                    await TargetClient.NotifyAsync("Quelqu'un fouille vos poches");
+                    TargetClient.SendNotification("Quelqu'un fouille vos poches");
                     var invmenu = new Inventory.RPGInventoryMenu(TargetHandler.PocketInventory, TargetHandler.OutfitInventory, TargetHandler.BagInventory);
                     invmenu.OnMove += async (p, m) =>
                     {
@@ -144,7 +144,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         if (vehicle != null)
                         {
                             if (vehicle.LockState == AltV.Net.Enums.VehicleLockState.Locked)
-                                await Client.SendNotificationError("Le véhicule est fermé");
+                                Client.SendNotificationError("Le véhicule est fermé");
                             else
                             {
                                 VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get(vehicle.Model);
@@ -152,11 +152,11 @@ namespace ResurrectionRP_Server.Entities.Players
                                 if (manifest != null)
                                     TargetClient.Emit("TrySetPlayerIntoVehicle", vehicle);
                                 else
-                                    await Client.SendNotificationError("Impossible de le mettre dans ce véhicule");
+                                    Client.SendNotificationError("Impossible de le mettre dans ce véhicule");
                             }
                         }
                         else
-                            await Client.SendNotificationError("Aucun véhicule proche de vous");
+                            Client.SendNotificationError("Aucun véhicule proche de vous");
                     }
                     break;
                 /*

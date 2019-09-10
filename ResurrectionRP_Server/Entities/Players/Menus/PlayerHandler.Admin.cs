@@ -71,8 +71,8 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     AdminRank rang = (AdminRank)((ListItem)menu.Items["ID_Rang"]).SelectedItem;
                     _playerSelected.StaffRank = rang;
-                    await _playerSelected.Client.NotifyAsync($"Vous êtes désormais {rang}");
-                    await client.NotifyAsync($"Vous avez mis au rang: {rang} {_playerSelected.Identite.Name}");
+                    _playerSelected.Client.SendNotification($"Vous êtes désormais {rang}");
+                    client.SendNotification($"Vous avez mis au rang: {rang} {_playerSelected.Identite.Name}");
                     await _playerSelected.Update();
                 };
 
@@ -178,11 +178,11 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (veh != null)
                 {    
                     await veh.SetLockStateAsync(veh.LockState == VehicleLockState.Locked ? VehicleLockState.Unlocked : VehicleLockState.Locked);
-                    await client.SendNotificationSuccess($"Vous venez {(veh.LockState == VehicleLockState.Locked ? "de fermer" : "d'ouvrir")} le véhicule {veh.NumberplateText}");
+                    client.SendNotificationSuccess($"Vous venez {(veh.LockState == VehicleLockState.Locked ? "de fermer" : "d'ouvrir")} le véhicule {veh.NumberplateText}");
                     //LogManager.Log($"~r~[ADMIN]~w~ {client.Name} viens d'ouvrir ou fermer " + VehiclesManager.GetNearestVehicle(client).NumberPlate);
                 }
                 else
-                    await client.SendNotificationError("Aucun véhicule a votre portée.");
+                    client.SendNotificationError("Aucun véhicule a votre portée.");
             };
             mainMenu.Add(vehunlock);
             #endregion
@@ -204,7 +204,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 playerpos.X = playerpos.X + 1f;
                 await _playerSelected.Client.SetPositionAsync(playerpos);
                 await _playerSelected.Client.SetDimensionAsync(await Client.GetDimensionAsync());
-                await Client.SendNotificationSuccess($"{_playerSelected.Identite.Name} viens d'être téléporté sur vous");
+                Client.SendNotificationSuccess($"{_playerSelected.Identite.Name} viens d'être téléporté sur vous");
             };
             mainMenu.Add(tptome);
             #endregion
@@ -215,7 +215,7 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 await Client.SetPositionAsync(await _playerSelected.Client.GetPositionAsync());
                 await Client.SetDimensionAsync(await _playerSelected.Client.GetDimensionAsync());
-                await Client.SendNotificationSuccess($"vous venez d'être téléporté sur {_playerSelected.Identite.Name}");
+                Client.SendNotificationSuccess($"vous venez d'être téléporté sur {_playerSelected.Identite.Name}");
             };
             mainMenu.Add(tpme);
             #endregion
@@ -232,7 +232,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 if (Enum.TryParse(name, true, out WeaponHash hash) == false)
                 {
-                    await client.SendNotificationError($"Weapon {menuItem.InputValue} is invalid!");
+                    client.SendNotificationError($"Weapon {menuItem.InputValue} is invalid!");
                     return;
                 }
 
@@ -253,7 +253,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 if (Enum.TryParse(name, true, out PedModel hash) == false)
                 {
-                    await client.SendNotificationError($"Ped {menuItem.InputValue} is invalid!");
+                    client.SendNotificationError($"Ped {menuItem.InputValue} is invalid!");
                     return;
                 }
 
@@ -266,7 +266,7 @@ namespace ResurrectionRP_Server.Entities.Players
             var killitem = new MenuItem("Kill", "", "", true);
             killitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                await client.SendNotificationSuccess($"Vous venez de tuer {_playerSelected.Identite.Name}.");
+                client.SendNotificationSuccess($"Vous venez de tuer {_playerSelected.Identite.Name}.");
                 await _playerSelected.Client.SetHealthAsync(0);
             };
             mainMenu.Add(killitem);
@@ -277,7 +277,7 @@ namespace ResurrectionRP_Server.Entities.Players
             kickitem.SetInput("", 99, InputType.Text);
             kickitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                await client.SendNotificationSuccess($"Vous venez de kick {_playerSelected.Identite.Name}.");
+                client.SendNotificationSuccess($"Vous venez de kick {_playerSelected.Identite.Name}.");
                 await _playerSelected.Client.KickAsync(menuItem.InputValue);
             };
             mainMenu.Add(kickitem);
@@ -289,7 +289,7 @@ namespace ResurrectionRP_Server.Entities.Players
             banitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 if(string.IsNullOrEmpty(menuItem.InputValue)) return;
-                await client.SendNotificationSuccess($"Vous venez de ban {_playerSelected.Identite.Name}.");
+                client.SendNotificationSuccess($"Vous venez de ban {_playerSelected.Identite.Name}.");
                 await BanManager.BanPlayer(_playerSelected.Client, menuItem.InputValue, new DateTime(2031, 1, 1));
                 // TODO ajouter contacte API
             };
@@ -306,7 +306,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (double.TryParse(menuItem.InputValue, out money) && money > 0)
                 {
                     await _playerSelected.AddMoney(money);
-                    await client.SendNotificationSuccess($"Vous venez de donner {money} à {_playerSelected.Identite.Name}");
+                    client.SendNotificationSuccess($"Vous venez de donner {money} à {_playerSelected.Identite.Name}");
                 }
             };
             mainMenu.Add(moneyitem);
@@ -322,7 +322,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (double.TryParse(menuItem.InputValue, out money) && money > 0)
                 {
                     if (await _playerSelected.HasMoney(money))
-                        await client.SendNotificationSuccess($"Vous venez de retirer ${money} à {_playerSelected.Identite.Name}");
+                        client.SendNotificationSuccess($"Vous venez de retirer ${money} à {_playerSelected.Identite.Name}");
                 }
             };
             mainMenu.Add(delmoneyitem);
@@ -360,7 +360,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (manifest == null)
                     {
-                        await client.SendNotificationError($"véhicule inconnu : {name}");
+                        client.SendNotificationError($"véhicule inconnu : {name}");
                         return;
                     }
 
@@ -368,12 +368,12 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (vehicle != null)
                     {
-                        await _playerSelected.Client.SetPlayerIntoVehicle(vehicle.Vehicle);
+                        _playerSelected.Client.SetPlayerIntoVehicle(vehicle.Vehicle);
                         _playerSelected.ListVehicleKey.Add(new VehicleKey(manifest.DisplayName, vehicle.Plate));
                         //LogManager.Log($"~r~[ADMIN]~w~ {client.Name} a spawn le véhicule {_vehs.Model} {_vehs.Plate}");
                     }
                     else
-                        await client.SendNotificationError("Il y a une erreur avec le véhicule demandé.");
+                        client.SendNotificationError("Il y a une erreur avec le véhicule demandé.");
                 }
                 catch (Exception ex)
                 {
@@ -400,7 +400,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (manifest == null)
                     {
-                        await client.SendNotificationError($"véhicule inconnu : {name}");
+                        client.SendNotificationError($"véhicule inconnu : {name}");
                         return;
                     }
 
@@ -408,14 +408,14 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (vehicle != null)
                     {
-                        await _playerSelected.Client.SetPlayerIntoVehicle(vehicle.Vehicle);
+                        _playerSelected.Client.SetPlayerIntoVehicle(vehicle.Vehicle);
                         await vehicle.InsertVehicle();
                         _playerSelected.ListVehicleKey.Add(new VehicleKey(manifest.DisplayName, vehicle.Plate));
                         //LogManager.Log($"~r~[ADMIN]~w~ {client.Name} a spawn le véhicule {_vehs.Model} {_vehs.Plate}");
                     }
                     else
                     {
-                        await client.SendNotificationError("Il y a une erreur avec le véhicule demandé.");
+                        client.SendNotificationError("Il y a une erreur avec le véhicule demandé.");
                     }
                 }
                 catch (Exception ex)
@@ -433,11 +433,11 @@ namespace ResurrectionRP_Server.Entities.Players
                 VehicleHandler vehicle = (await VehiclesManager.GetNearestVehicle(client)).GetVehicleHandler();
 
                 if (vehicle == null)
-                    await client.SendNotificationError("Aucun véhicule a proximité");
+                    client.SendNotificationError("Aucun véhicule a proximité");
                 else if (await vehicle.Delete(true))
-                    await client.SendNotificationSuccess($"Véhicule ~r~{vehicle.Plate}~w~ supprimé...");
+                    client.SendNotificationSuccess($"Véhicule ~r~{vehicle.Plate}~w~ supprimé...");
                 else
-                    await client.SendNotificationError($"Erreur de suppression du véhicule");
+                    client.SendNotificationError($"Erreur de suppression du véhicule");
             };
 
             mainMenu.Add(deletepermvehitem);
@@ -450,11 +450,11 @@ namespace ResurrectionRP_Server.Entities.Players
                 VehicleHandler vehicle = (await VehiclesManager.GetNearestVehicle(client)).GetVehicleHandler();
 
                 if (vehicle == null)
-                    await client.SendNotificationError("Aucun véhicule a proximité");
+                    client.SendNotificationError("Aucun véhicule a proximité");
                 else if (await vehicle.Delete(false))
-                    await client.SendNotificationSuccess($"Véhicule ~r~{vehicle.Plate}~w~ supprimé...");
+                    client.SendNotificationSuccess($"Véhicule ~r~{vehicle.Plate}~w~ supprimé...");
                 else
-                    await client.SendNotificationError($"Erreur de suppression du véhicule");
+                    client.SendNotificationError($"Erreur de suppression du véhicule");
             };
 
             mainMenu.Add(deletevehitem);
@@ -468,7 +468,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 if (vehicle == null)
                 {
-                    await client.SendNotificationError("Aucun véhicule a proximité");
+                    client.SendNotificationError("Aucun véhicule a proximité");
                     return;
                 }
                 else
@@ -478,7 +478,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (vehfourriere.SpawnVeh)
                         return;
 
-                    await client.NotifyAsync($"Véhicule ~r~{vehfourriere.Plate} ~w~ mis en fourrière...");
+                    client.SendNotification($"Véhicule ~r~{vehfourriere.Plate} ~w~ mis en fourrière...");
                     // await GameMode.Instance.PoundManager.AddVehicleInPound(vehfourriere);
                 }
             };

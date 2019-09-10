@@ -44,23 +44,22 @@ namespace ResurrectionRP_Server
 
 
 
-        public static void SetClothAsync(this IPlayer client, ClothSlot level, int drawable, int texture, int palette)
+        public static void SetCloth(this IPlayer client, ClothSlot level, int drawable, int texture, int palette)
         {
             client.EmitLocked("ComponentVariation", (int)level, drawable, texture, palette);
         }
 
-        public async static Task SetPropAsync(this IPlayer client, PropSlot slot, PropData item)
+        public static void SetProp(this IPlayer client, PropSlot slot, PropData item)
         {
-            await Task.Run(() =>
-                client.Emit("PropVariation", (int)slot, item.Drawable, item.Texture));
+            client.EmitLocked("PropVariation", (int)slot, item.Drawable, item.Texture);
         }
-        public async static Task SetWaypoint(this IPlayer client, Vector3 pos, bool overrideOld = true) => 
-            await client.EmitAsync("SetWaypoint", pos.X, pos.Y, overrideOld);
+        public static void SetWaypoint(this IPlayer client, Vector3 pos, bool overrideOld = true) => 
+            client.EmitLocked("SetWaypoint", pos.X, pos.Y, overrideOld);
 
-        public async static Task DisplayHelp(this IPlayer client, string text, int timeMs) =>
-            await client.EmitAsync("Display_Help", text, timeMs);
-        public async static Task DisplaySubtitle(this IPlayer client, string text, int timeMs) =>
-            await client.EmitAsync("Display_subtitle", text, timeMs);
+        public static void DisplayHelp(this IPlayer client, string text, int timeMs) =>
+            client.EmitLocked("Display_Help", text, timeMs);
+        public static void DisplaySubtitle(this IPlayer client, string text, int timeMs) =>
+            client.EmitLocked("Display_subtitle", text, timeMs);
 
         public static PlayerHandler GetPlayerHandler(this IPlayer client)
         {
@@ -83,26 +82,25 @@ namespace ResurrectionRP_Server
         }
 
 
-        public async static Task SendNotification(this IPlayer client, string text)
+        public static void SendNotification(this IPlayer client, string text)
         {
             if (text == "")
                 return;
 
-            await client.EmitAsync("notify", "Notification", text, 7000);
+            client.EmitLocked("notify", "Notification", text, 7000);
         }
-        public async static Task SendNotificationError(this IPlayer client, string text)
+        public static void SendNotificationError(this IPlayer client, string text)
         {
-            await client.EmitAsync("alertNotify", "Erreur", text, 7000);
+            client.EmitLocked("alertNotify", "Erreur", text, 7000);
         }
-        public async static Task SendNotificationSuccess(this IPlayer client, string text)
+        public static void SendNotificationSuccess(this IPlayer client, string text)
         {
-            await client.EmitAsync("successNotify", "Succès", text, 7000);
+            client.EmitLocked("successNotify", "Succès", text, 7000);
         }
 
-        public static async Task SendNotificationPicture(this IPlayer client, Utils.Enums.CharPicture img, string sender, string subject, string message) =>
-            await client.EmitAsync("SetNotificationMessage", img.ToString(), sender, subject, message);
+        public static void SendNotificationPicture(this IPlayer client, Utils.Enums.CharPicture img, string sender, string subject, string message) =>
+            client.EmitLocked("SetNotificationMessage", img.ToString(), sender, subject, message);
 
-        public async static Task NotifyAsync(this IPlayer client, string text) => await client.SendNotification(text);
         public static List<IVehicle> GetVehiclesInRange(this IPlayer client, int Range)
         {
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
@@ -328,11 +326,11 @@ namespace ResurrectionRP_Server
 
         public static void RequestCollisionAtCoords(this IPlayer client, Vector3 pos)
         {
-            client.Emit("RequestCollisionAtCoords", pos.X, pos.Y, pos.Z);
+            client.EmitLocked("RequestCollisionAtCoords", pos.X, pos.Y, pos.Z);
         }
 
-        public static async Task Resurrect(this IPlayer client)
-            => await client.EmitAsync("ResurrectPlayer");
+        public static void Resurrect(this IPlayer client)
+            => client.EmitLocked("ResurrectPlayer");
 
         public static async Task<bool> PlayerHandlerExist(this IPlayer player)
         {
@@ -353,14 +351,14 @@ namespace ResurrectionRP_Server
 
         public static async Task Revive(this IPlayer client)
         {
-            await AltAsync.Do(async () =>
+            await AltAsync.Do(() =>
             {
-                await client.SpawnAsync(new Position(client.GetPosition().X, client.GetPosition().Y, client.GetPosition().Z));
-                await client.SetRotationAsync(client.Rotation);
-                await client.SetHealthAsync(5);
+                client.Spawn(new Position(client.GetPosition().X, client.GetPosition().Y, client.GetPosition().Z));
+                client.Resurrect();
+                client.SetHealthAsync(5);
             });
 
-            await client.Resurrect();
+            
             var ph = client.GetPlayerHandler();
             //if (ph != null)
             //await ph.SetDead(false); TODO
@@ -377,9 +375,9 @@ namespace ResurrectionRP_Server
         public static bool HasVehicleKey(this IPlayer client, string plate)
             => client.GetPlayerHandler().ListVehicleKey.Exists(x => x.Plate == plate);
 
-        public static async Task SetPlayerIntoVehicle(this IPlayer target, IVehicle client)
+        public static void SetPlayerIntoVehicle(this IPlayer target, IVehicle client)
         {
-            await target.EmitAsync("SetPlayerIntoVehicle", client, -1);
+            target.EmitLocked("SetPlayerIntoVehicle", client, -1);
         }
     }
 }

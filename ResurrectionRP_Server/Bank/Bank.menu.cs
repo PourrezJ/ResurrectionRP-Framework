@@ -165,18 +165,18 @@ namespace ResurrectionRP_Server.Bank
 
                 if (! await _bankAccount.GetBankMoney(money, $"Retrait {((_atmType == AtmType.ATM) ? "ATM" : "Banque")}", save: save))
                 {
-                    await client.SendNotificationError("Vous n'avez pas assez d'argent sur ce compte en banque.");
+                    client.SendNotificationError("Vous n'avez pas assez d'argent sur ce compte en banque.");
                     await client.PlaySoundFrontEndFix(-1,"ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
                 }
                 else
                 {
                     await _player.AddMoney(money);
-                    await client.SendNotificationSuccess($"Vous avez retiré ${menuItem.InputValue} sur le compte {_bankAccount.AccountNumber}");
+                    client.SendNotificationSuccess($"Vous avez retiré ${menuItem.InputValue} sur le compte {_bankAccount.AccountNumber}");
                 }
             }
             else
             {
-                await client.SendNotificationError("Problème de saisie.");
+                client.SendNotificationError("Problème de saisie.");
                 await client.PlaySoundFrontEndFix(-1,"ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
             }
 
@@ -190,17 +190,17 @@ namespace ResurrectionRP_Server.Bank
             {
                 if (!await _player.HasMoney(somme))
                 {
-                    await client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
+                    client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
                 }
                 else
                 {
                     _bankAccount.AddMoney(somme, $"Dépôt {((_atmType == AtmType.ATM) ? "ATM" : "Banque")}", true);
-                    await client.SendNotificationSuccess($"Vous avez déposé ${menuItem.InputValue} sur le compte {_bankAccount.AccountNumber}");
+                    client.SendNotificationSuccess($"Vous avez déposé ${menuItem.InputValue} sur le compte {_bankAccount.AccountNumber}");
                 }
             }
             else
             {
-                await client.SendNotificationError("Problème de saisie.");
+                client.SendNotificationError("Problème de saisie.");
                 await client.PlaySoundFrontEndFix(-1, "ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
             }
 
@@ -208,9 +208,10 @@ namespace ResurrectionRP_Server.Bank
                 await menu.CloseMenu(client);
         }
 
-        private async Task OnTransfertItem(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private Task OnTransfertItem(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            await client.SendNotificationError("Pas encore implanté, S00N!");
+            client.SendNotificationError("Pas encore implanté, S00N!");
+            return Task.CompletedTask;
         }
         #endregion
     }

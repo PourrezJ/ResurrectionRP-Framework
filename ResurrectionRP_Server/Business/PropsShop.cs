@@ -115,14 +115,15 @@ namespace ResurrectionRP_Server.Businesses
                 await MenuManager.CloseMenu(client);
         }
 
-        private async Task MenuClose(IPlayer client, Menu menu)
+        private Task MenuClose(IPlayer client, Menu menu)
         {
             var ph = client.GetPlayerHandler();
 
             if (ph == null)
-                return;
+                return Task.CompletedTask;
 
-            await ph.Clothing.UpdatePlayerClothing();
+            ph.Clothing.UpdatePlayerClothing();
+            return Task.CompletedTask;
         }
         #endregion
 
@@ -169,7 +170,7 @@ namespace ResurrectionRP_Server.Businesses
             }
             else
             {
-                await client.SendNotificationError("Vous n'êtes pas autorisé à utiliser la boutique de vêtements avec ce skin.");
+                client.SendNotificationError("Vous n'êtes pas autorisé à utiliser la boutique de vêtements avec ce skin.");
             }
 
 
@@ -327,30 +328,31 @@ namespace ResurrectionRP_Server.Businesses
             {
                 if (await ph.AddItem(item, 1))
                 {
-                    await client.SendNotificationSuccess($"Vous avez acheté {menuItem.Text} pour la somme de ${price}");
+                    client.SendNotificationSuccess($"Vous avez acheté {menuItem.Text} pour la somme de ${price}");
                     await ph.Update();
                 }
                 else
-                    await client.SendNotificationError("Vous n'avez pas la place pour cette élément.");
+                    client.SendNotificationError("Vous n'avez pas la place pour cette élément.");
             }
             else
-                await client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque.");
+                client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque.");
         }
         #endregion
 
-        private async Task OnCurrentItem(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        private Task OnCurrentItem(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
             try
             {
                 byte compomentID = menu.GetData("compomentID");
                 int drawable = menuItem.GetData("drawable");
                 int variation = menuItem.GetData("variation");
-                await client.SetPropAsync((PropSlot)compomentID, new PropData(drawable, variation));
+                client.SetProp((PropSlot)compomentID, new PropData(drawable, variation));
             }
             catch (Exception ex)
             {
                 Alt.Server.LogError("OnCurrentItem" + ex);
             }
+            return Task.CompletedTask;
         }
     }
 }

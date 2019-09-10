@@ -18,7 +18,7 @@ namespace ResurrectionRP_Server.Businesses
 
             if (fuelpump == null)
             {
-                await client.SendNotificationError("Cette pompe est hors service.");
+                client.SendNotificationError("Cette pompe est hors service.");
                 return;
             }
 
@@ -30,7 +30,7 @@ namespace ResurrectionRP_Server.Businesses
             var VehicleList = fuelpump.StationPos.GetPlayersInRange( fuelpump.Range);
             if (VehicleList.Count <= 0)
             {
-                await client.SendNotificationError("Aucun véhicule près de la pompe.");
+                client.SendNotificationError("Aucun véhicule près de la pompe.");
                 return;
             }
 
@@ -60,12 +60,12 @@ namespace ResurrectionRP_Server.Businesses
                     {
                         await vh.SetFuel(vh.FuelMax);
                         BankAccount.AddMoney(price, $"Plein du véhicule {vh.Plate}", false);
-                        await client.SendNotificationSuccess($"Vous avez fait le plein dans le véhicule pour la somme de ${price}");
+                        client.SendNotificationSuccess($"Vous avez fait le plein dans le véhicule pour la somme de ${price}");
                         await Update();
                     }
                     else
                     {
-                        await client.SendNotificationError("Vous n'avez pas assez d'argent en banque.");
+                        client.SendNotificationError("Vous n'avez pas assez d'argent en banque.");
                     }
                     await MenuManager.CloseMenu(client);
                 }
@@ -88,7 +88,7 @@ namespace ResurrectionRP_Server.Businesses
                 {
                     if (_ravitaillement || _utilisateurRavi != null)
                     {
-                        await client.DisplayHelp("Il y a déjà un ravitaillement en cours !", 15000);
+                        client.DisplayHelp("Il y a déjà un ravitaillement en cours !", 15000);
                         return;
                     }
                     _utilisateurRavi = client;
@@ -102,7 +102,7 @@ namespace ResurrectionRP_Server.Businesses
                         currentmax = LitrageMax;
 
                     //API.Shared.OnProgressBar(client, true, 0, currentmax, 750);
-                    await client.DisplayHelp("Le ravitaillement vient de démarrer.\n Patientez", 15000);
+                    client.DisplayHelp("Le ravitaillement vient de démarrer.\n Patientez", 15000);
                     while (_ravitaillement)
                     {
                         await Task.Delay(750);
@@ -110,7 +110,7 @@ namespace ResurrectionRP_Server.Businesses
                         fueltruck.SetData("RefuelRaffine", currentmax - 1);
                         if (Litrage >= LitrageMax)
                         {
-                            await client.DisplayHelp("~r~[Abandon] Le réservoir de la station est plein!", 15000);
+                            client.DisplayHelp("~r~[Abandon] Le réservoir de la station est plein!", 15000);
                             //API.Shared.OnProgressBar(client, false);
                             _ravitaillement = false;
                             _utilisateurRavi = null;
@@ -119,7 +119,7 @@ namespace ResurrectionRP_Server.Businesses
 
                         if (currentmax <= 0)
                         {
-                            await client.DisplayHelp("Ravitaillement terminé, merci !", 15000);
+                            client.DisplayHelp("Ravitaillement terminé, merci !", 15000);
                             //API.Shared.OnProgressBar(client, false);
                             _ravitaillement = false;
                             _utilisateurRavi = null;
@@ -131,7 +131,7 @@ namespace ResurrectionRP_Server.Businesses
                 }
                 else
                 {
-                    await client.DisplayHelp("Impossible, votre citerne est vide !", 15000);
+                    client.DisplayHelp("Impossible, votre citerne est vide !", 15000);
                     return;
                 }
             }

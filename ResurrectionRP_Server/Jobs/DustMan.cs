@@ -165,17 +165,17 @@ namespace ResurrectionRP_Server.Jobs
             await base.Load();
         }
 
-        public override async Task OnPlayerEnterVehicleJob(IVehicle vehicle, IPlayer client, byte seat)
+        public override Task OnPlayerEnterVehicleJob(IVehicle vehicle, IPlayer client, byte seat)
         {
-            if (await IsInService(client) && seat == 1)
+            if (IsInService(client) && seat == 1)
             {
                 if (!client.Exists || !vehicle.Exists)
-                    return;
+                    return Task.CompletedTask;
 
                 foreach (KeyValuePair<DustManManager, VehicleHandler> item in TrashVehiclesList)
                 {
                     if (item.Key.DustManClient == client)
-                        return;
+                        return Task.CompletedTask;
                 }
 
                 //TrashZoneList[Utils.Utils.RandomNumber(TrashZoneList.Count)]
@@ -183,6 +183,8 @@ namespace ResurrectionRP_Server.Jobs
                 TrashVehiclesList.TryAdd(DustManmanager, vehicle.GetVehicleHandler());
                 //await client.EmitAsync("Jobs_Dustman", "Init", vehicle.Id, TrashZoneList[Utils.Utils.RandomNumber(TrashZoneList.Count)], _depotZone);
             }
+
+            return Task.CompletedTask;
         }
 
         private async Task DustMan_Callback(object[] args)

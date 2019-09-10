@@ -122,12 +122,12 @@ namespace ResurrectionRP_Server.Models
                     }
                     else
                     {
-                        await client.SendNotificationError("Action impossible.");
+                        client.SendNotificationError("Action impossible.");
                     }
                 }
                 else
                 {
-                    await client.SendNotificationError("Vous n'avez pas la place.");
+                    client.SendNotificationError("Vous n'avez pas la place.");
                 }
             }
         }

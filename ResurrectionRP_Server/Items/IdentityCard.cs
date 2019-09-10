@@ -12,7 +12,7 @@ namespace ResurrectionRP_Server.Items
         {
         }
 
-        public override async Task Use(IPlayer client, string inventoryType, int slot)
+        public override Task Use(IPlayer client, string inventoryType, int slot)
         {
             Models.Identite identite = client.GetPlayerHandler().Identite;
 
@@ -24,9 +24,9 @@ namespace ResurrectionRP_Server.Items
                     $"~r~Âge: ~w~{identite.Age} \n" +
                     $"~r~Nationalité: ~w~{identite.Nationalite}";
 
-                await player.Client.SendNotification("Carte d'identité\n" + paper);
+                player.Client.SendNotification("Carte d'identité\n" + paper);
             }
-
+            return Task.CompletedTask;
         }
     }
 }

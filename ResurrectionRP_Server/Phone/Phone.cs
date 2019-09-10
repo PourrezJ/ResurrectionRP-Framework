@@ -88,7 +88,7 @@ namespace ResurrectionRP_Server.Phone
                 if (_client != null)
                 {
                     string contactName = GetNameForNumber(receiver);
-                    await _client.NotifyAsync("Message bien envoyé " + ("à ~b~~h~" + contactName ?? "au ~b~~h~" + receiver));
+                    _client.SendNotification("Message bien envoyé " + ("à ~b~~h~" + contactName ?? "au ~b~~h~" + receiver));
                     await _client.PlaySoundFrontEndFix(-1, "MP_5_SECOND_TIMER", "HUD_FRONTEND_DEFAULT_SOUNDSET");
                 }
 
@@ -112,7 +112,7 @@ namespace ResurrectionRP_Server.Phone
                 return;
 
             string contactName = GetNameForNumber(phoneNumber);
-            await _client.NotifyAsync("Nouveau message de ~b~~h~" + (contactName ?? phoneNumber));
+            _client.SendNotification("Nouveau message de ~b~~h~" + (contactName ?? phoneNumber));
 
             //var receverList = await MP.Players.GetInRangeAsync( _client.GetPosition(), 3f);
             var receverList = _client.GetPlayersInRange(3f);
@@ -162,13 +162,13 @@ namespace ResurrectionRP_Server.Phone
                 }
                 else
                 {
-                    await client.SendNotificationError("Le contact est déjà en communication vocale.");
+                    client.SendNotificationError("Le contact est déjà en communication vocale.");
                     await client.EmitAsync("canceledCall");
                 }
             }
             else
             {
-                await client.SendNotificationError("Le contact n'est actuellement pas disponible");
+                client.SendNotificationError("Le contact n'est actuellement pas disponible");
             }
         }
 
@@ -225,7 +225,7 @@ namespace ResurrectionRP_Server.Phone
         {
             if (await ValidateContact(contactName, contactNumber))
             {
-                await AddNameToAddressBook(client, contactName, contactNumber, message);
+                AddNameToAddressBook(client, contactName, contactNumber, message);
                 return true;
             }
             return false;
@@ -244,8 +244,8 @@ namespace ResurrectionRP_Server.Phone
                 Address foundAddress = AddressBook.Find(address => address.phoneNumber == originalNumber);
                 if (foundAddress.phoneNumber != null && foundAddress.phoneNumber != "")
                 {
-                    await RemoveContactFromAddressBook(originalNumber);
-                    await AddNameToAddressBook(client, contactName, contactNumber);
+                    RemoveContactFromAddressBook(originalNumber);
+                    AddNameToAddressBook(client, contactName, contactNumber);
 
                     await client.EmitAsync("ContactEdited");
                     return true;
@@ -269,25 +269,25 @@ namespace ResurrectionRP_Server.Phone
             {
                 if (name.Length == 0)
                 {
-                    await _client.SendNotificationError("Le nom du contact ne peut être vide!");
+                    _client.SendNotificationError("Le nom du contact ne peut être vide!");
                     return false;
                 }
 
                 if (number.Length != 9)
                 {
-                    await _client.SendNotificationError("Le numéro de téléphone doit comporter 9 chiffres!");
+                    _client.SendNotificationError("Le numéro de téléphone doit comporter 9 chiffres!");
                     return false;
                 }
 
                 if (name.Length > 17)
                 {
-                    await _client.SendNotificationError("Le nom ne peut pas être plus long que 17 caractères!");
+                    _client.SendNotificationError("Le nom ne peut pas être plus long que 17 caractères!");
                     return false;
                 }
 
                 if (!edit && HasContactForNumber(number))
                 {
-                    await _client.SendNotificationError("Vous avez déjà un contact pour le numéro " + number);
+                    _client.SendNotificationError("Vous avez déjà un contact pour le numéro " + number);
                     return false;
                 }
             }
@@ -299,20 +299,20 @@ namespace ResurrectionRP_Server.Phone
         /// </summary>
         /// <param name="name">Contact name</param>
         /// <param name="number">Contact number</param>
-        public async Task AddNameToAddressBook(IPlayer client, String name, String number, bool message = false)
+        public void AddNameToAddressBook(IPlayer client, String name, String number, bool message = false)
         {
             AddressBook.Add(new Address() { contactName = name, phoneNumber = number });
             if (message)
-                await client?.SendNotificationSuccess("Contact Ajouté!!");
+                client.SendNotificationSuccess("Contact Ajouté!!");
 
-            client?.Emit("ContactEdited");
+            client.Emit("ContactEdited");
         }
 
         /// <summary>
         /// Removes a contact from address book
         /// </summary>
         /// <param name="number">Contact number</param>
-        public async Task<bool> RemoveContactFromAddressBook(string number)
+        public bool RemoveContactFromAddressBook(string number)
         {
             int indexToRemove = -1;
             for (int i = 0; i < AddressBook.Count; i++)
@@ -335,9 +335,9 @@ namespace ResurrectionRP_Server.Phone
             return false;
         }
 
-        public async Task SendContactListToClient(IPlayer client)
+        public void SendContactListToClient(IPlayer client)
         {
-            await client.EmitAsync("ContactReturned", JsonConvert.SerializeObject(AddressBook));
+            client.EmitLocked("ContactReturned", JsonConvert.SerializeObject(AddressBook));
         }
 
         #endregion

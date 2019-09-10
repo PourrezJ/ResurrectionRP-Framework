@@ -31,18 +31,18 @@ namespace ResurrectionRP_Server.Factions
                 {
                     if (await c.GetPlayerHandler().HasBankMoney(healprice, "Soin Hospital"))
                     {
-                        await c.SetHealthAsync(100);
+                        c.Health = 100;
                         c.GetPlayerHandler().PlayerSync.Injured = false;
-                        await c.SendNotificationSuccess("Voilà qui est fait!");
+                        c.SendNotificationSuccess("Voilà qui est fait!");
                     }
                     else
                     {
-                        await c.SendNotificationError("Désolé Mr mais la banque refuse le paiement de vos soins.");
+                        c.SendNotificationError("Désolé Mr mais la banque refuse le paiement de vos soins.");
                     }
                 }
                 else
                 {
-                    await c.NotifyAsync("Ne me faites pas perdre mon temps alors!");
+                    c.SendNotification("Ne me faites pas perdre mon temps alors!");
                 }
             });
         }
@@ -91,7 +91,7 @@ namespace ResurrectionRP_Server.Factions
                             Defibrilator defribrilator = defibrilators[InventoryTypes.Pocket][0].Item as Defibrilator;
                             if (defribrilator.Usage >= 3)
                             {
-                                await client.NotifyAsync("Le défibrillateur est décharger.");
+                                client.SendNotification("Le défibrillateur est décharger.");
                                 ph.PocketInventory.Delete(defibrilators[InventoryTypes.Pocket][0], 1);
                             }
                         }
@@ -100,13 +100,13 @@ namespace ResurrectionRP_Server.Factions
                             Defibrilator defribrilator = defibrilators[InventoryTypes.Bag][0].Item as Defibrilator;
                             if (defribrilator.Usage >= 3)
                             {
-                                await client.NotifyAsync("Le défibrillateur est décharger.");
+                                client.SendNotification("Le défibrillateur est décharger.");
                                 ph.BagInventory.Delete(defibrilators[InventoryTypes.Bag][0], 1);
                             }
                         }
                         await _target.Revive();
 
-                        await client.SendNotificationSuccess("Vous avez réanimé le patient.");
+                        client.SendNotificationSuccess("Vous avez réanimé le patient.");
                     }
 
                     break;
@@ -118,7 +118,7 @@ namespace ResurrectionRP_Server.Factions
                             await _target.SetHealthAsync(100);
                         else
                             await _target.SetHealthAsync((ushort)(healthActual + 75));
-                        await client.SendNotificationSuccess("Vous avez appliqué un kit de soin au patient.");
+                        client.SendNotificationSuccess("Vous avez appliqué un kit de soin au patient.");
                     }
                     break;
 
@@ -129,7 +129,7 @@ namespace ResurrectionRP_Server.Factions
                             await _target.SetHealthAsync(100);
                         else
                             await _target.SetHealthAsync(healthActual += 5);
-                        await client.SendNotificationSuccess("Vous avez appliqué un bandage au patient.");
+                        client.SendNotificationSuccess("Vous avez appliqué un bandage au patient.");
                     }
                     break;
             }

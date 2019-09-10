@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.DrivingSchool
 
             this.checkpoint = await AltAsync.CreateCheckpoint(this.PlayerExam, (byte)CheckpointType.Cyclinder2, this.Trajectoire[this.CurrentCheckpoint].Position, 3, 6, new Rgba(255, 255, 255, 128));
             this.colshape = Alt.CreateColShapeCylinder(this.Trajectoire[this.CurrentCheckpoint].Position, 3, 6);
-            await this.PlayerExam.SetWaypoint(this.Trajectoire[this.CurrentCheckpoint].Position);
+            this.PlayerExam.SetWaypoint(this.Trajectoire[this.CurrentCheckpoint].Position);
             this.colshape.SetData("DrivingSchool", true);
 
 
@@ -81,11 +81,11 @@ namespace ResurrectionRP_Server.DrivingSchool
             await AltAsync.EmitAsync(PlayerExam, "DrivingSchool_End", this.id, this.avert);
         }
 
-        private async Task VehicleChecker(IPlayer client, object[] args)
+        private void VehicleChecker(IPlayer client, object[] args)
         {
             if ( (Int64) args[0] > this.Trajectoire[this.CurrentCheckpoint].Speed)
             {
-                await client.SendNotificationError("Votre vitesse est bien trop excessive ! Ralentissez bon sang !");
+                client.SendNotificationError("Votre vitesse est bien trop excessive ! Ralentissez bon sang !");
                 this.avert++;
             }
         }
@@ -97,9 +97,9 @@ namespace ResurrectionRP_Server.DrivingSchool
             if (vehicle != this.VehicleExam.Vehicle)
                 return;
             //await client.SendNotificationPicture("Ok! Maintenant allumer le moteur ~r~(F3) ~w~et rendez-vous au prochain point.", "CHAR_ANDREAS", false, 0, "CHAR_ANDREAS",  "Auto-école");
-            await client.SendNotificationSuccess("Génial, l'instructeur vous fait signe de démarrer le moteur (F3), et de rejoindre le point blanc");
+            client.SendNotificationSuccess("Génial, l'instructeur vous fait signe de démarrer le moteur (F3), et de rejoindre le point blanc");
             await client.EmitAsync("DrivingSchool_Start");
-            AltAsync.OnClient("DrivingSchool_Checker", VehicleChecker);
+            Alt.OnClient("DrivingSchool_Checker", VehicleChecker);
             await NextTraj();
 
             AltAsync.OnColShape += this.onColShape;

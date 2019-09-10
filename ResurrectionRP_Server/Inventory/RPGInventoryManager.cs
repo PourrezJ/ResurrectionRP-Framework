@@ -311,7 +311,7 @@ namespace ResurrectionRP_Server.Inventory
                                     break;
                             }
 
-                            await ph.Clothing.UpdatePlayerClothing();
+                            ph.Clothing.UpdatePlayerClothing();
                             break;
                     }
 
@@ -373,7 +373,7 @@ namespace ResurrectionRP_Server.Inventory
 
                             if (await phDistant.AddItem(invItem.stack.Item, quantity))
                             {
-                                await phDistant.Client.NotifyAsync($"On vous à donner {quantity} {invItem.stack.Item.name}");
+                                phDistant.Client.SendNotification($"On vous à donner {quantity} {invItem.stack.Item.name}");
                                 ph.DeleteItem(slot, inventoryType, quantity);
                             }
 
@@ -384,7 +384,7 @@ namespace ResurrectionRP_Server.Inventory
                                 return;
                             if (await phDistant.AddItem(invItem.stack.Item, quantity))
                             {
-                                await phDistant.Client.NotifyAsync($"On vous à donner {quantity} {invItem.stack.Item.name}");
+                                phDistant.Client.SendNotification($"On vous à donner {quantity} {invItem.stack.Item.name}");
                                 ph.DeleteItem(slot, inventoryType, quantity);
                             }
 
@@ -395,7 +395,7 @@ namespace ResurrectionRP_Server.Inventory
                                 return;
                             if (await phDistant.AddItem(invItem.stack.Item, quantity))
                             {
-                                await phDistant.Client.NotifyAsync($"On vous à donner {quantity} {invItem.stack.Item.name}");
+                                phDistant.Client.SendNotification($"On vous à donner {quantity} {invItem.stack.Item.name}");
                                 ph.DeleteItem(slot, inventoryType, quantity);
                             }
                             break;
@@ -405,7 +405,7 @@ namespace ResurrectionRP_Server.Inventory
                                 return;
                             if (await phDistant.AddItem(invItem.stack.Item, quantity))
                             {
-                                await phDistant.Client.NotifyAsync($"On vous a donné {quantity} {invItem.stack.Item.name}");
+                                phDistant.Client.SendNotification($"On vous a donné {quantity} {invItem.stack.Item.name}");
                                 ph.DeleteItem(slot, inventoryType, quantity);
                             }
 
@@ -498,7 +498,7 @@ namespace ResurrectionRP_Server.Inventory
                                     break;
                             }
 
-                            await ph.Clothing.UpdatePlayerClothing();
+                            ph.Clothing.UpdatePlayerClothing();
 
                             break;
                     }
@@ -613,7 +613,7 @@ namespace ResurrectionRP_Server.Inventory
                                 if (!backpack.InventoryBag.IsEmpty())
                                 {
                                     await menu.CloseMenu(client);
-                                    await client.SendNotificationError("Votre sac n'est pas vide!");
+                                    client.SendNotificationError("Votre sac n'est pas vide!");
                                     return;
                                 }
                             }
@@ -637,7 +637,7 @@ namespace ResurrectionRP_Server.Inventory
                                     }
                                     else
                                     {
-                                        await client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
+                                        client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
                                         return;
                                     }
 
@@ -649,7 +649,7 @@ namespace ResurrectionRP_Server.Inventory
                                         if (stack.Item.id == ItemID.Bag)
                                         {
                                             await menu.CloseMenu(client);
-                                            await client.SendNotificationError("Euh ... non!");
+                                            client.SendNotificationError("Euh ... non!");
                                             return;
                                         }
 
@@ -667,7 +667,7 @@ namespace ResurrectionRP_Server.Inventory
                                     }
                                     else
                                     {
-                                        await client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
+                                        client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
                                         return;
                                     }
 
@@ -690,7 +690,7 @@ namespace ResurrectionRP_Server.Inventory
                                     }
                                     else
                                     {
-                                        await client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
+                                        client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
                                         return;
                                     }
 
@@ -804,7 +804,7 @@ namespace ResurrectionRP_Server.Inventory
                                         break;
                                 }
 
-                                await player.Clothing.UpdatePlayerClothing();
+                                player.Clothing.UpdatePlayerClothing();
                                 menu.Outfit.Slots[oldslotID] = null;
                             }
                             // Equip
@@ -926,7 +926,7 @@ namespace ResurrectionRP_Server.Inventory
                                         break;
                                 }
 
-                                await player.Clothing.UpdatePlayerClothing();
+                                player.Clothing.UpdatePlayerClothing();
                             }
                             #endregion
 

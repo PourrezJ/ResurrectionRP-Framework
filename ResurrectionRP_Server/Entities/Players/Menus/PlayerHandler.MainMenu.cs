@@ -25,7 +25,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             if (PlayerSync.IsCuff)
             {
-                await Client.SendNotificationError("Vous ne pouvez pas ouvrir le menu\nVous êtes menotté.");
+                Client.SendNotificationError("Vous ne pouvez pas ouvrir le menu\nVous êtes menotté.");
                 return;
             }
             
@@ -49,7 +49,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             if (ListVehicleKey.Count <= 0)
             {
-                await Client.SendNotificationError("Vous n'avez pas de clées sur vous!");
+                Client.SendNotificationError("Vous n'avez pas de clées sur vous!");
                 return;
             }
             else
@@ -77,7 +77,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     case "ID_WalkingStyles":
                         if ( client.GetPlayerHandler().PlayerSync.Injured)
                         {
-                            await client.NotifyAsync("Vous êtes blessé, vous ne pouvez pas changer votre style de marche");
+                            client.SendNotification("Vous êtes blessé, vous ne pouvez pas changer votre style de marche");
                             return;
                         }
 
@@ -173,7 +173,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (keygiven != null)
                         ListVehicleKey.Remove(keygiven);
 
-                    await Client.SendNotificationSuccess("Vous avez jeté la clé du véhicule " + menu.Title);
+                    Client.SendNotificationSuccess("Vous avez jeté la clé du véhicule " + menu.Title);
                     await Update();
                     await MenuManager.CloseMenu(Client);
                 }

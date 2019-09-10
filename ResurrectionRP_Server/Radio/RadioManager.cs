@@ -138,7 +138,7 @@ namespace ResurrectionRP_Server.Radio
                     catch(Exception ex)
                     {
                         Alt.Server.LogError(ex.ToString());
-                        await player.SendNotificationError("Erreur dans la saisie");
+                        player.SendNotificationError("Erreur dans la saisie");
                     }
                     break;
 

@@ -27,7 +27,7 @@ namespace ResurrectionRP_Server.Businesses.Barber
         {
             if (!( IsOwner(client) ||  IsEmployee(client)))
             {
-                await client.NotifyAsync("Men, tu n'est pas coiffeur!");
+                client.SendNotification("Men, tu n'est pas coiffeur!");
                 return;
             }
 
@@ -73,7 +73,7 @@ namespace ResurrectionRP_Server.Businesses.Barber
                 await MenuManager.OpenMenu(client, mainmenu);
             }
             else
-                await client.SendNotificationError("Aucun client autour.");
+                client.SendNotificationError("Aucun client autour.");
         }
         #endregion
 
@@ -102,10 +102,10 @@ namespace ResurrectionRP_Server.Businesses.Barber
                 if (await ph.HasMoney(result))
                 {
                     BankAccount.AddMoney(result, $"Ajout d'argent par {ph.Identite.Name}");
-                    await client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
+                    client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
                 }
                 else
-                    await client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
+                    client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
             }
         }
         #endregion
@@ -123,7 +123,7 @@ namespace ResurrectionRP_Server.Businesses.Barber
 
             if (ClientSelected.Character.Gender == 1) // if is a girl
             {
-                await client.SendNotificationError("Les femmes à barbe sont interdites dans le pays.");
+                client.SendNotificationError("Les femmes à barbe sont interdites dans le pays.");
                 return;
             }
 
@@ -167,7 +167,7 @@ namespace ResurrectionRP_Server.Businesses.Barber
                 await Update();
             }
             else
-                await client.SendNotificationError("Vous n'avez pas de fond de caisse.");
+                client.SendNotificationError("Vous n'avez pas de fond de caisse.");
 
             await menu.CloseMenu(client);
         }
@@ -223,7 +223,7 @@ namespace ResurrectionRP_Server.Businesses.Barber
                 await Update();
             }
             else
-                await client.SendNotificationError("Vous n'avez pas de fond de caisse.");
+                client.SendNotificationError("Vous n'avez pas de fond de caisse.");
 
             await menu.CloseMenu(client);
         }
@@ -293,13 +293,13 @@ namespace ResurrectionRP_Server.Businesses.Barber
                 }
                 else
                 {
-                    await client.SendNotificationError("Vous n'avez pas de fond de caisse.");
+                    client.SendNotificationError("Vous n'avez pas de fond de caisse.");
                     ClientSelected?.Character.ApplyCharacter(client);
                 }
             }
             catch
             {
-                await client.SendNotificationError("Pour appliquer la couleur.");
+                client.SendNotificationError("Pour appliquer la couleur.");
                 ClientSelected?.Character.ApplyCharacter(client);
 
             }
@@ -312,7 +312,7 @@ namespace ResurrectionRP_Server.Businesses.Barber
             if (menuItem.Id == "ID_Hair")
             {
                 List<Hairs> _hairsList = (ClientSelected.Character.Gender == 0) ? Hairs.HairsMenList : Hairs.HairsGirlList;
-                await ClientSelected?.Client?.SetClothAsync(ClothSlot.Hair, _hairsList[itemIndex].ID, 0, 0);
+                ClientSelected?.Client?.SetCloth(ClothSlot.Hair, _hairsList[itemIndex].ID, 0, 0);
             }
             else if (menuItem.Id == "ID_Beard")
             {
@@ -370,7 +370,7 @@ namespace ResurrectionRP_Server.Businesses.Barber
             if (menuItem == null)
             {
                 if (menu.Id == "ID_BarberHair")
-                    await ClientSelected?.Client?.SetClothAsync(ClothSlot.Hair, ClientSelected.Character.Hair.Hair, 0, 0);
+                    ClientSelected?.Client?.SetCloth(ClothSlot.Hair, ClientSelected.Character.Hair.Hair, 0, 0);
                 else if (menu.Id == "ID_BarberBeard")
                 {
                     HeadOverlay hairs = ClientSelected.Character.Appearance[1];

@@ -210,17 +210,17 @@ namespace ResurrectionRP_Server.Farms
 
             if (await client.IsInVehicleAsync())
             {
-                await client.DisplaySubtitle($"~s~Vous ne pouvez pas récolter depuis le véhicule.", 5000);
+                client.DisplaySubtitle($"~s~Vous ne pouvez pas récolter depuis le véhicule.", 5000);
                 return;
             }
 
             if (player.InventoryIsFull(item.weight))
             {
-                await client.SendNotificationError("Votre inventaire est déjà plein.");
+                client.SendNotificationError("Votre inventaire est déjà plein.");
                 return;
             }
 
-            await client.DisplaySubtitle("Vous commencez à ramasser de(s) ~r~" + item.name, 5000);
+            client.DisplaySubtitle("Vous commencez à ramasser de(s) ~r~" + item.name, 5000);
             player.IsOnProgress = true;
             bool _exit = false;
             int i = 0;
@@ -232,25 +232,25 @@ namespace ResurrectionRP_Server.Farms
                 await Task.Delay(Harvest_Time);
                 if (await client.IsInVehicleAsync())
                 {
-                    await client.DisplaySubtitle($"~r~Récolte interrompu: ~s~Vous ne pouvez pas récolter depuis le véhicule.", 5000);
+                    client.DisplaySubtitle($"~r~Récolte interrompu: ~s~Vous ne pouvez pas récolter depuis le véhicule.", 5000);
                     _exit = true;
                 }
                 else if (!await IsInFarmingZone(client))
                 {
-                    await client.DisplaySubtitle($"~r~Récolte interrompu: ~s~Vous devez rester dans la zone.", 5000);
+                    client.DisplaySubtitle($"~r~Récolte interrompu: ~s~Vous devez rester dans la zone.", 5000);
                     _exit = true;
                 }
 
                 if (!await player.AddItem(item, 1) || _exit)
                 {
                     _exit = true;
-                    await client.DisplaySubtitle($"Récolte terminée: Vous avez ramassé ~r~ {i} {item.name}", 30000);
+                    client.DisplaySubtitle($"Récolte terminée: Vous avez ramassé ~r~ {i} {item.name}", 30000);
                     player.IsOnProgress = false;
                 }
                 else
                 {
                     i++;
-                    await client.DisplaySubtitle($"~r~Récolte en cours: ~s~Vous venez de ramasser 1 {item.name}(s)", 5000);
+                    client.DisplaySubtitle($"~r~Récolte en cours: ~s~Vous venez de ramasser 1 {item.name}(s)", 5000);
                 }
             }
 
@@ -268,14 +268,14 @@ namespace ResurrectionRP_Server.Farms
 
             if (!player.HasItemID(ItemIDBrute))
             {
-                await sender.DisplaySubtitle("~r~ERREUR ~s~Vous n'avez rien à traiter", 5000);
+                sender.DisplaySubtitle("~r~ERREUR ~s~Vous n'avez rien à traiter", 5000);
                 return;
             }
 
             await MenuManager.CloseMenu(sender);
 
             player.IsOnProgress = true;
-            await sender.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s)", 5000);
+            sender.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s)", 5000);
             bool _exit = false;
             var i = 0;
             while (!_exit)
@@ -289,12 +289,12 @@ namespace ResurrectionRP_Server.Farms
 
                 if (await sender.IsInVehicleAsync())
                 {
-                    await sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous ne pouvez pas traiter depuis le véhicule.", 5000);
+                    sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous ne pouvez pas traiter depuis le véhicule.", 5000);
                     _exit = true;
                 }
                 else if ((await sender.GetPositionAsync()).Distance(Process_Ped.Position) > 10f)
                 {
-                    await sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous devez rester dans la zone.", 5000);
+                    sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous devez rester dans la zone.", 5000);
                     _exit = true;
                 }
 
@@ -306,13 +306,13 @@ namespace ResurrectionRP_Server.Farms
 
                 if (player.DeleteAllItem(ItemIDBrute, Process_QuantityNeeded))
                 {
-                    await sender.DisplaySubtitle($"~r~Traitement en cours: ~s~+1 {_itemTraite.name}", 5000);
+                    sender.DisplaySubtitle($"~r~Traitement en cours: ~s~+1 {_itemTraite.name}", 5000);
                     await player.AddItem(_itemTraite, 1);
                     i++;
                 }
                 else
                 {
-                    await sender.DisplaySubtitle($"Traitement terminé: Vous avez traité ~r~ {i} {_itemTraite.name}(s)", 15000);
+                    sender.DisplaySubtitle($"Traitement terminé: Vous avez traité ~r~ {i} {_itemTraite.name}(s)", 15000);
                     await player.Update();
                     player.IsOnProgress = false;
                     return;
@@ -328,11 +328,11 @@ namespace ResurrectionRP_Server.Farms
 
             if (!player.HasItemID(ItemIDProcess))
             {
-                await sender.DisplaySubtitle("~r~ERREUR ~s~Vous n'avez rien à vendre", 5000);
+                sender.DisplaySubtitle("~r~ERREUR ~s~Vous n'avez rien à vendre", 5000);
                 return;
             }
             player.IsOnProgress = true;
-            await sender.DisplaySubtitle($"Vous commencez à vendre vos ~r~{_itemBuy.name}(s)", 5000);
+            sender.DisplaySubtitle($"Vous commencez à vendre vos ~r~{_itemBuy.name}(s)", 5000);
 
             await MenuManager.CloseMenu(sender);
             int itemcount = player.CountItem(_itemBuy);
@@ -352,7 +352,7 @@ namespace ResurrectionRP_Server.Farms
                 await sender.DisplaySubtitle($"~r~{itemcount} ~w~{_itemBuy.name}(s) $~r~{(ItemPrice * itemcount) - gettaxe} ~w~taxe:$~r~{gettaxe}.", 15000);*/
             }
             else
-                await sender.SendNotificationError("Inconnu.");
+                sender.SendNotificationError("Inconnu.");
 
             player.IsOnProgress = false;
             await player.Update();
@@ -369,20 +369,20 @@ namespace ResurrectionRP_Server.Farms
 
             if (!player.HasItemID(ItemIDBrute))
             {
-                await player.Client.SendNotificationError($"Vous n'avez pas de {_itemNoTraite.name}");
+                player.Client.SendNotificationError($"Vous n'avez pas de {_itemNoTraite.name}");
                 return;
             }
 
             if (!player.HasItemID(ItemIDBrute2))
             {
-                await player.Client.SendNotificationError($"Vous n'avez pas de {_itemNoTraite2.name}");
+                player.Client.SendNotificationError($"Vous n'avez pas de {_itemNoTraite2.name}");
                 return;
             }
 
             await MenuManager.CloseMenu(sender);
 
             player.IsOnProgress = true;
-            await sender.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s) ~w~& ~r~{_itemNoTraite2.name}(s)", 5000);
+            sender.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s) ~w~& ~r~{_itemNoTraite2.name}(s)", 5000);
             bool _exit = false;
             var i = 0;
             while (!_exit)
@@ -399,12 +399,12 @@ namespace ResurrectionRP_Server.Farms
 
                 if (await sender.IsInVehicleAsync())
                 {
-                    await sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous ne pouvez pas traiter depuis le véhicule.", 5000);
+                    sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous ne pouvez pas traiter depuis le véhicule.", 5000);
                     _exit = true;
                 }
                 else if ((await sender.GetPositionAsync()).Distance(DoubleProcess_Ped.Position) > 15f)
                 {
-                    await sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous devez rester dans la zone.", 5000);
+                    sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous devez rester dans la zone.", 5000);
                     _exit = true;
                 }
 
@@ -414,17 +414,17 @@ namespace ResurrectionRP_Server.Farms
                     return;
                 }
 
-                await sender.DisplaySubtitle($"~r~Traitement en cours: ~s~+1 {_itemTraite.name}", 5000);
+                sender.DisplaySubtitle($"~r~Traitement en cours: ~s~+1 {_itemTraite.name}", 5000);
 
                 if (player.DeleteAllItem(ItemIDBrute, 1) && player.DeleteAllItem(ItemIDBrute2, 1))
                 {
-                    await sender.DisplaySubtitle($"~r~Traitement en cours: ~s~+1 {_itemTraite.name}", 5000);
+                    sender.DisplaySubtitle($"~r~Traitement en cours: ~s~+1 {_itemTraite.name}", 5000);
                     await player.AddItem(_itemTraite, 1);
                     i++;
                 }
                 else
                 {
-                    await sender.DisplaySubtitle($"Traitement terminé: Vous avez traité ~r~ {i} {_itemTraite.name}(s)", 15000);
+                    sender.DisplaySubtitle($"Traitement terminé: Vous avez traité ~r~ {i} {_itemTraite.name}(s)", 15000);
                     await player.Update();
                     player.IsOnProgress = false;
                     return;

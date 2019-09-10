@@ -32,7 +32,7 @@ namespace ResurrectionRP_Server.Businesses
         {
             if (Inventory.Locked)
             {
-                await client.SendNotificationError("Le Digital Den est en cours de réapprovisionnement.");
+                client.SendNotificationError("Le Digital Den est en cours de réapprovisionnement.");
                 return;
             }
 
@@ -58,7 +58,7 @@ namespace ResurrectionRP_Server.Businesses
                 }
             }
             else
-                await client.NotifyAsync("Il n'y a pas de produits en vente.");
+                client.SendNotification("Il n'y a pas de produits en vente.");
             await MenuManager.OpenMenu(client, _menu);
         }
 
@@ -108,7 +108,7 @@ namespace ResurrectionRP_Server.Businesses
                     };
                     invmenu.PriceChange += async (p, m, stack, stackprice) =>
                     {
-                        await client.NotifyAsync($"Le nouveau prix de {stack.Item.name} est de ${stackprice} ");
+                        client.SendNotification($"Le nouveau prix de {stack.Item.name} est de ${stackprice} ");
                         await player.Update();
                         await Update();
                     };
@@ -153,16 +153,16 @@ namespace ResurrectionRP_Server.Businesses
                                 BankAccount.AddMoney(itemStack.Price * quantity, $"Achat de {itemStack.Item.name}", false);
                                 GameMode.Instance.Economy.CaissePublique += tax;
                                 await Update();
-                                await client.NotifyAsync($"Vous avez acheté un/des {itemStack.Item.name}(s) pour la somme de {(itemStack.Price * quantity) + tax} dont {tax} de taxes.");
+                                client.SendNotification($"Vous avez acheté un/des {itemStack.Item.name}(s) pour la somme de {(itemStack.Price * quantity) + tax} dont {tax} de taxes.");
                                 await OpenMenu(client);
                             }
                         }
                         else
-                            await client.NotifyAsync("Vous n'avez pas la place dans votre inventaire!");
+                            client.SendNotification("Vous n'avez pas la place dans votre inventaire!");
                     }
                 }
                 else
-                    await client.NotifyAsync("Vous n'avez pas assez d'argent sur vous!");
+                    client.SendNotification("Vous n'avez pas assez d'argent sur vous!");
             }
             catch (Exception ex)
             {
@@ -182,7 +182,7 @@ namespace ResurrectionRP_Server.Businesses
             }
             else
             {
-                await client.NotifyAsync("Vous n'avez pas la place dans votre inventaire!");
+                client.SendNotification("Vous n'avez pas la place dans votre inventaire!");
                 return;
             }
 

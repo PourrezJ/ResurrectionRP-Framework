@@ -49,13 +49,13 @@ namespace ResurrectionRP_Server.Services
         private async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Models.Location Spawn)
         {
             await Update();
-            await client.SendNotificationSuccess($"Vous avez sorti votre {vehicle.VehicleManifest.LocalizedName}!"); 
+            client.SendNotificationSuccess($"Vous avez sorti votre {vehicle.VehicleManifest.LocalizedName}!"); 
         }
 
         private async Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
         {
             await Update();
-            await client.SendNotificationSuccess($"Vous avez rangé votre véhicule {vehicle.VehicleManifest.LocalizedName}");
+            client.SendNotificationSuccess($"Vous avez rangé votre véhicule {vehicle.VehicleManifest.LocalizedName}");
         }
 
         public async Task Insert() => await Database.MongoDB.Insert("carparks", this);

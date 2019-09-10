@@ -85,7 +85,7 @@ namespace ResurrectionRP_Server.Models
             Player = player;
         }
 
-        public async Task UpdatePlayerClothing()
+        public void UpdatePlayerClothing()
         {
             if (Player == null || !Player.Exists)
                 return;
@@ -103,25 +103,23 @@ namespace ResurrectionRP_Server.Models
                 { ClothSlot.Torso, new ClothData(Torso.Drawable, Torso.Texture, Torso.Palette) }
             };
 
-            // await AltAsync.Do(async () => {
                 foreach (KeyValuePair<ClothSlot, ClothData> entry in cloths)
-                     await Player.SetClothAsync(entry.Key, entry.Value.Drawable, entry.Value.Texture, entry.Value.Palette);
+                    Player.SetCloth(entry.Key, entry.Value.Drawable, entry.Value.Texture, entry.Value.Palette);
 
                 if (Bracelets != null)
-                    await Player.SetPropAsync(PropSlot.Bracelets, Bracelets.Value);
+                    Player.SetProp(PropSlot.Bracelets, Bracelets.Value);
 
                 if (Ears != null)
-                    await Player.SetPropAsync(PropSlot.Ears, Ears.Value);
+                    Player.SetProp(PropSlot.Ears, Ears.Value);
 
                 if (Glasses != null)
-                    await Player.SetPropAsync(PropSlot.Glasses, Glasses.Value);
+                    Player.SetProp(PropSlot.Glasses, Glasses.Value);
 
                 if (Watches != null)
-                    await Player.SetPropAsync(PropSlot.Watches, Watches.Value);
+                    Player.SetProp(PropSlot.Watches, Watches.Value);
 
                 if (Hats != null)
-                    await Player.SetPropAsync(PropSlot.Hats, Hats.Value);
-            // });
+                    Player.SetProp(PropSlot.Hats, Hats.Value);
         }
     }
 }

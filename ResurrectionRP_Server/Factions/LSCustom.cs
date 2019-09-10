@@ -121,17 +121,17 @@ namespace ResurrectionRP_Server.Factions
 
             if (!employees.Contains(social))
             {
-                await client.SendNotificationError("Vous n'êtes pas autorisé à être là.");
+                client.SendNotificationError("Vous n'êtes pas autorisé à être là.");
                 return;
             }
             else if (employees.Contains(social) && !await client.IsInVehicleAsync())
             {
-                await client.SendNotificationError("Tu dois venir avec la voiture dans la chambre de peinture!");
+                client.SendNotificationError("Tu dois venir avec la voiture dans la chambre de peinture!");
                 return;
             }
             else if (employees.Contains(social) && ! IsOnService(client))
             {
-                await client.SendNotificationError("Va te changer, tu ne vas pas peindre cette voiture comme ça!");
+                client.SendNotificationError("Va te changer, tu ne vas pas peindre cette voiture comme ça!");
                 return;
             }
 
@@ -142,7 +142,7 @@ namespace ResurrectionRP_Server.Factions
         {
             if (!await client.IsInVehicleAsync())
             {
-                await client.SendNotificationError("Tu dois rester dans le véhicule!");
+                client.SendNotificationError("Tu dois rester dans le véhicule!");
                 return;
             }
 
@@ -205,11 +205,11 @@ namespace ResurrectionRP_Server.Factions
                     vh.SecondaryColor = (byte)color;
                 }
                 await vh.Update();
-                await client.SendNotificationSuccess("Peinture effectuée!");
+                client.SendNotificationSuccess("Peinture effectuée!");
             }
             else
             {
-                await client.SendNotificationError("Le fond de commerce est vide.");
+                client.SendNotificationError("Le fond de commerce est vide.");
             }
         }
 
@@ -231,13 +231,13 @@ namespace ResurrectionRP_Server.Factions
             switch (client.GetPlayerHandler().Character.Gender)
             {
                 case 0: // Homme
-                    await client.SetClothAsync(Models.ClothSlot.Undershirt, 8, 36, 0);
+                    client.SetCloth(Models.ClothSlot.Undershirt, 8, 36, 0);
                     break;
                 case 1: // Femme
-                    await client.SetClothAsync(Models.ClothSlot.Undershirt, 8, 36, 0);
+                    client.SetCloth(Models.ClothSlot.Undershirt, 8, 36, 0);
                     break;
                 default: // Ped?
-                    await client.SendNotificationError("Vous ne pouvez pas avoir de tenue avec ce personnage");
+                    client.SendNotificationError("Vous ne pouvez pas avoir de tenue avec ce personnage");
                     break;
             }
             await base.OnPlayerServiceEnter(client, rang);
@@ -316,7 +316,7 @@ namespace ResurrectionRP_Server.Factions
             else
             {
                 if (( GetEmployeeOnline()).Count > 0)
-                    await client.SendNotificationError("Vous devez passer par un mécanicien.");
+                    client.SendNotificationError("Vous devez passer par un mécanicien.");
                 else
                     menu.Add(new MenuItem("Bricoler le moteur", "Faites une réparation à 50% des dégâts moteur.", "ID_BricoEngine", true, rightLabel: $"${ReparFortune}"));
             }
@@ -349,7 +349,7 @@ namespace ResurrectionRP_Server.Factions
             switch (menuItem.Id)
             {
                 case "ID_Diag":
-                    await client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Diagnostique: ~r~Démarrage~w~.", "En cours ...");
+                    client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Diagnostique: ~r~Démarrage~w~.", "En cours ...");
 
                     await _vh.SetDoorState(VehicleDoor.Hood, VehicleDoorState.OpenedLevel7);
                     await veh.SetEngineOnAsync(true);
@@ -363,7 +363,7 @@ namespace ResurrectionRP_Server.Factions
 
                         string str = $"Body: {Math.Floor(await veh.GetBodyHealthAsync() * 0.1)}% \n" +
                         $"Engine: {Math.Floor(await veh.GetEngineHealthAsync() * 0.1)} %";
-                        await client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Diagnostique: ~g~Terminé~w~.", str);
+                        client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Diagnostique: ~g~Terminé~w~.", str);
                         await client.StopAnimationAsync();
                     });
 
@@ -374,7 +374,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         Utils.Utils.Delay(20000, true, async () =>
                         {
-                            await client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~g~Terminé~w~.", "Elle est niquel!");
+                            client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~g~Terminé~w~.", "Elle est niquel!");
                             await _vh.Vehicle.RepairAsync();
                             _vh.BodyHealth = (uint)1000;
                             _vh.Door = new VehicleDoorState[6] { 0, 0, 0, 0, 0, 0 };
@@ -385,17 +385,17 @@ namespace ResurrectionRP_Server.Factions
                         });
 
                         await UpdateDatabase();
-                        await client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~r~Démarrage~w~.", "C'est parti!");
+                        client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~r~Démarrage~w~.", "C'est parti!");
                     }
                     else
-                        await client.SendNotificationError("Vous n'avez pas assez d'argent dans les caisses!");
+                        client.SendNotificationError("Vous n'avez pas assez d'argent dans les caisses!");
 
                     break;
 
                 case "ID_Engine":
                     if (await BankAccount.GetBankMoney(ReparEnginePrice, $"Réparation moteur {_vh.Plate} par {ph.Identite.Name}"))
                     {
-                        await client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.","C'est parti!");
+                        client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.","C'est parti!");
                         var pos = await client.GetPositionAsync();
 
                         await _vh.Freeze(true);
@@ -406,7 +406,7 @@ namespace ResurrectionRP_Server.Factions
 
                         Utils.Utils.Delay(20000, true, async () =>
                         {
-                            await client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~g~Terminé~w~.","Il est niquel!");
+                            client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~g~Terminé~w~.","Il est niquel!");
 
                             _vh.EngineHealth = 1000;
                             await _vh.Update();
@@ -419,18 +419,18 @@ namespace ResurrectionRP_Server.Factions
                         await UpdateDatabase();
                     }
                     else
-                        await client.SendNotificationError("Vous n'avez pas assez d'argent dans les caisses!");
+                       client.SendNotificationError("Vous n'avez pas assez d'argent dans les caisses!");
 
                     break;
 
                 case "ID_Clean":
                     if (await BankAccount.GetBankMoney(ClearVehicle, $"Néttoyage vehicule {_vh.Plate} par {ph.Identite.Name}"))
                     {
-                        await client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~r~Démarrage~w~.","C'est parti!" );
+                        client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~r~Démarrage~w~.","C'est parti!" );
 
                         Utils.Utils.Delay(20000, true, async () =>
                         {
-                            await client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~g~Terminé~w~.","Elle est niquel!");
+                            client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~g~Terminé~w~.","Elle est niquel!");
                             _vh.Dirt = 0;
                             await _vh.Update();
                         });
@@ -438,18 +438,18 @@ namespace ResurrectionRP_Server.Factions
                         await UpdateDatabase();
                     }
                     else
-                        await client.SendNotificationError("Vous n'avez pas assez d'argent dans les caisses!");
+                        client.SendNotificationError("Vous n'avez pas assez d'argent dans les caisses!");
 
                     break;
 
                 case "ID_BricoEngine":
                     if (await client.GetPlayerHandler()?.HasMoney(ReparFortune))
                     {
-                        await client.SendNotificationPicture( CharPicture.CHAR_LS_CUSTOMS ,"Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.", "Alors ce tuyau va où déjà?");
+                        client.SendNotificationPicture( CharPicture.CHAR_LS_CUSTOMS ,"Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.", "Alors ce tuyau va où déjà?");
 
                         Utils.Utils.Delay(20000, true, async () =>
                         {
-                            await client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~g~Terminé~w~.","Le moteur démarre, c'est déjà ça!");
+                            client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~g~Terminé~w~.","Le moteur démarre, c'est déjà ça!");
                             _vh.EngineHealth = 400;
                             await _vh.Update();
                         });
@@ -457,7 +457,7 @@ namespace ResurrectionRP_Server.Factions
                         await UpdateDatabase();
                     }
                     else
-                        await client.SendNotificationError("Vous n'avez pas assez d'argent sur vous!");
+                        client.SendNotificationError("Vous n'avez pas assez d'argent sur vous!");
 
                     break;
             }
@@ -465,8 +465,6 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Static
-
-
         public static void TowVehicle(IVehicle towtruck, IVehicle vehicle)
         {
             VehicleHandler towhandler = towtruck.GetVehicleHandler();
@@ -546,7 +544,7 @@ namespace ResurrectionRP_Server.Factions
                         }
                         else
                         {
-                            await client.SendNotificationError("Aucune dépanneuse dans les environs");
+                            client.SendNotificationError("Aucune dépanneuse dans les environs");
                         }
                         await XMenuManager.XMenuManager.CloseMenu(client);
                     }

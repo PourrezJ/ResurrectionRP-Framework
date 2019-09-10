@@ -24,7 +24,7 @@ namespace ResurrectionRP_Server.Society
                 if (await IsEmployee(client) || Owner == client.GetSocialClub())
                     await Parking.OpenParkingMenu(client);
                 else
-                    await client.SendNotificationError("Vous ne faites pas partie des employés de cette entreprise.");
+                    client.SendNotificationError("Vous ne faites pas partie des employés de cette entreprise.");
             }
         }
 
@@ -105,7 +105,7 @@ namespace ResurrectionRP_Server.Society
                 }
                 else
                 {
-                    await client.SendNotificationError("Vous n'êtes pas autorisé à prendre ce job");
+                    client.SendNotificationError("Vous n'êtes pas autorisé à prendre ce job");
                 }
             }
 
@@ -128,10 +128,10 @@ namespace ResurrectionRP_Server.Society
                 {
                     BankAccount.AddMoney(result, $"Ajout d'argent par {ph.Identite.Name}");
                     await ph.Update();
-                    await client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
+                    client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
                 }
                 else
-                    await client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
+                    client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
             }
         }
 
@@ -196,19 +196,19 @@ namespace ResurrectionRP_Server.Society
                         PlayerHandler player = await PlayerManager.GetPlayerHandlerDatabase(socialClub);
 
                         if (player == null)
-                            await client.SendNotificationError("Joueur inconnu");
+                            client.SendNotificationError("Joueur inconnu");
                         else
                         {
                             Owner = socialClub;
                             await Update();
-                            await client.SendNotificationSuccess("Propriétaire changé");
+                            client.SendNotificationSuccess("Propriétaire changé");
                             await OpenServerJobMenu(client);
                         }
                     }
                     break;
                 case "ID_CancelResell":
                     Resell = false;
-                    await client.SendNotificationSuccess($"Vous avez annulé la vente de {SocietyName}");
+                    client.SendNotificationSuccess($"Vous avez annulé la vente de {SocietyName}");
                     await MenuManager.CloseMenu(client);
                     break;
                 case "ID_Resell":
@@ -216,12 +216,12 @@ namespace ResurrectionRP_Server.Society
                     {
                         ResellPrice = _resell;
                         Resell = true;
-                        await client.SendNotificationSuccess($"Vous avez mis en vente {SocietyName} pour la somme de ${ResellPrice}");
+                        client.SendNotificationSuccess($"Vous avez mis en vente {SocietyName} pour la somme de ${ResellPrice}");
                         await menu.CloseMenu(client);
                     }
                     else
                     {
-                        await client.SendNotificationError("Erreur dans la saisie!");
+                        client.SendNotificationError("Erreur dans la saisie!");
                     }
                     break;
                 case "ID_Buy":
@@ -229,11 +229,11 @@ namespace ResurrectionRP_Server.Society
                     {
                         Resell = false;
                         Owner = client.GetSocialClub();
-                        await client.SendNotificationSuccess($"Vous avez acheté {SocietyName} pour la somme de ${ResellPrice}");
+                        client.SendNotificationSuccess($"Vous avez acheté {SocietyName} pour la somme de ${ResellPrice}");
                     }
                     else
                     {
-                        await client.SendNotificationError($"Vous n'avez pas assez d'argent sur votre compte.");
+                        client.SendNotificationError($"Vous n'avez pas assez d'argent sur votre compte.");
                     }
                     break;
                 case "ID_NameChange":
@@ -245,20 +245,20 @@ namespace ResurrectionRP_Server.Society
                         {
                             SocietyName = societyName;
                             await Update();
-                            await client.SendNotificationSuccess($"Vous avez changé le nom en {SocietyName}");
+                            client.SendNotificationSuccess($"Vous avez changé le nom en {SocietyName}");
                         }
                         else
-                            await client.SendNotificationError("Vous n'avez pas assez d'argent en banque");
+                            client.SendNotificationError("Vous n'avez pas assez d'argent en banque");
                     }
                     break;
                 case "ID_AddParking":
                     if (SocietyManager.AddParkingList.TryAdd(client, this))
                     {
-                        await client.NotifyAsync("Tapez dans le tchat la commande /addparkingsociety pour ajouter le parking");
+                        client.SendNotification("Tapez dans le tchat la commande /addparkingsociety pour ajouter le parking");
                     }
                     else
                     {
-                        await client.SendNotificationError("Un parking est déjà disponible pour cette société.");
+                        client.SendNotificationError("Un parking est déjà disponible pour cette société.");
                     }
                     break;
                 default:
@@ -309,26 +309,26 @@ namespace ResurrectionRP_Server.Society
 
                     if (Employees.Count >= MaxEmployee)
                     {
-                        await client.SendNotificationError("Vous avez atteint le nombre maximun d'employés.");
+                        client.SendNotificationError("Vous avez atteint le nombre maximun d'employés.");
                         return;
                     }
                     else if (Employees.Any(p => p.Value.ToLower() == _msg.ToLower()))
                     {
-                        await client.SendNotificationError("Cette personne fait déjà partie des employés");
+                        client.SendNotificationError("Cette personne fait déjà partie des employés");
                         return;
                     }
 
                     if (ph != null)
                     {
                         Employees.Add(ph.PID, ph.Identite.Name);
-                        await client.SendNotificationSuccess($"{_msg} est ajouté à la liste des employés");
+                        client.SendNotificationSuccess($"{_msg} est ajouté à la liste des employés");
                         await Update();
                     }
                     else
-                        await client.SendNotificationError($"{_msg} est introuvable.");
+                        client.SendNotificationError($"{_msg} est introuvable.");
                 }
                 else
-                    await client.SendNotificationError("Aucun nom de rentré.");
+                    client.SendNotificationError("Aucun nom de rentré.");
 
                 await GestionEmployee(client, menu);
             }
@@ -345,7 +345,7 @@ namespace ResurrectionRP_Server.Society
 
                         Employees.Remove(ph.PID);
                         await Update();
-                        await client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
+                        client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
                         await GestionEmployee(client, menu);
                         break;
                     }
@@ -353,7 +353,7 @@ namespace ResurrectionRP_Server.Society
                     {
                         Employees.Remove(ph.PID);
                         await Update();
-                        await client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
+                        client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
                         await GestionEmployee(client, menu);
                         break;
                     }

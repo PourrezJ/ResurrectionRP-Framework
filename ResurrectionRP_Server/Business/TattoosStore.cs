@@ -33,7 +33,7 @@ namespace ResurrectionRP_Server.Businesses
         {
             if (!( IsOwner(client) ||  this.IsEmployee(client)))
             {
-                await client.SendNotificationError("Vous n'êtes pas autorisé à tatouer!");
+                client.SendNotificationError("Vous n'êtes pas autorisé à tatouer!");
                 return;
             }
 
@@ -69,7 +69,7 @@ namespace ResurrectionRP_Server.Businesses
                 await MenuManager.OpenMenu(client, mainmenu);
             }
             else
-                await client.SendNotificationError("Aucun client autour.");
+                client.SendNotificationError("Aucun client autour.");
         }
 
         private async Task TattooMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -96,7 +96,7 @@ namespace ResurrectionRP_Server.Businesses
 
                 if (ClientSelected == null)
                 {
-                    await client.SendNotificationError("Joueur inconnu");
+                    client.SendNotificationError("Joueur inconnu");
                     await menu.CloseMenu(client);
                 }
                 else
@@ -115,7 +115,7 @@ namespace ResurrectionRP_Server.Businesses
                         else
                         {
                             await menu.CloseMenu(client);
-                            await client.SendNotificationError("Le client ne veut pas être tatoué.");
+                            client.SendNotificationError("Le client ne veut pas être tatoué.");
                         }
                     });
                 }
@@ -133,7 +133,7 @@ namespace ResurrectionRP_Server.Businesses
 
                 if (ClientSelected == null)
                 {
-                    await client.SendNotificationError("inconnu.");
+                    client.SendNotificationError("inconnu.");
                     return;
                 }
 
@@ -149,7 +149,7 @@ namespace ResurrectionRP_Server.Businesses
                     ClientSelected.Character.Decorations.Remove(decoration);
                     await ClientSelected.Update();
                     await Update();
-                    await client.SendNotificationSuccess("Vous avez retiré le tatouage");
+                    client.SendNotificationSuccess("Vous avez retiré le tatouage");
                 }
                 else
                 {
@@ -163,10 +163,10 @@ namespace ResurrectionRP_Server.Businesses
                         ClientSelected.Character.Decorations.Add(new Entities.Players.Data.Decoration(collection, overlay));
                         await ClientSelected.Update();
                         await Update();
-                        await client.SendNotificationSuccess("Vous avez appliqué le tatouage");
+                        client.SendNotificationSuccess("Vous avez appliqué le tatouage");
                     }
                     else
-                        await client.SendNotificationError("Vous n'avez pas assez dans la caisse enregistreuse.");
+                        client.SendNotificationError("Vous n'avez pas assez dans la caisse enregistreuse.");
                 }
 
                 await OpenMenu(client);
@@ -256,10 +256,10 @@ namespace ResurrectionRP_Server.Businesses
                 if (await ph.HasMoney(amount))
                 {
                     BankAccount.AddMoney(amount, $"Ajout d'argent par {ph.Identite.Name}");
-                    await client.SendNotificationSuccess($"Vous avez déposé ${amount} dans la caisse.");
+                    client.SendNotificationSuccess($"Vous avez déposé ${amount} dans la caisse.");
                 }
                 else
-                    await client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
+                    client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
             }
 
             await OpenMenu(client);

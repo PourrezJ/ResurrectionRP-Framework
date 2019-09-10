@@ -7,23 +7,18 @@ namespace ResurrectionRP_Server.Entities.Players
 {
     public partial class PlayerHandler
     {
-        public async Task SetInvincible(bool value)
-        {
-            PlayerSync.IsInvincible = value;
-        }
-
         public async Task SetCuff(bool cuff)
         {
             PlayerSync.IsCuff = cuff;
 
             if (cuff)
             {
-                await Client.SetClothAsync(Models.ClothSlot.Bags, 0, 0, 0);
+                Client.SetCloth(Models.ClothSlot.Bags, 0, 0, 0);
                 await Client.RemoveAllWeaponsAsync();
                 Client.CurrentWeapon = (uint)WeaponHash.Unarmed;
             }
             else if (BagInventory != null)
-                await Client.SetClothAsync(Models.ClothSlot.Bags, 1, 0, 0);
+                Client.SetCloth(Models.ClothSlot.Bags, 1, 0, 0);
         }
 
         public bool IsCuff() => PlayerSync.IsCuff;

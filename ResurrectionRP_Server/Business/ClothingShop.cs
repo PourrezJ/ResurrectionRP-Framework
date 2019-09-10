@@ -112,10 +112,11 @@ namespace ResurrectionRP_Server.Businesses
             await OpenClothingMenu(client);
         }
 
-        public async Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        public Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
             if (colShape == _clothingColShape)
-                await client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
+                client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
+            return Task.CompletedTask;
         }
 
         public virtual async Task OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
@@ -139,14 +140,16 @@ namespace ResurrectionRP_Server.Businesses
             return await base.OpenSellMenu(client, menu);
         }
 
-        private async Task MenuClose(IPlayer client, Menu menu)
+        private Task MenuClose(IPlayer client, Menu menu)
         {
             var ph = client.GetPlayerHandler();
 
             if (ph == null)
-                return;
+                return Task.CompletedTask;
 
-            await ph.Clothing.UpdatePlayerClothing();
+            ph.Clothing.UpdatePlayerClothing();
+
+            return Task.CompletedTask;
         }
         #endregion
 
@@ -199,14 +202,14 @@ namespace ResurrectionRP_Server.Businesses
             {
                 if (await ph.AddItem(item, 1))
                 {
-                    await client.SendNotificationSuccess($"Vous avez acheté le vêtement {clothName} pour la somme de ${price}");
+                    client.SendNotificationSuccess($"Vous avez acheté le vêtement {clothName} pour la somme de ${price}");
                     await ph.Update();
                 }
                 else
-                    await client.SendNotificationError("Vous n'avez pas la place pour cette élément.");
+                    client.SendNotificationError("Vous n'avez pas la place pour cette élément.");
             }
             else
-                await client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque.");
+                client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque.");
         }
         #endregion
 
@@ -252,7 +255,7 @@ namespace ResurrectionRP_Server.Businesses
             }
             else
             {
-                await client.SendNotificationError("Vous n'êtes pas autorisé à utiliser la boutique de vêtements avec ce skin.");
+                client.SendNotificationError("Vous n'êtes pas autorisé à utiliser la boutique de vêtements avec ce skin.");
             }
 
             await menu.OpenMenu(client);
@@ -378,11 +381,8 @@ namespace ResurrectionRP_Server.Businesses
             int variation = (int)menuItem.GetData("variation");
             int torso = (int)menuItem.GetData("torso");
 
-            await AltAsync.Do(async () =>
-            {
-                await client.SetClothAsync(ClothSlot.Tops, drawable, variation, 0);
-                await client.SetClothAsync(ClothSlot.Torso, torso, 0, 0);
-            });
+            client.SetCloth(ClothSlot.Tops, drawable, variation, 0);
+            client.SetCloth(ClothSlot.Torso, torso, 0, 0);
         }
 
         private async Task OnTopsCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -406,14 +406,14 @@ namespace ResurrectionRP_Server.Businesses
             {
                 if (await ph.AddItem(new ClothItem(ItemID.Jacket, menuItem.Text, "", new ClothData((byte)drawable, (byte)variation, 0), 0.2, true, false, false, true, false, classes: "jacket", icon: "jacket"), 1))
                 {
-                    await client.SendNotificationSuccess($"Vous avez acheté le vêtement {menuItem.Text} pour la somme de ${price}");
+                    client.SendNotificationSuccess($"Vous avez acheté le vêtement {menuItem.Text} pour la somme de ${price}");
                     await ph.Update();
                 }
                 else
-                    await client.SendNotificationError("Vous n'avez pas la place pour cette élément.");
+                    client.SendNotificationError("Vous n'avez pas la place pour cette élément.");
             }
             else
-                await client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque.");
+                client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque.");
         }
         #endregion
 
@@ -554,24 +554,23 @@ namespace ResurrectionRP_Server.Businesses
             int variation = menuItem.GetData("variation");
             double price = menuItem.GetData("price");
             string clothName = menuItem.Text;
-            BuyCloth(client, componentID, drawable, variation, price, clothName);
+            await BuyCloth(client, componentID, drawable, variation, price, clothName);
         }
 
-        private async Task OnCurrentItem(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        private Task OnCurrentItem(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
             try
             {
                 byte componentID = menu.GetData("componentID");
                 int drawable = menuItem.GetData("drawable");
                 int variation = menuItem.GetData("variation");
-
-                await AltAsync.Do(async () =>
-                    await client.SetClothAsync((ClothSlot)componentID, drawable, variation, 0));
+                client.SetCloth((ClothSlot)componentID, drawable, variation, 0);
             }
             catch (Exception ex)
             {
                 Alt.Server.LogError("OnCurrentItem" + ex);
             }
+            return Task.CompletedTask;
         }
         #endregion
 

@@ -108,7 +108,7 @@ namespace ResurrectionRP_Server.Factions
             if (_target == null) return;
 
             FactionPlayerList.Remove( _target.GetSocialClub(), out FactionPlayer value);
-            await _target.NotifyAsync($"Vous avez été renvoyé de {FactionName}.");
+            _target.SendNotification($"Vous avez été renvoyé de {FactionName}.");
             await UpdateDatabase();
         }
 
@@ -149,12 +149,12 @@ namespace ResurrectionRP_Server.Factions
                 {
                     if (await TryAddIntoFaction(_target, rang.Rang))
                     {
-                        await c.SendNotificationSuccess($"Vous faites désormais partie de la faction {FactionName} au rang {rang.RangName}.");
-                        await client.SendNotificationSuccess($"La personne fait dorénavant partie de {FactionName} au rang {rang.RangName}.");
+                        c.SendNotificationSuccess($"Vous faites désormais partie de la faction {FactionName} au rang {rang.RangName}.");
+                        client.SendNotificationSuccess($"La personne fait dorénavant partie de {FactionName} au rang {rang.RangName}.");
                     }
                 }
                 else
-                    await client.SendNotificationError($"La personne ne souhaite pas rejoindre {FactionName}.");
+                    client.SendNotificationError($"La personne ne souhaite pas rejoindre {FactionName}.");
             });
         }
 
@@ -171,8 +171,8 @@ namespace ResurrectionRP_Server.Factions
 
             FactionPlayerList[social].Rang = rang.Rang;
             await OnPlayerPromote(_target, itemIndex - 1);
-            await _target.NotifyAsync($"Vous êtes désormais {(rang.Rang >= rangActuel ? "~g~promu~w~" : "~r~rétrogradé~w~")} au rang de {rang.RangName}");
-            await client.SendNotificationSuccess($"Vous avez promu {_target.GetPlayerHandler().Identite.Name} au rang de {FactionRang[itemIndex - 1].RangName}");
+            _target.SendNotification($"Vous êtes désormais {(rang.Rang >= rangActuel ? "~g~promu~w~" : "~r~rétrogradé~w~")} au rang de {rang.RangName}");
+            client.SendNotificationSuccess($"Vous avez promu {_target.GetPlayerHandler().Identite.Name} au rang de {FactionRang[itemIndex - 1].RangName}");
             await UpdateDatabase();
         }
         #endregion
@@ -262,7 +262,7 @@ namespace ResurrectionRP_Server.Factions
                 return menu;
             }
             else
-                await client.SendNotificationError("Vous ne faites pas partie de cette faction.");
+                client.SendNotificationError("Vous ne faites pas partie de cette faction.");
 
             return null;
         }
@@ -310,7 +310,7 @@ namespace ResurrectionRP_Server.Factions
 
                     if (FactionPlayerList.Count >= 25)
                     {
-                        await client.SendNotificationError("Vous avez atteint le nombre maximun de membre.");
+                        client.SendNotificationError("Vous avez atteint le nombre maximun de membre.");
                         return;
                     }
 
@@ -318,18 +318,18 @@ namespace ResurrectionRP_Server.Factions
                     {
                         if (FactionPlayerList.TryAdd(ph.PID, new FactionPlayer(ph.PID, 0)))
                         {
-                            await client.SendNotificationSuccess($"{_msg} est ajouté à la liste des employés");
+                            client.SendNotificationSuccess($"{_msg} est ajouté à la liste des employés");
                             await UpdateDatabase();
                         }
                     }
                     else
                     {
-                        await client.SendNotificationError($"{_msg} est introuvable.");
+                        client.SendNotificationError($"{_msg} est introuvable.");
                     }
                 }
                 else
                 {
-                    await client.SendNotificationError("Aucun nom de rentré.");
+                    client.SendNotificationError("Aucun nom de rentré.");
                 }
                 await PriseServiceMenu(client);
             }
@@ -346,7 +346,7 @@ namespace ResurrectionRP_Server.Factions
 
                         if (FactionPlayerList.TryRemove(playerID.Key, out FactionPlayer value))
                         {
-                            await client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
+                            client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
                             await PriseServiceMenu(client);
                             await UpdateDatabase();
                         }
@@ -356,7 +356,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         if (FactionPlayerList.TryRemove(playerID.Key, out FactionPlayer value))
                         {
-                            await client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
+                            client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
                             await PriseServiceMenu(client);
                             await UpdateDatabase();
                         }
@@ -404,7 +404,7 @@ namespace ResurrectionRP_Server.Factions
             };
             invmenu.PriceChange += async (p, m, stack, stackprice) =>
             {
-                await client.NotifyAsync($"Le nouveau prix de {stack.Item.name} est de ${stackprice} ");
+                client.SendNotification($"Le nouveau prix de {stack.Item.name} est de ${stackprice} ");
                 await _player.Update();
                 await UpdateDatabase();
             };
@@ -426,10 +426,10 @@ namespace ResurrectionRP_Server.Factions
                 {
                     BankAccount.AddMoney(result, $"Ajout d'argents par {ph.Identite.Name}");
                     await ph.Update();
-                    await client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
+                    client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
                 }
                 else
-                    await client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
+                    client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
             }
 
             await PriseServiceMenu(client);
@@ -467,13 +467,13 @@ namespace ResurrectionRP_Server.Factions
         {
             if (!HasPlayerIntoFaction(client))
             {
-                await client.SendNotificationError("Vous n'êtes pas autorisé à utiliser ce parking!");
+                client.SendNotificationError("Vous n'êtes pas autorisé à utiliser ce parking!");
                 return null;
             }
 
             if (GetVehicleAllowed(GetRangPlayer(client)) == null)
             {
-                await client.SendNotificationError("Aucun véhicule d'autorisé");
+                client.SendNotificationError("Aucun véhicule d'autorisé");
                 return null;
             }
 
@@ -511,7 +511,7 @@ namespace ResurrectionRP_Server.Factions
             if (target != null)
             {
                 this.FactionPlayerList.Remove( target.GetSocialClub(), out FactionPlayer value);
-                await target?.NotifyAsync($"Vous avez été congédié de {FactionName}.");
+                target.SendNotification($"Vous avez été congédié de {FactionName}.");
                 await UpdateDatabase();
             }
         }
@@ -544,21 +544,21 @@ namespace ResurrectionRP_Server.Factions
 
                     if (await ph.AddItem(item.Item, 1))
                     {
-                        await client.SendNotificationSuccess($"Vous avez pris un(e) {item.Item.name}");
+                        client.SendNotificationSuccess($"Vous avez pris un(e) {item.Item.name}");
                     }
                     else
                     {
-                        await client.SendNotificationError($"Vous n'avez pas la place pour un(e) {item.Item.name}");
+                        client.SendNotificationError($"Vous n'avez pas la place pour un(e) {item.Item.name}");
                     }
                 }
                 catch (Exception ex)
                 {
                     Alt.Server.LogError("ShopMenuCallBack " + ex);
-                    await client.SendNotificationError($"Une erreur s'est produite avec l'item: {item.Item.name}");
+                    client.SendNotificationError($"Une erreur s'est produite avec l'item: {item.Item.name}");
                 }
             }
             else
-                await client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
+                client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
         }
 
         private async Task ConcessCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -661,7 +661,7 @@ namespace ResurrectionRP_Server.Factions
                 }
                 else
                 {
-                    await client.SendNotificationError("Votre faction n'a pas assez d'argent.");
+                    client.SendNotificationError("Votre faction n'a pas assez d'argent.");
                 }
             }
         }

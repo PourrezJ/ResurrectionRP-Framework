@@ -284,7 +284,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                                     }
                                     else
                                     {
-                                        await client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque");
+                                        client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque");
                                     }
                                 }
                             }
@@ -311,7 +311,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                                     }
                                     else
                                     {
-                                        await client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque");
+                                        client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque");
                                     }
                                 }
                             }

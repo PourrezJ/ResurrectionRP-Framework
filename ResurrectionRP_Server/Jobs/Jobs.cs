@@ -129,7 +129,7 @@ namespace ResurrectionRP_Server.Jobs
             }*/
             if (VehicleSpawnLocation != null && VehicleManager.IsVehicleInSpawn(VehicleSpawnLocation.Pos))
             {
-                await client.SendNotificationError($"Un véhicule gêne la sortie de votre véhicule de fonction");
+                client.SendNotificationError($"Un véhicule gêne la sortie de votre véhicule de fonction");
                 return false;
             }
 
@@ -155,9 +155,9 @@ namespace ResurrectionRP_Server.Jobs
         public virtual async Task QuitterService(IPlayer client)
         {
             client.GetPlayerHandler()?.Character.ApplyCharacter(client);
-            if (await IsInService(client))
+            if (IsInService(client))
             {
-                var job = await GetJobService(client);
+                var job = GetJobService(client);
 
 
                 if (job.VehicleSpawnLocation != null)
@@ -165,17 +165,17 @@ namespace ResurrectionRP_Server.Jobs
                     await job.RemoveVehiclePlayer(client);
                 }
                 _inServiceList.Remove( client.GetSocialClub());
-                await client.SendNotificationSuccess("Vous avez quitté votre service.");
+                client.SendNotificationSuccess("Vous avez quitté votre service.");
             }
         }
 
-        public async Task<bool> IsInService(IPlayer client)
+        public bool IsInService(IPlayer client)
         {
             if (_inServiceList.ContainsKey(client.GetSocialClub())) return true;
             return false;
         }
 
-        public async Task<Jobs> GetJobService(IPlayer client)
+        public Jobs GetJobService(IPlayer client)
         {
             if (_inServiceList.TryGetValue( client.GetSocialClub(), out Jobs value))
             {
@@ -184,7 +184,7 @@ namespace ResurrectionRP_Server.Jobs
             return null;
         }
 
-        public async Task<VehicleHandler> GetJobVehiclePlayer(IPlayer client)
+        public VehicleHandler GetJobVehiclePlayer(IPlayer client)
         {
             if (_vehicleList.TryGetValue(client.GetSocialClub(), out VehicleHandler value))
             {
@@ -195,7 +195,7 @@ namespace ResurrectionRP_Server.Jobs
 
         public async Task RemoveVehiclePlayer(IPlayer client)
         {
-            VehicleHandler _veh = await GetJobVehiclePlayer(client);
+            VehicleHandler _veh = GetJobVehiclePlayer(client);
             client.GetPlayerHandler()?.RemoveKey(_veh);
             _vehicleList.Remove(client.GetSocialClub());
             await _veh.Delete();

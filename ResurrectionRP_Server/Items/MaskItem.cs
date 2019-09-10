@@ -15,19 +15,19 @@ namespace ResurrectionRP_Server.Items
             Mask = mask;
         }
 
-        public override async Task Use(IPlayer client, string inventoryType, int slot)
+        public override Task Use(IPlayer client, string inventoryType, int slot)
         {
             if (!used)
             {
-                await client.SetClothAsync(Models.ClothSlot.Mask, Mask.variation, Mask.texture, 0);
+                client.SetCloth(Models.ClothSlot.Mask, Mask.variation, Mask.texture, 0);
                 used = true;
             }
             else
             {
-                await client.SetClothAsync(Models.ClothSlot.Mask, 0, 0, 0);
+                client.SetCloth(Models.ClothSlot.Mask, 0, 0, 0);
                 used = false;
             }
-                
+            return Task.CompletedTask;
         }
 
         public override Task Give(IPlayer sender, IPlayer recever, int quantite)

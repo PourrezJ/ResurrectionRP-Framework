@@ -38,10 +38,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         private void Cloth(IPlayer player, object[] args)
         {
-            Task.Run(async () =>
-            {
-                await player.SetClothAsync((Models.ClothSlot)Convert.ToInt32(args[0]), (int)args[1], (int)args[2], (int)args[3]);
-            });
+            player.SetCloth((Models.ClothSlot)Convert.ToInt32(args[0]), (int)args[1], (int)args[2], (int)args[3]);
         }
     }
 }

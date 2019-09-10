@@ -47,15 +47,15 @@ namespace ResurrectionRP_Server.Entities.Players
             switch (menuItem.Id)
             {
                 case "ID_Kick":
-                    await client.SendNotificationSuccess($"Vous venez de kick {TargetHandler.Identite.Name}.");
-                    await TargetClient.NotifyAsync($"Kick raison: {menuItem.InputValue}");
+                    client.SendNotificationSuccess($"Vous venez de kick {TargetHandler.Identite.Name}.");
+                    TargetClient.SendNotification($"Kick raison: {menuItem.InputValue}");
                     await Task.Delay(100);
                     TargetClient.Kick(menuItem.InputValue);
                     break;
 
                 case "ID_Ban":
-                    await client.SendNotificationSuccess($"Vous venez de ban {TargetHandler.Identite.Name}.");
-                    await TargetClient.NotifyAsync($"Ban raison: {menuItem.InputValue}");
+                    client.SendNotificationSuccess($"Vous venez de ban {TargetHandler.Identite.Name}.");
+                    TargetClient.SendNotification($"Ban raison: {menuItem.InputValue}");
                     await Task.Delay(100);
                     await Models.BanManager.BanPlayer(TargetClient, menuItem.InputValue, new DateTime(2031, 1, 1));
                     break;
@@ -63,25 +63,25 @@ namespace ResurrectionRP_Server.Entities.Players
                 case "ID_Give":
                     double money = Convert.ToDouble(menuItem.InputValue);
                     await TargetHandler.AddMoney(money);
-                    await client.SendNotificationSuccess($"Vous venez de donner à {TargetHandler.Identite.Name} ${money}.");
+                    client.SendNotificationSuccess($"Vous venez de donner à {TargetHandler.Identite.Name} ${money}.");
                     break;
 
                 case "ID_Kill":
-                    await client.SendNotificationSuccess($"Vous venez de tuer {TargetHandler.Identite.Name}.");
+                    client.SendNotificationSuccess($"Vous venez de tuer {TargetHandler.Identite.Name}.");
                     TargetClient.Health = 0;
                     break;
 
                 case "ID_Revive":
-                    await client.SendNotificationSuccess($"Vous venez de revive {TargetHandler.Identite.Name}.");
+                    client.SendNotificationSuccess($"Vous venez de revive {TargetHandler.Identite.Name}.");
                     await TargetClient.Revive() ;
                     break;
 
                 case "ID_Heal":
-                    await client.SendNotificationSuccess($"Vous venez de soigner {TargetHandler.Identite.Name}.");
+                    client.SendNotificationSuccess($"Vous venez de soigner {TargetHandler.Identite.Name}.");
                     TargetClient.Health = (200);
                     break;
                 case "ID_Food":
-                    await client.SendNotificationSuccess($"Vous venez de rassasier {TargetHandler.Identite.Name}.");
+                    client.SendNotificationSuccess($"Vous venez de rassasier {TargetHandler.Identite.Name}.");
                     TargetClient.GetPlayerHandler()?.UpdateHungerThirst(100, 100);
                     break;
             }

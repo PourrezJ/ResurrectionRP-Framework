@@ -12,7 +12,7 @@ namespace ResurrectionRP_Server.Items
             Life = life;
         }
 
-        public override async Task Use(IPlayer client, string inventoryType, int slot)
+        public override Task Use(IPlayer client, string inventoryType, int slot)
         {
             ushort healthActual = client.Health;
             client.Health =  (ushort)((healthActual + (ushort)Life < 100) ? healthActual + Life : 100); 
@@ -22,7 +22,8 @@ namespace ResurrectionRP_Server.Items
             else if (inventoryType == Utils.Enums.InventoryTypes.Bag)
                 client.GetPlayerHandler()?.BagInventory?.Delete(slot, 1);
             if (Life > 0)
-                await client.NotifyAsync("Vous vous êtes appliqué un bandage");
+                client.SendNotification("Vous vous êtes appliqué un bandage");
+            return Task.CompletedTask;
         }
     }
 }

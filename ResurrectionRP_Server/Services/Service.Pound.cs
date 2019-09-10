@@ -165,7 +165,7 @@ namespace ResurrectionRP_Server.Services
             var _poundList = GetVehicleInPound(client);
             if (_poundList.Count <= 0)
             {
-                await client.SendNotificationPicture(Utils.Enums.CharPicture.DIA_GARDENER, "Fourrière", "","~r~Vous n'avez aucun véhicule ici!" );
+                client.SendNotificationPicture(Utils.Enums.CharPicture.DIA_GARDENER, "Fourrière", "","~r~Vous n'avez aucun véhicule ici!" );
                 return;
             }
 
@@ -203,12 +203,12 @@ namespace ResurrectionRP_Server.Services
                     await veh.InsertVehicle();
                     PoundVehicleList.Remove(PoundVehicleList.Find(v => v.Plate == veh.Plate));
                     await GameMode.Instance.Save();
-                    await client.SendNotificationPicture(Utils.Enums.CharPicture.DIA_GARDENER,"Fourrière", "","~g~Votre véhicule vous attend sur le parking." );
+                    client.SendNotificationPicture(Utils.Enums.CharPicture.DIA_GARDENER,"Fourrière", "","~g~Votre véhicule vous attend sur le parking." );
                     await MenuManager.CloseMenu(client);
                 }
                 else
                 {
-                    await client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
+                    client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
                 }
             }
         }

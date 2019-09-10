@@ -14,15 +14,16 @@ namespace ResurrectionRP_Server.Items
         {
         }
 
-        public override async Task Use(IPlayer client, string inventoryType, int slot)
+        public override Task Use(IPlayer client, string inventoryType, int slot)
         {
             var vehs = client.GetVehiclesInRange(5);
             Entities.Vehicles.VehicleHandler _vehicle = (vehs.FirstOrDefault()).GetVehicleHandler();
             if (_vehicle != null)
             {
                 _vehicle.Fuel += 20;
-                await client.SendNotificationSuccess("Vous avez remis de l'essence dans le véhicule");
+                client.SendNotificationSuccess("Vous avez remis de l'essence dans le véhicule");
             }
+            return Task.CompletedTask;
         }
     }
 }

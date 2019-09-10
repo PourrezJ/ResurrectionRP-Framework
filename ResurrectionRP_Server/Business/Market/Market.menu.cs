@@ -17,7 +17,7 @@ namespace ResurrectionRP_Server.Businesses
             Alt.Server.LogError("Are in open menu");
             if (Inventory.Locked)
             {
-                await client.SendNotificationError("La supérette est en cours de réapprovisionnement.");
+                client.SendNotificationError("La supérette est en cours de réapprovisionnement.");
                 return;
             }
 
@@ -43,7 +43,7 @@ namespace ResurrectionRP_Server.Businesses
                 }
             }
             else
-                await client.NotifyAsync("Il n'y a pas de produits en vente.");
+                client.SendNotification("Il n'y a pas de produits en vente.");
             await MenuManager.OpenMenu(client, _menu);
         }
 
@@ -100,7 +100,7 @@ namespace ResurrectionRP_Server.Businesses
 
                     invmenu.PriceChange += async (p, m, stack, stackprice) =>
                     {
-                        await client.NotifyAsync($"Le nouveau prix de {stack.Item.name} est de ${stackprice}");
+                        client.SendNotification($"Le nouveau prix de {stack.Item.name} est de ${stackprice}");
                         await player.Update();
                         await Update();
                     };
@@ -115,7 +115,7 @@ namespace ResurrectionRP_Server.Businesses
 
                 case "ID_Stats":
                     string msg = $"Réservoir: {Litrage} / {LitrageMax} litre(s)";
-                    await client.NotifyAsync(msg);
+                    client.SendNotification(msg);
                     break;
 
                 case "ID_EssencePrice":
@@ -123,7 +123,7 @@ namespace ResurrectionRP_Server.Businesses
                     {
                         EssencePrice = price;
                         await Update();
-                        await client.NotifyAsync($"Le nouveau prix de l'essence est de ${EssencePrice + GameMode.Instance.Economy.Taxe_Essence} dont ${GameMode.Instance.Economy.Taxe_Essence} de taxe.");
+                        client.SendNotification($"Le nouveau prix de l'essence est de ${EssencePrice + GameMode.Instance.Economy.Taxe_Essence} dont ${GameMode.Instance.Economy.Taxe_Essence} de taxe.");
                         await OnNpcSecondaryInteract(client, Ped);
                     }
                     break;
@@ -157,16 +157,16 @@ namespace ResurrectionRP_Server.Businesses
                                 BankAccount.AddMoney(itemStack.Price * quantity, $"Achat de {itemStack.Item.name}", false);
                                 GameMode.Instance.Economy.CaissePublique += tax;
                                 await Update();
-                                await client.NotifyAsync($"Vous avez acheté un / des {itemStack.Item.name}(s) pour la somme de {(itemStack.Price * quantity) + tax} dont {tax} de taxes.");
+                                client.SendNotification($"Vous avez acheté un / des {itemStack.Item.name}(s) pour la somme de {(itemStack.Price * quantity) + tax} dont {tax} de taxes.");
                                 await OpenMenu(client);
                             }
                         }
                         else
-                            await client.NotifyAsync("Vous n'avez pas la place dans votre inventaire!");
+                            client.SendNotification("Vous n'avez pas la place dans votre inventaire!");
                     }
                 }
                 else
-                    await client.NotifyAsync("Vous n'avez pas assez d'argent sur vous!");
+                    client.SendNotification("Vous n'avez pas assez d'argent sur vous!");
             }
             catch (Exception ex)
             {

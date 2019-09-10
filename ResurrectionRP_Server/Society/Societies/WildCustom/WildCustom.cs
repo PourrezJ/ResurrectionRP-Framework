@@ -34,7 +34,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             if (_vehicleBench != null)
                 await OpenMainMenu(client, _vehicleBench);
             else
-                await client.SendNotificationError("Aucun véhicule devant l'établi.");
+                client.SendNotificationError("Aucun véhicule devant l'établi.");
         }
 
         public override async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)

@@ -31,13 +31,13 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
         {
             if (!(await IsEmployee(client) || Owner == client.GetSocialClub()))
             {
-                await client.SendNotificationError("Hey mec tu veux quoi?!");
+                client.SendNotificationError("Hey mec tu veux quoi?!");
                 return;
             }
 
             if (vehicle == null || !vehicle.Exists)
             {
-                await client.SendNotificationError("Aucun véhicule devant l'établi.");
+                client.SendNotificationError("Aucun véhicule devant l'établi.");
                 return;
             }
 
@@ -47,34 +47,34 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
                 if (info == null)
                 {
-                    await client.SendNotificationError("Je ne touche pas à ce véhicule bordel.");
+                    client.SendNotificationError("Je ne touche pas à ce véhicule bordel.");
                     return;
                 }
                 else if (info.VehicleClass != 8 && _garageType == GarageType.Bike)
                 {
-                    await client.SendNotificationError("Seules les motos sont autorisées mon pote!");
+                    client.SendNotificationError("Seules les motos sont autorisées mon pote!");
                     return;
                 }
                 else if (info.VehicleClass == 8 && _garageType == GarageType.Car)
                 {
-                    await client.SendNotificationError("J'ai une geule à faire de la moto?!");
+                    client.SendNotificationError("J'ai une geule à faire de la moto?!");
                     return;
                 }
                 else if (blackListModel.Contains(info.VehicleClass))
                 {
-                    await client.SendNotificationError("OH! Je touche pas à ça, dégage!");
+                    client.SendNotificationError("OH! Je touche pas à ça, dégage!");
                     return;
                 }
                 else if (ClientInMenu != null && ClientInMenu != client)
                 {
-                    await client.SendNotificationError("Un mécanicien utilise déjà la caisse à outils.");
+                    client.SendNotificationError("Un mécanicien utilise déjà la caisse à outils.");
                     return;
                 }
             }
             catch (Exception ex)
             {
                 Alt.Server.LogError("OpenMainMenu"+ ex);
-                await client.SendNotificationError("Erreur inconnue, contactez un membre du staff.");
+                client.SendNotificationError("Erreur inconnue, contactez un membre du staff.");
                 return;
             }
 
@@ -122,7 +122,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
             if (manifest == null)
             {
-                await client.SendNotificationError("problème avec le véhicule.");
+                client.SendNotificationError("problème avec le véhicule.");
                 return;
             }
 
@@ -161,7 +161,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             }
             else if (!menuItem.HasData("mod"))
             {
-                await client.SendNotificationError("problème avec le véhicule.");
+                client.SendNotificationError("problème avec le véhicule.");
                 await OpenPerformanceMenu(client);
                 return;
             }
@@ -181,7 +181,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
             if (vh == null || !manifest.HasModType(_modType) && _modType != 666) // 666 = neons
             {
-                await client.SendNotificationError("Je ne peux pas sur ce véhicule.");
+                client.SendNotificationError("Je ne peux pas sur ce véhicule.");
                 await OpenPerformanceMenu(client);
             }
 
@@ -334,7 +334,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             }
             else if (!menuItem.HasData("mod"))
             {
-                await client.SendNotificationError("problème avec le véhicule.");
+                client.SendNotificationError("problème avec le véhicule.");
                 await OpenDesignMenu(client);
                 return;
             }
@@ -355,7 +355,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
             if (!manifest.HasModType(_modType)) // 666 = neons
             {
-                await client.SendNotificationError("Je ne peux pas sur ce véhicule.");
+                client.SendNotificationError("Je ne peux pas sur ce véhicule.");
                 await OpenDesignMenu(client);
             }
 
@@ -537,13 +537,13 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
             if (vh == null)
             {
-                await client.SendNotificationError("Problème avec le véhicule.");
+                client.SendNotificationError("Problème avec le véhicule.");
                 return;
             }
 
             if (vh.Mods.Count == 0)
             {
-                await client.SendNotificationError("Aucune amélioration n'est disponible sur le véhicule!");
+                client.SendNotificationError("Aucune amélioration n'est disponible sur le véhicule!");
                 return;
             }
             else if (vh.Mods.Count >= 1)
@@ -603,7 +603,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
                 vh.NeonsColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
                 await vh.Update();
 
-                await client.SendNotificationSuccess($"Vous avez installé des Néons pour la somme de ${price}");
+                client.SendNotificationSuccess($"Vous avez installé des Néons pour la somme de ${price}");
                 await OpenNeonsMenu(client);
             }
         }
@@ -647,10 +647,10 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
                 if (price != 0)
                     str += $" pour la somme de ${price}.";
 
-                await client.SendNotificationSuccess(str);
+                client.SendNotificationSuccess(str);
             }
             else
-                await client.SendNotificationError("Vous n'avez pas assez sur le compte de l'entreprise.");
+                client.SendNotificationError("Vous n'avez pas assez sur le compte de l'entreprise.");
 
             if (menu.Id == "ID_DesignChoise")
                 await OpenDesignChoiseMenu(client);

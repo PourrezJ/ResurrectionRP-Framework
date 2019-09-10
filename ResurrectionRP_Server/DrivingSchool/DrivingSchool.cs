@@ -103,12 +103,12 @@ namespace ResurrectionRP_Server.DrivingSchool
 
                 if (advert >= 5)
                     //await client.SendNotificationPicture($"~r~ Vous avez échoué votre examen avec {advert} fautes.", Utils.Enums.CharPicture.CHAR_ANDREAS, false, 0, "Auto-école", "Examinateur");
-                    await client.SendNotificationError($"~r~ Vous avez échoué votre examen avec {advert} fautes.");
+                    client.SendNotificationError($"~r~ Vous avez échoué votre examen avec {advert} fautes.");
                 else
                 {
                     //await client.SendNotificationPicture($"~g~ Vous réussi votre examen avec {advert} faute(s).", Utils.Enums.CharPicture.CHAR_ANDREAS, false, 0, "Auto-école", "Examinateur");
                     client.GetPlayerHandler()?.Licenses.Add(new Models.License(_schoolType));
-                    await client.SendNotificationSuccess($"~g~ Vous réussi votre examen avec {advert} faute(s).");
+                    client.SendNotificationSuccess($"~g~ Vous réussi votre examen avec {advert} faute(s).");
                 }
             }
         }
@@ -149,7 +149,7 @@ namespace ResurrectionRP_Server.DrivingSchool
 
                 if (ClientIsInExamen(client))
                 {
-                    await client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANTONIA, "Auto-école", "Secrétaire", "Vous êtes déjà en examen! Vous voulez abandonner et rester où est la voiture!?");
+                    client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANTONIA, "Auto-école", "Secrétaire", "Vous êtes déjà en examen! Vous voulez abandonner et rester où est la voiture!?");
                     drivingschoolmenu.Add(new MenuItem("Abandonner l'examen.", "Permet de recommencer l'examen.", "ID_Cancel", true));
                 }
                 else
@@ -158,7 +158,7 @@ namespace ResurrectionRP_Server.DrivingSchool
                         drivingschoolmenu.Add(new MenuItem("Permis Voiture", $"Passer le permis voiture pour la somme de ~r~${_price} ~w~prélevée au début de l'examen.", "ID_Car", true, rightLabel: $"${_price}"));
                     else
                     {
-                        await client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANTONIA, "Auto-école", "Secrétaire", "MAIS VOUS AVEZ DEJA VOTRE PERMIS ?!");
+                        client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANTONIA, "Auto-école", "Secrétaire", "MAIS VOUS AVEZ DEJA VOTRE PERMIS ?!");
                         return;
                     }
                 }
@@ -192,14 +192,14 @@ namespace ResurrectionRP_Server.DrivingSchool
                 {
                     if (await ph.HasMoney(_price))
                     {
-                        await client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANDREAS, "Auto-école", "Examinateur", "Votre examen de conduite commence! Vous avez le droit à ~r~5 erreurs~w~.");
+                        client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANDREAS, "Auto-école", "Examinateur", "Votre examen de conduite commence! Vous avez le droit à ~r~5 erreurs~w~.");
                         await BeginDrivingExamen(client);
                     }
                     else
-                        await client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
+                        client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
                 }
                 else
-                    await client.SendNotificationError("Un véhicule gêne la sorti du garage.");
+                    client.SendNotificationError("Un véhicule gêne la sorti du garage.");
             }
         }
         #endregion

@@ -38,7 +38,7 @@ namespace ResurrectionRP_Server.Teleport
             {
                 if (teleport.IsWhitelisted && !teleport.Whileliste.Contains(player.GetSocialClub()))
                 {
-                    await player.SendNotificationError("Vous n'êtes pas autorisé à utiliser cette porte.");
+                    player.SendNotificationError("Vous n'êtes pas autorisé à utiliser cette porte.");
                     return;
                 }
 

@@ -69,7 +69,7 @@ namespace ResurrectionRP_Server.Factions
             List<Invoice> Invoices = InvoiceList.FindAll(b => (b.SocialClub == client.GetSocialClub() && b.paid == false));
 
             if (Invoices.Count == 0)
-                await client.DisplayHelp("Vous n'avez aucune amende à payer !", 5000);
+                client.DisplayHelp("Vous n'avez aucune amende à payer !", 5000);
 
             Menu menu = new Menu("ID_Accueil", FactionName, "", 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
             menu.ItemSelectCallback = AccueilMenuCallback;
@@ -113,7 +113,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         if (!await clientHandler.BankAccount.GetBankMoney(menuItem.GetData("price"), $"Réglement amende {menuItem.GetData("name")}"))
                         {
-                            await client.DisplayHelp( "Vous n'avez pas assez d'argent en banque pour payer l'amende.", 5000);
+                            client.DisplayHelp( "Vous n'avez pas assez d'argent en banque pour payer l'amende.", 5000);
                             await client.PlaySoundFrontEndFix(-1, "ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
                             await menu.CloseMenu(client);
                             break;
@@ -122,7 +122,7 @@ namespace ResurrectionRP_Server.Factions
                         BankAccount.AddMoney(Convert.ToDouble(menuItem.GetData("price")), $"Paiement par {client.Name}, réglement amende {menuItem.GetData("name")}", false);
                         invoice.paid = true;
                         await UpdateDatabase();
-                        await client.DisplayHelp( $"Vous venez de payer ~r~${menuItem.GetData("price")}~w~ pour régler votre amende.", 5000);
+                        client.DisplayHelp( $"Vous venez de payer ~r~${menuItem.GetData("price")}~w~ pour régler votre amende.", 5000);
                         await menu.CloseMenu(client);
                     }
 
@@ -255,7 +255,7 @@ namespace ResurrectionRP_Server.Factions
                     }
                     catch (Exception ex)
                     {
-                        await client.SendNotificationError("~r~Le prix ne doit être exclusivement numérique.");
+                        client.SendNotificationError("~r~Le prix ne doit être exclusivement numérique.");
                     }
                     await menu.OpenMenu(client);
                     break;
@@ -266,13 +266,13 @@ namespace ResurrectionRP_Server.Factions
                 case "ID_Validate":
                     if (invoice.Desc == null || invoice.Amount <= 0)
                     {
-                        await client.SendNotificationError( "~r~Vous devez avoir sélectionné un motif et un prix pour mettre une amende.");
+                        client.SendNotificationError( "~r~Vous devez avoir sélectionné un motif et un prix pour mettre une amende.");
                         break;
                     }
                     await CreateInvoice(client, invoice);
                     PlayerHandler clientHandler = invoice.Player.GetPlayerHandler();
-                    await client.DisplayHelp( $"L'amende est enregistrée et a été envoyée à {clientHandler.Identite.Name}.", 10000);
-                    await invoice.Player.DisplayHelp( $"Vous venez de recevoir une amende.\nVous avez 7 jours pour vous rendre au poste.", 10000);
+                    client.DisplayHelp( $"L'amende est enregistrée et a été envoyée à {clientHandler.Identite.Name}.", 10000);
+                    invoice.Player.DisplayHelp( $"Vous venez de recevoir une amende.\nVous avez 7 jours pour vous rendre au poste.", 10000);
                     await menu.CloseMenu(client);
                     break;
             }
@@ -280,7 +280,7 @@ namespace ResurrectionRP_Server.Factions
             menu.SetData("CurrentInvoice", invoice);
 
             if (invoice.Desc != null || invoice.Amount > 0)
-                await client.DisplaySubtitle( $"~o~Motif~w~: {invoice.Desc} \n~g~Prix~w~: ~g~$~w~{invoice.Amount}", 5000);
+                client.DisplaySubtitle( $"~o~Motif~w~: {invoice.Desc} \n~g~Prix~w~: ~g~$~w~{invoice.Amount}", 5000);
         }
 
         private async Task CreateInvoice(IPlayer client, Invoice invoice)
@@ -326,7 +326,7 @@ namespace ResurrectionRP_Server.Factions
                     return;
                 }*/
 
-                await client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande de mise en fourrière.", $"Besoin de retrait du véhicule {target.NumberplateText}" );
+                client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande de mise en fourrière.", $"Besoin de retrait du véhicule {target.NumberplateText}" );
 
                 Utils.Utils.Delay(30000 * 1, true, async () =>
                 {
@@ -334,7 +334,7 @@ namespace ResurrectionRP_Server.Factions
                     if (vh == null)
                         return;
 
-                    await client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande de mise en fourrière.", "La fourrière est venu récupérer le véhicule.");
+                    client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande de mise en fourrière.", "La fourrière est venu récupérer le véhicule.");
                     await GameMode.Instance.PoundManager.AddVehicleInPound(vh);
                 });
             }
@@ -346,7 +346,7 @@ namespace ResurrectionRP_Server.Factions
             IVehicle target = menu.GetData("Vehicle");
             if (target != null)
             {
-                await client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande d'information:", "~r~Recherche en cours~w~.");
+                client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande d'information:", "~r~Recherche en cours~w~.");
 
                 Identite identite = null;
                 string infos = string.Empty;
@@ -381,8 +381,8 @@ namespace ResurrectionRP_Server.Factions
                     }
                 }
 
-                Utils.Utils.Delay(20000, true, async () => {
-                    await client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Information trouvées:", infos );
+                Utils.Utils.Delay(20000, true, () => {
+                    client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Information trouvées:", infos );
                 });
             }
         }

@@ -77,9 +77,9 @@ namespace SaltyServer
                 return;
 
             if (!String.IsNullOrWhiteSpace(Voice.RequiredUpdateBranch) && updateBranch != Voice.RequiredUpdateBranch)
-                await client.NotifyAsync($"[Salty Chat] Required update branch: {Voice.RequiredUpdateBranch} | Your update branch: {updateBranch}");
+                client.SendNotification($"[Salty Chat] Required update branch: {Voice.RequiredUpdateBranch} | Your update branch: {updateBranch}");
             else
-                await client.NotifyAsync($"[Salty Chat] Required version: {Voice.MinimumPluginVersion} | Your version: {version}");
+                client.SendNotification($"[Salty Chat] Required version: {Voice.MinimumPluginVersion} | Your version: {version}");
 
             await client.KickAsync("SaltyChat version");
         }

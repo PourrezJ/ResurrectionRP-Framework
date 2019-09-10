@@ -173,23 +173,23 @@ namespace ResurrectionRP_Server.Phone
                     break;
 
                 case "GetContacts":
-                    await phone.SendContactListToClient(client);
+                    phone.SendContactListToClient(client);
                     break;
 
                 case "AddOrEditContact":
                     Address contact = JsonConvert.DeserializeObject<Address>(args[1].ToString());
 
                     if (string.IsNullOrEmpty(contact.originalNumber) && await phone.TryAddNewContact(client, contact.contactName, contact.phoneNumber))
-                        await client.SendNotificationSuccess($"Vous avez ajouté le contact {contact.contactName}");
+                        client.SendNotificationSuccess($"Vous avez ajouté le contact {contact.contactName}");
                     else if (await phone.TryEditContact(client, contact.contactName, contact.phoneNumber, contact.originalNumber))
-                        await client.SendNotificationSuccess($"Vous avez édité le contact {contact.contactName}");
+                        client.SendNotificationSuccess($"Vous avez édité le contact {contact.contactName}");
 
                     await ph.Update();
                     break;
 
                 case "RemoveContact":
-                    if (await phone.RemoveContactFromAddressBook(args[1].ToString()))
-                        await client.SendNotificationSuccess("Contact Supprimé!!");
+                    if (phone.RemoveContactFromAddressBook(args[1].ToString()))
+                        client.SendNotificationSuccess("Contact Supprimé!!");
 
                     await ph.Update();
                     break;
@@ -206,7 +206,7 @@ namespace ResurrectionRP_Server.Phone
 
                     if (Database.MongoDB.GetCollectionSafe<Conversation>("conversations").DeleteOne(filter).DeletedCount > 0)
                     {
-                        await client.NotifyAsync("Conversation supprimée");
+                        client.SendNotification("Conversation supprimée");
                         await client.EmitAsync("deletedConversation");
                     }
                     break;

@@ -86,11 +86,14 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
             vehicleplace.VehicleHandler.FreezePosition = (false);
             vehicleplace.VehicleHandler.Vehicle.ResetData("RentShop");
             ph.ListVehicleKey.Add(Models.VehicleKey.GenerateVehicleKey(vehicleplace.VehicleHandler));
-            await ph.Client.SendNotificationSuccess($"Vous avez loué un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");
+            ph.Client.SendNotificationSuccess($"Vous avez loué un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");
             VehicleRentPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;
 
             Utils.Utils.Delay((int)TimeSpan.FromHours(2).TotalMilliseconds, true, async () =>
             {
+                if (!veh.Vehicle.Exists)
+                    return;
+
                 await veh.Delete();
             });
         }

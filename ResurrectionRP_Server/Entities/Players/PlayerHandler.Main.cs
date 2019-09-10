@@ -254,7 +254,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
             else
             {
-                await client.SendNotificationError("Erreur avec votre personnage.");
+                client.SendNotificationError("Erreur avec votre personnage.");
                 //await client.FadeIn(0);
                 await client.KickAsync("Une erreur s'est produite");
             }
@@ -455,7 +455,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     Alt.Server.LogError($"UpdateClothing ID: {i} player: {social}" +ex);
                 }
             }
-            await Clothing.UpdatePlayerClothing();
+            Clothing.UpdatePlayerClothing();
         }
 
         public bool PocketIsFull() => PocketInventory.IsFull();

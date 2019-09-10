@@ -19,7 +19,7 @@ namespace ResurrectionRP_Server.Items
 
         public override async Task Use(IPlayer client, string inventoryType, int slot)
         {
-            await client.NotifyAsync("Item inutilisable");
+            client.SendNotification("Item inutilisable");
         }
     }
 }

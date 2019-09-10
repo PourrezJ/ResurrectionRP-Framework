@@ -208,7 +208,7 @@ namespace ResurrectionRP_Server.Models
                     else
                     {
                         // Aucun spawn de libre on stop tout.
-                        await client.SendNotificationError("Aucune place de disponible pour sortir votre véhicule.");
+                        client.SendNotificationError("Aucune place de disponible pour sortir votre véhicule.");
                         return;
                     }
                 }
@@ -263,7 +263,7 @@ namespace ResurrectionRP_Server.Models
 
                 if (!Whitelist.Contains(social))
                 {
-                    await client.SendNotificationError("Vous n'êtes pas autorisé à utiliser ce parking.");
+                    client.SendNotificationError("Vous n'êtes pas autorisé à utiliser ce parking.");
                     return;
                 }
             }
@@ -292,13 +292,13 @@ namespace ResurrectionRP_Server.Models
                 // some check
                 if (vehicle.SpawnVeh)
                 {
-                    await client.SendNotificationError("Vous ne pouvez pas garer un véhicule de location dans le parking!");
+                    client.SendNotificationError("Vous ne pouvez pas garer un véhicule de location dans le parking!");
                     return;
                 }
 
                 if (ListVehicleStored.Count + 1 >= Limite)
                 {
-                    await client.SendNotificationError("Le parking est plein!");
+                    client.SendNotificationError("Le parking est plein!");
                     return;
                 }
                 // it's ok!
@@ -354,7 +354,7 @@ namespace ResurrectionRP_Server.Models
                 }
                 else
                 {
-                    await client.SendNotificationError("Vous n'avez aucun véhicule dans ce parking.");
+                    client.SendNotificationError("Vous n'avez aucun véhicule dans ce parking.");
                     return;
                 }
             } 
@@ -374,7 +374,7 @@ namespace ResurrectionRP_Server.Models
             {
                 if (!await client.GetPlayerHandler().HasMoney(Price))
                 {
-                    await client.SendNotificationError($"Vous n'avez pas les ${Price} en poche pour payer le ticket.");
+                    client.SendNotificationError($"Vous n'avez pas les ${Price} en poche pour payer le ticket.");
                     return;
                 }
 

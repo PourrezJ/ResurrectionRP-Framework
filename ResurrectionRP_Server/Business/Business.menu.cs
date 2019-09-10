@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.Businesses
                     if (int.TryParse(menuItem.InputValue, out int value))
                         await Sell(client, value);
                     else
-                        await client.SendNotificationError("Montant non valide");
+                        client.SendNotificationError("Montant non valide");
 
                     await OnNpcSecondaryInteract(client, Ped);
                 }
@@ -88,13 +88,13 @@ namespace ResurrectionRP_Server.Businesses
                     BankAccount.Clear();
                     await Update();
                     Entities.Blips.BlipsManager.SetColor(Blip, 35);
-                    await client.SendNotificationSuccess("Propriétaire retiré");
+                    client.SendNotificationSuccess("Propriétaire retiré");
                     await OnNpcSecondaryInteract(client, Ped);
                 }
                 else if (menuItem.Id == "ID_DeleteAdmin")
                 {
                     await Delete();
-                    await client.SendNotificationSuccess("Le magasin a été supprimé");
+                    client.SendNotificationSuccess("Le magasin a été supprimé");
                     await MenuManager.CloseMenu(client);
                 }
                 else if (menuItem.Id == "ID_AddStaff")
@@ -149,26 +149,26 @@ namespace ResurrectionRP_Server.Businesses
 
                     if (Employees.Count >= MaxEmployee)
                     {
-                        await client.SendNotificationError("Vous avez atteint le nombre maximun d'employés.");
+                        client.SendNotificationError("Vous avez atteint le nombre maximun d'employés.");
                         return;
                     }
                     else if (Employees.Any(p => p.Value.ToLower() == _msg.ToLower()))
                     {
-                        await client.SendNotificationError("Cette personne fait déjà partie des employés");
+                        client.SendNotificationError("Cette personne fait déjà partie des employés");
                         return;
                     }
 
                     if (ph != null)
                     {
                         Employees.Add(ph.PID, ph.Identite.Name);
-                        await client.SendNotificationSuccess($"{_msg} est ajouté à la liste des employés");
+                        client.SendNotificationSuccess($"{_msg} est ajouté à la liste des employés");
                         await Update();
                     }
                     else
-                        await client.SendNotificationError($"{_msg} est introuvable.");
+                        client.SendNotificationError($"{_msg} est introuvable.");
                 }
                 else
-                    await client.SendNotificationError("Aucun nom de rentré.");
+                    client.SendNotificationError("Aucun nom de rentré.");
 
                 await GestionEmployee(client, menu);
             }
@@ -180,7 +180,7 @@ namespace ResurrectionRP_Server.Businesses
                     {
                         Employees.Remove(playerID.Key);
                         await Update();
-                        await client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
+                        client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
                         await GestionEmployee(client, menu);
                         break;
                     }
@@ -201,10 +201,10 @@ namespace ResurrectionRP_Server.Businesses
                     OnSale = false;
                     await Update();
                     Entities.Blips.BlipsManager.SetColor(Blip, 2);
-                    await client.SendNotificationSuccess($"Vous avez acheté {BusinnessName} pour la somme de ${BusinessPrice}.");
+                    client.SendNotificationSuccess($"Vous avez acheté {BusinnessName} pour la somme de ${BusinessPrice}.");
                 }
                 else
-                    await client.NotifyAsync("Vous n'avez pas l'argent nécessaire pour acheter le commerce.");
+                    client.SendNotification("Vous n'avez pas l'argent nécessaire pour acheter le commerce.");
             }
         }
 
@@ -215,16 +215,15 @@ namespace ResurrectionRP_Server.Businesses
             BusinessPrice = money;
             await Update();
             Entities.Blips.BlipsManager.SetColor(Blip, 35);
-            await client.SendNotificationSuccess($"Vous avez mis en vente {BusinnessName} pour la somme de ${BusinessPrice}.");
+            client.SendNotificationSuccess($"Vous avez mis en vente {BusinnessName} pour la somme de ${BusinessPrice}.");
         }
 
         public async Task CancelSell(IPlayer client)
         {
             OnSale = false;
             Entities.Blips.BlipsManager.SetColor(Blip, 2);
-            await client.SendNotificationSuccess($"Vous avez annulé la mise en vente de {BusinnessName}.");
+            client.SendNotificationSuccess($"Vous avez annulé la mise en vente de {BusinnessName}.");
             await MenuManager.CloseMenu(client);
         }
-
     }
 }

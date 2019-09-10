@@ -1,5 +1,7 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
+import * as utils from 'client/Utils/Utils';
+import Scaleforms from 'client/Helpers/Scaleform';
 
 export class Blesse {
 
@@ -72,13 +74,17 @@ export class Blesse {
 }
 
 export class Medical {
+    private scaleForm: Scaleforms;
     private BlesseList: Blesse[];
     private isInMission: boolean;
     private deathMessage: string;
-    private RequestedTimeMedic: Date;
+    public RequestedTimeMedic: number = 0;
 
     constructor()
     {
+        this.scaleForm = new Scaleforms("mp_big_message_freemode");
+        this.RequestedTimeMedic = Date.now();
+
         alt.onServer("ONU_IAccept_Client", (player: alt.Player) => {
             this.isInMission = true;
             let call = this.BlesseList.find(p => p.BlessePlayer.id == player.id);
@@ -157,19 +163,52 @@ export class Medical {
             game.pauseDeathArrestRestart(true);
             game.setFadeInAfterLoad(false);
             game.setFadeOutAfterDeath(false);
+            game.setEntityHealth(alt.Player.local.scriptID, 100, 0);
         });  
+
+        alt.everyTick(this.OnTick.bind(this));
     }
 
     private KeyHandler(key)
     {
         if (key == 'Y'.charCodeAt(0)) {
-            //if (Date.now(). >= this.RequestedTimeMedic) {
-            //    Events.CallRemote("ONU_CallUrgenceMedic");
-            //    RequestedTimeMedic = DateTime.Now.AddMinutes(3);
-            //}
+            if (new Date(Date.now()).getTime() >= new Date(this.RequestedTimeMedic).getTime()) // <--- Besoin d'améliorer prochainement se check.
+            {
+                alt.emitServer("ONU_CallUrgenceMedic");
+                this.RequestedTimeMedic = Date.now() + new Date().setMinutes(3)
+            }
         }
         else if (key == 'R'.charCodeAt(0)) {
+            alt.emitServer("IWantToDie");
+        }
 
+        game.animpostfxPlay("DeathFailMPIn", 0, true);
+        game.setCamEffect(1);
+    }
+
+    private OnTick() {
+        if (game.isPlayerDead(0))
+        {
+            if (Date.now() >= this.RequestedTimeMedic) // <--- Besoin d'améliorer prochainement se check.
+            {
+                this.deathMessage = "Appuyer sur ~g~Y~w~ pour utiliser l'appel d'urgence ou ~r~R~w~ pour en finir :(";
+            } 
+
+            if (new Date(Date.now()).getTime() >= new Date(this.RequestedTimeMedic).getTime()) // <--- Besoin d'améliorer prochainement se check.
+            {
+                this.deathMessage = "Appuyer sur ~g~Y~w~ pour utiliser l'appel d'urgence ou ~r~R~w~ pour en finir :(";
+            } 
+            else {
+                if (new Date(Date.now()).getTime() - new Date(this.RequestedTimeMedic).getTime() > -1) {
+                    this.deathMessage = `Il vous reste à attendre ${new Date(new Date(Date.now()).getTime() - new Date(this.RequestedTimeMedic).getTime()).getSeconds()} secondes pour re-contacter les secours.`;
+                }
+                else {
+                    this.deathMessage = `Il vous reste à attendre ${new Date(new Date(Date.now()).getTime() - new Date(this.RequestedTimeMedic).getTime()).getMinutes()} minutes pour re-contacter les secours.`;
+                }
+            }
+           
+            this.scaleForm.call("SHOW_SHARD_WASTED_MP_MESSAGE", "~r~Vous êtes dans le Coma!", this.deathMessage);
+            this.scaleForm.render2D();
         }
     }
 }

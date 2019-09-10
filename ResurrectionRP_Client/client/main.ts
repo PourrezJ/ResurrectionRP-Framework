@@ -58,5 +58,12 @@ alt.on("disconnect", () =>
 {
     alt.log("disconnect detected.");
 
+    game.animpostfxStop("DeathFailMPIn")
+    game.setCamEffect(0);
 
+    game.setFadeInAfterDeathArrest(false);
+    game.setFadeOutAfterArrest(false);
+    game.pauseDeathArrestRestart(true);
+    game.setFadeInAfterLoad(false);
+    game.setFadeOutAfterDeath(false);
 });

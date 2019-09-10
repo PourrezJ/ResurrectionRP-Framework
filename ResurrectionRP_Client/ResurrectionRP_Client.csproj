@@ -83,6 +83,7 @@
     <TypeScriptCompile Include="client\Env\Doors.ts" />
     <TypeScriptCompile Include="client\Env\Time.ts" />
     <TypeScriptCompile Include="client\Env\Weather.ts" />
+    <TypeScriptCompile Include="client\Helpers\Scaleform.ts" />
     <TypeScriptCompile Include="client\Models\Ped.ts" />
     <TypeScriptCompile Include="client\Helpers\UiHelper.ts" />
     <TypeScriptCompile Include="client\Jobs\Data\Trash.ts" />

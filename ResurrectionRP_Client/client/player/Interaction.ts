@@ -88,6 +88,9 @@ export class Interaction {
 
         alt.on('update', () => {
 
+            if (game.isPlayerDead(0))
+                return;
+
             raycastResult = Raycast.line(2, -1, alt.Player.local.scriptID);
 
             if (raycastResult.isHit && raycastResult.entityType == 2 && alt.Player.local.vehicle == null) {

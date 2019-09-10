@@ -102,6 +102,7 @@ export default class NativeUI {
         this._background = new Sprite("commonmenu", "gradient_bgd", new Point(this.offset.X, 144 + this.offset.Y - 37 + this.extraOffset), new Size(290, 25));
 
         alt.on("disconnect", () => {
+           
             this._mainMenu = null;
             this.render = null;
             delete this;

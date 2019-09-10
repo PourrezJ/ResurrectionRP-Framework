@@ -312,7 +312,7 @@ namespace ResurrectionRP_Server.Entities.Players
             if (!client.Exists)
                 return;
 
-/*            PlayerHandler ph = GetPlayerByClient(client); TODO
+            PlayerHandler ph = client.GetPlayerHandler();
             if (ph != null)
             {
                 if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList.Count > 0)
@@ -326,8 +326,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 await client.SetRotationAsync(new Rotation(0, 239.0923f, 0));
                 await client.Resurrect();
                 ph.PlayerSync.Injured = false;
-                ph.Health = 100; TODO
-            }*/
+            }
         }
 
         public async Task ReviveEvent(IPlayer client, object[] args )

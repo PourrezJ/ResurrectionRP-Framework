@@ -24,7 +24,7 @@ namespace ResurrectionRP_Server
             System.Threading.Thread.CurrentThread.CurrentCulture = ci;
             System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
 
-            AltAsync.OnPlayerConnect += AltAsync_OnPlayerConnect;
+            //AltAsync.OnPlayerConnect += AltAsync_OnPlayerConnect;
 
             Database.MongoDB.Init();
 
@@ -55,19 +55,19 @@ namespace ResurrectionRP_Server
             }
         }
 
-        private async Task AltAsync_OnPlayerConnect(IPlayer player, string reason)
-        {
-            player.Emit("FadeOut", 0);
+        //private async Task AltAsync_OnPlayerConnect(IPlayer player, string reason)
+        //{
+        //    player.Emit("FadeOut", 0);
 
-            while (gamemode == null)
-                await Task.Delay(50);
+        //    while (gamemode == null)
+        //        await Task.Delay(50);
 
-            while (gamemode.PlayerManager == null)
-                await Task.Delay(50);
+        //    while (gamemode.PlayerManager == null)
+        //        await Task.Delay(50);
 
-            player.Emit("GetSocialClub", "Events_PlayerJoin");
-            //await gamemode.PlayerManager.Events_PlayerJoin(player, reason);
-        }
+        //    player.Emit("GetSocialClub", "Events_PlayerJoin");
+        //    //await gamemode.PlayerManager.Events_PlayerJoin(player, reason);
+        //}
 
         public override void OnStop()
         {

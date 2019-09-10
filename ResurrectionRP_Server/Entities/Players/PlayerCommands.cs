@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
+using System.Threading.Tasks;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Utils.Enums;
 
@@ -13,6 +14,7 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             Chat.RegisterCmd("tp", TpCoord);
             Chat.RegisterCmd("cls", Cls);
+            Chat.RegisterCmd("cloth", Cloth);
         }
 
         private void TpCoord(IPlayer player, string[] args)
@@ -32,6 +34,14 @@ namespace ResurrectionRP_Server.Entities.Players
         public void Cls(IPlayer player, string[] args)
         {
             player.Emit("EmptyChat");
+        }
+
+        private void Cloth(IPlayer player, object[] args)
+        {
+            Task.Run(async () =>
+            {
+                await player.SetClothAsync((Models.ClothSlot)Convert.ToInt32(args[0]), (int)args[1], (int)args[2], (int)args[3]);
+            });
         }
     }
 }

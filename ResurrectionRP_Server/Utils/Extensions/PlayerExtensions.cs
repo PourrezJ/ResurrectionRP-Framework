@@ -42,10 +42,11 @@ namespace ResurrectionRP_Server
             return ID;
         }
 
-        public async static Task SetClothAsync(this IPlayer client, ClothSlot level, int drawable, int texture, int palette)
+
+
+        public static void SetClothAsync(this IPlayer client, ClothSlot level, int drawable, int texture, int palette)
         {
-            await Task.Run(() =>
-                client.Emit("ComponentVariation", (int)level, drawable, texture, palette));
+            client.EmitLocked("ComponentVariation", (int)level, drawable, texture, palette);
         }
 
         public async static Task SetPropAsync(this IPlayer client, PropSlot slot, PropData item)

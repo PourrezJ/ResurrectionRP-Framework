@@ -12,58 +12,71 @@ import { Streamer } from 'client/Streamer/Streamer';
 import { Notify } from 'client/Notify/Notify';
 import menuManager from 'client/MenuManager/MenuManager';
 
-chat.initialize();
-speedometer.initialize();
-utils.initialize();
-login.init();
-xtreamMenu.init();
-new Streamer();
-menuManager();
-
 var GameClass: Game;
 
-export function Instance(): Game {
-    return GameClass;
-}
+const init = async () => {
+    try {
+        alt.log("Chargement des events.");
 
-alt.onServer("PlayerInitialised", (
-    StaffRank: number,
-    IdentiteName: string,
-    Money: number,
-    Thirst: number,
-    Hunger: number,
-    AnimSettings: string,
-    Time: string,
-    Weather: string,
-    WeatherWind: number,
-    WeatherWindDirection: number,
-    isDebug: boolean,
-    Location: string
-) => {
-    PlayerCustomization.init();
-    new Notify();
-    GameClass = new Game(StaffRank, IdentiteName, Money, Thirst, Hunger, AnimSettings, Time, Weather, WeatherWind, WeatherWindDirection, isDebug, Location);
-    game.freezeEntityPosition(alt.Player.local.scriptID, false);
-});
+        alt.onServer("PlayerInitialised", (
+            StaffRank: number,
+            IdentiteName: string,
+            Money: number,
+            Thirst: number,
+            Hunger: number,
+            AnimSettings: string,
+            Time: string,
+            Weather: string,
+            WeatherWind: number,
+            WeatherWindDirection: number,
+            isDebug: boolean,
+            Location: string
+        ) => {
+            PlayerCustomization.init();
+            new Notify();
+            GameClass = new Game(StaffRank, IdentiteName, Money, Thirst, Hunger, AnimSettings, Time, Weather, WeatherWind, WeatherWindDirection, isDebug, Location);
+            game.freezeEntityPosition(alt.Player.local.scriptID, false);
+        });
 
-alt.onServer('OpenCreator', () => {
-    OpenCharCreator();
-});
+        alt.onServer('OpenCreator', () => {
+            OpenCharCreator();
+        });
 
-alt.onServer("togglePlayerControl", (value: boolean) => {
-    alt.toggleGameControls(value);
-});
+        alt.onServer("togglePlayerControl", (value: boolean) => {
+            alt.toggleGameControls(value);
+        });
 
-alt.on("disconnect", () =>
-{
-    alt.log("disconnect detected.");
+        alt.on("disconnect", () => {
+            alt.log("disconnect detected.");
 
-    game.animpostfxStop("DeathFailMPIn")
-    game.setCamEffect(0);
+            game.animpostfxStop("DeathFailMPIn")
+            game.setCamEffect(0);
 
-    game.setFadeInAfterDeathArrest(false);
-    game.setFadeOutAfterArrest(false);
-    game.pauseDeathArrestRestart(true);
-    game.setFadeInAfterLoad(false);
-    game.setFadeOutAfterDeath(false);
-});
+            game.setFadeInAfterDeathArrest(false);
+            game.setFadeOutAfterArrest(false);
+            game.pauseDeathArrestRestart(true);
+            game.setFadeInAfterLoad(false);
+            game.setFadeOutAfterDeath(false);
+        });
+
+        alt.log("Chargement des controlleurs");
+
+        chat.initialize();
+        speedometer.initialize();
+        utils.initialize();
+        login.init();
+        xtreamMenu.init();
+        new Streamer();
+        menuManager();
+        alt.emitServer("Events_PlayerJoin", game.scGetNickname());
+    }
+    catch (Exception) {
+        alt.logError(`Failed to load scripts.\nMessage: ${Exception.Message}`);
+        game.freezeEntityPosition(alt.getLocalPlayer().scriptID, true);
+        game.doScreenFadeOut(0);
+        alt.logError(`Erreur! Essayez de vous reconnecter. Si le problème se reproduit, veuillez contacter un helpers.`);
+    }
+};
+init();
+
+

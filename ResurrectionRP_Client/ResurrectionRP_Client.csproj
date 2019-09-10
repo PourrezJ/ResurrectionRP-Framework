@@ -106,6 +106,7 @@
     <TypeScriptCompile Include="client\Streamer\Streamer.ts" />
     <TypeScriptCompile Include="client\Streamer\Streamer.ts" />
     <TypeScriptCompile Include="client\Utils\Enums\Enums.ts" />
+    <TypeScriptCompile Include="client\Utils\IplLoader.ts" />
     <TypeScriptCompile Include="client\Utils\Raycast.ts" />
     <TypeScriptCompile Include="client\Voice\VoiceChat.ts" />
     <TypeScriptCompile Include="typings\altv-client.d.ts" />

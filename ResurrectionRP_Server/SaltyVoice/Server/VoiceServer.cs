@@ -102,14 +102,15 @@ namespace SaltyServer
             });
         }
 
-        public async Task OnPlayerTalkingOnRadio(IPlayer client, object[] args)
+        public Task OnPlayerTalkingOnRadio(IPlayer client, object[] args)
         {
             if (!client.Exists)
-                return;
+                return Task.CompletedTask;
 
             string radioChannel = args[0].ToString();
             bool isSending = (bool)args[1];
-            await Voice.SetPlayerSendingOnRadioChannel(client, radioChannel, isSending);
+            Voice.SetPlayerSendingOnRadioChannel(client, radioChannel, isSending);
+            return Task.CompletedTask;
         }
 
         public void OnSetRadioChannel(IPlayer client, string radioChannel)
@@ -235,32 +236,29 @@ namespace SaltyServer
             }
         }
 
-        public static async Task SetPlayerSendingOnRadioChannel(IPlayer client, string radioChannel, bool isSending)
+        public static void SetPlayerSendingOnRadioChannel(IPlayer client, string radioChannel, bool isSending)
         {
-            await AltAsync.Do(() =>
+            if (!Voice.RadioChannels.ContainsKey(radioChannel) || !Voice.RadioChannels[radioChannel].Contains(client) || !client.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName))
+                return;
+
+            if (isSending && !Voice.PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
             {
-                if (!Voice.RadioChannels.ContainsKey(radioChannel) || !Voice.RadioChannels[radioChannel].Contains(client) || !client.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName))
-                    return;
+                Voice.PlayersTalkingOnRadioChannels[radioChannel].Add(client);
 
-                if (isSending && !Voice.PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
+                foreach (IPlayer radioClient in Voice.RadioChannels[radioChannel])
                 {
-                    Voice.PlayersTalkingOnRadioChannels[radioChannel].Add(client);
-
-                    foreach (IPlayer radioClient in Voice.RadioChannels[radioChannel])
-                    {
-                        radioClient.Emit(SaltyShared.Event.Voice_TalkingOnRadio, tsName, true, radioChannel);
-                    }
+                    radioClient.EmitLocked(SaltyShared.Event.Voice_TalkingOnRadio, tsName, true, radioChannel);
                 }
-                else if (!isSending && Voice.PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
+            }
+            else if (!isSending && Voice.PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
+            {
+                Voice.PlayersTalkingOnRadioChannels[radioChannel].Remove(client);
+
+                foreach (IPlayer radioClient in Voice.RadioChannels[radioChannel])
                 {
-                    Voice.PlayersTalkingOnRadioChannels[radioChannel].Remove(client);
-
-                    foreach (IPlayer radioClient in Voice.RadioChannels[radioChannel])
-                    {
-                        radioClient.Emit(SaltyShared.Event.Voice_TalkingOnRadio, tsName, false, radioChannel);
-                    }
+                    radioClient.EmitLocked(SaltyShared.Event.Voice_TalkingOnRadio, tsName, false, radioChannel);
                 }
-            });
+            }
         }
         #endregion
     }

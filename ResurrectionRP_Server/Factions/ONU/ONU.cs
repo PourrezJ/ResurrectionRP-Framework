@@ -143,7 +143,7 @@ namespace ResurrectionRP_Server.Factions
             await client.EmitAsync("ONU_Callback", ServicePlayerList.Count);
         }
 
-        private async Task ONU_IAccept(IPlayer client, object[] args)
+        private Task ONU_IAccept(IPlayer client, object[] args)
         {
 
             IPlayer victim = GameMode.Instance.PlayerList[(int)args[0]];
@@ -158,12 +158,12 @@ namespace ResurrectionRP_Server.Factions
             EmergencyCall result = EmergencyCalls.FindLast(b => (b.player.Id == victim.Id));
             if (result != null && result.Taken == true)
             {
-                client.Emit("ONU_BlesseCallTaken", victim);
+                client.EmitLocked("ONU_BlesseCallTaken", victim);
                 return;
             }
 
             EmergencyCalls.FindLast(b => (b.player.Id == victim.Id))?.TakeCall();
-            client.Emit("ONU_IAccept_Client", victim);
+            client.EmitLocked("ONU_IAccept_Client", victim);
 
             var players =  GetEmployeeOnline();
 
@@ -172,10 +172,11 @@ namespace ResurrectionRP_Server.Factions
                 foreach (IPlayer medic in players)
                 {
                     if (medic.Exists && medic != client)
-                        medic.Emit("ONU_BlesseCalled_Accepted", victim, client.GetPlayerHandler()?.Identite.Name);
+                        medic.EmitLocked("ONU_BlesseCalled_Accepted", victim, client.GetPlayerHandler()?.Identite.Name);
                 }
             }
-            await victim.EmitAsync("ONU_CallbackAccept");
+            victim.EmitLocked("ONU_CallbackAccept");
+            return Task.CompletedTask;
         }
 
         private async Task ONU_BlesseRemoveBlip(IPlayer client, object[] args)

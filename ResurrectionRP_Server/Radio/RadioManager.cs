@@ -132,7 +132,7 @@ namespace ResurrectionRP_Server.Radio
 
                             radio.SaveFrequeceRadio(Convert.ToInt32(args[1]), frequence);
                             await player.GetPlayerHandler()?.Update();
-                            await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
+                            SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
                         }
                     }
                     catch(Exception ex)
@@ -144,7 +144,7 @@ namespace ResurrectionRP_Server.Radio
 
                 case "ChangeFrequence":
                     radio.CurrentFrequence = int.Parse(args[1].ToString());
-                    await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
+                    SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
                     break;
                 default:
                     Alt.Server.LogError("RadioManager RadioChange Hm args[0] is not valid... problem in client side ? args 0 mmust be the event name");

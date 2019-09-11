@@ -147,7 +147,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     
                     if (!Config.GetSetting<bool>("WhitelistOpen"))
                     {
-                        await player.EmitAsync("OpenLogin");
+                        player.EmitLocked("OpenLogin");
                         return;
                     }
 
@@ -160,7 +160,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             if (DateTime.Now > whitelist.EndBanTime)
                             {
                                 whitelist.IsBan = false;
-                                await player.EmitAsync("OpenLogin", args[0]);
+                                player.EmitLocked("OpenLogin", args[0]);
                                 return;
                             }
 
@@ -169,12 +169,12 @@ namespace ResurrectionRP_Server.Entities.Players
                         }
                         else
                         {
-                            player.Emit("OpenLogin", socialclub);
+                            player.EmitLocked("OpenLogin", socialclub);
                         }
                     }
                     else
                     {
-                        await player.EmitAsync("FadeIn", 0);
+                        player.EmitLocked("FadeIn", 0);
                         string _kickMessage = "Vous n'êtes pas whitelist sur le serveur";
                         await player.KickAsync(_kickMessage);
                     }

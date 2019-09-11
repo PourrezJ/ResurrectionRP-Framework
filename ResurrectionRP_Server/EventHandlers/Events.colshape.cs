@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace ResurrectionRP_Server.EventHandlers
         private static async Task OnEntityColshape(IColShape colShape, IEntity targetEntity, bool state)
         {
             if(targetEntity.Type == BaseObjectType.Player && colShape.Exists)
-                (targetEntity as IPlayer).Emit("SetStateInColShape", state);
+                (targetEntity as IPlayer).EmitLocked("SetStateInColShape", state);
 
             if (state)
             {

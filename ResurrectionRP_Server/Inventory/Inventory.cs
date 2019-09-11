@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
@@ -86,7 +87,7 @@ namespace ResurrectionRP_Server.Inventory
             if (AddItem(item, quantity))
             {
                 if (message)
-                    client.Emit("Display_Help", "Vous venez d'ajouter " + quantity + " " + item.name + " dans l'inventaire", 10000);
+                    client.EmitLocked("Display_Help", "Vous venez d'ajouter " + quantity + " " + item.name + " dans l'inventaire", 10000);
 
                 await client.GetPlayerHandler()?.Update();
                 return true;

@@ -67,19 +67,19 @@ namespace ResurrectionRP_Server.Radio
             {
                 Statut = RadioModes.SPEAKING;
 
-                await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), true); 
+                SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), true); 
 
                 await client.PlayAnimation("random@arrests", "generic_radio_chatter", 4, -8, -1, (AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.AllowPlayerControl));
             }
         }
 
-        public async Task DontUse(IPlayer client)
+        public void DontUse(IPlayer client)
         {
             Owner = client;
             if (Statut == RadioModes.SPEAKING || Statut == RadioModes.LISTENING)
             {
                 Statut = RadioModes.LISTENING;
-                await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), false);
+                SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), false);
 
                 var ph = client.GetPlayerHandler();
 

@@ -285,26 +285,28 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        private async Task OnKeyReleasedCallback(IPlayer client, ConsoleKey Keycode)
+        private Task OnKeyReleasedCallback(IPlayer client, ConsoleKey Keycode)
         {
             if (!client.Exists)
-                return;
+                return Task.CompletedTask;
 
             PlayerHandler ph = client.GetPlayerHandler();
 
             if (ph == null)
-                return;
+                return Task.CompletedTask;
 
 
             switch (Keycode)
             {
                 case (ConsoleKey)20:
                     if (ph.HasOpenMenu())
-                        return;
+                        return Task.CompletedTask;
 
-                    await ph.RadioSelected?.DontUse(client);
+                    ph.RadioSelected?.DontUse(client);
                     break;
             }
+
+            return Task.CompletedTask;
         }
     }
 }

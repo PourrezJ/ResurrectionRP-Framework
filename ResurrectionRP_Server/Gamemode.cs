@@ -20,6 +20,7 @@ using AltV.Net.Enums;
 using SaltyServer;
 using ResurrectionRP_Server.Radio;
 using ResurrectionRP_Server.Farms;
+using AltV.Net.Async;
 
 namespace ResurrectionRP_Server
 {
@@ -304,7 +305,7 @@ namespace ResurrectionRP_Server
                 ph.ListVehicleKey.Add(new VehicleKey(vh.VehicleManifest.DisplayName, vh.Plate));
 
                 if (vh.Vehicle != null)
-                    player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);
+                    player.EmitLocked("SetPlayerIntoVehicle", vh.Vehicle, -1);
 
                 await vh.InsertVehicle();
                 await ph.Update();

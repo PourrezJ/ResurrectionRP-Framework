@@ -9,6 +9,7 @@ using XMenuItemIcons = ResurrectionRP_Server.XMenuManager.XMenuItemIcons;
 using InputType = ResurrectionRP_Server.Utils.Enums.InputType;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
+using AltV.Net.Async;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -150,7 +151,7 @@ namespace ResurrectionRP_Server.Entities.Players
                                 VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get(vehicle.Model);
 
                                 if (manifest != null)
-                                    TargetClient.Emit("TrySetPlayerIntoVehicle", vehicle);
+                                    TargetClient.EmitLocked("TrySetPlayerIntoVehicle", vehicle);
                                 else
                                     Client.SendNotificationError("Impossible de le mettre dans ce véhicule");
                             }

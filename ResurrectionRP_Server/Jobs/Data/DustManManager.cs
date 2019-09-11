@@ -83,7 +83,7 @@ namespace ResurrectionRP_Server.Jobs
                             this.ProgressState = 0;
                             this.timer.Stop();
                             this.timer = null;
-                            Alt.Emit("DustMan_Callback", this.DustManClient);
+                            this.DustManClient.EmitLocked("DustMan_Callback");
                             break;
                     }
                 });

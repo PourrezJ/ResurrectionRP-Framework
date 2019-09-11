@@ -377,7 +377,7 @@ namespace ResurrectionRP_Server.Factions
 
                         if (FactionPlayerList.TryRemove(playerID.Key, out FactionPlayer value))
                         {
-                            client.Emit("Display_Help", $"Vous avez démissionné de la faction {FactionName}", 10000);
+                            client.EmitLocked("Display_Help", $"Vous avez démissionné de la faction {FactionName}", 10000);
                             await menu.CloseMenu(client);
                             await UpdateDatabase();
                         }

@@ -33,7 +33,7 @@ namespace ResurrectionRP_Server.Society
             Menu menu = new Menu("ID_SocietyMainMenu", SocietyName, "Administration de la société", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
             menu.ItemSelectCallback += SocietyCallBackMenu;
 
-            if (Owner != null && (client.GetPlayerHandler().StaffRank >= AdminRank.Moderator || await FactionManager.IsGouv(client)))
+            if (Owner != null && (client.GetPlayerHandler().StaffRank >= AdminRank.Moderator || FactionManager.IsGouv(client)))
             {
                 var identite = (await Identite.GetOfflineIdentite(Owner)).Name ?? Owner;
                 menu.SubTitle = $"Propriétaire: {identite}";
@@ -65,7 +65,7 @@ namespace ResurrectionRP_Server.Society
                 menu.Add(new MenuItem("Ouvrir l'inventaire", "", "dinventaire", executeCallback: true));
 
 
-                if (Owner == client.GetSocialClub() || await FactionManager.IsGouv(client))
+                if (Owner == client.GetSocialClub() || FactionManager.IsGouv(client))
                 {
                     MenuItem getmoney = new MenuItem($"Gérer les finances", $"Caisse de l'entreprise: ${BankAccount.Balance}", "ID_money", executeCallback: true);
                     getmoney.OnMenuItemCallback = FinanceMenu;

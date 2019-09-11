@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Businesses
             if (Owner ==  client.GetSocialClub())
                 menu.Add(new MenuItem("Gestion des employés", "", id: "ID_AddStaff", executeCallback: true));
 
-            if (Owner != null && (client.GetPlayerHandler().StaffRank >= Utils.Enums.AdminRank.Moderator || await Factions.FactionManager.IsGouv(client)))
+            if (Owner != null && (client.GetPlayerHandler().StaffRank >= Utils.Enums.AdminRank.Moderator || Factions.FactionManager.IsGouv(client)))
             {
                 var identite = (await Models.Identite.GetOfflineIdentite(Owner)).Name ?? Owner;
                 menu.SubTitle = $"Owner: {identite} | Inactivité: {this.Inactivity.ToShortDateString()}";

@@ -40,7 +40,8 @@ namespace ResurrectionRP_Server.Factions
                     await Task.Delay(50);
                 }
             });
-            EventHandlers.Events.OnPlayerEnterColShape += this.OnEnterColShape;
+
+            FactionList.AddRange(new List<Faction>() { Onu, Lspd});
         }
 
         public static void AddFactionTargetMenu(IPlayer client, IPlayer target, XMenu xMenu)
@@ -79,14 +80,14 @@ namespace ResurrectionRP_Server.Factions
             }
         }
 
-        public static async Task<bool> IsMedic(IPlayer client)
+        public static bool IsMedic(IPlayer client)
         {  
             if (GameMode.Instance.FactionManager.Onu != null)
                 return GameMode.Instance.FactionManager.Onu.HasPlayerIntoFaction(client);
             return false;
         }
 
-        public static async Task<bool> IsLspd(IPlayer client)
+        public static bool IsLspd(IPlayer client)
         {
             if (GameMode.Instance.FactionManager.Lspd != null)
                 return GameMode.Instance.FactionManager.Lspd.HasPlayerIntoFaction(client);
@@ -100,7 +101,7 @@ namespace ResurrectionRP_Server.Factions
             return false;
         }
 */
-        public static async Task<bool> IsLSCustom(IPlayer client)
+        public static bool IsLSCustom(IPlayer client)
         {
             if (GameMode.Instance.FactionManager.LSCustom != null)
                 return GameMode.Instance.FactionManager.LSCustom.HasPlayerIntoFaction(client);
@@ -114,7 +115,7 @@ namespace ResurrectionRP_Server.Factions
             return false;
         }*/
 
-        public static async Task<bool> IsGouv(IPlayer client)
+        public static bool IsGouv(IPlayer client)
         {
             if (GameMode.Instance.FactionManager.Gouvernement != null)
                 return  GameMode.Instance.FactionManager.Gouvernement.HasPlayerIntoFaction(client);
@@ -156,29 +157,6 @@ namespace ResurrectionRP_Server.Factions
                 await GameMode.Instance.FactionManager.FactionList[i].PayCheck();
                 await GameMode.Instance.FactionManager.FactionList[i].UpdateDatabase();
             }
-        }
-
-        public async Task OnEnterColShape(IColShape colshape, IPlayer client)
-        {
-            for (int i = 0; i < FactionList?.Count; i++) await FactionList[i].OnPlayerEnterColShape(colshape, client);
-            /* crash the server
-            FactionList.ForEach(async (Faction faction) =>
-            {
-                Alt.Server.LogError(faction.Parking_colShape?.IsEntityInColShape(client).ToString());
-                Alt.Server.LogError(faction.Heliport_colShape?.IsEntityInColShape(client).ToString());
-                Alt.Server.LogError(faction.Shop_colShape?.IsEntityInColShape(client).ToString());
-
-                if (faction.Parking_colShape != null && faction.Parking_colShape.IsEntityInColShape(client))
-                    await faction.OpenConcessMenu(client, Faction.ConcessType.Vehicle, faction.ParkingLocation, faction.FactionName);
-                else if (faction.Heliport_colShape != null &&faction.Heliport_colShape.IsEntityInColShape(client))
-                    await faction.OpenConcessMenu(client, Faction.ConcessType.Helico, faction.HeliportLocation, faction.FactionName);
-                else if (faction.Shop_colShape != null && faction.Shop_colShape.IsEntityInColShape(client))
-                    await faction.OpenShopMenu(client);
-                else if (faction.Vestiaire_colShape != null && faction.Vestiaire_colShape.IsEntityInColShape(client))
-                    await faction.PriseServiceMenu(client);
-            });
-
-    */
         }
 
         public static async Task OnExitColShape(IPlayer player, IColShape colshapePointer)

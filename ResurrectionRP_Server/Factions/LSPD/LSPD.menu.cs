@@ -18,7 +18,7 @@ namespace ResurrectionRP_Server.Factions
         #region Cellule
         private async Task OpenCelluleDoor(IPlayer client, Door door)
         {
-            if (await FactionManager.IsLspd(client))
+            if (FactionManager.IsLspd(client))
             {
                 XMenu xmenu = new XMenu("ID_Door");
                 xmenu.SetData("Door", door);

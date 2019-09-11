@@ -155,11 +155,34 @@ namespace ResurrectionRP_Server.Factions
             ServicePlayerList = new List<string>();
             BankAccount.Owner = this;
 
+            AltAsync.OnColShape += AltAsync_OnColShape;
+
             if (!string.IsNullOrEmpty(FactionName)) { Alt.Server.LogInfo(FactionName + " is started."); }
-            GameMode.Instance.FactionManager.FactionList.Add(this);
             return this;
         }
 
+        private async Task AltAsync_OnColShape(IColShape colShape, IEntity targetEntity, bool state)
+        {
+            IPlayer client = targetEntity as IPlayer;
+
+            if (client == null)
+                return;
+
+            if (!client.Exists)
+                return;
+
+            if (Parking_colShape != null && colShape == Parking_colShape)
+                await OpenConcessMenu(client, Faction.ConcessType.Vehicle, ParkingLocation, FactionName);
+
+            else if (Heliport_colShape != null && colShape == Heliport_colShape)
+                await OpenConcessMenu(client, Faction.ConcessType.Helico, HeliportLocation, FactionName);
+
+            else if (Shop_colShape != null && colShape == Shop_colShape)
+                await OpenShopMenu(client);
+
+            else if (Vestiaire_colShape != null && colShape == Vestiaire_colShape)
+                await PriseServiceMenu(client);
+        }
 
         public virtual async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
         {

@@ -101,7 +101,7 @@ namespace ResurrectionRP_Server.Businesses.Barber
 
                 if (await ph.HasMoney(result))
                 {
-                    BankAccount.AddMoney(result, $"Ajout d'argent par {ph.Identite.Name}");
+                    await BankAccount.AddMoney(result, $"Ajout d'argent par {ph.Identite.Name}");
                     client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
                 }
                 else

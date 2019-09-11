@@ -194,7 +194,7 @@ namespace ResurrectionRP_Server.Bank
                 }
                 else
                 {
-                    _bankAccount.AddMoney(somme, $"Dépôt {((_atmType == AtmType.ATM) ? "ATM" : "Banque")}", true);
+                    await _bankAccount.AddMoney(somme, $"Dépôt {((_atmType == AtmType.ATM) ? "ATM" : "Banque")}", true);
                     client.SendNotificationSuccess($"Vous avez déposé ${menuItem.InputValue} sur le compte {_bankAccount.AccountNumber}");
                 }
             }

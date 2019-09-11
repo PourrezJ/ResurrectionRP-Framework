@@ -28,7 +28,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
         #region MainMenu
         private async Task OpenMainMenu(IPlayer client, IVehicle vehicle)
         {
-            if (!(await IsEmployee(client) || Owner == client.GetSocialClub()))
+            if (!(IsEmployee(client) || Owner == client.GetSocialClub()))
             {
                 client.SendNotificationError("Hey mec tu veux quoi?!");
                 return;

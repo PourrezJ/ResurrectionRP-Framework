@@ -71,18 +71,18 @@ namespace ResurrectionRP_Server.Factions
             BlipColor = (BlipColor)75;
             BlipSprite = 537;
 
-            PortChancelierA = await Door.CreateDoor(110411286, new Vector3(-549.8286f, -196.6932f, 47.41496f), true);
-            PortChancelierB = await Door.CreateDoor(110411286, new Vector3(-548.8829f, -195.8936f, 47.41496f), true);
+            PortChancelierA = Door.CreateDoor(110411286, new Vector3(-549.8286f, -196.6932f, 47.41496f), true);
+            PortChancelierB = Door.CreateDoor(110411286, new Vector3(-548.8829f, -195.8936f, 47.41496f), true);
 
-            PortDevantA = await Door.CreateDoor(2537604, new Vector3(-545.2567f, -202.7703f, 38.22255f), true);
-            PortDevantB = await Door.CreateDoor(2537604, new Vector3(-545.9545f, -203.4294f, 38.2224f), true);
+            PortDevantA = Door.CreateDoor(2537604, new Vector3(-545.2567f, -202.7703f, 38.22255f), true);
+            PortDevantB = Door.CreateDoor(2537604, new Vector3(-545.9545f, -203.4294f, 38.2224f), true);
 
-            PortDerriereA = await Door.CreateDoor(114775988, new Vector3(-582.8537f, -196.2415f, 38.23097f), true);
-            PortDerriereB = await Door.CreateDoor(114775988, new Vector3(-582.0195f, -195.5236f, 38.23092f), true);
+            PortDerriereA = Door.CreateDoor(114775988, new Vector3(-582.8537f, -196.2415f, 38.23097f), true);
+            PortDerriereB = Door.CreateDoor(114775988, new Vector3(-582.0195f, -195.5236f, 38.23092f), true);
 
             // Villa Chancelier
-            PortailA = await Door.CreateDoor(unchecked((uint)3945237283), new Vector3(-123.8705f, 899.3705f, 235.792f), true);
-            PortailB = await Door.CreateDoor(unchecked((uint)2376486946), new Vector3(-125.1007f, 902.032f, 235.7901f), true);
+            PortailA = Door.CreateDoor(unchecked((uint)3945237283), new Vector3(-123.8705f, 899.3705f, 235.792f), true);
+            PortailB = Door.CreateDoor(unchecked((uint)2376486946), new Vector3(-125.1007f, 902.032f, 235.7901f), true);
 
             Doors = new List<Door>()
             {
@@ -98,10 +98,10 @@ namespace ResurrectionRP_Server.Factions
             foreach (var door in Doors)
                 door.Interact = OpenCelluleDoor;
 
-            Secretaire = await Ped.CreateNPC(PedModel.Bevhills03AFY,Streamer.Data.PedType.Human ,new Vector3(-550.1015f, -190.1574f, 38.22381f), 192.4752f);
+            Secretaire = Ped.CreateNPC(PedModel.Bevhills03AFY,Streamer.Data.PedType.Human ,new Vector3(-550.1015f, -190.1574f, 38.22381f), 192.4752f);
             Secretaire.NpcInteractCallBack = OnNPCInteract;
 
-            Ped npcsecuoutside = await Ped.CreateNPC(PedModel.ChemSec01SMM, Streamer.Data.PedType.Human, new Vector3(-519.5601f, -257.3863f, 35.76096f), 299.4756f);
+            Ped npcsecuoutside = Ped.CreateNPC(PedModel.ChemSec01SMM, Streamer.Data.PedType.Human, new Vector3(-519.5601f, -257.3863f, 35.76096f), 299.4756f);
 
             VehicleAllowed.Add(new FactionVehicle(6, VehicleModel.Swift, 5000000, 25));
             VehicleAllowed.Add(new FactionVehicle(2, VehicleModel.Menacer, 2000000, 90));
@@ -131,19 +131,20 @@ namespace ResurrectionRP_Server.Factions
             return await base.OnFactionInit();
         }
 
-        public override async Task<XMenu> InteractPlayerMenu(IPlayer client, IPlayer target, XMenu xmenu)
+        public override XMenu InteractPlayerMenu(IPlayer client, IPlayer target, XMenu xmenu)
         {
             xmenu.SetData("Player", target);
 
-            return await base.InteractPlayerMenu(client, target, xmenu);
+            return base.InteractPlayerMenu(client, target, xmenu);
         }
 
-        private async Task OnNPCInteract(IPlayer client, Ped npc)
+        private Task OnNPCInteract(IPlayer client, Ped npc)
         {
             if (npc == Secretaire)
             {
                 //await OpenSecretaireMenu(client); TODO
             }
+            return Task.CompletedTask;
         }
 
         public override Task OnVehicleOut(IPlayer client, VehicleHandler vehicleHandler, Location location = null)

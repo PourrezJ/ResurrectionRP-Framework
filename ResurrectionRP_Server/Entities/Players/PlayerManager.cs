@@ -326,6 +326,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 await ph.UpdateHungerThirst(100, 100);
                 await client.SpawnAsync(new Vector3(308.2974f, -567.4647f, 43.29008f));
                 await client.SetRotationAsync(new Rotation(0, 239.0923f, 0));
+                await client.SetHealthAsync(15);
                 client.Resurrect();
                 ph.PlayerSync.Injured = false;
             }
@@ -339,7 +340,7 @@ namespace ResurrectionRP_Server.Entities.Players
             await client.Revive();
         }
 
-        public static async Task<PlayerHandler> GetPlayerBySCN(string socialClubName)
+        public static PlayerHandler GetPlayerBySCN(string socialClubName)
         {
             try
             {

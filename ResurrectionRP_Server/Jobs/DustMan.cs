@@ -37,7 +37,6 @@ namespace ResurrectionRP_Server.Jobs
         #region Private Variables
         private Location _spawn = new Location(new Vector3(-316.7995f, -1537.94f, 27.36676f), new Vector3(0.1620936f, 0.8791512f, 351.5811f));
         private Vector3 _depotZone = new Vector3(-348.8411f, -1558.844f, 24.22907f);
-        private int _price = 250;
         #endregion
 
         public DustMan()
@@ -187,25 +186,27 @@ namespace ResurrectionRP_Server.Jobs
             return Task.CompletedTask;
         }
 
-        private async Task DustMan_Callback(object[] args)
+        private Task DustMan_Callback(object[] args)
         {
             IPlayer client = args[0] as IPlayer;
             if (!client.Exists)
-                return;
-/*
-            PlayerHandler ph = PlayerManager.GetPlayerByClient(client); TODO
-            if (ph != null)
-            {
-                await client.SendNotificationSuccess($"Vous avez gagné ${_price}");
-                await ph.AddMoney(_price);
+                return Task.CompletedTask;
+            /*
+                        PlayerHandler ph = PlayerManager.GetPlayerByClient(client); TODO
+                        if (ph != null)
+                        {
+                            await client.SendNotificationSuccess($"Vous avez gagné ${_price}");
+                            await ph.AddMoney(_price);
 
-                Menu menu = new Menu("ID_DustMan", "Déchetterie", "Que voulez-vous faire?", 0, 0, Menu.MenuAnchor.MiddleRight, true, true, false);
-                menu.Callback = DustManCallBack;
-                menu.Add(new MenuItem("~g~Prendre un autre quartier", "", "ID_Quartier", true));
-                menu.Add(new MenuItem("~r~Fin de mission", "", "ID_End", true));
+                            Menu menu = new Menu("ID_DustMan", "Déchetterie", "Que voulez-vous faire?", 0, 0, Menu.MenuAnchor.MiddleRight, true, true, false);
+                            menu.Callback = DustManCallBack;
+                            menu.Add(new MenuItem("~g~Prendre un autre quartier", "", "ID_Quartier", true));
+                            menu.Add(new MenuItem("~r~Fin de mission", "", "ID_End", true));
 
-                await menu.OpenMenu(arg.Player);
-            }*/
+                            await menu.OpenMenu(arg.Player);
+                        }*/
+
+            return Task.CompletedTask;
         }
 
 /*        private async Task DustManCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex) TODO

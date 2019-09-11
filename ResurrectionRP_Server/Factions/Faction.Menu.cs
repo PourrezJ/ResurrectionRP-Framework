@@ -24,7 +24,7 @@ namespace ResurrectionRP_Server.Factions
 
         #region Menus
         #region TargetMenu
-        public async Task<XMenu> AddFactionTargetMenu(IPlayer client, IPlayer target, XMenu xMenu, XMenuItemIconDesc icon)
+        public XMenu AddFactionTargetMenu(IPlayer client, IPlayer target, XMenu xMenu, XMenuItemIconDesc icon)
         {
             if ( HasPlayerIntoFaction(client))
             {
@@ -44,7 +44,7 @@ namespace ResurrectionRP_Server.Factions
                 if (target == null) return;
 
                 menu = new XMenu("ID_Faction");
-                await InteractPlayerMenu(client, target, menu);
+                InteractPlayerMenu(client, target, menu);
                 await menu.OpenXMenu(client);
             }
             catch
@@ -53,7 +53,7 @@ namespace ResurrectionRP_Server.Factions
             }
         }
 
-        public virtual async Task<XMenu> InteractPlayerMenu(IPlayer client, IPlayer target, XMenu xmenu)
+        public virtual XMenu InteractPlayerMenu(IPlayer client, IPlayer target, XMenu xmenu)
         {
             xmenu.SetData("Player", target);
             if ( IsRecruteur(client))
@@ -178,7 +178,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region VehicleMenu
-        public async Task<XMenu> AddFactionVehicleMenu(IPlayer client, IVehicle vehicle, XMenu xMenu, XMenuItemIconDesc icon)
+        public XMenu AddFactionVehicleMenu(IPlayer client, IVehicle vehicle, XMenu xMenu, XMenuItemIconDesc icon)
         {
             if ( HasPlayerIntoFaction(client))
             {
@@ -207,9 +207,9 @@ namespace ResurrectionRP_Server.Factions
             }
         }
 
-        public virtual async Task<XMenu> InteractVehicleMenu(IPlayer client, IVehicle target, XMenu xmenu)
+        public virtual Task<XMenu> InteractVehicleMenu(IPlayer client, IVehicle target, XMenu xmenu)
         {
-            return xmenu;
+            return Task.FromResult(xmenu);
         }
         #endregion
 
@@ -337,7 +337,7 @@ namespace ResurrectionRP_Server.Factions
             {
                 foreach(var playerID in FactionPlayerList)
                 {
-                    PlayerHandler ph = await PlayerManager.GetPlayerBySCN(playerID.Key);
+                    PlayerHandler ph = PlayerManager.GetPlayerBySCN(playerID.Key);
 
                     if (ph != null && ph.Identite.Name == menuItem.Text)
                     {
@@ -371,7 +371,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         if (ServicePlayerList.Contains(playerID.Key))
                         {
-                            PlayerHandler ph = await PlayerManager.GetPlayerBySCN(playerID.Key);
+                            PlayerHandler ph = PlayerManager.GetPlayerBySCN(playerID.Key);
                             await PriseService(ph.Client);
                         }
 
@@ -424,7 +424,7 @@ namespace ResurrectionRP_Server.Factions
                 if (result < 0) return;
                 if (await ph.HasMoney(result))
                 {
-                    BankAccount.AddMoney(result, $"Ajout d'argents par {ph.Identite.Name}");
+                    await BankAccount.AddMoney(result, $"Ajout d'argents par {ph.Identite.Name}");
                     await ph.Update();
                     client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
                 }

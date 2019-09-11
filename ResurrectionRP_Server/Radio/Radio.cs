@@ -90,10 +90,10 @@ namespace ResurrectionRP_Server.Radio
             }
         }
 
-        public async Task ShutdownRadio(IPlayer client)
+        public void ShutdownRadio(IPlayer client)
         {
             Statut = RadioModes.OFF;
-            await SaltyServer.Voice.RemovePlayerRadioChannel(client);
+            SaltyServer.Voice.RemovePlayerRadioChannel(client);
         }
 
         public void SaveFrequeceRadio(int channel, double frequence)

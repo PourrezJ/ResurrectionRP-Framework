@@ -111,11 +111,11 @@ namespace ResurrectionRP_Server.Radio
                     radio.Statut = ((bool)args[1]) ? RadioModes.LISTENING : RadioModes.OFF;
                     if (radio.Statut == RadioModes.OFF)
                     {
-                        await SaltyServer.Voice.RemovePlayerRadioChannel(player);
+                        SaltyServer.Voice.RemovePlayerRadioChannel(player);
                     }
                     else
                     {
-                        await GameMode.Instance.VoiceController.OnSetRadioChannel(player, radio.GetCurrentFrequence().ToString());
+                        GameMode.Instance.VoiceController.OnSetRadioChannel(player, radio.GetCurrentFrequence().ToString());
                         //await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
                     }
                     break;

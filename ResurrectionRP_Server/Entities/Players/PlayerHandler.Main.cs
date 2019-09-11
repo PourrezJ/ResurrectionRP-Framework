@@ -231,7 +231,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     Client.Emit("FadeIn", 3000);
                 });
 
-               await UpdateClothing();
+               UpdateClothing();
 
                 if (PlayerSync.IsCuff)
                     await SetCuff(true);
@@ -323,7 +323,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region Inventory
-        public async Task UpdateClothing()
+        public void UpdateClothing()
         {
             Clothing = new Clothings(Client);
 

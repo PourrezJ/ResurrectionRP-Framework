@@ -97,9 +97,10 @@ namespace ResurrectionRP_Server
             return null;
         }
 
-        public static async Task RepairAsync(this IVehicle vehicle)
+        public static Task RepairAsync(this IVehicle vehicle)
         {
             // TODO
+            return Task.CompletedTask;
         }
         public static async Task SetModAsync(this IVehicle vehicle, int type, int mod)
         {

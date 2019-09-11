@@ -44,7 +44,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Interaction Player
-        public override async Task<XMenu> InteractPlayerMenu(IPlayer client, IPlayer target, XMenu xmenu)
+        public override XMenu InteractPlayerMenu(IPlayer client, IPlayer target, XMenu xmenu)
         {
             xmenu.SetData("Player", target);
 
@@ -56,7 +56,7 @@ namespace ResurrectionRP_Server.Factions
             penalty.OnMenuItemCallback = InvoicePlayer;
             xmenu.Add(penalty);
 
-            return await base.InteractPlayerMenu(client, target, xmenu);
+            return base.InteractPlayerMenu(client, target, xmenu);
         }
         #endregion
 
@@ -253,7 +253,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         invoice.Amount = Convert.ToDouble(menuItem.InputValue);
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         client.SendNotificationError("~r~Le prix ne doit être exclusivement numérique.");
                     }
@@ -354,7 +354,7 @@ namespace ResurrectionRP_Server.Factions
                 string ownerId = target.GetVehicleHandler()?.OwnerID;
                 if (!string.IsNullOrEmpty(ownerId))
                 {
-                    var player = await PlayerManager.GetPlayerBySCN(ownerId);
+                    var player = PlayerManager.GetPlayerBySCN(ownerId);
 
                     var vh = target.GetVehicleHandler();
 

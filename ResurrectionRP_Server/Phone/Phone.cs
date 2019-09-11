@@ -95,7 +95,7 @@ namespace ResurrectionRP_Server.Phone
                 Phone _phone = GetPhoneWithPhoneNumber(receiver);
                 if (_phone != null)
                 {
-                    await _phone.NewSMS(this.PhoneNumber);
+                    _phone.NewSMS(this.PhoneNumber);
                 }
             }
             catch (Exception ex)
@@ -104,7 +104,7 @@ namespace ResurrectionRP_Server.Phone
             }
         }
 
-        public async Task NewSMS(string phoneNumber)
+        public void NewSMS(string phoneNumber)
         {
             IPlayer _client = GetClientWithPhoneNumber(this.PhoneNumber);
 
@@ -114,7 +114,6 @@ namespace ResurrectionRP_Server.Phone
             string contactName = GetNameForNumber(phoneNumber);
             _client.SendNotification("Nouveau message de ~b~~h~" + (contactName ?? phoneNumber));
 
-            //var receverList = await MP.Players.GetInRangeAsync( _client.GetPosition(), 3f);
             var receverList = _client.GetPlayersInRange(3f);
 
             if (Settings == null)
@@ -127,7 +126,7 @@ namespace ResurrectionRP_Server.Phone
             foreach (IPlayer recever in receverList)
             {
                 if (recever != null && recever.Exists)
-                    await recever?.PlaySoundFromEntity(_client, -1, "MP_5_SECOND_TIMER", "HUD_FRONTEND_DEFAULT_SOUNDSET");
+                    recever?.PlaySoundFromEntity(_client, -1, "MP_5_SECOND_TIMER", "HUD_FRONTEND_DEFAULT_SOUNDSET");
             }
         }
 
@@ -150,7 +149,7 @@ namespace ResurrectionRP_Server.Phone
                 if (!_client.HasData("InToPhoneCommunication"))
                 {
                     string contactName = this.GetNameForNumber(phoneNumber);
-                    await client.EmitAsync("initiatedCall", phoneNumber, contactName);
+                    client.EmitLocked("initiatedCall", phoneNumber, contactName);
 
                     var phoneDistant = GetPhoneWithPhoneNumber(phoneNumber);
                     string callerName = phoneDistant.GetNameForNumber(PhoneNumber);
@@ -163,7 +162,7 @@ namespace ResurrectionRP_Server.Phone
                 else
                 {
                     client.SendNotificationError("Le contact est déjà en communication vocale.");
-                    await client.EmitAsync("canceledCall");
+                    client.EmitLocked("canceledCall");
                 }
             }
             else
@@ -172,39 +171,39 @@ namespace ResurrectionRP_Server.Phone
             }
         }
 
-        public async Task StartCall(IPlayer client, string phoneNumber)
+        public void StartCall(IPlayer client, string phoneNumber)
         {
             var calledPlayer = GetClientWithPhoneNumber(phoneNumber);
 
             if (calledPlayer != null)
             {
-                 calledPlayer.Emit("StartedCall", client.Id);
-                 await client.EmitAsync("StartedCall", calledPlayer.Id);
+                 calledPlayer.EmitLocked("StartedCall", client.Id);
+                 client.EmitLocked("StartedCall", calledPlayer.Id);
                 calledPlayer.SetData("InToPhoneCommunication", true);
                 client.SetData("InToPhoneCommunication", true);
             }
         }
 
-        public async Task CancelCall(IPlayer player, string phoneNumber)
+        public void CancelCall(IPlayer player, string phoneNumber)
         {
             var calledPlayer = GetClientWithPhoneNumber(phoneNumber);
             if (calledPlayer != null)
             {
                 calledPlayer.ResetData("InToPhoneCommunication");
                 player.ResetData("InToPhoneCommunication");
-                 calledPlayer.Emit("canceledCall");
-                 player.Emit("canceledCall");
+                 calledPlayer.EmitLocked("canceledCall");
+                 player.EmitLocked("canceledCall");
             }
         }
 
-        public async Task EndCall(IPlayer player, string phoneNumber)
+        public void EndCall(IPlayer player, string phoneNumber)
         {
             var calledPlayer = GetClientWithPhoneNumber(phoneNumber);
 
             if (calledPlayer != null)
             {
-                 calledPlayer.Emit("endedCall");
-                 player.Emit("endedCall");
+                 calledPlayer.EmitLocked("endedCall");
+                 player.EmitLocked("endedCall");
 
                 calledPlayer.ResetData("InToPhoneCommunication");
                 player.ResetData("InToPhoneCommunication");
@@ -221,9 +220,9 @@ namespace ResurrectionRP_Server.Phone
         /// <param name="client">Client</param>
         /// <param name="contactName">Contact name</param>
         /// <param name="contactNumber">Contact number</param>
-        public async Task<bool> TryAddNewContact(IPlayer client, String contactName, String contactNumber, bool message = true)
+        public bool TryAddNewContact(IPlayer client, String contactName, String contactNumber, bool message = true)
         {
-            if (await ValidateContact(contactName, contactNumber))
+            if (ValidateContact(contactName, contactNumber))
             {
                 AddNameToAddressBook(client, contactName, contactNumber, message);
                 return true;
@@ -237,9 +236,9 @@ namespace ResurrectionRP_Server.Phone
         /// <param name="client">Client</param>
         /// <param name="contactName">Contact name</param>
         /// <param name="contactNumber">Contact number</param>
-        public async Task<bool> TryEditContact(IPlayer client, String contactName, String contactNumber, String originalNumber, bool message = true)
+        public bool TryEditContact(IPlayer client, String contactName, String contactNumber, String originalNumber, bool message = true)
         {
-            if (await ValidateContact(contactName, contactNumber, true))
+            if (ValidateContact(contactName, contactNumber, true))
             {
                 Address foundAddress = AddressBook.Find(address => address.phoneNumber == originalNumber);
                 if (foundAddress.phoneNumber != null && foundAddress.phoneNumber != "")
@@ -247,22 +246,14 @@ namespace ResurrectionRP_Server.Phone
                     RemoveContactFromAddressBook(originalNumber);
                     AddNameToAddressBook(client, contactName, contactNumber);
 
-                    await client.EmitAsync("ContactEdited");
+                    client.EmitLocked("ContactEdited");
                     return true;
                 }
             }
             return false;
         }
 
-        /// <summary>
-        /// Validate phone contact
-        /// Contact name, number etc
-        /// </summary>
-        /// <param name="c">Client who adds the contact</param>
-        /// <param name="name">Contact name</param>
-        /// <param name="number">Contact number</param>
-        /// <returns>True if validated, otherwise false</returns>
-        private async Task<bool> ValidateContact(String name, String number, bool edit = false)
+        private bool ValidateContact(String name, String number, bool edit = false)
         {
             IPlayer _client = GetClientWithPhoneNumber(PhoneNumber);
             if (_client != null)
@@ -305,7 +296,7 @@ namespace ResurrectionRP_Server.Phone
             if (message)
                 client.SendNotificationSuccess("Contact Ajouté!!");
 
-            client.Emit("ContactEdited");
+            client.EmitLocked("ContactEdited");
         }
 
         /// <summary>
@@ -329,7 +320,7 @@ namespace ResurrectionRP_Server.Phone
             {
                 AddressBook.RemoveAt(indexToRemove);
                 var client = GetClientWithPhoneNumber(PhoneNumber);
-                client?.Emit("ContactEdited");
+                client?.EmitLocked("ContactEdited");
                 return true;
             }
             return false;
@@ -372,10 +363,11 @@ namespace ResurrectionRP_Server.Phone
 
         #region Général
 
-        public async Task ClosePhone()
+        public Task ClosePhone()
         {/*
             if (props != null)
                 await props.Destroy();*/
+            return Task.CompletedTask;
         }
 
         #endregion

@@ -36,7 +36,7 @@ namespace ResurrectionRP_Server.Jobs
         #endregion
 
         #region Load
-        public virtual async Task Load()
+        public virtual Task Load()
         {
             if (ServicePos != null)
             {
@@ -49,6 +49,8 @@ namespace ResurrectionRP_Server.Jobs
                 //_marker = await MP.Markers.NewAsync(MarkerType.VerticalCylinder, ServicePos - new Vector3(0, 0, 1), new Vector3(), new Vector3(), 1f, System.Drawing.Color.White, true);
                 _marker = GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ServicePos - new Vector3(0, 0, 1), new Vector3(1, 1, 1), 255, 255, 255, 128);
             }
+
+            return Task.CompletedTask;
         }
         #endregion
 

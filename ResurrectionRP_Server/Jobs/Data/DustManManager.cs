@@ -35,23 +35,23 @@ namespace ResurrectionRP_Server.Jobs
 
         public async Task Init()
         {
-            AltAsync.OnClient("Jobs_Dustman_Depot", this.onDepot);
+            Alt.OnClient("Jobs_Dustman_Depot", this.OnDepot);
             this.DustManClient.SendNotificationSuccess($"Vous devez vous rendre dans la zone de ~g~{this.Zone.NameZone}~w~.");
             if (GameMode.Instance.IsDebug)
             this.DustManClient.SetWaypoint(this.Zone.ZonePosition, true);
             await this.DustManClient.EmitAsync("Jobs_Dustman", JsonConvert.SerializeObject(this.Zone.ZonePosition), JsonConvert.SerializeObject(this.Zone.TrashList));
         }
 
-        public async Task onDepot(IPlayer client, object[] args)
+        public void OnDepot(IPlayer client, object[] args)
         {
             if (client.Id != this.DustManClient.Id)
                 return;
             this.depotColShape = Alt.CreateColShapeCircle(this.DepotZone, 8);
-            AltAsync.OnColShape += this.onEnterColShape;
+            Alt.OnColShape += this.OnEnterColShape;
             client.SetWaypoint(this.DepotZone);
         }
 
-        public async Task onEnterColShape(IColShape colShape, IEntity entity, bool state)
+        public void OnEnterColShape(IColShape colShape, IEntity entity, bool state)
         {
             if (!entity.Exists || entity.Type != BaseObjectType.Player)
                 return;
@@ -61,7 +61,7 @@ namespace ResurrectionRP_Server.Jobs
                 this.depotInProgress = true;
                 client.SendNotificationSuccess("Génial ! Restez ici pour vider votre camion !");
                 client.DisplayHelp("Déchargement de la remorque en cours, veuillez patenter! ", 30000);
-                this.timer = Utils.Utils.Delay(30000, false, async () =>
+                this.timer = Utils.Utils.Delay(30000, false, () =>
                 {
                     if (!depotInProgress)
                         this.timer.Stop();

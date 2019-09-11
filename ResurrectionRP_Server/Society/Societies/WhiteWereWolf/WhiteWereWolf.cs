@@ -58,8 +58,8 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
         {
             await base.Load();
 
-            var PortInt = await Door.CreateDoor(747286790, new Vector3(984.9756f, -94.93642f, 74.84788f), true);
-            var PortExt = await Door.CreateDoor(190770132, new Vector3(981.4236f, -102.6262f, 74.84506f), true);
+            var PortInt = Door.CreateDoor(747286790, new Vector3(984.9756f, -94.93642f, 74.84788f), true);
+            var PortExt = Door.CreateDoor(190770132, new Vector3(981.4236f, -102.6262f, 74.84506f), true);
 
             Doors = new List<Door>()
             {
@@ -71,7 +71,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                 door.Interact = OpenCelluleDoor;
 
             Location pnjPos = new Location(new Vector3(974.9861f, -111.0525f, 74.35313f), new Vector3(0, 0, 239.715f));
-            var npc = await Entities.Peds. Ped.CreateNPC(PedModel.Benny,Streamer.Data.PedType.Human ,pnjPos.Pos, pnjPos.Rot.Z, (uint)GameMode.GlobalDimension);
+            var npc = Entities.Peds. Ped.CreateNPC(PedModel.Benny,Streamer.Data.PedType.Human ,pnjPos.Pos, pnjPos.Rot.Z, (uint)GameMode.GlobalDimension);
             npc.NpcInteractCallBack = OnInteractWithPnj;
 
             Vector3 workZonePos = new Vector3(970.89f, -115.2172f, 74.35314f);
@@ -83,7 +83,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
 
         private async Task OpenCelluleDoor(IPlayer client, Door door)
         {
-            if (await IsEmployee(client))
+            if (IsEmployee(client))
             {
                 XMenu xmenu = new XMenu("ID_Door");
                 xmenu.SetData("Door", door);

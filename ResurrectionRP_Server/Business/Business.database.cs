@@ -20,6 +20,7 @@ namespace ResurrectionRP_Server.Businesses
             Inventory = null;
             Owner = null;
             Employees = null;
+            await Database.MongoDB.Delete<Business>("businesses", _id);
         }
 
         public async Task Update()

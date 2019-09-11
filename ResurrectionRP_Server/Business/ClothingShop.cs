@@ -157,7 +157,7 @@ namespace ResurrectionRP_Server.Businesses
         private async Task BuyCloth(IPlayer client, byte componentID, int drawable, int variation, double price, string clothName)
         {
             Item item = null;
-            var clothdata = await ClothingLoader.FindCloths(client, componentID) ?? null;
+            var clothdata = ClothingLoader.FindCloths(client, componentID) ?? null;
 
             if (clothdata == null)
                 return;
@@ -290,7 +290,7 @@ namespace ResurrectionRP_Server.Businesses
             menu.ClearItems();
             menu.BackCloseMenu = false;
             menu.SubTitle = null;
-            var data = await ClothingLoader.FindTops(client) ?? null;
+            var data = ClothingLoader.FindTops(client) ?? null;
 
             if (data == null)
                 return;
@@ -338,7 +338,7 @@ namespace ResurrectionRP_Server.Businesses
             menu.ItemSelectCallback = OnTopsCallBack;
             menu.IndexChangeCallback = PreviewTopsItem;
 
-            ClothManifest? clothdata = await ClothingLoader.FindTops(client);
+            ClothManifest? clothdata = ClothingLoader.FindTops(client);
 
             if (clothdata == null)
                 return;
@@ -375,7 +375,7 @@ namespace ResurrectionRP_Server.Businesses
             await PreviewTopsItem(client, menu, 0, menu.Items[0]);
         }
 
-        private async Task PreviewTopsItem(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        private Task PreviewTopsItem(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
             int drawable = (int)menuItem.GetData("drawable");
             int variation = (int)menuItem.GetData("variation");
@@ -383,6 +383,7 @@ namespace ResurrectionRP_Server.Businesses
 
             client.SetCloth(ClothSlot.Tops, drawable, variation, 0);
             client.SetCloth(ClothSlot.Torso, torso, 0, 0);
+            return Task.CompletedTask;
         }
 
         private async Task OnTopsCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -420,7 +421,7 @@ namespace ResurrectionRP_Server.Businesses
         #region WithCategorie
         public async Task OpenComponentMenu(IPlayer client, Menu menu, byte componentID)
         {
-            var data = await ClothingLoader.FindCloths(client, componentID) ?? null;
+            var data = ClothingLoader.FindCloths(client, componentID) ?? null;
 
             if (data == null)
                 return;
@@ -577,7 +578,7 @@ namespace ResurrectionRP_Server.Businesses
         #region WithoutCategorie
         private async Task OpenComponentMenuWithoutCat(IPlayer client, Menu menu, byte componentID, bool backCloseMenu)
         {
-            var data = await ClothingLoader.FindCloths(client, componentID) ?? null;
+            var data = ClothingLoader.FindCloths(client, componentID) ?? null;
 
             if (data == null)
                 return;
@@ -647,7 +648,7 @@ namespace ResurrectionRP_Server.Businesses
             double price = menuItem.GetData("price");
             string clothName = menuItem.Text;
 
-            BuyCloth(client, componentID, drawable, variation, price, clothName);
+            await BuyCloth(client, componentID, drawable, variation, price, clothName);
         }
         #endregion
     }

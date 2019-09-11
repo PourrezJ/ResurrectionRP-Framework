@@ -72,7 +72,7 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
             }
         }
 
-        public async Task RentCar(VehicleRentPlace vehicleplace, Entities.Players.PlayerHandler ph)
+        public void RentCar(VehicleRentPlace vehicleplace, Entities.Players.PlayerHandler ph)
         {
             //await vehicleplace.TextLabel.DestroyAsync();
             GameMode.Instance.Streamer.DestroyEntityLabel(vehicleplace.TextLabelId);

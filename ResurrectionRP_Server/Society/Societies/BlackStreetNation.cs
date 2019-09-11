@@ -22,8 +22,8 @@ namespace ResurrectionRP_Server.Society.Societies
 
         public override async Task Load()
         {
-            PorteDevant1 = await Door.CreateDoor(3478499199, new Vector3(-1387.809f, -586.5994f, 30.21479f), true);
-            PorteDevant2 = await Door.CreateDoor(2182616413, new Vector3(-1388.825f, -587.3669f, 30.2216f), true);
+            PorteDevant1 = Door.CreateDoor(3478499199, new Vector3(-1387.809f, -586.5994f, 30.21479f), true);
+            PorteDevant2 = Door.CreateDoor(2182616413, new Vector3(-1388.825f, -587.3669f, 30.2216f), true);
 
             List<TeleportEtage> etages = new List<TeleportEtage>()
             {
@@ -31,7 +31,7 @@ namespace ResurrectionRP_Server.Society.Societies
                 new TeleportEtage() { Name = "Sorti arrière", Location = new Location(new Vector3(-1368.322f, -647.4513f, 28.69429f), new Vector3(0, 0, 124.4904f))}
             };
 
-            await Teleport.Teleport.CreateTeleport(new Location(new Vector3(-1386.159f, -627.3551f, 30.81957f), new Vector3(0, 0, 309.1539f)), etages, menutitle: "Porte");
+            Teleport.Teleport.CreateTeleport(new Location(new Vector3(-1386.159f, -627.3551f, 30.81957f), new Vector3(0, 0, 309.1539f)), etages, menutitle: "Porte");
 
             PorteDevant1.Interact = OpenDoor;
             PorteDevant2.Interact = OpenDoor;
@@ -44,7 +44,7 @@ namespace ResurrectionRP_Server.Society.Societies
         #region Doors
         private async Task OpenDoor(IPlayer client, Door door)
         {
-            if (await this.IsEmployee(client) || Owner == client.GetSocialClub())
+            if (this.IsEmployee(client) || Owner == client.GetSocialClub())
             {
                 XMenu xmenu = new XMenu("ID_Door");
                 xmenu.SetData("Door", door);

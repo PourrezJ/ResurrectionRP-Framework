@@ -155,8 +155,8 @@ export class Medical {
             //Game.Instance.KeyHandler.Remove((int)ConsoleKey.R);
 
             game.setPlayerHealthRechargeMultiplier(alt.Player.local.scriptID, 0);
-            game.animpostfxStop("DeathFailMPIn")
-            game.setCamEffect(0);
+            //game.animpostfxStop("DeathFailMPIn")
+            //game.setCamEffect(0);
 
             game.setFadeInAfterDeathArrest(false);
             game.setFadeOutAfterArrest(false);
@@ -182,8 +182,8 @@ export class Medical {
             alt.emitServer("IWantToDie");
         }
 
-        game.animpostfxPlay("DeathFailMPIn", 0, true);
-        game.setCamEffect(1);
+        //game.animpostfxPlay("DeathFailMPIn", 0, true);
+        //game.setCamEffect(1);
     }
 
     private OnTick() {

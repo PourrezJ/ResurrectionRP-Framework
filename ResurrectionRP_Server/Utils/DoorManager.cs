@@ -25,7 +25,7 @@ namespace ResurrectionRP_Server.Utils
 
         }
 
-        public async static Task<Door> CreateDoor(int hash, Vector3 position, bool locked = false, bool hide = false)
+        public static Door CreateDoor(int hash, Vector3 position, bool locked = false, bool hide = false)
         {
             var door = new Door()
             {
@@ -41,7 +41,7 @@ namespace ResurrectionRP_Server.Utils
             return door;
         }
 
-        public async static Task<Door> CreateDoor(uint hash, Vector3 position, bool locked = false, bool hide = false)
+        public static Door CreateDoor(uint hash, Vector3 position, bool locked = false, bool hide = false)
         {
             var door = new Door()
             {

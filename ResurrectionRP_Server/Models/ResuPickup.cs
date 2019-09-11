@@ -22,10 +22,10 @@ namespace ResurrectionRP_Server.Models
             Alt.On("ResuPickup_Take", (IPlayer client, object[] args) =>ResuPickup_Take(client, args));
         }
 
-        private async Task ResuPickup_Take(IPlayer client, object[] args)
+        private Task ResuPickup_Take(IPlayer client, object[] args)
         {
             if (!client.Exists)
-                return;
+                return Task.CompletedTask;
 
             if (int.TryParse(args[0].ToString(), out int netID))
             {
@@ -33,6 +33,7 @@ namespace ResurrectionRP_Server.Models
                 if (resupickup != null)
                     await resupickup.Take(client);*/
             }
+            return Task.CompletedTask;
         }
         /*
         public static ResuPickup CreatePickup(Vector3 pos, Item item, int quantite, int hash = 1108364521, bool hide = false)
@@ -69,8 +70,10 @@ namespace ResurrectionRP_Server.Models
         {
         }
 
-        public static async Task CreatePickup(uint hash, Item item, int quantite, Vector3 position, bool hide, TimeSpan endlife, uint dimension = 2)
-        {/**
+        public static Task CreatePickup(uint hash, Item item, int quantite, Vector3 position, bool hide, TimeSpan endlife, uint dimension = 2)
+        {
+            return Task.CompletedTask;
+            /**
             var obj = new ResuPickup()
             {
                 Hash = hash,

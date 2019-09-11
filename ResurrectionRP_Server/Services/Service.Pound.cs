@@ -26,7 +26,7 @@ namespace ResurrectionRP_Server.Services
         [BsonIgnore]
         private IColShape _colshape = null;
 
-        public async Task LoadPound()
+        public Task LoadPound()
         {
             if (PoundVehicleList == null)
                 PoundVehicleList = new List<ParkedCar>();
@@ -95,13 +95,14 @@ namespace ResurrectionRP_Server.Services
                 }
             }*/
 
-            Entities.Peds.Ped _npc = await Entities.Peds.Ped.CreateNPC(PedModel.Gardener01SMM, Streamer.Data.PedType.Human,new Vector3(409.1505f, -1622.874f, 29.29193f), 227.5882f);
+            Entities.Peds.Ped _npc = Entities.Peds.Ped.CreateNPC(PedModel.Gardener01SMM, Streamer.Data.PedType.Human,new Vector3(409.1505f, -1622.874f, 29.29193f), 227.5882f);
             _npc.NpcInteractCallBack += async (IPlayer client, Entities.Peds.Ped ped) =>
             {
                 await OpenPoundMenu(client);
             };
 
             Alt.Server.LogInfo($"--- [POUND] Finish loading all pounds in database: {PoundVehicleList.Count} ---");
+            return Task.CompletedTask;
         }
 
         public async Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)

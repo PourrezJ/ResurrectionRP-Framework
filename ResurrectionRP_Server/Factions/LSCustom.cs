@@ -270,12 +270,12 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Menus
-        public override async Task<XMenu> InteractPlayerMenu(IPlayer client, IPlayer target, XMenu xmenu)
+        public override XMenu InteractPlayerMenu(IPlayer client, IPlayer target, XMenu xmenu)
         {
             var playerHandler = client.GetPlayerHandler();
             xmenu.SetData("Player", target);
 
-            return await base.InteractPlayerMenu(client, target, xmenu);
+            return base.InteractPlayerMenu(client, target, xmenu);
         }
 
         private async Task UseCrateTool(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)

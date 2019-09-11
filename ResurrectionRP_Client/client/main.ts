@@ -68,7 +68,10 @@ const init = async () => {
         xtreamMenu.init();
         new Streamer();
         menuManager();
-        alt.emitServer("Events_PlayerJoin", game.scGetNickname());
+        alt.discordRequestOAuth2();
+        while (!alt.isDiscordInfoReady()) { }
+
+        alt.emitServer("Events_PlayerJoin", game.scGetNickname(), JSON.stringify(alt.discordInfo()));
     }
     catch (Exception) {
         alt.logError(`Failed to load scripts.\nMessage: ${Exception.Message}`);

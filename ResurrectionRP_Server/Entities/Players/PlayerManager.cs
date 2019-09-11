@@ -5,6 +5,7 @@ using AltV.Net.Elements.Entities;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Bank;
+using ResurrectionRP_Server.Entities.Players.Data;
 using ResurrectionRP_Server.Factions;
 using ResurrectionRP_Server.Models;
 using System;
@@ -116,6 +117,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
 
             string socialclub = args[0].ToString();
+            DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(args[1].ToString());
 
             if (IsBan(socialclub))
             {

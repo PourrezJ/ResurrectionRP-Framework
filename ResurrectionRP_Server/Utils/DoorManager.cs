@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Async;
 using AltV.Net;
+using ResurrectionRP_Server.Streamer.Data;
+
 namespace ResurrectionRP_Server.Utils
 {
     public class Door
@@ -14,7 +16,7 @@ namespace ResurrectionRP_Server.Utils
         public Vector3 Position;
         public bool Locked;
         public bool Hide;
-        private int TextLabel;
+        private TextLabel TextLabel;
 
         public delegate Task InteractDelegate(IPlayer client, Door door);
         [JsonIgnore]
@@ -61,7 +63,7 @@ namespace ResurrectionRP_Server.Utils
         public void SetDoorLockState(bool lockStatut)
         {
             Locked = lockStatut;
-            GameMode.Instance.Streamer.UpdateEntityTextLabel(this.TextLabel, $"Porte: {((Locked) ? "Verrouillée" : "Deverrouillée")}");
+            GameMode.Instance.Streamer.UpdateEntityTextLabel(this.TextLabel.id, $"Porte: {((Locked) ? "Verrouillée" : "Deverrouillée")}");
 
             Alt.EmitAllClients("SetDoorLockState", ID, Locked);
         }

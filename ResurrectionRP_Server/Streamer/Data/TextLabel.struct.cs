@@ -4,10 +4,21 @@ using System.Text;
 
 namespace ResurrectionRP_Server.Streamer.Data
 {
-    public struct TextLabel
+    public class TextLabel
     {
         public int id;
-        public string text;
+
+        private string _text;
+        public string text
+        {
+            set
+            {
+                _text = value;
+                GameMode.Instance.Streamer.UpdateEntityTextLabel(this.id, value);
+            }
+            get => _text;
+        }
+
         public int font;
         public int r;
         public int g;
@@ -37,6 +48,11 @@ namespace ResurrectionRP_Server.Streamer.Data
             data["entityType"] = (int)EntityType.TextLabel;
             data["id"] = this.id;
             return data;
+        }
+
+        public void Destroy()
+        {
+            GameMode.Instance.Streamer.DestroyEntityLabel(this.id);
         }
     }
 }

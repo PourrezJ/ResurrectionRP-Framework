@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ResurrectionRP_Server.Streamer.Data;
 
 namespace ResurrectionRP_Server.Loader.VehicleRentLoader
 {
@@ -8,7 +6,7 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
     {
         public int ID;
         public Models.Location Location;
-        public int TextLabelId;
+        public TextLabel TextLabelId;
         public Entities.Vehicles.VehicleHandler VehicleHandler;
         public Loader.CarDealerLoader.VehicleInfo VehicleInfo;
         public VehicleRentShop RentShop;

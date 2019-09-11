@@ -74,9 +74,7 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
 
         public void RentCar(VehicleRentPlace vehicleplace, Entities.Players.PlayerHandler ph)
         {
-            //await vehicleplace.TextLabel.DestroyAsync();
-            GameMode.Instance.Streamer.DestroyEntityLabel(vehicleplace.TextLabelId);
-
+            vehicleplace.TextLabelId.Destroy();
             //GameMode.Instance.Economy.CaissePublique += Economy.CalculPriceTaxe(vehicleplace.VehicleInfo.Price, GameMode.Instance.Economy.Taxe_Market);
 
             var veh = vehicleplace.VehicleHandler;

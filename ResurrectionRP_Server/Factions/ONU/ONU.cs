@@ -149,17 +149,17 @@ namespace ResurrectionRP_Server.Factions
             IPlayer victim = GameMode.Instance.PlayerList[(int)args[0]];
 
             if (victim == null)
-                return;
+                return Task.CompletedTask;
 
             if (!victim.Exists)
-                return;
+                return Task.CompletedTask;
 
 
             EmergencyCall result = EmergencyCalls.FindLast(b => (b.player.Id == victim.Id));
             if (result != null && result.Taken == true)
             {
                 client.EmitLocked("ONU_BlesseCallTaken", victim);
-                return;
+                return Task.CompletedTask;
             }
 
             EmergencyCalls.FindLast(b => (b.player.Id == victim.Id))?.TakeCall();

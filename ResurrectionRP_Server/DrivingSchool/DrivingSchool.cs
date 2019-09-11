@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using ResurrectionRP_Server.Streamer.Data;
 
 namespace ResurrectionRP_Server.DrivingSchool
 {
@@ -24,7 +25,7 @@ namespace ResurrectionRP_Server.DrivingSchool
         private int _price;
         private List<Ride> _circuit;
         private VehicleModel _vehicleModel;
-        private int _markerId;
+        private Marker _markerId;
         private Entities.Blips.Blips _blipId;
         private IColShape _colshape;
         private ConcurrentDictionary<string, Exam> _clientsInExamen = new ConcurrentDictionary<string, Exam>();

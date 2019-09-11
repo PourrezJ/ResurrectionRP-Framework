@@ -23,7 +23,7 @@ using ResurrectionRP_Server.Society.Societies;
 using ResurrectionRP_Server.Society.Societies.Bennys;
 using ResurrectionRP_Server.Society.Societies.WildCustom;
 using ResurrectionRP_Server.Society.Societies.WhiteWereWolf;
-
+using ResurrectionRP_Server.Streamer.Data;
 
 namespace ResurrectionRP_Server.Society
 {
@@ -66,7 +66,7 @@ namespace ResurrectionRP_Server.Society
         [BsonIgnore]
         public IColShape ParkingColshape;
         [BsonIgnore]
-        public int Marker;
+        public Marker Marker;
 
         public BankAccount BankAccount;
         #endregion

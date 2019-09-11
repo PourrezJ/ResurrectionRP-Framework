@@ -7,6 +7,7 @@ using AltV.Net.Async;
 using AltV.Net.Enums;
 using VehicleHandler = ResurrectionRP_Server.Entities.Vehicles.VehicleHandler;
 using VehicleManager = ResurrectionRP_Server.Entities.Vehicles.VehiclesManager;
+using ResurrectionRP_Server.Streamer.Data;
 
 namespace ResurrectionRP_Server.Jobs
 {
@@ -22,7 +23,7 @@ namespace ResurrectionRP_Server.Jobs
         public VehicleModel VehicleSpawnHash;
 
         private Entities.Blips.Blips _blip;
-        private int _marker;
+        private Marker _marker;
         private IColShape _serviceColshape;
         private Dictionary<string, VehicleHandler> _vehicleList = new Dictionary<string, VehicleHandler>();
         private static Dictionary<string, Jobs> _inServiceList = new Dictionary<string, Jobs>();

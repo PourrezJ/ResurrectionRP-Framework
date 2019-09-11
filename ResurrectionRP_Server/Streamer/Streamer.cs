@@ -88,12 +88,12 @@ namespace ResurrectionRP_Server.Streamer
             ListEntities[entityid] = null;
             return 0;
         }
-        public int AddEntityMarker(Data.MarkerType type, Vector3 pos, Vector3 scale, int r = 225, int g = 225, int b = 225, int a = 255, int dimension = GameMode.GlobalDimension)
+        public Marker AddEntityMarker(Data.MarkerType type, Vector3 pos, Vector3 scale, int r = 225, int g = 225, int b = 225, int a = 255, int dimension = GameMode.GlobalDimension)
         {
             var data = new Marker(type, scale, r,g,b,a, this.EntityNumber++);
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, GameMode.Instance.StreamDistance, data.export());
             ListEntities.TryAdd(EntityNumber, item);
-            return EntityNumber;
+            return data;
         }
 
         public int AddStaticEntityBlip(Blips blip)

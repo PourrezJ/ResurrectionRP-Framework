@@ -10,12 +10,23 @@ var loading;
 
 
 export function initialize() {
+    alt.onServer('TeleportToWaypoint', () => {
+        let pos: alt.Vector3 = ForceGroundZ(GetWaypointPos());
+
+        if (alt.Player.local.vehicle != null)
+            game.setEntityCoordsNoOffset(alt.Player.local.vehicle.scriptID, parseInt(pos.x.toString()), parseInt(pos.y.toString()), parseInt(pos.z.toString()), false, false, false);
+        else
+            game.setEntityCoordsNoOffset(alt.Player.local.scriptID, parseInt(pos.x.toString()), parseInt(pos.y.toString()), parseInt(pos.z.toString()), false, false, false);
+
+    });
+
     alt.onServer('SetWaypoint', (posx: number, posy: number, override: boolean) => {
         if (game.isWaypointActive() && override)
             game.setWaypointOff();
         if (override && !game.isWaypointActive())
             game.setNewWaypoint(posx, posy);
     });
+
     alt.onServer('DeleteWaypoint', () => {
         game.setWaypointOff();
     })
@@ -154,8 +165,12 @@ export function initialize() {
         
     }
 
-    function ForceGroundZ(v: Vector3) {
+    function ForceGroundZ(v: alt.Vector3) {
         let zcoord = 0.0;
+        let temp = null;
+
+        let x: number = parseInt(v.x.toString()); 
+        let y: number = parseInt(v.y.toString()); 
 
         let firstCheck = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
 
@@ -169,39 +184,42 @@ export function initialize() {
             100, 200, 300, 400, 500, 600, 700, 800, 900, 1000
         ];
 
-        game.getGroundZFor3dCoord(v[0], v[1], 1000, zcoord, false, false);
+        temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
+        alt.log(temp);
+        zcoord = temp[1];
 
         if (zcoord == 0) {
             for (let i = firstCheck.length - 1; i >= 0; i--)
             {
-                game.requestCollisionAtCoord(v[0], v[1], firstCheck[i])
-                //game.wait(0);
+                game.requestCollisionAtCoord(x, y, firstCheck[i]);
             }
-
-            game.getGroundZFor3dCoord(v[0], v[1], 1000, zcoord, false, false);
+            temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
+            alt.log(temp);
+            zcoord = temp[1];
         }
 
         if (zcoord == 0) {
             for (let i = secondCheck.length - 1; i >= 0; i--)
             {
-                game.requestCollisionAtCoord(v[0], v[1], secondCheck[i]);
-                //game.wait(0);
+                game.requestCollisionAtCoord(x, y, secondCheck[i]);
             }
             
-            game.getGroundZFor3dCoord(v[0], v[1], 1000, zcoord, false, false);
+            temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
+            alt.log(temp);
+            zcoord = temp[1];
         }
 
         if (zcoord == 0) {
             for (let i = thirdCheck.length - 1; i >= 0; i--)
             {
-                game.requestCollisionAtCoord(v[0], v[1], secondCheck[i]);
-                //game.wait(0);
+                game.requestCollisionAtCoord(x, y, secondCheck[i]);
             }
-
-            game.getGroundZFor3dCoord(v[0], v[1], 1000, zcoord, false, false);
+            temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
+            alt.log(temp);
+            zcoord = temp[1];
         }
-        return [v[0], v[1], zcoord];
-        //return new Vector3(v.X, v.Y, zcoord);
+        v.z = zcoord + 1;
+        return v;
     }
 
     class HelpText {
@@ -415,4 +433,10 @@ async function loadAnim(dict) {
             }
         }, 5);
     });
+}
+
+export function GetWaypointPos()
+{
+    let id: number = game.getFirstBlipInfoId(8);
+    return (id > 0) ? game.getBlipInfoIdCoord(id) : new alt.Vector3(0,0,0);
 }

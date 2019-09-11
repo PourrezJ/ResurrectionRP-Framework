@@ -17,7 +17,7 @@
         public const string HandsUP = "HandsUP";
         public const string UpdateNeeded = "UpdateNeeded";
 
-        public const string SetToWayPoint = "SetToWayPoint";
+        public const string SetToWayPoint = "TeleportToWaypoint";
         public const string UpdateMoneyHUD = "UpdateMoneyHUD";
 
         public const string AnnonceGlobal = "AnnonceGlobal";

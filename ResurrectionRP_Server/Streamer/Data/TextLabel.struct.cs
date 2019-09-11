@@ -27,7 +27,7 @@ namespace ResurrectionRP_Server.Streamer.Data
 
         public TextLabel(string text, int font, int r, int g, int b, int a, int entityId)
         {
-            this.text = text;
+            this._text = text;
             this.font = font;
             this.r = r;
             this.g = g;

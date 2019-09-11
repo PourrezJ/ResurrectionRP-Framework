@@ -1,4 +1,6 @@
-﻿using AltV.Net.Elements.Entities;
+﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
+using AltV.Net.Async;
 using System.Numerics;
 using System.Threading.Tasks;
 using Flags = ResurrectionRP_Server.Utils.Enums.AnimationFlags;
@@ -22,11 +24,11 @@ namespace ResurrectionRP_Server.Items
 
                 if (Weapon == (uint)Utils.Enums.WeaponHash.Hatchet)
                 {
-                    client.RemoveWeapon((uint)Utils.Enums.WeaponHash.Hatchet);
+                    await client.RemoveWeaponAsync((uint)Utils.Enums.WeaponHash.Hatchet);
                 }
                 else
                 {
-                    client.GiveWeapon((uint)Utils.Enums.WeaponHash.Hatchet, 200, true);
+                    await client.GiveWeaponAsync((uint)Utils.Enums.WeaponHash.Hatchet, 200, true);
                 }
         }
     }

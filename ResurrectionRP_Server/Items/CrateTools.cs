@@ -10,8 +10,10 @@ namespace ResurrectionRP_Server.Items
         {
         }
 
-        public static async Task RepairVehicle(IPlayer player, IVehicle vehicle)
+        public static Task RepairVehicle(IPlayer player, IVehicle vehicle)
         {
+
+            return Task.CompletedTask;
 /*            if (!player.Exists || !vehicle.Exists)
                 return;
 

@@ -43,7 +43,7 @@ namespace ResurrectionRP_Server.Entities.Peds
         [JsonIgnore]
         public Dictionary<dynamic, dynamic> Variable = new Dictionary<dynamic, dynamic>();
 
-        public static async Task<Ped> CreateNPC(PedModel pedHash, Streamer.Data.PedType pedType,Vector3 startPosition, float facingAngle, uint dimension = (uint)ushort.MaxValue, bool freeze = true, bool visible = true, bool invincible = true, bool canRagdoll = false)
+        public static Ped CreateNPC(PedModel pedHash, Streamer.Data.PedType pedType,Vector3 startPosition, float facingAngle, uint dimension = (uint)ushort.MaxValue, bool freeze = true, bool visible = true, bool invincible = true, bool canRagdoll = false)
         {
             var ped = new Ped()
             {

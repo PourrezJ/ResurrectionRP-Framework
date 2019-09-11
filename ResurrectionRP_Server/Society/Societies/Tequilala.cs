@@ -21,9 +21,9 @@ namespace ResurrectionRP_Server.Society.Societies
         {
             await base.Load();
 
-            var PortExt = await Door.CreateDoor(993120320, new Vector3(-564.3921f, 276.5233f, 83.13618f), true);
-            var PortInt = await Door.CreateDoor(unchecked((int)3668283177), new Vector3(-560.3441f, 291.9776f, 82.17625f), true);
-            var PortArr = await Door.CreateDoor(993120320, new Vector3(-561.966f, 293.679f, 87.62682f), true);
+            var PortExt = Door.CreateDoor(993120320, new Vector3(-564.3921f, 276.5233f, 83.13618f), true);
+            var PortInt = Door.CreateDoor(unchecked((int)3668283177), new Vector3(-560.3441f, 291.9776f, 82.17625f), true);
+            var PortArr = Door.CreateDoor(993120320, new Vector3(-561.966f, 293.679f, 87.62682f), true);
 
             Doors = new List<Door>()
             {
@@ -38,7 +38,7 @@ namespace ResurrectionRP_Server.Society.Societies
 
         private async Task OpenCelluleDoor(IPlayer client, Door door)
         {
-            if (await IsEmployee(client))
+            if (IsEmployee(client))
             {
                 XMenu xmenu = new XMenu("ID_Door");
                 xmenu.SetData("Door", door);

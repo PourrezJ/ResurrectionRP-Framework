@@ -7,6 +7,7 @@ using AltV.Net.Async;
 using AltV.Net.Enums;
 using VehicleHandler = ResurrectionRP_Server.Entities.Vehicles.VehicleHandler;
 using VehicleManager = ResurrectionRP_Server.Entities.Vehicles.VehiclesManager;
+using ResurrectionRP_Server.Streamer.Data;
 
 namespace ResurrectionRP_Server.Jobs
 {
@@ -22,7 +23,7 @@ namespace ResurrectionRP_Server.Jobs
         public VehicleModel VehicleSpawnHash;
 
         private Entities.Blips.Blips _blip;
-        private int _marker;
+        private Marker _marker;
         private IColShape _serviceColshape;
         private Dictionary<string, VehicleHandler> _vehicleList = new Dictionary<string, VehicleHandler>();
         private static Dictionary<string, Jobs> _inServiceList = new Dictionary<string, Jobs>();
@@ -36,7 +37,7 @@ namespace ResurrectionRP_Server.Jobs
         #endregion
 
         #region Load
-        public virtual async Task Load()
+        public virtual Task Load()
         {
             if (ServicePos != null)
             {
@@ -49,6 +50,8 @@ namespace ResurrectionRP_Server.Jobs
                 //_marker = await MP.Markers.NewAsync(MarkerType.VerticalCylinder, ServicePos - new Vector3(0, 0, 1), new Vector3(), new Vector3(), 1f, System.Drawing.Color.White, true);
                 _marker = GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ServicePos - new Vector3(0, 0, 1), new Vector3(1, 1, 1), 255, 255, 255, 128);
             }
+
+            return Task.CompletedTask;
         }
         #endregion
 

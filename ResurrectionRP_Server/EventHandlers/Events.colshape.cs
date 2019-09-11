@@ -27,7 +27,7 @@ namespace ResurrectionRP_Server.EventHandlers
         #region Private methods
         private static async Task OnEntityColshape(IColShape colShape, IEntity targetEntity, bool state)
         {
-            if (targetEntity.Type == BaseObjectType.Player && colShape.Exists)
+            if(targetEntity.Type == BaseObjectType.Player && colShape.Exists)
                 (targetEntity as IPlayer).EmitLocked("SetStateInColShape", state);
 
             if (state)

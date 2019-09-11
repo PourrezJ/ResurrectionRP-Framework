@@ -70,16 +70,12 @@ namespace ResurrectionRP_Server.Businesses
         {
             this.MaxEmployee = 5;
             await base.Init();
-            await AltAsync.Do(async () =>
-            {
-                _clothingColshape = Alt.CreateColShapeCylinder(ClothingPos, 4f, 3f);
-                _clothingColshape.SetData("ClothingID", this._id);
-                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ClothingPos - new Vector3(0,0,4f), new Vector3(0,0,3f), 80, 255, 255, 255);
-                //MP.Markers.New(MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 4f), new Vector3(0, 0, 180), new Vector3(), 3f, Color.FromArgb(80, 255, 255, 255), true, MP.GlobalDimension);
-                
-                Entities.Blips.BlipsManager.SetColor(Blip, 25);
-            });
+            _clothingColshape = Alt.CreateColShapeCylinder(ClothingPos, 4f, 3f);
+            _clothingColshape.SetData("ClothingID", this._id);
+            GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 4f), new Vector3(0, 0, 3f), 80, 255, 255, 255);
+            //MP.Markers.New(MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 4f), new Vector3(0, 0, 180), new Vector3(), 3f, Color.FromArgb(80, 255, 255, 255), true, MP.GlobalDimension);
 
+            Entities.Blips.BlipsManager.SetColor(Blip, 25);
 
             AltAsync.OnClient("ClothingID_Open", ClothingID_Open);
         }
@@ -207,7 +203,7 @@ namespace ResurrectionRP_Server.Businesses
         #region WithoutCategorie
         private async Task OpenComponentMenuWithoutCat(IPlayer client, Menu menu, byte compomentID)
         {
-            var data = await Loader.ClothingLoader.FindProps(client, compomentID) ?? null;
+            var data = Loader.ClothingLoader.FindProps(client, compomentID) ?? null;
 
             if (data == null)
                 return;
@@ -290,7 +286,7 @@ namespace ResurrectionRP_Server.Businesses
             double price = menuItem.GetData("price");
 
             Models.Item item = null;
-            var clothdata = await Loader.ClothingLoader.FindProps(client, compomentID) ?? null;
+            var clothdata = Loader.ClothingLoader.FindProps(client, compomentID) ?? null;
 
             if (clothdata == null)
                 return;

@@ -112,7 +112,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Start
-        public virtual async Task<Faction> OnFactionInit()
+        public virtual Task<Faction> OnFactionInit()
         {
             if (ServiceLocation != null)
             {
@@ -165,7 +165,7 @@ namespace ResurrectionRP_Server.Factions
             if (!string.IsNullOrEmpty(FactionName))
                 Alt.Server.LogInfo(FactionName + " is started.");
 
-            return this;
+            return Task.FromResult(this);
         }
 
         public virtual async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
@@ -292,7 +292,7 @@ namespace ResurrectionRP_Server.Factions
         {
             foreach (string socialClub in ServicePlayerList.ToList())
             {
-                var ph = await PlayerManager.GetPlayerBySCN(socialClub);
+                var ph = PlayerManager.GetPlayerBySCN(socialClub);
 
                 if (ph != null && FactionPlayerList.ContainsKey(socialClub) && DateTime.Now >= FactionPlayerList[socialClub].LastPayCheck)
                 {
@@ -304,7 +304,7 @@ namespace ResurrectionRP_Server.Factions
                     if (await BankAccount.GetBankMoney(salaire, $"Salaire {ph.Identite.Name}", save: false))
                     {
                         FactionPlayerList[socialClub].LastPayCheck = DateTime.Now.AddMinutes(PayCheckMinutes);
-                        ph.BankAccount.AddMoney(salaire, $"Salaire {FactionName}");
+                        await ph.BankAccount.AddMoney(salaire, $"Salaire {FactionName}");
                         ph.Client.SendNotification($"Vous avez touché votre salaire ~g~${salaire}~w~.");
                     }
                     else

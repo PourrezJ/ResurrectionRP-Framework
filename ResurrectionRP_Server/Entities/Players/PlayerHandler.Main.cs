@@ -231,7 +231,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     Client.Emit("FadeIn", 3000);
                 });
 
-               await UpdateClothing();
+               UpdateClothing();
 
                 if (PlayerSync.IsCuff)
                     await SetCuff(true);
@@ -268,7 +268,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
 
             Money += somme;
-            Client?.Emit(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money));
+            Client?.EmitLocked(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money));
             await Update();
         }
 
@@ -280,7 +280,7 @@ namespace ResurrectionRP_Server.Entities.Players
             if (Money >= somme)
             {
                 Money -= somme;
-                await Client?.EmitAsync(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money)) ;
+                Client?.EmitLocked(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money)) ;
                 await Update();
                 return true;
             }
@@ -323,7 +323,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region Inventory
-        public async Task UpdateClothing()
+        public void UpdateClothing()
         {
             Clothing = new Clothings(Client);
 

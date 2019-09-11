@@ -15,6 +15,7 @@ using ResurrectionRP_Server.Items;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
+using AltV.Net.Async;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -109,21 +110,21 @@ namespace ResurrectionRP_Server.Factions
             #endregion
 
             #region Peds
-            portiqueSecu = await Ped.CreateNPC(PedModel.Cop01SFY,Streamer.Data.PedType.Human, new Vector3(438.8754f, -985.9456f, 30.68967f), 95.78963f);
+            portiqueSecu = Ped.CreateNPC(PedModel.Cop01SFY,Streamer.Data.PedType.Human, new Vector3(438.8754f, -985.9456f, 30.68967f), 95.78963f);
             portiqueSecu.NpcInteractCallBack = OnNPCInteract;
 
-            accueil = await Ped.CreateNPC(PedModel.Cop01SMY, Streamer.Data.PedType.Human, new Vector3(441.4182f, -978.3267f, 30.68967f), 176.1195f);
+            accueil = Ped.CreateNPC(PedModel.Cop01SMY, Streamer.Data.PedType.Human, new Vector3(441.4182f, -978.3267f, 30.68967f), 176.1195f);
             accueil.NpcInteractCallBack = OnNPCInteract;
 
-            armurerie = await Ped.CreateNPC(PedModel.Cop01SMY,Streamer.Data.PedType.Human ,new Vector3(454.0918f, -979.9051f, 30.68966f), 96.70792f);
+            armurerie = Ped.CreateNPC(PedModel.Cop01SMY,Streamer.Data.PedType.Human ,new Vector3(454.0918f, -979.9051f, 30.68966f), 96.70792f);
             armurerie.NpcInteractCallBack = OnNPCInteract;
             #endregion
 
             #region Doors
-            Cellule1 = await Door.CreateDoor(631614199, new Vector3(461.8065f, -994.4086f, 25.06443f), true);
-            Cellule2 = await Door.CreateDoor(631614199, new Vector3(461.8065f, -997.6583f, 25.06443f), true);
-            Cellule3 = await Door.CreateDoor(631614199, new Vector3(461.8065f, -1001.302f, 25.06443f), true);
-            Cellule4 = await Door.CreateDoor(631614199, new Vector3(464.5701f, -992.6641f, 25.06443f), true);
+            Cellule1 = Door.CreateDoor(631614199, new Vector3(461.8065f, -994.4086f, 25.06443f), true);
+            Cellule2 = Door.CreateDoor(631614199, new Vector3(461.8065f, -997.6583f, 25.06443f), true);
+            Cellule3 = Door.CreateDoor(631614199, new Vector3(461.8065f, -1001.302f, 25.06443f), true);
+            Cellule4 = Door.CreateDoor(631614199, new Vector3(464.5701f, -992.6641f, 25.06443f), true);
 
             var doors = new List<Door>()
             {
@@ -131,16 +132,16 @@ namespace ResurrectionRP_Server.Factions
                 Cellule2,
                 Cellule3,
                 Cellule4,
-                await Door.CreateDoor(320433149, new Vector3(434.7479f, -983.2151f, 30.83926f), false, false),     // Porte devant
-                await Door.CreateDoor(-1215222675, new Vector3(434.7479f, -980.6184f, 30.83926f), false, false),    // Porte devant
-                await Door.CreateDoor(-2023754432, new Vector3(469.9679f, -1014.452f, 26.53623f), true, false),    // Porte arrière
-                await Door.CreateDoor(-2023754432, new Vector3(467.3716f, -1014.452f, 26.53623f), true, false),    // Porte arrière            
-                await Door.CreateDoor(749848321, new Vector3(453.0793f, -983.1895f, 30.83926f), true, false),    // Armurerie
-                await Door.CreateDoor(749848321, new Vector3(461.2865f, -985.3206f, 30.83926f), true, false), // Toit
-                await Door.CreateDoor(-131296141, new Vector3(443.0298f, -991.941f, 30.8393f), true, false), // Briefing
-                await Door.CreateDoor(-1320876379, new Vector3(446.5728f, -980.0106f, 30.8393f), true, false), // bureau
-                await Door.CreateDoor(3079744621, new Vector3(445.3772f, -998.8503f, 30.73355f), false, false), // Porte garage
-                await Door.CreateDoor(320433149, new Vector3(446.853f, -998.8173f, 30.73125f), false, false),    // Porte garage
+                Door.CreateDoor(320433149, new Vector3(434.7479f, -983.2151f, 30.83926f), false, false),     // Porte devant
+                Door.CreateDoor(-1215222675, new Vector3(434.7479f, -980.6184f, 30.83926f), false, false),    // Porte devant
+                Door.CreateDoor(-2023754432, new Vector3(469.9679f, -1014.452f, 26.53623f), true, false),    // Porte arrière
+                Door.CreateDoor(-2023754432, new Vector3(467.3716f, -1014.452f, 26.53623f), true, false),    // Porte arrière            
+                Door.CreateDoor(749848321, new Vector3(453.0793f, -983.1895f, 30.83926f), true, false),    // Armurerie
+                Door.CreateDoor(749848321, new Vector3(461.2865f, -985.3206f, 30.83926f), true, false), // Toit
+                Door.CreateDoor(-131296141, new Vector3(443.0298f, -991.941f, 30.8393f), true, false), // Briefing
+                Door.CreateDoor(-1320876379, new Vector3(446.5728f, -980.0106f, 30.8393f), true, false), // bureau
+                Door.CreateDoor(3079744621, new Vector3(445.3772f, -998.8503f, 30.73355f), false, false), // Porte garage
+                Door.CreateDoor(320433149, new Vector3(446.853f, -998.8173f, 30.73125f), false, false),    // Porte garage
             };
 
             foreach (var door in doors)
@@ -169,13 +170,14 @@ namespace ResurrectionRP_Server.Factions
             }
         }
 
-        public override async Task OnPlayerServiceEnter(IPlayer client, int rang)
+        public override Task OnPlayerServiceEnter(IPlayer client, int rang)
         {
             // Accès aux docks
-/*            foreach (var teleport in GameMode.Instance.FactionManager.Dock.Teleports) TODO
-            {
-                teleport.Whileliste.Add( client.GetSocialClub());
-            };*/
+            /*            foreach (var teleport in GameMode.Instance.FactionManager.Dock.Teleports) TODO
+                        {
+                            teleport.Whileliste.Add( client.GetSocialClub());
+                        };*/
+            return Task.CompletedTask;
         }
 
         public override async Task OnPlayerServiceQuit(IPlayer client, int rang)
@@ -202,8 +204,9 @@ namespace ResurrectionRP_Server.Factions
             return Task.CompletedTask;
         }
 
-        public override async Task OnPlayerEnterColShape(IColShape colshape,IPlayer client)
+        public override Task OnPlayerEnterColShape(IColShape colshape,IPlayer client)
         {
+            return Task.CompletedTask;
             /*
             try
             {
@@ -339,7 +342,7 @@ namespace ResurrectionRP_Server.Factions
             return base.OnVehicleOut(client, vehicleHandler);
         }
 
-        private async Task CallUrgenceLSPD(IPlayer client, object[] args)
+        private void CallUrgenceLSPD(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -353,10 +356,10 @@ namespace ResurrectionRP_Server.Factions
                     foreach (IPlayer player in players)
                     {
                         if (player.Exists && player != client)
-                            player.Emit("LSPD_Call", client.Id, phone.PhoneNumber, JsonConvert.SerializeObject(client.GetPosition()), args[0]);
+                            player.EmitLocked("LSPD_Call", client.Id, phone.PhoneNumber, JsonConvert.SerializeObject(client.GetPosition()), args[0]);
                     }
                 }
-                client.Emit("LSPD_Call", ServicePlayerList.Count);
+                client.EmitLocked("LSPD_Call", ServicePlayerList.Count);
             }
         }
     }

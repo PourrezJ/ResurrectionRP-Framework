@@ -20,6 +20,7 @@ using AltV.Net.Enums;
 using SaltyServer;
 using ResurrectionRP_Server.Radio;
 using ResurrectionRP_Server.Farms;
+using AltV.Net.Async;
 
 namespace ResurrectionRP_Server
 {
@@ -142,7 +143,7 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Events
-        private async Task OnServerStop()
+        private Task OnServerStop()
         {
             var players = GameMode.Instance.PlayerList;
             for (int i = 0; i < players.Count; i++)
@@ -152,6 +153,7 @@ namespace ResurrectionRP_Server
             }
 
             //await HouseManager.House_Exit();
+            return Task.CompletedTask;
         }
 
         public async Task OnStartAsync()
@@ -242,20 +244,24 @@ namespace ResurrectionRP_Server
                     Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z);
                     Chat.SendChatMessage(player, "RX: " + player.Rotation.Roll + " RY: " + player.Rotation.Pitch + " RZ: " + player.Rotation.Yaw);
                 }
+                return Task.CompletedTask;
             });
             Chat.RegisterCmd("getCoords", (IPlayer player, string[] args) =>
             {
                 Alt.Server.LogColored($" X: {player.Position.X}  Y: {player.Position.Y} Z: {player.Position.Z} ");
                 Alt.Server.LogColored($" RX: {player.Rotation.Roll}  RY: {player.Rotation.Pitch} RZ: {player.Rotation.Yaw} ");
+                return Task.CompletedTask;
             });
-            Chat.RegisterCmd("dimension", async (IPlayer player, string[] args) =>
+            Chat.RegisterCmd("dimension", (IPlayer player, string[] args) =>
             {
                 Alt.Server.LogInfo("My dimension: " + player.Dimension) ;
+                return Task.CompletedTask;
             });
+
             Chat.RegisterCmd("save", async (IPlayer player, string[] args) =>
             {
                 player.GetPlayerHandler()?.Update();
-                player.Vehicle?.GetVehicleHandler()?.Update();
+                await player.Vehicle?.GetVehicleHandler()?.Update();
             });
             ServerLoaded = true;
         }
@@ -281,7 +287,7 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Methods
-        private void CommandVeh(IPlayer player, string[] args)
+        private async Task CommandVeh(IPlayer player, string[] args)
         {
             if (args == null)
             {
@@ -291,22 +297,19 @@ namespace ResurrectionRP_Server
 
             VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), new Vector3(player.Position.X+5, player.Position.Y, player.Position.Z), player.Rotation, locked:false);
 
-            Task.Run(async () =>
+            await vh.SpawnVehicle(null);
+            PlayerHandler ph = player.GetPlayerHandler();
+
+            if (ph != null)
             {
-                await vh.SpawnVehicle(null);
-                PlayerHandler ph = player.GetPlayerHandler();
+                ph.ListVehicleKey.Add(new VehicleKey(vh.VehicleManifest.DisplayName, vh.Plate));
 
-                if (ph != null)
-                {
-                    ph.ListVehicleKey.Add(new VehicleKey(vh.VehicleManifest.DisplayName, vh.Plate));
+                if (vh.Vehicle != null)
+                    player.EmitLocked("SetPlayerIntoVehicle", vh.Vehicle, -1);
 
-                    if (vh.Vehicle != null)
-                        player.Emit("SetPlayerIntoVehicle", vh.Vehicle, -1);
-
-                    await vh.InsertVehicle();
-                    await ph.Update();
-                }
-            });
+                await vh.InsertVehicle();
+                await ph.Update();
+            }
         }
 
         public async Task Save()

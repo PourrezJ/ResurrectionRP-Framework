@@ -258,13 +258,15 @@ namespace ResurrectionRP_Server
             await Task.CompletedTask;
         }
 
-        public async static Task SetDecorationAsync(this IPlayer client, uint collection, uint overlay)
+        public static Task SetDecorationAsync(this IPlayer client, uint collection, uint overlay)
         {
             // TODO
+            return Task.CompletedTask;
         }
-        public async static Task RemoveDecorationAsync(this IPlayer client, uint collection, uint overlay)
+        public static Task RemoveDecorationAsync(this IPlayer client, uint collection, uint overlay)
         {
             // TODO
+            return Task.CompletedTask;
         }
         public static void SetDecoration(this IPlayer client, uint collection, uint overlay)
         {
@@ -275,14 +277,16 @@ namespace ResurrectionRP_Server
         {
             // TODO
         }
-        public async static Task ClearDecorationsAsync(this IPlayer client)
+        public static Task ClearDecorationsAsync(this IPlayer client)
         {
             // TODO
+            return Task.CompletedTask;
         }
 
-        public async static Task SetHeadOverlayAsync(this IPlayer client, int overlayId, Businesses.Barber.HeadOverlayData overlayData)
+        public static Task SetHeadOverlayAsync(this IPlayer client, int overlayId, Businesses.Barber.HeadOverlayData overlayData)
         {
             // TODO
+            return Task.CompletedTask;
         }
         public static void SetHeadOverlay(this IPlayer client, int overlayId, Businesses.Barber.HeadOverlayData overlayData)
         {
@@ -293,9 +297,9 @@ namespace ResurrectionRP_Server
         {
             // TOOD
         }
-        public async static Task SetHairColorAsync(this IPlayer client,  uint color, uint hightlightColor)
+        public static Task SetHairColorAsync(this IPlayer client,  uint color, uint hightlightColor)
         {
-
+            return Task.CompletedTask;
         }
 
         public static void Freeze(this IPlayer client, bool state)
@@ -319,9 +323,10 @@ namespace ResurrectionRP_Server
             await client.EmitAsync("PlayAnimation", JsonConvert.SerializeObject(animsync));
         }
 
-        public static async Task StopAnimationAsync(this IPlayer client)
+        public static Task StopAnimationAsync(this IPlayer client)
         {
             //TODO
+            return Task.CompletedTask;
         }
 
         public static void RequestCollisionAtCoords(this IPlayer client, Vector3 pos)

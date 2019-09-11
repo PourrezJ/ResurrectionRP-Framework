@@ -76,11 +76,11 @@ namespace ResurrectionRP_Server.Businesses
         #endregion
 
         #region Loader
-        public virtual async Task Init()
+        public virtual Task Init()
         {
             if (PedHash != 0)
             {
-                Ped ped = await Ped.CreateNPC(PedHash, Streamer.Data.PedType.Human, Location.Pos, Location.Rot.Z);
+                Ped ped = Ped.CreateNPC(PedHash, Streamer.Data.PedType.Human, Location.Pos, Location.Rot.Z);
                 ped.NpcInteractCallBack = OnNpcFirstInteract; // E
                 ped.NpcSecInteractCallBack = OnNpcSecondaryInteract; // W
                 Ped = ped;
@@ -93,6 +93,7 @@ namespace ResurrectionRP_Server.Businesses
 
             BankAccount.Owner = this;
             GameMode.Instance.BusinessesManager.BusinessesList.Add(this);
+            return Task.CompletedTask;
         }
         #endregion
 
@@ -111,7 +112,7 @@ namespace ResurrectionRP_Server.Businesses
         public bool IsOwner(IPlayer client)
             => client.GetSocialClub() == Owner;
 
-        public static async Task<bool> CanIHaveABusiness(string owner) => (GameMode.Instance.BusinessesManager.BusinessesList.Find(x => x.Owner == owner) == null || (await PlayerManager.GetPlayerBySCN(owner)).StaffRank >= AdminRank.Moderator) ? true : false;
+        public static bool CanIHaveABusiness(string owner) => (GameMode.Instance.BusinessesManager.BusinessesList.Find(x => x.Owner == owner) == null || (PlayerManager.GetPlayerBySCN(owner)).StaffRank >= AdminRank.Moderator) ? true : false;
         #endregion
 
         #region Events

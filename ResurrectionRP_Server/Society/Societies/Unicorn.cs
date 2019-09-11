@@ -23,9 +23,9 @@ namespace ResurrectionRP_Server.Society.Societies
 
         public override async Task Load()
         {
-            Principal = await Door.CreateDoor(-1116041313, new Vector3(128.7443f, -1298.621f, 29.23274f), true);
-            Bureau1 = await Door.CreateDoor(668467214, new Vector3(95.84587f, -1285.645f, 29.26877f), true);
-            Bureau2 = await Door.CreateDoor(-626684119, new Vector3(99.5032f, -1292.784f, 29.26877f), true);
+            Principal = Door.CreateDoor(-1116041313, new Vector3(128.7443f, -1298.621f, 29.23274f), true);
+            Bureau1 = Door.CreateDoor(668467214, new Vector3(95.84587f, -1285.645f, 29.26877f), true);
+            Bureau2 = Door.CreateDoor(-626684119, new Vector3(99.5032f, -1292.784f, 29.26877f), true);
 
             List<Teleport.TeleportEtage> etages = new List<Teleport.TeleportEtage>()
             {
@@ -47,7 +47,7 @@ namespace ResurrectionRP_Server.Society.Societies
         #region Doors
         private async Task OpenDoor(IPlayer client, Door door)
         {
-            if (await this.IsEmployee(client) || Owner == client.GetSocialClub())
+            if (this.IsEmployee(client) || Owner == client.GetSocialClub())
             {
                 XMenu xmenu = new XMenu("ID_Door");
                 xmenu.SetData("Door", door);

@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using System;
 using System.Collections.Concurrent;
@@ -10,7 +11,7 @@ namespace ResurrectionRP_Server
     static class Chat
     {
         #region Delegates
-        public delegate void CmdCallback(IPlayer player, string[] args = null);
+        public delegate Task CmdCallback(IPlayer player, string[] args = null);
         #endregion
 
         #region Static fields
@@ -20,7 +21,7 @@ namespace ResurrectionRP_Server
         #region Client events
         public static void Initialize()
         {
-            Alt.OnClient("chatmessage", OnChatMessage);
+            AltAsync.OnClient("chatmessage", OnChatMessage);
         }
         #endregion
 
@@ -33,7 +34,7 @@ namespace ResurrectionRP_Server
                 _cmdHandlers[cmd](player, args);
         }
 
-        private static void OnChatMessage(IPlayer player, object[] args)
+        private static Task OnChatMessage(IPlayer player, object[] args)
         {
             string msg = (string)args[0];
 
@@ -67,10 +68,11 @@ namespace ResurrectionRP_Server
                 msg = msg.Trim();
 
                 if (msg.Length == 0)
-                    return;
+                    return Task.CompletedTask;
 
                 Alt.Log($"[Chat:msg] {player.Name}: {msg}");
             }
+            return Task.CompletedTask;
         }
         #endregion
 
@@ -93,7 +95,7 @@ namespace ResurrectionRP_Server
 
         public static void Send(IPlayer player, string msg)
         {
-            player.Emit("ChatMessage", msg);
+            player.EmitLocked("ChatMessage", msg);
         }
         #endregion
 

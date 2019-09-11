@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using AltV.Net.Async;
+using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Utils.Enums;
 
@@ -17,28 +19,30 @@ namespace ResurrectionRP_Server.Entities.Players
             Chat.RegisterCmd("cloth", Cloth);
         }
 
-        private void TpCoord(IPlayer player, string[] args)
+        private async Task TpCoord(IPlayer player, string[] args)
         {
             try
             {
                 if (player.GetPlayerHandler().StaffRank <= AdminRank.Player)
                     return;
 
-                player.Position = (new Vector3(float.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
+                await player.SetPositionAsync(new Position(float.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
             }
             catch
             {
                 player.SendChatMessage("Erreur dans la saisie des coordonnées");
             }
         }
-        public void Cls(IPlayer player, string[] args)
+        public Task Cls(IPlayer player, string[] args)
         {
-            player.Emit("EmptyChat");
+            player.EmitLocked("EmptyChat");
+            return Task.CompletedTask;
         }
 
-        private void Cloth(IPlayer player, object[] args)
+        private Task Cloth(IPlayer player, object[] args)
         {
             player.SetCloth((Models.ClothSlot)Convert.ToInt32(args[0]), (int)args[1], (int)args[2], (int)args[3]);
+            return Task.CompletedTask;
         }
     }
 }

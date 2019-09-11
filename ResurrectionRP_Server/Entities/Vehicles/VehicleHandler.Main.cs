@@ -312,9 +312,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         }
 
-        public async Task PutPlayerInVehicle( IPlayer client )
+        public Task PutPlayerInVehicle( IPlayer client )
         {
             //TODO
+            return Task.CompletedTask;
         }
 
         

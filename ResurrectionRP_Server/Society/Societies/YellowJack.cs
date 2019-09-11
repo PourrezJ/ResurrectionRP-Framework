@@ -26,13 +26,13 @@ namespace ResurrectionRP_Server.Society.Societies
             //await this.Marker.SetAlphaAsync(80);
 
 
-            var port = await Door.CreateDoor(4007304890, new Vector3(1991.106f, 3053.105f, 47.36529f), true);
+            var port = Door.CreateDoor(4007304890, new Vector3(1991.106f, 3053.105f, 47.36529f), true);
             port.Interact = OpenCelluleDoor;
         }
 
         private async Task OpenCelluleDoor(IPlayer client, Door door)
         {
-            if (await IsEmployee(client))
+            if (IsEmployee(client))
             {
                 XMenu xmenu = new XMenu("ID_Door");
                 xmenu.SetData("Door", door);

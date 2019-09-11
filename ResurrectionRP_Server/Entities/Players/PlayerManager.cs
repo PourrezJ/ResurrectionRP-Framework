@@ -5,6 +5,7 @@ using AltV.Net.Elements.Entities;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Bank;
+using ResurrectionRP_Server.Entities.Players.Data;
 using ResurrectionRP_Server.Factions;
 using ResurrectionRP_Server.Models;
 using System;
@@ -116,6 +117,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
 
             string socialclub = args[0].ToString();
+            DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(args[1].ToString());
 
             if (IsBan(socialclub))
             {
@@ -145,7 +147,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     
                     if (!Config.GetSetting<bool>("WhitelistOpen"))
                     {
-                        await player.EmitAsync("OpenLogin");
+                        player.EmitLocked("OpenLogin");
                         return;
                     }
 
@@ -158,7 +160,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             if (DateTime.Now > whitelist.EndBanTime)
                             {
                                 whitelist.IsBan = false;
-                                await player.EmitAsync("OpenLogin", args[0]);
+                                player.EmitLocked("OpenLogin", args[0]);
                                 return;
                             }
 
@@ -167,12 +169,12 @@ namespace ResurrectionRP_Server.Entities.Players
                         }
                         else
                         {
-                            player.Emit("OpenLogin", socialclub);
+                            player.EmitLocked("OpenLogin", socialclub);
                         }
                     }
                     else
                     {
-                        await player.EmitAsync("FadeIn", 0);
+                        player.EmitLocked("FadeIn", 0);
                         string _kickMessage = "Vous n'êtes pas whitelist sur le serveur";
                         await player.KickAsync(_kickMessage);
                     }
@@ -324,6 +326,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 await ph.UpdateHungerThirst(100, 100);
                 await client.SpawnAsync(new Vector3(308.2974f, -567.4647f, 43.29008f));
                 await client.SetRotationAsync(new Rotation(0, 239.0923f, 0));
+                await client.SetHealthAsync(15);
                 client.Resurrect();
                 ph.PlayerSync.Injured = false;
             }
@@ -337,7 +340,7 @@ namespace ResurrectionRP_Server.Entities.Players
             await client.Revive();
         }
 
-        public static async Task<PlayerHandler> GetPlayerBySCN(string socialClubName)
+        public static PlayerHandler GetPlayerBySCN(string socialClubName)
         {
             try
             {

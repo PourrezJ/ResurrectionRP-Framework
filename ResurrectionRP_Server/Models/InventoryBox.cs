@@ -34,7 +34,7 @@ namespace ResurrectionRP_Server.Models
             }
         }
 
-        public static async Task<InventoryBox> CreateInventoryBox(string id, Location location,Inventory.Inventory inventory = null, uint model = 307713837, int taille = 200)
+        public static Task<InventoryBox> CreateInventoryBox(string id, Location location,Inventory.Inventory inventory = null, uint model = 307713837, int taille = 200)
         {
             InventoryBox inv = new InventoryBox()
             {
@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server.Models
             };
 
             //await inv.Spawn();
-            return inv;
+            return Task.FromResult(inv);
         }
 
 /*        public async Task Spawn() TODO OBJECT HANDLER

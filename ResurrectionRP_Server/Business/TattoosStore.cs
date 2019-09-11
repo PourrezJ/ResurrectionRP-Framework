@@ -255,7 +255,7 @@ namespace ResurrectionRP_Server.Businesses
 
                 if (await ph.HasMoney(amount))
                 {
-                    BankAccount.AddMoney(amount, $"Ajout d'argent par {ph.Identite.Name}");
+                    await BankAccount.AddMoney(amount, $"Ajout d'argent par {ph.Identite.Name}");
                     client.SendNotificationSuccess($"Vous avez déposé ${amount} dans la caisse.");
                 }
                 else

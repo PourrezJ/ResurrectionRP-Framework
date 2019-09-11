@@ -19,18 +19,18 @@ namespace ResurrectionRP_Server.Factions
             //Chat.RegisterCmd("addsheriff", AddPlayerSheriff);
         }
 
-        public void AddPlayerONU(IPlayer client, string[] args)
+        public async Task AddPlayerONU(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            Task.Run(async ()=> await GameMode.Instance.FactionManager?.Onu.TryAddIntoFaction(client, 4));  
+            await GameMode.Instance.FactionManager?.Onu.TryAddIntoFaction(client, 4);
         }
 
-        public void AddPlayerLSPD(IPlayer client, string[] args)
+        public async Task AddPlayerLSPD(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            Task.Run(async () => await GameMode.Instance.FactionManager?.Lspd.TryAddIntoFaction(client, 4));
+            await GameMode.Instance.FactionManager?.Lspd.TryAddIntoFaction(client, 4);
         }
         /*
         public void AddPlayerRebelle(IPlayer client, string[] args)
@@ -40,18 +40,18 @@ namespace ResurrectionRP_Server.Factions
             Task.Run(async () => await GameMode.Instance.FactionManager?.Rebelle.TryAddIntoFaction(client, 3));
         }*/
 
-        public void AddPlayerLSCustom(IPlayer client, string[] args)
+        public async Task AddPlayerLSCustom(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            Task.Run(async () => await GameMode.Instance.FactionManager?.LSCustom.TryAddIntoFaction(client, 2));
+            await GameMode.Instance.FactionManager?.LSCustom.TryAddIntoFaction(client, 2);
         }
 
-        public void AddPlayerGouv(IPlayer client, string[] args)
+        public async Task AddPlayerGouv(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            Task.Run(async () => await GameMode.Instance.FactionManager?.Gouvernement.TryAddIntoFaction(client, 7));
+            await GameMode.Instance.FactionManager?.Gouvernement.TryAddIntoFaction(client, 7);
         }
         /*
         public void AddPlayerDock(IPlayer client, string[] args)

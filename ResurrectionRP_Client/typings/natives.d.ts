@@ -1922,7 +1922,7 @@ declare module "natives" {
 	export function getFrameCount(): number;
 	export function getRandomFloatInRange(startRange: number, endRange: number): number;
 	export function getRandomIntInRange(startRange: number, endRange: number): number;
-	export function getGroundZFor3dCoord(x: number, y: number, z: number, groundZ: number, unk: boolean, p5: boolean): boolean;
+    export function getGroundZFor3dCoord(x: number, y: number, z: number, groundZ: number, unk: boolean, p5: boolean): Array<any>; 
 	export function getGroundZCoordWithOffsets(x: number, y: number, z: number, groundZ: number, offsets: vectorPtr): boolean;
 	export function _0x9E82F0F362881B29(p0: number, p1: number, p2: number, p3: number, p4: number, p5: number): number;
 	export function asin(p0: number): number;

@@ -84,8 +84,8 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
 
         public async Task BuyCar(CarDealerPlace vehicleplace, Entities.Players.PlayerHandler ph)
         {
-            if (vehicleplace.TextLabelId > 0)
-                GameMode.Instance.Streamer.DestroyEntityLabel(vehicleplace.TextLabelId);
+            if (vehicleplace.TextLabelId != null)
+                vehicleplace.TextLabelId.Destroy();
 
             //GameMode.Instance.Economy.CaissePublique += Economy.CalculPriceTaxe(vehicleplace.VehicleInfo.Price, GameMode.Instance.Economy.Taxe_Market);
 

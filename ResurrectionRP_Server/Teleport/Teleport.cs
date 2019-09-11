@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.Teleport
             ID = GameMode.Instance.TeleportManager.Teleports.Count + 1;
         }
 
-        public static async Task<Teleport> CreateTeleport(Location entree, List<TeleportEtage> sorti, float scale = 1f, bool vehicleAllowed = false, byte opacite = 128, uint dimensionIN = 0, uint dimensionOUT = 0, string menutitle = "Ouvrir la porte", bool iswhitelisted = false, List<string> whitelist = null)
+        public static Teleport CreateTeleport(Location entree, List<TeleportEtage> sorti, float scale = 1f, bool vehicleAllowed = false, byte opacite = 128, uint dimensionIN = 0, uint dimensionOUT = 0, string menutitle = "Ouvrir la porte", bool iswhitelisted = false, List<string> whitelist = null)
         {
             var teleport = new Teleport()
             {

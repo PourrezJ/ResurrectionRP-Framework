@@ -307,7 +307,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                                 {
                                     if (await ph.HasBankMoney(_place.VehicleInfo.Price, $"Location de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
                                     {
-                                        await _place.RentShop.RentCar(_place, ph);
+                                        _place.RentShop.RentCar(_place, ph);
                                     }
                                     else
                                     {

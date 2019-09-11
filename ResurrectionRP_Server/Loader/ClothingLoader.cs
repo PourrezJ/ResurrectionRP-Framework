@@ -208,7 +208,7 @@ namespace ResurrectionRP_Server.Loader
             return Path.GetFullPath(Path.Combine(basePath, relativePath));
         }
 
-        public static async Task<ClothManifest?> FindTops(IPlayer player)
+        public static ClothManifest? FindTops(IPlayer player)
         {
             if (player.Model == Alt.Hash("mp_m_freemode_01"))
             {
@@ -222,7 +222,7 @@ namespace ResurrectionRP_Server.Loader
             return null;
         }
 
-        public static async Task<ClothManifest?> FindCloths(IPlayer player, byte compomentID)
+        public static ClothManifest? FindCloths(IPlayer player, byte compomentID)
         {
             if (compomentID == 1)
             {
@@ -247,7 +247,7 @@ namespace ResurrectionRP_Server.Loader
             return null;
         }
 
-        public static async Task<ClothManifest?> FindProps(IPlayer player, byte compomentID)
+        public static ClothManifest? FindProps(IPlayer player, byte compomentID)
         {
             if (player.Model == Alt.Hash("mp_m_freemode_01"))
             {

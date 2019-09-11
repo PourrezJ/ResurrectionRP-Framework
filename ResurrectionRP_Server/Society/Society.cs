@@ -23,7 +23,7 @@ using ResurrectionRP_Server.Society.Societies;
 using ResurrectionRP_Server.Society.Societies.Bennys;
 using ResurrectionRP_Server.Society.Societies.WildCustom;
 using ResurrectionRP_Server.Society.Societies.WhiteWereWolf;
-
+using ResurrectionRP_Server.Streamer.Data;
 
 namespace ResurrectionRP_Server.Society
 {
@@ -66,7 +66,7 @@ namespace ResurrectionRP_Server.Society
         [BsonIgnore]
         public IColShape ParkingColshape;
         [BsonIgnore]
-        public int Marker;
+        public Marker Marker;
 
         public BankAccount BankAccount;
         #endregion
@@ -162,20 +162,22 @@ namespace ResurrectionRP_Server.Society
         #endregion
 
         #region Methods
-        public virtual async Task PriseService(IPlayer client)
+        public virtual Task PriseService(IPlayer client)
         {
             InService.Add(client.GetSocialClub());
             client.SendNotificationSuccess("Vous avez pris votre service");
+            return Task.CompletedTask;
         }
 
-        public virtual async Task QuitterService(IPlayer client)
+        public virtual Task QuitterService(IPlayer client)
         {
             InService.Remove( client.GetSocialClub());
             client.GetPlayerHandler()?.Character?.ApplyCharacter(client);
             client.SendNotificationSuccess("Vous avez quitté votre service");
+            return Task.CompletedTask;
         }
 
-        public virtual async Task<bool> IsEmployee(IPlayer client)
+        public virtual bool IsEmployee(IPlayer client)
         {
             if (Employees == null)
                 return false;
@@ -185,7 +187,7 @@ namespace ResurrectionRP_Server.Society
             return Employees.ContainsKey( client.GetSocialClub()) || Owner == social;
         }
 
-        public async Task<int> GetEmployeeOnline()
+        public int GetEmployeeOnline()
         {
             int a = 0;
 
@@ -194,7 +196,7 @@ namespace ResurrectionRP_Server.Society
                 if (!player.Exists)
                     continue;
 
-                if (await IsEmployee(player))
+                if (IsEmployee(player))
                     a++;
             }
             return a;

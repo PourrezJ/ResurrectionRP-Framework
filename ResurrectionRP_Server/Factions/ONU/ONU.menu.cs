@@ -49,7 +49,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Interaction
-        public override async Task<XMenu> InteractPlayerMenu(IPlayer client, IPlayer target, XMenu xmenu)
+        public override XMenu InteractPlayerMenu(IPlayer client, IPlayer target, XMenu xmenu)
         {
             var playerHandler = client.GetPlayerHandler();
             xmenu.SetData("Player", target);
@@ -69,7 +69,7 @@ namespace ResurrectionRP_Server.Factions
 
             xmenu.Callback += OnInteractCallBack;
 
-            return await base.InteractPlayerMenu(client, target, xmenu);
+            return base.InteractPlayerMenu(client, target, xmenu);
         }
 
         private async Task OnInteractCallBack(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)

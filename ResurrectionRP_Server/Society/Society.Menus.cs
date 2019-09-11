@@ -21,7 +21,7 @@ namespace ResurrectionRP_Server.Society
         {
             if (Parking != null)
             {
-                if (await IsEmployee(client) || Owner == client.GetSocialClub())
+                if (IsEmployee(client) || Owner == client.GetSocialClub())
                     await Parking.OpenParkingMenu(client);
                 else
                     client.SendNotificationError("Vous ne faites pas partie des employés de cette entreprise.");
@@ -55,7 +55,7 @@ namespace ResurrectionRP_Server.Society
                 }
             }
 
-            if (Owner == client.GetSocialClub() || await IsEmployee(client))
+            if (Owner == client.GetSocialClub() || IsEmployee(client))
             {
                 if (InService.Contains(client.GetSocialClub()))
                     menu.Add(new MenuItem("Quitter votre service", "", "qservice", executeCallback: true));
@@ -126,7 +126,7 @@ namespace ResurrectionRP_Server.Society
                 if (result < 0) return;
                 if (await ph.HasMoney(result))
                 {
-                    BankAccount.AddMoney(result, $"Ajout d'argent par {ph.Identite.Name}");
+                    await BankAccount.AddMoney(result, $"Ajout d'argent par {ph.Identite.Name}");
                     await ph.Update();
                     client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
                 }
@@ -336,7 +336,7 @@ namespace ResurrectionRP_Server.Society
             {
                 foreach (var playerID in Employees)
                 {
-                    PlayerHandler ph = await PlayerManager.GetPlayerBySCN(playerID.Key);
+                    PlayerHandler ph = PlayerManager.GetPlayerBySCN(playerID.Key);
 
                     if (ph != null && ph.Identite.Name == menuItem.Text)
                     {

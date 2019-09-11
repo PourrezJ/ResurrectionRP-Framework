@@ -49,7 +49,7 @@ namespace ResurrectionRP_Server.Bank
         #endregion
 
         #region Method
-        public void AddMoney(double money, string reason, bool save = true)
+        public async Task AddMoney(double money, string reason, bool save = true)
         {
             Balance += money;
             History.Add(new BankAccountHistory()
@@ -61,15 +61,15 @@ namespace ResurrectionRP_Server.Bank
             });
 
             if (save)
-                Save();
+                await Save();
         }
 
-        public void AddMoney(double money, bool save = true)
+        public async Task AddMoney(double money, bool save = true)
         {
             Balance += money;
 
             if (save)
-                Save();
+                await Save();
         }
 
         public async Task<bool> GetBankMoney(double money, string reason, string details = null, bool save = true)

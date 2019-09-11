@@ -179,9 +179,9 @@ namespace ResurrectionRP_Server.Phone
                 case "AddOrEditContact":
                     Address contact = JsonConvert.DeserializeObject<Address>(args[1].ToString());
 
-                    if (string.IsNullOrEmpty(contact.originalNumber) && await phone.TryAddNewContact(client, contact.contactName, contact.phoneNumber))
+                    if (string.IsNullOrEmpty(contact.originalNumber) && phone.TryAddNewContact(client, contact.contactName, contact.phoneNumber))
                         client.SendNotificationSuccess($"Vous avez ajouté le contact {contact.contactName}");
-                    else if (await phone.TryEditContact(client, contact.contactName, contact.phoneNumber, contact.originalNumber))
+                    else if (phone.TryEditContact(client, contact.contactName, contact.phoneNumber, contact.originalNumber))
                         client.SendNotificationSuccess($"Vous avez édité le contact {contact.contactName}");
 
                     await ph.Update();
@@ -224,15 +224,15 @@ namespace ResurrectionRP_Server.Phone
                     break;
 
                 case "cancelCall":
-                    await phone.CancelCall(client, args[1].ToString());
+                    phone.CancelCall(client, args[1].ToString());
                     break;
 
                 case "endCall":
-                    await phone.EndCall(client, args[1].ToString());
+                    phone.EndCall(client, args[1].ToString());
                     break;
 
                 case "acceptCall":
-                    await phone.StartCall(client, args[1].ToString());
+                    phone.StartCall(client, args[1].ToString());
                     break;
                 default:
                     Alt.Server.LogError("PhoneManager  PhoneMenuCallback, is arg[0] the event name ?");

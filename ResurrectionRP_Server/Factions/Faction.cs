@@ -117,15 +117,19 @@ namespace ResurrectionRP_Server.Factions
             if (ServiceLocation != null)
             {
                 Vestiaire_colShape = Alt.CreateColShapeCylinder(ServiceLocation - new Vector3(0, 0, 1), 1.0f, 1f);
+                Vestiaire_colShape.SetOnPlayerEnterColShape(OnPlayerEnterVestiaire);
+                Vestiaire_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveVestiaire);
                 GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.HorizontalCircleArrow, ServiceLocation - new Vector3(0, 0, 1), new Vector3(1, 1, 1), 128);
             }
 
             if (ParkingLocation != null)
             {
-                if (Parking == null) Parking = new Parking(ParkingLocation.Pos, ParkingLocation);
-
+                if (Parking == null)
+                    Parking = new Parking(ParkingLocation.Pos, ParkingLocation);
 
                 Parking_colShape = Alt.CreateColShapeCylinder(ParkingLocation.Pos - new Vector3(0, 0, 1), 3.0f, 3f);
+                Parking_colShape.SetOnPlayerEnterColShape(OnPlayerEnterParking);
+                Parking_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveParking);
                 GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ParkingLocation.Pos - new Vector3(0, 0, 1), new Vector3(2, 2, 2), 128);
 
                 Parking.OnVehicleStored = OnVehicleStore;
@@ -133,19 +137,22 @@ namespace ResurrectionRP_Server.Factions
                 Parking.ParkingType = ParkingType.Faction;
                 Parking.Limite = 3;
                 Parking.Spawn1 = ParkingLocation;
-
             }
 
             if (HeliportLocation != null)
             {
                 if (Parking == null) Parking = new Parking(HeliportLocation.Pos, HeliportLocation);
-                Parking_colShape = Alt.CreateColShapeCylinder(HeliportLocation.Pos, 3.0f, 1f);
+                Heliport_colShape = Alt.CreateColShapeCylinder(HeliportLocation.Pos, 3.0f, 1f);
+                Heliport_colShape.SetOnPlayerEnterColShape(OnPlayerEnterHeliport);
+                Heliport_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveHeliport);
                 GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, HeliportLocation.Pos - new Vector3(0, 0, 0), new Vector3(3, 3, 3), 128);
             }
 
             if (ShopLocation != null)
             {
-                Parking_colShape = Alt.CreateColShapeCylinder(ShopLocation, 1.0f, 2f);
+                Shop_colShape = Alt.CreateColShapeCylinder(ShopLocation, 1.0f, 2f);
+                Shop_colShape.SetOnPlayerEnterColShape(OnPlayerEnterShop);
+                Shop_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveShop);
                 GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ShopLocation - new Vector3(0, 0, 0), new Vector3(1, 1, 1), 128);
             }
 
@@ -155,33 +162,10 @@ namespace ResurrectionRP_Server.Factions
             ServicePlayerList = new List<string>();
             BankAccount.Owner = this;
 
-            AltAsync.OnColShape += AltAsync_OnColShape;
+            if (!string.IsNullOrEmpty(FactionName))
+                Alt.Server.LogInfo(FactionName + " is started.");
 
-            if (!string.IsNullOrEmpty(FactionName)) { Alt.Server.LogInfo(FactionName + " is started."); }
             return this;
-        }
-
-        private async Task AltAsync_OnColShape(IColShape colShape, IEntity targetEntity, bool state)
-        {
-            IPlayer client = targetEntity as IPlayer;
-
-            if (client == null)
-                return;
-
-            if (!client.Exists)
-                return;
-
-            if (Parking_colShape != null && colShape == Parking_colShape)
-                await OpenConcessMenu(client, Faction.ConcessType.Vehicle, ParkingLocation, FactionName);
-
-            else if (Heliport_colShape != null && colShape == Heliport_colShape)
-                await OpenConcessMenu(client, Faction.ConcessType.Helico, HeliportLocation, FactionName);
-
-            else if (Shop_colShape != null && colShape == Shop_colShape)
-                await OpenShopMenu(client);
-
-            else if (Vestiaire_colShape != null && colShape == Vestiaire_colShape)
-                await PriseServiceMenu(client);
         }
 
         public virtual async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
@@ -196,6 +180,69 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Event
+        public async Task OnPlayerEnterVestiaire(IColShape colShape, IPlayer client)
+        {
+            await PriseServiceMenu(client);
+        }
+
+        public async Task OnPlayerLeaveVestiaire(IColShape colShape, IPlayer client)
+        {
+            PlayerHandler player = client.GetPlayerHandler();
+
+            if (player == null)
+                return;
+
+            if (player.HasOpenMenu())
+                await MenuManager.CloseMenu(client);
+        }
+
+        public async Task OnPlayerEnterShop(IColShape colShape, IPlayer client)
+        {
+            await OpenShopMenu(client);
+        }
+
+        public async Task OnPlayerLeaveShop(IColShape colShape, IPlayer client)
+        {
+            PlayerHandler player = client.GetPlayerHandler();
+
+            if (player == null)
+                return;
+
+            if (player.HasOpenMenu())
+                await MenuManager.CloseMenu(client);
+        }
+
+        public async Task OnPlayerEnterParking(IColShape colShape, IPlayer client)
+        {
+            await OpenConcessMenu(client, ConcessType.Vehicle, ParkingLocation, FactionName);
+        }
+
+        public async Task OnPlayerLeaveParking(IColShape colShape, IPlayer client)
+        {
+            PlayerHandler player = client.GetPlayerHandler();
+
+            if (player == null)
+                return;
+
+            if (player.HasOpenMenu())
+                await MenuManager.CloseMenu(client);
+        }
+
+        public async Task OnPlayerEnterHeliport(IColShape colShape, IPlayer client)
+        {
+            await OpenConcessMenu(client, ConcessType.Helico, ParkingLocation, FactionName);
+        }
+
+        public async Task OnPlayerLeaveHeliport(IColShape colShape, IPlayer client)
+        {
+            PlayerHandler player = client.GetPlayerHandler();
+
+            if (player == null)
+                return;
+
+            if (player.HasOpenMenu())
+                await MenuManager.CloseMenu(client);
+        }
 
         public virtual Task OnPlayerPromote(IPlayer client, int rang)
         {
@@ -216,7 +263,7 @@ namespace ResurrectionRP_Server.Factions
         {
             if (ServicePlayerList.Contains(client.GetSocialClub()))
             {
-                FactionPlayerList[client.GetSocialClub()].LastPayCheck = (DateTime.Now).AddMinutes(PayCheckMinutes);
+                FactionPlayerList[client.GetSocialClub()].LastPayCheck = DateTime.Now.AddMinutes(PayCheckMinutes);
                 await OnPlayerServiceEnter(client, GetRangPlayer(client));
             }
         }
@@ -256,7 +303,7 @@ namespace ResurrectionRP_Server.Factions
 
                     if (await BankAccount.GetBankMoney(salaire, $"Salaire {ph.Identite.Name}", save: false))
                     {
-                        FactionPlayerList[socialClub].LastPayCheck = (DateTime.Now).AddMinutes(PayCheckMinutes);
+                        FactionPlayerList[socialClub].LastPayCheck = DateTime.Now.AddMinutes(PayCheckMinutes);
                         ph.BankAccount.AddMoney(salaire, $"Salaire {FactionName}");
                         ph.Client.SendNotification($"Vous avez touché votre salaire ~g~${salaire}~w~.");
                     }
@@ -265,7 +312,6 @@ namespace ResurrectionRP_Server.Factions
                 }
             }
         }
-
         #endregion
 
         #region Method
@@ -298,7 +344,6 @@ namespace ResurrectionRP_Server.Factions
             if (ph == null)
                 return;
 
-            await MenuManager.CloseMenu(client);
             if (ServicePlayerList.Contains(client.GetSocialClub()))
             {
                 client.SendNotificationSuccess("Vous avez quitté votre service");
@@ -312,6 +357,8 @@ namespace ResurrectionRP_Server.Factions
                 ServicePlayerList.Add(client.GetSocialClub());
                 await OnPlayerServiceEnter(client, GetRangPlayer(client));
             }
+
+            await MenuManager.CloseMenu(client);
         }
 
         public bool IsOnService(IPlayer client)

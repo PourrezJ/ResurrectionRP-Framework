@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.EventHandlers;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -40,12 +41,143 @@ namespace ResurrectionRP_Server
 
         public static bool IsEntityInColShape(this IColShape colshape, IEntity client)
         {
-            colshape.GetData("Entities", out List<IEntity> entities);
+            lock (colshape)
+            {
+                colshape.GetData("Entities", out List<IEntity> entities);
 
-            if (entities == null || !entities.Contains(client))
-                return false;
+                if (entities == null || !entities.Contains(client))
+                    return false;
+            }
 
             return true;
+        }
+
+        public static void SetOnPlayerEnterColShape(this IColShape colshape, Events.ColShapePlayerEventHandler method)
+        {
+            lock (colshape)
+            {
+                colshape.GetData("OnPlayerEnterColShape", out Events.ColShapePlayerEventHandler eventHandler);
+
+                if (eventHandler != null)
+                    eventHandler += method;
+                else
+                {
+                    eventHandler += method;
+                    colshape.SetData("OnPlayerEnterColShape", eventHandler);
+                }
+            }
+        }
+
+        public static void UnsetOnPlayerEnterColShape(this IColShape colshape, Events.ColShapePlayerEventHandler method)
+        {
+            lock (colshape)
+            {
+                colshape.GetData("OnPlayerEnterColShape", out Events.ColShapePlayerEventHandler eventHandler);
+
+                if (eventHandler != null)
+                    eventHandler -= method;
+                else
+                {
+                    eventHandler -= method;
+                    colshape.SetData("OnPlayerEnterColShape", eventHandler);
+                }
+            }
+        }
+
+        public static void SetOnPlayerLeaveColShape(this IColShape colshape, Events.ColShapePlayerEventHandler method)
+        {
+            lock (colshape)
+            {
+                colshape.GetData("OnPlayerLeaveColShape", out Events.ColShapePlayerEventHandler eventHandler);
+
+                if (eventHandler != null)
+                    eventHandler += method;
+                else
+                {
+                    eventHandler += method;
+                    colshape.SetData("OnPlayerLeaveColShape", eventHandler);
+                }
+            }
+        }
+
+        public static void UnsetOnPlayerLeaveColShape(this IColShape colshape, Events.ColShapePlayerEventHandler method)
+        {
+            lock (colshape)
+            {
+                colshape.GetData("OnPlayerLeaveColShape", out Events.ColShapePlayerEventHandler eventHandler);
+
+                if (eventHandler != null)
+                    eventHandler -= method;
+                else
+                {
+                    eventHandler -= method;
+                    colshape.SetData("OnPlayerLeaveColShape", eventHandler);
+                }
+            }
+        }
+
+        public static void SetOnVehicleEnterColShape(this IColShape colshape, Events.ColShapeVehicleEventHandler method)
+        {
+            lock (colshape)
+            {
+                colshape.GetData("OnVehicleEnterColShape", out Events.ColShapeVehicleEventHandler eventHandler);
+
+                if (eventHandler != null)
+                    eventHandler += method;
+                else
+                {
+                    eventHandler += method;
+                    colshape.SetData("OnVehicleEnterColShape", eventHandler);
+                }
+            }
+        }
+
+        public static void UnsetOnVehicleEnterColShape(this IColShape colshape, Events.ColShapeVehicleEventHandler method)
+        {
+            lock (colshape)
+            {
+                colshape.GetData("OnVehicleEnterColShape", out Events.ColShapeVehicleEventHandler eventHandler);
+
+                if (eventHandler != null)
+                    eventHandler -= method;
+                else
+                {
+                    eventHandler -= method;
+                    colshape.SetData("OnVehicleEnterColShape", eventHandler);
+                }
+            }
+        }
+
+        public static void SetOnVehicleLeaveColShape(this IColShape colshape, Events.ColShapeVehicleEventHandler method)
+        {
+            lock (colshape)
+            {
+                colshape.GetData("OnVehicleLeaveColShape", out Events.ColShapeVehicleEventHandler eventHandler);
+
+                if (eventHandler != null)
+                    eventHandler += method;
+                else
+                {
+                    eventHandler += method;
+                    colshape.SetData("OnVehicleLeaveColShape", eventHandler);
+                }
+            }
+        }
+
+        public static void UnsetOnVehicleLeaveColShape(this IColShape colshape, Events.ColShapeVehicleEventHandler method)
+        {
+            lock (colshape)
+            {
+                colshape.GetData("OnVehicleLeaveColShape", out Events.ColShapeVehicleEventHandler eventHandler);
+
+                if (eventHandler != null)
+                    eventHandler -= method;
+                else
+                {
+                    eventHandler -= method;
+                    colshape.SetData("OnVehicleLeaveColShape", eventHandler);
+                }
+            }
         }
     }
 }

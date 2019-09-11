@@ -123,7 +123,7 @@ namespace ResurrectionRP_Server.Businesses
         {
             PlayerHandler player = client.GetPlayerHandler();
 
-            if (player == null)
+            if (player == null || colShape != _clothingColShape)
                 return;
 
             if (player.HasOpenMenu())

@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using System.Threading.Tasks;
@@ -26,8 +27,8 @@ namespace ResurrectionRP_Server.EventHandlers
         #region Private methods
         private static async Task OnEntityColshape(IColShape colShape, IEntity targetEntity, bool state)
         {
-            if(targetEntity.Type == BaseObjectType.Player && colShape.Exists)
-                (targetEntity as IPlayer).Emit("SetStateInColShape", state);
+            if (targetEntity.Type == BaseObjectType.Player && colShape.Exists)
+                (targetEntity as IPlayer).EmitLocked("SetStateInColShape", state);
 
             if (state)
             {
@@ -35,9 +36,17 @@ namespace ResurrectionRP_Server.EventHandlers
                 colShape.AddEntity(targetEntity);
 
                 if (targetEntity.Type == BaseObjectType.Vehicle)
+                {
                     await OnVehicleEnterColShape?.Invoke(colShape, (IVehicle)targetEntity);
+                    colShape.GetData("OnVehicleEnterColShape", out ColShapeVehicleEventHandler onVehicleEnterColShape);
+                    onVehicleEnterColShape?.Invoke(colShape, (IVehicle)targetEntity);
+                }
                 else if (targetEntity.Type == BaseObjectType.Player)
+                {
                     await OnPlayerEnterColShape?.Invoke(colShape, (IPlayer)targetEntity);
+                    colShape.GetData("OnPlayerEnterColShape", out ColShapePlayerEventHandler onPlayerEnterColShape);
+                    onPlayerEnterColShape?.Invoke(colShape, (IPlayer)targetEntity);
+                }
             }
             else
             {
@@ -45,9 +54,17 @@ namespace ResurrectionRP_Server.EventHandlers
                 colShape.RemoveEntity(targetEntity as IPlayer);
 
                 if (targetEntity.Type == BaseObjectType.Vehicle)
+                {
                     await OnVehicleLeaveColShape?.Invoke(colShape, (IVehicle)targetEntity);
+                    colShape.GetData("OnVehicleLeaveColShape", out ColShapeVehicleEventHandler onVehicleLeaveColShape);
+                    onVehicleLeaveColShape?.Invoke(colShape, (IVehicle)targetEntity);
+                }
                 else if (targetEntity.Type == BaseObjectType.Player)
+                {
                     await OnPlayerLeaveColShape?.Invoke(colShape, (IPlayer)targetEntity);
+                    colShape.GetData("OnPlayerLeaveColShape", out ColShapePlayerEventHandler onPlayerLeaveColShape);
+                    onPlayerLeaveColShape?.Invoke(colShape, (IPlayer)targetEntity);
+                }
             }
         }
 

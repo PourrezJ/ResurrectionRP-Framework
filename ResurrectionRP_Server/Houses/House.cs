@@ -88,18 +88,19 @@ namespace ResurrectionRP_Server.Houses
             Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, Position - new Vector3(0.0f, 0.0f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f), Color.FromArgb(80, 255, 0, 0));
 
             // create colshape
-            ColShape = AltV.Net.Alt.CreateColShapeCylinder(Position, 1f, 2f);
+            ColShape = AltV.Net.Alt.CreateColShapeCylinder(Position, 1f, 3f);
+            ColShape.SetData("House", this.ID);
             var sorti = AltV.Net.Alt.CreateColShapeCylinder(HouseTypes.HouseTypeList[Type].Position.Pos, 1f, 1f);
             sorti.Dimension = (short)ID;
 
-            ResurrectionRP_Server.EventHandlers.Events.OnPlayerInteractClothingShop += OpenMenu;
+            ResurrectionRP_Server.EventHandlers.Events.OnPlayerInteractHouse += OnPlayerInteractHouse;
             ColShape.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
 
             IColShape parkingColshape = null;
 
             if (Parking != null)
             {
-                parkingColshape = AltV.Net.Alt.CreateColShapeCylinder(Parking.Spawn1.Pos, 3f, 1f);
+                parkingColshape = AltV.Net.Alt.CreateColShapeCylinder(Parking.Spawn1.Pos, 3f, 3f);
                 Parking.OnSaveNeeded = OnParkingSaveNeeded;
                 Parking.OnVehicleStored = OnVehicleStored;
                 Parking.OnVehicleOut = OnVehicleOutParking;
@@ -155,15 +156,12 @@ namespace ResurrectionRP_Server.Houses
             }
         }
 
-        private async Task OpenMenu(BsonObjectId ID, IPlayer client)
+        private async Task OnPlayerInteractHouse(IColShape colShape, IPlayer client)
         {
             if (!client.Exists)
                 return;
 
-            if (ID == null)
-                return;
-
-            if (ID.ToString() != this.ID.ToString())
+            if (colShape != ColShape)
                 return;
 
             await HouseMenu.OpenHouseMenu(client, this);

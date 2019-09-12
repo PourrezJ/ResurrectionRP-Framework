@@ -7,6 +7,7 @@ using System.Drawing;
 using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Factions;
 using ResurrectionRP_Server.Models;
 using System;
 using System.Numerics;
@@ -214,7 +215,7 @@ namespace ResurrectionRP_Server.Database
                     var update = Builders<Business>.Update.Set("BankAccount", bankAccount);
                     return await collection.UpdateOneAsync(filter, update);
                 }
-                /*else if (bankAccount.AccountType == AccountType.Faction)
+                else if (bankAccount.AccountType == AccountType.Faction)
                 {
                     var collection = GetCollectionSafe<Faction>("factions");
                     var filter = Builders<Faction>.Filter.Eq("_id", ((Faction)bankAccount.Owner).FactionName);
@@ -223,11 +224,11 @@ namespace ResurrectionRP_Server.Database
                 }
                 else if (bankAccount.AccountType == AccountType.Society)
                 {
-                    var collection = GetCollectionSafe<Society>("society");
-                    var filter = Builders<Society>.Filter.Eq("_id", ((Society)bankAccount.Owner)._id);
-                    var update = Builders<Society>.Update.Set("BankAccount", bankAccount);
+                    var collection = GetCollectionSafe<Society.Society>("society");
+                    var filter = Builders<Society.Society>.Filter.Eq("_id", ((Society.Society)bankAccount.Owner)._id);
+                    var update = Builders<Society.Society>.Update.Set("BankAccount", bankAccount);
                     return await collection.UpdateOneAsync(filter, update);
-                }*/
+                }
                 else  if (bankAccount.AccountType == AccountType.Personal)
                 {
                     var collection = GetCollectionSafe<PlayerHandler>("players");

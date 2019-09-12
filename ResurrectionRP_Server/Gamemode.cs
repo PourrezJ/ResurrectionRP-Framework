@@ -233,6 +233,7 @@ namespace ResurrectionRP_Server
 
             Chat.Initialize();
             Chat.RegisterCmd("veh", CommandVeh);
+
             Chat.RegisterCmd("coords", (IPlayer player, string[] args) =>
             {
                 if (player.Vehicle != null)
@@ -247,22 +248,25 @@ namespace ResurrectionRP_Server
                 }
                 return Task.CompletedTask;
             });
+
             Chat.RegisterCmd("getCoords", (IPlayer player, string[] args) =>
             {
                 Alt.Server.LogColored($" X: {player.Position.X}  Y: {player.Position.Y} Z: {player.Position.Z} ");
                 Alt.Server.LogColored($" RX: {player.Rotation.Roll}  RY: {player.Rotation.Pitch} RZ: {player.Rotation.Yaw} ");
                 return Task.CompletedTask;
             });
+
             Chat.RegisterCmd("dimension", (IPlayer player, string[] args) =>
             {
                 Alt.Server.LogInfo("My dimension: " + player.Dimension) ;
                 return Task.CompletedTask;
             });
 
-            Chat.RegisterCmd("save", async (IPlayer player, string[] args) =>
+            Chat.RegisterCmd("save", (IPlayer player, string[] args) =>
             {
                 player.GetPlayerHandler()?.Update();
-                await player.Vehicle?.GetVehicleHandler()?.Update();
+                player.Vehicle?.GetVehicleHandler()?.Update();
+                return Task.CompletedTask;
             });
 
             Chat.RegisterCmd("tpto", async (IPlayer player, string[] args) =>

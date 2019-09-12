@@ -601,7 +601,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             if (await BankAccount.GetBankMoney(price, $"{SocietyName}: Néons"))
             {
                 vh.NeonsColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
-                await vh.Update();
+                vh.Update();
 
                 client.SendNotificationSuccess($"Vous avez installé des Néons pour la somme de ${price}");
                 await OpenNeonsMenu(client);
@@ -641,7 +641,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
                 vh.Mods.AddOrUpdate(_modType, selected, (key, oldvalue) => selected);
                 await _vehicleBench.SetModAsync(_modType, selected);
-                await vh.Update();
+                vh.Update();
                 string str = $"Vous avez installé {modName}";
 
                 if (price != 0)

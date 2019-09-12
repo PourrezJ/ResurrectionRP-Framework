@@ -262,7 +262,7 @@ namespace ResurrectionRP_Server.Houses
         {
             var social = player.GetSocialClub();
             foreach (House house in Houses.Where(h => h.Owner == social))
-                await house.SetOwnerHandle(player);
+                house.SetOwnerHandle(player);
         }
 
         public async Task House_PlayerDeath(IPlayer player, IPlayer killer, uint reason)

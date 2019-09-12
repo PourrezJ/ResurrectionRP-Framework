@@ -209,7 +209,7 @@ namespace ResurrectionRP_Server.Houses
                 if (player == null)
                     return;
 
-                await SetOwnerHandle(player.Client);
+                SetOwnerHandle(player.Client);
             }
             else
             {
@@ -222,11 +222,11 @@ namespace ResurrectionRP_Server.Houses
         public async Task SetOwner(IPlayer player)
         {
             Owner = (player == null) ? string.Empty : player.GetSocialClub();
-            await SetOwnerHandle(player);
+            SetOwnerHandle(player);
             await Save();
         }
 
-        public async Task SetOwnerHandle(IPlayer player)
+        public void SetOwnerHandle(IPlayer player)
         {
             OwnerHandle = player;
             /*

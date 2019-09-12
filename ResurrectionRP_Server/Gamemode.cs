@@ -1,26 +1,23 @@
 using AltV.Net;
-using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Driver;
 using ResurrectionRP_Server.Models;
 using System.Globalization;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
-using ResurrectionRP_Server.Utils.Extensions;
-using AltV.Net.Enums;
 using SaltyServer;
 using ResurrectionRP_Server.Radio;
 using ResurrectionRP_Server.Farms;
 using AltV.Net.Async;
+using AltV.Net.Data;
+using ResurrectionRP_Server.Houses;
 
 namespace ResurrectionRP_Server
 {
@@ -114,6 +111,8 @@ namespace ResurrectionRP_Server
         public Voice VoiceController { get; private set; }
         [BsonIgnore]
         public RadioManager RadioManager { get; private set; }
+        [BsonIgnore]
+        public HouseManager HouseManager { get; private set; }
 
         public static bool ServerLock;
 
@@ -185,6 +184,7 @@ namespace ResurrectionRP_Server
             DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
             JobsManager = new Jobs.JobsManager();
             VoiceController = new Voice();
+            HouseManager = new HouseManager();
 
             RadioManager = new RadioManager();
 
@@ -212,6 +212,7 @@ namespace ResurrectionRP_Server
             await PoundManager.LoadPound();
             await FarmManager.InitAll();
             DrivingSchoolManager.InitAll();
+            await HouseManager.LoadAllHouses();
 
             VoiceController.OnResourceStart();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
@@ -262,6 +263,11 @@ namespace ResurrectionRP_Server
             {
                 player.GetPlayerHandler()?.Update();
                 await player.Vehicle?.GetVehicleHandler()?.Update();
+            });
+
+            Chat.RegisterCmd("tpto", async (IPlayer player, string[] args) =>
+            {
+                await player.SetPositionAsync(new Position(float.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
             });
             ServerLoaded = true;
         }

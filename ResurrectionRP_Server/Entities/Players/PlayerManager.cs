@@ -23,7 +23,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Variables 
         private readonly static Location charpos = new Location(new Vector3(402.8664f, -996.4108f, -99.00027f), new Vector3(0,0,60));
 
-        private static short Dimension = short.MaxValue;
+        private static short Dimension = short.MinValue;
         public static int StartMoney = 0;
         public static int StartBankMoney = 0;
 

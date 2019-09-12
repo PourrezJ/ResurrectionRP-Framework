@@ -14,6 +14,7 @@ using AltV.Net.Enums;
 using ResurrectionRP_Server.Entities.Blips;
 using AltV.Net;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server.Farms
 {
@@ -150,7 +151,7 @@ namespace ResurrectionRP_Server.Farms
 
                     if (Debug)
                     {
-                        GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, position - new Vector3(0.0f, 0.0f, Harvest_Range), new Vector3(0,0, Harvest_Range), 60, 255, 255, 255);
+                        Marker.CreateMarker(MarkerType.VerticalCylinder, position - new Vector3(0.0f, 0.0f, Harvest_Range), new Vector3(0,0, Harvest_Range));
                     }
                 }
             }

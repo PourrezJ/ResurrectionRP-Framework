@@ -1,26 +1,46 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.489
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResurrectionRP_Server", "ResurrectionRP_Server\ResurrectionRP_Server.csproj", "{C9B3ADDA-90D3-4917-B089-E6771C2AF155}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResurrectionRP_Client", "ResurrectionRP_Client\ResurrectionRP_Client.csproj", "{2574F603-4B6C-4A30-BFDD-E3BC09EEDFDF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AltV.Net", "..\coreclr-module\api\AltV.Net\AltV.Net.csproj", "{0C6FF9F6-5A38-47E0-9C8C-5B850281F86F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AltV.Net.Async", "..\coreclr-module\api\AltV.Net.Async\AltV.Net.Async.csproj", "{B71B1452-9BF7-42FF-9300-D1CDA6ABA4E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Testing|Any CPU = Testing|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C9B3ADDA-90D3-4917-B089-E6771C2AF155}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C9B3ADDA-90D3-4917-B089-E6771C2AF155}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9B3ADDA-90D3-4917-B089-E6771C2AF155}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9B3ADDA-90D3-4917-B089-E6771C2AF155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9B3ADDA-90D3-4917-B089-E6771C2AF155}.Testing|Any CPU.ActiveCfg = Release|Any CPU
+		{C9B3ADDA-90D3-4917-B089-E6771C2AF155}.Testing|Any CPU.Build.0 = Release|Any CPU
 		{2574F603-4B6C-4A30-BFDD-E3BC09EEDFDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2574F603-4B6C-4A30-BFDD-E3BC09EEDFDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2574F603-4B6C-4A30-BFDD-E3BC09EEDFDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2574F603-4B6C-4A30-BFDD-E3BC09EEDFDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2574F603-4B6C-4A30-BFDD-E3BC09EEDFDF}.Testing|Any CPU.ActiveCfg = Release|Any CPU
+		{0C6FF9F6-5A38-47E0-9C8C-5B850281F86F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C6FF9F6-5A38-47E0-9C8C-5B850281F86F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C6FF9F6-5A38-47E0-9C8C-5B850281F86F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C6FF9F6-5A38-47E0-9C8C-5B850281F86F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C6FF9F6-5A38-47E0-9C8C-5B850281F86F}.Testing|Any CPU.ActiveCfg = Testing|Any CPU
+		{0C6FF9F6-5A38-47E0-9C8C-5B850281F86F}.Testing|Any CPU.Build.0 = Testing|Any CPU
+		{B71B1452-9BF7-42FF-9300-D1CDA6ABA4E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B71B1452-9BF7-42FF-9300-D1CDA6ABA4E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B71B1452-9BF7-42FF-9300-D1CDA6ABA4E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B71B1452-9BF7-42FF-9300-D1CDA6ABA4E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B71B1452-9BF7-42FF-9300-D1CDA6ABA4E9}.Testing|Any CPU.ActiveCfg = Debug|Any CPU
+		{B71B1452-9BF7-42FF-9300-D1CDA6ABA4E9}.Testing|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

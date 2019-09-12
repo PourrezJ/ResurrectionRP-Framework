@@ -11,7 +11,7 @@ using AltV.Net.Enums;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Models;
-
+using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server.Services
 {
@@ -35,7 +35,7 @@ namespace ResurrectionRP_Server.Services
 
             Entities.Blips.BlipsManager.CreateBlip("Fourrière", PoundSpawn.Pos, 0, 88,1,true);
             _colshape = Alt.CreateColShapeCylinder(PoundSpawn.Pos, 3f, 3f);
-            GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, PoundSpawn.Pos, new Vector3(1, 1, 1), 80, 255, 255, 255);
+            Marker.CreateMarker(MarkerType.VerticalCylinder, PoundSpawn.Pos, new Vector3(1, 1, 1));
 
             //_colshape.OnEntityEnterColShape += _colshape_OnEntityEnterColShape;
             //_colshape.OnEntityExitColShape += _colshape_OnEntityExitColShape;

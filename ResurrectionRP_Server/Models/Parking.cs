@@ -14,6 +14,8 @@ using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Utils.Extensions;
 using VehicleHandler = ResurrectionRP_Server.Entities.Vehicles.VehicleHandler;
 using VehicleManager = ResurrectionRP_Server.Entities.Vehicles.VehiclesManager;
+using ResurrectionRP_Server.Streamer.Data;
+using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server.Models
 {
@@ -237,7 +239,7 @@ namespace ResurrectionRP_Server.Models
         #region Public methods
         public async Task Load(float markerscale = 3f, int opacite = 128, bool blip = false, uint sprite = 50, float scale = 1f, byte color = 0, uint alpha = 255, string name = "", uint dimension = (uint)short.MaxValue)
         {
-            GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale-1), new Vector3(3, 3, 3), 180);
+            Marker.CreateMarker(MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale-1), new Vector3(3, 3, 3));
             ParkingColshape = Alt.CreateColShapeCylinder(new AltV.Net.Data.Position(Location.X, Location.Y, Location.Z -1), markerscale, 4);
             ParkingColshape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
             ParkingColshape.SetOnPlayerLeaveColShape(OnPlayerLeaveColShape);

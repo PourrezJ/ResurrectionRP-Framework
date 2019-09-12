@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.Streamer.Data
 
         public void Destroy()
         {
-            GameMode.Instance.Streamer.DestroyEntityLabel(this.id);
+            GameMode.Instance.Streamer.DestroyEntity(this.id);
         }
     }
 }

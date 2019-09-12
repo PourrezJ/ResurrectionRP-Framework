@@ -131,16 +131,20 @@ export class Streamer {
         alt.logWarning("Ped is invicible : " + JSON.stringify(invicible) + " | is frozen : " + JSON.stringify(freeze));
         this.EntityList[id] = entityId;
     }
+
     private streamObject = async (id: number, model: any, x: number, y: number, z: number) => {
         var entityId = game.createObject(model, x, y, z, false, true, false);
         this.EntityList[id] = entityId;
     }
+
     private streamTextLabel = async (id: number, text: string, x: number, y: number, z: number, font: number, rgba: object) => {
         this.EntityList[id] = {PosX: x, PosY: y, PosZ: z, Text: text, Font: font, Color: rgba};
     }
+
     private streamMarker = async (id: number, type: number, x: number, y: number, z: number, scalex: number, scaley: number, scalez: number, rgba: object) => {
         this.EntityList[id] = { PosX: x, PosY: y, PosZ: z, Color: rgba , type: type, scalex: scalex, scaley: scaley, scalez: scalez};
     }
+
     private streamBlip = async (id: number, x: number, y: number, z: number, sprite: number, color:number, name: string, scale: number, shortRange: boolean) => {
 
         var test = new alt.PointBlip(x,y,z);

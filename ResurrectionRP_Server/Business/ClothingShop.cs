@@ -13,6 +13,8 @@ using System;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using ResurrectionRP_Server.Entities;
+using System.Drawing;
 
 namespace ResurrectionRP_Server.Businesses
 {
@@ -90,12 +92,13 @@ namespace ResurrectionRP_Server.Businesses
 
             _clothingColShape = Alt.CreateColShapeCylinder(ClothingPos - new Vector3(0, 0, 1), 4f, 3f);
             _clothingColShape.SetData("ClothingID", _id);
-            GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 4f), new Vector3(0, 0, 3f), 80, 255, 255, 255);
+            Marker.CreateMarker(MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 4f), new Vector3(0, 0, 3f), Color.FromArgb(80, 255, 255, 255));
             Entities.Blips.BlipsManager.SetColor(Blip, 25);
 
-            Events.OnPlayerEnterColShape += OnPlayerEnterColShape;
-            Events.OnPlayerLeaveColShape += OnPlayerLeaveColShape;
             Events.OnPlayerInteractClothingShop += ClothingID_Open;
+
+            _clothingColShape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
+            _clothingColShape.SetOnPlayerLeaveColShape(OnPlayerLeaveColShape);
         }
 
         private async Task ClothingID_Open(BsonObjectId ID, IPlayer client)

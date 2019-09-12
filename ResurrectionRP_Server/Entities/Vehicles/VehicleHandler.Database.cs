@@ -17,6 +17,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         private DateTime _lastUpdateRequest;
         [BsonIgnore]
         private bool _updateWaiting = false;
+        [BsonIgnore]
+        private int _nbUpdateRequests;
         #endregion
 
         #region Methods
@@ -35,40 +37,42 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }
 
-        public async Task Update(Location location = null)
+        public void Update(Location location = null)
         {
-            
-            _lastUpdateRequest = DateTime.Now;
-
             if (SpawnVeh)
                 return;
 
             LastUse = DateTime.Now;
 
-            if (location != null)
-                Location = location;
-            else if (Vehicle != null)
+            if (Vehicle != null)
             {
                 if (!Vehicle.Exists)
                     return;
-                Utils.Utils.Delay(1000, true, async () =>
-                {
-                    await UpdateProperties();
-                });
 
+                if (location != null)
+                    Location = location;
+
+                UpdateProperties();
+                UpdateAsync();
             }
-
-            if (!_updateWaiting)
-                await UpdateAsync();
         }
 
-        private async Task UpdateAsync()
+        private void UpdateAsync()
         {
+            _lastUpdateRequest = DateTime.Now;
+
+            if (_updateWaiting)
+            {
+                _nbUpdateRequests++;
+                return;
+            }
+
             if (GameMode.Instance.IsDebug)
                 Alt.Server.LogColored("~b~VehicleHandler.Database.cs~w~ | Vehicle saving()");
             _updateWaiting = true;
+            _nbUpdateRequests = 1;
 
-            await Task.Run(async () =>
+            Task.Run(async () =>
             {
                 DateTime updateTime = _lastUpdateRequest.AddMilliseconds(_updateWaitTime);
 
@@ -88,10 +92,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     var result = await Database.MongoDB.Update(this, "vehicles", Plate);
 
                     if (result.ModifiedCount == 0)
-                    {
-                        await InsertVehicle();
-                        Alt.Server.LogError($"Vehicule Update error for: {Plate} {OwnerID}");
-                    }
+                        Alt.Server.LogError($"Vehicule Update error for vehicle: {Plate} - Owner: {OwnerID}");
 
                     _updateWaiting = false;
                 }

@@ -87,7 +87,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     await recever.PlaySoundFromEntity(veh.Vehicle, 0, "5_SEC_WARNING", "HUD_MINI_GAME_SOUNDSET");
                 }
 
-                await veh.Update();
+                veh.Update();
             }
         }
 
@@ -97,7 +97,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             PlayerHandler ph = player.GetPlayerHandler();
 
             if (vh != null)
-                await vh.Update();
+                vh.Update();
 
             if (ph != null)
             {
@@ -261,6 +261,12 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
             }
         }
 
+        public static VehicleHandler GetVehicleHandler(IVehicle vehicle)
+        {
+            GameMode.Instance.VehicleManager.VehicleHandlerList.TryGetValue(vehicle, out VehicleHandler vh);
+            return vh;
+        }
+
         public static VehicleHandler GetVehicleHandlerWithPlate(string Plate)
         {
             foreach(KeyValuePair<IVehicle, VehicleHandler> veh in GameMode.Instance.VehicleManager.VehicleHandlerList)
@@ -268,8 +274,10 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
                 if (veh.Value.Plate == Plate)
                     return veh.Value;
             }
+
             return null;
         }
+
         public static IVehicle GetVehicleWithPlate(string Plate)
         {
             foreach(KeyValuePair<IVehicle, VehicleHandler> veh in GameMode.Instance.VehicleManager.VehicleHandlerList)
@@ -277,10 +285,9 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
                 if (veh.Value.Plate == Plate)
                     return veh.Key;
             }
+
             return null;
         }
-
-
         #endregion
     }
 }

@@ -9,45 +9,10 @@ using AltV.Net.Elements.Entities;
 namespace ResurrectionRP_Server.Entities.Objects
 {
 
-    public class ObjectHandler
+
+    public class ObjectManager
     {
-/*        [BsonIgnore, JsonIgnore] TODO
-        public IObject IObject;
-
-        public uint NetHandle;
-        public Attachment Attachment;
-        public bool Freeze;
-        public bool Dynamic;*/
-
- /*       public async Task AttachObject(IEntity ent2, string bone, Vector3 positionOffset, Vector3 rotationOffset)
-        {
-            await ObjectHandlerManager.AttachEntity(IObject, ent2, bone, positionOffset, rotationOffset);
-        }
-
-        public async Task DetachObject(IEntity ent2)
-        {
-            await ObjectHandlerManager.Detach(ent2);
-        }
-
-        public async Task UpdateSync() TODO
-        {
-            await MP.Players.CallAsync("ObjStream_GetStreamInfo_Clt", IObject.Id, this);
-        }
-
-        public async Task Destroy()
-        {
-            if (IObject != null && IObject.Exists)
-            {
-                await MP.Players.CallAsync("ObjStream_Destroy", IObject.Id, this);
-
-                await IObject.DestroyAsync();
-            }
-        }*/
-    }
-
-    public class ObjectHandlerManager
-    {
-/*        public ObjectHandlerManager() TODO
+        public ObjectManager()
         {
             MP.Events.Add("ObjStream_GetStreamInfo_Srv", ObjStream_GetStreamInfo_Srv);
         }
@@ -143,6 +108,6 @@ namespace ResurrectionRP_Server.Entities.Objects
                 }
             }
             return null;
-        }*/
+        }
     }
 }

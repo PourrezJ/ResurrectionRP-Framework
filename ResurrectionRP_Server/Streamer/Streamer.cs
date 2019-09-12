@@ -8,7 +8,9 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using System.Numerics;
-using Object = ResurrectionRP_Server.Streamer.Data.Object;
+using System.Text;
+using Newtonsoft.Json;
+using Object = ResurrectionRP_Server.Entities.Objects.Object;
 using TextLabel = ResurrectionRP_Server.Streamer.Data.TextLabel;
 using Blips = ResurrectionRP_Server.Entities.Blips.Blips;
 
@@ -55,12 +57,22 @@ namespace ResurrectionRP_Server.Streamer
             return EntityNumber;
         }
 
-        public int AddEntityObject(string model, Vector3 pos, int dimension = GameMode.GlobalDimension)
+        public Object AddEntityObject(string model, Vector3 pos, int dimension = GameMode.GlobalDimension)
         {
-            var data = new Object(model,  EntityNumber++);
+            var data = new Object(model,  pos,EntityNumber++);
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, GameMode.Instance.StreamDistance, data.export());
             ListEntities.TryAdd(EntityNumber, item);
-            return EntityNumber;
+            return data;
+        }
+
+        public Object UpdateEntityObject(Object obj)
+        {
+            INetworkingEntity oitem = this.ListEntities[obj.id];
+            if (oitem.GetData("freeze", out bool freeze) && freeze != obj.freeze)
+                oitem.SetData("freeze", obj.freeze);
+            if (oitem.GetData("position", out string position) == true&& JsonConvert.DeserializeObject<Vector3>(position) != obj.position)
+                oitem.Position = obj.position.ConvertToEntityPosition();
+            return obj;
         }
 
         public TextLabel AddEntityTextLabel(string label, Vector3 pos, int font = 1, int r = 255, int g = 255, int b = 255, int a = 255, int drawDistance = 20, int dimension = GameMode.GlobalDimension)

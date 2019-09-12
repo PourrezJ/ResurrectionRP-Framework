@@ -96,6 +96,13 @@ namespace ResurrectionRP_Server
 
             return null;
         }
+        public static bool HasData( this IVehicle vehicle, string dataName)
+        {
+            if (vehicle.GetData(dataName, out string test) && test != null)
+                return true;
+
+            return false;
+        }
 
         public static Task RepairAsync(this IVehicle vehicle)
         {

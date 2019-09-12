@@ -25,7 +25,7 @@ namespace ResurrectionRP_Server.EventHandlers
         #endregion
 
         #region Private methods
-        private static async Task OnEntityColshape(IColShape colShape, IEntity targetEntity, bool state)
+        private static void OnEntityColshape(IColShape colShape, IEntity targetEntity, bool state)
         {
             if(targetEntity.Type == BaseObjectType.Player && colShape.Exists)
                 (targetEntity as IPlayer).EmitLocked("SetStateInColShape", state);
@@ -37,13 +37,13 @@ namespace ResurrectionRP_Server.EventHandlers
 
                 if (targetEntity.Type == BaseObjectType.Vehicle)
                 {
-                    await OnVehicleEnterColShape?.Invoke(colShape, (IVehicle)targetEntity);
+                    OnVehicleEnterColShape?.Invoke(colShape, (IVehicle)targetEntity);
                     colShape.GetData("OnVehicleEnterColShape", out ColShapeVehicleEventHandler onVehicleEnterColShape);
                     onVehicleEnterColShape?.Invoke(colShape, (IVehicle)targetEntity);
                 }
                 else if (targetEntity.Type == BaseObjectType.Player)
                 {
-                    await OnPlayerEnterColShape?.Invoke(colShape, (IPlayer)targetEntity);
+                    OnPlayerEnterColShape?.Invoke(colShape, (IPlayer)targetEntity);
                     colShape.GetData("OnPlayerEnterColShape", out ColShapePlayerEventHandler onPlayerEnterColShape);
                     onPlayerEnterColShape?.Invoke(colShape, (IPlayer)targetEntity);
                 }
@@ -55,13 +55,13 @@ namespace ResurrectionRP_Server.EventHandlers
 
                 if (targetEntity.Type == BaseObjectType.Vehicle)
                 {
-                    await OnVehicleLeaveColShape?.Invoke(colShape, (IVehicle)targetEntity);
+                    OnVehicleLeaveColShape?.Invoke(colShape, (IVehicle)targetEntity);
                     colShape.GetData("OnVehicleLeaveColShape", out ColShapeVehicleEventHandler onVehicleLeaveColShape);
                     onVehicleLeaveColShape?.Invoke(colShape, (IVehicle)targetEntity);
                 }
                 else if (targetEntity.Type == BaseObjectType.Player)
                 {
-                    await OnPlayerLeaveColShape?.Invoke(colShape, (IPlayer)targetEntity);
+                    OnPlayerLeaveColShape?.Invoke(colShape, (IPlayer)targetEntity);
                     colShape.GetData("OnPlayerLeaveColShape", out ColShapePlayerEventHandler onPlayerLeaveColShape);
                     onPlayerLeaveColShape?.Invoke(colShape, (IPlayer)targetEntity);
                 }

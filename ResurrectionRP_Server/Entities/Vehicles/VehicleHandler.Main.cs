@@ -239,8 +239,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
             return false;
         }
-
-
+        
         public void SetFuel(float fuel)
         {
             Fuel = fuel;
@@ -261,7 +260,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public void UpdateProperties()
         {
-            DateTime debut = DateTime.Now;
             if (Door == null)
                 Door = new VehicleDoorState[7];
 
@@ -281,12 +279,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 bool neonActive = Vehicle.IsNeonActive;
                 Tuple<bool, bool, bool, bool> NeonState = new Tuple<bool, bool, bool, bool>(neonActive, neonActive, neonActive, neonActive);
                 NeonsColor = Vehicle.NeonColor;
-                Alt.Server.LogInfo($"UpdateProperties: {(DateTime.Now - debut).TotalMilliseconds}ms");
 
                 for (byte i = 0; i < 5; i++)
                     Door[i] = (VehicleDoorState)Vehicle.GetDoorState(i);
-
-                Alt.Server.LogInfo($"UpdateProperties: {(DateTime.Now - debut).TotalMilliseconds}ms");
 
                 for (byte i = 0; i < Vehicle.WheelsCount; i++)
                 {
@@ -305,7 +300,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 Alt.Server.LogError("Error on veicle save: " + ex.ToString());
             }
-            Alt.Server.LogInfo($"UpdateProperties: {(DateTime.Now - debut).TotalMilliseconds}ms");
 
             //this.NeonState.Clear();
             //this.NeonState.Add(NeonState.Item1);

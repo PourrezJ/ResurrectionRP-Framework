@@ -3,6 +3,8 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.NetworkingEntity;
 using MongoDB.Driver;
+using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Entities.Vehicles;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -41,14 +43,20 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Server Events
         private async Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
-            await player.GetPlayerHandler()?.Update();
-            await player.EmitAsync("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32(seat), 50, 50);
+            PlayerHandler ph = player.GetPlayerHandler();
+
+            if (ph != null)
+            {
+                await ph.Update();
+                await player.EmitAsync("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32(seat), 50, 50);
+            }
         }
 
         public static Task OpenXtremVehicle(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return Task.CompletedTask;
+
             return client.GetNearestVehicleHandler()?.OpenXtremMenu(client);
         }
 
@@ -85,8 +93,17 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         private async Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
-            await player.GetPlayerHandler()?.Update();
-            await player.EmitAsync("OnPlayerLeaveVehicle");
+            VehicleHandler vh = vehicle.GetVehicleHandler();
+            PlayerHandler ph = player.GetPlayerHandler();
+
+            if (vh != null)
+                await vh.Update();
+
+            if (ph != null)
+            {
+                await ph.Update();
+                await player.EmitAsync("OnPlayerLeaveVehicle");
+            }
         }
         #endregion
 

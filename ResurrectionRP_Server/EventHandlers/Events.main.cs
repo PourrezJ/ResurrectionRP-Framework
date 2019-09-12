@@ -11,7 +11,7 @@ namespace ResurrectionRP_Server.EventHandlers
     {
         public static void Initialize()
         {
-            AltAsync.OnColShape += OnEntityColshape;
+            Alt.OnColShape += OnEntityColshape;
             Alt.OnServerCustomEvent += Alt_OnServerCustomEvent;
             AltAsync.OnClient("InteractionInColshape", OnEntityInteractInColShape);
         }

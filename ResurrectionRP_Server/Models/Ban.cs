@@ -65,7 +65,7 @@ namespace ResurrectionRP_Server.Models
                 };
 
                 GameMode.Instance.BanManager.BanList.Add(ban);
-                Alt.Server.LogDebug ($"~grey~Ban du joueur {player.GetSocialClub()} pour la raison: {reason}");
+                Alt.Server.LogColored($"~c~Ban du joueur {player.GetSocialClub()} pour la raison: {reason}");
                 await Database.MongoDB.Insert("ban", ban);
                 await player.KickAsync(reason);
                 await Task.Delay(100);

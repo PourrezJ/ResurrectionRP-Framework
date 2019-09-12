@@ -169,7 +169,7 @@ namespace ResurrectionRP_Server.Database
             try
             {
                 if (Config.GetSetting<bool>("DBProfiling"))
-                    Alt.Server.LogDebug($"{caller}() in {file.Substring(file.LastIndexOf('\\') + 1)} line {line} - {GetObjectDetails(objet)}");
+                    Alt.Server.LogColored($"~m~{caller}() in {file.Substring(file.LastIndexOf('\\') + 1)} line {line} - {GetObjectDetails(objet)}");
 
                 await GetCollectionSafe<T>(collectionName).InsertOneAsync(objet);
             }
@@ -187,7 +187,7 @@ namespace ResurrectionRP_Server.Database
             try
             {
                 if (Config.GetSetting<bool>("DBProfiling"))
-                    Alt.Server.LogDebug($"{caller}() in {file.Substring(file.LastIndexOf('\\') + 1)} line {line} - Requests: {requests} - {GetObjectDetails(objet)}");
+                    Alt.Server.LogColored($"~m~{caller}() in {file.Substring(file.LastIndexOf('\\') + 1)} line {line} - Requests: {requests} - {GetObjectDetails(objet)}");
 
                 return await GetCollectionSafe<T>(collectionName).ReplaceOneAsync(Builders<T>.Filter.Eq("_id", ID), objet);
             }
@@ -205,7 +205,7 @@ namespace ResurrectionRP_Server.Database
             try
             {
                 if (Config.GetSetting<bool>("DBProfiling"))
-                    Alt.Server.LogDebug($"{caller}() in {file.Substring(file.LastIndexOf('\\') + 1)} line {line} - Bank account: {bankAccount.AccountNumber} - Type: {bankAccount.AccountType.ToString()}");
+                    Alt.Server.LogColored($"~m~{caller}() in {file.Substring(file.LastIndexOf('\\') + 1)} line {line} - Bank account: {bankAccount.AccountNumber} - Type: {bankAccount.AccountType.ToString()}");
                 
                 if (bankAccount.AccountType == AccountType.Business)
                 {
@@ -251,7 +251,7 @@ namespace ResurrectionRP_Server.Database
             try
             {
                 if (Config.GetSetting<bool>("DBProfiling"))
-                    Alt.Server.LogDebug($"{caller}() in {file.Substring(file.LastIndexOf('\\') + 1)} line {line} - Object ID: {ID}");
+                    Alt.Server.LogColored($"~m~{caller}() in {file.Substring(file.LastIndexOf('\\') + 1)} line {line} - Object ID: {ID}");
 
                 return await _database.GetCollection<T>(collectionName).DeleteOneAsync(Builders<T>.Filter.Eq("_id", ID));
             }

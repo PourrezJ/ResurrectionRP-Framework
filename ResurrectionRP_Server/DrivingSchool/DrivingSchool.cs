@@ -12,6 +12,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using ResurrectionRP_Server.Streamer.Data;
+using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server.DrivingSchool
 {
@@ -61,7 +62,7 @@ namespace ResurrectionRP_Server.DrivingSchool
         #region Public methods
         public void Load()
         {
-            _markerId = GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.MarkerTypeCarSymbol, _position, new Vector3(1f, 1f, 1f), 150, 5, 168);
+            _markerId = Marker.CreateMarker(MarkerType.MarkerTypeCarSymbol, _position, new Vector3(1f, 1f, 1f), Color.FromArgb(150, 5, 168, 0));
             _colshape = Alt.CreateColShapeCylinder(_position - new Vector3(0, 0, 1), 2, 3);
             //await MP.Markers.NewAsync(29, Position, new Vector3(), new Vector3(), 1f, Color.FromArgb(150, 5, 168, 0), true);
             //IColshape colshape = await MP.Colshapes.NewTubeAsync(Position, 1f, 1f);

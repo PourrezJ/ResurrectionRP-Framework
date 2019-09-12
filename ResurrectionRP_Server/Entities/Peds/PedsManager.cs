@@ -14,13 +14,10 @@ namespace ResurrectionRP_Server.Entities.Peds
 
         public PedsManager()
         {
-
             AltAsync.OnClient("Ped_Interact", InteractPed);
             AltAsync.OnClient("Ped_SecondaryInteract", SecondaryInteractPed);
 
         }
-
-
 
         public static async Task InteractPed(IPlayer client, object[] args)
         {

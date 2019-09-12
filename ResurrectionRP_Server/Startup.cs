@@ -12,11 +12,6 @@ namespace ResurrectionRP_Server
     {
         private GameMode gamemode = null;
 
-        static void Main(string[] args)
-        {
-
-        }
-
         public async override void OnStart()
         {
             var ci = new CultureInfo("fr-FR");

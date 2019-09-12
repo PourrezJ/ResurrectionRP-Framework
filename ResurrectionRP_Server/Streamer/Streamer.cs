@@ -1,5 +1,4 @@
-﻿using AltV.Net.Data;
-using AltV.Net;
+﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Async;
 using AltV.Net.NetworkingEntity;
@@ -9,12 +8,8 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using System.Numerics;
-using System.Text;
-using Newtonsoft.Json;
 using Object = ResurrectionRP_Server.Streamer.Data.Object;
 using TextLabel = ResurrectionRP_Server.Streamer.Data.TextLabel;
-using PedType = ResurrectionRP_Server.Streamer.Data.PedType;
-using Marker = ResurrectionRP_Server.Streamer.Data.Marker;
 using Blips = ResurrectionRP_Server.Entities.Blips.Blips;
 
 
@@ -82,18 +77,11 @@ namespace ResurrectionRP_Server.Streamer
             return entityid;
         }
 
-        public int DestroyEntityLabel(int entityid)
+        public int DestroyEntity(int entityid)
         {
             AltNetworking.RemoveEntity(ListEntities[entityid]);
             ListEntities[entityid] = null;
             return 0;
-        }
-        public Marker AddEntityMarker(Data.MarkerType type, Vector3 pos, Vector3 scale, int r = 225, int g = 225, int b = 225, int a = 255, int dimension = GameMode.GlobalDimension)
-        {
-            var data = new Marker(type, scale, r,g,b,a, this.EntityNumber++);
-            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, GameMode.Instance.StreamDistance, data.export());
-            ListEntities.TryAdd(EntityNumber, item);
-            return data;
         }
 
         public int AddStaticEntityBlip(Blips blip)

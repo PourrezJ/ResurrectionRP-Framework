@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using ResurrectionRP_Server.Factions.Model;
+using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -119,7 +120,7 @@ namespace ResurrectionRP_Server.Factions
                 Vestiaire_colShape = Alt.CreateColShapeCylinder(ServiceLocation - new Vector3(0, 0, 1), 1.0f, 1f);
                 Vestiaire_colShape.SetOnPlayerEnterColShape(OnPlayerEnterVestiaire);
                 Vestiaire_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveVestiaire);
-                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.HorizontalCircleArrow, ServiceLocation - new Vector3(0, 0, 1), new Vector3(1, 1, 1), 128);
+                Marker.CreateMarker(MarkerType.HorizontalCircleArrow, ServiceLocation - new Vector3(0, 0, 1), new Vector3(1, 1, 1));
             }
 
             if (ParkingLocation != null)
@@ -130,7 +131,7 @@ namespace ResurrectionRP_Server.Factions
                 Parking_colShape = Alt.CreateColShapeCylinder(ParkingLocation.Pos - new Vector3(0, 0, 1), 3.0f, 3f);
                 Parking_colShape.SetOnPlayerEnterColShape(OnPlayerEnterParking);
                 Parking_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveParking);
-                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ParkingLocation.Pos - new Vector3(0, 0, 1), new Vector3(2, 2, 2), 128);
+                Marker.CreateMarker(MarkerType.VerticalCylinder, ParkingLocation.Pos - new Vector3(0, 0, 1), new Vector3(2, 2, 2));
 
                 Parking.OnVehicleStored = OnVehicleStore;
                 Parking.OnVehicleOut = OnVehicleOut;
@@ -145,7 +146,7 @@ namespace ResurrectionRP_Server.Factions
                 Heliport_colShape = Alt.CreateColShapeCylinder(HeliportLocation.Pos, 3.0f, 1f);
                 Heliport_colShape.SetOnPlayerEnterColShape(OnPlayerEnterHeliport);
                 Heliport_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveHeliport);
-                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, HeliportLocation.Pos - new Vector3(0, 0, 0), new Vector3(3, 3, 3), 128);
+                Marker.CreateMarker(MarkerType.VerticalCylinder, HeliportLocation.Pos - new Vector3(0, 0, 0), new Vector3(3, 3, 3));
             }
 
             if (ShopLocation != null)
@@ -153,7 +154,7 @@ namespace ResurrectionRP_Server.Factions
                 Shop_colShape = Alt.CreateColShapeCylinder(ShopLocation, 1.0f, 2f);
                 Shop_colShape.SetOnPlayerEnterColShape(OnPlayerEnterShop);
                 Shop_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveShop);
-                GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ShopLocation - new Vector3(0, 0, 0), new Vector3(1, 1, 1), 128);
+                Marker.CreateMarker(MarkerType.VerticalCylinder, ShopLocation - new Vector3(0, 0, 0), new Vector3(1, 1, 1));
             }
 
             if (BlipPosition != Vector3.Zero)

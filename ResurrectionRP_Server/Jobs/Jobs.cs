@@ -8,6 +8,8 @@ using AltV.Net.Enums;
 using VehicleHandler = ResurrectionRP_Server.Entities.Vehicles.VehicleHandler;
 using VehicleManager = ResurrectionRP_Server.Entities.Vehicles.VehiclesManager;
 using ResurrectionRP_Server.Streamer.Data;
+using ResurrectionRP_Server.Entities;
+using System.Drawing;
 
 namespace ResurrectionRP_Server.Jobs
 {
@@ -41,14 +43,9 @@ namespace ResurrectionRP_Server.Jobs
         {
             if (ServicePos != null)
             {
-                // Blip
-                //_blip = await MP.Blips.NewAsync(BlipSprite, ServicePos, 1, (byte)BlipColor, Name, 255, 0, true, 0);
                 _blip = Entities.Blips.BlipsManager.CreateBlip(Name, ServicePos, 1, (int)BlipSprite, 1, true);
-
-                //_serviceColshape = await MP.Colshapes.NewTubeAsync(ServicePos, 1f, 1f);
                 _serviceColshape = Alt.CreateColShapeCylinder(ServicePos, 1f, 1f);
-                //_marker = await MP.Markers.NewAsync(MarkerType.VerticalCylinder, ServicePos - new Vector3(0, 0, 1), new Vector3(), new Vector3(), 1f, System.Drawing.Color.White, true);
-                _marker = GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ServicePos - new Vector3(0, 0, 1), new Vector3(1, 1, 1), 255, 255, 255, 128);
+                _marker = Marker.CreateMarker(MarkerType.VerticalCylinder, ServicePos - new Vector3(0, 0, 1), new Vector3(1, 1, 1), Color.FromArgb(128, 255, 255, 255));
             }
 
             return Task.CompletedTask;

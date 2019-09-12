@@ -18,6 +18,7 @@ using ResurrectionRP_Server.Utils.Enums;
 using AltV.Net;
 using AltV.Net.Enums;
 using AltV.Net.Data;
+using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -51,7 +52,7 @@ namespace ResurrectionRP_Server.Factions
         #region Event listeners
         public override async Task<Faction> OnFactionInit()
         {
-            GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, new Vector3(-324.7894f, -134.2555f, 35.54341f), new Vector3(1, 1, 1), 255, 255, 255, 40);
+            Marker.CreateMarker(MarkerType.VerticalCylinder, new Vector3(-324.7894f, -134.2555f, 35.54341f), new Vector3(1, 1, 1));
 
             ReparationVLColshape = Alt.CreateColShapeCylinder(new Vector3(-324.7894f, -134.2555f, 39.54341f), 3, 1);
             PeintureColshape = Alt.CreateColShapeCylinder(PeintureZone, 3, 1);

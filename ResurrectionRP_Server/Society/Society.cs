@@ -24,6 +24,7 @@ using ResurrectionRP_Server.Society.Societies.Bennys;
 using ResurrectionRP_Server.Society.Societies.WildCustom;
 using ResurrectionRP_Server.Society.Societies.WhiteWereWolf;
 using ResurrectionRP_Server.Streamer.Data;
+using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server.Society
 {
@@ -116,7 +117,7 @@ namespace ResurrectionRP_Server.Society
                 Blip = Entities.Blips.BlipsManager.CreateBlip(SocietyName, ServicePos, BlipColor,(int) BlipSprite, 1);
 
                 ServiceColshape = Alt.CreateColShapeCylinder(ServicePos, 1f, 1f);
-                Marker = GameMode.Instance.Streamer.AddEntityMarker(Streamer.Data.MarkerType.VerticalCylinder, ServicePos - new Vector3(0.0f, 0.0f, 1f), new Vector3(1, 1f, 1f), 255, 255, 255, 180);
+                //Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, ServicePos - new Vector3(0.0f, 0.0f, 1f), new Vector3(1, 1f, 1f), Color.FromArgb(128,255,255,255));
             }
 
             if (Parking != null)

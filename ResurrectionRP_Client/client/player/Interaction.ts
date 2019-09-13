@@ -88,7 +88,10 @@ export class Interaction {
 
         alt.everyTick(() => {
 
-            if (game.isPlayerDead(0))
+            if (!alt.Player.local.getMeta("IsConnected"))
+                return;
+
+            if (game.isEntityDead(alt.Player.local.scriptID, false))
                 return;
 
             raycastResult = Raycast.line(2, -1, alt.Player.local.scriptID);

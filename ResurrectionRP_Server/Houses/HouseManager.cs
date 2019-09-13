@@ -26,7 +26,6 @@ namespace ResurrectionRP_Server.Houses
         #region Constructor
         public HouseManager()
         {
-            AltAsync.OnClient("OpenHouseMenu", OpenHouseMenu);
             AltAsync.OnClient("OutHouse", OutHouse);
             AltAsync.OnClient("ParkingHouse", ParkingHouse);
 
@@ -124,13 +123,10 @@ namespace ResurrectionRP_Server.Houses
             }
         }
 
-        private async Task OpenHouseMenu(IPlayer player, object[] args)
+        public static async Task OpenHouseMenu(IPlayer player, House house)
         {
             if (!player.Exists)
                 return;
-
-            House house = GetHouseWithID((int)args[0]);
-            if (house == null) return;
 
             Menu menu = new Menu("House_PurchaseMenu", HouseTypes.HouseTypeList[house.Type].Name, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
             menu.BannerColor = new MenuColor(0, 0, 0, 0);
@@ -187,7 +183,7 @@ namespace ResurrectionRP_Server.Houses
             await MenuManager.OpenMenu(player, menu);
         }
 
-        private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private static async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             House house = menu.GetData("House");
             if (house == null) return;

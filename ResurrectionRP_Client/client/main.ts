@@ -8,7 +8,7 @@ import * as login from 'client/login/Login';
 import * as PlayerCustomization from 'client/player/PlayerCustomization';
 import { Game } from 'client/player/Game';
 import { OpenCharCreator } from 'client/Creator/Creator';
-import { Streamer } from 'client/Streamer/Streamer';
+import { NetworkingEntityClient } from 'client/Streamer/NetworkingEntityClient';
 import { Notify } from 'client/Notify/Notify';
 import menuManager from 'client/MenuManager/MenuManager';
 
@@ -66,8 +66,9 @@ const init = async () => {
         utils.initialize();
         login.init();
         xtreamMenu.init();
-        new Streamer();
+        new NetworkingEntityClient();
         menuManager();
+
         alt.discordRequestOAuth2();
         while (!alt.isDiscordInfoReady()) { }
 

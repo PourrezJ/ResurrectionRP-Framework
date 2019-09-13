@@ -11,6 +11,7 @@ import { OpenCharCreator } from 'client/Creator/Creator';
 import { NetworkingEntityClient } from 'client/Streamer/NetworkingEntityClient';
 import { Notify } from 'client/Notify/Notify';
 import menuManager from 'client/MenuManager/MenuManager';
+import { Admin } from 'client/Utils/Admin';
 
 var GameClass: Game;
 
@@ -67,6 +68,7 @@ const init = async () => {
         login.init();
         xtreamMenu.init();
         new NetworkingEntityClient();
+        new Admin();
         menuManager();
 
         alt.discordRequestOAuth2();

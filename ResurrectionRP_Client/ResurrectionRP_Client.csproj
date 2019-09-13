@@ -104,8 +104,8 @@
     <TypeScriptCompile Include="client\player\Survival.ts" />
     <TypeScriptCompile Include="client\Menus\RadioManager.ts" />
     <TypeScriptCompile Include="client\Streamer\NetworkingEntityClient.ts" />
+    <TypeScriptCompile Include="client\Utils\Admin.ts" />
     <TypeScriptCompile Include="client\Utils\Enums\Enums.ts" />
-    <TypeScriptCompile Include="client\Utils\IplLoader.ts" />
     <TypeScriptCompile Include="client\Utils\Raycast.ts" />
     <TypeScriptCompile Include="client\Voice\VoiceChat.ts" />
     <TypeScriptCompile Include="typings\altv-client.d.ts" />

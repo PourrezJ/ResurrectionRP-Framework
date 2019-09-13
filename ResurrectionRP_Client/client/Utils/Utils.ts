@@ -1,26 +1,12 @@
 ﻿
 import * as alt from 'alt';
 import * as game from 'natives';
-import * as UiHelper from 'client/helpers/UiHelper';
-
 
 var helpText;
 var subtitle;
 var loading;
 
-
 export function initialize() {
-    alt.onServer('TeleportToWaypoint', async () => {
-        game.doScreenFadeOut(10);
-        let pos: alt.Vector3 = await ForceGroundZ(GetWaypointPos());
-
-        if (alt.Player.local.vehicle != null)
-            game.setEntityCoordsNoOffset(alt.Player.local.vehicle.scriptID, parseInt(pos.x.toString()), parseInt(pos.y.toString()), parseInt(pos.z.toString()), false, false, false);
-        else
-            game.setEntityCoordsNoOffset(alt.Player.local.scriptID, parseInt(pos.x.toString()), parseInt(pos.y.toString()), parseInt(pos.z.toString()), false, false, false);
-        game.doScreenFadeIn(10);
-    });
-
     alt.onServer('SetWaypoint', (posx: number, posy: number, override: boolean) => {
         if (game.isWaypointActive() && override)
             game.setWaypointOff();
@@ -84,6 +70,7 @@ export function initialize() {
     alt.onServer('Display_Help', (text, time) => {
         new HelpText(text, time);
     });
+
     alt.on('Display_Help', (text, time) => {
         new HelpText(text, time);
     });
@@ -164,64 +151,6 @@ export function initialize() {
         game.endTextCommandScaleformString();
         //RAGE.Game.Graphics.PopScaleformMovieFunctionVoid();
         
-    }
-
-    async function ForceGroundZ(v: alt.Vector3) {
-        let zcoord = 0.0;
-        let temp = null;
-
-        let x: number = parseInt(v.x.toString()); 
-        let y: number = parseInt(v.y.toString()); 
-
-        let firstCheck = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
-
-        let secondCheck = [
-            1000, 900, 800, 700, 600, 500,
-            400, 300, 200, 100, 0, -100, -200, -300, -400, -500
-        ];
-
-        let thirdCheck = [
-            -500, -400, -300, -200, -100, 0,
-            100, 200, 300, 400, 500, 600, 700, 800, 900, 1000
-        ];
-
-        temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
-        await Wait(10);
-        zcoord = temp[1];
-
-        if (zcoord == 0) {
-            for (let i = firstCheck.length - 1; i >= 0; i--)
-            {
-                game.requestCollisionAtCoord(x, y, firstCheck[i]);
-                await Wait(10);
-            }
-            temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
-            alt.log(temp);
-            zcoord = temp[1];
-        }
-
-        if (zcoord == 0) {
-            for (let i = secondCheck.length - 1; i >= 0; i--)
-            {
-                game.requestCollisionAtCoord(x, y, secondCheck[i]);
-                await Wait(10);
-            }
-            
-            temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
-            zcoord = temp[1];
-        }
-
-        if (zcoord == 0) {
-            for (let i = thirdCheck.length - 1; i >= 0; i--)
-            {
-                game.requestCollisionAtCoord(x, y, secondCheck[i]);
-                await Wait(10);
-            }
-            temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
-            zcoord = temp[1];
-        }
-        v.z = zcoord + 1;
-        return v;
     }
 
     class HelpText {
@@ -360,18 +289,28 @@ export function Distance(positionOne, positionTwo) {
     return Math.sqrt(Math.pow(positionOne.x - positionTwo.x, 2) + Math.pow(positionOne.y - positionTwo.y, 2) + Math.pow(positionOne.z - positionTwo.z, 2));
 }
 
+//export function GetCameraDirection() {
+//    const heading = game.getGameplayCamRelativeHeading() + game.getEntityHeading(alt.Player.local.scriptID);
+//    const pitch = game.getGameplayCamRot(0).x;
+//    var x = -Math.sin(heading * Math.PI / 180.0);
+//    var y = Math.cos(heading * Math.PI / 180.0);
+//    var z = Math.sin(pitch * Math.PI / 180.0);
+//    var len = Math.sqrt(x * x + y * y + z * z);
+//    if (len !== 0) {
+//        x = x / len;
+//        y = y / len;
+//        z = z / len;
+//    }
+//    return new alt.Vector3(x, y, z);
+//}
+
 export function GetCameraDirection() {
     const heading = game.getGameplayCamRelativeHeading() + game.getEntityHeading(alt.Player.local.scriptID);
     const pitch = game.getGameplayCamRot(0).x;
     var x = -Math.sin(heading * Math.PI / 180.0);
     var y = Math.cos(heading * Math.PI / 180.0);
     var z = Math.sin(pitch * Math.PI / 180.0);
-    var len = Math.sqrt(x * x + y * y + z * z);
-    if (len !== 0) {
-        x = x / len;
-        y = y / len;
-        z = z / len;
-    }
+
     return new alt.Vector3(x, y, z);
 }
 
@@ -446,4 +385,59 @@ export async function Wait(ms: number) {
     return new Promise(resolve => {
         alt.setTimeout(resolve, ms);
     });
+}
+
+export async function ForceGroundZ(v: alt.Vector3) {
+    let zcoord = 0.0;
+    let temp = null;
+
+    let x: number = parseInt(v.x.toString());
+    let y: number = parseInt(v.y.toString());
+
+    let firstCheck = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
+
+    let secondCheck = [
+        1000, 900, 800, 700, 600, 500,
+        400, 300, 200, 100, 0, -100, -200, -300, -400, -500
+    ];
+
+    let thirdCheck = [
+        -500, -400, -300, -200, -100, 0,
+        100, 200, 300, 400, 500, 600, 700, 800, 900, 1000
+    ];
+
+    temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
+    await Wait(10);
+    zcoord = temp[1];
+
+    if (zcoord == 0) {
+        for (let i = firstCheck.length - 1; i >= 0; i--) {
+            game.requestCollisionAtCoord(x, y, firstCheck[i]);
+            await Wait(10);
+        }
+        temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
+        alt.log(temp);
+        zcoord = temp[1];
+    }
+
+    if (zcoord == 0) {
+        for (let i = secondCheck.length - 1; i >= 0; i--) {
+            game.requestCollisionAtCoord(x, y, secondCheck[i]);
+            await Wait(10);
+        }
+
+        temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
+        zcoord = temp[1];
+    }
+
+    if (zcoord == 0) {
+        for (let i = thirdCheck.length - 1; i >= 0; i--) {
+            game.requestCollisionAtCoord(x, y, secondCheck[i]);
+            await Wait(10);
+        }
+        temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
+        zcoord = temp[1];
+    }
+    v.z = zcoord + 1;
+    return v;
 }

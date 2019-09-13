@@ -57,10 +57,9 @@ namespace ResurrectionRP_Server.Streamer
             return EntityNumber;
         }
 
-        public Object AddEntityObject(string model, Vector3 pos, Vector3 rot,int dimension = GameMode.GlobalDimension)
+        public Object AddEntityObject(Object data)
         {
-            var data = new Object(model,  pos, rot, EntityNumber++);
-            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, GameMode.Instance.StreamDistance, data.export());
+            INetworkingEntity item = AltNetworking.CreateEntity(data.position.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());
             ListEntities.TryAdd(EntityNumber, item);
             return data;
         }
@@ -70,11 +69,19 @@ namespace ResurrectionRP_Server.Streamer
             INetworkingEntity oitem = this.ListEntities[obj.id];
             if (oitem.GetData("freeze", out bool freeze) && freeze != obj.freeze)
                 oitem.SetData("freeze", obj.freeze);
-            //if (oitem.GetData("position", out string position) == true&& JsonConvert.DeserializeObject<Position>(position) != obj.position)
-            //    oitem.Position = obj.position;
+            if (oitem.GetData("position", out string position) == true&& JsonConvert.DeserializeObject<Position>(position) != obj.position)
+                oitem.Position = obj.position.ConvertToEntityPosition();
+            if (oitem.GetData("rotation", out string rotation) == true)
+                oitem.SetData("rotation" , JsonConvert.SerializeObject(obj.rotation));
+
             return obj;
         }
 
+        public void DeleteEntityObject(Object data)
+        {
+            AltNetworking.RemoveEntity(ListEntities[data.id]);
+            ListEntities[data.id] = null;
+        }
         public TextLabel AddEntityTextLabel(string label, Vector3 pos, int font = 1, int r = 255, int g = 255, int b = 255, int a = 255, int drawDistance = 20, int dimension = GameMode.GlobalDimension)
         {
             var data = new TextLabel(label, font, r, g, b, a, EntityNumber++);

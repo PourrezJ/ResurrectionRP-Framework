@@ -19,7 +19,7 @@ namespace ResurrectionRP_Server.Entities.Objects
             AltAsync.OnClient("ObjStream_GetStreamInfo_Srv", ObjStream_GetStreamInfo_Srv);
         }
 
-        public static Object CreateObject(string model, Vector3 position, Vector3 rotation, bool freeze = false, bool dynamic = false, uint dimension = ushort.MaxValue)
+        public static Object CreateObject(string model, Vector3 position, Vector3 rotation, bool freeze = false, bool dynamic = false, uint dimension = ushort.MaxValue, string pickup = null)
         {
             var resuobject = new Object 
             (
@@ -27,12 +27,15 @@ namespace ResurrectionRP_Server.Entities.Objects
                 position.ConvertToPosition(),
                 rotation.ConvertToEntityRotation(),
                 GameMode.Instance.Streamer.EntityNumber++,
-                freeze
+                freeze,
+                dimension,
+                pickup
             );
+            GameMode.Instance.Streamer.AddEntityObject(resuobject);
             return resuobject;
         }
 
-        public static void AttachEntity(IEntity ent1, Object target, string bone, Vector3 positionOffset, Vector3 rotationOffset)
+        public static void AttachToEntity(IEntity ent1, Object target, string bone, Vector3 positionOffset, Vector3 rotationOffset)
         {
             var attach = new Models.Attachment()
             {
@@ -42,6 +45,7 @@ namespace ResurrectionRP_Server.Entities.Objects
                 RemoteID = (uint)target.id,
                 Type = EntityType.Object
             };
+            target.attach = attach;
 
             //var obj = ent1 as IObject;
             //var objhandle = GetHandlerByObject(obj);
@@ -53,8 +57,9 @@ namespace ResurrectionRP_Server.Entities.Objects
 
         }
 
-        public static async Task Detach(IEntity ent1)
+        public static async Task DetachFromEntity(IEntity ent1, Object target)
         {
+            target.attach = null;
             //switch (ent1.Type)
             //{
             //    case EntityType.Object:

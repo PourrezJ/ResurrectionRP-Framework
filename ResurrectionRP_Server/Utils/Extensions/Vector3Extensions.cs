@@ -100,5 +100,8 @@ namespace ResurrectionRP_Server
             }
             return null;
         }
+        public static Vector3 ConvertToVector3(this Position pos) => new Vector3(pos.X, pos.Y, pos.Z);
+
+        public static Entity.Position ConvertToEntityPosition(this Position pos) => new Entity.Position { X = pos.X, Y = pos.Y, Z = pos.Z };
     }
 }

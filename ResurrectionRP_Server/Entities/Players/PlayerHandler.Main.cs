@@ -86,11 +86,8 @@ namespace ResurrectionRP_Server.Entities.Players
             get => _health;
             set
             {
-                AltAsync.Do(() =>
-                {
-                    if (Client != null)
-                        Client.SetHealthAsync((ushort)value);
-                });
+                if (Client != null)
+                    Client.SetHealthAsync((ushort)value);
 
                 _health = value;
             }
@@ -318,7 +315,16 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public bool HasOpenMenu()
         {
-            return MenuManager.HasOpenMenu(Client);
+            if (MenuManager.HasOpenMenu(Client))
+                return true;
+
+            if (Phone.PhoneManager.HasOpenPhone(Client, out Phone.Phone phone))
+                return true;
+
+            if (RPGInventoryManager.HasInventoryOpen(Client))
+                return true;
+
+            return false;
         }
         #endregion
 

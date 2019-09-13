@@ -105,7 +105,7 @@ namespace ResurrectionRP_Server.Inventory
 
             RPGInventoryMenu menu = null;
 
-            Models.InventoryData.ItemID itemID = (Models.InventoryData.ItemID)args[0];
+           // ItemID itemID = (ItemID)Convert.ToInt32(args[0]);
             string targetInventory = Convert.ToString(args[1]);
             int itemSlot = Convert.ToInt32(args[2]);
 
@@ -143,7 +143,7 @@ namespace ResurrectionRP_Server.Inventory
             try
             {
                 string inventoryType = Convert.ToString(args[0]);
-                ItemID itemID = (ItemID)Convert.ToInt32(args[1]);
+               // ItemID itemID = (ItemID)Convert.ToInt32(args[1]);
                 int slot = Convert.ToInt32(args[2]);
                 int quantity = Convert.ToInt32(args[3]);
 
@@ -334,7 +334,7 @@ namespace ResurrectionRP_Server.Inventory
             try
             {
                 string inventoryType = Convert.ToString(args[0]);
-                ItemID itemID = (ItemID)args[1];
+                int itemID = Convert.ToInt32(args[1]);
                 int slot = Convert.ToInt32(args[2]);
                 int quantity = Convert.ToInt32(args[3]);
 

@@ -226,11 +226,11 @@ namespace ResurrectionRP_Server.Phone
         /// <param name="client">Client</param>
         /// <param name="contactName">Contact name</param>
         /// <param name="contactNumber">Contact number</param>
-        public bool TryAddNewContact(IPlayer client, String contactName, String contactNumber, bool message = true)
+        public bool TryAddNewContact(IPlayer client, String contactName, String contactNumber)
         {
             if (ValidateContact(contactName, contactNumber))
             {
-                AddNameToAddressBook(client, contactName, contactNumber, message);
+                AddNameToAddressBook(client, contactName, contactNumber);
                 return true;
             }
             return false;
@@ -296,12 +296,9 @@ namespace ResurrectionRP_Server.Phone
         /// </summary>
         /// <param name="name">Contact name</param>
         /// <param name="number">Contact number</param>
-        public void AddNameToAddressBook(IPlayer client, String name, String number, bool message = false)
+        public void AddNameToAddressBook(IPlayer client, String name, String number)
         {
             AddressBook.Add(new Address() { contactName = name, phoneNumber = number });
-            if (message)
-                client.SendNotificationSuccess("Contact Ajouté!!");
-
             client.EmitLocked("ContactEdited");
         }
 

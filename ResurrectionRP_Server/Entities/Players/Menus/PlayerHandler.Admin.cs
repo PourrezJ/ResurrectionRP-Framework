@@ -102,8 +102,8 @@ namespace ResurrectionRP_Server.Entities.Players
             var lifeitem = new MenuItem("Reset life", "", "", true);
             lifeitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                 _playerSelected.Health = 100;
-                 await Update();
+                await AltAsync.Do(() => { _playerSelected.Health = 100; });
+                await Update();
             };
             mainMenu.Add(lifeitem);
             #endregion

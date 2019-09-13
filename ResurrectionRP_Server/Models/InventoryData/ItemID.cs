@@ -1,6 +1,8 @@
-﻿namespace ResurrectionRP_Server.Models.InventoryData
+﻿using System;
+
+namespace ResurrectionRP_Server.Models.InventoryData
 {
-    public enum ItemID
+    public enum ItemID : Int64
     {
         Fromage = 1,
         Pain = 2,

@@ -318,7 +318,16 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public bool HasOpenMenu()
         {
-            return MenuManager.HasOpenMenu(Client);
+            if (MenuManager.HasOpenMenu(Client))
+                return true;
+
+            if (Phone.PhoneManager.HasOpenPhone(Client, out Phone.Phone phone))
+                return true;
+
+            if (RPGInventoryManager.HasInventoryOpen(Client))
+                return true;
+
+            return false;
         }
         #endregion
 

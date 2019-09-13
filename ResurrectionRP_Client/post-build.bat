@@ -10,7 +10,9 @@ mkdir %ClientDir%
 mkdir %ClientDir%\cef
 mkdir %ClientDir%\lib
 mkdir %ClientDir%\NativeUIMenu
+mkdir %ClientDir%\Streamer
 xcopy /E /Y %TargetDir% %ClientDir%
 xcopy /E /Y %ProjectDir%\cef %ClientDir%\cef
 xcopy /E /Y %ProjectDir%\lib %ClientDir%\lib
 xcopy /E /Y %ProjectDir%\client\NativeUIMenu %ClientDir%\NativeUIMenu
+xcopy /E /Y %ProjectDir%\client\Streamer %ClientDir%\Streamer

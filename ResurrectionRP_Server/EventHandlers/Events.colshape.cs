@@ -2,6 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
+using System;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.EventHandlers
@@ -28,52 +29,59 @@ namespace ResurrectionRP_Server.EventHandlers
         #region Private methods
         private static async Task OnEntityColshape(IColShape colShape, IEntity targetEntity, bool state)
         {
-            if(targetEntity.Type == BaseObjectType.Player && colShape.Exists)
-                (targetEntity as IPlayer).EmitLocked("SetStateInColShape", state);
-
-            if (state)
+            try
             {
-                // V752 : Bug ColShape.IsEntityIn() returns always false
-                colShape.AddEntity(targetEntity);
+                if (targetEntity.Type == BaseObjectType.Player && colShape.Exists)
+                    (targetEntity as IPlayer).EmitLocked("SetStateInColShape", state);
 
-                if (targetEntity.Type == BaseObjectType.Vehicle)
+                if (state)
                 {
-                    if (OnVehicleEnterColShape != null)
-                        await OnVehicleEnterColShape.Invoke(colShape, (IVehicle)targetEntity);
+                    // V752 : Bug ColShape.IsEntityIn() returns always false
+                    colShape.AddEntity(targetEntity);
 
-                    if (colShape.GetData("OnVehicleEnterColShape", out ColShapeVehicleEventHandler onVehicleEnterColShape))
-                        await onVehicleEnterColShape.Invoke(colShape, (IVehicle)targetEntity);
+                    if (targetEntity.Type == BaseObjectType.Vehicle)
+                    {
+                        if (OnVehicleEnterColShape != null)
+                            await OnVehicleEnterColShape.Invoke(colShape, (IVehicle)targetEntity);
+
+                        if (colShape.GetData("OnVehicleEnterColShape", out ColShapeVehicleEventHandler onVehicleEnterColShape))
+                            await onVehicleEnterColShape.Invoke(colShape, (IVehicle)targetEntity);
+                    }
+                    else if (targetEntity.Type == BaseObjectType.Player)
+                    {
+                        if (OnPlayerEnterColShape != null)
+                            await OnPlayerEnterColShape.Invoke(colShape, (IPlayer)targetEntity);
+
+                        if (colShape.GetData("OnPlayerEnterColShape", out ColShapePlayerEventHandler onPlayerEnterColShape))
+                            await onPlayerEnterColShape.Invoke(colShape, (IPlayer)targetEntity);
+                    }
                 }
-                else if (targetEntity.Type == BaseObjectType.Player)
+                else
                 {
-                    if (OnPlayerEnterColShape != null)
-                        await OnPlayerEnterColShape.Invoke(colShape, (IPlayer)targetEntity);
+                    // V752 : Bug ColShape.IsEntityIn() returns always false
+                    colShape.RemoveEntity(targetEntity as IPlayer);
 
-                    if (colShape.GetData("OnPlayerEnterColShape", out ColShapePlayerEventHandler onPlayerEnterColShape))
-                        await onPlayerEnterColShape.Invoke(colShape, (IPlayer)targetEntity);
+                    if (targetEntity.Type == BaseObjectType.Vehicle)
+                    {
+                        if (OnVehicleLeaveColShape != null)
+                            await OnVehicleLeaveColShape.Invoke(colShape, (IVehicle)targetEntity);
+
+                        if (colShape.GetData("OnVehicleLeaveColShape", out ColShapeVehicleEventHandler onVehicleLeaveColShape))
+                            await onVehicleLeaveColShape.Invoke(colShape, (IVehicle)targetEntity);
+                    }
+                    else if (targetEntity.Type == BaseObjectType.Player)
+                    {
+                        if (OnPlayerLeaveColShape != null)
+                            await OnPlayerLeaveColShape.Invoke(colShape, (IPlayer)targetEntity);
+
+                        if (colShape.GetData("OnPlayerLeaveColShape", out ColShapePlayerEventHandler onPlayerLeaveColShape))
+                            await onPlayerLeaveColShape?.Invoke(colShape, (IPlayer)targetEntity);
+                    }
                 }
             }
-            else
+            catch(Exception ex)
             {
-                // V752 : Bug ColShape.IsEntityIn() returns always false
-                colShape.RemoveEntity(targetEntity as IPlayer);
-
-                if (targetEntity.Type == BaseObjectType.Vehicle)
-                {
-                    if (OnVehicleLeaveColShape != null)
-                        await OnVehicleLeaveColShape.Invoke(colShape, (IVehicle)targetEntity);
-
-                    if(colShape.GetData("OnVehicleLeaveColShape", out ColShapeVehicleEventHandler onVehicleLeaveColShape))
-                        await onVehicleLeaveColShape.Invoke(colShape, (IVehicle)targetEntity);
-                }
-                else if (targetEntity.Type == BaseObjectType.Player)
-                {
-                    if (OnPlayerLeaveColShape != null)
-                        await OnPlayerLeaveColShape.Invoke(colShape, (IPlayer)targetEntity);
-
-                    if (colShape.GetData("OnPlayerLeaveColShape", out ColShapePlayerEventHandler onPlayerLeaveColShape))
-                        await onPlayerLeaveColShape?.Invoke(colShape, (IPlayer)targetEntity);
-                }
+                Alt.Server.LogError(ex.ToString());
             }
         }
 
@@ -103,7 +111,7 @@ namespace ResurrectionRP_Server.EventHandlers
                         if (OnPlayerInteractTeleporter != null)
                             await OnPlayerInteractTeleporter.Invoke(colshape, client);
                     }
-                    else if (colshape.GetData("House", out string HouseID) && HouseID != null)
+                    else if (colshape.GetData("House", out int HouseID))
                     {
                         if (key != 69)
                             return;

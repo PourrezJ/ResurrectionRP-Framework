@@ -1,18 +1,15 @@
-using MongoDB.Bson.Serialization.Attributes;
-using Newtonsoft.Json;
-using System.Drawing;
-using System.Numerics;
-using System.Threading.Tasks;
-using ResurrectionRP_Server.Models;
-using ResurrectionRP_Server.Models.InventoryData;
-using ResurrectionRP_Server.Items;
-using ResurrectionRP_Server.Utils.Enums;
-using ResurrectionRP_Server.Inventory;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Async;
 using AltV.Net.Enums;
+using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
+using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Streamer.Data;
+using ResurrectionRP_Server.Utils;
+using System.Drawing;
+using System.Numerics;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Factions.Dock
 {
@@ -76,7 +73,7 @@ namespace ResurrectionRP_Server.Factions.Dock
                 if (model != (uint)VehicleModel.Forklift)
                     return;
 
-                Menu menu = new Menu("ID_Rack", RackName, "", 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
+                Menu menu = new Menu("ID_Rack", RackName, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
                 menu.ItemSelectCallback = MenuCallBack;
 
                 if (vehicle.HasData("BoxForks"))

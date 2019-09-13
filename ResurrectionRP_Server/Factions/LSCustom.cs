@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ResurrectionRP_Server.Models;
-using ResurrectionRP_Server.Entities.Players;
-using AltV.Net.Elements.Entities;
-using System.Numerics;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using AltV.Net;
 using AltV.Net.Async;
-using System.Threading.Tasks;
-using ResurrectionRP_Server.Factions.Model;
-using ResurrectionRP_Server.Entities.Blips;
-using ResurrectionRP_Server.Items;
-using ResurrectionRP_Server.Models.InventoryData;
-using ResurrectionRP_Server.XMenuManager;
-using ResurrectionRP_Server.Entities.Vehicles;
-using ResurrectionRP_Server.Utils.Enums;
-using AltV.Net;
-using AltV.Net.Enums;
 using AltV.Net.Data;
+using AltV.Net.Elements.Entities;
+using AltV.Net.Enums;
+using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Entities;
+using ResurrectionRP_Server.Entities.Blips;
+using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Factions.Model;
+using ResurrectionRP_Server.Items;
+using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Models.InventoryData;
+using ResurrectionRP_Server.Utils;
+using ResurrectionRP_Server.Utils.Enums;
+using ResurrectionRP_Server.XMenuManager;
+using System;
+using System.Numerics;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -147,7 +146,7 @@ namespace ResurrectionRP_Server.Factions
                 return;
             }
 
-            menu = new Menu(menuItem.Id, "", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, false, Banner.CarMod);
+            menu = new Menu(menuItem.Id, "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.CarMod);
             menu.SetData("Vehicle", await client.GetVehicleAsync());
             menu.ItemSelectCallback = PeintureSelectCallback;
             menu.IndexChangeCallback = PeinturePreview;
@@ -304,7 +303,7 @@ namespace ResurrectionRP_Server.Factions
 
         public async Task OpenMenu(IPlayer client, IVehicle vehicle)
         {
-            Menu menu = new Menu("ID_MainReparMenu", "", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true, Banner.CarMod);
+            Menu menu = new Menu("ID_MainReparMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.CarMod);
             menu.SetData("Vehicle", vehicle);
             menu.ItemSelectCallback = MenuCallBack;
 
@@ -328,7 +327,7 @@ namespace ResurrectionRP_Server.Factions
 
         public async Task OpenPeintureMenu(IPlayer client)
         {
-            Menu menu = new Menu("ID_MainReparMenu", "", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true, Banner.CarMod);
+            Menu menu = new Menu("ID_MainReparMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.CarMod);
 
             MenuItem primary = new MenuItem("Peinture principal", "", "ID_First", executeCallback: true, executeCallbackIndexChange: true);
             primary.OnMenuItemCallback = OnPeintureSelect;

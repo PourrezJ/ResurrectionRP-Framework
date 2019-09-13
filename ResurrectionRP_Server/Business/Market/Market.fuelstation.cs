@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Utils;
+using System;
 using System.Threading.Tasks;
-using AltV.Net;
-using AltV.Net.Elements.Entities;
 
 namespace ResurrectionRP_Server.Businesses
 {
-
     public partial class Market
     {
         private bool _ravitaillement = false;
@@ -22,7 +20,7 @@ namespace ResurrectionRP_Server.Businesses
                 return;
             }
 
-            Menu menu = new Menu("ID_GasPumpMenuMain", "Station Essence", $"Prix du litre: {fuelpump.EssencePrice}", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+            Menu menu = new Menu("ID_GasPumpMenuMain", "Station Essence", $"Prix du litre: {fuelpump.EssencePrice}", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
             menu.ItemSelectCallback = fuelpump.FuelMenuCallBack;
 
             menu.SubTitle = "Mettre le plein dans:";

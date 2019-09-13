@@ -1,4 +1,6 @@
-﻿
+﻿using AltV.Net;
+using AltV.Net.Async;
+using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using System;
@@ -6,16 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using AltV.Net;
-using AltV.Net.Async;
-using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Players;
-using ResurrectionRP_Server.EventHandlers;
-using ResurrectionRP_Server.Utils.Extensions;
-using VehicleHandler = ResurrectionRP_Server.Entities.Vehicles.VehicleHandler;
-using VehicleManager = ResurrectionRP_Server.Entities.Vehicles.VehiclesManager;
-using ResurrectionRP_Server.Streamer.Data;
+using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Entities;
+using ResurrectionRP_Server.Utils;
 
 namespace ResurrectionRP_Server.Models
 {
@@ -189,7 +185,7 @@ namespace ResurrectionRP_Server.Models
 
                 if (menu.GetData("Location") != null)
                 {
-                    if (!await VehicleManager.IsVehicleInSpawn(menu.GetData("Location")))
+                    if (!await VehiclesManager.IsVehicleInSpawn(menu.GetData("Location")))
                     {
                         Spawn = menu.GetData("Location");
                         await veh.SpawnVehicle(Spawn);
@@ -198,12 +194,12 @@ namespace ResurrectionRP_Server.Models
                 else
                 {
                     // Attribution du spawn de libre
-                    if (!VehicleManager.IsVehicleInSpawn(Spawn1.Pos))
+                    if (!VehiclesManager.IsVehicleInSpawn(Spawn1.Pos))
                     {
                         Spawn = Spawn1;
                         await veh.SpawnVehicle(Spawn1);
                     }
-                    else if (Spawn2 != null && !VehicleManager.IsVehicleInSpawn(Spawn2.Pos))
+                    else if (Spawn2 != null && !VehiclesManager.IsVehicleInSpawn(Spawn2.Pos))
                     {
                         Spawn = Spawn2;
                         await veh.SpawnVehicle(Spawn2);
@@ -271,7 +267,7 @@ namespace ResurrectionRP_Server.Models
             }
 
             if (menu == null)
-                menu = new Menu("ID_ParkingMenu", (string.IsNullOrEmpty(title) ? "Parking" : title), (string.IsNullOrEmpty(description)) ? "" : description, 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+                menu = new Menu("ID_ParkingMenu", (string.IsNullOrEmpty(title) ? "Parking" : title), (string.IsNullOrEmpty(description)) ? "" : description, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
             else
             {
                 menu.ClearItems();

@@ -11,8 +11,8 @@ export function initialize() {
     alt.onServer('OnPlayerLeaveVehicle', hide);
     alt.onServer('OnPlayerEnterVehicle', show);
 
-    alt.on('update', () => {
-        if ((Date.now() - lastSent) > 50) {
+    alt.everyTick(() => {
+        if ((Date.now() - lastSent) > 33) {
             lastSent = Date.now();
 
             if (player.vehicle !== null && speedoWindow !== null) {

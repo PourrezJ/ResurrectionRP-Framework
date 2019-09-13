@@ -330,8 +330,7 @@ export function initialize() {
         game.endTextCommandDisplayText(x, y, 0);
     }
 
-
-    alt.on('update', () => {
+    alt.everyTick(() => {
         if (helpText !== undefined)
             helpText.Draw();
         if (subtitle !== undefined)

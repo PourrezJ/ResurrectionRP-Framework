@@ -1,14 +1,13 @@
-﻿using System;
+﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
+using AltV.Net.Enums;
+using MongoDB.Bson.Serialization.Attributes;
+using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Loader.TattooLoader;
+using ResurrectionRP_Server.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AltV.Net;
-using AltV.Net.Async;
-using AltV.Net.Elements.Entities;
-using MongoDB.Bson.Serialization.Attributes;
-using AltV.Net.Enums;
-using ResurrectionRP_Server.Entities.Players;
-using ResurrectionRP_Server.Loader.TattooLoader;
 
 namespace ResurrectionRP_Server.Businesses
 {
@@ -37,7 +36,7 @@ namespace ResurrectionRP_Server.Businesses
                 return;
             }
 
-            Menu mainmenu = new Menu("ID_TattooMain", "", "", 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true)
+            Menu mainmenu = new Menu("ID_TattooMain", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true)
             {
                 BannerSprite = Banner.Tattoos2,
                 ItemSelectCallback = TattooMenuCallBack,
@@ -177,7 +176,7 @@ namespace ResurrectionRP_Server.Businesses
         #region Choix & Preview
         private async Task TattooChoiseMenu(List<Tattoo> TattooList, IPlayer tatoueur)
         {
-            Menu selectMenu = new Menu("ID_TattooSelect", "", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, false, Banner.Tattoos2);
+            Menu selectMenu = new Menu("ID_TattooSelect", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Tattoos2);
             selectMenu.IndexChangeCallback = TattooChoiseIndex; 
             selectMenu.ItemSelectCallback = TattooMenuCallBack;
             selectMenu.Finalizer = MenuFinalizer;

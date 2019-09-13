@@ -75,7 +75,7 @@ namespace ResurrectionRP_Server.Jobs
         #region Menus
 /*        public virtual async Task<Menu> OpenServerJobMenu(IPlayer client)
         {
-            Menu serverJobMenu = new Menu("ID_ServiceMenu", Name, "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+            Menu serverJobMenu = new Menu("ID_ServiceMenu", Name, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
             serverJobMenu.BannerColor = new MenuColor(0, 0, 0, 0);
             serverJobMenu.Callback += MenuJobCallback;
 

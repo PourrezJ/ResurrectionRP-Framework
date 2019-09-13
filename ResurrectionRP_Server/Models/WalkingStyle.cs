@@ -1,8 +1,6 @@
-﻿using AltV.Net.Async;
-using AltV.Net.Async.Events;
-using AltV.Net.Elements.Entities;
+﻿using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Players.Data;
-using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Utils;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -43,7 +41,7 @@ namespace ResurrectionRP_Server.Models
         {
             var walkmenu = new WalkingStyleMenu()
             {
-                menu = new Menu("ID_WalkingMenu", "Style de marche", "Choisissez une option :", 0, 0, Menu.MenuAnchor.MiddleRight)
+                menu = new Menu("ID_WalkingMenu", "Style de marche", "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR)
             };
 
             walkmenu.menu.ItemSelectCallback = walkmenu.WalkingStyleMenuCallBack;

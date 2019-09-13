@@ -1,18 +1,16 @@
 ﻿using AltV.Net.Elements.Entities;
-using AltV.Net.Async;
 using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Enums;
+using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Models;
-using System;
+using ResurrectionRP_Server.Utils;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Drawing;
 using System.Numerics;
-using System.Text;
 using System.Threading.Tasks;
-using ResurrectionRP_Server.Streamer.Data;
-using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server.DrivingSchool
 {
@@ -146,7 +144,7 @@ namespace ResurrectionRP_Server.DrivingSchool
 
             if (ph != null) 
             {
-                Menu drivingschoolmenu = new Menu("ID_DrivingShoolMenu", "Auto-école", "", 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
+                Menu drivingschoolmenu = new Menu("ID_DrivingShoolMenu", "Auto-école", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
                 drivingschoolmenu.ItemSelectCallback = DrivingMenuCallBack;
 
                 if (ClientIsInExamen(client))

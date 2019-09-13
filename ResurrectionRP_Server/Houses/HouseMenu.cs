@@ -1,8 +1,8 @@
 ﻿using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Inventory;
+using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.Utils.Enums;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -28,7 +28,7 @@ namespace ResurrectionRP_Server.Houses
             houseMenu._client = client;
             houseMenu._house = house;
 
-            houseMenu._menu = new Menu("houseMenu", "House Menu", "", 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
+            houseMenu._menu = new Menu("houseMenu", "House Menu", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
             houseMenu._menu.BannerColor = new MenuColor(0, 255, 255, 0);
             houseMenu._menu.ItemSelectCallback = houseMenu.HouseCallBackMenu;
 

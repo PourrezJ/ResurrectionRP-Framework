@@ -10,12 +10,10 @@ function showSpeedometer() {
 }
 
 function setSpeed(speed, rpm, gear, light, enginehealth, currentFuel, fuelMax) {
-    $('.speed').html(`<div class='vitesse'><span>${gear}</span></div> ${Math.floor(speed)}`);
-
+    $('.speed').html(Math.floor(speed));
+    $('.gear').html(`<span>${gear}</span>`);
     $('.information .stats .fuel').html(`<img src="img/fuel.png">${currentFuel}L/${fuelMax}L`);
-
     $(".compteur .on").css("width", `${rpm}px`);
-
 
     switch (light) {
         case 0:

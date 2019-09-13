@@ -61,7 +61,7 @@ export default class Scaleforms {
     }
 
     renderOnUpdate(render, methodName, ...args) {
-        alt.on('update', () => {
+        alt.everyTick(() => {
             if (render) {
                 this[methodName].call(this, ...args);
             }

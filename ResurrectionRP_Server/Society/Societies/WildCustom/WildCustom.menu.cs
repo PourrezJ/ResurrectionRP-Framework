@@ -1,16 +1,15 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
-using AltV.Net.Enums;
+using ResurrectionRP_Server.Society.Societies.Bennys;
+using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using ResurrectionRP_Server.Society.Societies.Bennys;
-using ResurrectionRP_Server.Entities.Vehicles;
-using ResurrectionRP_Server.Entities.Players;
 
 namespace ResurrectionRP_Server.Society.Societies.WildCustom
 {
@@ -621,7 +620,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             }
             else if (vh.Mods.Count >= 1)
             {
-                Menu menu = new Menu("ID_Histo", "", "Historique :", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, false, banner: Banner.Garage);
+                Menu menu = new Menu("ID_Histo", "", "Historique :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, banner: Banner.Garage);
                 menu.ItemSelectCallback = HistoricMenuCallback;
                 menu.Finalizer = Finalizer;
 

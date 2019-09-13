@@ -17,7 +17,7 @@ body {
   height: 14%;
   position: absolute;
   bottom: 17%;
-  right: 5%;
+  right: 53px;
   width: 585px;
 }
 
@@ -59,22 +59,24 @@ body {
   height: 14%;
   position: absolute;
   bottom: 17%;
-  right: 5%;
+  right: 53px;
   width: 585px;
   text-align: right;
 }
 
 .speed {
   position: absolute;
-  bottom: -30px;
+  bottom: -34px;
   right: 0;
   color: #fff;
-  /* font-size: 72px; */
   font-size: 55px;
   font-weight: 900;
 }
 
-.speed .vitesse {
+.gear {
+    position: absolute;
+    bottom: -124px;
+    right: 105px;
     display: inline-block;
     background: url('../img/speed-bg.png');
     background-position: center;
@@ -85,8 +87,9 @@ body {
     position: relative;
 }
 
-.speed .vitesse span {
+.gear span {
   font-size: 23px;
+  font-weight: 900;
   position: absolute;
   left: 50%;
   color: #331600;

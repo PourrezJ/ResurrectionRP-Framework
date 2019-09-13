@@ -14,6 +14,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using ResurrectionRP_Server.Entities;
+using ResurrectionRP_Server.Utils;
 using System.Drawing;
 
 namespace ResurrectionRP_Server.Businesses
@@ -219,7 +220,7 @@ namespace ResurrectionRP_Server.Businesses
         #region Menu
         public async Task OpenClothingMenu(IPlayer client)
         {
-            Menu menu = new Menu("ClothingMenu", "", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true, BannerStyle);
+            Menu menu = new Menu("ClothingMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, BannerStyle);
             menu.ItemSelectCallback = MenuCallBack;
             menu.Finalizer = MenuClose;
 

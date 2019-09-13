@@ -290,10 +290,7 @@ namespace ResurrectionRP_Server
             if (PlayerList.Find(b => b == player) != null)
                 PlayerList.Remove(player);
 
-            MenuManager.OnPlayerDisconnect(player);
-            RPGInventory.OnPlayerQuit(player);
-            PlayerHandler.PlayerHandlerList.TryRemove(player, out _);
-            Alt.Log($"==> {player.Name} has disconnected.");
+            PlayerManager.OnPlayerDisconnected(player, reason);   
         }
         #endregion
 

@@ -86,11 +86,8 @@ namespace ResurrectionRP_Server.Entities.Players
             get => _health;
             set
             {
-                AltAsync.Do(() =>
-                {
-                    if (Client != null)
-                        Client.SetHealthAsync((ushort)value);
-                });
+                if (Client != null)
+                    Client.SetHealthAsync((ushort)value);
 
                 _health = value;
             }

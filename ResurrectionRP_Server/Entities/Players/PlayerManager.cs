@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Entities.Players.Data;
 using ResurrectionRP_Server.Factions;
+using ResurrectionRP_Server.Houses;
+using ResurrectionRP_Server.Inventory;
 using ResurrectionRP_Server.Models;
 using System;
 using System.Collections.Generic;
@@ -101,6 +103,44 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region ServerEvents
+
+        public void OnPlayerDisconnected(IPlayer player, string reason)
+        {
+            PlayerHandler playerhandler = player.GetPlayerHandler();
+
+            if (playerhandler == null)
+                return;
+
+            MenuManager.OnPlayerDisconnect(player);
+
+            if (GameMode.Instance.PhoneManager.PhoneClientList.ContainsKey(player))
+            {
+                GameMode.Instance.PhoneManager.PhoneClientList.Remove(player);
+            }
+
+            if (HouseManager.IsInHouse(player))
+            {
+                var house = HouseManager.GetHouse(player);
+                playerhandler.Location = new Location(house.Position, new Vector3());
+                house.PlayersInside.Remove(player);
+            }
+
+            if (RPGInventoryManager.HasInventoryOpen(player))
+            {
+                var rpg = RPGInventoryManager.GetRPGInventory(player);
+                if (rpg != null)
+                {
+                    if (rpg.OnClose != null)
+                        rpg.OnClose.Invoke(player, rpg);
+                }
+                GameMode.Instance.RPGInventory.OnPlayerQuit(player);
+            }
+
+            playerhandler.IsOnline = false;
+            Task.Run(async () => { await playerhandler?.Update(); }); // pas sûre qu'il soit atteind 
+            PlayerHandler.PlayerHandlerList.Remove(player, out PlayerHandler value);
+            Alt.Server.LogInfo($"Joueur social: {player.GetSocialClub()} || Nom: {playerhandler.Identite.Name} || IP: {player.Ip} est déconnecté raison: {reason}.");
+        }
         private async Task Events_PlayerDeath(IPlayer player, IEntity killer, uint weapon)
         {
             if (!player.Exists)

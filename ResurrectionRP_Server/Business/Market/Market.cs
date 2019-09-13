@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using ResurrectionRP_Server.Utils;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -66,7 +67,7 @@ namespace ResurrectionRP_Server.Businesses
                 {
                     if ((int)data > 0)
                     {
-                        Menu RefuelMenu = new Menu("ID_RefuelMenu", "Station Service", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+                        Menu RefuelMenu = new Menu("ID_RefuelMenu", "Station Service", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
                         RefuelMenu.ItemSelectCallback = RefuelMenuCallBack;
                         RefuelMenu.Add(new MenuItem("Remplir la station", "", "", true));
 

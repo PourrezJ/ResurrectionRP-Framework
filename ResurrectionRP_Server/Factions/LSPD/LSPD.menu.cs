@@ -71,7 +71,7 @@ namespace ResurrectionRP_Server.Factions
             if (Invoices.Count == 0)
                 client.DisplayHelp("Vous n'avez aucune amende à payer !", 5000);
 
-            Menu menu = new Menu("ID_Accueil", FactionName, "", 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
+            Menu menu = new Menu("ID_Accueil", FactionName, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
             menu.ItemSelectCallback = AccueilMenuCallback;
             //List<Invoice> amendes = InvoiceList.FindAll(b => b.SocialClub == client.GetSocialClub());
             //MenuItem menuitem = new MenuItem("Payer mes amendes", rightLabel: amendes.Count.ToString());

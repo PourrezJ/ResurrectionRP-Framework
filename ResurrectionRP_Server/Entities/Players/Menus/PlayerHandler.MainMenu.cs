@@ -2,7 +2,7 @@
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Menus;
 using ResurrectionRP_Server.Models;
-using System;
+using ResurrectionRP_Server.Utils;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Entities.Players
@@ -29,10 +29,10 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
             }
             
-            Menu menu = new Menu("ID_MainMenu", Identite.Name, "Choisissez une option :", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+            Menu menu = new Menu("ID_MainMenu", Identite.Name, "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
             menu.BannerColor = new MenuColor(0, 0, 0, 0);
             menu.ItemSelectCallback = MainMenuManager;
-                   
+            
             menu.Add(new MenuItem("Mes clefs", "", "ID_Clefs", true));
             menu.Add(new MenuItem("Animations", "Réglage des touches des animations", "ID_Animations", true));
             menu.Add(new MenuItem("Styles de Marche", "", "ID_WalkingStyles", true));
@@ -44,7 +44,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         private async Task OpenKeysMenu()
         {
-            Menu menu = new Menu("ID_KeyMenu", "Mes Clefs", "Clefs que vous possédez", 0, 0, Menu.MenuAnchor.MiddleRight);
+            Menu menu = new Menu("ID_KeyMenu", "Mes Clefs", "Clefs que vous possédez", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR);
             menu.ItemSelectCallback = MainMenuManager;
 
             if (ListVehicleKey.Count <= 0)
@@ -108,7 +108,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     return;
                 }
 
-                menu = new Menu("ID_KeyOption", menuItem.RightLabel, "", 0, 0, Menu.MenuAnchor.MiddleRight);
+                menu = new Menu("ID_KeyOption", menuItem.RightLabel, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR);
                 keygiven = ListVehicleKey.Find(x => x.Plate == menuItem.RightLabel) ?? null;
 
                 if (keygiven == null)
@@ -134,7 +134,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (menuItem.Id == "ID_Give")
                 {
                     /*
-                    menu = new Menu("ID_GiveMenu", menuItem.Text, "", 0, 0, Menu.MenuAnchor.MiddleRight);
+                    menu = new Menu("ID_GiveMenu", menuItem.Text, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR);
                     menu.Callback = MainMenuManager;
                     var players = await PlayerManager.GetNearestPlayers(client, 2, true, await client.GetDimensionAsync());
 

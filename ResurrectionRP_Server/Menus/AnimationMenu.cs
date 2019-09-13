@@ -1,6 +1,7 @@
 ﻿using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.Utils.Enums;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace ResurrectionRP_Server.Menus
         public static async Task OpenAnimationsMenu(IPlayer client)
         {
             var animationsMenu = new AnimationsMenu();
-            animationsMenu._menu = new Menu("Animation", "Réglages", "Choisissez une touche :", 0, 0, Menu.MenuAnchor.MiddleRight);
+            animationsMenu._menu = new Menu("Animation", "Réglages", "Choisissez une touche :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR);
             animationsMenu._menu.ItemSelectCallback = animationsMenu.AnimationMenuCallBack;
 
             for (int i = 1; i <= 9; i++)

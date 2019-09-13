@@ -3,6 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Driver;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.Utils.Enums;
 using System;
 using System.Collections.Generic;
@@ -131,7 +132,7 @@ namespace ResurrectionRP_Server.Houses
             House house = GetHouseWithID((int)args[0]);
             if (house == null) return;
 
-            Menu menu = new Menu("House_PurchaseMenu", HouseTypes.HouseTypeList[house.Type].Name, "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+            Menu menu = new Menu("House_PurchaseMenu", HouseTypes.HouseTypeList[house.Type].Name, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
             menu.BannerColor = new MenuColor(0, 0, 0, 0);
             menu.SetData("House", house);
             menu.ItemSelectCallback = MenuCallBack;

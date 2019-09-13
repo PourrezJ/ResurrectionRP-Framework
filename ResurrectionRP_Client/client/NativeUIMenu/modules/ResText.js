@@ -32,7 +32,7 @@ export default class ResText extends Text {
             scale = this.scale;
             color = this.color;
             font = this.font;
-            if (centered == true || centered == false) {
+            if (centered === true || centered === false) {
                 centered = this.centered;
             }
             else {

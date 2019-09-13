@@ -8,6 +8,7 @@ using AltV.Net.Enums;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Utils;
 
 namespace ResurrectionRP_Server.Businesses.Barber
 {
@@ -31,7 +32,7 @@ namespace ResurrectionRP_Server.Businesses.Barber
                 return;
             }
 
-            Menu mainmenu = new Menu("ID_BarberMain", "", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true, Banner.Barber);
+            Menu mainmenu = new Menu("ID_BarberMain", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Barber);
 
             List<object> _playerlist = new List<object>();
             foreach (PlayerHandler player in  client.GetNearestPlayers(5f)) { _playerlist.Add(player.Identite.Name); };
@@ -127,7 +128,7 @@ namespace ResurrectionRP_Server.Businesses.Barber
                 return;
             }
 
-            menu = new Menu("ID_BarberBeard", "", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, false, Banner.Barber);
+            menu = new Menu("ID_BarberBeard", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Barber);
             menu.ItemSelectCallback= BarberMenuCallBack;
             menu.IndexChangeCallback = HairCutPreview;
             menu.Finalizer = MenuFinalizer;
@@ -184,7 +185,7 @@ namespace ResurrectionRP_Server.Businesses.Barber
             if (ClientSelected == null)
                 return;
 
-            menu = new Menu("ID_BarberHair", "", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, false, Banner.Barber);
+            menu = new Menu("ID_BarberHair", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Barber);
             menu.ItemSelectCallback = BarberMenuCallBack;
             menu.IndexChangeCallback = HairCutPreview;
             menu.Finalizer = MenuFinalizer;
@@ -246,7 +247,7 @@ namespace ResurrectionRP_Server.Businesses.Barber
             _beardfirstcolor = ClientSelected.Character.Appearance[1].Color;
             _beardsecondcolor = ClientSelected.Character.Appearance[1].SecondaryColor;
 
-            menu = new Menu("ID_BarberColor", "", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, false, Banner.Barber);
+            menu = new Menu("ID_BarberColor", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Barber);
             menu.ItemSelectCallback = BarberMenuCallBack;
             menu.ListCallback = ColorPreview;
             menu.Finalizer = MenuFinalizer;

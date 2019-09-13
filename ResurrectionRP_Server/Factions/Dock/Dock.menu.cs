@@ -1,21 +1,8 @@
-using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
-using AltV.Net.Enums;
-using System.Numerics;
-using ResurrectionRP_Server.Models;
-using ResurrectionRP_Server.Items;
-using ResurrectionRP_Server.Inventory;
-using ResurrectionRP_Server.Entities.Peds;
-using ResurrectionRP_Server.Entities.Blips;
-using ResurrectionRP_Server.Entities.Players;
-using ResurrectionRP_Server.Entities.Vehicles;
-using ResurrectionRP_Server.Factions.Model;
-using ResurrectionRP_Server.Teleport;
-using MongoDB.Bson.Serialization.Attributes;
+using ResurrectionRP_Server.Utils;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ResurrectionRP_Server.Factions.Dock
 {
@@ -32,7 +19,7 @@ namespace ResurrectionRP_Server.Factions.Dock
             if (client == null || !client.Exists)
                 return;
 
-            Menu menu = new Menu("ID_Importation", "Importation", "", 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
+            Menu menu = new Menu("ID_Importation", "Importation", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
             menu.ItemSelectCallback = ImportationMenuCallback;
             menu.IndexChangeCallback = ItemChangeCallback;
             menu.Finalizer = MenuFinalizer;

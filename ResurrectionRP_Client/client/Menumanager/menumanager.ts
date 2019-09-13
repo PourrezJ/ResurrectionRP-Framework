@@ -1,6 +1,7 @@
 ﻿import * as alt from 'alt';
 import * as NativeUI from 'client/NativeUIMenu/NativeUI.js';
 import * as chat from 'client/chat/chat';
+import * as game from 'natives';
 
 enum InputType {
     Text,
@@ -8,6 +9,18 @@ enum InputType {
     UNumber,
     Float,
     UFloat
+}
+
+enum MenuAnchor {
+    TopLeft = 0,
+    TopCenter = 1,
+    TopRight = 2,
+    MiddleLeft = 3,
+    MiddleCenter = 4,
+    MiddleRight = 6,
+    BottomLeft = 7,
+    BottomCenter = 8,
+    BottomRight = 9,
 }
 
 var menu = null;
@@ -23,7 +36,6 @@ var inputIndex = -1;
 
 export default () => {
     alt.onServer("MenuManager_OpenMenu", (data) => {
-        // alt.log(data);
         menuItems = new Array();
         menuData = JSON.parse(data);
 
@@ -47,10 +59,40 @@ export default () => {
             newMenu = true;
         }
 
+        let pos = null;
+
+        const screen = game.getActiveScreenResolution(0, 0);
+        let factor = 1080 / screen[2];
+
+        if (menuData.Anchor == MenuAnchor.TopLeft) {
+            pos = new NativeUI.Point(menuData.PosX, menuData.PosY);
+        } else if (menuData.Anchor == MenuAnchor.TopCenter) {
+            pos = new NativeUI.Point(menuData.PosX + 745 * factor, menuData.PosY);
+        } else if (menuData.Anchor == MenuAnchor.TopRight) {
+            pos = new NativeUI.Point(menuData.PosX + 1489 * factor, menuData.PosY);
+        } else if (menuData.Anchor == MenuAnchor.MiddleLeft) {
+            pos = new NativeUI.Point(menuData.PosX, menuData.PosY + 260);
+        } else if (menuData.Anchor == MenuAnchor.MiddleCenter) {
+            pos = new NativeUI.Point(menuData.PosX + 745 * factor, menuData.PosY + 260);
+        } else if (menuData.Anchor == MenuAnchor.MiddleRight) {
+            pos = new NativeUI.Point(menuData.PosX + 1489 * factor, menuData.PosY + 260);
+        } else if (menuData.Anchor == MenuAnchor.BottomLeft) {
+            pos = new NativeUI.Point(menuData.PosX, menuData.PosY + 520);
+        } else if (menuData.Anchor == MenuAnchor.BottomCenter) {
+            pos = new NativeUI.Point(menuData.PosX + 745 * factor, menuData.PosY + 520);
+        } else if (menuData.Anchor == MenuAnchor.BottomRight) {
+            pos = new NativeUI.Point(menuData.PosX + 1489 * factor, menuData.PosY + 520);
+        }
+
         if (menuData.BannerSprite != undefined) {
-            menu = new NativeUI.Menu(menuData.Title, menuData.SubTitle, new NativeUI.Point(menuData.PosX, menuData.PosY), menuData.BannerSprite.Dict, menuData.BannerSprite.Name);
+            menu = new NativeUI.Menu(menuData.Title, menuData.SubTitle, pos, undefined, menuData.BannerSprite.Dict, menuData.BannerSprite.Name);
         } else {
-            menu = new NativeUI.Menu(menuData.Title, menuData.SubTitle, new NativeUI.Point(menuData.PosX, menuData.PosY));
+            if (menuData.BannerColor != undefined) {
+                let color = new NativeUI.Color(menuData.BannerColor.red, menuData.BannerColor.green, menuData.BannerColor.blue, menuData.BannerColor.alpha);
+                menu = new NativeUI.Menu(menuData.Title, menuData.SubTitle, pos, color);
+            } else {
+                menu = new NativeUI.Menu(menuData.Title, menuData.SubTitle, pos);
+            }
         }
 
         if (!newMenu) {

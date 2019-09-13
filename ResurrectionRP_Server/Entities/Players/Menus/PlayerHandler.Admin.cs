@@ -5,6 +5,7 @@ using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.Utils.Enums;
 using System;
 using System.Collections.Generic;
@@ -45,7 +46,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #endregion
 
             #region Menu
-            Menu mainMenu = new Menu("ID_AdminMenu", "Admin Menu", "Choisissez une option:", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true, Banner.Garage);
+            Menu mainMenu = new Menu("ID_AdminMenu", "Admin Menu", "Choisissez une option:", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Garage);
             mainMenu.SubTitle = $"Joueur Selectionné: ~r~{_playerSelected.Identite.Name}";
             mainMenu.Finalizer += OnFinalize;
             #endregion
@@ -504,7 +505,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #region CallBacks
         private async Task ChoisePlayer(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            var secondMenu = new Menu("", "Admin Menu", "Choisissez un joueur :", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, false, Banner.Garage);
+            var secondMenu = new Menu("", "Admin Menu", "Choisissez un joueur :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Garage);
             secondMenu.ItemSelectCallback = ChoisePlayerCallback;
 
             List<PlayerHandler> players = PlayerManager.GetPlayersList();

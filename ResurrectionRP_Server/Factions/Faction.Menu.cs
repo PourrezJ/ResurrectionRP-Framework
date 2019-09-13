@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using VehicleInfoLoader.Data;
-using System.Linq;
-using AltV.Net.Async;
+﻿using AltV.Net.Async;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Entities.Players;
-using ResurrectionRP_Server.Utils.Enums;
-using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Factions.Model;
 using ResurrectionRP_Server.Inventory;
+using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Utils;
+using ResurrectionRP_Server.Utils.Enums;
 using ResurrectionRP_Server.XMenuManager;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using VehicleInfoLoader.Data;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -217,7 +217,7 @@ namespace ResurrectionRP_Server.Factions
         {
             if (HasPlayerIntoFaction(client))
             {
-                Menu menu = new Menu("ID_ServiceMenu", this.FactionName, "", 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
+                Menu menu = new Menu("ID_ServiceMenu", this.FactionName, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
 
                 MenuItem item = new MenuItem($"{(ServicePlayerList.Contains(client.GetSocialClub()) ? "Quitter" : "Prendre")} son service", "", "ID_PriseService", true);
                 item.OnMenuItemCallback = ServiceMenuCallBack;
@@ -445,7 +445,7 @@ namespace ResurrectionRP_Server.Factions
         {
             if (HasPlayerIntoFaction(client))
             {
-                Menu menu = new Menu("ID_Shop", FactionName, "", 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
+                Menu menu = new Menu("ID_Shop", FactionName, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
                 menu.ItemSelectCallback = ShopMenuCallBack;
                 foreach (var item in ItemShop)
                 {
@@ -485,7 +485,7 @@ namespace ResurrectionRP_Server.Factions
             else
                 subtitle = $"Parking véhicules {factionName}";
 
-            Menu menu = new Menu("ID_ParkingMenu", "Parking", subtitle, 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
+            Menu menu = new Menu("ID_ParkingMenu", "Parking", subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
             menu.SetData("ConcessType", type);
             menu.SetData("Faction_Location", location); 
             menu.ItemSelectCallback = ConcessCallBack;

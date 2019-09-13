@@ -234,7 +234,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         List<PlayerHandler> players = await PlayerManager.GetNearestPlayers(client);
                         if (players.Count > 0)
                         {
-                            Menu menugive = new Menu("ID_GiveVehicle", "", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+                            Menu menugive = new Menu("ID_GiveVehicle", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
 
                             foreach (PlayerHandler player in players)
                             {

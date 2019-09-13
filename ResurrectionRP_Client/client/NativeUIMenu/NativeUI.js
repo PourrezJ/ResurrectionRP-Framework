@@ -27,7 +27,7 @@ import * as alt from 'alt';
 import * as game from 'natives';
 
 export default class NativeUI {
-    constructor(title, subtitle, offset, spriteLibrary, spriteName) {
+    constructor(title, subtitle, offset, bannerColor, spriteLibrary, spriteName) {
         this.Id = UUIDV4();
         this.counterPretext = "";
         this.counterOverride = undefined;
@@ -66,10 +66,11 @@ export default class NativeUI {
         this.subtitle = subtitle;
         this.spriteLibrary = spriteLibrary || "commonmenu";
         this.spriteName = spriteName || "interaction_bgd";
+        this.bannerColor = bannerColor;
         this.offset = new Point(offset.X, offset.Y);
         this.Children = new Map();
         this._mainMenu = new Container(new Point(0, 0), new Size(700, 500), new Color(0, 0, 0, 0));
-        this._logo = new Sprite(this.spriteLibrary, this.spriteName, new Point(0 + this.offset.X, 0 + this.offset.Y), new Size(431, 107));
+        this._logo = new Sprite(this.spriteLibrary, this.spriteName, new Point(0 + this.offset.X, 0 + this.offset.Y), new Size(431, 107), 0, this.bannerColor);
         this._mainMenu.addItem((this._title = new ResText(this.title, new Point(215 + this.offset.X, 20 + this.offset.Y), 1.15, new Color(255, 255, 255), 1, Alignment.Centered)));
         if (this.subtitle !== "") {
             this._mainMenu.addItem(new ResRectangle(new Point(0 + this.offset.X, 107 + this.offset.Y), new Size(431, 37), new Color(0, 0, 0, 255)));

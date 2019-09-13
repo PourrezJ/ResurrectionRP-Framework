@@ -7,6 +7,7 @@ using AltV.Net.Async;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Utils;
 using AltV.Net.Enums;
 
 namespace ResurrectionRP_Server.Businesses
@@ -36,7 +37,7 @@ namespace ResurrectionRP_Server.Businesses
                 return;
             }
 
-            Menu _menu = new Menu("DigitalDean", "", "Emplacements: " + Inventory.CurrentSize() + "/" + Inventory.MaxSize, 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
+            Menu _menu = new Menu("DigitalDean", "", "Emplacements: " + Inventory.CurrentSize() + "/" + Inventory.MaxSize, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
             _menu.BannerSprite = Banner.Guns;
 
             if (!Inventory.IsEmpty())

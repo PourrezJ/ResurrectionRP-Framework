@@ -7,6 +7,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -128,7 +129,7 @@ namespace ResurrectionRP_Server.Businesses
         #region MainMenu
         public async Task OpenPropsStoreMenu(IPlayer client)
         {
-            Menu menu = new Menu("ClothingMenu", "", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true, BannerStyle);
+            Menu menu = new Menu("ClothingMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, BannerStyle);
             menu.ItemSelectCallback = MenuCallBack;
             menu.Finalizer = MenuClose;
 

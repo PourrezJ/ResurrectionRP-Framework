@@ -41,7 +41,7 @@ namespace ResurrectionRP_Server.Houses
                     House house = HouseMain.GetHouse(player);
                     if (house == null) return;
 
-                    Menu menu = new Menu("House_PurchaseMenu", "", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+                    Menu menu = new Menu("House_PurchaseMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
                     menu.Callback = MenuCallBack;
 
                     menu.Add(new MenuItem("Sortir de la maison", "", "sortir", executeCallback: true));

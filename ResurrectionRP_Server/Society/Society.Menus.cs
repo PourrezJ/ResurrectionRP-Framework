@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Bank;
+using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Factions;
+using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Utils;
+using ResurrectionRP_Server.Utils.Enums;
 using System.Threading.Tasks;
 using System.Linq;
-using AltV.Net;
-using AltV.Net.Elements.Entities;
-using AltV.Net.Enums;
-using ResurrectionRP_Server.Utils.Enums;
-using ResurrectionRP_Server.Models;
-using ResurrectionRP_Server.Factions;
-using ResurrectionRP_Server.Entities.Players;
-using ResurrectionRP_Server.Bank;
-
 
 namespace ResurrectionRP_Server.Society
 {
@@ -30,7 +25,7 @@ namespace ResurrectionRP_Server.Society
 
         public virtual async Task<Menu> OpenServerJobMenu(IPlayer client)
         {
-            Menu menu = new Menu("ID_SocietyMainMenu", SocietyName, "Administration de la société", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+            Menu menu = new Menu("ID_SocietyMainMenu", SocietyName, "Administration de la société", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
             menu.ItemSelectCallback += SocietyCallBackMenu;
 
             if (Owner != null && (client.GetPlayerHandler().StaffRank >= AdminRank.Moderator || FactionManager.IsGouv(client)))

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AltV.Net;
-using AltV.Net.Async;
+﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Utils;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Businesses
 {
@@ -43,7 +43,7 @@ namespace ResurrectionRP_Server.Businesses
                 return;
             }
 
-            Menu _menu = new Menu("Pawn Shop", "", "Emplacements: " + Inventory.CurrentSize() + "/" + Inventory.MaxSize, 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
+            Menu _menu = new Menu("Pawn Shop", "", "Emplacements: " + Inventory.CurrentSize() + "/" + Inventory.MaxSize, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
             _menu.BannerSprite = Banner.Guns;
 
             if (!Inventory.IsEmpty())

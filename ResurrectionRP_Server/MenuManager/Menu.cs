@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server
         public string SubTitle { get; set; } = "";
         public int PosX { get; set; }
         public int PosY { get; set; }
-        public MenuAnchor Anchor { get; set; } = MenuAnchor.BottomRight;
+        public MenuAnchor Anchor { get; set; } = MenuAnchor.MiddleRight;
         public bool NoExit { get; set; }
         public bool EnableBanner { get; set; }
         public bool CallbackOnIndexChange

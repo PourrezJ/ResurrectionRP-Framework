@@ -10,14 +10,15 @@ var loading;
 
 
 export function initialize() {
-    alt.onServer('TeleportToWaypoint', () => {
-        let pos: alt.Vector3 = ForceGroundZ(GetWaypointPos());
+    alt.onServer('TeleportToWaypoint', async () => {
+        game.doScreenFadeOut(10);
+        let pos: alt.Vector3 = await ForceGroundZ(GetWaypointPos());
 
         if (alt.Player.local.vehicle != null)
             game.setEntityCoordsNoOffset(alt.Player.local.vehicle.scriptID, parseInt(pos.x.toString()), parseInt(pos.y.toString()), parseInt(pos.z.toString()), false, false, false);
         else
             game.setEntityCoordsNoOffset(alt.Player.local.scriptID, parseInt(pos.x.toString()), parseInt(pos.y.toString()), parseInt(pos.z.toString()), false, false, false);
-
+        game.doScreenFadeIn(10);
     });
 
     alt.onServer('SetWaypoint', (posx: number, posy: number, override: boolean) => {
@@ -165,7 +166,7 @@ export function initialize() {
         
     }
 
-    function ForceGroundZ(v: alt.Vector3) {
+    async function ForceGroundZ(v: alt.Vector3) {
         let zcoord = 0.0;
         let temp = null;
 
@@ -185,13 +186,14 @@ export function initialize() {
         ];
 
         temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
-        alt.log(temp);
+        await Wait(10);
         zcoord = temp[1];
 
         if (zcoord == 0) {
             for (let i = firstCheck.length - 1; i >= 0; i--)
             {
                 game.requestCollisionAtCoord(x, y, firstCheck[i]);
+                await Wait(10);
             }
             temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
             alt.log(temp);
@@ -202,10 +204,10 @@ export function initialize() {
             for (let i = secondCheck.length - 1; i >= 0; i--)
             {
                 game.requestCollisionAtCoord(x, y, secondCheck[i]);
+                await Wait(10);
             }
             
             temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
-            alt.log(temp);
             zcoord = temp[1];
         }
 
@@ -213,9 +215,9 @@ export function initialize() {
             for (let i = thirdCheck.length - 1; i >= 0; i--)
             {
                 game.requestCollisionAtCoord(x, y, secondCheck[i]);
+                await Wait(10);
             }
             temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
-            alt.log(temp);
             zcoord = temp[1];
         }
         v.z = zcoord + 1;
@@ -438,4 +440,10 @@ export function GetWaypointPos()
 {
     let id: number = game.getFirstBlipInfoId(8);
     return (id > 0) ? game.getBlipInfoIdCoord(id) : new alt.Vector3(0,0,0);
+}
+
+export async function Wait(ms: number) {
+    return new Promise(resolve => {
+        alt.setTimeout(resolve, ms);
+    });
 }

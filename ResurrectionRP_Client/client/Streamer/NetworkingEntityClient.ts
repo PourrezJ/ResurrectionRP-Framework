@@ -100,7 +100,7 @@ export class NetworkingEntityClient {
 
     destroy() {
         this.webview.emit("entityDestroy");
-        clearInterval(this.interval);
+        alt.clearInterval(this.interval);
         if (this.defaultToken) {
             alt.offServer("streamingToken", this.tokenCallback);
         }

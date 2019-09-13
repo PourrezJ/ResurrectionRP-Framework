@@ -86,7 +86,7 @@ export class Interaction {
             }
         });
 
-        alt.on('update', () => {
+        alt.everyTick(() => {
 
             if (game.isPlayerDead(0))
                 return;

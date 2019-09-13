@@ -11,7 +11,7 @@ export function initialize() {
     alt.onServer('OnPlayerLeaveVehicle', hide);
     alt.onServer('OnPlayerEnterVehicle', show);
 
-    alt.on('update', () => {
+    alt.everyTick(() => {
         if ((Date.now() - lastSent) > 33) {
             lastSent = Date.now();
 

@@ -3,6 +3,8 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.NetworkingEntity;
 using MongoDB.Driver;
+using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Entities.Vehicles;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -41,14 +43,20 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Server Events
         private async Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
-            await player.GetPlayerHandler()?.Update();
-            await player.EmitAsync("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32(seat), 50, 50);
+            PlayerHandler ph = player.GetPlayerHandler();
+
+            if (ph != null)
+            {
+                await ph.Update();
+                await player.EmitAsync("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32(seat), 50, 50);
+            }
         }
 
         public static Task OpenXtremVehicle(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return Task.CompletedTask;
+
             return client.GetNearestVehicleHandler()?.OpenXtremMenu(client);
         }
 
@@ -79,14 +87,23 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     await recever.PlaySoundFromEntity(veh.Vehicle, 0, "5_SEC_WARNING", "HUD_MINI_GAME_SOUNDSET");
                 }
 
-                await veh.Update();
+                veh.Update();
             }
         }
 
         private async Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
-            await player.GetPlayerHandler()?.Update();
-            await player.EmitAsync("OnPlayerLeaveVehicle");
+            VehicleHandler vh = vehicle.GetVehicleHandler();
+            PlayerHandler ph = player.GetPlayerHandler();
+
+            if (vh != null)
+                vh.Update();
+
+            if (ph != null)
+            {
+                await ph.Update();
+                await player.EmitAsync("OnPlayerLeaveVehicle");
+            }
         }
         #endregion
 
@@ -244,6 +261,12 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
             }
         }
 
+        public static VehicleHandler GetVehicleHandler(IVehicle vehicle)
+        {
+            GameMode.Instance.VehicleManager.VehicleHandlerList.TryGetValue(vehicle, out VehicleHandler vh);
+            return vh;
+        }
+
         public static VehicleHandler GetVehicleHandlerWithPlate(string Plate)
         {
             foreach(KeyValuePair<IVehicle, VehicleHandler> veh in GameMode.Instance.VehicleManager.VehicleHandlerList)
@@ -251,8 +274,10 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
                 if (veh.Value.Plate == Plate)
                     return veh.Value;
             }
+
             return null;
         }
+
         public static IVehicle GetVehicleWithPlate(string Plate)
         {
             foreach(KeyValuePair<IVehicle, VehicleHandler> veh in GameMode.Instance.VehicleManager.VehicleHandlerList)
@@ -260,10 +285,9 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
                 if (veh.Value.Plate == Plate)
                     return veh.Key;
             }
+
             return null;
         }
-
-
         #endregion
     }
 }

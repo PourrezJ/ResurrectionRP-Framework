@@ -12,7 +12,7 @@ namespace ResurrectionRP_Server.Radio
     {
         #region JsonIgnore
         [JsonIgnore, BsonIgnore]
-        public Entities.Objects.ObjectHandler Objet;
+        public Entities.Objects.Object Objet;
         [JsonIgnore, BsonIgnore]
         public IPlayer Owner;
         [BsonIgnore]

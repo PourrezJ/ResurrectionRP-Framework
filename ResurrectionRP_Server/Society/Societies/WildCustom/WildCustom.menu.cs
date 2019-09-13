@@ -133,7 +133,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
 
             client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_LS_CUSTOMS, SocietyName, "Nettoyage: ~r~Démarrage~w~.", "C'est parti!" );
 
-            Utils.Utils.Delay(20000, true, async () =>
+            Utils.Utils.Delay(20000, true, () =>
             {
                 if (_vehicleBench == null || !_vehicleBench.Exists)
                     return;
@@ -145,7 +145,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                     return;
 
                 vh.Dirt = 0;
-                await vh.Update();
+                vh.Update();
             });
         }
 
@@ -172,7 +172,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                                 vh.PlateHide = true;
                                 client.SendNotificationSuccess("La plaque du véhicule a été retirée du registre");
                                 await ph.Update();
-                                await vh.Update();
+                                vh.Update();
                             }
                         }
                         else
@@ -673,7 +673,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             if (await BankAccount.GetBankMoney(price, $"{SocietyName}: Néons"))
             {
                 vh.NeonsColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
-                await vh.Update();
+                vh.Update();
 
                 client.SendNotificationSuccess($"Vous avez installé des Néons pour la somme de ${price}");
                 await OpenNeonsMenu(client);
@@ -713,7 +713,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
 
                 vh.Mods.AddOrUpdate(_modType, selected, (key, oldvalue) => selected);
                 await _vehicleBench.SetModAsync(_modType, selected);
-                await vh.Update();
+                vh.Update();
                 string str = $"Vous avez installé {modName}";
 
                 if (price != 0)

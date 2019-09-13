@@ -181,10 +181,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (HaveTowVehicle())
             {
                 IVehicle _vehtowed = VehiclesManager.GetVehicleWithPlate(TowTruck.VehPlate);
+
                 if (_vehtowed != null)
-                {
                     await TowVehicle(_vehtowed);
-                }
             }
 
             return Vehicle;
@@ -240,15 +239,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
             return false;
         }
-
-
-        public async Task SetFuel(float fuel)
+        
+        public void SetFuel(float fuel)
         {
             Fuel = fuel;
-            await Update();
+            Update();
         }
 
-        public async Task AddFuel(float fuel)
+        public void AddFuel(float fuel)
         {
             if (Fuel + fuel > FuelMax)
             {
@@ -257,59 +255,54 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             else
                 Fuel += fuel;
 
-            await Update();
+            Update();
         }
-        public async Task UpdateProperties()
+
+        public void UpdateProperties()
         {
             if (Door == null)
                 Door = new VehicleDoorState[7];
 
-
             if (Wheel == null)
                 Wheel = new WheelsStruct();
-            if(Wheel.Wheels == null)
-                Wheel.Wheels = new WheelStruct[await Vehicle.GetWheelsCountAsync()];
 
+            if (Wheel.Wheels == null)
+                Wheel.Wheels = new WheelStruct[Vehicle.WheelsCount];
 
             try
             {
-                this.Dirt = await Vehicle.GetDirtLevelAsync();
-
-                this.Engine = await Vehicle.IsEngineOnAsync();
-                this.EngineHealth = await Vehicle.GetEngineHealthAsync();
-                BodyHealth = await Vehicle.GetBodyHealthAsync();
-                RadioID = await Vehicle.GetRadioStationAsync();
-
-                Tuple<bool, bool, bool, bool> NeonState = await Vehicle.GetNeonActiveAsync();
-                NeonsColor = await Vehicle.GetNeonColorAsync();
+                Dirt = Vehicle.DirtLevel;
+                Engine = Vehicle.EngineOn;
+                EngineHealth = Vehicle.EngineHealth;
+                BodyHealth = Vehicle.BodyHealth;
+                RadioID = Vehicle.RadioStation;
+                bool neonActive = Vehicle.IsNeonActive;
+                Tuple<bool, bool, bool, bool> NeonState = new Tuple<bool, bool, bool, bool>(neonActive, neonActive, neonActive, neonActive);
+                NeonsColor = Vehicle.NeonColor;
 
                 for (byte i = 0; i < 5; i++)
-                {
-                    Door[i] = (VehicleDoorState)(await Vehicle.GetDoorStateAsync(i));
-                }
+                    Door[i] = (VehicleDoorState)Vehicle.GetDoorState(i);
 
-                for (byte i = 0; i < await Vehicle.GetWheelsCountAsync(); i++)
+                for (byte i = 0; i < Vehicle.WheelsCount; i++)
                 {
                     Wheel.Wheels[i] = new WheelStruct();
-
                     Wheel.Wheels[i].Health = Vehicle.GetWheelHealth(i);
                     Wheel.Wheels[i].Burst = Vehicle.IsWheelBurst(i);
                 }
-                Wheel.Type = Vehicle.WheelType;
-                Wheel.Variation = await Vehicle.GetWheelVariationAsync();
 
-                Location.Pos = await Vehicle.GetPositionAsync();
-                Location.Rot = await Vehicle.GetRotationAsync();
+                Wheel.Type = Vehicle.WheelType;
+                Wheel.Variation = Vehicle.WheelVariation;
+
+                Location.Pos = Vehicle.Position;
+                Location.Rot = Vehicle.Rotation;
             }
             catch (Exception ex)
             {
                 Alt.Server.LogError("Error on veicle save: " + ex.ToString());
             }
 
-
             //this.NeonState.Clear();
             //this.NeonState.Add(NeonState.Item1);
-
         }
 
         public Task PutPlayerInVehicle( IPlayer client )
@@ -317,8 +310,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             //TODO
             return Task.CompletedTask;
         }
-
-        
 
         public void SetOwner(IPlayer player) => OwnerID = player.GetSocialClub();
         public void SetOwner(PlayerHandler player) => OwnerID = player.Client.GetSocialClub();

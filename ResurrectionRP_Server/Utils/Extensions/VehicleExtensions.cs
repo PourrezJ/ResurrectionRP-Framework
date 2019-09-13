@@ -13,8 +13,9 @@ namespace ResurrectionRP_Server
     {
         public static VehicleHandler GetVehicleHandler(this IVehicle vehicle)
         {
-            return VehiclesManager.GetVehicleHandlerWithPlate(vehicle.NumberplateText);
+            return VehiclesManager.GetVehicleHandler(vehicle);
         }
+
         public static Vector3 GetVehicleVector(this IVehicle vehicle)
         {
             var pos = vehicle.GetPosition();
@@ -42,22 +43,24 @@ namespace ResurrectionRP_Server
             }
             return endup;
         }
+
         public static List<IPlayer> GetPlayersInRange(this IVehicle client, float Range)
         {
             var vehs = Alt.GetAllPlayers();
             List<IPlayer> endup = new List<IPlayer>();
             var position = client.GetPosition();
             Vector3 osition = new Vector3(position.X, position.Y, position.Z);
+
             foreach (IPlayer veh in vehs)
             {
                 if (!veh.Exists)
                     continue;
                 var vehpos = veh.GetPosition();
+
                 if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= Range)
-                {
                     endup.Add(veh);
-                }
             }
+
             return endup;
         }
 
@@ -96,18 +99,26 @@ namespace ResurrectionRP_Server
 
             return null;
         }
+        public static bool HasData( this IVehicle vehicle, string dataName)
+        {
+            if (vehicle.GetData(dataName, out string test) && test != null)
+                return true;
+
+            return false;
+        }
 
         public static Task RepairAsync(this IVehicle vehicle)
         {
             // TODO
             return Task.CompletedTask;
         }
+
         public static async Task SetModAsync(this IVehicle vehicle, int type, int mod)
         {
             if (mod < 0)
                 Alt.Server.LogError("VehicleExtension: " + "Mod type must not be negativ ! It's a byte !");
+
             await vehicle.SetModAsync((byte)type, (byte)mod);
         }
     }
-
 }

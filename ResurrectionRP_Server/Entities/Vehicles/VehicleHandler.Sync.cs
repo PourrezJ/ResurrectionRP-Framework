@@ -101,10 +101,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public bool HaveTowVehicle() => TowTruck != null;
 
-        public async Task Freeze(bool statut)
+        public void Freeze(bool statut)
         {
             FreezePosition = statut;
-            await UpdateProperties();
+            UpdateProperties();
         }
 
         public async Task TowVehicle(IVehicle vehicle)
@@ -140,11 +140,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             IVehicle temp = VehiclesManager.GetVehicleWithPlate(TowTruck.VehPlate);
             TowTruck = null;
-            await UpdateProperties();
+            UpdateProperties();
 
             await temp.SetPositionAsync(position.Pos);
             await temp.SetRotationAsync(position.Rot);
-            await temp.GetVehicleHandler()?.Update();
+            temp.GetVehicleHandler()?.Update();
 
             return temp;
         }

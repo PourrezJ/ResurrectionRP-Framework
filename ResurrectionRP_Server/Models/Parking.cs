@@ -370,7 +370,7 @@ namespace ResurrectionRP_Server.Models
             if (vh == null)
                 return;
 
-            await client.EmitAsync("toggleControl", false);
+            // client.EmitLocked("toggleControl", false);
 
             try
             {
@@ -399,8 +399,8 @@ namespace ResurrectionRP_Server.Models
                         ListVehicleStored.Add(new Models.ParkedCar(veh.Plate, veh.OwnerID, veh.VehicleManifest.VehicleClass, DateTime.Now)); // Store vehicle into a list
                         veh.IsParked = true;
                     }
-                    
-                    await veh.Update();
+
+                    veh.Update();
                     await veh.Delete(false);
                     await OnVehicleStored?.Invoke(client, veh); // call event for success storage
                 }
@@ -415,7 +415,7 @@ namespace ResurrectionRP_Server.Models
                 Alt.Server.LogError("StoreVehicle" + ex);
             }
 
-            await client.EmitAsync("toggleControl", true);
+            // await client.EmitAsync("toggleControl", true);
         }
 
         public bool RemoveVehicle(VehicleHandler veh)

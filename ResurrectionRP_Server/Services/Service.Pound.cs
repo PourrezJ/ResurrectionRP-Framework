@@ -147,8 +147,8 @@ namespace ResurrectionRP_Server.Services
                                 _vh.TowTruck = null;
                                 PoundVehicleList.Add(new ParkedCar(_towedvehicle.Plate, _towedvehicle.OwnerID , _towedvehicle.VehicleManifest.VehicleClass, DateTime.Now));
                                 _towedvehicle.IsInPound = true;
-                                await _vh.UpdateProperties();
-                                await _towedvehicle.Update();
+                                _vh.UpdateProperties();
+                                _towedvehicle.Update();
                                 await _towedvehicle.Delete(true);
                                 await MenuManager.CloseMenu(client);
                             }

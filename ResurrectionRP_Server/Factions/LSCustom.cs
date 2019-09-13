@@ -111,7 +111,7 @@ namespace ResurrectionRP_Server.Factions
                 await vehicle.SetSecondaryColorAsync(veh.SecondaryColor);
 
                 veh.Door[(byte)DoorID.DoorHood] = (byte)DoorState.DoorClosed;
-                await veh.Update();
+                veh.Update();
             }
         }
 
@@ -205,7 +205,8 @@ namespace ResurrectionRP_Server.Factions
                     await vehicle.SetSecondaryColorAsync((byte)color);
                     vh.SecondaryColor = (byte)color;
                 }
-                await vh.Update();
+
+                vh.Update();
                 client.SendNotificationSuccess("Peinture effectuée!");
             }
             else
@@ -381,8 +382,7 @@ namespace ResurrectionRP_Server.Factions
                             _vh.Door = new VehicleDoorState[6] { 0, 0, 0, 0, 0, 0 };
                             _vh.Window = new WindowState[6] { 0, 0, 0, 0, 0, 0 };
                             _vh.Wheel = new WheelsStruct();
-                            await _vh.Update();
-                            await _vh.Update();
+                            _vh.Update();
                         });
 
                         await UpdateDatabase();
@@ -399,7 +399,7 @@ namespace ResurrectionRP_Server.Factions
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.","C'est parti!");
                         var pos = await client.GetPositionAsync();
 
-                        await _vh.Freeze(true);
+                        _vh.Freeze(true);
                         var bite = (new Vector3(client.Position.X, client.Position.Y, client.Position.Z)).Forward((await veh.GetRotationAsync()).Yaw, 2.2f);
                         await client.SetPositionAsync(bite);
                         await client.SetRotationAsync(await veh.GetRotationAsync());
@@ -410,11 +410,11 @@ namespace ResurrectionRP_Server.Factions
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~g~Terminé~w~.","Il est niquel!");
 
                             _vh.EngineHealth = 1000;
-                            await _vh.Update();
-                            await _vh.UpdateProperties();
+                            _vh.Update();
+                            _vh.UpdateProperties();
                             await client.SetPositionAsync(pos);
                             await client.StopAnimationAsync();
-                            await _vh.Freeze(false);
+                            _vh.Freeze(false);
                         });
 
                         await UpdateDatabase();
@@ -429,11 +429,11 @@ namespace ResurrectionRP_Server.Factions
                     {
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~r~Démarrage~w~.","C'est parti!" );
 
-                        Utils.Utils.Delay(20000, true, async () =>
+                        Utils.Utils.Delay(20000, true, () =>
                         {
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~g~Terminé~w~.","Elle est niquel!");
                             _vh.Dirt = 0;
-                            await _vh.Update();
+                            _vh.Update();
                         });
 
                         await UpdateDatabase();
@@ -448,11 +448,11 @@ namespace ResurrectionRP_Server.Factions
                     {
                         client.SendNotificationPicture( CharPicture.CHAR_LS_CUSTOMS ,"Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.", "Alors ce tuyau va où déjà?");
 
-                        Utils.Utils.Delay(20000, true, async () =>
+                        Utils.Utils.Delay(20000, true, () =>
                         {
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~g~Terminé~w~.","Le moteur démarre, c'est déjà ça!");
                             _vh.EngineHealth = 400;
-                            await _vh.Update();
+                            _vh.Update();
                         });
 
                         await UpdateDatabase();
@@ -553,12 +553,12 @@ namespace ResurrectionRP_Server.Factions
                 case "ID_detach":
                     var rot = await veh.GetRotationAsync();
                     await vh.UnTowVehicle(new Location((new Vector3(client.Position.X, client.Position.Y, client.Position.Z)).Forward(rot.Yaw, -10), rot));
-                    await vh.Update();
+                    vh.Update();
                     await XMenuManager.XMenuManager.CloseMenu(client);
                     break;
                 case "ID_atelier":
                     await vh.UnTowVehicle(LSCustom.ReparZoneVL);
-                    await vh.Update();
+                    vh.Update();
 
                     await XMenuManager.XMenuManager.CloseMenu(client);
                     break;

@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
 
                 if (veh != null)
-                    await veh.Update();
+                    veh.Update();
 
                 if ((DateTime.Now - LastUpdate).Minutes >= 1)
                 {

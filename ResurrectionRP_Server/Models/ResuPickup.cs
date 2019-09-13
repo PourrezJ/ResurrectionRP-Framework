@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.Models
     public class ResuPickup
     {
         [JsonIgnore]
-        public Entities.Objects.ObjectHandler Object;
+        public Entities.Objects.Object Object;
         /*[JsonIgnore]
         public ITextLabel Label;*/
 

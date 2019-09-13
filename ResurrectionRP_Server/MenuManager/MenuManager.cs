@@ -23,15 +23,14 @@ namespace ResurrectionRP_Server
             AltAsync.OnClient("MenuManager_ListChanged", MenuManager_ListChanged);
             AltAsync.OnClient("MenuManager_BackKey", MenuManager_BackKey);
             AltAsync.OnClient("MenuManager_ClosedMenu", MenuManager_ClosedMenu);
-            AltAsync.OnPlayerDisconnect += OnPlayerDisconnect;
         }
+
         #endregion
 
         #region API Event handlers
-        private Task OnPlayerDisconnect(ReadOnlyPlayer player, IPlayer origin, string reason)
+        public static void OnPlayerDisconnect(IPlayer player)
         {
             _clientMenus.TryRemove(player, out _);
-            return Task.CompletedTask;
         }
         #endregion
 

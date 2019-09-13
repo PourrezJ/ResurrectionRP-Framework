@@ -7,12 +7,12 @@ app.config(['$compileProvider', function ($compileProvider) {
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|package):/);
 }]);
 
-$(() => {
+window.addEventListener('load', function () {
     if ('alt' in window) {
         alt.on("CharCreatorLoad", loadChar);
+        alt.emit('CreatorLoad');
     }
 });
-
 
 function loadChar() {
     var $scope = angular.element($("body")).scope();

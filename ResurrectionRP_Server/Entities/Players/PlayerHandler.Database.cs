@@ -3,6 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Models;
 using System;
 using System.Numerics;
@@ -33,23 +34,20 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 VehicleHandler veh = null;
 
-                // lock (Client)
+                Health = await Client.GetHealthAsync();
+                IVehicle vehicle = await Client.GetVehicleAsync();
+
+                if (vehicle != null && vehicle.Exists)
                 {
-                    Health = await Client.GetHealthAsync();
-                    IVehicle vehicle = await Client.GetVehicleAsync();
+                    if (await vehicle.GetDriverAsync() == Client)
+                        veh = vehicle.GetVehicleHandler();
 
-                    if (vehicle != null && vehicle.Exists)
-                    {
-                        if (await vehicle.GetDriverAsync() == Client)
-                            veh = vehicle.GetVehicleHandler();
-
-                        Location = new Location(await vehicle.GetPositionAsync(), await vehicle.GetRotationAsync());
-                    }
-                    // else if (HouseManager.IsInHouse(Client))
-                    //     Location = new Location(HouseManager.GetHouse(Client).Position, new Vector3());
-                    else
-                        Location = new Location(await Client.GetPositionAsync(), await Client.GetRotationAsync());
+                    Location = new Location(await vehicle.GetPositionAsync(), await vehicle.GetRotationAsync());
                 }
+                else if (HouseManager.IsInHouse(Client))
+                    Location = new Location(HouseManager.GetHouse(Client).Position, new Vector3());
+                else
+                    Location = new Location(await Client.GetPositionAsync(), await Client.GetRotationAsync());
 
                 if (veh != null)
                     veh.Update();

@@ -49,11 +49,13 @@ export function OpenCharCreator() {
 
         view = new alt.WebView("http://resource/client/cef/charcreator/index.html");
 
-        alt.setTimeout(() => view.emit("CharCreatorLoad"), 1000);
-
         view.focus();
         alt.toggleGameControls(false);
-        
+
+        view.on("CreatorLoad", () => {
+            alt.setTimeout(() => view.emit("CharCreatorLoad"), 1000);
+        });
+
         view.on("setGender", (gender: any) => {
             alt.setModel(gender == 1 ? 'mp_f_freemode_01' : 'mp_m_freemode_01');
             game.setEntityCoords(alt.Player.local.scriptID, playerPoint.x, playerPoint.y, playerPoint.z, false, false, false, false);

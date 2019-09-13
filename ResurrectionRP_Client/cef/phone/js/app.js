@@ -9,6 +9,7 @@ app.config(['$compileProvider', function ($compileProvider) {
 app.run(function ($rootScope, amMoment) {
     amMoment.changeLocale('fr');
     $rootScope.phoneSettings = JSON.parse(localStorage.getItem("phoneSettings"));
+    console.log($rootScope.phoneSettings);
     $rootScope.newMessagesCount = (urlParams.get("newMessages") == null ? 0 : parseInt(urlParams.get("newMessages")));
     alt.emit('CanClose', true);
 });

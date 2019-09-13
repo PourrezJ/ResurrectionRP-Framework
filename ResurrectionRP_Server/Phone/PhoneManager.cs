@@ -72,10 +72,10 @@ namespace ResurrectionRP_Server.Phone
 
 
                     await client.PlayAnimation((await client.GetVehicleAsync() != null) ? "cellphone@in_car@ds" : (await client.GetModelAsync() == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_read_base", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.Loop | AnimationFlags.SecondaryTask));
-                    await Task.Delay(500);
+                    await Task.Delay(200);
                     long newMessagesCount = GetNewMessagesOnConversationsCount(phone.PhoneNumber);
-                    await client.EmitAsync("OpenPhone", newMessagesCount, JsonConvert.SerializeObject(phone.Settings), incomingCall, contactNumber, contactName);
-                    await client.EmitAsync("ShowCursor", true);
+                    client.EmitLocked("OpenPhone", newMessagesCount, JsonConvert.SerializeObject(phone.Settings), incomingCall, contactNumber, contactName);
+                    client.EmitLocked("ShowCursor", true);
 
                     return true;
                 }

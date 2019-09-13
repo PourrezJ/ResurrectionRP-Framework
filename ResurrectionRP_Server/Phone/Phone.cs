@@ -189,8 +189,8 @@ namespace ResurrectionRP_Server.Phone
             var calledPlayer = GetClientWithPhoneNumber(phoneNumber);
             if (calledPlayer != null)
             {
-                calledPlayer.ResetData("InToPhoneCommunication");
-                player.ResetData("InToPhoneCommunication");
+                 calledPlayer.ResetData("InToPhoneCommunication");
+                 player.ResetData("InToPhoneCommunication");
                  calledPlayer.EmitLocked("canceledCall");
                  player.EmitLocked("canceledCall");
             }
@@ -202,8 +202,14 @@ namespace ResurrectionRP_Server.Phone
 
             if (calledPlayer != null)
             {
-                 calledPlayer.EmitLocked("endedCall");
-                 player.EmitLocked("endedCall");
+                if (!calledPlayer.Exists)
+                    return;
+
+                if (player.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName))
+                    calledPlayer.EmitLocked("endedCall", tsName);
+
+                if (calledPlayer.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsNamee))
+                    player.EmitLocked("endedCall", tsNamee);
 
                 calledPlayer.ResetData("InToPhoneCommunication");
                 player.ResetData("InToPhoneCommunication");

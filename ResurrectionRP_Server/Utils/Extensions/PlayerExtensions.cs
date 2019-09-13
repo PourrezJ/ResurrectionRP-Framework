@@ -13,7 +13,6 @@ using Newtonsoft.Json;
 
 namespace ResurrectionRP_Server
 {
-
     public static class PlayerExtensions
     {
         public static string GetSocialClub(this IPlayer player)
@@ -23,26 +22,6 @@ namespace ResurrectionRP_Server
 
             throw new NullReferenceException("SocialClubMising");
         }
-
-        public static string GetTeamspeakID(this IPlayer player)
-        {
-            var ID = "NothingAtAll";
-
-            if (player.GetData<string>("PLAYER_TEAMSPEAK_IDENT", out string data))
-                ID = data;
-
-            return ID;
-        }
-
-        public static ushort GetTeamspeakClientID(this IPlayer player)
-        {
-            ushort ID = 0;
-            if (player.GetData("VOICE_TS_ID", out ushort data))
-                ID = data;
-            return ID;
-        }
-
-
 
         public static void SetCloth(this IPlayer client, ClothSlot level, int drawable, int texture, int palette)
         {

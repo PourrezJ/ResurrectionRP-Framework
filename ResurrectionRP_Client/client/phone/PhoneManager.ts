@@ -26,6 +26,8 @@ export default class PhoneManager {
             else
                 this.browser = new alt.WebView('http://resource/client/cef/phone/home.html?newMessages=' + idk0 + '?phoneSettings=' + idk1);
 
+            alt.showCursor(true);
+
             this.browser.focus();
 
             this.browser.on("SavePhoneSettings", (arg) => alt.emitServer("PhoneMenuCallBack", "SavePhoneSettings", arg));

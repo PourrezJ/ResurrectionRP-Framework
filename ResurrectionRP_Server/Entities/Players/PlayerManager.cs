@@ -115,7 +115,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             if (GameMode.Instance.PhoneManager.PhoneClientList.ContainsKey(player))
             {
-                GameMode.Instance.PhoneManager.PhoneClientList.Remove(player);
+                GameMode.Instance.PhoneManager.PhoneClientList.TryRemove(player, out List<Phone.Phone> phoneList);
             }
 
             if (HouseManager.IsInHouse(player))

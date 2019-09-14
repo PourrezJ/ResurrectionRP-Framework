@@ -51,6 +51,12 @@ export class Interaction {
                     return;
                 }
 
+                if (game.isAnyObjectNearPoint(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, 2, true) &&
+                    game.getClosestObjectOfType(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, 2, game.getHashKey("prop_money_bag_01"), false, true, false) != 0) {
+                    alt.emit("interactWithPickableObject", game.getClosestObjectOfType(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, 2, game.getHashKey("prop_money_bag_01"), false, true, false) );
+
+                }
+
                 if (raycastResult.isHit && raycastResult.entityType == 2) {
                     var vehicle: alt.Vehicle = alt.Vehicle.all.find(v => v.scriptID == raycastResult.hitEntity);
 
@@ -65,10 +71,6 @@ export class Interaction {
                         return;
 
                     alt.emitServer('OpenXtremPlayer', player.id);
-                } else if (raycastResult.isHit && raycastResult.entityType == 3) {
-                    if (Interaction.isAtm(raycastResult.entityHash)) {
-                        alt.emitServer('OpenAtmMenu');
-                    }
                 }
                 else
                     alt.emitServer('OnKeyPress', key);
@@ -95,12 +97,17 @@ export class Interaction {
                 return;
 
             raycastResult = Raycast.line(2, -1, alt.Player.local.scriptID);
-
             if (raycastResult.isHit && raycastResult.entityType == 2 && alt.Player.local.vehicle == null) {
                 alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le véhicule", 100)
             } else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isAtm(raycastResult.entityHash)) {
                 alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec l'ATM", 100)
             }
+
+            if (game.isAnyObjectNearPoint(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, 2, true) &&
+                game.getClosestObjectOfType(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, 2, game.getHashKey("prop_money_bag_01"), false, true, false) != 0
+            )
+                alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour ramasser l'objet", 100);
+
         });
     }
 
@@ -114,5 +121,10 @@ export class Interaction {
         }
 
         return false;
+    }
+    public static isPickable(entityHash: number): boolean {
+        if (game.objectValueGetString(entityHash, "pickup")[0] == "")
+            return false;
+        return true;
     }
 }

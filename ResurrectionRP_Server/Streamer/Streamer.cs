@@ -60,7 +60,7 @@ namespace ResurrectionRP_Server.Streamer
         public Object AddEntityObject(Object data)
         {
             INetworkingEntity item = AltNetworking.CreateEntity(data.position.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());
-            ListEntities.TryAdd(EntityNumber, item);
+            ListEntities.TryAdd(data.id, item);
             return data;
         }
 
@@ -86,7 +86,7 @@ namespace ResurrectionRP_Server.Streamer
         {
             var data = new TextLabel(label, font, r, g, b, a, EntityNumber++);
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, drawDistance, data.export());
-            ListEntities.TryAdd(EntityNumber, item);
+            ListEntities.TryAdd(data.id, item);
             return data;
         }
 

@@ -19,7 +19,7 @@ namespace ResurrectionRP_Server.Models
 
         public ResuPickupManager()
         {
-            Alt.On("ResuPickup_Take", (IPlayer client, object[] args) =>ResuPickup_Take(client, args));
+            AltAsync.OnClient("ObjectManager_InteractPickup", ObjectManager_InteractPickup);
         }
 
         private Task ResuPickup_Take(IPlayer client, object[] args)
@@ -35,18 +35,20 @@ namespace ResurrectionRP_Server.Models
             }
             return Task.CompletedTask;
         }
-        /*
-        public static ResuPickup CreatePickup(Vector3 pos, Item item, int quantite, int hash = 1108364521, bool hide = false)
+        public async Task ObjectManager_InteractPickup(IPlayer client, object[] args)
         {
-            ResuPickup pickup = new ResuPickup(hash, item, quantite, pos, hide);
-            ResuPickupList.Add(pick up);
-            return pickup;
-        }*/
-
-/*        public static ResuPickup GetResuPickup(int netID)
+            if (!client.Exists)
+                return;
+            
+            int oid = int.Parse(args[0].ToString());
+            var resupickup = GetResuPickup(oid);
+            if (resupickup != null)
+                await resupickup.Take(client);
+        }
+        public static ResuPickup GetResuPickup(int netID)
         {
-            return ResuPickupList.Find(r => r.Object.NetHandle == netID) ?? null;
-        }*/
+            return ResuPickupList.Find(r => r.Object.id == netID) ?? null;
+        }
     }
 
     public class ResuPickup
@@ -61,7 +63,6 @@ namespace ResurrectionRP_Server.Models
         public int Quantite;
         public Vector3 Position;
         public bool Hide;
-        public string Id;
 
         public delegate Task TakeDelegate(IPlayer client, ResuPickup pickup);
         [JsonIgnore]
@@ -73,7 +74,7 @@ namespace ResurrectionRP_Server.Models
 
         public static ResuPickup CreatePickup(string model, Item item, int quantite, Vector3 position, bool hide, TimeSpan endlife, uint dimension = ushort.MaxValue)
         {
-            Entities.Objects.Object obje = Entities.Objects.ObjectManager.CreateObject(model, position, new Vector3(), true, true, dimension, GenerateRandomID());
+            Entities.Objects.Object obje = Entities.Objects.ObjectManager.CreateObject(model, position, new Vector3(), true, true, dimension);
             var obj = new ResuPickup()
             {
                 Hash = Alt.Hash(model),
@@ -81,14 +82,12 @@ namespace ResurrectionRP_Server.Models
                 Quantite = quantite,
                 Position = position,
                 Hide = hide,
-                Object = obje,
-                Id = obje.pickup
+                Object = obje
             };
 
             string str = $"{item.name} x{quantite}";
             if (!hide) obj.Label =
-                    GameMode.Instance.Streamer.AddEntityTextLabel(str, obj.Position + new Vector3(0,0,0.5f), 0, 255,255,255,120, 3);
-            //obj.Object.IObject.SetSharedData("ItemDrop", obj);
+                    GameMode.Instance.Streamer.AddEntityTextLabel(str, obj.Position + new Vector3(0, 0, 0.5f), 0, 255, 255, 255, 120, 3);
 
             ResuPickupManager.ResuPickupList.Add(obj);
 
@@ -128,21 +127,19 @@ namespace ResurrectionRP_Server.Models
         }
 
         public void Delete()
-        {/**
+        {
             AltAsync.Do(() =>
             {
                 if (Object != null)
                 {
-                    if (Object.IObject != null && Object.IObject.Exists)
-                    {
-                        Object.IObject.Destroy();
-                        Label.Destroy(); TODO
+                    Object.Destroy();
+                    Label.Destroy(); 
 
-                        if (ResuPickupManager.ResuPickupList.Contains(this))
-                            ResuPickupManager.ResuPickupList.Remove(this);
-                    }
+                    if (ResuPickupManager.ResuPickupList.Contains(this))
+                        ResuPickupManager.ResuPickupList.Remove(this);
+                    
                 }
-            });**/
+            });
         }
     }
 }

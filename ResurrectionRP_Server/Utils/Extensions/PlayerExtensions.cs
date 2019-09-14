@@ -332,27 +332,20 @@ namespace ResurrectionRP_Server
             return false;
         }
 
-        public static async Task Revive(this IPlayer client)
+        public static async Task Revive(this IPlayer client, ushort health = 200, Vector3? position = null)
         {
-            await AltAsync.Do(() =>
-            {
-                client.Spawn(new Position(client.GetPosition().X, client.GetPosition().Y, client.GetPosition().Z));
-                client.Resurrect();
-                client.SetHealthAsync(5);
-            });
+            Vector3 pos = position ?? await client.GetPositionAsync();
+            await client.SpawnAsync(new Position(pos.X, pos.Y, pos.Z));
+            await client.SetHealthAsync(health);
+            client.Resurrect();
 
-            
-            var ph = client.GetPlayerHandler();
-            //if (ph != null)
-            //await ph.SetDead(false); TODO
-            /*
-                        if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
-                        {
-                            foreach (var medecin in await GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
-                            {
-                                await medecin.CallAsync("ONU_BlesseEnd", client.Id);
-                            }
-                        }*/
+            if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
+            {
+                foreach (var medecin in GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
+                {
+                    medecin.EmitLocked("ONU_BlesseEnd", client.Id);
+                }
+            }
         }
 
         public static bool HasVehicleKey(this IPlayer client, string plate)

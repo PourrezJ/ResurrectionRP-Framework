@@ -2,6 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -103,7 +104,7 @@ namespace ResurrectionRP_Server.EventHandlers
                         if (OnPlayerInteractClothingShop != null)
                             await OnPlayerInteractClothingShop.Invoke(clothing, client);
                     }
-                    else if (colshape.GetData("Teleport", out string TeleportID) && TeleportID != null)
+                    else if (colshape.GetData("Teleport", out string TeleportID) && TeleportID != null )
                     {
                         if (key != 69)
                             return;

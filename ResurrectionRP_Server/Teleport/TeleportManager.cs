@@ -32,6 +32,7 @@ namespace ResurrectionRP_Server.Teleport
 
             colshape.GetData("Teleport", out string datad);
             var data = JsonConvert.DeserializeAnonymousType(datad, definition);
+            Alt.Server.LogError(JsonConvert.SerializeObject(data));
             Teleport teleport = GetTeleport(data.ID);
 
             if (teleport != null)

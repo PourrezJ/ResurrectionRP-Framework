@@ -72,24 +72,24 @@ namespace ResurrectionRP_Server.Teleport
 
             // Entrée
 
-            var enterColshape =Alt.CreateColShapeCylinder(entree.Pos, scale, 3f);
+            var enterColshape =Alt.CreateColShapeCylinder(entree.Pos - new Vector3(0,0,1), scale, 3f);
             Marker.CreateMarker(MarkerType.VerticalCylinder, entree.Pos - new Vector3(0.0f, 0.0f, 1.5f), new Vector3(1, 1, 1));
-            enterColshape.SetData("Teleport", new
+            enterColshape.SetData("Teleport", JsonConvert.SerializeObject(new
             {
                 ID = teleport.ID,
                 State = TeleportState.Enter
-            });
+            }));
 
             // Multiple Sorti
             foreach (var sortipos in sorti)
             {
                 var sortiColshape = Alt.CreateColShapeCylinder(sortipos.Location.Pos, scale, 1f);
                 Marker.CreateMarker(MarkerType.VerticalCylinder, sortipos.Location.Pos - new Vector3(0, 0, 1f), new Vector3(1, 1, 1), Color.FromArgb(opacite, 255, 255, 255));
-                sortiColshape.SetData("Teleport", new
+                sortiColshape.SetData("Teleport", JsonConvert.SerializeObject( new
                 {
-                    ID = teleport.ID,
+                    teleport.ID,
                     State = TeleportState.Out
-                });
+                }) );
             }
 
             GameMode.Instance.TeleportManager.Teleports.Add(teleport);

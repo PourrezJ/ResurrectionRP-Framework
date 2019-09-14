@@ -69,6 +69,12 @@ export class Hud {
             }
             this._advert = 0;
 
+            let health = (game.getEntityHealth(alt.Player.local.scriptID) - 100);
+            if (health <= 70) {
+                var blood = (1 - (health / 70)) * 255;
+                game.drawSprite("resurrection_images", "blood_screen", 0.5, 0.5, 1, 1, 0, 255, 255, 255, blood, false);
+            }
+
             if (this.Hide)
                 return;
 

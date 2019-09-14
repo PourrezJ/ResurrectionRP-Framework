@@ -34,7 +34,6 @@ const init = async () => {
             Location: string
         ) => {
             PlayerCustomization.init();
-            new Notify();
             GameClass = new Game(StaffRank, IdentiteName, Money, Thirst, Hunger, AnimSettings, Time, Weather, WeatherWind, WeatherWindDirection, isDebug, Location);
             game.freezeEntityPosition(alt.Player.local.scriptID, false);
         });
@@ -67,6 +66,7 @@ const init = async () => {
         utils.initialize();
         login.init();
         xtreamMenu.init();
+        new Notify();
         new NetworkingEntityClient();
         new Admin();
         menuManager();

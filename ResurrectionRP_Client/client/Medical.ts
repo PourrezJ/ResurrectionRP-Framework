@@ -151,10 +151,10 @@ export class Medical {
         });
 
         alt.onServer("ResurrectPlayer", () => {
-            //Game.Instance.KeyHandler.Remove((int)ConsoleKey.Y); TODO
-            //Game.Instance.KeyHandler.Remove((int)ConsoleKey.R);
 
+            alt.off('keydown', this.KeyHandler);
             game.setPlayerHealthRechargeMultiplier(alt.Player.local.scriptID, 0);
+
             //game.animpostfxStop("DeathFailMPIn")
             //game.setCamEffect(0);
 
@@ -165,7 +165,6 @@ export class Medical {
             game.setFadeOutAfterDeath(false);
             game.setEntityHealth(alt.Player.local.scriptID, 100, 0);
         });  
-
         alt.everyTick(this.OnTick.bind(this));
     }
 

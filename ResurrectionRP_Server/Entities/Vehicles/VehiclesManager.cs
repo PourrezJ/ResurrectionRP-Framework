@@ -174,10 +174,10 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
 
             return veh;
         }
-        public static bool IsVehicleInSpawn(Models.Location location, float distance = 4, uint dimension = ushort.MaxValue) =>
+        public static bool IsVehicleInSpawn(Models.Location location, float distance = 4, short dimension = short.MaxValue) =>
             IsVehicleInSpawn(location.Pos, distance, dimension);
 
-        public static bool IsVehicleInSpawn(Vector3 location, float distance = 4, uint dimension = ushort.MaxValue)
+        public static bool IsVehicleInSpawn(Vector3 location, float distance = 4, short dimension = short.MaxValue)
         {
             var vehHandler = GetNearestVehicle(location, distance, dimension);
 
@@ -203,10 +203,10 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
                 return generatedPlate = new string(stringChars);
             } while (!IsPlateUnique(generatedPlate));
         }
-        public static async Task<IVehicle> GetNearestVehicle(IPlayer client, float distance = 3.0f, uint dimension = (uint)short.MaxValue) =>
+        public static async Task<IVehicle> GetNearestVehicle(IPlayer client, float distance = 3.0f, short dimension = short.MaxValue) =>
             GetNearestVehicle(await client.GetPositionAsync(), distance, dimension);
 
-        public static IVehicle GetNearestVehicle(Vector3 position, float distance = 3.0f, uint dimension = (uint)short.MaxValue)
+        public static IVehicle GetNearestVehicle(Vector3 position, float distance = 3.0f, short dimension = short.MaxValue)
         {
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
             // ICollection<IVehicle> vehs = Alt.GetAllVehicles();

@@ -157,7 +157,7 @@ namespace ResurrectionRP_Server.Farms
             }
 
             if (Harvest_BlipPosition != new Vector3(0, 0, 0))
-                Harvest_Blip = BlipsManager.CreateBlip(Harvest_Name, Harvest_BlipPosition, 1, Harvest_BlipSprite);
+                Harvest_Blip = BlipsManager.CreateBlip(Harvest_Name, Harvest_BlipPosition, BlipColor, Harvest_BlipSprite);
 
 
             #endregion

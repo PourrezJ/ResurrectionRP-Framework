@@ -2,6 +2,7 @@
 import * as game from 'natives';
 import PhoneManager from 'client/phone/PhoneManager';
 import * as chat from 'client/chat/chat';
+import * as utils from 'client/Utils/Utils';
 import Raycast, * as raycast from 'client/Utils/Raycast';
 
 export class NetworkingEntityClient {
@@ -152,7 +153,7 @@ export class NetworkingEntityClient {
     onStreamIn = async (entity: object) => {
         switch (entity["data"]["entityType"]["intValue"]) {
             case 0:
-                await alt.loadModelAsync(entity["data"]["model"]["uintValue"]);
+                await utils.loadModelAsync(entity["data"]["model"]["uintValue"]);
                 this.streamPed(
                     entity["data"]["id"]["intValue"],
                     entity["data"]["type"]["intValue"],
@@ -162,11 +163,11 @@ export class NetworkingEntityClient {
                     entity["position"]["z"],
                     entity["data"]["heading"]["doubleValue"],
                     entity["data"]["freeze"]["boolValue"],
-                    entity["data"]["invicible"]["boolValue"]
+                    entity["data"]["invincible"]["boolValue"]
                 );
                 break;
             case 1:
-                await alt.loadModelAsync(game.getHashKey( entity["data"]["model"]["stringValue"]));
+                await utils.loadModelAsync(game.getHashKey( entity["data"]["model"]["stringValue"]));
                 await this.streamObject(
                     entity["data"]["id"]["intValue"],
                     game.getHashKey( entity["data"]["model"]["stringValue"]),
@@ -236,15 +237,20 @@ export class NetworkingEntityClient {
         }
     }
 
-    private streamPed = async (id: number, type: number, model: any, x: number, y: number, z: number, heading: number, freeze: boolean, invicible: boolean) => {
-        var entityId = game.createPed(type, model, x, y, z, heading, false, true);
-        if (entityId != 0) {/*
-            game.setEntityInvincible(entityId, invicible);
-            game.freezeEntityPosition(entityId, freeze); // REND LE PED INVISIBLE ??*/
+    private streamPed = async (id: number, type: number, model: any, x: number, y: number, z: number, heading: number, freeze: boolean, invincible: boolean) => {
+        var entityId = game.createPed(type, model, x, y, z - 1, heading, false, false); 
+
+        if (entityId != 0) {
+            game.setEntityInvincible(entityId, invincible);
+            game.setEntityCanBeDamaged(entityId, invincible);
+            game.freezeEntityPosition(entityId, freeze);
+            game.setEntityDynamic(entityId, freeze);
+            game.setEntityAsMissionEntity(entityId, true, true);
         }
-        alt.logWarning("Streaming in new ped, entity ID " + entityId + " | id global : " + id + "| heading : " + JSON.stringify(heading));
-        alt.logWarning("Entity type: " + type + " Model : " + model);
-        alt.logWarning("Ped is invicible : " + JSON.stringify(invicible) + " | is frozen : " + JSON.stringify(freeze));
+
+        //alt.logWarning("Streaming in new ped, entity ID " + entityId + " | id global : " + id + "| heading : " + JSON.stringify(heading));
+        //alt.logWarning(`Entity type:  ${type} || Model : ${model}`);
+        //alt.logWarning("Ped is invicible : " + JSON.stringify(invincible) + " | is frozen : " + JSON.stringify(freeze));
         this.EntityList[id] = entityId;
     }
 

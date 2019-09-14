@@ -23,7 +23,7 @@ namespace ResurrectionRP_Server.Entities.Peds
         public int ID { get; private set; }
         public PedModel Model;
         public Streamer.Data.PedType PedType;
-        public uint Dimension;
+        public short Dimension;
         public Vector3 Position;
         public float Rotation;
         public bool Freeze;
@@ -34,7 +34,6 @@ namespace ResurrectionRP_Server.Entities.Peds
             get => VehicleID != uint.MaxValue;
         }
 
-        public bool Visible;
         public bool CanRagdoll;
         public bool Invincible;
         public IPlayer Owner;
@@ -43,7 +42,7 @@ namespace ResurrectionRP_Server.Entities.Peds
         [JsonIgnore]
         public Dictionary<dynamic, dynamic> Variable = new Dictionary<dynamic, dynamic>();
 
-        public static Ped CreateNPC(PedModel pedHash, Streamer.Data.PedType pedType,Vector3 startPosition, float facingAngle, uint dimension = (uint)ushort.MaxValue, bool freeze = true, bool visible = true, bool invincible = true, bool canRagdoll = false)
+        public static Ped CreateNPC(PedModel pedHash, Streamer.Data.PedType pedType,Vector3 startPosition, float facingAngle, short dimension = GameMode.GlobalDimension, bool freeze = true, bool invincible = true, bool canRagdoll = false)
         {
             var ped = new Ped()
             {
@@ -52,7 +51,6 @@ namespace ResurrectionRP_Server.Entities.Peds
                 Position = startPosition,
                 Rotation = facingAngle,
                 Freeze = freeze,
-                Visible = visible,
                 Dimension = dimension,
                 CanRagdoll = canRagdoll,
                 PedType = pedType
@@ -71,7 +69,7 @@ namespace ResurrectionRP_Server.Entities.Peds
             data["type"] = (int)this.PedType;
             data["heading"] = this.Rotation;
             data["freeze"] = this.Freeze;
-            data["invicible"] = this.Invincible;
+            data["invincible"] = this.Invincible;
             data["entityType"] = (int)Streamer.Data.EntityType.Ped;
             data["id"] = this.ID;
             return data;

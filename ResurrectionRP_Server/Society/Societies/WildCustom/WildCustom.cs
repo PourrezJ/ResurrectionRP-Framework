@@ -58,7 +58,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             await base.Load();
 
             Location pnjPos = new Location(new Vector3(106.0419f, 6627.597f, 31.78723f), new Vector3(0, 0, 237.60875f));
-            var npc = Entities.Peds.Ped.CreateNPC(PedModel.Benny,Streamer.Data.PedType.Human, pnjPos.Pos, pnjPos.Rot.Z, (uint)GameMode.GlobalDimension);
+            var npc = Entities.Peds.Ped.CreateNPC(PedModel.Benny,Streamer.Data.PedType.Human, pnjPos.Pos, pnjPos.Rot.Z, GameMode.GlobalDimension);
             npc.NpcInteractCallBack = OnInteractWithPnj;
 
             Vector3 workZonePos = new Vector3(111.3728f, 6625.725f, 31.78725f);

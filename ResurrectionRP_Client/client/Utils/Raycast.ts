@@ -1,16 +1,16 @@
-﻿import { Player, Vector3 } from "alt";
+﻿import * as alt from "alt";
 import * as native from 'natives';
 
 interface RaycastResultInterface {
     isHit: boolean;
-    pos: Vector3;
+    pos: alt.Vector3;
     hitEntity: number;
     entityType: number;
     entityHash: number;
 }
 
 class Raycast {
-    public static readonly player = Player.local;
+    public static readonly player = alt.Player.local;
 
     public static line(scale: number, flags: number, ignoreEntity: number) {
         let playerForwardVector = native.getEntityForwardVector(this.player.scriptID);
@@ -36,9 +36,10 @@ class Raycast {
     private static result(ray: any): RaycastResultInterface {
         let result = native.getShapeTestResult(ray, undefined, undefined, undefined, undefined);
         let hitEntity = result[4];
+
         return {
             isHit: result[1],
-            pos: new Vector3(result[2].x, result[2].y, result[2].z),
+            pos: new alt.Vector3(result[2].x, result[2].y, result[2].z),
             hitEntity,
             entityType: native.getEntityType(hitEntity),
             entityHash: native.getEntityModel(hitEntity)

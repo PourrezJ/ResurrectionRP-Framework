@@ -7,7 +7,14 @@ let packetsReceived = 0;
 let lastCommand = "";
 
 function connect() {
-    window.webSocket = new WebSocket(`ws://${pluginAddress}/`);
+    try {
+       // window.webSocket = new WebSocket(`ws://${pluginAddress}/`);
+    } catch
+    {
+        // no warning please!
+        return;
+    }
+    
 
     webSocket.onmessage = function (evt) {
         let object = JSON.parse(evt.data);
@@ -40,7 +47,7 @@ function connect() {
     };
 
     webSocket.onerror = function (error) {
-        console.error(error);
+        //console.error(error);
     };
 }
 

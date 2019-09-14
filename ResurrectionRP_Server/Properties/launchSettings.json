@@ -3,7 +3,8 @@
     "ResurrectionRP_Server": {
       "commandName": "Executable",
       "executablePath": "C:\\altv\\server-files\\altv-server.exe",
-      "workingDirectory": "C:\\altv\\server-files"
+      "workingDirectory": "C:\\altv\\server-files",
+      "nativeDebugging": true
     }
   }
 }

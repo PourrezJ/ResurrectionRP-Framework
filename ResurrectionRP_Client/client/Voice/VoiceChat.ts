@@ -115,16 +115,6 @@ export class VoiceChat
             });*/
         });
 
-        alt.onServer('Voice_EstablishedCall', (playerName: string) => {
-            alt.Player.all.forEach((player: alt.Player) => {
-                if (player.getSyncedMeta("Voice_TeamSpeakName") == playerName) {
-                    VoiceChat.ExecuteCommand(new PluginCommand(Command.PhoneCommunicationUpdate, VoiceChat.serverUniqueIdentifier, new PhoneCommunication(playerName, 0, 0, true)))
-
-                    return;
-                }
-            });
-        });
-
         alt.onServer('Voice_EndCall', (playerName: string) => {
             VoiceChat.ExecuteCommand(new PluginCommand(Command.StopPhoneCommunication, VoiceChat.serverUniqueIdentifier, new PhoneCommunication(playerName)));
         });
@@ -232,44 +222,9 @@ export class VoiceChat
         VoiceChat.ExecuteCommand(new PluginCommand(Command.SelfStateUpdate, VoiceChat.serverUniqueIdentifier, new PlayerState(null, TSVector.Convert(playerPos), null, game.getGameplayCamRot(0).z, false, null)));
     }
 
-    /*
-     *         internal static void OnEstablishCall(string playerName)
-        {
-#warning There seems to be an issue where the "client"-object is not correctly referenced on the client, remove workaround if the issue is resolved
-
-            foreach (RAGE.Elements.Player player in RAGE.Elements.Entities.Players.All)
-            {
-                if (!player.TryGetSharedData(SaltyShared.SharedData.Voice_TeamSpeakName, out string tsName) || tsName != playerName)
-                    continue;
-
-                RAGE.Vector3 ownPosition = RAGE.Elements.Player.LocalPlayer.Position;
-                RAGE.Vector3 playerPosition = player.Position;
-
-                Voice.ExecuteCommand(
-                    new PluginCommand(
-                        Command.PhoneCommunicationUpdate,
-                        Voice._serverUniqueIdentifier,
-                        new PhoneCommunication(
-                            playerName,
-                            RAGE.Game.Zone.GetZoneScumminess(RAGE.Game.Zone.GetZoneAtCoords(ownPosition.X, ownPosition.Y, ownPosition.Z)) +
-                            RAGE.Game.Zone.GetZoneScumminess(RAGE.Game.Zone.GetZoneAtCoords(playerPosition.X, playerPosition.Y, playerPosition.Z))
-                        )
-                    )
-                );
-
-                break;
-            }
-        }
-     */
-
     public static OnEstablishCall(playerName: string)
     {
-        VoiceChat.ExecuteCommand(new PluginCommand(Command.PhoneCommunicationUpdate, VoiceChat.serverUniqueIdentifier, new PhoneCommunication(playerName, 0, 5)));
-
-        /*       parameters 0, 0 replace this, is for quality audio fucking useless
-                 RAGE.Game.Zone.GetZoneScumminess(RAGE.Game.Zone.GetZoneAtCoords(ownPosition.X, ownPosition.Y, ownPosition.Z)) +
-                 RAGE.Game.Zone.GetZoneScumminess(RAGE.Game.Zone.GetZoneAtCoords(playerPosition.X, playerPosition.Y, playerPosition.Z))
-        */
+        VoiceChat.ExecuteCommand(new PluginCommand(Command.PhoneCommunicationUpdate, VoiceChat.serverUniqueIdentifier, new PhoneCommunication(playerName, 0, null)));
     }
 
     public static OnEndCall(playerName: string)
@@ -384,10 +339,10 @@ class RadioCommunication
 class PhoneCommunication
 {
     public Name: string;
-    public SignalStrength: number = undefined;
-    public Volume: number;
-    public Direct: boolean;
-    public RelayedBy: string[];
+    public SignalStrength: number = null;
+    public Volume: number = null;
+    public Direct: boolean = true;
+    public RelayedBy: string[] = null;
 
     constructor(name: string, signalStrength: number = undefined, volume: number = undefined, direct: boolean = true, relayedBy: string[] = undefined)
     {

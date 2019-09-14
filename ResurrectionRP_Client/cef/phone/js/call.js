@@ -36,11 +36,11 @@
 
 app.controller("OnCallCtrl", function ($scope, $interval, $timeout) {
     let urlParams = (new URL(document.location)).searchParams;
+    
     $scope.calledNumber = urlParams.get("number");
     $scope.contactName = (urlParams.get("name") == null ? "Inconnu" : urlParams.get("name"));
-    $scope.incomingCall = (urlParams.get("incomingCall") == null ? false : true);
-
-    $scope.callStatus = ($scope.incomingCall ? "Appel entrant..." : "Appel...");
+    $scope.incomingCall = (urlParams.get("incomingCall"));
+    $scope.callStatus = ($scope.incomingCall ? "Appel..." : "Appel entrant...");
 
     $scope.callStart = null;
     $scope.timerInterval = null;

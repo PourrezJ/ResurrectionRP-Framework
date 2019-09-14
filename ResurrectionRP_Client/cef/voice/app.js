@@ -8,7 +8,7 @@ let lastCommand = "";
 
 function connect() {
     try {
-       // window.webSocket = new WebSocket(`ws://${pluginAddress}/`);
+       window.webSocket = new WebSocket(`ws://${pluginAddress}/`);
     } catch
     {
         // no warning please!

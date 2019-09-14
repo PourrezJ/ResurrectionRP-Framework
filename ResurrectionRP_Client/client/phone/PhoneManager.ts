@@ -15,8 +15,6 @@ export default class PhoneManager {
     constructor()
     {
         alt.onServer("OpenPhone", (idk0: any, idk1: any, incomingCall: boolean, contactNumber: string, contactName: string) => {
-            alt.log(JSON.stringify(idk1));
-
             if (game.isPauseMenuActive())
                 return;
 
@@ -95,9 +93,7 @@ export default class PhoneManager {
                 if (this.browser != null)
                     this.browser.emit("callEvent", "started");
 
-                var playerName = player.getSyncedMeta("Voice_TeamSpeakName");
-                alt.log(playerName);
-                voice.VoiceChat.OnEstablishCall(playerName);
+                voice.VoiceChat.OnEstablishCall(player.getSyncedMeta("Voice_TeamSpeakName").toString());
                 
             });
 

@@ -10,10 +10,8 @@ export class Hud {
 
     private _hide: boolean;
     public get Hide(): boolean { return this._hide; }
-    private setHide(val: boolean) {
+    public setHide(val: boolean) {
         this._hide = val;
-        game.displayRadar(!val);
-        game.displayHud(!val);
     }
 
     ChatIsOpen: boolean = false;
@@ -28,6 +26,18 @@ export class Hud {
     constructor(money: number) {
         this._money = Math.round(money);
         this.Browser = new alt.WebView("http://resource/client/cef/hud/index.html");
+
+        alt.on('keyup', (key) => {
+            if (key == 0x76) {
+                this._hide = !this._hide;
+                game.displayHud(!this._hide);
+                game.displayRadar(!this._hide);
+                alt.emit("toggleChat");
+                if (this.Browser != null)
+                    this.Browser.emit("showHide", this._hide);
+            }
+        });
+
 
         alt.onServer("UpdateMoneyHUD", (val: number) => {
             this._money = Math.round(val);
@@ -69,17 +79,19 @@ export class Hud {
             }
             this._advert = 0;
 
+            if (this.Hide)
+                return;
+
             let health = (game.getEntityHealth(alt.Player.local.scriptID) - 100);
             if (health <= 70) {
                 var blood = (1 - (health / 70)) * 255;
                 game.drawSprite("resurrection_images", "blood_screen", 0.5, 0.5, 1, 1, 0, 255, 255, 255, blood, false);
             }
 
-            if (this.Hide)
-                return;
+            game.drawSprite("resurrection_images", "resu_2", 0.02, 0.03, 0.06, 0.08, 0, 255, 255, 255, 180, false);
 
             if (!game.isPedSittingInAnyVehicle(alt.Player.local.scriptID))
-                game.drawSprite("srange_gen", "hits_dot", 0.5, 0.5, 0.005, 0.007, 0, 255, 255, 255, 30, false);
+                game.drawSprite("srange_gen", "hits_dot", 0.5, 0.5, 0.005, 0.007, 0, 255, 255, 255, 60, false);
 
             if (this.Browser != null)
             {

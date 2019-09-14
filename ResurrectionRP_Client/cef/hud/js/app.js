@@ -140,6 +140,14 @@ function FinishCB() {
     }, 2000);*/
 }
 
+function showHide(value) {
+    if (value)
+        $('body').hide();
+    else
+        $('body').show();
+}
+
 if ('alt' in window) {
     alt.on('setHUD', setHUD);
+    alt.on('showHide', showHide);
 }

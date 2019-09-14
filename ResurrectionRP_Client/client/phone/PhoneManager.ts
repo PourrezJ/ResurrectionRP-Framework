@@ -28,10 +28,6 @@ export default class PhoneManager {
 
             this.browser.focus();
 
-            alt.setTimeout(() => {
-                this.browser.emit("loadPhoneSettings", idk1);
-            }, 1000);
-
             this.browser.on("SavePhoneSettings", (arg) => alt.emitServer("PhoneMenuCallBack", "SavePhoneSettings", arg));
             this.browser.on("GetContacts", (arg) => alt.emitServer("PhoneMenuCallBack", "GetContacts", arg));
             this.browser.on("AddOrEditContact", (arg) => alt.emitServer("PhoneMenuCallBack", "AddOrEditContact", arg));

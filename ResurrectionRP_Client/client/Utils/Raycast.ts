@@ -42,7 +42,7 @@ class Raycast {
             pos: new alt.Vector3(result[2].x, result[2].y, result[2].z),
             hitEntity,
             entityType: native.getEntityType(hitEntity),
-            entityHash: native.getEntityModel(hitEntity)
+            entityHash: (native.getEntityType(hitEntity) == 0) ? 0 : native.getEntityModel(hitEntity)
         }
     }
 }

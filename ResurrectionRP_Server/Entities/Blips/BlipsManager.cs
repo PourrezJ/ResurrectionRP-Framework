@@ -13,6 +13,21 @@ namespace ResurrectionRP_Server.Entities.Blips
     {
         public ConcurrentDictionary<int, Blips> BlipList = new ConcurrentDictionary<int, Blips>();
 
+        public static Blips CreateBlip(string name, Vector3 pos, BlipColor color, int sprite, float scale = 1f, bool shortRange = true)
+        {
+            Blips blip = null;
+
+            lock (GameMode.Instance.Streamer.ListStaticEntities)
+            {
+                blip = new Blips(name, pos, (int)color, sprite, scale, shortRange, GameMode.Instance.Streamer.StaticEntityNumber++);
+            }
+
+            GameMode.Instance.Streamer.AddStaticEntityBlip(blip);
+            GameMode.Instance.BlipsManager.BlipList.TryAdd(blip.id, blip);
+
+            return blip;
+        }
+
         public static Blips CreateBlip(string name, Vector3 pos, int color, int sprite, float scale = 1f, bool shortRange = true)
         {
             Blips blip = null;
@@ -26,7 +41,6 @@ namespace ResurrectionRP_Server.Entities.Blips
             GameMode.Instance.BlipsManager.BlipList.TryAdd(blip.id, blip);
 
             return blip;
-
         }
         public static Blips SetColor(Blips entity, int color)
         {

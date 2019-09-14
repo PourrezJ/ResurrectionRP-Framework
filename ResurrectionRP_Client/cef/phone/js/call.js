@@ -102,6 +102,11 @@ app.controller("OnCallCtrl", function ($scope, $interval, $timeout) {
 
 let addZeros = number => (parseInt(number) < 10 ? "0" + number : number);
 
+window.addEventListener('load', function () {
+    if ('alt' in window) {
+        alt.on("callEvent", callEvent);
+    }
+});
 function callEvent(event) {
     event = new CustomEvent("OnCallEvent", { "detail": event });
     window.dispatchEvent(event);

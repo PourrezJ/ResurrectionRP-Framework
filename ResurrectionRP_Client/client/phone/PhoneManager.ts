@@ -53,11 +53,11 @@ export default class PhoneManager {
             alt.onServer("MessagesReturned", (args) => { if (this.browser != null) { this.browser.emit("loadMessages", args) } });
             alt.onServer("ContactReturned", (args) => { if (this.browser != null) { this.browser.emit("loadContacts", args) } });
             alt.onServer("ClosePhone", () => this.ClosePhone());
+            alt.onServer("initiatedCall", (phoneNumber: string, contactName: string) => { if (this.browser != null) { this.browser.url = 'http://resource/client/cef/phone/oncall.html?incomingCall=true&number=' + phoneNumber + '&name=' + contactName }  });
 
             alt.on("ClosePhone", () => this.ClosePhone());
 
             this.browser.on("initiateCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "initiateCall", arg));
-            this.browser.on("initiatedCall", (arg, arg2) => { if (this.browser != null) { this.browser.url = 'http://resource/client/cef/phone/oncall.html?incomingCall=true&number=' + arg + '&name=' + arg2 } });
             this.browser.on("acceptCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "acceptCall", arg));
 
             this.browser.on("cancelCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "cancelCall", arg));
@@ -89,13 +89,16 @@ export default class PhoneManager {
                 game.playSoundFromEntity(-1, "Beep_Green", entity, "DLC_HEIST_HACKING_SNAKE_SOUNDS", false, 0);
             });
 
-            this.browser.on("StartedCall", (playerName: string) => {
+            alt.onServer("StartedCall", (player: alt.Player) => {
                 this.animStage = 3;
 
                 if (this.browser != null)
                     this.browser.emit("callEvent", "started");
 
+                var playerName = player.getSyncedMeta("Voice_TeamSpeakName");
+                alt.log(playerName);
                 voice.VoiceChat.OnEstablishCall(playerName);
+                
             });
 
             alt.everyTick(() => {

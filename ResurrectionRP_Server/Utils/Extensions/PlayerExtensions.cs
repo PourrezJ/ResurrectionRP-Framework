@@ -210,8 +210,7 @@ namespace ResurrectionRP_Server
 
         public static bool HasData(this IPlayer client, string Data)
         {
-            client.GetData(Data, out string result);
-            return (Data != null) ? true : false;
+            return client.GetData(Data, out string result);
         }
 
         public static void ResetData(this IPlayer client, string Data)

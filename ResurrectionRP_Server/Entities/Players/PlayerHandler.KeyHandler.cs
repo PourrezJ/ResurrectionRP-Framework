@@ -34,9 +34,7 @@ namespace ResurrectionRP_Server.Entities.Players
             if (ph == null)
                 return;
 
-            if (ph.HasOpenMenu())
-                return;
-
+            
             switch (Keycode)
             {/**
                 case ConsoleKey.NumPad0:
@@ -91,6 +89,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
                     
                 case ConsoleKey.F5:
+                    if (ph.HasOpenMenu())
+                        return;
+
                     await ph.OpenAdminMenu();
                     break;
                     
@@ -115,6 +116,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
                     
                 case ConsoleKey.M:
+                    if (ph.HasOpenMenu())
+                        return;
+
                     if (client.GetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, out object data))
                     {
                         string voiceRange = (string)data;
@@ -137,6 +141,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.G:
+                    if (ph.HasOpenMenu())
+                        return;
+
                     if (vehicle == null)
                         return;
 
@@ -167,6 +174,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
                 **/
                 case ConsoleKey.I:
+                    if (ph.HasOpenMenu())
+                        return;
+
                     if (ph.IsCuff())
                     {
                         client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
@@ -179,6 +189,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.PageUp:
+                    if (ph.HasOpenMenu())
+                        return;
+
                     if (ph.IsCuff())
                     {
                         client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
@@ -195,10 +208,16 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.PageDown:
+                    if (ph.HasOpenMenu())
+                        return;
+
                     await RadioManager.Close(client);
                     break;
 
                 case ConsoleKey.UpArrow:
+                    if (ph.HasOpenMenu())
+                        return;
+
                     if (ph.IsCuff())
                     {
                         client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
@@ -216,10 +235,16 @@ namespace ResurrectionRP_Server.Entities.Players
 
 
                 case ConsoleKey.DownArrow:
+                    if (ph.HasOpenMenu())
+                        return;
+
                     Phone.PhoneManager.ClosePhone(client);
                     break;
 
                 case (ConsoleKey)20:
+                    if (ph.HasOpenMenu())
+                        return;
+
                     await ph.RadioSelected?.UseRadio(client);
                     break;
 

@@ -177,8 +177,8 @@ namespace ResurrectionRP_Server.Phone
 
             if (calledPlayer != null)
             {
-                 calledPlayer.EmitLocked("StartedCall", client.Id);
-                 client.EmitLocked("StartedCall", calledPlayer.Id);
+                calledPlayer.EmitLocked("StartedCall", client);
+                client.EmitLocked("StartedCall", calledPlayer);
                 calledPlayer.SetData("InToPhoneCommunication", true);
                 client.SetData("InToPhoneCommunication", true);
             }

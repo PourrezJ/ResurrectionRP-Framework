@@ -264,7 +264,7 @@ export class VoiceChat
 
     public static OnEstablishCall(playerName: string)
     {
-        VoiceChat.ExecuteCommand(new PluginCommand(Command.PhoneCommunicationUpdate, VoiceChat.serverUniqueIdentifier, new PhoneCommunication(playerName, 0, 0)));
+        VoiceChat.ExecuteCommand(new PluginCommand(Command.PhoneCommunicationUpdate, VoiceChat.serverUniqueIdentifier, new PhoneCommunication(playerName, 0, 5)));
 
         /*       parameters 0, 0 replace this, is for quality audio fucking useless
                  RAGE.Game.Zone.GetZoneScumminess(RAGE.Game.Zone.GetZoneAtCoords(ownPosition.X, ownPosition.Y, ownPosition.Z)) +

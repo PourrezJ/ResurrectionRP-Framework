@@ -48,6 +48,8 @@ export class NetworkingEntityClient {
         alt.onServer('createStaticEntity', this.createStaticEntity.bind(this));
         alt.onServer("deleteStaticEntity", this.deleteStaticEntity.bind(this));
 
+        alt.on("interactWithPickableObject", this.interactPickup);
+
         this.webview.on("streamIn", (entities) => {
             for (const entity of JSON.parse(entities)) {
                 this.streamedInEntities[entity.id] = entity;
@@ -174,8 +176,7 @@ export class NetworkingEntityClient {
                     entity["position"]["x"],
                     entity["position"]["y"],
                     entity["position"]["z"],
-                    entity["data"]["freeze"]["boolValue"],
-                    entity["data"]["pickup"]["stringValue"]
+                    entity["data"]["freeze"]["boolValue"]
                 );
                 break;
             case 2:
@@ -254,20 +255,22 @@ export class NetworkingEntityClient {
         this.EntityList[id] = entityId;
     }
 
-    private streamObject = async (id: number, model: any, x: number, y: number, z: number, freeze: boolean, pickupID: string = null) => {
-        alt.logWarning(pickupID);
+    private streamObject = async (id: number, model: any, x: number, y: number, z: number, freeze: boolean) => {
         var entityId = null;
 
         if(this.EntityList[id] == undefined)
             entityId = game.createObject(model, x, y, z, false, true, false);
 
-        if (pickupID != null)
-            game.objectValueAddString(entityId, "pickup", pickupID);
-        alt.log(game.objectValueGetString(entityId, "pickup"));
-        entityId = this.EntityList[id];
         game.freezeEntityPosition(entityId, freeze);
         this.EntityList[id] = entityId;
 
+    }
+
+    private interactPickup = (OID: number ) => {
+        this.EntityList.forEach((item, index) => {
+            if (item == OID)
+                alt.emitServer("ObjectManager_InteractPickup", index);
+        });
     }
 
     private streamTextLabel = async (id: number, text: string, x: number, y: number, z: number, font: number, rgba: object) => {

@@ -24,14 +24,13 @@ namespace ResurrectionRP_Server.Entities.Objects
         public string pickup = null;
 
 
-        public Object(string model, Position position, Rotation rotation, int entityId, bool freeze = false, uint dimension = ushort.MaxValue, string pickup = null)
+        public Object(string model, Position position, Rotation rotation, int entityId, bool freeze = false, uint dimension = ushort.MaxValue)
         {
             this.model = model;
             this.id = entityId;
             this.freeze = freeze;
             this.position = position;
             this.rotation = rotation;
-            this.pickup = pickup;
         }
 
         public bool SetAttachToEntity(IEntity target, string bone, Position positionOffset, Rotation rotationOffset)
@@ -46,6 +45,11 @@ namespace ResurrectionRP_Server.Entities.Objects
             return true;
         }
 
+        public void Destroy()
+        {
+            GameMode.Instance.Streamer.DeleteEntityObject(this);
+        }
+
         public Dictionary<string, object> export()
         {
             var data = new Dictionary<string, object>();
@@ -54,7 +58,6 @@ namespace ResurrectionRP_Server.Entities.Objects
             data["id"] = this.id;
             data["position"] = JsonConvert.SerializeObject(this.id);
             data["freeze"] = this.freeze;
-            data["pickup"] = this.pickup;
             data["attachment"] = JsonConvert.SerializeObject(this.attach);
             return data;
         }

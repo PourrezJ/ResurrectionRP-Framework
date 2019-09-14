@@ -7,6 +7,7 @@ using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Streamer.Data;
+using System.Collections.Concurrent;
 
 namespace ResurrectionRP_Server.Entities.Objects
 {
@@ -14,12 +15,13 @@ namespace ResurrectionRP_Server.Entities.Objects
 
     public class ObjectManager
     {
+        public ConcurrentDictionary<int, Object> ListObject = new ConcurrentDictionary<int, Object>();
         public ObjectManager()
         {
             AltAsync.OnClient("ObjStream_GetStreamInfo_Srv", ObjStream_GetStreamInfo_Srv);
         }
 
-        public static Object CreateObject(string model, Vector3 position, Vector3 rotation, bool freeze = false, bool dynamic = false, uint dimension = ushort.MaxValue, string pickup = null)
+        public static Object CreateObject(string model, Vector3 position, Vector3 rotation, bool freeze = false, bool dynamic = false, uint dimension = ushort.MaxValue)
         {
             var resuobject = new Object 
             (
@@ -28,9 +30,9 @@ namespace ResurrectionRP_Server.Entities.Objects
                 rotation.ConvertToEntityRotation(),
                 GameMode.Instance.Streamer.EntityNumber++,
                 freeze,
-                dimension,
-                pickup
+                dimension
             );
+            GameMode.Instance.ObjectManager.ListObject[resuobject.id] = resuobject;
             GameMode.Instance.Streamer.AddEntityObject(resuobject);
             return resuobject;
         }
@@ -104,6 +106,13 @@ namespace ResurrectionRP_Server.Entities.Objects
             //    }
             //}
             return null;
+        }
+
+        public Task DestroyObject(int oid)
+        {
+            GameMode.Instance.Streamer.DeleteEntityObject(this.ListObject[oid]);
+            this.ListObject[oid] = null;
+            return Task.CompletedTask;
         }
     }
 }

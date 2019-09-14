@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using MongoDB.Bson.Serialization.Attributes;
 using OutfitInventory = ResurrectionRP_Server.Inventory.OutfitInventory;
+using System.Numerics;
 
 namespace ResurrectionRP_Server.Models
 {
@@ -83,8 +84,8 @@ namespace ResurrectionRP_Server.Models
             {
                 var position = c.GetPosition();
                 var dimension = c.Dimension;
-                //ResuPickup resu = await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension); TODO
-                //resu.OnTakePickup += OnPickup;
+                ResuPickup resu = ResuPickup.CreatePickup("prop_money_bag_01", this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension); 
+                resu.OnTakePickup += OnPickup;
 
                 return Task.FromResult(true);
             }
@@ -100,8 +101,8 @@ namespace ResurrectionRP_Server.Models
             {
                 var position = c.GetPosition();
                 var dimension = c.Dimension;
-                //ResuPickup resu =await ResuPickup.CreatePickup(Alt.Hash("prop_money_bag_01"), this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension); TODO
-                //resu.OnTakePickup += OnPickup;
+                ResuPickup resu = ResuPickup.CreatePickup("prop_money_bag_01", this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension); 
+                resu.OnTakePickup += OnPickup;
 
                 return Task.FromResult(true);
             }

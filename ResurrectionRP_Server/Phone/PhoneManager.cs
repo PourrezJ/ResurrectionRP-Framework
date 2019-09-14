@@ -240,9 +240,10 @@ namespace ResurrectionRP_Server.Phone
             }
         }
 
-        public async static void ClosePhone(IPlayer client)
+        public static void ClosePhone(IPlayer client)
         {
-            await client.EmitAsync("ClosePhone");
+            if( _ClientPhoneMenu.Remove(client))
+                client.EmitLocked("ClosePhone");
         }
 
         #region Gestion des conversations (liste de messages) 

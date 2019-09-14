@@ -85,14 +85,13 @@ namespace ResurrectionRP_Server.Entities.Players
                         client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
                         return;
                     }
-                    await vh.OpenXtremMenu(client);
+                    if (!ph.HasOpenMenu())
+                        await vh.OpenXtremMenu(client);
                     break;
                     
                 case ConsoleKey.F5:
-                    if (ph.HasOpenMenu())
-                        return;
-
-                    await ph.OpenAdminMenu();
+                    if (!ph.HasOpenMenu())
+                        await ph.OpenAdminMenu();
                     break;
                     
                 case ConsoleKey.Backspace:
@@ -101,7 +100,8 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.E:
-
+                    if (ph.HasOpenMenu())
+                        return;
                     Farm farm = await FarmManager.PlayerInFarmZone(client);
                     if (farm != null)
                     {
@@ -208,9 +208,6 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.PageDown:
-                    if (ph.HasOpenMenu())
-                        return;
-
                     await RadioManager.Close(client);
                     break;
 
@@ -235,9 +232,6 @@ namespace ResurrectionRP_Server.Entities.Players
 
 
                 case ConsoleKey.DownArrow:
-                    if (ph.HasOpenMenu())
-                        return;
-
                     Phone.PhoneManager.ClosePhone(client);
                     break;
 

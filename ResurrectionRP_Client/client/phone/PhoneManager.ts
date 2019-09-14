@@ -15,8 +15,6 @@ export default class PhoneManager {
     constructor()
     {
         alt.onServer("OpenPhone", (idk0: any, idk1: any, incomingCall: boolean, contactNumber: string, contactName: string) => {
-            alt.log(JSON.stringify(idk1));
-
             if (game.isPauseMenuActive())
                 return;
 
@@ -29,10 +27,6 @@ export default class PhoneManager {
                 this.browser = new alt.WebView('http://resource/client/cef/phone/home.html?newMessages=' + idk0 + '?phoneSettings=' + idk1);
 
             this.browser.focus();
-
-            alt.setTimeout(() => {
-                this.browser.emit("loadPhoneSettings", idk1);
-            }, 1000);
 
             this.browser.on("SavePhoneSettings", (arg) => alt.emitServer("PhoneMenuCallBack", "SavePhoneSettings", arg));
             this.browser.on("GetContacts", (arg) => alt.emitServer("PhoneMenuCallBack", "GetContacts", arg));
@@ -95,9 +89,7 @@ export default class PhoneManager {
                 if (this.browser != null)
                     this.browser.emit("callEvent", "started");
 
-                var playerName = player.getSyncedMeta("Voice_TeamSpeakName");
-                alt.log(playerName);
-                voice.VoiceChat.OnEstablishCall(playerName);
+                voice.VoiceChat.OnEstablishCall(player.getSyncedMeta("Voice_TeamSpeakName").toString());
                 
             });
 

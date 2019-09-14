@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Entities.Players.Data;
+using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Factions;
 using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Inventory;
@@ -110,42 +111,66 @@ namespace ResurrectionRP_Server.Entities.Players
 
         #region ServerEvents
 
-        public void OnPlayerDisconnected(IPlayer player, string reason)
+        public async Task OnPlayerDisconnected(ReadOnlyPlayer player, IPlayer origin, string reason)
         {
-            PlayerHandler playerhandler = player.GetPlayerHandler();
+            PlayerHandler.PlayerHandlerList.TryGetValue(origin, out PlayerHandler playerhandler);
 
-            if (playerhandler == null)
-                return;
+            MenuManager.OnPlayerDisconnect(origin);
 
-            MenuManager.OnPlayerDisconnect(player);
-
-            if (GameMode.Instance.PhoneManager.PhoneClientList.ContainsKey(player))
+            if (GameMode.Instance.PhoneManager.PhoneClientList.ContainsKey(origin))
             {
-                GameMode.Instance.PhoneManager.PhoneClientList.TryRemove(player, out List<Phone.Phone> phoneList);
+                GameMode.Instance.PhoneManager.PhoneClientList.TryRemove(origin, out List<Phone.Phone> phoneList);
             }
 
-            if (HouseManager.IsInHouse(player))
+            if (HouseManager.IsInHouse(origin))
             {
-                var house = HouseManager.GetHouse(player);
+                var house = HouseManager.GetHouse(origin);
                 playerhandler.Location = new Location(house.Position, new Vector3());
-                house.PlayersInside.Remove(player);
+                house.PlayersInside.Remove(origin);
             }
 
-            if (RPGInventoryManager.HasInventoryOpen(player))
+            if (RPGInventoryManager.HasInventoryOpen(origin))
             {
-                var rpg = RPGInventoryManager.GetRPGInventory(player);
+                var rpg = RPGInventoryManager.GetRPGInventory(origin);
                 if (rpg != null)
                 {
                     if (rpg.OnClose != null)
-                        rpg.OnClose.Invoke(player, rpg);
+                       await  rpg.OnClose.Invoke(origin, rpg);
                 }
-                GameMode.Instance.RPGInventory.OnPlayerQuit(player);
+                GameMode.Instance.RPGInventory.OnPlayerQuit(origin);
             }
-
+            
             playerhandler.IsOnline = false;
-            Task.Run(async () => { await playerhandler?.Update(); }); // pas sûre qu'il soit atteind 
-            PlayerHandler.PlayerHandlerList.Remove(player, out PlayerHandler value);
-            Alt.Server.LogInfo($"Joueur social: {player.GetSocialClub()} || Nom: {playerhandler.Identite.Name} || IP: {player.Ip} est déconnecté raison: {reason}.");
+
+            VehicleHandler veh = null;
+            
+            IVehicle vehicle = player.Vehicle;
+            
+            if (vehicle != null && vehicle.Exists)
+            {
+                if (await vehicle.GetDriverAsync() == origin)
+                    veh = vehicle.GetVehicleHandler();
+
+                playerhandler.Location = new Location(await vehicle.GetPositionAsync(), await vehicle.GetRotationAsync());
+            }
+            else if (HouseManager.IsInHouse(origin))
+                playerhandler.Location = new Location(HouseManager.GetHouse(origin).Position, new Vector3());
+            else
+                playerhandler.Location = new Location(player.Position, player.Rotation);
+             
+            if (veh != null)
+                veh.Update();
+
+            if ((DateTime.Now - playerhandler.LastUpdate).Minutes >= 1)
+            {
+                playerhandler.TimeSpent += (DateTime.Now - playerhandler.LastUpdate).Minutes;
+                playerhandler.LastUpdate = DateTime.Now;
+            }
+           
+            playerhandler.SaveAsync();
+
+            PlayerHandler.PlayerHandlerList.Remove(origin, out PlayerHandler value);
+            Alt.Server.LogInfo($"Joueur social: {playerhandler.PID} || Nom: {playerhandler.Identite.Name} est déconnecté raison: {reason}.");
         }
         private async Task Events_PlayerDeath(IPlayer player, IEntity killer, uint weapon)
         {

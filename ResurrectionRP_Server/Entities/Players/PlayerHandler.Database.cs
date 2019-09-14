@@ -66,7 +66,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        private void SaveAsync()
+        public void SaveAsync()
         {
             _lastUpdateRequest = DateTime.Now;
 

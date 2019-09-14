@@ -85,7 +85,6 @@ namespace ResurrectionRP_Server.Entities.Players
                         break;
                     case "ID_Disconnect":
                         await client.EmitAsync("PlayerDisconnect");
-                        await Update();
                         await Task.Delay(100);
                         await Client.KickAsync("Disconnected");
                         break;

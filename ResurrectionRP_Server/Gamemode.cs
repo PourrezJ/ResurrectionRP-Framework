@@ -166,7 +166,8 @@ namespace ResurrectionRP_Server
             IsDebug = Config.GetSetting<bool>("Debug");
 
             Alt.OnPlayerConnect += OnPlayerConnected;
-            Alt.OnPlayerDisconnect += OnPlayerDisconnected;
+
+            AltAsync.OnPlayerDisconnect += OnPlayerDisconnected;
 
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
@@ -284,7 +285,6 @@ namespace ResurrectionRP_Server
             ServerLoaded = true;
         }
 
-
         private void OnPlayerConnected(IPlayer player, string reason)
         {
             if (PlayerList.Find(b => b == player) == null)
@@ -293,12 +293,12 @@ namespace ResurrectionRP_Server
             Alt.Log($"==> {player.Name} has connected.");
         }
 
-        private void OnPlayerDisconnected(IPlayer player, string reason)
+        private async Task OnPlayerDisconnected(ReadOnlyPlayer player, IPlayer origin, string reason)
         {
-            if (PlayerList.Find(b => b == player) != null)
-                PlayerList.Remove(player);
+            if (PlayerList.Find(b => b == origin) != null)
+                PlayerList.Remove(origin);
 
-            PlayerManager.OnPlayerDisconnected(player, reason);   
+            await PlayerManager.OnPlayerDisconnected(player, origin, reason);   
         }
         #endregion
 

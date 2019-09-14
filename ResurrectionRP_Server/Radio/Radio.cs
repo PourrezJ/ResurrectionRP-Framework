@@ -30,7 +30,7 @@ namespace ResurrectionRP_Server.Radio
             123.4
         };
 
-        private int _volume = 5;
+        private int _volume = 10;
         public int Volume
         {
             get => _volume;
@@ -50,7 +50,7 @@ namespace ResurrectionRP_Server.Radio
 
             await Owner.PlayAnimation((await Owner.GetVehicleAsync() != null) ? "cellphone@in_car@ds" : (await Owner.GetModelAsync() == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_read_base", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.Loop | AnimationFlags.SecondaryTask));
             await Task.Delay(500);
-            await Owner.EmitAsync("OpenRadio", JsonConvert.SerializeObject(Favoris), CurrentFrequence, (int)Statut);
+            await Owner.EmitAsync("OpenRadio", JsonConvert.SerializeObject(Favoris), CurrentFrequence, (int)Statut, Volume);
         }
 
         public async Task HideRadio(IPlayer client)
@@ -66,7 +66,7 @@ namespace ResurrectionRP_Server.Radio
             if (Statut == RadioModes.LISTENING)
             {
                 Statut = RadioModes.SPEAKING;
-
+                Alt.Server.LogError("Client " + client.Name + " is speaking on frequency " + GetCurrentFrequence());
                 SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), true); 
 
                 await client.PlayAnimation("random@arrests", "generic_radio_chatter", 4, -8, -1, (AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.AllowPlayerControl));
@@ -79,6 +79,7 @@ namespace ResurrectionRP_Server.Radio
             if (Statut == RadioModes.SPEAKING || Statut == RadioModes.LISTENING)
             {
                 Statut = RadioModes.LISTENING;
+                Alt.Server.LogError("Client " + client.Name + " is not speaking on frequency " + GetCurrentFrequence());
                 SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), false);
 
                 var ph = client.GetPlayerHandler();

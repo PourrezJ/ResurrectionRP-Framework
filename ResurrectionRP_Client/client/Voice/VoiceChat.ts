@@ -24,6 +24,8 @@ export class VoiceChat
 
     private static _isIngame: boolean;
 
+    public static radioVolume: number = 1;
+
     constructor()
     {
         alt.onServer('Voice_Initialize', (serverUniqueIdentifier: string, requiredBranch: string, minimumVersion: string, soundPack: string, ingameChannel: number, ingameChannelPassword: string) =>
@@ -130,14 +132,14 @@ export class VoiceChat
             }
         });
 
-        alt.onServer('Voice_TalkingOnRadio', (playerName: string, isOnRadio: boolean) => {
-            if (alt.Player.local.getSyncedMeta("Voice_TeamSpeakName") == playerName) {
+        alt.onServer('Voice_TalkingOnRadio', (playerName: string, isOnRadio: boolean, frequence: number) => {
+            if (alt.Player.local.getSyncedMeta("Voice_TeamSpeakName") == playerName ) {
                 this.PlaySound("selfMicClick", false, "MicClick");
             }
             else {
                 if (isOnRadio) {
                     VoiceChat.ExecuteCommand(
-                        new PluginCommand(Command.RadioCommunicationUpdate, VoiceChat.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, 0, true, null)))
+                        new PluginCommand(Command.RadioCommunicationUpdate, VoiceChat.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, VoiceChat.radioVolume / 10, true, null)))
 
                     game.stopSound(-1);
                     game.stopSound(1);
@@ -146,7 +148,7 @@ export class VoiceChat
                 }
                 else {
                     VoiceChat.ExecuteCommand(
-                        new PluginCommand(Command.StopRadioCommunication, VoiceChat.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, 0, true, null)))
+                        new PluginCommand(Command.StopRadioCommunication, VoiceChat.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, VoiceChat.radioVolume / 10, true, null)))
 
                     game.stopSound(-1);
                     game.stopSound(1);

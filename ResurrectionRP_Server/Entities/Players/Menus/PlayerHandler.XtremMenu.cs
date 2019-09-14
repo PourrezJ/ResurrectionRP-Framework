@@ -160,13 +160,13 @@ namespace ResurrectionRP_Server.Entities.Players
                             Client.SendNotificationError("Aucun véhicule proche de vous");
                     }
                     break;
-                /*
-                case "ID_Faction": TODO
+                
+                case "ID_Faction": 
                     menu.ClearItems();
-                    FactionManager.AddFactionTargetMenu(Client, TargetClient, menu);
+                    Factions.FactionManager.AddFactionTargetMenu(Client, TargetClient, menu);
                     await menu.OpenXMenu(client);
                     break;
-                */
+                
             }
         }
     }

@@ -117,7 +117,8 @@ namespace ResurrectionRP_Server.Society
                 Blip = Entities.Blips.BlipsManager.CreateBlip(SocietyName, ServicePos, BlipColor,(int) BlipSprite, 1);
 
                 ServiceColshape = Alt.CreateColShapeCylinder(ServicePos, 1f, 1f);
-                //Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, ServicePos - new Vector3(0.0f, 0.0f, 1f), new Vector3(1, 1f, 1f), Color.FromArgb(128,255,255,255));
+                Marker = Entities.Marker.CreateMarker(MarkerType.VerticalCylinder, ServicePos - new Vector3(0.0f, 0.0f, 1f), new Vector3(1, 1f, 1f), Color.FromArgb(128, 255, 255, 255));
+                EventHandlers.Events.OnPlayerEnterColShape += OnPlayerEnterColshape;
             }
 
             if (Parking != null)
@@ -140,6 +141,7 @@ namespace ResurrectionRP_Server.Society
         #region Events
         public virtual async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
         {
+            Alt.Server.LogError("Enter colsape society");
             if (colShape == ServiceColshape)
             {
                 if (client != null)

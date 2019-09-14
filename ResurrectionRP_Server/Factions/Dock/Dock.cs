@@ -19,6 +19,7 @@ using ResurrectionRP_Server.Teleport;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Models.InventoryData;
 using ResurrectionRP_Server.Phone;
+using ResurrectionRP_Server.Utils.Enums;
 
 namespace ResurrectionRP_Server.Factions.Dock
 {
@@ -55,27 +56,27 @@ namespace ResurrectionRP_Server.Factions.Dock
             this.VehicleAllowed = new List<FactionVehicle>();
             this.VehicleAllowed.Add(new FactionVehicle(0, VehicleModel.Forklift, 15000, 5));
             this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Benson, 400000, 200));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.supra2, 600000, 25)); TODO Vehicule modde
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.oiltanker, 150000, 25));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.chevelle1970, 86000, 30));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.stingray66, 83000, 30));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.bmci, 330000, 25));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.skyline, 330000, 25));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.mers63c, 100000, 15));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.zl12017, 90000, 30));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.tts, 170000, 25));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodm4gts, 600000, 25));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.focusrs, 265000, 25));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.ben17, 166000, 30));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.audirs6tk, 265000, 25));
-            ////this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.ast, 265000, 25)); Deja commente
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodmustang, 600000, 25));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodm3e36, 530000, 25));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodgt63, 550000, 50));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodlp770, 1000000, 15));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodlp750, 1000000, 15));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.p205t16a, 360000, 25));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.p205t16b, 330000, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.supra2, 600000, 25)); 
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.oiltanker, 150000, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.chevelle1970, 86000, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.stingray66, 83000, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.bmci, 330000, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.skyline, 330000, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.mers63c, 100000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.zl12017, 90000, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.tts, 170000, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodm4gts, 600000, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.focusrs, 265000, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.ben17, 166000, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.audirs6tk, 265000, 25));
+            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.ast, 265000, 25)); Deja commente
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodmustang, 600000, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodm3e36, 530000, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodgt63, 550000, 50));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodlp770, 1000000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodlp750, 1000000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.p205t16a, 360000, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.p205t16b, 330000, 25));
 
 
             // Wolf Motor Shop

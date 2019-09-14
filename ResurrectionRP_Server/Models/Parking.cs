@@ -404,7 +404,7 @@ namespace ResurrectionRP_Server.Models
                 {
                     Alt.Server.LogError("GetHandlerByVehicle fuck is null this shit! mother fucker!");
                 }
-                //await MenuManager.CloseMenu(client); TODO
+                await MenuManager.CloseMenu(client);
             }
             catch (Exception ex)
             {

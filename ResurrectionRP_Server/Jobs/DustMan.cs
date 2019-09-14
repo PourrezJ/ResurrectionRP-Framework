@@ -10,6 +10,8 @@ using AltV.Net.Enums;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Utils;
 
 namespace ResurrectionRP_Server.Jobs
 {
@@ -37,6 +39,7 @@ namespace ResurrectionRP_Server.Jobs
         #region Private Variables
         private Location _spawn = new Location(new Vector3(-316.7995f, -1537.94f, 27.36676f), new Vector3(0.1620936f, 0.8791512f, 351.5811f));
         private Vector3 _depotZone = new Vector3(-348.8411f, -1558.844f, 24.22907f);
+        private int _price = 250;
         #endregion
 
         public DustMan()
@@ -59,13 +62,13 @@ namespace ResurrectionRP_Server.Jobs
 
             #region Zone making
             
-            TrashZone _debug = new TrashZone("Debug Zone", new Vector3(-317.1852f, -1519.029f, 27.55757f));
+/*            TrashZone _debug = new TrashZone("Debug Zone", new Vector3(-317.1852f, -1519.029f, 27.55757f));
             _debug.TrashList = new List<Vector3>()
             {
                new Vector3(-317.1852f, -1519.029f, 27.55757f),
                new Vector3(-317.1852f, -1516.029f, 27.55757f)
             };
-            TrashZoneList.Add(_debug);
+            TrashZoneList.Add(_debug);*/
             
 
             TrashZone _groove = new TrashZone("Groove Street", new Vector3(94.61163f, -1921.357f, 20.788f));
@@ -177,8 +180,7 @@ namespace ResurrectionRP_Server.Jobs
                         return Task.CompletedTask;
                 }
 
-                //TrashZoneList[Utils.Utils.RandomNumber(TrashZoneList.Count)]
-                DustManManager DustManmanager = new DustManManager(client, TrashZoneList[0], _depotZone);
+                DustManManager DustManmanager = new DustManManager(client, TrashZoneList[Utils.Utils.RandomNumber(TrashZoneList.Count)], _depotZone);
                 TrashVehiclesList.TryAdd(DustManmanager, vehicle.GetVehicleHandler());
                 //await client.EmitAsync("Jobs_Dustman", "Init", vehicle.Id, TrashZoneList[Utils.Utils.RandomNumber(TrashZoneList.Count)], _depotZone);
             }
@@ -186,35 +188,33 @@ namespace ResurrectionRP_Server.Jobs
             return Task.CompletedTask;
         }
 
-        private Task DustMan_Callback(object[] args)
+        private async Task DustMan_Callback(object[] args)
         {
             IPlayer client = args[0] as IPlayer;
             if (!client.Exists)
-                return Task.CompletedTask;
-            /*
-                        PlayerHandler ph = PlayerManager.GetPlayerByClient(client); TODO
-                        if (ph != null)
-                        {
-                            await client.SendNotificationSuccess($"Vous avez gagné ${_price}");
-                            await ph.AddMoney(_price);
+                return ;
+            
+            PlayerHandler ph = client.GetPlayerHandler();
+            if (ph != null)
+            {
+                client.SendNotificationSuccess($"Vous avez gagné ${_price}");
+                await ph.AddMoney(_price);
 
-                            Menu menu = new Menu("ID_DustMan", "Déchetterie", "Que voulez-vous faire?", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, true, true, false);
-                            menu.Callback = DustManCallBack;
-                            menu.Add(new MenuItem("~g~Prendre un autre quartier", "", "ID_Quartier", true));
-                            menu.Add(new MenuItem("~r~Fin de mission", "", "ID_End", true));
+                Menu menu = new Menu("ID_DustMan", "Déchetterie", "Que voulez-vous faire?", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, true, true, false);
+                menu.ItemSelectCallback = DustManCallBack;
+                menu.Add(new MenuItem("~g~Prendre un autre quartier", "", "ID_Quartier", true));
+                menu.Add(new MenuItem("~r~Fin de mission", "", "ID_End", true));
 
-                            await menu.OpenMenu(arg.Player);
-                        }*/
-
-            return Task.CompletedTask;
+                await menu.OpenMenu(client);
+            }
         }
 
-/*        private async Task DustManCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex) TODO
+        private async Task DustManCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             switch (menuItem.Id)
             {
                 case "ID_Quartier":
-                    await client.CallAsync("Jobs_Dustman", "ReInit", (await GetJobVehiclePlayer(client)).Vehicle.Id, TrashZoneList[Utils.RandomNumber(TrashZoneList.Count)], _depotZone);
+                    DustManManager DustManmanager = new DustManManager(client, TrashZoneList[Utils.Utils.RandomNumber(TrashZoneList.Count)], _depotZone);
                     break;
 
                 case "ID_End":
@@ -223,7 +223,7 @@ namespace ResurrectionRP_Server.Jobs
             }
             await MenuManager.CloseMenu(client);
         }
-*/
+
         public override async Task QuitterService(IPlayer client)
         {
             await client.EmitAsync("Jobs_Dustman", "End");

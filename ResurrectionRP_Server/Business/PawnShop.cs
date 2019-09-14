@@ -27,8 +27,8 @@ namespace ResurrectionRP_Server.Businesses
         public override async Task Init()
         {
             this.MaxEmployee = 5;
-/*            if (InventoryBox != null) TODO
-                await InventoryBox.Spawn();*/
+            if (InventoryBox != null) 
+                await InventoryBox.Spawn();
 
             await base.Init();
         }

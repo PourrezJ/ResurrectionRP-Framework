@@ -108,17 +108,26 @@ namespace ResurrectionRP_Server.Radio
                     break;
 
                 case "OnOff":
-                    radio.Statut = ((bool)args[1]) ? RadioModes.LISTENING : RadioModes.OFF;
-                    if (radio.Statut == RadioModes.OFF)
+                    try
                     {
-                        SaltyServer.Voice.RemovePlayerRadioChannel(player);
+                        radio.Statut = ((bool)args[1]) ? RadioModes.LISTENING : RadioModes.OFF;
+                        if (radio.Statut == RadioModes.OFF)
+                        {
+                            SaltyServer.Voice.RemovePlayerRadioChannel(player);
+                        }
+                        else
+                        {
+                            GameMode.Instance.VoiceController.OnSetRadioChannel(player, radio.GetCurrentFrequence().ToString());
+                            SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        GameMode.Instance.VoiceController.OnSetRadioChannel(player, radio.GetCurrentFrequence().ToString());
-                        //await SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
+
+                        Alt.Server.LogError(ex.ToString());
                     }
                     break;
+
 
                 case "Close":     
                     if(_clientMenus.TryRemove(player, out radio))
@@ -145,6 +154,10 @@ namespace ResurrectionRP_Server.Radio
                 case "ChangeFrequence":
                     radio.CurrentFrequence = int.Parse(args[1].ToString());
                     SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
+                    break;
+                case "ChangeVolume":
+                    radio.Volume = int.Parse(args[1].ToString());
+                    Alt.Server.LogError("New volume: " + radio.Volume);
                     break;
                 default:
                     Alt.Server.LogError("RadioManager RadioChange Hm args[0] is not valid... problem in client side ? args 0 mmust be the event name");

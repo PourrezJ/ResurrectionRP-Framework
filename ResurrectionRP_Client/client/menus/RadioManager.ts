@@ -2,6 +2,7 @@
 import * as game from 'natives';
 import * as chat from 'client/chat/chat';
 import * as utils from 'client/Utils/Utils';
+import { VoiceChat } from '../Voice/VoiceChat';
 
 export class RadioManager
 {
@@ -11,10 +12,12 @@ export class RadioManager
     private lastcheck: number;
     private pressed: boolean;
     private status: RadioModes;
+    private volume: number = 10;
+    private muted :boolean = false;
 
     constructor()
     {
-        alt.onServer('OpenRadio', (favoris: string, frequence: number, status: RadioModes) =>
+        alt.onServer('OpenRadio', (favoris: string, frequence: number, status: RadioModes, volume: number) =>
         {
             if (chat.isOpened() || game.isPauseMenuActive())
                 return;
@@ -22,6 +25,8 @@ export class RadioManager
             this.favoris = JSON.parse(favoris);
             this.frequence = frequence;
             this.status = status;
+            this.volume = volume;
+            this.muted = false;
 
             if (this.view == null) {
                 this.view = new alt.WebView("http://resource/client/cef/radio/index.html");       
@@ -43,6 +48,26 @@ export class RadioManager
             this.view.on('SaveFrequence', (channel: number, frequence: number) => {
                 alt.emitServer('RadioManager', 'SaveFrequence', channel, frequence);
             });
+
+            this.view.on('volumeUP', () => {
+                VoiceChat.radioVolume = (this.volume + 1 > 10) ? 10 : this.volume + 1;
+                this.volume = VoiceChat.radioVolume;
+                alt.emitServer('RadioManager', 'ChangeVolume', VoiceChat.radioVolume);
+                alt.emit("Display_Help", "Volume: " + this.volume, 5000);
+            });
+            this.view.on('volumeDown', () => {
+                VoiceChat.radioVolume = (this.volume - 1 < 0) ? 0 : this.volume - 1 ;
+                this.volume = VoiceChat.radioVolume;
+                alt.emit("Display_Help", "Volume: " + this.volume, 5000);
+                alt.emitServer("RadioManager", 'ChangeVolume', VoiceChat.radioVolume);
+            });
+            this.view.on('volumeMuted', () => {
+                VoiceChat.radioVolume = (this.muted) ? 10 : 0;
+                this.volume = VoiceChat.radioVolume;
+                alt.emit("Display_Help", "Volume: " + this.volume, 5000);
+                alt.emitServer("RadioManager", 'ChangeVolume', VoiceChat.radioVolume);
+                this.muted = !this.muted;
+            })
    
             this.view.on('GetFavoris', () => {
                 alt.setTimeout(() => {
@@ -88,11 +113,12 @@ export class RadioManager
     public CloseRadio() {
         if (this.view == null)
             return;
+        this.view.unfocus();
         this.view.destroy();
         this.view = null;
 
-        alt.toggleGameControls(true);
         alt.showCursor(false);
+        alt.toggleGameControls(true);
         alt.emit("toggleChatAdminRank");
     }
 }

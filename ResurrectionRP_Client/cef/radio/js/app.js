@@ -98,11 +98,15 @@ function hide() {
 }
 
 function volumeUP() {
-    
+    alt.emit("volumeUP");
 }
 
 function volumeDown() {
-   
+    alt.emit("volumeDown");
+}
+
+function muteRadio() {
+    alt.emit("volumeMuted");
 }
 
 $(() => {

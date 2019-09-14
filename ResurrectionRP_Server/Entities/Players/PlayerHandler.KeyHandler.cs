@@ -10,6 +10,7 @@ using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.Utils.Extensions;
 using System;
 using System.Threading.Tasks;
+using AltV.Net;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -238,7 +239,6 @@ namespace ResurrectionRP_Server.Entities.Players
                 case (ConsoleKey)20:
                     if (ph.HasOpenMenu())
                         return;
-
                     await ph.RadioSelected?.UseRadio(client);
                     break;
 

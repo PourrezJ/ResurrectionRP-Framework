@@ -4,8 +4,10 @@ import * as game from 'natives';
 let player = alt.Player.local;
 let fuelMax = 100;
 let fuelCur = 100;
+var CurrentMilage = 0.0;
 let speedoWindow = new alt.WebView('http://resource/client/cef/speedometer/speedometer.html');
 let lastSent = Date.now();
+let lastPos = null;
 
 export function initialize() {
     alt.onServer('OnPlayerLeaveVehicle', hide);
@@ -31,16 +33,33 @@ export function initialize() {
                     light = 1;
 
                 let engineHealth = game.getVehicleEngineHealth(player.vehicle.scriptID);
-                speedoWindow.emit('setSpeed', speed, rpm, player.vehicle.gear, light, engineHealth, fuelCur, fuelMax);
+                speedoWindow.emit('setSpeed', speed, rpm, player.vehicle.gear, light, engineHealth, fuelCur, fuelMax, CurrentMilage);
+            }
+
+            if (player.vehicle == null)
+                return;
+            if (game.getPedInVehicleSeat(player.vehicle.scriptID, -1, player.scriptID)) {
+                var newPos = alt.Player.local.pos;
+                if (lastPos == null)
+                    lastPos = newPos;
+
+                var deltaX = newPos.x - lastPos.x;
+                var deltaY = newPos.y - lastPos.y;
+                var deltaZ = newPos.z - lastPos.z;
+                lastPos = newPos;
+                var distance = (Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) / 1000);
+
+                CurrentMilage += distance;
             }
         }
     });
 }
 
-export function hide() {
+export function hide(vehicle) {
     if (speedoWindow !== null) {
         speedoWindow.emit('hideSpeedometer');
     }
+    alt.emitServer('updateFuelAndMilage', vehicle, fuelCur, CurrentMilage);
 }
 
 export function show(vehicle, seat, currentFuel, maxFuel) {

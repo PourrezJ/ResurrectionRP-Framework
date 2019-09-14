@@ -104,7 +104,7 @@ namespace ResurrectionRP_Server.Factions
                                 ph.BagInventory.Delete(defibrilators[InventoryTypes.Bag][0], 1);
                             }
                         }
-                        await _target.Revive();
+                        await _target.Revive(125);
 
                         client.SendNotificationSuccess("Vous avez réanimé le patient.");
                     }

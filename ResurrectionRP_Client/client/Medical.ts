@@ -150,7 +150,7 @@ export class Medical {
             alt.on('keydown', this.KeyHandler);
         });
 
-        alt.onServer("ResurrectPlayer", () => {
+        alt.onServer("ResurrectPlayer", (health : number) => {
 
             alt.off('keydown', this.KeyHandler);
             game.setPlayerHealthRechargeMultiplier(alt.Player.local.scriptID, 0);
@@ -158,12 +158,7 @@ export class Medical {
             //game.animpostfxStop("DeathFailMPIn")
             //game.setCamEffect(0);
 
-            game.setFadeInAfterDeathArrest(false);
-            game.setFadeOutAfterArrest(false);
-            game.pauseDeathArrestRestart(true);
-            game.setFadeInAfterLoad(false);
-            game.setFadeOutAfterDeath(false);
-            game.setEntityHealth(alt.Player.local.scriptID, 100, 0);
+            game.clearPedBloodDamage(alt.Player.local.scriptID);
         });  
         alt.everyTick(this.OnTick.bind(this));
     }

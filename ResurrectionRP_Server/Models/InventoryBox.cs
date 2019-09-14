@@ -11,10 +11,10 @@ namespace ResurrectionRP_Server.Models
     {
         public string ID;
         public Inventory.Inventory Inventory;
-        public uint Model;
+        public string Model;
 
-/*        [BsonIgnore, JsonIgnore]
-        public ObjectHandler Obj { get; private set; }*/
+        [BsonIgnore, JsonIgnore]
+        public Entities.Objects.Object Obj { get; private set; }
 
         private Location _location;
         public Location Location
@@ -34,7 +34,7 @@ namespace ResurrectionRP_Server.Models
             }
         }
 
-        public static Task<InventoryBox> CreateInventoryBox(string id, Location location,Inventory.Inventory inventory = null, uint model = 307713837, int taille = 200)
+        public async static Task<InventoryBox> CreateInventoryBox(string id, Location location,Inventory.Inventory inventory = null, string model = "prop_box_wood07a", int taille = 200)
         {
             InventoryBox inv = new InventoryBox()
             {
@@ -44,19 +44,17 @@ namespace ResurrectionRP_Server.Models
                 Inventory = (inventory == null) ? new Inventory.Inventory(taille, 20) : inventory
             };
 
-            //await inv.Spawn();
-            return Task.FromResult(inv);
+            await inv.Spawn();
+            return inv;
         }
 
-/*        public async Task Spawn() TODO OBJECT HANDLER
+        public async Task Spawn() 
         {
-            Obj = await ObjectHandlerManager.CreateObject(Model, new Vector3(Location.Pos.X, Location.Pos.Y, Location.Pos.Z - 1f), Location.Rot);
-            Obj.IObject.SetSharedData("ID", ID);
+            Obj = Entities.Objects.ObjectManager.CreateObject(Model, new Vector3(Location.Pos.X, Location.Pos.Y, Location.Pos.Z - 1f), Location.Rot);
+            
         }
 
-        public async Task Destruct()
-        {
-            await Obj?.IObject?.DestroyAsync();
-        }*/
+        public void Destruct() =>
+            Obj?.Destroy();
     }
 }

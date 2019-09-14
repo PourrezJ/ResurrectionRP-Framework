@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.Factions.Dock
                 Entities.Marker.CreateMarker(Entities.MarkerType.VerticalCylinder,RackPos - new Vector3(0,0,2),new Vector3(1,1,1), Color.FromArgb(80, 255, 255, 255) );
             if (!empty && InventoryBox != null)
             {
-                //await InventoryBox.Spawn(); TODO
+                await InventoryBox.Spawn(); 
             }
             else if (!empty && InventoryBox == null)
             {

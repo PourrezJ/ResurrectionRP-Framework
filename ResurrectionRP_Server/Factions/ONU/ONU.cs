@@ -46,7 +46,7 @@ namespace ResurrectionRP_Server.Factions
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Insurgent2));
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Insurgent3));
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Polmav));
-            //VehicleAllowed.Add(new FactionVehicle(3, (VehicleModel)VehicleHas2.qrv)); TODO Véhicule moddé ?
+            VehicleAllowed.Add(new FactionVehicle(3, (VehicleModel)VehicleModel2.qrv));
 
             BlipPosition = new Vector3(298.5557f, -584.4615f, 43.26084f);
             BlipColor = (BlipColor)57;

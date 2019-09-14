@@ -11,7 +11,7 @@ namespace ResurrectionRP_Server.Models
     {
         public string ID;
         public Inventory.Inventory Inventory;
-        public string Model;
+        public uint Model;
 
         [BsonIgnore, JsonIgnore]
         public Entities.Objects.Object Obj { get; private set; }
@@ -40,7 +40,7 @@ namespace ResurrectionRP_Server.Models
             {
                 ID = id,
                 Location = location,
-                Model = model,
+                Model = Alt.Hash(model),
                 Inventory = (inventory == null) ? new Inventory.Inventory(taille, 20) : inventory
             };
 
@@ -50,7 +50,7 @@ namespace ResurrectionRP_Server.Models
 
         public async Task Spawn() 
         {
-            Obj = Entities.Objects.ObjectManager.CreateObject(Model, new Vector3(Location.Pos.X, Location.Pos.Y, Location.Pos.Z - 1f), Location.Rot);
+            //Obj = Entities.Objects.ObjectManager.CreateObject(Model, new Vector3(Location.Pos.X, Location.Pos.Y, Location.Pos.Z - 1f), Location.Rot);
             
         }
 

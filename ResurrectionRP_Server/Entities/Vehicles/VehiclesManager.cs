@@ -37,10 +37,21 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             AltAsync.OnClient("LockUnlockVehicle", LockUnlockVehicle);
             AltAsync.OnClient("OpenXtremVehicle", OpenXtremVehicle);
+            AltAsync.OnClient("updateFuelAndMilage", updateFuelAndMilage);
         }
         #endregion
 
         #region Server Events
+        private Task updateFuelAndMilage(IPlayer client, object[] args)
+        {
+            var veh = (IVehicle)args[0];
+            float fuel = float.Parse(args[1].ToString());
+            float mile = float.Parse(args[2].ToString());
+            var vehh = VehiclesManager.GetVehicleHandler(veh);
+            vehh.Milage = mile;
+            vehh.SetFuel(fuel);
+            return Task.CompletedTask;
+        }
         private async Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
             PlayerHandler ph = player.GetPlayerHandler();
@@ -102,7 +113,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (ph != null)
             {
                 await ph.Update();
-                await player.EmitAsync("OnPlayerLeaveVehicle");
+                await player.EmitAsync("OnPlayerLeaveVehicle", vehicle);
             }
         }
         #endregion

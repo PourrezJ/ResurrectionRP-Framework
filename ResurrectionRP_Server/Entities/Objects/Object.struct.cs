@@ -7,6 +7,7 @@ using System.Numerics;
 using Newtonsoft.Json;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Data;
+using AltV.Net.NetworkingEntity.Elements.Entities;
 
 namespace ResurrectionRP_Server.Entities.Objects
 {
@@ -14,23 +15,29 @@ namespace ResurrectionRP_Server.Entities.Objects
     public class Object
     {
         public int id;
-        public uint model;
+        public string model;
         public Position position;
         public Rotation rotation;
+        public uint dimension;
         public bool freeze;
         public Models.Attachment attach = null;
+        public string pickup = null;
 
-        public Object(string model, Position position, Rotation rotation, int entityId, bool freeze = false)
+
+        public Object(string model, Position position, Rotation rotation, int entityId, bool freeze = false, uint dimension = ushort.MaxValue, string pickup = null)
         {
-            this.model = Alt.Hash(model);
+            this.model = model;
             this.id = entityId;
             this.freeze = freeze;
+            this.position = position;
+            this.rotation = rotation;
+            this.pickup = pickup;
         }
 
-        public bool SetAttach(IEntity target, string bone, Position positionOffset, Rotation rotationOffset)
+        public bool SetAttachToEntity(IEntity target, string bone, Position positionOffset, Rotation rotationOffset)
         {
-            //ObjectManager.AttachEntity();
-            return false;
+            ObjectManager.AttachToEntity(target, this, bone, positionOffset, rotationOffset);
+            return true;
         }
 
         public bool DetachAttach()
@@ -47,7 +54,8 @@ namespace ResurrectionRP_Server.Entities.Objects
             data["id"] = this.id;
             data["position"] = JsonConvert.SerializeObject(this.id);
             data["freeze"] = this.freeze;
-            data["attachment"] = this.attach;
+            data["pickup"] = this.pickup;
+            data["attachment"] = JsonConvert.SerializeObject(this.attach);
             return data;
         }
 

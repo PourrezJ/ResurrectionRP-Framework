@@ -49,8 +49,9 @@ namespace ResurrectionRP_Server
                     return false;
             }
 
-            return true;
+                return true;
         }
+ 
 
         public static void SetOnPlayerEnterColShape(this IColShape colshape, Events.ColShapePlayerEventHandler method)
         {

@@ -117,7 +117,7 @@ export class NetworkingEntityClient {
                 this.onStreamIn(entity);
                 break;
             case 1:
-                game.deleteObject(this.EntityList[entity["data"]["id"]["intValue"]])
+                //game.deleteObject(this.EntityList[entity["data"]["id"]["intValue"]])
                 this.onStreamIn(entity);
                 break;
             case 2:
@@ -166,13 +166,15 @@ export class NetworkingEntityClient {
                 );
                 break;
             case 1:
-                await alt.loadModelAsync(entity["data"]["model"]["uintValue"]);
+                await alt.loadModelAsync(game.getHashKey( entity["data"]["model"]["stringValue"]));
                 await this.streamObject(
                     entity["data"]["id"]["intValue"],
-                    entity["data"]["model"]["uintValue"],
+                    game.getHashKey( entity["data"]["model"]["stringValue"]),
                     entity["position"]["x"],
                     entity["position"]["y"],
-                    entity["position"]["z"]
+                    entity["position"]["z"],
+                    entity["data"]["freeze"]["boolValue"],
+                    entity["data"]["pickup"]["stringValue"]
                 );
                 break;
             case 2:
@@ -246,9 +248,20 @@ export class NetworkingEntityClient {
         this.EntityList[id] = entityId;
     }
 
-    private streamObject = async (id: number, model: any, x: number, y: number, z: number) => {
-        var entityId = game.createObject(model, x, y, z, false, true, false);
+    private streamObject = async (id: number, model: any, x: number, y: number, z: number, freeze: boolean, pickupID: string = null) => {
+        alt.logWarning(pickupID);
+        var entityId = null;
+
+        if(this.EntityList[id] == undefined)
+            entityId = game.createObject(model, x, y, z, false, true, false);
+
+        if (pickupID != null)
+            game.objectValueAddString(entityId, "pickup", pickupID);
+        alt.log(game.objectValueGetString(entityId, "pickup"));
+        entityId = this.EntityList[id];
+        game.freezeEntityPosition(entityId, freeze);
         this.EntityList[id] = entityId;
+
     }
 
     private streamTextLabel = async (id: number, text: string, x: number, y: number, z: number, font: number, rgba: object) => {

@@ -53,14 +53,15 @@ namespace ResurrectionRP_Server.Models
     {
         [JsonIgnore]
         public Entities.Objects.Object Object;
-        /*[JsonIgnore]
-        public ITextLabel Label;*/
+        [JsonIgnore]
+        public Streamer.Data.TextLabel Label;
 
         public uint Hash;
         public Item Item;
         public int Quantite;
         public Vector3 Position;
         public bool Hide;
+        public string Id;
 
         public delegate Task TakeDelegate(IPlayer client, ResuPickup pickup);
         [JsonIgnore]
@@ -70,24 +71,24 @@ namespace ResurrectionRP_Server.Models
         {
         }
 
-        public static Task CreatePickup(uint hash, Item item, int quantite, Vector3 position, bool hide, TimeSpan endlife, uint dimension = 2)
+        public static ResuPickup CreatePickup(string model, Item item, int quantite, Vector3 position, bool hide, TimeSpan endlife, uint dimension = ushort.MaxValue)
         {
-            return Task.CompletedTask;
-            /**
+            Entities.Objects.Object obje = Entities.Objects.ObjectManager.CreateObject(model, position, new Vector3(), true, true, dimension, GenerateRandomID());
             var obj = new ResuPickup()
             {
-                Hash = hash,
+                Hash = Alt.Hash(model),
                 Item = item,
                 Quantite = quantite,
                 Position = position,
                 Hide = hide,
-                Object = await Entities.Objects.ObjectHandlerManager.CreateObject(hash, position, new Vector3(), false, true, dimension)
+                Object = obje,
+                Id = obje.pickup
             };
 
             string str = $"{item.name} x{quantite}";
             if (!hide) obj.Label =
-                    await MP.TextLabels.NewAsync(obj.Position + new Vector3(0, 0, 0.5f), str, 0, Color.FromArgb(120, 255, 255, 255), 3, false, dimension);
-            obj.Object.IObject.SetSharedData("ItemDrop", obj);
+                    GameMode.Instance.Streamer.AddEntityTextLabel(str, obj.Position + new Vector3(0,0,0.5f), 0, 255,255,255,120, 3);
+            //obj.Object.IObject.SetSharedData("ItemDrop", obj);
 
             ResuPickupManager.ResuPickupList.Add(obj);
 
@@ -96,9 +97,22 @@ namespace ResurrectionRP_Server.Models
                 obj.Delete();
             });
 
-            return obj;**/
+            return obj;
         }
+        public static string GenerateRandomID()
+        {
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            char[] stringChars = new char[4];
+            Random random = new Random();
+            string generatedPlate = "";
 
+            
+            for (int i = 0; i < stringChars.Length; i++)
+            {
+                stringChars[i] = chars[random.Next(chars.Length)];
+            }
+            return generatedPlate = new string(stringChars);
+        }
         public async Task<bool> Take(IPlayer client)
         {
             try

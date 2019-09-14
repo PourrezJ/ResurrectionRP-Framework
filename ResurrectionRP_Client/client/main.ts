@@ -70,9 +70,8 @@ const init = async () => {
         new NetworkingEntityClient();
         new Admin();
         menuManager();
-
-        alt.discordRequestOAuth2();
-        while (!alt.isDiscordInfoReady()) { }
+        //alt.discordRequestOAuth2();
+        //while (!alt.isDiscordInfoReady()) { }
 
         alt.emitServer("Events_PlayerJoin", game.scGetNickname(), JSON.stringify(alt.discordInfo()));
     }

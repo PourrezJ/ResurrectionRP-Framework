@@ -4,35 +4,22 @@ using AltV.Net.Elements.Entities;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 using Address = ResurrectionRP_Server.Phone.Data.Address;
-using PhoneState = ResurrectionRP_Server.Phone.Data.PhoneState;
 using PhoneSettings = ResurrectionRP_Server.Phone.Data.PhoneSettings;
 using Conversation = ResurrectionRP_Server.Phone.Data.Conversation;
-using SMS = ResurrectionRP_Server.Phone.Data.SMS;
 using ResurrectionRP_Server.Utils.Enums;
+using System.Collections.Concurrent;
 
 namespace ResurrectionRP_Server.Phone
 {
     public class PhoneManager
     {
         #region Private static properties
-        private static Dictionary<IPlayer, Phone> _ClientPhoneMenu = new Dictionary<IPlayer, Phone>();
-        public Dictionary<IPlayer, List<Phone>> PhoneClientList = new Dictionary<IPlayer, List<Phone>>();
-
-        private static Vector3 femaleUsingPhonePosition = new Vector3(0.14f, 0, -0.021f);
-        private static Vector3 femaleUsingPhoneRotation = new Vector3(130, 115, 0);
-        private static Vector3 femaleCallingPhonePosition = new Vector3(0.1f, 0, -0.021f);
-        private static Vector3 femaleCallingPhoneRotation = new Vector3(90, 100, 0);
-
-        private static Vector3 maleUsingPhoneRotation = new Vector3(130, 100, 0);
-        private static Vector3 maleUsingPhonePosition = new Vector3(0.17f, 0.021f, -0.009f);
-        private static Vector3 maleCallingPhoneRotation = new Vector3(120, 100, 0);
-        private static Vector3 maleCallingPhonePosition = new Vector3(0.16f, 0.02f, -0.01f);
+        private static ConcurrentDictionary<IPlayer, Phone> _ClientPhoneMenu = new ConcurrentDictionary<IPlayer, Phone>();
+        public ConcurrentDictionary<IPlayer, List<Phone>> PhoneClientList = new ConcurrentDictionary<IPlayer, List<Phone>>();
         #endregion
 
         #region Public Variables
@@ -42,10 +29,8 @@ namespace ResurrectionRP_Server.Phone
         #region Constructor
         public PhoneManager()
         {
-            PhoneClientList = new Dictionary<IPlayer, List<Phone>>();
+            PhoneClientList = new ConcurrentDictionary<IPlayer, List<Phone>>();
             AltAsync.OnClient("PhoneMenuCallBack", PhoneMenuCallBack);
-            AltAsync.OnClient("CallOpenPhone", EventTrigered);
-            AltAsync.OnClient("ClosePhone", EventTrigered);
         }
         #endregion
 
@@ -70,12 +55,11 @@ namespace ResurrectionRP_Server.Phone
                          return false;
      */
 
-
                     await client.PlayAnimation((await client.GetVehicleAsync() != null) ? "cellphone@in_car@ds" : (await client.GetModelAsync() == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_read_base", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.Loop | AnimationFlags.SecondaryTask));
                     await Task.Delay(200);
                     long newMessagesCount = GetNewMessagesOnConversationsCount(phone.PhoneNumber);
                     client.EmitLocked("OpenPhone", newMessagesCount, JsonConvert.SerializeObject(phone.Settings), incomingCall, contactNumber, contactName);
-                    client.EmitLocked("ShowCursor", true);
+                    //client.EmitLocked("ShowCursor", true);
 
                     return true;
                 }
@@ -125,33 +109,6 @@ namespace ResurrectionRP_Server.Phone
             return false;
         }
         #endregion
-
-        private async Task EventTrigered(IPlayer client, object[] args)
-        {
-            if (!client.Exists)
-                return;
-
-            Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
-            if (ph == null)
-                return;
-            if (args[0] == null)
-            {
-                Alt.Server.LogError("EventTrigered in PhoneManager, not argument to tell if CallOpen / Close... maybe client side problem ?");
-                return;
-            }
-            switch (args[0])
-            {
-                case "CallOpenPhone":
-                    if (ph.PhoneSelected != null)
-                        await OpenPhone(client, ph.PhoneSelected);
-                    break;
-
-                case "ClosePhone":
-                    if (ph.PhoneSelected != null)
-                        await ph.PhoneSelected.ClosePhone();
-                    break;
-            }
-        }
 
         private async Task PhoneMenuCallBack(IPlayer client, object[] args)
         {
@@ -242,7 +199,7 @@ namespace ResurrectionRP_Server.Phone
 
         public static void ClosePhone(IPlayer client)
         {
-            if( _ClientPhoneMenu.Remove(client))
+            if( _ClientPhoneMenu.TryRemove(client, out Phone value))
                 client.EmitLocked("ClosePhone");
         }
 

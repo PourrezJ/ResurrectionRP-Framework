@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VehicleInfoLoader.Data;
-using System.Linq;
 using AltV.Net.Async;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
@@ -14,10 +13,6 @@ using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.Utils.Enums;
 using ResurrectionRP_Server.XMenuManager;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using VehicleInfoLoader.Data;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -382,7 +377,7 @@ namespace ResurrectionRP_Server.Factions
 
                         if (FactionPlayerList.TryRemove(playerID.Key, out FactionPlayer value))
                         {
-                            client.EmitLocked("Display_Help", $"Vous avez démissionné de la faction {FactionName}", 10000);
+                            client.DisplayHelp($"Vous avez démissionné de la faction {FactionName}", 10000);
                             await menu.CloseMenu(client);
                             await UpdateDatabase();
                         }

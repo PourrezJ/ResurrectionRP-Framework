@@ -145,7 +145,17 @@ namespace ResurrectionRP_Server.Entities.Players
             if (!player.Exists)
                 return;
 
-            await player.EmitAsync("ONU_PlayerDeath", weapon);
+            if (weapon != 2725352035)
+                await player.EmitAsync("ONU_PlayerDeath", weapon);
+            else
+            {
+                player.SendNotification($"Ne va pas vers la lumière, tu vas te relever.");
+                Utils.Utils.Delay(60000 * 1, true, async () =>
+                {
+                    if (player.Exists)
+                        await player.Revive(105);
+                });
+            }
             await player.GetPlayerHandler()?.Update();
         }
 
@@ -164,8 +174,8 @@ namespace ResurrectionRP_Server.Entities.Players
             }
 
             player.SetData("SocialClub", socialclub);
-            player.Model = (uint)AltV.Net.Enums.PedModel.FreemodeMale01;
-            player.Spawn(new Vector3(-1072.886f, -2729.607f, 0.8148939f), 0);
+            await player.SetModelAsync((uint)AltV.Net.Enums.PedModel.FreemodeMale01);
+            await player.SpawnAsync(new Position(-1072.886f, -2729.607f, 0.8148939f));
 
             if (GameMode.ServerLock)
             {
@@ -182,7 +192,6 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 try
                 {
-                    
                     if (!Config.GetSetting<bool>("WhitelistOpen"))
                     {
                         player.EmitLocked("OpenLogin");

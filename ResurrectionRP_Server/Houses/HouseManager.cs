@@ -255,7 +255,7 @@ namespace ResurrectionRP_Server.Houses
             }
         }
 
-        public async Task OnPlayerConnected(IPlayer player)
+        public static void OnPlayerConnected(IPlayer player)
         {
             var social = player.GetSocialClub();
             foreach (House house in Houses.Where(h => h.Owner == social))

@@ -79,6 +79,7 @@ export class Medical {
     private isInMission: boolean;
     private deathMessage: string;
     public RequestedTimeMedic: number = 0;
+    private everyTick: number;
 
     constructor()
     {
@@ -148,10 +149,11 @@ export class Medical {
 
         alt.onServer("ONU_PlayerDeath", (weapon: number) => {
             alt.on('keydown', this.KeyHandler);
+            this.everyTick = alt.everyTick(this.OnTick.bind(this));
         });
 
-        alt.onServer("ResurrectPlayer", (health : number) => {
-
+        alt.onServer("ResurrectPlayer", (health: number) => {
+            alt.clearEveryTick(this.everyTick);
             alt.off('keydown', this.KeyHandler);
             game.setPlayerHealthRechargeMultiplier(alt.Player.local.scriptID, 0);
 
@@ -160,7 +162,7 @@ export class Medical {
 
             game.clearPedBloodDamage(alt.Player.local.scriptID);
         });  
-        alt.everyTick(this.OnTick.bind(this));
+        
     }
 
     private KeyHandler(key)

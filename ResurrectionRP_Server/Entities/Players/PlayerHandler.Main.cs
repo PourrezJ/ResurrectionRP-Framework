@@ -166,7 +166,10 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (BankAccount == null)
                     BankAccount = new Bank.BankAccount(Bank.AccountType.Personal, await Bank.BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
 
-                await GameMode.Instance.Streamer.LoadStreamPlayer(client);
+                GameMode.Instance.Streamer.LoadStreamPlayer(client);
+
+                Houses.HouseManager.OnPlayerConnected(client);
+
                 BankAccount.Owner = this;
 
                 if (firstspawn)

@@ -128,10 +128,14 @@ namespace ResurrectionRP_Server.Streamer
             ListStaticEntities.TryRemove(blip.id, out _);
         }
 
-        public async Task LoadStreamPlayer(IPlayer player)
+        public void LoadStreamPlayer(IPlayer player)
         {
             foreach(KeyValuePair<int, object> item in ListStaticEntities)
-                await AltAsync.EmitAsync(player, "createStaticEntity", item.Value);
+            {
+                if (!player.Exists)
+                    return;
+                AltAsync.EmitLocked(player, "createStaticEntity", item.Value);
+            }
         }
     }
 }

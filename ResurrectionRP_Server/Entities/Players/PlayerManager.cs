@@ -51,29 +51,36 @@ namespace ResurrectionRP_Server.Entities.Players
             AltAsync.OnClient("OnKeyUp", OnKeyReleased);
 
             AltAsync.OnPlayerDead += Events_PlayerDeath;
-
+            /*
             Utils.Utils.Delay(300000, false, async () =>
             {
                 var players = PlayerHandler.PlayerHandlerList.ToList();
 
                 for (int i = 0; i < players.Count; i++)
                 {
-                    var ph = players[i];
-
-                    if (!ph.Key.Exists)
-                        continue;
-
-                    if (GameMode.Instance.PlayerList.Any(v => v.Id == ph.Key.Id))
+                    try
                     {
-                        if (ph.Value != null)
-                            await ph.Value.Update();
-                    }
+                        var ph = players[i];
 
-                    await Task.Delay(500);
+                        if (!ph.Key.Exists)
+                            continue;
+
+                        if (GameMode.Instance.PlayerList.Any(v => v.Id == ph.Key.Id))
+                        {
+                            if (ph.Value != null)
+                                await ph.Value.Update();
+                        }
+
+                        await Task.Delay(500);
+                    }
+                    catch (Exception ex)
+                    {
+                        Alt.Server.LogError(ex.ToString());
+                    }
                 }
 
                 players.Clear();
-            });
+            });*/
 
         }
 

@@ -34,25 +34,24 @@ namespace ResurrectionRP_Server.Models
             }
         }
 
-        public async static Task<InventoryBox> CreateInventoryBox(string id, Location location,Inventory.Inventory inventory = null, string model = "prop_box_wood07a", int taille = 200)
+        public async static Task<InventoryBox> CreateInventoryBox(string id, Location location,Inventory.Inventory inventory = null, uint model = 0, int taille = 200)
         {
+            if (model == 0)
+                model = Alt.Hash("prop_box_wood07a");
             InventoryBox inv = new InventoryBox()
             {
                 ID = id,
                 Location = location,
-                Model = Alt.Hash(model),
+                Model = model,
                 Inventory = (inventory == null) ? new Inventory.Inventory(taille, 20) : inventory
             };
 
-            await inv.Spawn();
+            inv.Spawn();
             return inv;
         }
 
-        public async Task Spawn() 
-        {
-            //Obj = Entities.Objects.ObjectManager.CreateObject(Model, new Vector3(Location.Pos.X, Location.Pos.Y, Location.Pos.Z - 1f), Location.Rot);
-            
-        }
+        public void Spawn() =>
+            Obj = Entities.Objects.ObjectManager.CreateObject((int)Model, new Vector3(Location.Pos.X, Location.Pos.Y, Location.Pos.Z - 1f), Location.Rot);
 
         public void Destruct() =>
             Obj?.Destroy();

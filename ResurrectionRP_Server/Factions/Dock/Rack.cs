@@ -48,10 +48,10 @@ namespace ResurrectionRP_Server.Factions
         public async Task Load(bool empty = false)
         {
             if (GameMode.Instance.IsDebug)
-                Entities.Marker.CreateMarker(Entities.MarkerType.VerticalCylinder,RackPos - new Vector3(0,0,2),new Vector3(1,1,1), Color.FromArgb(80, 255, 255, 255) );
+                Entities.Marker.CreateMarker(Entities.MarkerType.VerticalCylinder,RackPos ,new Vector3(1,1,1), Color.FromArgb(80, 255, 255, 255) );
             if (!empty && InventoryBox != null)
             {
-                await InventoryBox.Spawn(); 
+                InventoryBox.Spawn(); 
             }
             else if (!empty && InventoryBox == null)
             {
@@ -59,7 +59,8 @@ namespace ResurrectionRP_Server.Factions
             }
 
             RefreshLabel();
-            Colshape = Alt.CreateColShapeCylinder(RackPos, 2, 2);
+            Colshape = Alt.CreateColShapeCylinder(RackPos - new Vector3(0,0,1), 2, 2);
+            
         }
 
         public async Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)

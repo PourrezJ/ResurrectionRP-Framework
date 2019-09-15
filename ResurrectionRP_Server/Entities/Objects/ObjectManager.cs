@@ -21,11 +21,26 @@ namespace ResurrectionRP_Server.Entities.Objects
             AltAsync.OnClient("ObjStream_GetStreamInfo_Srv", ObjStream_GetStreamInfo_Srv);
         }
 
-        public static Object CreateObject(string model, Vector3 position, Vector3 rotation, bool freeze = false, bool dynamic = false, uint dimension = ushort.MaxValue)
+        public static Object CreateObject(int model, Vector3 position, Vector3 rotation, bool freeze = false, bool dynamic = false, uint dimension = ushort.MaxValue)
         {
             var resuobject = new Object 
             (
                 model,
+                position.ConvertToPosition(),
+                rotation.ConvertToEntityRotation(),
+                GameMode.Instance.Streamer.EntityNumber++,
+                freeze,
+                dimension
+            );
+            GameMode.Instance.ObjectManager.ListObject[resuobject.id] = resuobject;
+            GameMode.Instance.Streamer.AddEntityObject(resuobject);
+            return resuobject;
+        }
+        public static Object CreateObject(string model, Vector3 position, Vector3 rotation, bool freeze = false, bool dynamic = false, uint dimension = ushort.MaxValue)
+        {
+            var resuobject = new Object 
+            (
+                (int)Alt.Hash(model),
                 position.ConvertToPosition(),
                 rotation.ConvertToEntityRotation(),
                 GameMode.Instance.Streamer.EntityNumber++,

@@ -95,8 +95,8 @@ namespace ResurrectionRP_Server.Factions
                 {
                     InventoryBox.Obj.SetAttachToEntity(vehicle, "forks_attach", new Vector3(), new Vector3()); 
                     vehicle.SetData("BoxForks", InventoryBox);
-                    InventoryBox = null;
-                    client.DisplayHelp("Transport d'une box", 60000);
+                    //InventoryBox = null;
+                    //client.DisplayHelp("Transport d'une box", 60000);
                 }
                 else if (menuItem.Id == "ID_OutRack")
                 {

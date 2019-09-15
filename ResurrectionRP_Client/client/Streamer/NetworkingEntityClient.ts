@@ -122,6 +122,7 @@ export class NetworkingEntityClient {
             case 1:
                 //game.deleteObject(this.EntityList[entity["data"]["id"]["intValue"]])
                 this.onStreamIn(entity);
+                
                 break;
             case 2:
                 this.EntityList[entity["data"]["id"]["intValue"]] = undefined;
@@ -179,7 +180,7 @@ export class NetworkingEntityClient {
                     entity["data"]["freeze"]["boolValue"]
                 );
                 if (JSON.parse(entity["data"]["attach"]["stringValue"])  != null)
-                    this.objectAttach(entity["data"]["id"]["intValue"], JSON.parse(entity["data"]["attach"]["stringValue"]) ) 
+                    this.objectAttach(entity["data"]["id"]["intValue"], JSON.parse(entity["data"]["attach"]["stringValue"])) 
                 break;
             case 2:
                 await this.streamTextLabel(
@@ -260,15 +261,15 @@ export class NetworkingEntityClient {
     private streamObject = async (id: number, model: any, x: number, y: number, z: number, freeze: boolean) => {
         var entityId = null;
 
-        if(this.EntityList[id] == undefined)
+        if (this.EntityList[id] == undefined)
             entityId = game.createObject(model, x, y, z, false, true, false);
-
+        else
+            entityId = this.EntityList[id];
         game.freezeEntityPosition(entityId, freeze);
         this.EntityList[id] = entityId;
     }
 
     private objectAttach = (entityId: number, attach: any) => {
-        alt.log(JSON.stringify(attach))
         switch (attach.Type) {
             case 5:
 /*
@@ -288,6 +289,10 @@ export class NetworkingEntityClient {
                         Utils.LogError("Vehicle bone: " + ex.ToString());
                     }
                 }*/
+                var veh: alt.Vehicle = alt.Vehicle.all.find(p => p.id == attach.RemoteID);
+
+                var bone = game.getEntityBoneIndexByName(veh.scriptID, attach.Bone);
+                game.attachEntityToEntity(this.EntityList[entityId], veh.scriptID, bone, attach.PositionOffset.X, attach.PositionOffset.Y, attach.PositionOffset.Z, attach.RotationOffset.X, attach.RotationOffset.Y, attach.RotationOffset.Z, true, false, false, false, 0, true);
                 break;
             default:
                 alt.logError("Entity attached not coded");

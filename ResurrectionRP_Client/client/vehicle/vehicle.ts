@@ -13,6 +13,9 @@ let lastPos = null;
 export function initialize() {
     alt.onServer('OnPlayerLeaveVehicle', hide);
     alt.onServer('OnPlayerEnterVehicle', show);
+    alt.onServer('UpdateFuel', (fuel: number) => {
+        fuelCur = fuel;
+    });
 
     alt.everyTick(() => {
         if ((Date.now() - lastSent) > 33) {

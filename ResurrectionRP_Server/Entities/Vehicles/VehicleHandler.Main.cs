@@ -260,6 +260,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             Update();
         }
+        public float GetFuel() => Fuel;
 
         public void UpdateProperties()
         {

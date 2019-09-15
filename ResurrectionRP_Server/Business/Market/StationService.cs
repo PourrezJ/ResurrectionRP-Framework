@@ -1,7 +1,7 @@
 ﻿using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Numerics;
 using System.Text;
 
@@ -12,7 +12,11 @@ namespace ResurrectionRP_Server.Business
         public Vector3 location;
         public float Range;
         public int ID;
-        public List<IVehicle> VehicleInStation = new List<IVehicle>();
+        public int EssencePrice = 1;
+        public float Litrage = 0;
+        public int LitrageMax = 1000;
+        [BsonIgnore]
+        public ConcurrentDictionary<int, IVehicle> VehicleInStation = new ConcurrentDictionary<int,IVehicle>();
         [BsonIgnore]
         public Entities.Blips.Blips StationBlip;
         [BsonIgnore]

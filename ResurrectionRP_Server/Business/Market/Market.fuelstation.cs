@@ -1,5 +1,7 @@
-﻿using AltV.Net.Elements.Entities;
+﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
+using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Utils;
 using System;
 using System.Collections.Generic;
@@ -14,55 +16,63 @@ namespace ResurrectionRP_Server.Business
         private bool _ravitaillement = false;
         private IPlayer _utilisateurRavi;
 
-        public static async Task OpenGasPompMenu(IPlayer client, int id)
+        public static async Task OpenGasPumpMenu(IPlayer client)
         {
-            var fuelpump = Market.MarketsList.Find(x => x.ID == id);
-
+            var fuelpump = Market.MarketsList.Find(x => x.Station.Colshape.IsEntityInColShape(client));
             if (fuelpump == null)
             {
-                client.SendNotificationError("Cette pompe est hors service.");
+                client.DisplaySubtitle( "Cette pompe est hors service.", 10000);
                 return;
             }
 
-            Menu menu = new Menu("ID_GasPumpMenuMain", "Station Essence", $"Prix du litre: {fuelpump.EssencePrice}", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
+            Menu menu = new Menu("ID_GasPumpMenuMain", "Station Essence", $"Prix du litre: {fuelpump.Station.EssencePrice}", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
             menu.ItemSelectCallback = fuelpump.FuelMenuCallBack;
 
             menu.SubTitle = "Mettre le plein dans:";
 
-            var VehicleList = fuelpump.StationPos.GetPlayersInRange( fuelpump.Range);
-            if (VehicleList.Count <= 0)
+
+            if (fuelpump.Station.VehicleInStation.Count == 0)
             {
-                client.SendNotificationError("Aucun véhicule près de la pompe.");
+                client.DisplaySubtitle( "Aucun véhicule près de la pompe.", 10000);
                 return;
             }
 
-            foreach (IVehicle vehicle in VehicleList)
+            foreach (KeyValuePair<int, IVehicle> veh in fuelpump.Station.VehicleInStation)
             {
-                Entities.Vehicles.VehicleHandler vh = vehicle.GetVehicleHandler() ;
+                IVehicle vehicle = veh.Value;
+
+                if (vehicle == null)
+                    continue;
+                VehicleHandler vh = vehicle.GetVehicleHandler();
+                if (vh.GetFuel() > vh.FuelMax - 2)
+                {
+                    client.DisplayHelp("Il se peut que certains véhicule n'aient pas besoin de plein!", 10000);
+                    continue;
+                }
 
                 MenuItem item = new MenuItem(vh.VehicleManifest.DisplayName, rightLabel: vh.Plate, executeCallback: true);
                 item.SetData("Vehicle", vh);
-                if (vh != null) menu.Add(item);
+                menu.Add(item);
             }
 
-            await MenuManager.OpenMenu(client, menu);
+            await menu.OpenMenu(client);
         }
 
         private async Task FuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            Entities.Vehicles.VehicleHandler vh = menuItem.GetData("Vehicle");
+            VehicleHandler vh = menuItem.GetData("Vehicle");
             if (vh == null) return;
-            int price = CalculEssencePriceNeeded(vh, this.EssencePrice);
-            AcceptMenu accept = await AcceptMenu.OpenMenu(client, menu.Title, $"Prix du litre: ${EssencePrice} || Taxe Etat: ${GameMode.Instance?.Economy.Taxe_Essence}", $"Mettre le plein dans {vh.Plate} pour la somme de ~r~${price}~w~.", rightlabel: $"${price}");
+            int price = CalculEssencePriceNeeded(vh, this.Station.EssencePrice);
+            AcceptMenu accept = await AcceptMenu.OpenMenu(client, menu.Title, $"Prix du litre: ${Station.EssencePrice} || Taxe Etat: ${GameMode.Instance?.Economy.Taxe_Essence}", $"Mettre le plein dans {vh.Plate} pour la somme de ~r~${price}~w~.", rightlabel: $"${price}");
 
             accept.AcceptMenuCallBack += (async (IPlayer _client, bool reponse) => {
                 if (reponse)
                 {
-                    if (await client.GetPlayerHandler().HasBankMoney(price, $"Plein d'essence."))
+                    if (await client.GetPlayerHandler().HasBankMoney(price, $"Plein d'essence {vh.Plate}."))
                     {
                         vh.SetFuel(vh.FuelMax);
-                        await BankAccount.AddMoney(price, $"Plein du véhicule {vh.Plate}", false);
-                        client.SendNotificationSuccess($"Vous avez fait le plein dans le véhicule pour la somme de ${price}");
+                        await BankAccount.AddMoney(price, $"Plein du véhicule {vh.Plate}");
+                        client.DisplayHelp($"Le plein est fait.\n Vous avez payé ~r~${price}", 6000);
                         await Update();
                     }
                     else
@@ -77,20 +87,20 @@ namespace ResurrectionRP_Server.Business
                 }
             });
         }
-
+        
         private async Task RefuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (!client.Exists)
                 return;
 
-            if ( client.IsInVehicle == true &&  ( client.Vehicle).Model == 4097861161)
+            if (client.IsInVehicle &&  client.Vehicle.Model== 4097861161)
             {
                 IVehicle fueltruck = client.Vehicle;
                 if (fueltruck.GetData("RefuelRaffine", out object dataa))
                 {
                     if (_ravitaillement || _utilisateurRavi != null)
                     {
-                        client.DisplayHelp("Il y a déjà un ravitaillement en cours !", 15000);
+                        client.DisplayHelp("La station service est déjà en ravitaillement!", 15000);
                         return;
                     }
                     _utilisateurRavi = client;
@@ -100,19 +110,19 @@ namespace ResurrectionRP_Server.Business
                     await MenuManager.CloseMenu(client);
 
 
-                    if (currentmax + Litrage > LitrageMax)
-                        currentmax = LitrageMax;
+                    if (currentmax + Station.Litrage > Station.LitrageMax)
+                        currentmax = Station.LitrageMax;
 
                     //API.Shared.OnProgressBar(client, true, 0, currentmax, 750);
-                    client.DisplayHelp("Le ravitaillement vient de démarrer.\n Patientez", 15000);
+                    client.DisplaySubtitle("Début du transfert ...", 30000);
                     while (_ravitaillement)
                     {
                         await Task.Delay(750);
                         //API.OnProgressBar(client, true, i, currentmax);
                         fueltruck.SetData("RefuelRaffine", currentmax - 1);
-                        if (Litrage >= LitrageMax)
+                        if (Station.Litrage >= Station.LitrageMax)
                         {
-                            client.DisplayHelp("~r~[Abandon] Le réservoir de la station est plein!", 15000);
+                            client.DisplaySubtitle("~r~[Abandon] Le réservoir de la station est plein!", 30000);
                             //API.Shared.OnProgressBar(client, false);
                             _ravitaillement = false;
                             _utilisateurRavi = null;
@@ -121,19 +131,19 @@ namespace ResurrectionRP_Server.Business
 
                         if (currentmax <= 0)
                         {
-                            client.DisplayHelp("Ravitaillement terminé, merci !", 15000);
+                            client.DisplaySubtitle("~g~Transfert terminé!", 30000);
                             //API.Shared.OnProgressBar(client, false);
                             _ravitaillement = false;
                             _utilisateurRavi = null;
                             await Update();
                             return;
                         }
-                        Litrage++;
+                        Station.Litrage++;
                     }
                 }
                 else
                 {
-                    client.DisplayHelp("Impossible, votre citerne est vide !", 15000);
+                    client.DisplaySubtitle("~r~Votre citerne est vide!", 15000);
                     return;
                 }
             }

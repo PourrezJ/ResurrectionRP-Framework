@@ -42,9 +42,9 @@ namespace ResurrectionRP_Server.Farms
             ItemIDBrute = ItemID.PetrolBrute;
             ItemIDProcess = ItemID.Petrol;
             ItemPrice = 21;
-            Harvest_Time = 15; // Prod : 2600
-            Process_Time = 15; // prod 2400
-            Selling_Time = 15; // prod /  600
+            Harvest_Time = 2600; // Prod : 2600
+            Process_Time = 2400; // prod 2400
+            Selling_Time = 600; // prod /  600
             Enabled = true;
         }
 

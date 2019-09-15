@@ -107,40 +107,47 @@ namespace ResurrectionRP_Server.Business
                     }
                     _utilisateurRavi = client;
                     _ravitaillement = true;
-                    int currentmax = Convert.ToInt32(data);
 
                     await MenuManager.CloseMenu(client);
 
 
-                    if (currentmax + Station.Litrage > Station.LitrageMax)
-                        currentmax = Station.LitrageMax;
 
                     //API.Shared.OnProgressBar(client, true, 0, currentmax, 750);
                     client.DisplaySubtitle("Début du transfert ...", 30000);
                     while (_ravitaillement)
                     {
-                        await Task.Delay(10); // prod : 750
+                        await Task.Delay(1000); // prod : 750
+                        client.DisplayHelp("Station service \n Litres en station: " + Station.Litrage + "\nLitres dans le camion: " + hfuel.OilTank.Traite, 1000);
                         //API.OnProgressBar(client, true, i, currentmax);
-                        hfuel.OilTank.Traite =  currentmax - 1;
-                        if (Station.Litrage >= Station.LitrageMax)
+                        if(Station.Litrage == Station.LitrageMax)
                         {
-                            client.DisplaySubtitle("~r~[Abandon] Le réservoir de la station est plein!", 30000);
+                            client.DisplaySubtitle("~g~Le réservoir de la station est plein ! Fin du transfert!", 30000);
+                            //API.Shared.OnProgressBar(client, false);
+                            _ravitaillement = false;
+                            _utilisateurRavi = null;
+                            return;
+
+                        }
+                        if(hfuel.OilTank.Traite == 0)
+                        {
+                            client.DisplaySubtitle("~g~Votre citerne est vide, fin du transfert! ", 30000);
                             //API.Shared.OnProgressBar(client, false);
                             _ravitaillement = false;
                             _utilisateurRavi = null;
                             return;
                         }
 
-                        if (currentmax <= 0)
+                        if(_ravitaillement = false && _utilisateurRavi == null)
                         {
-                            client.DisplaySubtitle("~g~Transfert terminé!", 30000);
-                            //API.Shared.OnProgressBar(client, false);
                             _ravitaillement = false;
                             _utilisateurRavi = null;
-                            await Update();
                             return;
                         }
+
                         Station.Litrage++;
+                        hfuel.OilTank.Traite--;
+                        _ravitaillement = true;
+                        _utilisateurRavi = client;
                     }
                 }
                 else

@@ -348,11 +348,10 @@ namespace ResurrectionRP_Server.Farms
 
             if (player.DeleteAllItem(ItemIDProcess, itemcount))
             {
-                /* ECONOMY a besoin d'être implanté
-                double gettaxe = Economy.CalculPriceTaxe((ItemPrice * itemcount), GameMode.Instance.Economy.Taxe_Exportation);
+                double gettaxe = Economy.Economy.CalculPriceTaxe((ItemPrice * itemcount), GameMode.Instance.Economy.Taxe_Exportation);
                 await player.AddMoney((ItemPrice * itemcount) - gettaxe);
                 GameMode.Instance.Economy.CaissePublique += gettaxe;
-                await sender.DisplaySubtitle($"~r~{itemcount} ~w~{_itemBuy.name}(s) $~r~{(ItemPrice * itemcount) - gettaxe} ~w~taxe:$~r~{gettaxe}.", 15000);*/
+                sender.DisplaySubtitle($"~r~{itemcount} ~w~{_itemBuy.name}(s) $~r~{(ItemPrice * itemcount) - gettaxe} ~w~taxe:$~r~{gettaxe}.", 15000);
             }
             else
                 sender.SendNotificationError("Inconnu.");

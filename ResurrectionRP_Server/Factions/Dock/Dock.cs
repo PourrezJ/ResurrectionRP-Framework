@@ -41,7 +41,7 @@ namespace ResurrectionRP_Server.Factions
         {
             Teleports = new List<Teleport.Teleport>();
 
-            this.ServiceLocation = new Vector3(993.1122f, -3096.144f, -38.99584f);
+            this.ServiceLocation = new Vector3(993.1122f, -3096.144f, -38.99584f + 0.2f);
             this.ParkingLocation = new Location(new Vector3(1186.454f, -3200.917f, 6.101458f), new Vector3(0, 0, 254.6298f));
 
             this.FactionRang = new FactionRang[] {
@@ -119,7 +119,7 @@ namespace ResurrectionRP_Server.Factions
                 new TeleportEtage() { Name = "Entrepôt", Location = new Location(new Vector3(1023.734f, -3101.668f, -39.55f), new Vector3(0.09950814f, 0.3552414f, 76.95227f))}
             };
 
-            Teleports.Add( Teleport.Teleport.CreateTeleport(new Location(new Vector3(1189.579f, -3106.517f, 5.3f), new Vector3(-3.693874f, -0.06248324f, 358.6757f)), doors, 1, true, iswhitelisted: true, menutitle: "Entrepôt", whitelist: this.ServicePlayerList));
+            Teleports.Add( Teleport.Teleport.CreateTeleport(new Location(new Vector3(1189.579f, -3106.517f, 5.3f), new Vector3(-3.693874f, -0.06248324f, 358.6757f)), doors, 2, true, iswhitelisted: true, menutitle: "Entrepôt", whitelist: this.ServicePlayerList));
 
             Parking.Hidden = true;
             Parking.Spawn1 = new Location(new Vector3(1186.454f, -3200.917f, 6.101458f), new Vector3(0.01919898f, 0.2955396f, 88.09204f));
@@ -144,6 +144,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         await Racks[i].Load();
                         Racks[i].Colshape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
+                        Racks[i].Colshape.SetOnVehicleEnterColShape(OnVehicleEnterColShape);
                         await Task.Delay(25);
                     }
                 }
@@ -326,17 +327,22 @@ namespace ResurrectionRP_Server.Factions
             {
                 await Quai.OnPlayerEnterColShape(colShape, player);
             }
-            else
+        }
+        public async Task OnVehicleEnterColShape(IColShape colShape, IVehicle vehicle)
+        {
+            if (vehicle.Driver == null)
+                return;
+            var player = vehicle.Driver;
+
+            for (int i = 0; i < Racks.Count; i++)
             {
-                for (int i = 0; i < Racks.Count; i++)
+                if (Racks[i].Colshape.IsEntityInColShape(player))
                 {
-                    if (Racks[i].Colshape.IsEntityInColShape(player))
-                    {
-                        await Racks[i].OnPlayerEnterColShape(colShape, player);
-                        break;
-                    }
+                    await Racks[i].OnPlayerEnterColShape(colShape, player);
+                    break;
                 }
             }
+            
         }
         #endregion
 

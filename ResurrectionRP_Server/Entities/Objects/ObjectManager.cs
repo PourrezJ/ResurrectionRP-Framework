@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.Entities.Objects
             return resuobject;
         }
 
-        public static void AttachToEntity(IEntity ent1, Object target, string bone, Vector3 positionOffset, Vector3 rotationOffset)
+        public static void AttachToEntity(Object ent1, Object target, string bone, Vector3 positionOffset, Vector3 rotationOffset)
         {
             var attach = new Models.Attachment()
             {
@@ -62,7 +62,7 @@ namespace ResurrectionRP_Server.Entities.Objects
                 RemoteID = (uint)target.id,
                 Type = EntityType.Object
             };
-            target.attach = attach;
+            //target.attach = attach;
 
             //var obj = ent1 as IObject;
             //var objhandle = GetHandlerByObject(obj);
@@ -71,6 +71,20 @@ namespace ResurrectionRP_Server.Entities.Objects
             //     objhandle.Attachment = attach;
             //     await objhandle.UpdateSync();
             //}
+
+        }
+        public static void AttachToEntity(IVehicle vehicle, Object target, string bone, Vector3 positionOffset, Vector3 rotationOffset)
+        {
+            var attach = new Models.Attachment()
+            {
+                Bone = bone,
+                PositionOffset = positionOffset,
+                RotationOffset = rotationOffset,
+                RemoteID = (uint)vehicle.Id,
+                Type = EntityType.Vehicle
+            };
+            target.attach = attach;
+            GameMode.Instance.Streamer.UpdateEntityObject(target);
 
         }
 

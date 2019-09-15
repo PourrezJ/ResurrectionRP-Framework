@@ -33,7 +33,7 @@ namespace ResurrectionRP_Server.Entities.Objects
             this.rotation = rotation;
         }
 
-        public bool SetAttachToEntity(IEntity target, string bone, Position positionOffset, Rotation rotationOffset)
+        public bool SetAttachToEntity(IVehicle target, string bone, Position positionOffset, Rotation rotationOffset)
         {
             ObjectManager.AttachToEntity(target, this, bone, positionOffset, rotationOffset);
             return true;
@@ -58,7 +58,7 @@ namespace ResurrectionRP_Server.Entities.Objects
             data["id"] = this.id;
             data["position"] = JsonConvert.SerializeObject(this.id);
             data["freeze"] = this.freeze;
-            data["attachment"] = JsonConvert.SerializeObject(this.attach);
+            data["attach"] = JsonConvert.SerializeObject(this.attach);
             return data;
         }
 

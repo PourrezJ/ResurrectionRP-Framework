@@ -172,12 +172,14 @@ export class NetworkingEntityClient {
                 await utils.loadModelAsync(game.getHashKey( entity["data"]["model"]["stringValue"]));
                 await this.streamObject(
                     entity["data"]["id"]["intValue"],
-                    game.getHashKey( entity["data"]["model"]["stringValue"]),
+                    ( entity["data"]["model"]["intValue"]),
                     entity["position"]["x"],
                     entity["position"]["y"],
                     entity["position"]["z"],
                     entity["data"]["freeze"]["boolValue"]
                 );
+                if (JSON.parse(entity["data"]["attach"]["stringValue"])  != null)
+                    this.objectAttach(entity["data"]["id"]["intValue"], JSON.parse(entity["data"]["attach"]["stringValue"]) ) 
                 break;
             case 2:
                 await this.streamTextLabel(
@@ -263,7 +265,34 @@ export class NetworkingEntityClient {
 
         game.freezeEntityPosition(entityId, freeze);
         this.EntityList[id] = entityId;
+    }
 
+    private objectAttach = (entityId: number, attach: any) => {
+        alt.log(JSON.stringify(attach))
+        switch (attach.Type) {
+            case 5:
+/*
+                var vehicle = Entities.Vehicles.All.Find(p => p.RemoteId == attach.RemoteID);
+                if (vehicle != null && vehicle.Exists) {
+                    try {
+                        int bone = 0;
+
+                        bone = vehicle.GetBoneIndexByName(attach.Bone);
+                        if (Game.Instance.IsDebug)
+                            Utils.LogInfo("Vehicle bone: " + bone.ToString());
+
+                        RAGE.Game.Entity.AttachEntityToEntity(@object.Handle, vehicle.Handle, bone, pos.X, pos.Y, pos.Z, rot.X, rot.Y, rot.Z, true, false, false, false, 0, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.LogError("Vehicle bone: " + ex.ToString());
+                    }
+                }*/
+                break;
+            default:
+                alt.logError("Entity attached not coded");
+                break;
+        }
     }
 
     private interactPickup = (OID: number ) => {

@@ -96,7 +96,9 @@ namespace ResurrectionRP_Server.Business
             if (client.IsInVehicle &&  client.Vehicle.Model== 4097861161)
             {
                 IVehicle fueltruck = client.Vehicle;
-                if (fueltruck.GetData("RefuelRaffine", out object dataa))
+                VehicleHandler hfuel = client.Vehicle.GetVehicleHandler();
+                var data = hfuel.OilTank.Traite;
+                if (data > 0)
                 {
                     if (_ravitaillement || _utilisateurRavi != null)
                     {
@@ -105,7 +107,7 @@ namespace ResurrectionRP_Server.Business
                     }
                     _utilisateurRavi = client;
                     _ravitaillement = true;
-                    int currentmax = Convert.ToInt32(dataa);
+                    int currentmax = Convert.ToInt32(data);
 
                     await MenuManager.CloseMenu(client);
 
@@ -117,9 +119,9 @@ namespace ResurrectionRP_Server.Business
                     client.DisplaySubtitle("Début du transfert ...", 30000);
                     while (_ravitaillement)
                     {
-                        await Task.Delay(750);
+                        await Task.Delay(10); // prod : 750
                         //API.OnProgressBar(client, true, i, currentmax);
-                        fueltruck.SetData("RefuelRaffine", currentmax - 1);
+                        hfuel.OilTank.Traite =  currentmax - 1;
                         if (Station.Litrage >= Station.LitrageMax)
                         {
                             client.DisplaySubtitle("~r~[Abandon] Le réservoir de la station est plein!", 30000);

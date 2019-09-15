@@ -52,36 +52,6 @@ namespace ResurrectionRP_Server.Business
             if (!client.Exists)
                 return;
 
-            if (!colShape.IsEntityInColShape(client)) return;
-
-        // On vérifie que ce soit un camion citerne qui rentre dans la zone
-            if (await client.IsInVehicleAsync() && await (await client.GetVehicleAsync()).GetModelAsync() == 4097861161)
-            {
-                IVehicle fueltruck = await client.GetVehicleAsync();
-                // Si il posséde du carburant raffiné
-                if (fueltruck.GetData("RefuelRaffine", out object data))
-                {
-                    if ((int)data > 0)
-                    {
-                        Menu RefuelMenu = new Menu("ID_RefuelMenu", "Station Service", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
-                        RefuelMenu.ItemSelectCallback = RefuelMenuCallBack;
-                        RefuelMenu.Add(new MenuItem("Remplir la station", "", "", true));
-
-                        await MenuManager.OpenMenu(client, RefuelMenu);
-                    }
-                }
-                else
-                {
-                    client.DisplayHelp("~r~Votre citerne est vide.", 10000);
-                }
-            }
-        }
-
-        private async Task Events_PlayerEnterColshape(IColShape colShape, IPlayer client)
-        {
-            if (!client.Exists)
-                return;
-
             if (!colShape.IsEntityInColShape(client))
                 return;
 
@@ -93,6 +63,35 @@ namespace ResurrectionRP_Server.Business
                 await Update();
                 client.DisplayHelp("~r~Vous êtes sorti de la zone de ravitaillement", 12000);
 
+            }
+
+        }
+
+        private async Task Events_PlayerEnterColshape(IColShape colShape, IPlayer client)
+        {
+            if (!client.Exists)
+                return;
+
+            if (!colShape.IsEntityInColShape(client)) return;
+
+            // On vérifie que ce soit un camion citerne qui rentre dans la zone
+            if (await client.IsInVehicleAsync() && await (await client.GetVehicleAsync()).GetModelAsync() == 4097861161)
+            {
+                IVehicle fueltruck = await client.GetVehicleAsync();
+                // Si il posséde du carburant raffiné
+                if (fueltruck.GetVehicleHandler().OilTank.Traite > 0 )
+                {
+                    
+                    Menu RefuelMenu = new Menu("ID_RefuelMenu", "Station Service", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+                    RefuelMenu.ItemSelectCallback = RefuelMenuCallBack;
+                    RefuelMenu.Add(new MenuItem("Remplir la station", "", "", true));
+
+                    await MenuManager.OpenMenu(client, RefuelMenu);
+                }
+                else
+                {
+                    client.DisplayHelp("~r~Votre citerne est vide.", 10000);
+                }
             }
         }
 

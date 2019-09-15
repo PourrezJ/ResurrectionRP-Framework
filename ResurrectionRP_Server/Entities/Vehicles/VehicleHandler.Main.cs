@@ -246,6 +246,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public void SetFuel(float fuel)
         {
             Fuel = fuel;
+            if(Vehicle.Driver != null)
+                Vehicle.Driver.EmitLocked("UpdateFuel", fuel);
             Update();
         }
 

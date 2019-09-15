@@ -111,7 +111,7 @@ namespace ResurrectionRP_Server.Business
                     await MenuManager.CloseMenu(client);
 
 
-
+                    var EssenceTransfert = 0;
                     //API.Shared.OnProgressBar(client, true, 0, currentmax, 750);
                     client.DisplaySubtitle("Début du transfert ...", 30000);
                     while (_ravitaillement)
@@ -125,6 +125,9 @@ namespace ResurrectionRP_Server.Business
                             //API.Shared.OnProgressBar(client, false);
                             _ravitaillement = false;
                             _utilisateurRavi = null;
+                            client.GetPlayerHandler()?.HasBankMoney(EssenceTransfert * this.Station.buyEssencePrice, "Vente essence à la station " + this.BusinnessName);
+                            await BankAccount.AddMoney(EssenceTransfert * this.Station.buyEssencePrice, "Achat essence au vendeur " + client.GetPlayerHandler()?.Identite.FirstName + " " + client.GetPlayerHandler()?.Identite.LastName, true);
+
                             return;
 
                         }
@@ -134,6 +137,8 @@ namespace ResurrectionRP_Server.Business
                             //API.Shared.OnProgressBar(client, false);
                             _ravitaillement = false;
                             _utilisateurRavi = null;
+                            client.GetPlayerHandler()?.HasBankMoney(EssenceTransfert * this.Station.buyEssencePrice, "Vente essence à la station " + this.BusinnessName);
+                            await BankAccount.AddMoney(EssenceTransfert * this.Station.buyEssencePrice, "Achat essence au vendeur " + client.GetPlayerHandler()?.Identite.FirstName + " " + client.GetPlayerHandler()?.Identite.LastName, true);
                             return;
                         }
 
@@ -141,11 +146,14 @@ namespace ResurrectionRP_Server.Business
                         {
                             _ravitaillement = false;
                             _utilisateurRavi = null;
+                            client.GetPlayerHandler()?.HasBankMoney(EssenceTransfert * this.Station.buyEssencePrice, "Vente essence à la station " + this.BusinnessName);
+                            await BankAccount.AddMoney(EssenceTransfert * this.Station.buyEssencePrice, "Achat essence au vendeur " + client.GetPlayerHandler()?.Identite.FirstName + " " + client.GetPlayerHandler()?.Identite.LastName, true);
                             return;
                         }
 
                         Station.Litrage++;
                         hfuel.OilTank.Traite--;
+                        EssenceTransfert++;
                         _ravitaillement = true;
                         _utilisateurRavi = client;
                     }

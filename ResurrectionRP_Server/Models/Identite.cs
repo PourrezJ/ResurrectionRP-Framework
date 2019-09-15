@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using AltV.Net;
 
 namespace ResurrectionRP_Server.Models
 {
@@ -30,9 +31,17 @@ namespace ResurrectionRP_Server.Models
 
         public async static Task<Identite> GetOfflineIdentite(string socialClub)
         {
-            
-            var player = await Entities.Players.PlayerManager.GetPlayerHandlerDatabase(socialClub);
-            return player?.Identite;
+            try
+            {
+                var player = await Entities.Players.PlayerManager.GetPlayerHandlerDatabase(socialClub);
+                return player?.Identite;
+
+            }
+            catch (Exception ex )
+            {
+                Alt.Server.LogError("Erreur : Identite.cs, ce problème est généralement dû au fait que le Handler du owner ne correspond pas à celui du noueau sur Alt:V");
+                return null;
+            }
         }
 
     }

@@ -15,7 +15,7 @@ namespace ResurrectionRP_Server.Entities.Objects
     public class Object
     {
         public int id;
-        public string model;
+        public int model;
         public Position position;
         public Rotation rotation;
         public uint dimension;
@@ -24,7 +24,7 @@ namespace ResurrectionRP_Server.Entities.Objects
         public string pickup = null;
 
 
-        public Object(string model, Position position, Rotation rotation, int entityId, bool freeze = false, uint dimension = ushort.MaxValue)
+        public Object(int model, Position position, Rotation rotation, int entityId, bool freeze = false, uint dimension = ushort.MaxValue)
         {
             this.model = model;
             this.id = entityId;

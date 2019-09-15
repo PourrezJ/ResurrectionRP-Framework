@@ -55,11 +55,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         private async Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
             PlayerHandler ph = player.GetPlayerHandler();
-
+            VehicleHandler vh = vehicle.GetVehicleHandler();
             if (ph != null)
             {
                 await ph.Update();
-                await player.EmitAsync("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32(seat), 50, 50);
+                await player.EmitAsync("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32(seat), vh.Fuel, vh.FuelMax, vh.Milage );
             }
         }
 

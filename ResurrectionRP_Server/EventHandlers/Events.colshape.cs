@@ -111,6 +111,7 @@ namespace ResurrectionRP_Server.EventHandlers
 
                         if (OnPlayerInteractTeleporter != null)
                             await OnPlayerInteractTeleporter.Invoke(colshape, client);
+                        return;
                     }
                     else if (colshape.GetData("House", out int HouseID))
                     {
@@ -119,6 +120,7 @@ namespace ResurrectionRP_Server.EventHandlers
 
                         if (OnPlayerInteractHouse != null)
                             await OnPlayerInteractHouse.Invoke(colshape, client);
+                        return;
                     }
                 }
             }

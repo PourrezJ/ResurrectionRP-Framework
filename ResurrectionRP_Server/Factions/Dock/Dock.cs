@@ -143,6 +143,7 @@ namespace ResurrectionRP_Server.Factions
                     if (rack != null)
                     {
                         await Racks[i].Load();
+                        Racks[i].Colshape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
                         await Task.Delay(25);
                     }
                 }
@@ -329,7 +330,7 @@ namespace ResurrectionRP_Server.Factions
             {
                 for (int i = 0; i < Racks.Count; i++)
                 {
-                    if (Racks[i].Colshape == colShape)
+                    if (Racks[i].Colshape.IsEntityInColShape(player))
                     {
                         await Racks[i].OnPlayerEnterColShape(colShape, player);
                         break;

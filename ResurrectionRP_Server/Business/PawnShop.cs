@@ -28,7 +28,7 @@ namespace ResurrectionRP_Server.Businesses
         {
             this.MaxEmployee = 5;
             if (InventoryBox != null) 
-                await InventoryBox.Spawn();
+                InventoryBox.Spawn();
 
             await base.Init();
         }

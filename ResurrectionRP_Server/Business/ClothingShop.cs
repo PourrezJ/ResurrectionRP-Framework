@@ -17,7 +17,7 @@ using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Utils;
 using System.Drawing;
 
-namespace ResurrectionRP_Server.Businesses
+namespace ResurrectionRP_Server.Business
 {
     public class ClothingStore : Business
     {

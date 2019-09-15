@@ -48,7 +48,6 @@ export class Interaction {
             if (key == 69) { // E
                 if (isInColshape) {
                     alt.emitServer("InteractionInColshape", key);
-                    return;
                 }
 
                 if (game.isAnyObjectNearPoint(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, 2, true) &&
@@ -71,6 +70,13 @@ export class Interaction {
                         return;
 
                     alt.emitServer('OpenXtremPlayer', player.id);
+                }
+                else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isPompe(raycastResult.entityHash)) {
+                    alt.logError(game.getDistanceBetweenCoords(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, raycastResult.pos.x, raycastResult.pos.y, raycastResult.pos.z, false));
+                    if (game.getDistanceBetweenCoords(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, raycastResult.pos.x, raycastResult.pos.y, raycastResult.pos.z, false) < 5) {
+                        alt.emitServer('OpenGasPumpMenu');
+                    }
+                    
                 }
                 else
                     alt.emitServer('OnKeyPress', key);
@@ -101,6 +107,8 @@ export class Interaction {
                 alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le véhicule", 100)
             } else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isAtm(raycastResult.entityHash)) {
                 alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec l'ATM", 100)
+            } else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isPompe(raycastResult.entityHash)) {
+                alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec la pompe à essence", 100)
             }
 
             if (game.isAnyObjectNearPoint(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, 2, true) &&
@@ -117,6 +125,22 @@ export class Interaction {
             case 506770882:
             case 2930269768:
             case 3168729781:
+                return true;
+        }
+
+        return false;
+    }
+    private static isPompe(entityHash: number): boolean {
+        switch (entityHash) {
+            case 1339433404:
+            case 1933174915:
+            case -2007231801:
+            case -462817101:
+            case -462817101:
+            case -469694731:
+            case 1694452750:
+            case 1694:
+            case 750:
                 return true;
         }
 

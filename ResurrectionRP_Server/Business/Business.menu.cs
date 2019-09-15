@@ -11,7 +11,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 
 
-namespace ResurrectionRP_Server.Businesses
+namespace ResurrectionRP_Server.Business
 {
     public partial class Business
     {

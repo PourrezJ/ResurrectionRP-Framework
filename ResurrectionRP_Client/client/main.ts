@@ -1,7 +1,7 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
 import * as chat from 'client/chat/chat';
-import * as speedometer from 'client/speedometer/speedometer';
+import * as speedometer from './vehicle/vehicle';
 import * as xtreamMenu from 'client/menus/xtreamMenu/xtreamMenuManager';
 import * as utils from 'client/Utils/utils';
 import * as login from 'client/login/Login';

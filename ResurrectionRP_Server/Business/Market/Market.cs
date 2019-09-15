@@ -9,7 +9,7 @@ using AltV.Net.Enums;
 using AltV.Net;
 using AltV.Net.Async;
 
-namespace ResurrectionRP_Server.Businesses
+namespace ResurrectionRP_Server.Business
 {
     public partial class Market : Business
     {
@@ -18,14 +18,8 @@ namespace ResurrectionRP_Server.Businesses
 
         public int ID;
         public Vector3 StationPos;
-        public float Range = 100f;
-        public int EssencePrice = 1;
-        public float Litrage = 0;
-        public int LitrageMax = 1000;
-        [BsonIgnore]
-        public Entities.Blips.Blips StationBlip;
-        [BsonIgnore]
-        public IColShape FuelPumpColshape { get; private set; }
+        public float Range = 3f;
+        public StationService Station;
 
         public Market(int id, string businnessName, Models.Location location, uint blipSprite, int inventoryMax, Vector3 stationPos, PedModel pedhash = 0, string owner = null) : base(businnessName, location, blipSprite, inventoryMax, pedhash, owner)
         {
@@ -36,14 +30,15 @@ namespace ResurrectionRP_Server.Businesses
 
         public override async Task Init()
         {
-            //await MP.Blips.NewAsync(361, StationPos, 0.5f, 1, "Station d'éssence", 128, 10, true);
-            StationBlip = Entities.Blips.BlipsManager.CreateBlip("Station essence", StationPos, 128, 361, 0.5f);
-            FuelPumpColshape = Alt.CreateColShapeCylinder(StationPos, Range, 3f);
-            //FuelPumpColshape = await MP.Colshapes.NewTubeAsync(StationPos, Range, 3f);
-            //FuelPumpColshape.SetSharedData("FuelPump", this);
+            this.Station = new StationService(this.ID, this.Range, this.StationPos);
+            this.Station.StationBlip = Entities.Blips.BlipsManager.CreateBlip("Station essence", StationPos, 128, 361, 0.5f);
+            this.Station.Colshape = Alt.CreateColShapeCylinder(StationPos - new Vector3(0,0,2), 14f, 6f);
 
-            EventHandlers.Events.OnPlayerEnterColShape += Events_PlayerEnterColshape;
-            EventHandlers.Events.OnPlayerLeaveColShape += Events_PlayerExitColshape;
+
+            this.Station.Colshape.SetOnPlayerEnterColShape(Events_PlayerEnterColshape);
+            this.Station.Colshape.SetOnPlayerLeaveColShape(Events_PlayerExitColshape);
+            this.Station.Colshape.SetOnVehicleEnterColShape(Events_VehicleEnterColshape);
+            this.Station.Colshape.SetOnVehicleLeaveColShape(Events_VehicleExitColshape);
 
             this.Inventory.MaxSlot = 40;
             this.Inventory.MaxSize = 750;
@@ -57,28 +52,19 @@ namespace ResurrectionRP_Server.Businesses
             if (!client.Exists)
                 return;
 
-            if (colShape != FuelPumpColshape) return;
-            // On vérifie que ce soit un camion citerne qui rentre dans la zone
-            if (await client.IsInVehicleAsync() && await (await client.GetVehicleAsync()).GetModelAsync() == 4097861161)
-            {
-                IVehicle fueltruck = await client.GetVehicleAsync();
-                // Si il posséde du carburant raffiné
-                if (fueltruck.GetData("RefuelRaffine", out object data))
-                {
-                    if ((int)data > 0)
-                    {
-                        Menu RefuelMenu = new Menu("ID_RefuelMenu", "Station Service", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
-                        RefuelMenu.ItemSelectCallback = RefuelMenuCallBack;
-                        RefuelMenu.Add(new MenuItem("Remplir la station", "", "", true));
+            if (!colShape.IsEntityInColShape(client))
+                return;
 
-                        await MenuManager.OpenMenu(client, RefuelMenu);
-                    }
-                }
-                else
-                {
-                    client.DisplayHelp("Votre citerne est vide, vous avez rien à faire ici !", 15000);
-                }
+            if (_utilisateurRavi == client && _ravitaillement && await _utilisateurRavi.IsInVehicleAsync() && await (await _utilisateurRavi.GetVehicleAsync()).GetModelAsync() == 4097861161)
+            {
+                _ravitaillement = false;
+                _utilisateurRavi = null;
+                // API.Shared.OnProgressBar(client, false);
+                await Update();
+                client.DisplayHelp("~r~Vous êtes sorti de la zone de ravitaillement", 12000);
+
             }
+
         }
 
         private async Task Events_PlayerEnterColshape(IColShape colShape, IPlayer client)
@@ -86,16 +72,44 @@ namespace ResurrectionRP_Server.Businesses
             if (!client.Exists)
                 return;
 
-            if (colShape != FuelPumpColshape) return;
-            if (_utilisateurRavi == client && _ravitaillement && await _utilisateurRavi.IsInVehicleAsync() && await (await _utilisateurRavi.GetVehicleAsync()).GetModelAsync() == 4097861161)
-            {
-                _ravitaillement = false;
-                _utilisateurRavi = null;
-                // API.Shared.OnProgressBar(client, false);
-                await Update();
-                client.DisplayHelp("Vous venez de sortir de la zone de ravitaillement!", 30000);
+            if (!colShape.IsEntityInColShape(client)) return;
 
+            // On vérifie que ce soit un camion citerne qui rentre dans la zone
+            if (await client.IsInVehicleAsync() && await (await client.GetVehicleAsync()).GetModelAsync() == 4097861161)
+            {
+                IVehicle fueltruck = await client.GetVehicleAsync();
+                // Si il posséde du carburant raffiné
+                if (fueltruck.GetVehicleHandler().OilTank.Traite > 0 )
+                {
+                    
+                    Menu RefuelMenu = new Menu("ID_RefuelMenu", "Station Service", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+                    RefuelMenu.ItemSelectCallback = RefuelMenuCallBack;
+                    RefuelMenu.Add(new MenuItem("Remplir la station", "", "", true));
+
+                    await MenuManager.OpenMenu(client, RefuelMenu);
+                }
+                else
+                {
+                    client.DisplayHelp("~r~Votre citerne est vide.", 10000);
+                }
             }
+        }
+
+        private async Task Events_VehicleEnterColshape(IColShape colshape, IVehicle vehicle)
+        {
+            if (!vehicle.Exists)
+                return;
+            if (!this.Station.VehicleInStation.ContainsKey(vehicle.Id))
+                this.Station.VehicleInStation.TryAdd(vehicle.Id, vehicle);
+
+        }
+        private async Task Events_VehicleExitColshape(IColShape colshape, IVehicle vehicle)
+        {
+            if (!vehicle.Exists)
+                return;
+            if (this.Station.VehicleInStation.ContainsKey(vehicle.Id))
+                this.Station.VehicleInStation.TryRemove(vehicle.Id, out IVehicle veh);
+
         }
     }
 }

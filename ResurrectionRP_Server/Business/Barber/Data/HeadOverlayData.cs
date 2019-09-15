@@ -1,4 +1,4 @@
-﻿namespace ResurrectionRP_Server.Businesses.Barber
+﻿namespace ResurrectionRP_Server.Business.Barber
 {
     public struct HeadOverlayData
     {

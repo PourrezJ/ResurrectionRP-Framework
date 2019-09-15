@@ -12,7 +12,7 @@ using ResurrectionRP_Server.Models;
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
-using ResurrectionRP_Server.Businesses;
+using ResurrectionRP_Server.Business;
 
 namespace ResurrectionRP_Server.Database
 {
@@ -210,9 +210,9 @@ namespace ResurrectionRP_Server.Database
                 
                 if (bankAccount.AccountType == AccountType.Business)
                 {
-                    var collection = GetCollectionSafe<Business>("businesses");
-                    var filter = Builders<Business>.Filter.Eq("_id", ((Business)bankAccount.Owner)._id);
-                    var update = Builders<Business>.Update.Set("BankAccount", bankAccount);
+                    var collection = GetCollectionSafe<Business.Business>("businesses");
+                    var filter = Builders<Business.Business>.Filter.Eq("_id", ((Business.Business)bankAccount.Owner)._id);
+                    var update = Builders<Business.Business>.Update.Set("BankAccount", bankAccount);
                     return await collection.UpdateOneAsync(filter, update);
                 }
                 else if (bankAccount.AccountType == AccountType.Faction)

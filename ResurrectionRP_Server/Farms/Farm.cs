@@ -444,12 +444,12 @@ namespace ResurrectionRP_Server.Farms
             return false;
         }
 
-        public virtual Task OnPlayerColshape(IPlayer player, IColShape colshapePointer)
+        public virtual Task OnPlayerColshape(IColShape colShape, IPlayer client)
         {
             return Task.CompletedTask;
         }
 
-        public virtual Task OnExitColshape(IPlayer player, IColShape colshapePointer)
+        public virtual Task OnExitColshape(IColShape colShape, IPlayer player)
         {
             var ph = player.GetPlayerHandler();
             if (ph != null)

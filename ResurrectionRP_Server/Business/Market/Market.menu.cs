@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ResurrectionRP_Server.Businesses
+namespace ResurrectionRP_Server.Business
 {
 
     public partial class Market
@@ -14,7 +14,6 @@ namespace ResurrectionRP_Server.Businesses
         #region Menus
         public override async Task OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
         {
-            Alt.Server.LogError("Are in open menu");
             if (Inventory.Locked)
             {
                 client.SendNotificationError("La supérette est en cours de réapprovisionnement.");
@@ -60,8 +59,8 @@ namespace ResurrectionRP_Server.Businesses
                     new MenuItem("Statut des pompes à essence", "", "ID_Stats", true)
                 });
 
-                MenuItem _item = new MenuItem("Prix de l'essence", "", "ID_EssencePrice", true, false, $"${EssencePrice} + ${GameMode.Instance.Economy.Taxe_Essence}");
-                _item.SetInput(EssencePrice.ToString(), 10, InputType.UFloat);
+                MenuItem _item = new MenuItem("Prix de l'essence", "", "ID_EssencePrice", true, false, $"${Station.EssencePrice} + ${GameMode.Instance.Economy.Taxe_Essence}");
+                _item.SetInput(Station.EssencePrice.ToString(), 10, InputType.UFloat);
                 menu.Add(_item);
 
                 if ( IsOwner(client))
@@ -114,16 +113,16 @@ namespace ResurrectionRP_Server.Businesses
                     break;
 
                 case "ID_Stats":
-                    string msg = $"Réservoir: {Litrage} / {LitrageMax} litre(s)";
+                    string msg = $"Réservoir: {Station.Litrage} / {Station.LitrageMax} litre(s)";
                     client.SendNotification(msg);
                     break;
 
                 case "ID_EssencePrice":
                     if (int.TryParse(menuItem.InputValue, out int price))
                     {
-                        EssencePrice = price;
+                        Station.EssencePrice = price;
                         await Update();
-                        client.SendNotification($"Le nouveau prix de l'essence est de ${EssencePrice + GameMode.Instance.Economy.Taxe_Essence} dont ${GameMode.Instance.Economy.Taxe_Essence} de taxe.");
+                        client.SendNotification($"Le nouveau prix de l'essence est de ${Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence} dont ${GameMode.Instance.Economy.Taxe_Essence} de taxe.");
                         await OnNpcSecondaryInteract(client, Ped);
                     }
                     break;

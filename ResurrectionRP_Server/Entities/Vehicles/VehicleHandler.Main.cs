@@ -168,6 +168,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 await Vehicle.SetEngineOnAsync(Engine);
                 await Vehicle.SetPositionAsync( Vehicle.Position.X, Vehicle.Position.Y, Vehicle.Position.Z );
 
+
                 if (setLastUse)
                     LastUse = DateTime.Now;
 
@@ -176,6 +177,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
                 GameMode.Instance.VehicleManager.VehicleHandlerList.TryAdd(Vehicle, this);
+                if (Vehicle.GetVehicleHandler()?.FuelConsumption == 0)
+                    Vehicle.GetVehicleHandler().FuelConsumption = 5.5f;
             });
             
             if (HaveTowVehicle())
@@ -243,6 +246,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public void SetFuel(float fuel)
         {
             Fuel = fuel;
+            if(Vehicle.Driver != null)
+                Vehicle.Driver.EmitLocked("UpdateFuel", fuel);
             Update();
         }
 
@@ -257,6 +262,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             Update();
         }
+        public float GetFuel() => Fuel;
 
         public void UpdateProperties()
         {

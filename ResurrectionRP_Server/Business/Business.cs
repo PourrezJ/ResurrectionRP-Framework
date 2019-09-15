@@ -17,7 +17,7 @@ using ResurrectionRP_Server.Entities.Peds;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Utils.Enums;
 
-namespace ResurrectionRP_Server.Businesses
+namespace ResurrectionRP_Server.Business
 {
     [BsonKnownTypes(typeof(Market), typeof(TattoosStore), typeof(Barber.BarberStore), typeof(WeaponsShop), typeof(ClothingStore), typeof(PawnShop), typeof(DigitalDeen), typeof(PropsStore))]
     public partial class Business

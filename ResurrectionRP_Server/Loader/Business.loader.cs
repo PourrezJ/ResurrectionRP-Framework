@@ -6,19 +6,19 @@ using System.IO;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Business = ResurrectionRP_Server.Businesses.Business;
+using Business = ResurrectionRP_Server.Business.Business;
 using MongoDB.Driver;
 
 namespace ResurrectionRP_Server.Loader
 {
     public class BusinessesLoader
     {
-        public List<Business> BusinessesList = new List<Business>();
+        public List<Business.Business> BusinessesList = new List<Business.Business>();
         public static async Task LoadAllBusinesses()
         {
             Alt.Server.LogColored("--- Start loading all businesses in database ---");
 
-            var _businessesList = await Database.MongoDB.GetCollectionSafe<Business>("businesses").AsQueryable().ToListAsync();
+            var _businessesList = await Database.MongoDB.GetCollectionSafe<Business.Business>("businesses").AsQueryable().ToListAsync();
             foreach (var _businesses in _businessesList)
             {
                 await _businesses.Init();

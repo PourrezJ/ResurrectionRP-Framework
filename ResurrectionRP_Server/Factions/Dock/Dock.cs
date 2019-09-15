@@ -21,7 +21,7 @@ using ResurrectionRP_Server.Models.InventoryData;
 using ResurrectionRP_Server.Phone;
 using ResurrectionRP_Server.Utils.Enums;
 
-namespace ResurrectionRP_Server.Factions.Dock
+namespace ResurrectionRP_Server.Factions
 {
 
     public partial class Dock : Faction

@@ -318,29 +318,19 @@ namespace ResurrectionRP_Server.Phone
         #region Gestion des conversations
         public async Task LoadConversations(IPlayer client)
         {
-            try
+            var list = await Database.MongoDB.GetCollectionSafe<Conversation>("conversations").Find(p => p.sender == PhoneNumber).ToListAsync();
+            if (list.Count > 0)
             {
-                var list = await Database.MongoDB.GetCollectionSafe<Conversation>("conversations").Find(p => p.sender == PhoneNumber).ToListAsync();
-                if (list.Count > 0)
+                list.OrderByDescending(x => x.lastMessageDate);
+                foreach (Conversation conv in list)
                 {
-                    list.OrderByDescending(x => x.lastMessageDate);
-                    list.ForEach((Conversation conv) =>
-                    {
-                        Address _adress = this.AddressBook.Find(p => p.phoneNumber == conv.receiver);
+                    Address _adress = this.AddressBook.Find(p => p.phoneNumber == conv.receiver);
 
-                        conv.receiverName = (_adress != null) ? _adress.contactName : conv.receiver;
-                    });
-                    await client.EmitAsync("ConversationsReturnedV2", JsonConvert.SerializeObject(list));
-                }
+                    conv.receiverName = (_adress != null) ? _adress.contactName : conv.receiver;
+                };
+                client.EmitLocked("ConversationsReturnedV2", JsonConvert.SerializeObject(list));
             }
-            catch (Exception ex)
-            {
-                Alt.Server.LogError("LoadConversations " + ex);
-            }
-
         }
-
-
         #endregion
 
         #region Static Methods

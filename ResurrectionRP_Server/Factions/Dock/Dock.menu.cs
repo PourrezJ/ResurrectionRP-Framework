@@ -4,9 +4,8 @@ using ResurrectionRP_Server.Utils;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-namespace ResurrectionRP_Server.Factions.Dock
+namespace ResurrectionRP_Server.Factions
 {
-
     public partial class Dock : Faction
     {
         #region Private fields

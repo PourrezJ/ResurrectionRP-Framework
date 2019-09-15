@@ -651,7 +651,7 @@ namespace ResurrectionRP_Server.Factions
                 string vhname = (string)menuItem.GetData("Manifest");
                 if (await BankAccount.GetBankMoney(fv.Price, $"Achat véhicule {vhname} par {ph.Identite.Name}"))
                 {
-                    VehicleHandler vh = await VehiclesManager.SpawnVehicle( client.GetSocialClub(), (uint)fv.Hash, location.Pos, location.Rot, inventory: new Inventory.Inventory(fv.Weight, fv.MaxSlot));
+                    VehicleHandler vh = await VehiclesManager.SpawnVehicle(client.GetSocialClub(), (uint)fv.Hash, location.Pos, location.Rot, inventory: new Inventory.Inventory(fv.Weight, fv.MaxSlot), primaryColor: fv.PrimaryColor, secondaryColor: fv.SecondaryColor);
                     await vh.InsertVehicle();
                     await vh.PutPlayerInVehicle(client);
                     await OnVehicleOut(client, vh);

@@ -249,7 +249,6 @@ namespace ResurrectionRP_Server.Phone
             }
             return 0;
         }
-
         #endregion
 
     }

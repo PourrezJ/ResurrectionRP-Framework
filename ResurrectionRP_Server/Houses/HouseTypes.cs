@@ -27,12 +27,12 @@ namespace ResurrectionRP_Server.Houses
             ParkingPlace = parkingPlace;
         }
 
-        public async Task Create()
+        public Task Create()
         {
             Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), new Vector3(), Color.FromArgb(25, 255, 255, 255));
 
             ColShape = AltV.Net.Alt.CreateColShapeCylinder(Position.Pos, 1f, 1f);
-
+            return Task.CompletedTask;
             /*
             ColShape.OnEntityEnterColShape += (s, player) =>
             {

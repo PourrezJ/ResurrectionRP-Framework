@@ -20,7 +20,7 @@ namespace ResurrectionRP_Server
             if (player.GetData("SocialClub", out string data))
                 return data;
 
-            throw new NullReferenceException("SocialClubMising");
+            return "";
         }
 
         public static void SetCloth(this IPlayer client, ClothSlot level, int drawable, int texture, int palette)

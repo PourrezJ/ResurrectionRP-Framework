@@ -98,10 +98,10 @@ namespace ResurrectionRP_Server.Factions
             foreach (var door in Doors)
                 door.Interact = OpenCelluleDoor;
 
-            Secretaire = Ped.CreateNPC(PedModel.Bevhills03AFY,Streamer.Data.PedType.Human ,new Vector3(-550.1015f, -190.1574f, 38.22381f), 192.4752f);
+            Secretaire = Ped.CreateNPC(PedModel.Bevhills03AFY, new Vector3(-550.1015f, -190.1574f, 38.22381f), 192.4752f);
             Secretaire.NpcInteractCallBack = OnNPCInteract;
 
-            Ped npcsecuoutside = Ped.CreateNPC(PedModel.ChemSec01SMM, Streamer.Data.PedType.Human, new Vector3(-519.5601f, -257.3863f, 35.76096f), 299.4756f);
+            Ped npcsecuoutside = Ped.CreateNPC(PedModel.ChemSec01SMM, new Vector3(-519.5601f, -257.3863f, 35.76096f), 299.4756f);
 
             VehicleAllowed.Add(new FactionVehicle(6, VehicleModel.Swift, 5000000, 25));
             VehicleAllowed.Add(new FactionVehicle(2, VehicleModel.Menacer, 2000000, 90));

@@ -167,7 +167,7 @@ namespace ResurrectionRP_Server.Farms
             {
                 Process_Blip = BlipsManager.CreateBlip(Process_Name, Process_PosRot.Pos, (byte)BlipColor, Process_BlipSprite);
 
-                Process_Ped = Ped.CreateNPC(Process_PedHash, Streamer.Data.PedType.Human, Process_PosRot.Pos, (int)Process_PosRot.Rot.Z);
+                Process_Ped = Ped.CreateNPC(Process_PedHash, Process_PosRot.Pos, (int)Process_PosRot.Rot.Z);
                 Process_Ped.NpcInteractCallBack += (async (IPlayer client, Ped npc) => { await StartProcessing(client); });
             }
 
@@ -175,7 +175,7 @@ namespace ResurrectionRP_Server.Farms
             {
                 DoubleProcess_Blip = BlipsManager.CreateBlip(DoubleProcess_Name, DoubleProcess_PosRot.Pos, (byte)BlipColor, DoubleProcess_BlipSprite);
 
-                DoubleProcess_Ped = Ped.CreateNPC(DoubleProcess_PedHash, Streamer.Data.PedType.Human, DoubleProcess_PosRot.Pos, (int)DoubleProcess_PosRot.Rot.Z);
+                DoubleProcess_Ped = Ped.CreateNPC(DoubleProcess_PedHash, DoubleProcess_PosRot.Pos, (int)DoubleProcess_PosRot.Rot.Z);
                 DoubleProcess_Ped.NpcInteractCallBack += (async (IPlayer client, Ped npc) => { await StartDoubleProcessing(client); });
             }
 
@@ -186,7 +186,7 @@ namespace ResurrectionRP_Server.Farms
             {
                 Selling_Blip = BlipsManager.CreateBlip(Selling_Name, Selling_PosRot.Pos, (int)BlipColor, Selling_BlipSprite);
 
-                Selling_Ped = Ped.CreateNPC(Selling_PedHash, Streamer.Data.PedType.Human, Selling_PosRot.Pos, (int)Selling_PosRot.Rot.Z);
+                Selling_Ped = Ped.CreateNPC(Selling_PedHash, Selling_PosRot.Pos, (int)Selling_PosRot.Rot.Z);
                 Selling_Ped.NpcInteractCallBack += (async (IPlayer client, Ped npc) => { await StartSelling(client); });
             }
             #endregion

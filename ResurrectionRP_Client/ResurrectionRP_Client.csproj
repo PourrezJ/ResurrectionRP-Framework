@@ -403,7 +403,6 @@
     <Content Include="client\NativeUIMenu\utils\Screen.js" />
     <Content Include="client\NativeUIMenu\utils\Size.js" />
     <Content Include="client\NativeUIMenu\utils\UUIDV4.js" />
-    <Content Include="client\Streamer\client.js" />
     <Content Include="client\Streamer\index.html" />
     <Content Include="client\Streamer\networking-entity.js" />
     <Content Include="lib\css\angular-confirm.min.css" />

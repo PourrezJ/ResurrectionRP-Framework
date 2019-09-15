@@ -125,7 +125,7 @@ namespace ResurrectionRP_Server.Factions
             Parking.Spawn1 = new Location(new Vector3(1186.454f, -3200.917f, 6.101458f), new Vector3(0.01919898f, 0.2955396f, 88.09204f));
             Parking.Spawn2 = new Location(new Vector3(1186.677f, -3195.231f, 6.094764f), new Vector3(0.4719574f, 0.1808039f, 89.15057f));
 
-            var pnj =  Ped.CreateNPC(PedModel.Dockwork01SMM,Streamer.Data.PedType.Human, new Vector3(1232.77f, -3034.825f, 9.363697f), 10.35416f);
+            var pnj =  Ped.CreateNPC(PedModel.Dockwork01SMM, new Vector3(1232.77f, -3034.825f, 9.363697f), 10.35416f);
             pnj.NpcInteractCallBack += OnPedInteract;
 
             if (Quai == null && Importation == null && Racks == null)

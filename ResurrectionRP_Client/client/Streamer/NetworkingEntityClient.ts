@@ -158,14 +158,11 @@ export class NetworkingEntityClient {
                 await utils.loadModelAsync(entity["data"]["model"]["uintValue"]);
                 this.streamPed(
                     entity["data"]["id"]["intValue"],
-                    entity["data"]["type"]["intValue"],
                     entity["data"]["model"]["uintValue"],
                     entity["position"]["x"],
                     entity["position"]["y"],
                     entity["position"]["z"],
-                    entity["data"]["heading"]["doubleValue"],
-                    entity["data"]["freeze"]["boolValue"],
-                    entity["data"]["invincible"]["boolValue"]
+                    entity["data"]["heading"]["doubleValue"]
                 );
                 break;
             case 1:
@@ -240,20 +237,17 @@ export class NetworkingEntityClient {
         }
     }
 
-    private streamPed = async (id: number, type: number, model: any, x: number, y: number, z: number, heading: number, freeze: boolean, invincible: boolean) => {
-        var entityId = game.createPed(type, model, x, y, z - 1, heading, false, false); 
+    private streamPed = async (id: number, model: any, x: number, y: number, z: number, heading: number) => {
+        var entityId = game.createPed(4, model, x, y, z - 1, heading, false, true); 
 
         if (entityId != 0) {
-            game.setEntityInvincible(entityId, invincible);
-            game.setEntityCanBeDamaged(entityId, invincible);
-            game.freezeEntityPosition(entityId, freeze);
-            game.setEntityDynamic(entityId, freeze);
-            game.setEntityAsMissionEntity(entityId, true, true);
+            game.taskSetBlockingOfNonTemporaryEvents(entityId, true);
+            game.setEntityInvincible(entityId, true);
+            game.freezeEntityPosition(entityId, true);
         }
 
         //alt.logWarning("Streaming in new ped, entity ID " + entityId + " | id global : " + id + "| heading : " + JSON.stringify(heading));
-        //alt.logWarning(`Entity type:  ${type} || Model : ${model}`);
-        //alt.logWarning("Ped is invicible : " + JSON.stringify(invincible) + " | is frozen : " + JSON.stringify(freeze));
+        //alt.logWarning(`Model : ${model}`);
         this.EntityList[id] = entityId;
     }
 

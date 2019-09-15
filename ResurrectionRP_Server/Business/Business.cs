@@ -80,7 +80,7 @@ namespace ResurrectionRP_Server.Businesses
         {
             if (PedHash != 0)
             {
-                Ped ped = Ped.CreateNPC(PedHash, Streamer.Data.PedType.Human, Location.Pos, Location.Rot.Z);
+                Ped ped = Ped.CreateNPC(PedHash, Location.Pos, Location.Rot.Z);
                 ped.NpcInteractCallBack = OnNpcFirstInteract; // E
                 ped.NpcSecInteractCallBack = OnNpcSecondaryInteract; // W
                 Ped = ped;

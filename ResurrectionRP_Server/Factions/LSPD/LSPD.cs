@@ -110,13 +110,13 @@ namespace ResurrectionRP_Server.Factions
             #endregion
 
             #region Peds
-            portiqueSecu = Ped.CreateNPC(PedModel.Cop01SFY,Streamer.Data.PedType.Human, new Vector3(438.8754f, -985.9456f, 30.68967f), 95.78963f);
+            portiqueSecu = Ped.CreateNPC(PedModel.Cop01SFY, new Vector3(438.8754f, -985.9456f, 30.68967f), 95.78963f);
             portiqueSecu.NpcInteractCallBack = OnNPCInteract;
 
-            accueil = Ped.CreateNPC(PedModel.Cop01SMY, Streamer.Data.PedType.Human, new Vector3(441.4182f, -978.3267f, 30.68967f), 176.1195f);
+            accueil = Ped.CreateNPC(PedModel.Cop01SMY, new Vector3(441.4182f, -978.3267f, 30.68967f), 176.1195f);
             accueil.NpcInteractCallBack = OnNPCInteract;
 
-            armurerie = Ped.CreateNPC(PedModel.Cop01SMY,Streamer.Data.PedType.Human ,new Vector3(454.0918f, -979.9051f, 30.68966f), 96.70792f);
+            armurerie = Ped.CreateNPC(PedModel.Cop01SMY, new Vector3(454.0918f, -979.9051f, 30.68966f), 96.70792f);
             armurerie.NpcInteractCallBack = OnNPCInteract;
             #endregion
 

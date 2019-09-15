@@ -82,9 +82,9 @@ namespace ResurrectionRP_Server.Utils
             AltAsync.OnClient("DoorManager_Interact", DoorManager_Interact);
         }
 
-        public async Task OnPlayerConnected(IPlayer client)
+        public void OnPlayerConnected(IPlayer client)
         {
-            await client.EmitAsync("SetAllDoorStatut", JsonConvert.SerializeObject(DoorList));
+            client.EmitLocked("SetAllDoorStatut", JsonConvert.SerializeObject(DoorList));
         }
 
         private async Task DoorManager_Interact(IPlayer client, object[] args)

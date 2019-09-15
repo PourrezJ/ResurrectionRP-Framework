@@ -8,6 +8,7 @@ namespace ResurrectionRP_Server.Streamer.Data
         Object = 1,
         TextLabel = 2,
         Marker = 3,
-        Blip = 4
+        Blip = 4,
+        Vehicle = 5
     }
 }

@@ -67,12 +67,7 @@ namespace ResurrectionRP_Server.Streamer
         public Object UpdateEntityObject(Object obj)
         {
             INetworkingEntity oitem = this.ListEntities[obj.id];
-            if (oitem.GetData("freeze", out bool freeze) && freeze != obj.freeze)
-                oitem.SetData("freeze", obj.freeze);
-            if (oitem.GetData("position", out string position) == true&& JsonConvert.DeserializeObject<Position>(position) != obj.position)
-                oitem.Position = obj.position.ConvertToEntityPosition();
-            if (oitem.GetData("rotation", out string rotation) == true)
-                oitem.SetData("rotation" , JsonConvert.SerializeObject(obj.rotation));
+            oitem.SetData("attach",JsonConvert.SerializeObject( obj.attach ) );
 
             return obj;
         }

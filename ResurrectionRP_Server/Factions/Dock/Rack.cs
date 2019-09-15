@@ -59,7 +59,7 @@ namespace ResurrectionRP_Server.Factions
             }
 
             RefreshLabel();
-            Colshape = Alt.CreateColShapeCylinder(RackPos - new Vector3(0,0,1), 2, 2);
+            Colshape = Alt.CreateColShapeCylinder(RackPos - new Vector3(0,0,1), 2, 4);
             
         }
 
@@ -93,9 +93,10 @@ namespace ResurrectionRP_Server.Factions
 
                 if (menuItem.Id == "ID_TakeRack")
                 {
-                    //await InventoryBox.Obj.AttachObject(vehicle, "forks_attach", new Vector3(), new Vector3()); TODO
+                    InventoryBox.Obj.SetAttachToEntity(vehicle, "forks_attach", new Vector3(), new Vector3()); 
                     vehicle.SetData("BoxForks", InventoryBox);
                     InventoryBox = null;
+                    client.DisplayHelp("Transport d'une box", 60000);
                 }
                 else if (menuItem.Id == "ID_OutRack")
                 {
@@ -107,15 +108,15 @@ namespace ResurrectionRP_Server.Factions
                             return;
 
                         //await ObjectHandlerManager.Detach(inventoryBox.Obj.IObject); TODO ajouter object handler
-                        //inventoryBox.Location = new Location(new Vector3(this.BoxLocation.Pos.X, this.BoxLocation.Pos.Y, this.BoxLocation.Pos.Z - 1), this.BoxLocation.Rot);
-                        //InventoryBox = inventoryBox;
-                        //inventoryBox.ID = this.RackName;
+                        inventoryBox.Location = new Location(new Vector3(this.BoxLocation.Pos.X, this.BoxLocation.Pos.Y, this.BoxLocation.Pos.Z - 1), this.BoxLocation.Rot);
+                        InventoryBox = inventoryBox;
+                        inventoryBox.ID = this.RackName;
                         //InventoryBox.Obj.IObject.SetSharedData("ID", RackName);
                         vehicle.ResetData("BoxForks");
                     }
                 }
 
-                //await GameMode.Instance.FactionManager.Dock.UpdateDatabase();
+                await GameMode.Instance.FactionManager.Dock.UpdateDatabase();
                 await MenuManager.CloseMenu(client);
                 RefreshLabel();
             }

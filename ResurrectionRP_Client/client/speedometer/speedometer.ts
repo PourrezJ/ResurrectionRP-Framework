@@ -62,11 +62,11 @@ export function hide(vehicle) {
     alt.emitServer('updateFuelAndMilage', vehicle, fuelCur, CurrentMilage);
 }
 
-export function show(vehicle, seat, currentFuel, maxFuel) {
+export function show(vehicle, seat, currentFuel, maxFuel, milage) {
     if (speedoWindow !== null) {
         speedoWindow.emit('showSpeedometer');
     }
-
+    CurrentMilage = milage;
     fuelMax = maxFuel;
     fuelCur = currentFuel;
 }

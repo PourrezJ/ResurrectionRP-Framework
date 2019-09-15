@@ -1,10 +1,14 @@
 ﻿using AltV.Net.Elements.Entities;
+using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Utils;
 using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Threading.Tasks;
 
-namespace ResurrectionRP_Server.Businesses
+namespace ResurrectionRP_Server.Business
 {
+
     public partial class Market
     {
         private bool _ravitaillement = false;

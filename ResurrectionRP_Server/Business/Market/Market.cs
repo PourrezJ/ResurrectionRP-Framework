@@ -9,7 +9,7 @@ using AltV.Net.Enums;
 using AltV.Net;
 using AltV.Net.Async;
 
-namespace ResurrectionRP_Server.Businesses
+namespace ResurrectionRP_Server.Business
 {
     public partial class Market : Business
     {
@@ -18,14 +18,11 @@ namespace ResurrectionRP_Server.Businesses
 
         public int ID;
         public Vector3 StationPos;
-        public float Range = 100f;
+        public float Range = 14f;
         public int EssencePrice = 1;
         public float Litrage = 0;
         public int LitrageMax = 1000;
-        [BsonIgnore]
-        public Entities.Blips.Blips StationBlip;
-        [BsonIgnore]
-        public IColShape FuelPumpColshape { get; private set; }
+        public StationService Station;
 
         public Market(int id, string businnessName, Models.Location location, uint blipSprite, int inventoryMax, Vector3 stationPos, PedModel pedhash = 0, string owner = null) : base(businnessName, location, blipSprite, inventoryMax, pedhash, owner)
         {
@@ -36,11 +33,13 @@ namespace ResurrectionRP_Server.Businesses
 
         public override async Task Init()
         {
-            //await MP.Blips.NewAsync(361, StationPos, 0.5f, 1, "Station d'éssence", 128, 10, true);
-            StationBlip = Entities.Blips.BlipsManager.CreateBlip("Station essence", StationPos, 128, 361, 0.5f);
-            FuelPumpColshape = Alt.CreateColShapeCylinder(StationPos, Range, 3f);
-            //FuelPumpColshape = await MP.Colshapes.NewTubeAsync(StationPos, Range, 3f);
-            //FuelPumpColshape.SetSharedData("FuelPump", this);
+            this.Station = new StationService(this.ID, this.Range, this.StationPos);
+            this.Station.StationBlip = Entities.Blips.BlipsManager.CreateBlip("Station essence", StationPos, 128, 361, 0.5f);
+            this.Station.Colshape = Alt.CreateColShapeCylinder(StationPos, Range, 3f);
+
+            this.Station.Colshape.SetData("FuelPumpID", this.Station.ID);
+            this.Station.Colshape.SetData("FuelPumpRange", this.Station.Range);
+            this.Station.Colshape.SetData("FuelPumpLocation", this.Station.location);
 
             EventHandlers.Events.OnPlayerEnterColShape += Events_PlayerEnterColshape;
             EventHandlers.Events.OnPlayerLeaveColShape += Events_PlayerExitColshape;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ResurrectionRP_Server.Businesses
+namespace ResurrectionRP_Server.Business
 {
     public partial class Business
     {

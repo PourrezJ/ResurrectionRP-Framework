@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ResurrectionRP_Server.Businesses.Barber
+namespace ResurrectionRP_Server.Business.Barber
 {
     public class Hairs
     {

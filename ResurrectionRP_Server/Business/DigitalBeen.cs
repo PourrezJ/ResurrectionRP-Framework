@@ -10,7 +10,7 @@ using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Utils;
 using AltV.Net.Enums;
 
-namespace ResurrectionRP_Server.Businesses
+namespace ResurrectionRP_Server.Business
 {
     public class DigitalDeen : Business
     {

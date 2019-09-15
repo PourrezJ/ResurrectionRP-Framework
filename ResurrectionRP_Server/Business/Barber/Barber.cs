@@ -7,7 +7,7 @@ using AltV.Net;
 using AltV.Net.Enums;
 using AltV.Net.Elements.Entities;
 
-namespace ResurrectionRP_Server.Businesses.Barber
+namespace ResurrectionRP_Server.Business.Barber
 {
     public partial class BarberStore : Business
     {

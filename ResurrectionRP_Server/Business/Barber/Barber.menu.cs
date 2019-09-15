@@ -10,7 +10,7 @@ using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils;
 
-namespace ResurrectionRP_Server.Businesses.Barber
+namespace ResurrectionRP_Server.Business.Barber
 {
 
     public partial class BarberStore

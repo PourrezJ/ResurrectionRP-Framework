@@ -17,6 +17,8 @@ namespace ResurrectionRP_Server.Entities.Players
             Chat.RegisterCmd("tp", TpCoord);
             Chat.RegisterCmd("cls", Cls);
             Chat.RegisterCmd("cloth", Cloth);
+            Chat.RegisterCmd("refuel", Refuel);
+            Chat.RegisterCmd("repair", Repair);
         }
 
         private async Task TpCoord(IPlayer player, string[] args)
@@ -37,6 +39,27 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             player.EmitLocked("EmptyChat");
             return Task.CompletedTask;
+        }
+        public Task Refuel(IPlayer player, string[] args)
+        {
+            if(player.Vehicle == null)
+            {
+                player.DisplaySubtitle("Vous devez être dans un véhicule", 10000);
+                return Task.CompletedTask;
+            }
+            player.Vehicle.GetVehicleHandler()?.SetFuel(player.Vehicle.GetVehicleHandler().FuelMax);
+            player.DisplaySubtitle("Vehicule restoré", 5000);
+            return Task.CompletedTask;
+        }
+        public async Task Repair(IPlayer player, string[] args)
+        {
+            if(player.Vehicle == null)
+            {
+                player.DisplaySubtitle("Vous devez être dans un véhicule", 10000);
+                return ;
+            }
+            await player.Vehicle.RepairAsync();
+            player.DisplaySubtitle("Vehicule restoré", 5000);
         }
 
         private Task Cloth(IPlayer player, object[] args)

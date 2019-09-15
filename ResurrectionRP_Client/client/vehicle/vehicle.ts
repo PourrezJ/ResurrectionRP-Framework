@@ -4,6 +4,7 @@ import * as game from 'natives';
 let player = alt.Player.local;
 let fuelMax = 100;
 let fuelCur = 100;
+let fuelConsum = 5.5;
 var CurrentMilage = 0.0;
 let speedoWindow = new alt.WebView('http://resource/client/cef/speedometer/speedometer.html');
 let lastSent = Date.now();
@@ -12,14 +13,19 @@ let lastPos = null;
 export function initialize() {
     alt.onServer('OnPlayerLeaveVehicle', hide);
     alt.onServer('OnPlayerEnterVehicle', show);
+    alt.onServer('UpdateFuel', (fuel: number) => {
+        fuelCur = fuel;
+    });
 
     alt.everyTick(() => {
         if ((Date.now() - lastSent) > 33) {
             lastSent = Date.now();
+            if (player.vehicle === null)
+                return;
 
-            if (player.vehicle !== null && speedoWindow !== null) {
-                let speed = player.vehicle.speed * 3.6;
-                let rpm = player.vehicle.rpm * 591;
+            let speed = player.vehicle.speed * 3.6;
+            let rpm = player.vehicle.rpm * 591;
+            if (speedoWindow !== null) {
 
                 if (rpm >= 591)
                     rpm = 591;
@@ -50,6 +56,16 @@ export function initialize() {
                 var distance = (Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) / 1000);
 
                 CurrentMilage += distance;
+
+                if (game.getIsVehicleEngineRunning(player.vehicle.scriptID)) {
+                    var SpeedFuel = 0;
+                    if (speed > 100) {
+                        SpeedFuel = (speed / 100) * 5;
+                    } else {
+                        SpeedFuel = (-(speed - 50)/100)*5
+                    }
+                    fuelCur -= (fuelConsum * distance * SpeedFuel) / 100;
+                }
             }
         }
     });
@@ -62,7 +78,7 @@ export function hide(vehicle) {
     alt.emitServer('updateFuelAndMilage', vehicle, fuelCur, CurrentMilage);
 }
 
-export function show(vehicle, seat, currentFuel, maxFuel, milage) {
+export function show(vehicle, seat, currentFuel, maxFuel, milage, fuelconsumption) {
     if (speedoWindow !== null) {
         speedoWindow.emit('showSpeedometer');
     }

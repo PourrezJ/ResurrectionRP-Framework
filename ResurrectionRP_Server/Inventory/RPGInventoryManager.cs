@@ -75,11 +75,6 @@ namespace ResurrectionRP_Server.Inventory
             RPGInventoryMenu oldMenu = null;
             _clientMenus.TryRemove(client, out oldMenu);
 
-            if (oldMenu != null)
-            {
-                //oldMenu.Finalizer?.Invoke(client, menu);
-            }
-
             if (_clientMenus.TryAdd(client, menu))
             {
                 await client.EmitAsync("InventoryManager_OpenMenu",
@@ -88,8 +83,6 @@ namespace ResurrectionRP_Server.Inventory
                     JsonConvert.SerializeObject(menu.DistantItems),
                     JsonConvert.SerializeObject(menu.OutfitItems),
                     (menu.DistantPlayer == null) ? false : true);
-                //await client.EmitAsync("ShowCursor", true);
-
 
                 return true;
             }
@@ -1110,7 +1103,13 @@ namespace ResurrectionRP_Server.Inventory
                 }
             }
 
-            await menu.OpenMenu(sender);
+            await sender.EmitAsync("InventoryManager_RefreshMenu",
+                    JsonConvert.SerializeObject(menu.PocketsItems),
+                    JsonConvert.SerializeObject(menu.BagItems),
+                    JsonConvert.SerializeObject(menu.DistantItems),
+                    JsonConvert.SerializeObject(menu.OutfitItems),
+                    (menu.DistantPlayer == null) ? false : true);
+
         }
         #endregion
 

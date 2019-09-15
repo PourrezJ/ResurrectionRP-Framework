@@ -128,18 +128,14 @@ namespace ResurrectionRP_Server.Models
 
         public void Delete()
         {
-            AltAsync.Do(() =>
+            if (Object != null)
             {
-                if (Object != null)
-                {
-                    Object.Destroy();
-                    Label.Destroy(); 
+                Object.Destroy();
+                Label.Destroy();
 
-                    if (ResuPickupManager.ResuPickupList.Contains(this))
-                        ResuPickupManager.ResuPickupList.Remove(this);
-                    
-                }
-            });
+                if (ResuPickupManager.ResuPickupList.Contains(this))
+                    ResuPickupManager.ResuPickupList.Remove(this);
+            }
         }
     }
 }

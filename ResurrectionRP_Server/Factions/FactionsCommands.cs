@@ -15,8 +15,8 @@ namespace ResurrectionRP_Server.Factions
             //Chat.RegisterCmd("addrebelle", AddPlayerRebelle);
             Chat.RegisterCmd("addlscustom", AddPlayerLSCustom);
             Chat.RegisterCmd("addgouv", AddPlayerGouv);
-            //Chat.RegisterCmd("adddock", AddPlayerDock);
-            //Chat.RegisterCmd("addsheriff", AddPlayerSheriff);
+            Chat.RegisterCmd("adddock", AddPlayerDock);
+            Chat.RegisterCmd("addsheriff", AddPlayerSheriff);
         }
 
         public async Task AddPlayerONU(IPlayer client, string[] args)
@@ -53,20 +53,20 @@ namespace ResurrectionRP_Server.Factions
                 return;
             await GameMode.Instance.FactionManager?.Gouvernement.TryAddIntoFaction(client, 7);
         }
-        /*
-        public void AddPlayerDock(IPlayer client, string[] args)
+        
+        public async Task AddPlayerDock(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            Task.Run(async () => await GameMode.Instance.FactionManager?.Dock.TryAddIntoFaction(client, 5));
+            await GameMode.Instance.FactionManager?.Dock.TryAddIntoFaction(client, 5);
         }
         
-        public void AddPlayerSheriff(IPlayer client, string[] args)
+        public async Task AddPlayerSheriff(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            Task.Run(async () => await GameMode.Instance.FactionManager?.Nordiste.TryAddIntoFaction(client, 6));
-        }*/
+            await GameMode.Instance.FactionManager?.Nordiste.TryAddIntoFaction(client, 6);
+        }
     }
 }
 

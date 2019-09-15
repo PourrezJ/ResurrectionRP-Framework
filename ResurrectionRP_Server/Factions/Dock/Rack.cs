@@ -11,9 +11,8 @@ using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
 
-namespace ResurrectionRP_Server.Factions.Dock
+namespace ResurrectionRP_Server.Factions
 {
-
     public class Rack
     {
         #region Fields

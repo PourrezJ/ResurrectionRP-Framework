@@ -12,9 +12,9 @@ function showSpeedometer() {
 function setSpeed(speed, rpm, gear, light, enginehealth, currentFuel, fuelMax, milage) {
     $('.speed').html(Math.floor(speed));
     $('.gear').html(`<span>${gear}</span>`);
-    $('.information .stats .fuel').html(`<img src="img/fuel.png">${currentFuel}L/${fuelMax}L`);
+    $('.information .stats .fuel').html(`<img src="img/fuel.png">${Math.floor(currentFuel* 10) / 10}L/${fuelMax}L`);
     $(".compteur .on").css("width", `${rpm}px`);
-    $('.information .stats .km').html(`<img src="img/km.png">${(Math.floor(milage))}km`);
+    $('.information .stats .km').html(`<img src="img/km.png">${(Math.floor(milage * 10) / 10)}km`);
 
     switch (light) {
         case 0:

@@ -154,15 +154,15 @@ namespace ResurrectionRP_Server
             if (_clientMenus.TryRemove(client, out Menu menu) && menu != null && menu.Finalizer != null)
                 await menu.Finalizer(client, menu);
             
-            await client.EmitAsync("MenuManager_CloseMenu");
+            client.EmitLocked("MenuManager_CloseMenu");
         }
 
-        public async Task ForceCallback(IPlayer client)
+        public void ForceCallback(IPlayer client)
         {
             _clientMenus.TryGetValue(client, out Menu menu);
 
             if (menu != null && menu.ItemSelectCallback != null)
-                await client.EmitAsync("MenuManager_ForceCallback");
+                client.EmitLocked("MenuManager_ForceCallback");
         }
 
         public Menu GetMenu(IPlayer client)
@@ -189,7 +189,7 @@ namespace ResurrectionRP_Server
             if (_clientMenus.TryAdd(client, menu))
             {
                 string json = JsonConvert.SerializeObject(menu, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                await client.EmitAsync("MenuManager_OpenMenu", json);
+                client.EmitLocked("MenuManager_OpenMenu", json);
                 return true;
             }
 

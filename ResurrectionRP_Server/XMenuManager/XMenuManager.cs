@@ -70,7 +70,7 @@ namespace ResurrectionRP_Server.XMenuManager
             {
                 if (menu.Finalizer != null)
                     await menu.Finalizer.Invoke(client, menu);
-                await client.EmitAsync("XMenuManager_CloseMenu");
+                client.EmitLocked("XMenuManager_CloseMenu");
             }
             else if (menu != null)
                 _clientMenus.TryRemove(client, out menu);
@@ -89,14 +89,13 @@ namespace ResurrectionRP_Server.XMenuManager
             {
                 if (oldMenu.Finalizer != null)
                     await oldMenu.Finalizer.Invoke(client, menu);
-                await client.EmitAsync("XMenuManager_CloseMenu");
+                client.EmitLocked("XMenuManager_CloseMenu");
                 await Task.Delay(100);
             }
 
             if (_clientMenus.TryAdd(client, menu))
             {
-                string json = JsonConvert.SerializeObject(menu);
-                await client.EmitAsync("XMenuManager_OpenMenu", json);
+                client.EmitLocked("XMenuManager_OpenMenu", JsonConvert.SerializeObject(menu));
                 return true;
             }
             return false;
@@ -108,7 +107,7 @@ namespace ResurrectionRP_Server.XMenuManager
             {
                 if (menu.Finalizer != null)
                     await menu.Finalizer.Invoke(client, menu);
-                await client.EmitAsync("XMenuManager_CloseMenu");
+                client.EmitLocked("XMenuManager_CloseMenu");
             }
         }
         #endregion

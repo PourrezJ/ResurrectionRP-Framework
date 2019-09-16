@@ -49,21 +49,7 @@ namespace ResurrectionRP_Server.Business
 
         private async Task Events_PlayerExitColshape(IColShape colShape, IPlayer client)
         {
-            if (!client.Exists)
-                return;
 
-            if (!colShape.IsEntityInColShape(client))
-                return;
-
-            if (_utilisateurRavi == client && _ravitaillement && await _utilisateurRavi.IsInVehicleAsync() && await (await _utilisateurRavi.GetVehicleAsync()).GetModelAsync() == 4097861161)
-            {
-                _ravitaillement = false;
-                _utilisateurRavi = null;
-                // API.Shared.OnProgressBar(client, false);
-                await Update();
-                client.DisplayHelp("~r~Vous êtes sorti de la zone de ravitaillement", 12000);
-
-            }
 
         }
 
@@ -109,6 +95,25 @@ namespace ResurrectionRP_Server.Business
                 return;
             if (this.Station.VehicleInStation.ContainsKey(vehicle.Id))
                 this.Station.VehicleInStation.TryRemove(vehicle.Id, out IVehicle veh);
+
+            if (vehicle.Driver == null)
+                return;
+            IPlayer client = vehicle.Driver;
+            if (!client.Exists)
+                return;
+
+            if (!colshape.IsEntityInColShape(client))
+                return;
+
+            if (_utilisateurRavi == client && _ravitaillement )
+            {
+                _ravitaillement = false;
+                _utilisateurRavi = null;
+                // API.Shared.OnProgressBar(client, false);
+                await Update();
+                client.DisplayHelp("~r~Vous êtes sorti de la zone de ravitaillement", 12000);
+
+            }
 
         }
     }

@@ -15,6 +15,7 @@ namespace ResurrectionRP_Server.Business
         public int EssencePrice = 1;
         public float Litrage = 0;
         public int LitrageMax = 1000;
+        public float buyEssencePrice = 0.5f;
         [BsonIgnore]
         public ConcurrentDictionary<int, IVehicle> VehicleInStation = new ConcurrentDictionary<int,IVehicle>();
         [BsonIgnore]

@@ -18,7 +18,6 @@ namespace ResurrectionRP_Server.Business
         public virtual async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
         {
             menu.ItemSelectCallback += MenuCallBack;
-
             if (Buyable && OnSale && Owner == client.GetSocialClub())
             {
                 menu.Add(new MenuItem("~r~Annuler la mise en vente", "", id: "ID_CancellSell", executeCallback: true));
@@ -39,7 +38,12 @@ namespace ResurrectionRP_Server.Business
 
             if (Owner != null && (client.GetPlayerHandler().StaffRank >= Utils.Enums.AdminRank.Moderator || Factions.FactionManager.IsGouv(client)))
             {
-                var identite = (await Models.Identite.GetOfflineIdentite(Owner)).Name ?? Owner;
+                var old = (await Models.Identite.GetOfflineIdentite(Owner));
+                var identite = "No Owner";
+                if (old != null)
+                    identite = old.Name;
+                else
+                    identite = Owner;
                 menu.SubTitle = $"Owner: {identite} | Inactivité: {this.Inactivity.ToShortDateString()}";
                 menu.Add(new MenuItem("~r~Retirer le propriétaire", "Remet en vente le commerce", "ID_ClearAdmin", true));
             }

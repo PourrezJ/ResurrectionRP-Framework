@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AltV.Net;
-using AltV.Net.Async;
-using AltV.Net.Elements.Entities;
-using AltV.Net.Enums;
+﻿using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Businesses.Barber
 {

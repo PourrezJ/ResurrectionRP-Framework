@@ -29,12 +29,14 @@ namespace ResurrectionRP_Server.Entities.Players
         [BsonIgnore]
         public KeyReleasedDelegate OnKeyReleased { get; set; }
 
-        private async Task OnKeyPressedCallback(IPlayer client, ConsoleKey Keycode, RaycastData Raycastdata, IVehicle vehicle, IPlayer playerDistant)
+        private async Task OnKeyPressedCallback(IPlayer client, ConsoleKey Keycode, RaycastData Raycastdata, IVehicle vehicleDistant, IPlayer playerDistant)
         {
             if (!client.Exists)
                 return;
 
+ 
             PlayerHandler ph = client.GetPlayerHandler();
+            IVehicle vehicle = vehicleDistant ?? await client.GetVehicleAsync();
             VehicleHandler vh = vehicle?.GetVehicleHandler();
             Position playerPos = Position.Zero;
 
@@ -84,11 +86,8 @@ namespace ResurrectionRP_Server.Entities.Players
                     
                 case ConsoleKey.F3:
                     if (vehicle == null || !vehicle.Exists)
-                        return;
+                            return;
 
-                    if (!vehicle.Exists)
-                        return;
-                    
                     if (ph.IsCuff())
                     {
                         client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
@@ -158,7 +157,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.U:
-                    await vh.LockUnlock(client);
+                    await vh?.LockUnlock(client);
                     break;
                     
                 case ConsoleKey.M:

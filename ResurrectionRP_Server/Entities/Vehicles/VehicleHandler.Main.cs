@@ -109,7 +109,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (Dimension.ToString() == "-1")
                 Dimension = short.MaxValue;
 
-            await AltAsync.Do(async () =>
+            await AltAsync.Do(() =>
             {
                 try
                 {
@@ -155,25 +155,25 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.RadioStation = RadioID;
                 IsParked = false;
 
-                for (byte i = 0; i < await Vehicle.GetWheelsCountAsync(); i++)
+                for (byte i = 0; i < Vehicle.WheelsCount; i++)
                 {
                     // Vehicle.SetWheelBurst(i, Wheel.Wheels[i].Burst );
                     // Vehicle.SetWheelHealth(i, Wheel.Wheels[i].Health);
                 }
 
                 for(byte i = 0; i < (byte)VehicleDoor.Trunk; i++)
-                    await Vehicle.SetDoorStateAsync(i,(byte) Door[i]);
-
-                await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
-                await Vehicle.SetEngineOnAsync(Engine);
-                await Vehicle.SetPositionAsync( Vehicle.Position.X, Vehicle.Position.Y, Vehicle.Position.Z );
-
-
+                     Vehicle.SetDoorStateAsync(i,(byte) Door[i]);
+                
                 if (setLastUse)
                     LastUse = DateTime.Now;
 
                 if (location != null)
                     Location = location;
+
+
+                Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
+                Vehicle.EngineOn = Engine;
+                Vehicle.Position = Location.Pos;
 
                 VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
                 GameMode.Instance.VehicleManager.VehicleHandlerList.TryAdd(Vehicle, this);

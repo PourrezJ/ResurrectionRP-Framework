@@ -13,6 +13,7 @@ using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
 using SaltyServer;
+using ResurrectionRP_Server.Database;
 using ResurrectionRP_Server.Radio;
 using ResurrectionRP_Server.Farms;
 using AltV.Net.Async;
@@ -23,7 +24,7 @@ namespace ResurrectionRP_Server
 {
     public class GameMode
     {
-        #region Variables
+        #region Fields
         public ObjectId _id;
 
         [BsonIgnore]
@@ -57,6 +58,7 @@ namespace ResurrectionRP_Server
 
         public List<string> PlateList = new List<string>();
 
+        public uint DatabaseVersion { get; set; }
 
         #region Pools
 
@@ -165,8 +167,16 @@ namespace ResurrectionRP_Server
         {
             IsDebug = Config.GetSetting<bool>("Debug");
 
-            Alt.OnPlayerConnect += OnPlayerConnected;
+            if (DataMigration.DATABASE_VERSION > Instance.DatabaseVersion)
+            {
+                if (!await DataMigration.MigrateDatabase())
+                {
+                    Alt.Server.LogError("Error migrating database to newer version");
+                    Environment.Exit(1);
+                }
+            }
 
+            Alt.OnPlayerConnect += OnPlayerConnected;
             AltAsync.OnPlayerDisconnect += OnPlayerDisconnected;
 
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);

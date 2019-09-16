@@ -17,7 +17,7 @@ using ResurrectionRP_Server.Entities.Peds;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Utils.Enums;
 
-namespace ResurrectionRP_Server.Businesses
+namespace ResurrectionRP_Server.Business
 {
     [BsonKnownTypes(typeof(Market), typeof(TattoosStore), typeof(Barber.BarberStore), typeof(WeaponsShop), typeof(ClothingStore), typeof(PawnShop), typeof(DigitalDeen), typeof(PropsStore))]
     public partial class Business
@@ -80,7 +80,7 @@ namespace ResurrectionRP_Server.Businesses
         {
             if (PedHash != 0)
             {
-                Ped ped = Ped.CreateNPC(PedHash, Streamer.Data.PedType.Human, Location.Pos, Location.Rot.Z);
+                Ped ped = Ped.CreateNPC(PedHash, Location.Pos, Location.Rot.Z);
                 ped.NpcInteractCallBack = OnNpcFirstInteract; // E
                 ped.NpcSecInteractCallBack = OnNpcSecondaryInteract; // W
                 Ped = ped;

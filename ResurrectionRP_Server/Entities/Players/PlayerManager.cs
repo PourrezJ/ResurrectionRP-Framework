@@ -46,6 +46,7 @@ namespace ResurrectionRP_Server.Entities.Players
             AltAsync.OnClient("UpdateHungerThirst", UpdateHungerThirst);        
             AltAsync.OnClient("IWantToDie", IWantToDie);
             AltAsync.OnClient("OpenXtremPlayer", OpenXtremPlayer);
+            AltAsync.OnClient("OpenGasPumpMenu", OpenGasPumpMenu);
             AltAsync.OnClient("OpenAtmMenu", OpenAtmMenuPlayer);
 
             AltAsync.OnClient("OnKeyPress", OnKeyPress);
@@ -485,6 +486,15 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
 
             await BankMenu.OpenBankMenu(player, player.BankAccount);
+        }
+        private async Task OpenGasPumpMenu(IPlayer client, object[] args)
+        {
+            if (!client.Exists)
+                return;
+
+            PlayerHandler player = client.GetPlayerHandler();
+            if (player == null) return;
+            await Business.Market.OpenGasPumpMenu(client);
         }
 
         public static List<PlayerHandler> GetPlayersList()

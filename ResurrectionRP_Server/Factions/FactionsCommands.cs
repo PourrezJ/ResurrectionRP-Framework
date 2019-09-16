@@ -1,4 +1,4 @@
-﻿using AltV.Net;
+using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Utils.Enums;

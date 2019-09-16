@@ -261,12 +261,12 @@ namespace ResurrectionRP_Server
             return Task.CompletedTask;
         }
 
-        public static Task SetHeadOverlayAsync(this IPlayer client, int overlayId, Businesses.Barber.HeadOverlayData overlayData)
+        public static Task SetHeadOverlayAsync(this IPlayer client, int overlayId, Business.Barber.HeadOverlayData overlayData)
         {
             // TODO
             return Task.CompletedTask;
         }
-        public static void SetHeadOverlay(this IPlayer client, int overlayId, Businesses.Barber.HeadOverlayData overlayData)
+        public static void SetHeadOverlay(this IPlayer client, int overlayId, Business.Barber.HeadOverlayData overlayData)
         {
             // TODO
         }

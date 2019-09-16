@@ -53,7 +53,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
         public override async Task Load()
         {
             Location pnjPos = new Location(new Vector3(-227.6015f, -1327.772f, 30.89038f), new Vector3(0, 0, 239.715f));
-            var npc = Entities.Peds.Ped.CreateNPC(PedModel.Benny,Streamer.Data.PedType.Human ,pnjPos.Pos, pnjPos.Rot.Z, GameMode.GlobalDimension);
+            var npc = Entities.Peds.Ped.CreateNPC(PedModel.Benny, pnjPos.Pos, pnjPos.Rot.Z, GameMode.GlobalDimension);
             npc.NpcInteractCallBack = OnInteractWithPnj;
 
             Vector3 workZonePos = new Vector3(-222.3765f, -1329.64f, 30.46614f);

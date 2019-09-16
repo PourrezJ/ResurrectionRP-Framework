@@ -68,10 +68,10 @@ namespace ResurrectionRP_Server.Factions
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Policeb, 150000, 15, 10, 132, 0));
 
             #region Peds
-            PedArmurerie = Ped.CreateNPC(PedModel.Sheriff01SMY, Streamer.Data.PedType.Cop, new Vector3(-436.0355f, 5999.875f, 31.71611f), 52.54101f);
+            PedArmurerie = Ped.CreateNPC(PedModel.Sheriff01SMY, new Vector3(-436.0355f, 5999.875f, 31.71611f), 52.54101f);
             PedArmurerie.NpcInteractCallBack = OnNPCInteract;
 
-            PedAccueil = Ped.CreateNPC(PedModel.Sheriff01SFY, Streamer.Data.PedType.Cop, new Vector3(-448.7506f, 6012.733f, 31.71646f), 315.8641f);
+            PedAccueil = Ped.CreateNPC(PedModel.Sheriff01SFY, new Vector3(-448.7506f, 6012.733f, 31.71646f), 315.8641f);
             PedAccueil.NpcInteractCallBack = OnNPCInteract;
             #endregion
 

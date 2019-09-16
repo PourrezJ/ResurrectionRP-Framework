@@ -6,7 +6,7 @@ using ResurrectionRP_Server.Utils;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ResurrectionRP_Server.Businesses.Barber
+namespace ResurrectionRP_Server.Business.Barber
 {
 
     public partial class BarberStore

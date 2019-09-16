@@ -14,7 +14,7 @@ using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
 
-namespace ResurrectionRP_Server.Businesses
+namespace ResurrectionRP_Server.Business
 {
     public class PropsStore : Business
     {

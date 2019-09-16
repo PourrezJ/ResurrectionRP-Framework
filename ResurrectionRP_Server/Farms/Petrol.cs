@@ -42,9 +42,9 @@ namespace ResurrectionRP_Server.Farms
             ItemIDBrute = ItemID.PetrolBrute;
             ItemIDProcess = ItemID.Petrol;
             ItemPrice = 21;
-            Harvest_Time = 2600;
-            Process_Time = 2400;
-            Selling_Time = 600;
+            Harvest_Time = 2600; // Prod : 2600
+            Process_Time = 2400; // prod 2400
+            Selling_Time = 600; // prod /  600
             Enabled = true;
         }
 
@@ -53,27 +53,29 @@ namespace ResurrectionRP_Server.Farms
             await base.Init();
             RaffinerieColshape = AltV.Net.Alt.CreateColShapeCylinder(RaffineriePos, 20, 4);
             await RaffinerieColshape.SetDimensionAsync(GameMode.GlobalDimension);
+            RaffinerieColshape.SetOnPlayerEnterColShape(OnPlayerColshape);
 
 
             SellingColshape = AltV.Net.Alt.CreateColShapeCylinder(SellPos, 20, 4);
             await SellingColshape.SetDimensionAsync(GameMode.GlobalDimension);
+            SellingColshape.SetOnPlayerEnterColShape(OnPlayerColshape);
 
-            Marker.CreateMarker(MarkerType.VerticalCylinder, RaffineriePos - new Vector3(0,0,28), new Vector3(30, 30, 30));
+            Marker.CreateMarker(MarkerType.VerticalCylinder, RaffineriePos - new Vector3(0,0,1), new Vector3(10, 10, 2), Color.FromArgb(0,0,0));
         }
 
-        public override async Task OnPlayerColshape(IPlayer player, IColShape colshapePointer)
+        public override async Task OnPlayerColshape(IColShape colShape, IPlayer player)
         {
-            if(colshapePointer == RaffinerieColshape)
+            if (RaffinerieColshape.IsEntityInColShape(player))
             {
                 await StartProcessing(player);
             }
-            else if (colshapePointer == SellingColshape)
+            else if (SellingColshape.IsEntityInColShape(player))
             {
                 await StartSelling(player);
             }
 
 
-            await base.OnPlayerColshape(player, colshapePointer);
+            await base.OnPlayerColshape(colShape, player);
         }
 
         #region Start Farming

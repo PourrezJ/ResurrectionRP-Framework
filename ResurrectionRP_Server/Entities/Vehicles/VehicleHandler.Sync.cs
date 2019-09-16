@@ -24,6 +24,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public TowTruck TowTruck { get; set; }
         public float Fuel { get; set; } = 100;
         public float FuelMax { get; set; } = 100;
+        public float FuelConsumption { get; set; } = 5.5f;
         public bool Siren { get; set; } = false;
         public bool SirenSound { get; set; } = false;
         public uint RadioID { get; set; } = 255;

@@ -6,7 +6,7 @@ using System.IO;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Business = ResurrectionRP_Server.Business.Business;
+using ResurrectionRP_Server.Business;
 using MongoDB.Driver;
 
 namespace ResurrectionRP_Server.Loader

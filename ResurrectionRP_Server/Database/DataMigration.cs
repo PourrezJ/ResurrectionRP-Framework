@@ -1,6 +1,6 @@
 ﻿using AltV.Net;
 using MongoDB.Driver;
-using ResurrectionRP_Server.Businesses;
+using ResurrectionRP_Server.Business;
 using ResurrectionRP_Server.Entities.Players;
 using System;
 using System.Threading.Tasks;
@@ -37,9 +37,9 @@ namespace ResurrectionRP_Server.Database
                 update = Builders<PlayerHandler>.Update.Rename("Character.DecorationsNew", "Character.Decorations");
                 await collection.UpdateManyAsync(filter, update);
                 
-                var busCollection = MongoDB.GetCollectionSafe<Business>("businesses");
-                var busFilter = Builders<Business>.Filter.Where(b => true);
-                var busUpdate = Builders<Business>.Update.Rename("Employees_fix", "Employees");
+                var busCollection = MongoDB.GetCollectionSafe<Business.Business>("businesses");
+                var busFilter = Builders<Business.Business>.Filter.Where(b => true);
+                var busUpdate = Builders<Business.Business>.Update.Rename("Employees_fix", "Employees");
                 await busCollection.UpdateManyAsync(busFilter, busUpdate);
             }
             catch (Exception ex)

@@ -107,6 +107,7 @@
     <TypeScriptCompile Include="client\Utils\Admin.ts" />
     <TypeScriptCompile Include="client\Utils\Enums\Enums.ts" />
     <TypeScriptCompile Include="client\Utils\Raycast.ts" />
+    <TypeScriptCompile Include="client\vehicle\vehicle.ts" />
     <TypeScriptCompile Include="client\Voice\VoiceChat.ts" />
     <TypeScriptCompile Include="typings\altv-client.d.ts" />
     <TypeScriptCompile Include="typings\natives.d.ts" />
@@ -424,7 +425,6 @@
     <Content Include="lib\js\angular.min.js" />
     <Content Include="lib\js\jquery-ui.min.js" />
     <Content Include="lib\js\jquery.min.js" />
-    <TypeScriptCompile Include="client\speedometer\speedometer.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="cef\login\libs\fontawesome\webfonts\fa-brands-400.eot" />

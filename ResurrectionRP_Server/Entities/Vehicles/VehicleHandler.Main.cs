@@ -47,6 +47,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public bool IsParked { get; set; } = false;
         public bool IsInPound { get; set; } = false;
 
+        [BsonIgnore]
         public bool SpawnVeh { get; set; }
         public bool Locked { get; set; } = true;
 

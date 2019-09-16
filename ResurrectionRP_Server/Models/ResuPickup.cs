@@ -93,7 +93,7 @@ namespace ResurrectionRP_Server.Models
 
             Utils.Utils.Delay((int)endlife.TotalMilliseconds, true, () =>
             {
-                obj.Delete();
+                obj?.Delete();
             });
 
             return obj;
@@ -125,13 +125,15 @@ namespace ResurrectionRP_Server.Models
                 return true;
             }
         }
-
         public void Delete()
         {
             if (Object != null)
             {
                 Object.Destroy();
+                Object = null;
+
                 Label.Destroy();
+                Label = null;
 
                 if (ResuPickupManager.ResuPickupList.Contains(this))
                     ResuPickupManager.ResuPickupList.Remove(this);

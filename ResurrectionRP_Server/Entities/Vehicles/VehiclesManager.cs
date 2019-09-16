@@ -36,7 +36,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
 
             AltAsync.OnClient("LockUnlockVehicle", LockUnlockVehicle);
-            AltAsync.OnClient("OpenXtremVehicle", OpenXtremVehicle);
             AltAsync.OnClient("updateFuelAndMilage", updateFuelAndMilage);
         }
         #endregion
@@ -61,14 +60,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 await ph.Update();
                 await player.EmitAsync("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32(seat), vh.Fuel, vh.FuelMax, vh.Milage , vh.FuelConsumption);
             }
-        }
-
-        public static Task OpenXtremVehicle(IPlayer client, object[] args)
-        {
-            if (!client.Exists)
-                return Task.CompletedTask;
-
-            return client.GetNearestVehicleHandler()?.OpenXtremMenu(client);
         }
 
         private async Task LockUnlockVehicle(IPlayer player, object[] args)

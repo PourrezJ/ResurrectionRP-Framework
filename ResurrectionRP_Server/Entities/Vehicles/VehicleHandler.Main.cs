@@ -236,7 +236,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 Locked = await Vehicle.GetLockStateAsync() == VehicleLockState.Locked ? false : true;
                 await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
-                client.SendNotification($"Vous avez {(Locked ? " ~r~fermé" : "~g~ouvert")} ~w~le véhicule");
+                client.SendNotification($"Vous avez {(Locked ? " fermé" : "ouvert")} le véhicule");
 
                 return true;
             }

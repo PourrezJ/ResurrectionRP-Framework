@@ -45,9 +45,6 @@ namespace ResurrectionRP_Server.Entities.Players
             AltAsync.OnClient("Events_PlayerJoin", Events_PlayerJoin);
             AltAsync.OnClient("UpdateHungerThirst", UpdateHungerThirst);        
             AltAsync.OnClient("IWantToDie", IWantToDie);
-            AltAsync.OnClient("OpenXtremPlayer", OpenXtremPlayer);
-            AltAsync.OnClient("OpenGasPumpMenu", OpenGasPumpMenu);
-            AltAsync.OnClient("OpenAtmMenu", OpenAtmMenuPlayer);
 
             AltAsync.OnClient("OnKeyPress", OnKeyPress);
             AltAsync.OnClient("OnKeyUp", OnKeyReleased);
@@ -370,7 +367,7 @@ namespace ResurrectionRP_Server.Entities.Players
             var ph = client.GetPlayerHandler();
 
             if (ph != null && ph.OnKeyPressed != null)
-                await ph.OnKeyPressed.Invoke(client, (ConsoleKey)(Int64)args[0]);
+                await ph.OnKeyPressed.Invoke(client, (ConsoleKey)(Int64)args[0], JsonConvert.DeserializeObject<RaycastData>(args[1].ToString()), (IVehicle)args[2] ?? null, (IPlayer)args[3] ?? null);
         }
 
         private async Task OnKeyReleased(IPlayer client, object[] args)
@@ -453,48 +450,6 @@ namespace ResurrectionRP_Server.Entities.Players
             }
 
             return false;
-        }
-
-        private async Task OpenXtremPlayer(IPlayer client, object[] args)
-        {
-            if (uint.TryParse(args[0].ToString(), out uint playerID))
-            {
-                if (!client.Exists)
-                    return;
-
-                var players = Alt.GetAllPlayers();
-
-                foreach(IPlayer player in players)
-                {
-                    if (player.Id == playerID)
-                    {
-                        if (player != null)
-                            await client.GetPlayerHandler()?.OpenXtremPlayer(player);
-                    }
-                }
-            }
-        }
-
-        private async Task OpenAtmMenuPlayer(IPlayer client, object[] args)
-        {
-            if (!client.Exists)
-                return;
-
-            PlayerHandler player = client.GetPlayerHandler();
-
-            if (player == null || player.HasOpenMenu())
-                return;
-
-            await BankMenu.OpenBankMenu(player, player.BankAccount);
-        }
-        private async Task OpenGasPumpMenu(IPlayer client, object[] args)
-        {
-            if (!client.Exists)
-                return;
-
-            PlayerHandler player = client.GetPlayerHandler();
-            if (player == null) return;
-            await Business.Market.OpenGasPumpMenu(client);
         }
 
         public static List<PlayerHandler> GetPlayersList()

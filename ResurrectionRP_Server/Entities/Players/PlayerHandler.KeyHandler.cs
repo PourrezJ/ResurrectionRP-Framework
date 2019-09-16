@@ -11,26 +11,34 @@ using ResurrectionRP_Server.Utils.Extensions;
 using System;
 using System.Threading.Tasks;
 using AltV.Net;
+using ResurrectionRP_Server.Entities.Players.Data;
+using ResurrectionRP_Server.Bank;
+using System.Linq;
+using AltV.Net.Data;
+using ResurrectionRP_Server.Models;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
     public partial class PlayerHandler
     {
-        public delegate Task KeyPressedDelegate(IPlayer client, ConsoleKey Keycode);
+        public delegate Task KeyPressedDelegate(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicle, IPlayer playerDistant);
         public delegate Task KeyReleasedDelegate(IPlayer client, ConsoleKey Keycode);
+
         [BsonIgnore]
         public KeyPressedDelegate OnKeyPressed { get; set; }
         [BsonIgnore]
-        public KeyPressedDelegate OnKeyReleased { get; set; }
+        public KeyReleasedDelegate OnKeyReleased { get; set; }
 
-        private async Task OnKeyPressedCallback(IPlayer client, ConsoleKey Keycode)
+        private async Task OnKeyPressedCallback(IPlayer client, ConsoleKey Keycode, RaycastData Raycastdata, IVehicle vehicle, IPlayer playerDistant)
         {
             if (!client.Exists)
                 return;
 
             PlayerHandler ph = client.GetPlayerHandler();
-            IVehicle vehicle = await client.GetVehicleAsync();
             VehicleHandler vh = vehicle?.GetVehicleHandler();
+            Position playerPos = Position.Zero;
+
+            client.GetPositionLocked(ref playerPos);
 
             if (ph == null)
                 return;
@@ -103,10 +111,43 @@ namespace ResurrectionRP_Server.Entities.Players
                 case ConsoleKey.E:
                     if (ph.HasOpenMenu())
                         return;
-                    Farm farm = await FarmManager.PlayerInFarmZone(client);
+                    Farm farm = FarmManager.PlayerInFarmZone(client);
                     if (farm != null)
                     {
                         await farm.StartFarming(client);
+                        return;
+                    }
+
+                    if (IsAtm(Raycastdata.entityHash))
+                    {
+                        await BankMenu.OpenBankMenu(ph, ph.BankAccount);
+                        return;
+                    }
+
+                    if (vh != null)
+                    {
+                        await vh.OpenXtremMenu(client);
+                        return;
+                    }
+
+                    if (playerDistant != null)
+                    {
+                        await ph.OpenXtremPlayer(playerDistant);
+                        return;
+                    }
+
+                    Objects.Object pickup = GameMode.Instance.ObjectManager.ListObject.FirstOrDefault(o => o.Value.position.Distance(playerPos) <= 1).Value;
+                    if (pickup != null)
+                    {
+                        var resupickup = ResuPickupManager.GetResuPickup(pickup.id);
+                        if (resupickup != null)
+                            await resupickup.Take(client);
+                        return;
+                    }
+
+                    if (Raycastdata.isHit && IsPump(Raycastdata.entityHash))
+                    {
+                        await Business.Market.OpenGasPumpMenu(client);
                         return;
                     }
 
@@ -114,6 +155,10 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (door != null)
                         await door.Interact?.Invoke(client, door);
 
+                    break;
+
+                case ConsoleKey.U:
+                    await vh.LockUnlock(client);
                     break;
                     
                 case ConsoleKey.M:
@@ -301,6 +346,34 @@ namespace ResurrectionRP_Server.Entities.Players
             }
 
             return Task.CompletedTask;
+        }
+
+        private static bool IsAtm(uint entityHash) {
+            switch (entityHash) {
+                case 3424098598:
+                case 506770882:
+                case 2930269768:
+                case 3168729781:
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static bool IsPump(uint entityHash) {
+            switch (entityHash) {
+                case 1339433404:
+                case 1933174915:
+                case unchecked((uint)-2007231801):
+                case unchecked((uint)-462817101):
+                case unchecked((uint)-469694731):
+                case unchecked((uint)1694452750):
+                case 1694:
+                case 750:
+                    return true;
+            }
+
+            return false;
         }
     }
 }

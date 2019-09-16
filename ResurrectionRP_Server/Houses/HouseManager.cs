@@ -80,7 +80,7 @@ namespace ResurrectionRP_Server.Houses
                     {
                         await house.Load();
                         Houses.Add(house);
-                        await Task.Delay(20);
+                        //await Task.Delay(20);
                     }
                 }
                 catch (Exception ex)

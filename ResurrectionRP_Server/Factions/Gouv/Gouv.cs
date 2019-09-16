@@ -81,8 +81,8 @@ namespace ResurrectionRP_Server.Factions
             PortDerriereB = Door.CreateDoor(114775988, new Vector3(-582.0195f, -195.5236f, 38.23092f), true);
 
             // Villa Chancelier
-            PortailA = Door.CreateDoor(unchecked((uint)3945237283), new Vector3(-123.8705f, 899.3705f, 235.792f), true);
-            PortailB = Door.CreateDoor(unchecked((uint)2376486946), new Vector3(-125.1007f, 902.032f, 235.7901f), true);
+            PortailA = Door.CreateDoor(3945237283, new Vector3(-123.8705f, 899.3705f, 235.792f), true);
+            PortailB = Door.CreateDoor(2376486946, new Vector3(-125.1007f, 902.032f, 235.7901f), true);
 
             Doors = new List<Door>()
             {

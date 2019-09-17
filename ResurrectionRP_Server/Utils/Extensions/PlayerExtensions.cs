@@ -158,20 +158,27 @@ namespace ResurrectionRP_Server
             }
             return endup;
         }
-        public static List<IPlayer> GetNearestPlayers(this IPlayer client, float range)
+        public static List<IPlayer> GetNearestPlayers(this IPlayer client, float range, int dimension = GameMode.GlobalDimension)
         {
-            var vehs = Alt.GetAllPlayers();
+            var players = Alt.GetAllPlayers();
             List<IPlayer> endup = null;
             var position = client.GetPosition();
             Vector3 osition = new Vector3(position.X, position.Y, position.Z);
-            foreach (IPlayer veh in vehs)
+            foreach (IPlayer player in players)
             {
-                if (!veh.Exists)
+                if (!player.Exists)
                     continue;
-                var vehpos = veh.GetPosition();
-                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= range)
+
+                if (player.Dimension != dimension)
+                    return endup;
+
+                Position pos = Position.Zero;
+                if (player.GetPositionLocked(ref pos))
                 {
-                    endup.Add(veh);
+                    if (osition.DistanceTo2D(new Vector3(pos.X, pos.Y, pos.Z)) <= range)
+                    {
+                        endup.Add(player);
+                    }
                 }
             }
             return endup;

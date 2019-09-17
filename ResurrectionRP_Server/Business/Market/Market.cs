@@ -47,10 +47,9 @@ namespace ResurrectionRP_Server.Business
             MarketsList.Add(this);
         }
 
-        private async Task Events_PlayerExitColshape(IColShape colShape, IPlayer client)
+        private Task Events_PlayerExitColshape(IColShape colShape, IPlayer client)
         {
-
-
+            return Task.CompletedTask;
         }
 
         private async Task Events_PlayerEnterColshape(IColShape colShape, IPlayer client)
@@ -81,12 +80,13 @@ namespace ResurrectionRP_Server.Business
             }
         }
 
-        private async Task Events_VehicleEnterColshape(IColShape colshape, IVehicle vehicle)
+        private Task Events_VehicleEnterColshape(IColShape colshape, IVehicle vehicle)
         {
             if (!vehicle.Exists)
-                return;
+                return Task.CompletedTask;
             if (!this.Station.VehicleInStation.ContainsKey(vehicle.Id))
                 this.Station.VehicleInStation.TryAdd(vehicle.Id, vehicle);
+            return Task.CompletedTask;
 
         }
         private async Task Events_VehicleExitColshape(IColShape colshape, IVehicle vehicle)

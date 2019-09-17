@@ -11,6 +11,7 @@ let lastSent = Date.now();
 let lastPos = null;
 
 export function initialize() {
+    alt.onServer('HideSpeedometer', hide2);
     alt.onServer('OnPlayerLeaveVehicle', hide);
     alt.onServer('OnPlayerEnterVehicle', show);
     alt.onServer('UpdateFuel', (fuel: number) => {
@@ -76,6 +77,12 @@ export function hide(vehicle) {
         speedoWindow.emit('hideSpeedometer');
     }
     alt.emitServer('updateFuelAndMilage', vehicle, fuelCur, CurrentMilage);
+}
+
+export function hide2() {
+    if (speedoWindow !== null) {
+        speedoWindow.emit('hideSpeedometer');
+    }
 }
 
 export function show(vehicle, seat, currentFuel, maxFuel, milage, fuelconsumption) {

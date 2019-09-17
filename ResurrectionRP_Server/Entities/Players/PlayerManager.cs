@@ -36,8 +36,9 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Constructor
         public PlayerManager()
         {
-            var PlayerCommands = new PlayerCommands();
-            var FactionsCommands = new FactionsCommands();
+            new PlayerCommands();
+            new FactionsCommands();
+            new HouseCommands();
 
             AltAsync.OnClient("LogPlayer", LogPlayer);
             AltAsync.OnClient("MakePlayer", MakePlayer);

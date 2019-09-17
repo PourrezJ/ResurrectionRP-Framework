@@ -233,10 +233,11 @@ namespace ResurrectionRP_Server.Models
         #endregion
 
         #region Public methods
-        public async Task Load(float markerscale = 3f, int opacite = 128, bool blip = false, uint sprite = 50, float scale = 1f, byte color = 0, uint alpha = 255, string name = "", uint dimension = (uint)short.MaxValue)
+        public async Task Load(float markerscale = 3f, int opacite = 128, bool blip = false, uint sprite = 50, float scale = 1f, byte color = 0, uint alpha = 255, string name = "", short dimension = GameMode.GlobalDimension)
         {
             Marker.CreateMarker(MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale-1), new Vector3(3, 3, 3));
             ParkingColshape = Alt.CreateColShapeCylinder(new AltV.Net.Data.Position(Location.X, Location.Y, Location.Z -1), markerscale, 4);
+            await ParkingColshape.SetDimensionAsync(dimension);
             ParkingColshape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
             ParkingColshape.SetOnPlayerLeaveColShape(OnPlayerLeaveColShape);
             ParkingColshape.SetOnVehicleEnterColShape(OnVehicleEnterColShape);
@@ -247,7 +248,6 @@ namespace ResurrectionRP_Server.Models
                 Entities.Blips.BlipsManager.CreateBlip(name, Location,color,(int) sprite);
 
             ParkingList.Add(this);
-            await Task.CompletedTask;
         }
 
         public async Task OpenParkingMenu(IPlayer client, string title = "", string description = "", bool canGetAllVehicle = false, Location location = null, int vehicleType = -1, Menu menu = null, Menu.MenuCallback menuCallback = null)

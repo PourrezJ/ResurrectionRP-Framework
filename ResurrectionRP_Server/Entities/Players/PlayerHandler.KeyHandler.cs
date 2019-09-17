@@ -16,6 +16,7 @@ using ResurrectionRP_Server.Bank;
 using System.Linq;
 using AltV.Net.Data;
 using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Houses;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -85,18 +86,23 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
                     
                 case ConsoleKey.F3:
-                    if (vehicle == null || !vehicle.Exists)
-                            return;
-
                     if (ph.IsCuff())
                     {
                         client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
                         return;
                     }
-                    if (!ph.HasOpenMenu())
+
+                    if (vehicle != null && vehicle.Exists)
                         await vh.OpenXtremMenu(client);
+                    else if (HouseManager.IsInHouse(Client))
+                    {
+                        House house = HouseManager.GetHouse(Client);
+
+                        if (house != null)
+                            await HouseMenu.OpenHouseMenu(client, house);
+                    }
                     break;
-                    
+
                 case ConsoleKey.F5:
                     if (!ph.HasOpenMenu())
                         await ph.OpenAdminMenu();

@@ -43,10 +43,21 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Server Events
         private Task updateFuelAndMilage(IPlayer client, object[] args)
         {
+            if (args[0] == null)
+                return Task.CompletedTask;
+
             var veh = (IVehicle)args[0];
+
+            if (!veh.Exists)
+                return Task.CompletedTask;
+
             float fuel = float.Parse(args[1].ToString());
             float mile = float.Parse(args[2].ToString());
             var vehh = VehiclesManager.GetVehicleHandler(veh);
+
+            if (vehh == null)
+                return Task.CompletedTask;
+
             vehh.Milage = mile;
             vehh.SetFuel(fuel);
             return Task.CompletedTask;
@@ -95,6 +106,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         private async Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
+            if (!player.Exists)
+                return;
+
+            if (!vehicle.Exists)
+                return;
+
             VehicleHandler vh = vehicle.GetVehicleHandler();
             PlayerHandler ph = player.GetPlayerHandler();
 
@@ -104,7 +121,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (ph != null)
             {
                 await ph.Update();
-                await player.EmitAsync("OnPlayerLeaveVehicle", vehicle);
+                try
+                {
+                    player.EmitLocked("OnPlayerLeaveVehicle", vehicle);
+                }
+                catch
+                {
+                    player.EmitLocked("HideSpeedometer");
+                }
+               
             }
         }
         #endregion

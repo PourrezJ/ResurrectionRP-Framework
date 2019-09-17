@@ -1,14 +1,11 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
-using MongoDB.Driver;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Models;
-using ResurrectionRP_Server.Streamer.Data;
 using ResurrectionRP_Server.Utils.Enums;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
 
@@ -22,7 +19,6 @@ namespace ResurrectionRP_Server.Houses
             Chat.RegisterCmd("addparkinghouse", Addparkinghouse);
         }
 
-        //public async Task CreateHouse(IPlayer player, int type, int price)
         public async Task CreateHouse(IPlayer player, string[] arguments = null)
         {
             try

@@ -16,45 +16,12 @@ namespace ResurrectionRP_Server.Houses
         public int InventorySize { get; }
         public int ParkingPlace { get; }
 
-        private Marker Marker;
-        private IColShape ColShape;
-
         public HouseType(string name, Location position, int inventorySize, int parkingPlace = 0)
         {
             Name = name;
             Position = position;
             InventorySize = inventorySize;
             ParkingPlace = parkingPlace;
-        }
-
-        public Task Create()
-        {
-            Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), new Vector3(), Color.FromArgb(25, 255, 255, 255));
-
-            ColShape = AltV.Net.Alt.CreateColShapeCylinder(Position.Pos, 1f, 1f);
-            return Task.CompletedTask;
-            /*
-            ColShape.OnEntityEnterColShape += (s, player) =>
-            {
-                if (HouseMain.IsInHouse(player))
-                {
-                    House house = HouseMain.GetHouse(player);
-                    if (house == null) return;
-
-                    Menu menu = new Menu("House_PurchaseMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
-                    menu.Callback = MenuCallBack;
-
-                    menu.Add(new MenuItem("Sortir de la maison", "", "sortir", executeCallback: true));
-
-                    MenuManager.OpenMenu(player, menu);
-                }
-            };
-
-            ColShape.OnEntityExitColShape += (s, player) =>
-            {
-                player.TriggerEvent("ShowHouseText", 0);
-                MenuManager.CloseMenu(player);
-            };*/
         }
 
         private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex, dynamic data)
@@ -65,12 +32,6 @@ namespace ResurrectionRP_Server.Houses
                     await HouseManager.GetHouse(client)?.RemovePlayer(client, true);
             }
         }
-
-        //public async Task DestroyAsync()
-        //{
-        //    await Marker.DestroyAsync();
-        //    await ColShape.DestroyAsync();
-        //}
     }
     #endregion
 

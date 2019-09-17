@@ -82,6 +82,12 @@ export class Hud {
             if (this.Hide)
                 return;
 
+             /*
+             *  STRESS  TEST
+             */
+
+            ui.DrawText2d("~r~RESURRECTIONRP ALT:V !STRESS-TEST! V0.1", 0.5, 0.03, 0.7, 4, 255, 255, 255, 255, true, true, 99);
+
             let health = (game.getEntityHealth(alt.Player.local.scriptID) - 100);
             if (health <= 70) {
                 var blood = (1 - (health / 70)) * 255;

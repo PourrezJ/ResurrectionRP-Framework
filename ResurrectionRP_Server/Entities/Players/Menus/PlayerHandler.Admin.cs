@@ -103,7 +103,8 @@ namespace ResurrectionRP_Server.Entities.Players
             var lifeitem = new MenuItem("Reset life", "", "", true);
             lifeitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                await AltAsync.Do(() => { _playerSelected.Health = 100; });
+                _playerSelected.Health = 200;
+                await client.SetHealthAsync(200);
                 Update();
             };
             mainMenu.Add(lifeitem);
@@ -119,7 +120,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #endregion
             
             #region GodMod
-            var godMod = new CheckboxItem("God Mode", "", "", _playerSelected.IsInvincible(), true);
+            var godMod = new MenuItem("God Mode", "", "", true);
             godMod.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 bool invinsible = !_playerSelected.IsInvincible();

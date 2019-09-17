@@ -122,7 +122,7 @@ namespace ResurrectionRP_Server.Society
 
             if (Parking != null)
             {
-                await Parking.Load();
+                Parking.Load();
                 InitParking(Parking.ParkingColshape);
             }
 

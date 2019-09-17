@@ -90,12 +90,12 @@ namespace ResurrectionRP_Server.Houses
 
             // create colshape
             ColShapeEnter = AltV.Net.Alt.CreateColShapeCylinder(Position - new Vector3(0, 0, 1), 1f, 3f);
-            await ColShapeEnter.SetDimensionAsync(GameMode.GlobalDimension);
+            ColShapeEnter.Dimension = GameMode.GlobalDimension;
             ColShapeEnter.SetData("House", this.ID);
             ColShapeEnter.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
 
             ColShapeOut = AltV.Net.Alt.CreateColShapeCylinder(HouseTypes.HouseTypeList[Type].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), 1f, 3f);
-            await ColShapeOut.SetDimensionAsync((short)ID);
+            ColShapeOut.Dimension = (short)ID;
             ColShapeOut.SetData("House", this.ID);
             ColShapeOut.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
 
@@ -103,14 +103,13 @@ namespace ResurrectionRP_Server.Houses
             if (Parking != null)
             {
                 parkingColshape = AltV.Net.Alt.CreateColShapeCylinder(Parking.Spawn1.Pos - new Vector3(0, 0, 1), 3f, 3f);
-                //Marker.CreateMarker(MarkerType.VerticalCylinder, Parking.Spawn1.Pos - new Vector3(0.0f, 0.0f, 1.0f), new Vector3(3.0f, 3.0f, 1.0f), Color.FromArgb(80, 255, 255, 255));
                 Parking.OnSaveNeeded = OnParkingSaveNeeded;
                 Parking.OnVehicleStored = OnVehicleStored;
                 Parking.OnVehicleOut = OnVehicleOutParking;
                 Parking.ParkingType = ParkingType.House;
 
                 Parking.Location = Parking.Spawn1.Pos;
-                await Parking.Load();
+                Parking.Load();
             }
 
             if (!string.IsNullOrEmpty(Owner))
@@ -118,13 +117,9 @@ namespace ResurrectionRP_Server.Houses
                 Marker.SetColor(Color.FromArgb(80, 255, 255, 255));
             }
 
-            //await ColShape.SetMetaDataAsync("House", JsonConvert.SerializeObject(new { Id = ID, Position = Position, Locked = Locked }));
-            //sorti.SetMetaData("House_Exit", ID);
-
             if (parkingColshape != null)
                 parkingColshape.SetMetaData("House_Parking", ID);
 
-            //Marker.CreateMarker(MarkerType.VerticalCylinder, HouseTypes.HouseTypeList[Type].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), null, null, ID); // not needed now
 
             if (GameMode.Instance.IsDebug)
                 BlipsManager.CreateBlip(Name, Position, 4, 1);

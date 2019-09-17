@@ -23,11 +23,11 @@ namespace ResurrectionRP_Server.Services
         #endregion
 
         #region Methods
-        public async Task Load()
+        public void Load()
         {
             if (Parking != null)
             {
-                await Parking.Load(alpha: 150, scale: 0.7f, name: "Parkings", blip: true);
+                Parking.Load(alpha: 150, scale: 0.7f, name: "Parkings", blip: true);
                 Parking.OnVehicleStored = OnVehicleStored;
                 Parking.OnVehicleOut = OnVehicleOut;
                 Parking.ParkingType = ParkingType.Public;
@@ -85,7 +85,7 @@ namespace ResurrectionRP_Server.Services
             carpark.Parking.Location = borne;
             carpark.Parking.Spawn1 = spawn1;
             carpark.Parking.Spawn2 = spawn2;
-            await carpark.Load();
+            carpark.Load();
             return carpark;
         }
 
@@ -98,7 +98,7 @@ namespace ResurrectionRP_Server.Services
             _carpark.ID = ID;
             _carpark.Parking = new Models.Parking(borne, spawn1, spawn2, name, maxVehicles: 2100, hidden: false);
             await _carpark.Insert();
-            await _carpark.Load();
+            _carpark.Load();
             return _carpark;
         }
         #endregion

@@ -25,7 +25,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region Methods
-        public async Task Update()
+        public void Update()
         {
             if (Client == null || !Client.Exists)
                 return;
@@ -34,20 +34,20 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 VehicleHandler veh = null;
 
-                Health = await Client.GetHealthAsync();
-                IVehicle vehicle = await Client.GetVehicleAsync();
+                Health = Client.Health;
+                IVehicle vehicle = Client.Vehicle;
 
                 if (vehicle != null && vehicle.Exists)
                 {
-                    if (await vehicle.GetDriverAsync() == Client)
+                    if (vehicle.Driver == Client)
                         veh = vehicle.GetVehicleHandler();
 
-                    Location = new Location(await vehicle.GetPositionAsync(), await vehicle.GetRotationAsync());
+                    Location = new Location(vehicle.Position, vehicle.Rotation);
                 }
                 else if (HouseManager.IsInHouse(Client))
                     Location = new Location(HouseManager.GetHouse(Client).Position, new Vector3());
                 else
-                    Location = new Location(await Client.GetPositionAsync(), await Client.GetRotationAsync());
+                    Location = new Location(Client.Position, Client.Rotation);
 
                 if (veh != null)
                     veh.Update();

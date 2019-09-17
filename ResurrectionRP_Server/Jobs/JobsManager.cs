@@ -39,6 +39,7 @@ namespace ResurrectionRP_Server.Jobs
                     JobsList.Add(jobs);
                 }
             }
+
             AltAsync.OnColShape += OnEntityColShape;
         }
 

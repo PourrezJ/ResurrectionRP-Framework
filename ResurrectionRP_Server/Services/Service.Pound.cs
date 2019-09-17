@@ -41,34 +41,8 @@ namespace ResurrectionRP_Server.Services
             //_colshape.OnEntityExitColShape += _colshape_OnEntityExitColShape;
             EventHandlers.Events.OnPlayerEnterColShape += OnPlayerEnterColShape;
 
-/*            // TEMPORARY CODE TO REMOVE DUPLICATE VEHICLES || Not necessary on alt v version
-            List<VehicleHandler> vehicleList = new List<VehicleHandler>();
-
-            foreach (VehicleHandler veh in PoundVehicleList)
-            {
-                bool duplicate = false;
-
-                foreach (VehicleHandler vehicle in vehicleList)
-                {
-                    if (veh.Plate == vehicle.Plate)
-                    {
-                        duplicate = true;
-                        break;
-                    }
-                }
-
-                if (!duplicate)
-                    vehicleList.Add(veh);
-            }
-
-            if (PoundVehicleList.Count != vehicleList.Count)
-            {
-                PoundVehicleList = vehicleList;
-                await GameMode.Instance.Save();
-            }
-            // END TEMPORARY CODE*/
-
-/*            List<string> checkedPlate = new List<string>();
+            /*
+            List<string> checkedPlate = new List<string>();
             foreach (var vehicle in PoundVehicleList.ToList())
             {
                 await VehiclesManager.DeleteVehicleFromAllParkings(vehicle.Plate);
@@ -93,9 +67,11 @@ namespace ResurrectionRP_Server.Services
                     PoundVehicleList.Remove(vehicle);
                     Alt.Server.LogError($"POUND | Vehicle duplicated plate: {vehicle.Plate} Owner: {vehicle.OwnerID} ");
                 }
-            }*/
+            }
+            */
 
             Entities.Peds.Ped _npc = Entities.Peds.Ped.CreateNPC(PedModel.Gardener01SMM, new Vector3(409.1505f, -1622.874f, 29.29193f), 227.5882f);
+
             _npc.NpcInteractCallBack += async (IPlayer client, Entities.Peds.Ped ped) =>
             {
                 await OpenPoundMenu(client);
@@ -139,13 +115,13 @@ namespace ResurrectionRP_Server.Services
 
                         if (ph != null)
                         {
-                            if (GameMode.Instance.VehicleManager.VehicleHandlerList.Remove(vehicle, out VehicleHandler value))
+                            if (VehiclesManager.VehicleHandlerList.Remove(vehicle, out _))
                             {
                                 //GameMode.Instance.FactionManager.LSCustom.BankAccount.AddMoney(750, $"Mise en fourrière {_towedvehicle.Plate} par {ph.Identite.Name}"); TODO
-                                await ph.AddMoney(250);
+                                ph.AddMoney(250);
 
                                 _vh.TowTruck = null;
-                                PoundVehicleList.Add(new ParkedCar(_towedvehicle.Plate, _towedvehicle.OwnerID , _towedvehicle.VehicleManifest.VehicleClass, DateTime.Now));
+                                PoundVehicleList.Add(new ParkedCar(_towedvehicle.Plate, DateTime.Now));
                                 _towedvehicle.IsInPound = true;
                                 _vh.UpdateProperties();
                                 _towedvehicle.Update();
@@ -197,11 +173,11 @@ namespace ResurrectionRP_Server.Services
         {
             if (menu.Id == "ID_PoundMenu" && menuItem.Id == "ID_Get" && menuItem.HasData("Vehicle"))
             {
-                if (await client.GetPlayerHandler().HasMoney(Price))
+                if (client.GetPlayerHandler().HasMoney(Price))
                 {
                     VehicleHandler veh = menuItem.GetData("Vehicle");
                     await veh.SpawnVehicle(PoundSpawn);
-                    await veh.InsertVehicle();
+                    veh.Update();
                     PoundVehicleList.Remove(PoundVehicleList.Find(v => v.Plate == veh.Plate));
                     await GameMode.Instance.Save();
                     client.SendNotificationPicture(Utils.Enums.CharPicture.DIA_GARDENER,"Fourrière", "","~g~Votre véhicule vous attend sur le parking." );
@@ -217,7 +193,7 @@ namespace ResurrectionRP_Server.Services
         public List<VehicleHandler> GetVehicleInPound(IPlayer client)
         {
             List<ParkedCar> List = PoundVehicleList.FindAll(
-                                v => v.Owner == client.GetSocialClub() ||
+                                v => VehiclesManager.GetVehicleHandler(v.Plate).OwnerID == client.GetSocialClub() ||
                                 client.GetPlayerHandler().HasKey(v.Plate)
             ).ToList();
             List<VehicleHandler> endup = new List<VehicleHandler>();
@@ -232,7 +208,7 @@ namespace ResurrectionRP_Server.Services
         {
             Alt.Server.LogInfo ($"Mise en fourrière véhicule {veh.Plate}");
             if (!PoundVehicleList.Exists(p => p.Plate == veh.Plate))
-                PoundVehicleList.Add(new ParkedCar(veh.Plate, veh.OwnerID, veh.VehicleManifest.VehicleClass, DateTime.Now));
+                PoundVehicleList.Add(new ParkedCar(veh.Plate, DateTime.Now));
             veh.IsInPound = true;
             await veh.RemoveInDatabase();
             await veh.Delete();

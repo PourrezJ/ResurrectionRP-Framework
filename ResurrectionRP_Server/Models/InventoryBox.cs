@@ -34,7 +34,7 @@ namespace ResurrectionRP_Server.Models
             }
         }
 
-        public async static Task<InventoryBox> CreateInventoryBox(string id, Location location,Inventory.Inventory inventory = null, uint model = 0, int taille = 200)
+        public static InventoryBox CreateInventoryBox(string id, Location location,Inventory.Inventory inventory = null, uint model = 0, int taille = 200)
         {
             if (model == 0)
                 model = Alt.Hash("prop_box_wood07a");

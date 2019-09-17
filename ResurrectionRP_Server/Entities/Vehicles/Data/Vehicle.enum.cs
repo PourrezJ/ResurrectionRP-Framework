@@ -19,37 +19,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         WindowBroken
     }
 
-    public enum DoorID
-    {
-        DoorFrontLeft,
-        DoorFrontRight,
-        DoorRearLeft,
-        DoorRearRight,
-        DoorHood,
-        DoorTrunk
-    }
-
-    public enum DoorState
-    {
-        DoorClosed,
-        DoorOpen,
-        DoorBroken,
-    }
-
-    public enum WheelID
-    {
-        Wheel0,
-        Wheel1,
-        Wheel2,
-        Wheel3,
-        Wheel4,
-        Wheel5,
-        Wheel6,
-        Wheel7,
-        Wheel8,
-        Wheel9
-    }
-
     public enum WheelState
     {
         WheelFixed,
@@ -57,16 +26,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         WheelOnRim,
     }
 
-    public class WheelStruct
+    public class Wheel
     {
         public float Health;
         public bool Burst;
-    }
-    public class WheelsStruct
-    {
-        public WheelStruct[] Wheels;
-        public byte Type = 255;
-        public byte Variation = 0;
+        public bool HasTire;
     }
 }
 

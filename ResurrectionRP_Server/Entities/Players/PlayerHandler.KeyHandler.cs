@@ -46,7 +46,6 @@ namespace ResurrectionRP_Server.Entities.Players
             if (ph == null)
                 return;
 
-            
             switch (Keycode)
             {/**
                 case ConsoleKey.NumPad0:
@@ -116,7 +115,9 @@ namespace ResurrectionRP_Server.Entities.Players
                 case ConsoleKey.E:
                     if (ph.HasOpenMenu())
                         return;
+
                     Farm farm = FarmManager.PlayerInFarmZone(client);
+
                     if (farm != null)
                     {
                         await farm.StartFarming(client);
@@ -163,7 +164,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.U:
-                    await vh?.LockUnlock(client);
+                    if (vh != null)
+                        await vh.LockUnlock(client);
+
                     break;
                     
                 case ConsoleKey.M:

@@ -30,26 +30,28 @@ namespace ResurrectionRP_Server.Business
 
         public override async Task Init()
         {
-            this.Station = new StationService(this.ID, this.Range, this.StationPos);
-            this.Station.StationBlip = Entities.Blips.BlipsManager.CreateBlip("Station essence", StationPos, 128, 361, 0.5f);
-            this.Station.Colshape = Alt.CreateColShapeCylinder(StationPos - new Vector3(0,0,2), 14f, 6f);
+            Station = new StationService(this.ID, this.Range, this.StationPos);
+            Station.StationBlip = Entities.Blips.BlipsManager.CreateBlip("Station essence", StationPos, 128, 361, 0.5f);
+            Station.Colshape = Alt.CreateColShapeCylinder(StationPos - new Vector3(0,0,2), 14f, 6f);
 
+            Station.Colshape.SetOnPlayerEnterColShape(Events_PlayerEnterColshape);
+            Station.Colshape.SetOnPlayerLeaveColShape(Events_PlayerExitColshape);
+            Station.Colshape.SetOnVehicleEnterColShape(Events_VehicleEnterColshape);
+            Station.Colshape.SetOnVehicleLeaveColShape(Events_VehicleExitColshape);
 
-            this.Station.Colshape.SetOnPlayerEnterColShape(Events_PlayerEnterColshape);
-            this.Station.Colshape.SetOnPlayerLeaveColShape(Events_PlayerExitColshape);
-            this.Station.Colshape.SetOnVehicleEnterColShape(Events_VehicleEnterColshape);
-            this.Station.Colshape.SetOnVehicleLeaveColShape(Events_VehicleExitColshape);
-
-            this.Inventory.MaxSlot = 40;
-            this.Inventory.MaxSize = 750;
-            this.MaxEmployee = 5;
+            Inventory.MaxSlot = 40;
+            Inventory.MaxSize = 750;
+            MaxEmployee = 5;
             await base.Init();
             MarketsList.Add(this);
         }
 
-        private Task Events_PlayerExitColshape(IColShape colShape, IPlayer client)
+        private async Task Events_PlayerExitColshape(IColShape colShape, IPlayer client)
         {
-            return Task.CompletedTask;
+            if (!client.Exists)
+                return;
+
+            await MenuManager.CloseMenu(client);
         }
 
         private async Task Events_PlayerEnterColshape(IColShape colShape, IPlayer client)
@@ -66,7 +68,6 @@ namespace ResurrectionRP_Server.Business
                 // Si il posséde du carburant raffiné
                 if (fueltruck.GetVehicleHandler().OilTank.Traite > 0 )
                 {
-                    
                     Menu RefuelMenu = new Menu("ID_RefuelMenu", "Station Service", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
                     RefuelMenu.ItemSelectCallback = RefuelMenuCallBack;
                     RefuelMenu.Add(new MenuItem("Remplir la station", "", "", true));
@@ -74,9 +75,7 @@ namespace ResurrectionRP_Server.Business
                     await MenuManager.OpenMenu(client, RefuelMenu);
                 }
                 else
-                {
                     client.DisplayHelp("~r~Votre citerne est vide.", 10000);
-                }
             }
         }
 
@@ -84,21 +83,25 @@ namespace ResurrectionRP_Server.Business
         {
             if (!vehicle.Exists)
                 return Task.CompletedTask;
-            if (!this.Station.VehicleInStation.ContainsKey(vehicle.Id))
-                this.Station.VehicleInStation.TryAdd(vehicle.Id, vehicle);
-            return Task.CompletedTask;
 
+            if (!Station.VehicleInStation.ContainsKey(vehicle.Id))
+                Station.VehicleInStation.TryAdd(vehicle.Id, vehicle);
+
+            return Task.CompletedTask;
         }
+
         private async Task Events_VehicleExitColshape(IColShape colshape, IVehicle vehicle)
         {
             if (!vehicle.Exists)
                 return;
+
             if (this.Station.VehicleInStation.ContainsKey(vehicle.Id))
                 this.Station.VehicleInStation.TryRemove(vehicle.Id, out IVehicle veh);
 
             if (vehicle.Driver == null)
                 return;
             IPlayer client = vehicle.Driver;
+
             if (!client.Exists)
                 return;
 
@@ -112,9 +115,7 @@ namespace ResurrectionRP_Server.Business
                 // API.Shared.OnProgressBar(client, false);
                 await Update();
                 client.DisplayHelp("~r~Vous êtes sorti de la zone de ravitaillement", 12000);
-
             }
-
         }
     }
 }

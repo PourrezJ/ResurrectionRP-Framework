@@ -100,9 +100,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (money == 0)
                         return;
 
-                    if (await HasMoney(money))
+                    if (HasMoney(money))
                     {
-                        await TargetHandler.AddMoney(money);
+                        TargetHandler.AddMoney(money);
                         Client.SendNotificationSuccess($"Vous avez donné la somme de ${money}.");
                         TargetClient.SendNotificationSuccess($"On vous a donné la somme de ${money}.");
                     }
@@ -117,13 +117,13 @@ namespace ResurrectionRP_Server.Entities.Players
                     var invmenu = new Inventory.RPGInventoryMenu(TargetHandler.PocketInventory, TargetHandler.OutfitInventory, TargetHandler.BagInventory);
                     invmenu.OnMove += async (p, m) =>
                     {
-                        await Update();
+                        Update();
                     };
 
                     invmenu.OnClose += async (p, m) =>
                     {
-                        await Update();
-                        await TargetHandler.Update();
+                        Update();
+                        TargetHandler.Update();
                     };
                     await invmenu.OpenMenu(client);
                     break;

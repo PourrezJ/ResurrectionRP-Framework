@@ -198,7 +198,7 @@ namespace ResurrectionRP_Server.Jobs
             if (ph != null)
             {
                 client.SendNotificationSuccess($"Vous avez gagné ${_price}");
-                await ph.AddMoney(_price);
+                ph.AddMoney(_price);
 
                 Menu menu = new Menu("ID_DustMan", "Déchetterie", "Que voulez-vous faire?", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, true, true, false);
                 menu.ItemSelectCallback = DustManCallBack;

@@ -62,7 +62,7 @@ namespace ResurrectionRP_Server.Houses
         private IPlayer OwnerHandle;
 
         // misc
-        [JsonIgnore]
+        [JsonIgnore, BsonIgnore]
         public List<IPlayer> PlayersInside = new List<IPlayer>();
 
         public House(int id, string owner, int type, Vector3 position, int price, bool locked, string name = "", Parking parking = null)
@@ -109,31 +109,6 @@ namespace ResurrectionRP_Server.Houses
                 Parking.OnVehicleOut = OnVehicleOutParking;
                 Parking.ParkingType = ParkingType.House;
 
-                // TEMPORARY CODE TO REMOVE DUPLICATE VEHICLES
-                List<ParkedCar> vehicleList = new List<ParkedCar>();
-
-                foreach (var veh in Parking.ListVehicleStored)
-                {
-                    bool duplicate = false;
-
-                    foreach (ParkedCar vehicle in vehicleList)
-                    {
-                        if (veh.Plate == vehicle.Plate)
-                        {
-                            duplicate = true;
-                            break;
-                        }
-                    }
-
-                    if (!duplicate)
-                        vehicleList.Add(veh);
-                }
-
-                if (Parking.ListVehicleStored.Count != vehicleList.Count)
-                {
-                    Parking.ListVehicleStored = vehicleList;
-                    await Save();
-                }
                 Parking.Location = Parking.Spawn1.Pos;
                 await Parking.Load();
             }

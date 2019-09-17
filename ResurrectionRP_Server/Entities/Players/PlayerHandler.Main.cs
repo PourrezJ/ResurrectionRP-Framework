@@ -182,8 +182,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     OutfitInventory.Slots[5] = new ItemStack(new ClothItem(Models.InventoryData.ItemID.Jacket, "Resurrection", "", new ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "jacket", icon: "jacket"), 1, 9);
                     //OutfitInventory.Slots[13] = new ItemStack(new BagItem(ItemID.Bag, "Backpack", "", new ClothData(1, 0, 0), new Inventory(25, 20, InventoryType.Bag),0, true, false, false, true, false, 0, classes: "backpack", icon: "backpack"), 1, 9);
                     
-                    await AddMoney(PlayerManager.StartMoney);
-
+                    AddMoney(PlayerManager.StartMoney);
                     Location = GameMode.FirstSpawn;
                 }
                 
@@ -204,8 +203,8 @@ namespace ResurrectionRP_Server.Entities.Players
                 
                 await AltAsync.Do( () =>
                 {
-                    this.IP = Client.Ip;
-                    this.IsOnline = true;
+                    IP = Client.Ip;
+                    IsOnline = true;
                     
                     Client.Emit
                     (
@@ -246,7 +245,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 await Task.Delay(500);
 
                 if (firstspawn)
-                    await Update();
+                    Update();
 
                 OnKeyPressed += OnKeyPressedCallback;
                 OnKeyReleased += OnKeyReleasedCallback;
@@ -261,17 +260,17 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region Money
-        public async Task AddMoney(double somme)
+        public void AddMoney(double somme)
         {
             if (somme < 0)
                 return;
 
             Money += somme;
             Client?.EmitLocked(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money));
-            await Update();
+            Update();
         }
 
-        public async Task<bool> HasMoney(double somme)
+        public bool HasMoney(double somme)
         {
             if (somme < 0)
                 return false;
@@ -280,7 +279,7 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 Money -= somme;
                 Client?.EmitLocked(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money)) ;
-                await Update();
+                Update();
                 return true;
             }
 
@@ -312,7 +311,7 @@ namespace ResurrectionRP_Server.Entities.Players
             Thirst = (thirst == -1) ? Thirst : thirst;
             Hunger = (hunger == -1) ? Hunger : hunger;
             await  Client?.EmitAsync("UpdateHungerThirst", Hunger, Thirst);
-            await Update();
+            Update();
         }
 
         public bool HasOpenMenu()

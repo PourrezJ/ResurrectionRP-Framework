@@ -62,7 +62,7 @@ namespace ResurrectionRP_Server.Houses
 
                 if (HouseManager.AddParkingList[client] != null)
                 {
-                    HouseManager.AddParkingList[client].Parking = new Parking(spawn1: new Location(position, rotation), spawn2: new Location(position, rotation), limite: HouseTypes.HouseTypeList[HouseManager.AddParkingList[client].Type].ParkingPlace);
+                    HouseManager.AddParkingList[client].Parking = new Parking(spawn1: new Location(position, rotation), spawn2: new Location(position, rotation), maxVehicles: HouseTypes.HouseTypeList[HouseManager.AddParkingList[client].Type].ParkingPlace);
 
                     if (HouseManager.AddParkingList.TryGetValue(client, out House house))
                     {

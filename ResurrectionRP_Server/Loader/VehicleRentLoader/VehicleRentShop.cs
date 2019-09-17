@@ -1,13 +1,13 @@
 ﻿
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Loader.CarDealerLoader;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
 using VehicleInfoLoader.Data;
-using Location = ResurrectionRP_Server.Models.Location;
-using VehicleInfo = ResurrectionRP_Server.Loader.CarDealerLoader.VehicleInfo;
 
 namespace ResurrectionRP_Server.Loader.VehicleRentLoader
 {
@@ -58,7 +58,7 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
 
             if (manifest != null)
             {
-                place.VehicleHandler = await Entities.Vehicles.VehiclesManager.SpawnVehicle("", place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot, color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
+                place.VehicleHandler = await VehiclesManager.SpawnVehicle("", place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot, color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
                 place.VehicleHandler?.Vehicle.SetData("RentShop", place);
                 string str = $"{manifest.DisplayName} \n" +
                 $"Prix $ {place.VehicleInfo.Price} \n" +

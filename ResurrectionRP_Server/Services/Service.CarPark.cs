@@ -33,8 +33,9 @@ namespace ResurrectionRP_Server.Services
                 Parking.ParkingType = ParkingType.Public;
                 Parking.OnSaveNeeded = async () => await Update();
 
-                List<Models.ParkedCar> _poundList = Parking.ListVehicleStored.FindAll(veh => DateTime.Now > veh.ParkTime.AddMonths(1));
-                foreach(Models.ParkedCar ve in _poundList.ToList())
+                List<ParkedCar> _poundList = Parking.ListVehicleStored.FindAll(veh => DateTime.Now > veh.ParkTime.AddMonths(1));
+
+                foreach(ParkedCar ve in _poundList.ToList())
                 {
                     ve.ParkTime = DateTime.Now;
                     Alt.Server.LogError("Service CarPark | Checking for too long parked car is not done yet, consider finishing it (Service.Carpark.cs)");
@@ -95,7 +96,7 @@ namespace ResurrectionRP_Server.Services
         {
             var _carpark = new CarPark();
             _carpark.ID = ID;
-            _carpark.Parking = new Models.Parking(borne, spawn1, spawn2, name, limite: 2100, hidden: false);
+            _carpark.Parking = new Models.Parking(borne, spawn1, spawn2, name, maxVehicles: 2100, hidden: false);
             await _carpark.Insert();
             await _carpark.Load();
             return _carpark;

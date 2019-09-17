@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AltV.Net;
-using AltV.Net.Async;
-using AltV.Net.Elements.Entities;
-using AltV.Net.Enums;
+﻿using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Business.Barber
 {
@@ -100,7 +96,7 @@ namespace ResurrectionRP_Server.Business.Barber
 
                 var ph = client.GetPlayerHandler();
 
-                if (await ph.HasMoney(result))
+                if (ph.HasMoney(result))
                 {
                     await BankAccount.AddMoney(result, $"Ajout d'argent par {ph.Identite.Name}");
                     client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
@@ -164,7 +160,7 @@ namespace ResurrectionRP_Server.Business.Barber
                 ClientSelected.Character.Appearance[1].Opacity = 255;
 
                 ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
-                await ClientSelected.Update();
+                ClientSelected.Update();
                 await Update();
             }
             else
@@ -220,7 +216,7 @@ namespace ResurrectionRP_Server.Business.Barber
             {
                 ClientSelected.Character.Hair.Hair = hair.ID;
                 ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
-                await ClientSelected.Update();
+                ClientSelected.Update();
                 await Update();
             }
             else
@@ -288,7 +284,7 @@ namespace ResurrectionRP_Server.Business.Barber
                     ClientSelected.Character.Appearance[1] = head;
 
                     ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
-                    await ClientSelected.Update();
+                    ClientSelected.Update();
                     await Update();
                     await menu.CloseMenu(client);
                 }

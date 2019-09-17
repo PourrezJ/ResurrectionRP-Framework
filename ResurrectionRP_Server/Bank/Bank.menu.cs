@@ -170,7 +170,7 @@ namespace ResurrectionRP_Server.Bank
                 }
                 else
                 {
-                    await _player.AddMoney(money);
+                    _player.AddMoney(money);
                     client.SendNotificationSuccess($"Vous avez retiré ${menuItem.InputValue} sur le compte {_bankAccount.AccountNumber}");
                 }
             }
@@ -188,7 +188,7 @@ namespace ResurrectionRP_Server.Bank
         {
             if (uint.TryParse(menuItem.InputValue, out uint somme) && somme > 0)
             {
-                if (!await _player.HasMoney(somme))
+                if (!_player.HasMoney(somme))
                 {
                     client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
                 }

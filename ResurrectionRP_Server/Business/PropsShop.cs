@@ -328,7 +328,7 @@ namespace ResurrectionRP_Server.Business
                 if (await ph.AddItem(item, 1))
                 {
                     client.SendNotificationSuccess($"Vous avez acheté {menuItem.Text} pour la somme de ${price}");
-                    await ph.Update();
+                    ph.Update();
                 }
                 else
                     client.SendNotificationError("Vous n'avez pas la place pour cette élément.");

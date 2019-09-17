@@ -136,7 +136,7 @@ namespace ResurrectionRP_Server.Factions
                 Parking.OnVehicleStored = OnVehicleStore;
                 Parking.OnVehicleOut = OnVehicleOut;
                 Parking.ParkingType = ParkingType.Faction;
-                Parking.Limite = 3;
+                Parking.MaxVehicles = 3;
                 Parking.Spawn1 = ParkingLocation;
             }
 
@@ -322,7 +322,7 @@ namespace ResurrectionRP_Server.Factions
             if (add)
             {
                 client.SendNotification($"Vous êtes désormais membre de {FactionName}");
-                await client.GetPlayerHandler()?.Update();
+                client.GetPlayerHandler()?.Update();
                 await UpdateDatabase();
                 await PlayerFactionAdded(client);
             }

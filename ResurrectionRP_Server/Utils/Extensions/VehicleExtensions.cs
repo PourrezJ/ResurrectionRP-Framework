@@ -26,7 +26,7 @@ namespace ResurrectionRP_Server
         {
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
             // var vehs = Alt.GetAllVehicles();
-            var vehs = Entities.Vehicles.VehiclesManager.GetAllVehicles();
+            var vehs = VehiclesManager.GetAllVehicles();
 
             List<IVehicle> endup = new List<IVehicle>();
             var position = client.GetPosition();
@@ -88,7 +88,7 @@ namespace ResurrectionRP_Server
                     if (vehicle.GetData("VehicleHandler", out object data))
                         return data as VehicleHandler;
 
-                    if (GameMode.Instance.VehicleManager.VehicleHandlerList.TryGetValue(vehicle, out VehicleHandler value))
+                    if (VehiclesManager.VehicleHandlerList.TryGetValue(vehicle, out VehicleHandler value))
                         return value;
                 }
             }

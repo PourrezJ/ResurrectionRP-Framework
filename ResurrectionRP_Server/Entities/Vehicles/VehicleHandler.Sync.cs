@@ -1,20 +1,16 @@
 ﻿using AltV.Net.Async;
+using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using ResurrectionRP.Entities.Vehicles.Data;
-using ResurrectionRP_Server.Entities.Vehicles.Data;
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.Options;
 using ResurrectionRP_Server.Models;
-using ResurrectionRP_Server.Utils.Extensions;
+using ResurrectionRP_Server.Utils;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
-using VehicleInfoLoader.Data;
-using AltV.Net.Elements.Entities;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
@@ -39,7 +35,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public uint BodyHealth { get; set; } = 1000;
         public int EngineHealth { get; set; } = 1000;
-        public int PetrolTankHealth { get; set; }
+        public int PetrolTankHealth { get; set; } = 1000;
 
         public Tuple<bool, bool, bool, bool> NeonState { get; set; } = new Tuple<bool, bool, bool, bool>(false, false, false, false);
         public Color NeonsColor { get; set; } = Color.Empty;
@@ -51,20 +47,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public byte PrimaryColor { get; set; } = 0;
         public byte SecondaryColor { get; set; } = 0;
 
-        public byte WindowTint { get; set; } = 0;
-        public bool ArmoredWindows { get; set; } = false;
+        // public byte WindowTint { get; set; } = 0;
+        // public bool ArmoredWindows { get; set; } = false;
 
-        public byte SirenActive { get; set; } = 0;
+        // public byte FrontBumperDamage { get; set; } = 0;
+        // public byte RearBumperDamage { get; set; } = 0;
 
-        public byte FrontBumperDamage { get; set; } = 0;
-        public byte RearBumperDamage { get; set; } = 0;
+        public VehicleDoorState[] Doors { get; set; } = new VehicleDoorState[Globals.NB_VEHICLE_DOORS];
+        public WindowState[] Windows { get; set; } = new WindowState[4] { 0, 0, 0, 0 };
 
-
-        public VehicleDoorState[] Door { get; set; } = new VehicleDoorState[7];
-        public WindowState[] Window { get; set; } = new WindowState[4] { 0, 0, 0, 0 };
-
-        public WheelsStruct Wheel { get; set; } = new WheelsStruct();
-
+        public Wheel[] Wheels { get; set; }
 
         public Location LastKnowLocation;
         public Location Location
@@ -75,6 +67,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 {
                     return new Location(Vehicle.Position, Vehicle.Rotation);
                 }
+
                 return LastKnowLocation;
             }
             set
@@ -84,18 +77,17 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Vehicle.Position = value.Pos;
                     Vehicle.Rotation = value.Rot;
                 }
+                
                 LastKnowLocation = value;
             }
         }
 
         public Attachment Attachment { get; set; }
 
-
-        public VehicleDoorState GetDoorState(VehicleDoor door) =>  (VehicleDoorState)Door[(byte)door]; 
-
+        public VehicleDoorState GetDoorState(VehicleDoor door) => Doors[(byte)door]; 
         public async Task SetDoorState(VehicleDoor door, VehicleDoorState state)
         {
-            Door[(byte)door] = (VehicleDoorState)state;
+            Doors[(byte)door] = state;
             await Vehicle.SetDoorStateAsync(door, state);
 
         }

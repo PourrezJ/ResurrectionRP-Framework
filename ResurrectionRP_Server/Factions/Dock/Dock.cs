@@ -56,28 +56,79 @@ namespace ResurrectionRP_Server.Factions
             this.VehicleAllowed = new List<FactionVehicle>();
             this.VehicleAllowed.Add(new FactionVehicle(0, VehicleModel.Forklift, 15000, 5));
             this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Benson, 400000, 200));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.supra2, 600000, 25)); 
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.oiltanker, 150000, 25));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.chevelle1970, 86000, 30));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.stingray66, 83000, 30));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.bmci, 330000, 25));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.skyline, 330000, 25));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.mers63c, 100000, 15));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.zl12017, 90000, 30));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.tts, 170000, 25));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodm4gts, 600000, 25));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.focusrs, 265000, 25));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.ben17, 166000, 30));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.audirs6tk, 265000, 25));
-            //this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.ast, 265000, 25)); Deja commente
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodmustang, 600000, 25));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodm3e36, 530000, 25));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodgt63, 550000, 50));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodlp770, 1000000, 15));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodlp750, 1000000, 15));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.p205t16a, 360000, 25));
-            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.p205t16b, 330000, 25));
 
+            // Pawn car
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Reaper, 507500, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Vacca, 343000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Turismor, 472500, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Infernus, 339500, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Banshee, 385000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Fmj, 630000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.T20, 525000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Osiris, 560000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Tyrus, 927500, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Prototipo, 1120000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Pfister811, 577500, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Bullet, 332500, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Voltic, 350000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Zentorno, 770000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Cheetah, 612500, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.EntityXf, 402500, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Le7B, 980000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Adder, 700000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Autarch, 805000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Cyclone, 525000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Emerus, 665000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Gp1, 455000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Italigtb, 525000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Krieger, 735000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Nero, 875000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Penetrator, 378000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Sc1, 325500, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.SultanRs, 133000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Tezeract, 1330000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Thrax, 1400000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Vagner, 1050000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Visione, 1155000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Zorrusso, 770000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodlp750, 1470000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.skyline, 108500, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.audirs6tk, 98000, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodm3e36, 133000, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rs72013, 119000, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.ben17, 157500, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Ztype, 325500, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.BType, 294000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Nebula, 14000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Zion3, 21000, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.zl12017, 66500, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodmustang, 112000, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rt440, 52500, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.chevelle1970, 98000, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.stingray66, 108500, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Hotknife, 49000, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Hermes, 59500, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Hustler, 47950, 10));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Dominator3, 66500, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Gauntlet4, 108500, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.SabreGt2, 49000, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.v242, 24500, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.bmci, 94500, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.mers63c, 87500, 15));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Dubsta3, 70000, 50));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.nisaltima, 14000, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Stafford, 192500, 25));
+            // this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.p205t16a, 0, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.p205t16b, 70000, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.charger, 54250, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodgt63, 91000, 30));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodm4gts, 119000, 30));
+
+            // Autres
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.charge4, 0, 90));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rolls, 0, 25));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodx6, 0, 50));
+            this.VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodlp770, 0, 15));
 
             // Wolf Motor Shop
             this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Avarus, 46550, 5));
@@ -87,15 +138,14 @@ namespace ResurrectionRP_Server.Factions
             this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Hexer, 39200, 5));
             this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Innovation, 88200, 5));
             this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Wolfsbane, 36750, 5));
-            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Sovereign, 73500, 5));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Sovereign, 73500, 7));
             this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Zombieb, 29400, 5));
             this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Sanctus, 100000, 5));
             this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Faggio2, 1470, 5));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Diablous2, 73500, 5));
+            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Nightblade, 122500, 5));
 
-            this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Zentorno, 750000, 15));
             this.VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Microlight, 150000, 15));
-
-
 
             this.BlipPosition = new Vector3(1181.065f, -3113.788f, 6.028026f);
             this.BlipColor = BlipColor.Yellow;
@@ -130,19 +180,21 @@ namespace ResurrectionRP_Server.Factions
 
             if (Quai == null && Importation == null && Racks == null)
             {
-                await GenerateAllRackPosition();
+                GenerateAllRackPosition();
                 await UpdateDatabase();
             }
             else
             {
-                await Quai.Load();
-                await Importation.Load();
+                Quai.Load();
+                Importation.Load();
+
                 for (int i = 0; i < Racks.Count; i++)
                 {
                     var rack = Racks[i];
+
                     if (rack != null)
                     {
-                        await Racks[i].Load();
+                        Racks[i].Load();
                         Racks[i].Colshape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
                         Racks[i].Colshape.SetOnVehicleEnterColShape(OnVehicleEnterColShape);
                         await Task.Delay(25);
@@ -300,7 +352,7 @@ namespace ResurrectionRP_Server.Factions
             // Save Inventory on move
             _inv.OnMove = async (IPlayer c, RPGInventoryMenu m) =>
             {
-                await ph.Update();
+                ph.Update();
                 await UpdateDatabase();
                 rack?.RefreshLabel();
             };
@@ -308,7 +360,7 @@ namespace ResurrectionRP_Server.Factions
             // Save Inventory on close
             _inv.OnClose = async (IPlayer c, RPGInventoryMenu m) =>
             {
-                await ph.Update();
+                ph.Update();
                 await UpdateDatabase();
                 rack?.RefreshLabel();
             };
@@ -347,11 +399,11 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Methods
-        public async Task GenerateAllRackPosition()
+        public void GenerateAllRackPosition()
         {
             Racks = new List<Rack>();
-            Quai = await Rack.CreateRackAsync("Quai", new Vector3(1180.685f, -3168.366f, 6.1175f), new Location(new Vector3(1183.685f, -3168.366f, 7.1175f), new Vector3(0, 0, 83.16074f)), true);
-            Importation = await Rack.CreateRackAsync("Importation", new Vector3(1216.311f, -3038.197f, 5.868594f), new Location(new Vector3(1216.311f, -3041.197f, 5.868594f), new Vector3()), true);
+            Quai = Rack.CreateRack("Quai", new Vector3(1180.685f, -3168.366f, 6.1175f), new Location(new Vector3(1183.685f, -3168.366f, 7.1175f), new Vector3(0, 0, 83.16074f)), true);
+            Importation = Rack.CreateRack("Importation", new Vector3(1216.311f, -3038.197f, 5.868594f), new Location(new Vector3(1216.311f, -3041.197f, 5.868594f), new Vector3()), true);
 
             Vector3 a = new Vector3(1003.698f, -3111.308f, -38.99989f);
             Vector3 b = new Vector3(1018.397f, -3094.57f, -38.99988f);
@@ -365,12 +417,13 @@ namespace ResurrectionRP_Server.Factions
                 Vector3 temp = new Vector3(a.X, a.Y, a.Z);
                 temp.Y += j * y;
 
-                Racks.Add(await Rack.CreateRackAsync($"Rack {e}", new Vector3(temp.X, temp.Y, temp.Z - 1), new Location(new Vector3(temp.X, temp.Y + 3, temp.Z), new Vector3())));
+                Racks.Add(Rack.CreateRack($"Rack {e}", new Vector3(temp.X, temp.Y, temp.Z - 1), new Location(new Vector3(temp.X, temp.Y + 3, temp.Z), new Vector3())));
                 e++;
+
                 for (int i = 0; i < 6; i++)
                 {
                     temp.X += x;
-                    Racks.Add(await Rack.CreateRackAsync($"Rack {e}", new Vector3(temp.X, temp.Y, temp.Z - 1), new Location(new Vector3(temp.X, temp.Y + 3, temp.Z), new Vector3())));
+                    Racks.Add(Rack.CreateRack($"Rack {e}", new Vector3(temp.X, temp.Y, temp.Z - 1), new Location(new Vector3(temp.X, temp.Y + 3, temp.Z), new Vector3())));
                     e++;
                 }
             }

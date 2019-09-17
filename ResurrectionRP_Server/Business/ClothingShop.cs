@@ -207,7 +207,7 @@ namespace ResurrectionRP_Server.Business
                 if (await ph.AddItem(item, 1))
                 {
                     client.SendNotificationSuccess($"Vous avez acheté le vêtement {clothName} pour la somme de ${price}");
-                    await ph.Update();
+                    ph.Update();
                 }
                 else
                     client.SendNotificationError("Vous n'avez pas la place pour cette élément.");
@@ -412,7 +412,7 @@ namespace ResurrectionRP_Server.Business
                 if (await ph.AddItem(new ClothItem(ItemID.Jacket, menuItem.Text, "", new ClothData((byte)drawable, (byte)variation, 0), 0.2, true, false, false, true, false, classes: "jacket", icon: "jacket"), 1))
                 {
                     client.SendNotificationSuccess($"Vous avez acheté le vêtement {menuItem.Text} pour la somme de ${price}");
-                    await ph.Update();
+                    ph.Update();
                 }
                 else
                     client.SendNotificationError("Vous n'avez pas la place pour cette élément.");

@@ -309,7 +309,7 @@ namespace ResurrectionRP_Server.Inventory
                     }
 
                     // Temporary solution to save inventory after object drop. Doesn't update inventory when dropping from distant inventory.
-                    await ph.Update();
+                    ph.Update();
                     await Refresh(client, menu);
                 }
             }
@@ -497,8 +497,8 @@ namespace ResurrectionRP_Server.Inventory
                     }
 
                     // Temporary solution to save inventory after object drop
-                    await ph.Update();
-                    await phDistant.Update();
+                    ph.Update();
+                    phDistant.Update();
                     await Refresh(client, menu);
                 }
             }
@@ -929,7 +929,7 @@ namespace ResurrectionRP_Server.Inventory
                     if (menu.OnMove != null)
                         await menu.OnMove.Invoke(client, menu);
 
-                    await player.Update();
+                    player.Update();
                     await Refresh(client, menu);
                 }
             }
@@ -982,7 +982,7 @@ namespace ResurrectionRP_Server.Inventory
                         cloneItem.Quantity = splitCount;
 
                         inv.InventoryList[newSlot] = cloneItem;
-                        await client.GetPlayerHandler()?.Update();
+                        client.GetPlayerHandler()?.Update();
                     }
                 }
             }

@@ -82,14 +82,14 @@ namespace ResurrectionRP_Server.Inventory
             return true;
         }
 
-        public async Task<bool> AddItem(IPlayer client, Models.Item item, int quantity = 1, bool message = true)
+        public bool AddItem(IPlayer client, Models.Item item, int quantity = 1, bool message = true)
         {
             if (AddItem(item, quantity))
             {
                 if (message)
                     client.EmitLocked("Display_Help", "Vous venez d'ajouter " + quantity + " " + item.name + " dans l'inventaire", 10000);
 
-                await client.GetPlayerHandler()?.Update();
+                client.GetPlayerHandler()?.Update();
                 return true;
             }
 

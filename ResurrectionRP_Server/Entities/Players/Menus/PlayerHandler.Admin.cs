@@ -74,7 +74,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     _playerSelected.StaffRank = rang;
                     _playerSelected.Client.SendNotification($"Vous êtes désormais {rang}");
                     client.SendNotification($"Vous avez mis au rang: {rang} {_playerSelected.Identite.Name}");
-                    await _playerSelected.Update();
+                    _playerSelected.Update();
                 };
 
                 mainMenu.Add(staffrank);
@@ -103,7 +103,7 @@ namespace ResurrectionRP_Server.Entities.Players
             lifeitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 await AltAsync.Do(() => { _playerSelected.Health = 100; });
-                await Update();
+                Update();
             };
             mainMenu.Add(lifeitem);
             #endregion
@@ -116,34 +116,32 @@ namespace ResurrectionRP_Server.Entities.Players
             };
             mainMenu.Add(hungeritem);
             #endregion
-            /*
+            
             #region GodMod
-            var godMod = new CheckboxItem("God Mode", "", "", _playerSelected.IsInvinsible(), true);
+            var godMod = new CheckboxItem("God Mode", "", "", _playerSelected.IsInvincible(), true);
             godMod.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                bool invinsible = !_playerSelected.IsInvinsible();
-                await _playerSelected.SetInvincible(invinsible);
+                bool invinsible = !_playerSelected.IsInvincible();
+                _playerSelected.SetInvincible(invinsible);
 
                 if (invinsible)
                 {
-                    await _playerSelected.Client.NotifyAsync("~r~[ADMIN]~w~ Vous êtes invincible.");
-                    // LogManager.Log($"~r~[ADMIN]~w~ {PlayerSelected.Name} est invincible.");
+                    _playerSelected.Client.SendNotification("~r~[ADMIN]~w~ Vous êtes invincible.");
 
                     if (_playerSelected != this)
-                        await Client.NotifyAsync($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} est invincible.");
+                        Client.SendNotification($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} est invincible.");
                 }
                 else
                 {
-                    await _playerSelected.Client.NotifyAsync("~r~[ADMIN]~w~ Vous n'êtes plus invincible.");
-                    // LogManager.Log($"~r~[ADMIN]~w~ {PlayerSelected.Name} n'est plus invincible.");
+                    _playerSelected.Client.SendNotification("~r~[ADMIN]~w~ Vous n'êtes plus invincible.");
 
                     if (_playerSelected != this)
-                        await Client.NotifyAsync($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} n'est plus invincible.");
+                        Client.SendNotification($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} n'est plus invincible.");
                 }
             };
             mainMenu.Add(godMod);
             #endregion
-
+            /*
             #region Invisible
             var invisible = new CheckboxItem("Invisible", "", "", await _playerSelected.Client.IsInvisible(), true);
             invisible.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
@@ -306,7 +304,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 if (double.TryParse(menuItem.InputValue, out money) && money > 0)
                 {
-                    await _playerSelected.AddMoney(money);
+                    _playerSelected.AddMoney(money);
                     client.SendNotificationSuccess($"Vous venez de donner {money} à {_playerSelected.Identite.Name}");
                 }
             };
@@ -322,7 +320,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 if (double.TryParse(menuItem.InputValue, out money) && money > 0)
                 {
-                    if (await _playerSelected.HasMoney(money))
+                    if (_playerSelected.HasMoney(money))
                         client.SendNotificationSuccess($"Vous venez de retirer ${money} à {_playerSelected.Identite.Name}");
                 }
             };
@@ -339,7 +337,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #endregion
 
             #region Revive
-            var resuitem = new MenuItem("Réanimmer le joueur", "", "", true);
+            var resuitem = new MenuItem("Réanimer le joueur", "", "", true);
             resuitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 await _playerSelected.Client.Revive();

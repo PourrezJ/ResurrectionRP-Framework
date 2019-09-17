@@ -96,13 +96,13 @@ namespace ResurrectionRP_Server.Business
                     Inventory.Locked = true;
                     invmenu.OnMove += async (p, m) =>
                     {
-                        await player.Update();
+                        player.Update();
                         await Update();
                     };
                     invmenu.PriceChange += async (p, m, stack, stackprice) =>
                     {
                         client.SendNotification($"Le nouveau prix de {stack.Item.name} est de ${stackprice} ");
-                        await player.Update();
+                        player.Update();
                         await Update();
                     };
                     invmenu.OnClose += (p, m) =>
@@ -119,7 +119,7 @@ namespace ResurrectionRP_Server.Business
             }
 
             await Update();
-            await player.Update();
+            player.Update();
         }
 
         private async Task StoreMenuManager(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -140,7 +140,7 @@ namespace ResurrectionRP_Server.Business
                     {
                         if (await _player.AddItem(itemStack.Item, quantity))
                         {
-                            if (await _player.HasMoney(price))
+                            if (_player.HasMoney(price))
                             {
                                 Inventory.Delete(itemStack, quantity);
                                 await BankAccount.AddMoney(itemStack.Price * quantity, $"Achat de {itemStack.Item.name}", false);

@@ -81,13 +81,15 @@ namespace ResurrectionRP_Server.DrivingSchool
             await AltAsync.EmitAsync(PlayerExam, "DrivingSchool_End", this.id, this.avert);
         }
 
-        private void VehicleChecker(IPlayer client, object[] args)
+        private Task VehicleChecker(IPlayer client, object[] args)
         {
-            if ( (Int64) args[0] > this.Trajectoire[this.CurrentCheckpoint].Speed)
+            if ((long)args[0] > Trajectoire[CurrentCheckpoint].Speed)
             {
                 client.SendNotificationError("Votre vitesse est bien trop excessive ! Ralentissez bon sang !");
-                this.avert++;
+                avert++;
             }
+
+            return Task.CompletedTask;
         }
 
         private async Task OnEnterVehicle(IVehicle vehicle, IPlayer client, byte seat)
@@ -99,7 +101,7 @@ namespace ResurrectionRP_Server.DrivingSchool
             //await client.SendNotificationPicture("Ok! Maintenant allumer le moteur ~r~(F3) ~w~et rendez-vous au prochain point.", "CHAR_ANDREAS", false, 0, "CHAR_ANDREAS",  "Auto-école");
             client.SendNotificationSuccess("Génial, l'instructeur vous fait signe de démarrer le moteur (F3), et de rejoindre le point blanc");
             await client.EmitAsync("DrivingSchool_Start");
-            Alt.OnClient("DrivingSchool_Checker", VehicleChecker);
+            AltAsync.OnClient("DrivingSchool_Checker", VehicleChecker);
             await NextTraj();
 
             AltAsync.OnColShape += this.onColShape;

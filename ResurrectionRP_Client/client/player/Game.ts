@@ -127,8 +127,16 @@ export class Game {
             game.setPedConfigFlag(playerId, 429, true);
 
             game.startAudioScene("FBI_HEIST_H5_MUTE_AMBIENCE_SCENE");
-            game.setPedConfigFlag(alt.Player.local.scriptID, 35, true);
+            game.setPedConfigFlag(alt.Player.local.scriptID, 35, false);
             game.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
+
+            alt.setStat('stamina', 100);
+            alt.setStat('strength', 100);
+            alt.setStat('lung_capacity', 100);
+            alt.setStat('wheelie_ability', 100);
+            alt.setStat('flying_ability', 100);
+            alt.setStat('shooting_ability', 100);
+            alt.setStat('stealth_ability', 100);
 
             alt.log("Stats terminées");
 

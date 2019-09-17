@@ -100,7 +100,17 @@ export class Interaction {
                 if (game.isEntityDead(alt.Player.local.scriptID, false))
                     return;
 
-                raycastResult = Raycast.line(2, -1, alt.Player.local.scriptID);
+                var _pos = game.getGameplayCamCoord();
+                var _dir: any = Utils.GetCameraDirection();
+
+                var _farAway = new alt.Vector3(
+                    _pos.x + (_dir.x * 5),
+                    _pos.y + (_dir.y * 5),
+                    _pos.z + (_dir.z * 5),
+                )
+
+                raycastResult = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, -1);
+
                 if (raycastResult.isHit && raycastResult.entityType == 2 && alt.Player.local.vehicle == null) {
                     Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le véhicule");
                 }

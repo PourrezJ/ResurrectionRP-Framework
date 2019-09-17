@@ -12,6 +12,23 @@ interface RaycastResultInterface {
 class Raycast {
     public static readonly player = alt.Player.local;
 
+    public static raycastRayFromTo(from: alt.Vector3, to: alt.Vector3, ignoreEntity: number, flags: number)
+    {
+        let ray = native.startShapeTestRay(
+            from.x as number,
+            from.y as number,
+            from.z as number,
+            to.x as number,
+            to.y as number,
+            to.z as number,
+            flags,
+            ignoreEntity,
+            undefined
+        );
+
+        return this.result(ray);
+    }
+
     public static line(scale: number, flags: number, ignoreEntity: number) {
         let playerForwardVector = native.getEntityForwardVector(this.player.scriptID);
         playerForwardVector.x *= scale;

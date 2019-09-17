@@ -353,7 +353,17 @@ export class NetworkingEntityClient {
             return;
         if (key != 69 && key != 87)
             return;
-        let resultPed = Raycast.line(5, 4, alt.Player.local.scriptID);
+
+        var _pos = game.getGameplayCamCoord();
+        var _dir: any = utils.GetCameraDirection();
+
+        var _farAway = new alt.Vector3(
+            _pos.x + (_dir.x * 3),
+            _pos.y + (_dir.y * 3),
+            _pos.z + (_dir.z * 3),
+        )
+
+        let resultPed = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, 4);
         if (!resultPed.isHit)
             return;
         if (key == 69) // E

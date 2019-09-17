@@ -109,8 +109,9 @@ namespace ResurrectionRP_Server.Entities.Objects
             //await MP.Players.CallAsync("ObjStream_Detach", ent1.Id);
         }
 
-        private async Task ObjStream_GetStreamInfo_Srv(IPlayer client, object[] args)
+        private Task ObjStream_GetStreamInfo_Srv(IPlayer client, object[] args)
         {
+            return Task.CompletedTask;
             //if (!arg.Player.Exists)
             //    return;
 

@@ -364,7 +364,7 @@ namespace ResurrectionRP_Server.Farms
                 {
                     sender.EmitLocked("StopProgressBar");          
                     double gettaxe = Economy.Economy.CalculPriceTaxe((ItemPrice * itemcount), GameMode.Instance.Economy.Taxe_Exportation);
-                    await player.AddMoney((ItemPrice * itemcount) - gettaxe);
+                    player.AddMoney((ItemPrice * itemcount) - gettaxe);
                     GameMode.Instance.Economy.CaissePublique += gettaxe;
                     sender.DisplaySubtitle($"~r~{itemcount} ~w~{_itemBuy.name}(s) $~r~{(ItemPrice * itemcount) - gettaxe} ~w~taxe:$~r~{gettaxe}.", 15000);
                     player.IsOnProgress = false;

@@ -68,13 +68,14 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
 
                 var staffrank = new ListItem("Staff Rang:", "Choix du rang à donner", "ID_Rang", _adminlistrang, (int)StaffRank, true);
-                staffrank.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                staffrank.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
                     AdminRank rang = (AdminRank)((ListItem)menu.Items["ID_Rang"]).SelectedItem;
                     _playerSelected.StaffRank = rang;
                     _playerSelected.Client.SendNotification($"Vous êtes désormais {rang}");
                     client.SendNotification($"Vous avez mis au rang: {rang} {_playerSelected.Identite.Name}");
                     _playerSelected.Update();
+                    return Task.CompletedTask;
                 };
 
                 mainMenu.Add(staffrank);
@@ -119,7 +120,7 @@ namespace ResurrectionRP_Server.Entities.Players
             
             #region GodMod
             var godMod = new CheckboxItem("God Mode", "", "", _playerSelected.IsInvincible(), true);
-            godMod.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            godMod.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 bool invinsible = !_playerSelected.IsInvincible();
                 _playerSelected.SetInvincible(invinsible);
@@ -138,6 +139,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (_playerSelected != this)
                         Client.SendNotification($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} n'est plus invincible.");
                 }
+                return Task.CompletedTask;
             };
             mainMenu.Add(godMod);
             #endregion
@@ -298,7 +300,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #region Money
             var moneyitem = new MenuItem("Give de l'argent", "", "ID_GiveMoney", true);
             moneyitem.SetInput("", 10, InputType.UFloat, true);
-            moneyitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) => 
+            moneyitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) => 
             {
                 double money = 0;
 
@@ -307,6 +309,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     _playerSelected.AddMoney(money);
                     client.SendNotificationSuccess($"Vous venez de donner {money} à {_playerSelected.Identite.Name}");
                 }
+                return Task.CompletedTask;
             };
             mainMenu.Add(moneyitem);
             #endregion
@@ -314,7 +317,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #region Remove Money
             var delmoneyitem = new MenuItem("Retirer de l'argent", "", "ID_RemoveMoney", true);
             delmoneyitem.SetInput("", 10, InputType.UFloat, true);
-            delmoneyitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            delmoneyitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 double money = 0;
 
@@ -323,6 +326,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (_playerSelected.HasMoney(money))
                         client.SendNotificationSuccess($"Vous venez de retirer ${money} à {_playerSelected.Identite.Name}");
                 }
+                return Task.CompletedTask;
             };
             mainMenu.Add(delmoneyitem);
             #endregion

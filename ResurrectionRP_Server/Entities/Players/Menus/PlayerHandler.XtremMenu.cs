@@ -115,15 +115,17 @@ namespace ResurrectionRP_Server.Entities.Players
                 case "ID_SearchInventory":
                     TargetClient.SendNotification("Quelqu'un fouille vos poches");
                     var invmenu = new Inventory.RPGInventoryMenu(TargetHandler.PocketInventory, TargetHandler.OutfitInventory, TargetHandler.BagInventory);
-                    invmenu.OnMove += async (p, m) =>
+                    invmenu.OnMove += (p, m) =>
                     {
                         Update();
+                        return Task.CompletedTask;
                     };
 
-                    invmenu.OnClose += async (p, m) =>
+                    invmenu.OnClose += (p, m) =>
                     {
                         Update();
                         TargetHandler.Update();
+                        return Task.CompletedTask;
                     };
                     await invmenu.OpenMenu(client);
                     break;

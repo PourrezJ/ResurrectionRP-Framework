@@ -92,7 +92,7 @@ namespace ResurrectionRP_Server.Houses
                     var house = housesList[i];
                     if (house != null)
                     {
-                        await house.Load();
+                        house.Load();
                         Houses.Add(house);
                         //await Task.Delay(20);
                     }

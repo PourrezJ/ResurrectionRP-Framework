@@ -141,6 +141,7 @@ export class Game {
             alt.log("Stats terminées");
 
             alt.Player.local.setMeta("IsConnected", true);
+            alt.Player.local.setMeta("LevelRank", this.LevelRank);
         } catch (ex) {
             alt.log(ex);
         }

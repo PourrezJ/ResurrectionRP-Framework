@@ -83,7 +83,7 @@ namespace ResurrectionRP_Server.Houses
             OwnerHandle = null;
         }
 
-        public async Task Load()
+        public void Load()
         {
             // create marker
             Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, Position - new Vector3(0.0f, 0.0f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f), Color.FromArgb(80, 255, 0, 0));
@@ -129,6 +129,8 @@ namespace ResurrectionRP_Server.Houses
             {
                 Array.Resize<ItemStack>(ref Inventory.InventoryList, Inventory.MaxSlot);
             }
+
+            PlayersInside = new List<IPlayer>();
         }
 
         private async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)

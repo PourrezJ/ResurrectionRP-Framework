@@ -3,6 +3,7 @@ import * as game from 'natives';
 import * as ui from 'client/Helpers/UiHelper';
 import { Survival } from 'client/player/Survival';
 import { VoiceChat } from 'client/Voice/VoiceChat';
+import { Game } from 'client/player/Game';
 
 export class Hud {
 
@@ -42,7 +43,6 @@ export class Hud {
             }
         });
 
-
         alt.onServer("UpdateMoneyHUD", (val: number) => {
             this._money = Math.round(val);
         });
@@ -68,7 +68,7 @@ export class Hud {
             if (!game.hasStreamedTextureDictLoaded("srange_gen"))
                 game.requestStreamedTextureDict("srange_gen", true);
 
-            if (!VoiceChat.isConnected && !alt.Player.local.getMeta("IsDebug")) {
+            if (!VoiceChat.isConnected && !alt.Player.local.getMeta("IsDebug") && !alt.Player.local.getMeta("LevelRank")) {
                 this._advert++;
                 if (this._advert >= 2000) {
                     let screenRes = game.getScreenResolution(0, 0);

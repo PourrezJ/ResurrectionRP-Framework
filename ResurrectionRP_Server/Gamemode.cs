@@ -167,6 +167,8 @@ namespace ResurrectionRP_Server
         public async Task OnStartAsync()
         {
             IsDebug = Config.GetSetting<bool>("Debug");
+            PlayerManager.StartBankMoney = Config.GetSetting<int>("BankMoneyStart");
+            PlayerManager.StartMoney = Config.GetSetting<int>("MoneyStart");
 
             Alt.OnPlayerConnect += OnPlayerConnected;
 

@@ -362,12 +362,11 @@ namespace ResurrectionRP_Server.Farms
                 vehHandler.OilTank.Traite --;
                 if (vehHandler.OilTank.Traite == 0)
                 {
-                    sender.EmitLocked("StopProgressBar");
-                    /*
-                    double gettaxe = Economy.CalculPriceTaxe((ItemPrice * itemcount), GameMode.Instance.Economy.Taxe_Exportation);
+                    sender.EmitLocked("StopProgressBar");          
+                    double gettaxe = Economy.Economy.CalculPriceTaxe((ItemPrice * itemcount), GameMode.Instance.Economy.Taxe_Exportation);
                     await player.AddMoney((ItemPrice * itemcount) - gettaxe);
                     GameMode.Instance.Economy.CaissePublique += gettaxe;
-                    await sender.DisplaySubtitle($"~r~{itemcount} ~w~{_itemBuy.name}(s) $~r~{(ItemPrice * itemcount) - gettaxe} ~w~taxe:$~r~{gettaxe}.", 15000);*/
+                    sender.DisplaySubtitle($"~r~{itemcount} ~w~{_itemBuy.name}(s) $~r~{(ItemPrice * itemcount) - gettaxe} ~w~taxe:$~r~{gettaxe}.", 15000);
                     player.IsOnProgress = false;
                     return;
                 }

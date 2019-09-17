@@ -14,6 +14,8 @@ using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
 using AltV.Net;
+using ResurrectionRP_Server.Factions;
+using ResurrectionRP_Server.Inventory;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
@@ -85,18 +87,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 xmenu.Add(new XMenuItem("Supprimer le véhicule PERM", "", "ID_delete", XMenuItemIcons.DELETE, true));
             }
-            /*
-           var lockPicks = PlayerHandler.GetStacksItems(ItemID.LockPick);
-           if (lockPicks.Count > 0)
-           {
-               xmenu.Add(new XMenuItem("Crocheter le véhicule", "", "ID_lockpick", XMenuItemIcons.SCREWDRIVER_SOLID, true));
-           }
+            
+            var lockPicks = PlayerHandler.GetStacksItems(ItemID.LockPick);
+            if (lockPicks.Count > 0)
+            {
+                xmenu.Add(new XMenuItem("Crocheter le véhicule", "", "ID_lockpick", XMenuItemIcons.SCREWDRIVER_SOLID, true));
+            }
 
-           if (await FactionManager.IsLSCustom(client) || await FactionManager.IsLspd(client) || await FactionManager.IsMedic(client) || await FactionManager.IsRebelle(client))
-           {
-               xmenu.Add(new XMenuItem("Faction", "", "ID_Faction", XMenuItemIcons.ID_BADGE_SOLID, false));
-           }
-           */
+            if (FactionManager.IsLSCustom(client) || FactionManager.IsLspd(client) || FactionManager.IsMedic(client) || FactionManager.IsNordiste(client))
+            {
+                xmenu.Add(new XMenuItem("Faction", "", "ID_Faction", XMenuItemIcons.ID_BADGE_SOLID, false));
+            }
+           
             await xmenu.OpenXMenu(client);
         }
 
@@ -145,30 +147,31 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     await LockUnlock(client);
                     await OpenXtremMenu(client);
                     break;
-                /*
+                
                     case "ID_OpenInventory":
 
                         if (RPGInventoryManager.HasInventoryOpen(Inventory))
                         {
-                            await client.SendNotificationError("Le coffre est déjà occupé.");
+                            client.SendNotificationError("Le coffre est déjà occupé.");
                             return;
                         }
 
-                        await XMenuManager.CloseMenu(client);
+                        await XMenuManager.XMenuManager.CloseMenu(client);
                         var inv = new RPGInventoryMenu(PlayerHandler.PocketInventory, PlayerHandler.OutfitInventory, PlayerHandler.BagInventory, this.Inventory);
                         inv.OnOpen = ((IPlayer c, RPGInventoryMenu m) =>
                         {
                             Inventory.Locked = true;
                             return Task.CompletedTask;
                         });
-                        inv.OnMove = (async (IPlayer c, RPGInventoryMenu m) =>
+                        inv.OnMove = ((IPlayer c, RPGInventoryMenu m) =>
                         {
                             if (PlayerHandler != null)
                             {
-                                await PlayerHandler.UpdatePlayerInfo();
+                                PlayerHandler.Update();
                             }
 
-                            await this.Update();
+                            this.Update();
+                            return Task.CompletedTask;
                         });
                         inv.OnClose = ((IPlayer c, RPGInventoryMenu m) =>
                         {
@@ -177,9 +180,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         });
                         await inv.OpenMenu(client);
                         break;
-                            */
-                    #warning DOOR SYSTEM DESACTIVER SONT COMPORTEMENT EST ETRANGE SUR ALTV
-                    
+                            
+     
                 case "ID_doors":
                     await OpenDoorsMenu(client);
                     break;

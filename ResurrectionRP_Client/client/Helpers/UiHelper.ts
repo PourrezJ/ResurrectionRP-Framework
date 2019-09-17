@@ -1,5 +1,7 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
+import * as utils from 'client/Utils/Utils';
+import Scaleforms from 'client/Helpers/Scaleform';
 
 export function EnableHuds(hud = true, radar = true) {
     game.displayRadar(radar);
@@ -135,4 +137,20 @@ export function DrawText2d(
     if (useDropShadow) game.setTextDropShadow();
 
     game.endTextCommandDisplayText(x, y, 0);
+}
+
+export function WeazelNews(text: string, title: string, othertitle: string)
+{
+    alt.emit("hideHud", true);
+
+    let annonce = new Scaleforms("BREAKING_NEWS");
+
+    annonce.call("SET_TEXT", title, text);
+    annonce.call("SET_SCROLL_TEXT", 0, 0, othertitle);
+    annonce.call("DISPLAY_SCROLL_TEXT", 0, 0);
+
+    alt.setTimeout(() => {
+        annonce = null;
+        alt.emit("hideHud", false);
+    }, 60000);
 }

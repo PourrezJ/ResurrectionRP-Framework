@@ -111,7 +111,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (Dimension.ToString() == "-1")
                 Dimension = short.MaxValue;
 
-            await AltAsync.Do(async () =>
+            await AltAsync.Do(() =>
             {
                 try
                 {
@@ -163,22 +163,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     // Vehicle.SetWheelHealth(i, Wheels[i].Health);
                     // Vehicle.SetWheelHasTire(i, Wheels[i].HasTire);
                 }
-
+                /*
                 for(byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
-                    await Vehicle.SetDoorStateAsync(i,(byte) Doors[i]);
+                    Vehicle.SetDoorState(i,(byte) Doors[i]);
 
                 for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
                 {
                     if (Windows[i] == WindowState.WindowBroken)
                         Vehicle.SetWindowDamaged(i, true);
                     else if (Windows[i] == WindowState.WindowDown)
-                        await Vehicle.SetWindowOpenedAsync(i, true);
+                        Vehicle.SetWindowOpened(i, true);
                 }
-
-                await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
-                await Vehicle.SetEngineOnAsync(Engine);
-                await Vehicle.SetPositionAsync(Vehicle.Position.X, Vehicle.Position.Y, Vehicle.Position.Z );
-
+                */
                 if (setLastUse)
                     LastUse = DateTime.Now;
 
@@ -190,20 +186,24 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.Position = Location.Pos;
 
                 VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
-                VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
 
+                lock (VehiclesManager.VehicleHandlerList)
+                {
+                    VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
+                }
+         
                 if (Vehicle.GetVehicleHandler()?.FuelConsumption == 0)
                     Vehicle.GetVehicleHandler().FuelConsumption = 5.5f;
-
-                if (HaveTowVehicle())
-                {
-                    IVehicle _vehtowed = VehiclesManager.GetVehicleWithPlate(TowTruck.VehPlate);
-
-                    if (_vehtowed != null)
-                        await TowVehicle(_vehtowed);
-                }
             });
-            
+
+            if (HaveTowVehicle())
+            {
+                IVehicle _vehtowed = VehiclesManager.GetVehicleWithPlate(TowTruck.VehPlate);
+
+                if (_vehtowed != null)
+                    await TowVehicle(_vehtowed);
+            }
+
             return Vehicle;
         }
 

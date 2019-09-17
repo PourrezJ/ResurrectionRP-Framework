@@ -85,16 +85,18 @@ namespace ResurrectionRP_Server.Entities.Players
             #region Message Global
             var globalAnnonce = new MenuItem("Message Global", "", "ID_Global", true);
             globalAnnonce.SetInput("Votre message", 99, InputType.Text);
-            globalAnnonce.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            globalAnnonce.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                if (string.IsNullOrEmpty(menuItem.InputValue)) return;
+                if (string.IsNullOrEmpty(menuItem.InputValue))
+                    return Task.CompletedTask;
 
                 foreach (var player in Alt.GetAllPlayers())
                 {
                     if (!player.Exists)
                         continue;
-                    await player.EmitAsync(Events.AnnonceGlobal, menuItem.InputValue, "AVIS A LA POPULATION!", "COMMUNIQUÉ GOUVERNEMENTAL");
+                    player.EmitLocked(Events.AnnonceGlobal, menuItem.InputValue, "AVIS A LA POPULATION!", "COMMUNIQUÉ GOUVERNEMENTAL");
                 }
+                return Task.CompletedTask;
             };
             mainMenu.Add(globalAnnonce);
             #endregion

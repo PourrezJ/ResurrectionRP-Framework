@@ -27,6 +27,10 @@ export class Hud {
         this._money = Math.round(money);
         this.Browser = new alt.WebView("http://resource/client/cef/hud/index.html");
 
+        alt.on('hideHud', (value: boolean) => {
+            this.setHide(value);
+        });
+
         alt.on('keyup', (key) => {
             if (key == 0x76) {
                 this._hide = !this._hide;

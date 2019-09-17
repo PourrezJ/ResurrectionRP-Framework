@@ -1,6 +1,7 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
 import * as utils from 'client/Utils/Utils';
+import * as ui from 'client/Helpers/UiHelper';
 
 export class Admin
 {
@@ -43,6 +44,10 @@ export class Admin
 
         alt.onServer('SetInvincible', (statut: boolean) => {
             game.setEntityInvincible(alt.Player.local.scriptID, statut);
+        }); 
+
+        alt.onServer('AnnonceGlobal', (text: string, title: string, othertitle: string) => {
+            ui.WeazelNews(text, title, othertitle);
         }); 
     }
 

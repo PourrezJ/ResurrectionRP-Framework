@@ -10,6 +10,7 @@ using InputType = ResurrectionRP_Server.Utils.Enums.InputType;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Async;
+using ResurrectionRP_Server.Factions;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -47,11 +48,11 @@ namespace ResurrectionRP_Server.Entities.Players
             if (StaffRank >= Utils.Enums.AdminRank.Moderator)
                 xmenu.Add(new XMenuItem("ADMIN", $"{TargetHandler.PID} {TargetHandler.Identite.Name}", "ID_Admin", XMenuItemIcons.SETTINGS, false));
 
-/*            if (await FactionManager.IsLSCustom(Client) || await FactionManager.IsLspd(Client) || await FactionManager.IsMedic(Client) || await FactionManager.IsRebelle(Client) || await FactionManager.IsDock(Client))
+            if (FactionManager.IsLSCustom(Client) || FactionManager.IsLspd(Client) || FactionManager.IsMedic(Client) || FactionManager.IsNordiste(Client) || FactionManager.IsDock(Client))
             {
                 xmenu.Add(new XMenuItem("Faction", "", "ID_Faction", XMenuItemIcons.ID_BADGE_SOLID, false));
-            } TODO
-            */
+            }
+            
 
             await xmenu.OpenXMenu(Client);
         }

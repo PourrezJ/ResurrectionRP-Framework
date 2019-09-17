@@ -18,6 +18,7 @@ using ResurrectionRP_Server.Farms;
 using AltV.Net.Async;
 using AltV.Net.Data;
 using ResurrectionRP_Server.Houses;
+using ResurrectionRP_Server.Services;
 
 namespace ResurrectionRP_Server
 {
@@ -118,6 +119,8 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public RadioManager RadioManager { get; private set; }
         [BsonIgnore]
+        public LifeInvader LifeInvader { get; private set; }
+        [BsonIgnore]
         public HouseManager HouseManager { get; private set; }
 
         public static bool ServerLock;
@@ -196,7 +199,7 @@ namespace ResurrectionRP_Server
             HouseManager = new HouseManager();
 
             RadioManager = new RadioManager();
-
+            LifeInvader = new LifeInvader();
             //FactionManager = new FactionManager();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
@@ -219,10 +222,11 @@ namespace ResurrectionRP_Server
             await Society.SocietyManager.LoadAllSociety();
             await JobsManager.Init();
             await PoundManager.LoadPound();
-            await FarmManager.InitAll();
-            DrivingSchoolManager.InitAll();
+            await FarmManager.InitAll();        
             await HouseManager.LoadAllHouses();
 
+            DrivingSchoolManager.InitAll();
+            LifeInvader.Load();
             VoiceController.OnResourceStart();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 

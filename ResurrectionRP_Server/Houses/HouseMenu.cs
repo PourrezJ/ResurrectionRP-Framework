@@ -76,7 +76,7 @@ namespace ResurrectionRP_Server.Houses
                         var inv = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory ,ph.BagInventory, _house.Inventory);
                         inv.OnMove += async (cl, inventaire) =>
                         {
-                            await ph.Update();
+                            ph.Update();
                             await _house.Save();
                         };
                         await menu.CloseMenu(client);

@@ -62,7 +62,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 case "ID_Give":
                     double money = Convert.ToDouble(menuItem.InputValue);
-                    await TargetHandler.AddMoney(money);
+                    TargetHandler.AddMoney(money);
                     client.SendNotificationSuccess($"Vous venez de donner à {TargetHandler.Identite.Name} ${money}.");
                     break;
 

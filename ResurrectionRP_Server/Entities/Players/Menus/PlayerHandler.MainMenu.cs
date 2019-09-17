@@ -173,7 +173,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         ListVehicleKey.Remove(keygiven);
 
                     Client.SendNotificationSuccess("Vous avez jeté la clé du véhicule " + menu.Title);
-                    await Update();
+                    Update();
                     await MenuManager.CloseMenu(Client);
                 }
                 else if (menuItem.Id == "ID_Duplicate")

@@ -51,13 +51,13 @@ namespace ResurrectionRP_Server.Farms
             return farmManager;
         }
 
-        public static async Task<Farm> PlayerInFarmZone(IPlayer client)
+        public static Farm PlayerInFarmZone(IPlayer client)
         {
             foreach(Farm farm in FarmList)
             {
                 foreach(Vector3 farmPos in farm.Harvest_Position)
                 {
-                    if (farmPos.DistanceTo2D(await client.GetPositionAsync()) <= farm.Harvest_Range)
+                    if (farmPos.DistanceTo2D(client.Position) <= farm.Harvest_Range)
                         return farm;
                 }
             }
@@ -258,7 +258,7 @@ namespace ResurrectionRP_Server.Farms
             }
 
             player.IsOnProgress = false;
-            await player.Update();
+            player.Update();
         }
 
         public virtual async Task StartProcessing(IPlayer sender)
@@ -316,7 +316,7 @@ namespace ResurrectionRP_Server.Farms
                 else
                 {
                     sender.DisplaySubtitle($"Traitement terminé: Vous avez traité ~r~ {i} {_itemTraite.name}(s)", 15000);
-                    await player.Update();
+                    player.Update();
                     player.IsOnProgress = false;
                     return;
                 }
@@ -349,7 +349,7 @@ namespace ResurrectionRP_Server.Farms
             if (player.DeleteAllItem(ItemIDProcess, itemcount))
             {
                 double gettaxe = Economy.Economy.CalculPriceTaxe((ItemPrice * itemcount), GameMode.Instance.Economy.Taxe_Exportation);
-                await player.AddMoney((ItemPrice * itemcount) - gettaxe);
+                player.AddMoney((ItemPrice * itemcount) - gettaxe);
                 GameMode.Instance.Economy.CaissePublique += gettaxe;
                 sender.DisplaySubtitle($"~r~{itemcount} ~w~{_itemBuy.name}(s) $~r~{(ItemPrice * itemcount) - gettaxe} ~w~taxe:$~r~{gettaxe}.", 15000);
             }
@@ -357,7 +357,7 @@ namespace ResurrectionRP_Server.Farms
                 sender.SendNotificationError("Inconnu.");
 
             player.IsOnProgress = false;
-            await player.Update();
+            player.Update();
         }
 
         public virtual async Task StartDoubleProcessing(IPlayer sender)
@@ -427,7 +427,7 @@ namespace ResurrectionRP_Server.Farms
                 else
                 {
                     sender.DisplaySubtitle($"Traitement terminé: Vous avez traité ~r~ {i} {_itemTraite.name}(s)", 15000);
-                    await player.Update();
+                    player.Update();
                     player.IsOnProgress = false;
                     return;
                 }

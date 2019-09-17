@@ -118,11 +118,13 @@ namespace ResurrectionRP_Server.Society
                 if (ph == null)
                     return;
 
-                if (result < 0) return;
-                if (await ph.HasMoney(result))
+                if (result < 0)
+                    return;
+
+                if (ph.HasMoney(result))
                 {
                     await BankAccount.AddMoney(result, $"Ajout d'argent par {ph.Identite.Name}");
-                    await ph.Update();
+                    ph.Update();
                     client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
                 }
                 else
@@ -171,7 +173,7 @@ namespace ResurrectionRP_Server.Society
 
                     invmenu.OnMove += async (p, m) =>
                     {
-                        await ph.Update();
+                        ph.Update();
                         await Update();
                     };
 

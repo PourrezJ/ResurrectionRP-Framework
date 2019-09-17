@@ -56,8 +56,6 @@ namespace ResurrectionRP_Server
 
         public const short GlobalDimension = short.MaxValue;
 
-        public List<string> PlateList = new List<string>();
-
         public uint DatabaseVersion { get; set; }
 
         #region Pools
@@ -125,7 +123,9 @@ namespace ResurrectionRP_Server
         public static bool ServerLock;
 
         public Time Time { get; set; }
-        public bool ModeAutoFourriere { get; internal set; }
+
+        [BsonIgnore]
+        public bool AutoPound { get; internal set; }
         
         #endregion
 
@@ -176,7 +176,7 @@ namespace ResurrectionRP_Server
                 }
             }
 
-            Alt.OnPlayerConnect += OnPlayerConnected;
+            AltAsync.OnPlayerConnect += OnPlayerConnected;
             AltAsync.OnPlayerDisconnect += OnPlayerDisconnected;
 
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
@@ -221,7 +221,7 @@ namespace ResurrectionRP_Server
             await Loader.CarDealerLoaders.LoadAllCardealer();
             await Loader.VehicleRentLoaders.LoadAllVehicleRent();
             await Loader.TattooLoader.TattooLoader.LoadAllTattoo();
-            await VehicleManager.LoadAllVehiclesActive();
+            await VehiclesManager.LoadAllVehicles();
             await FactionManager.InitAllFactions();
             await Loader.ClothingLoader.LoadAllCloth();
             await Loader.BusinessesLoader.LoadAllBusinesses();
@@ -237,8 +237,9 @@ namespace ResurrectionRP_Server
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
 
-            ModeAutoFourriere = Config.GetSetting<bool>("ModeAutoFourriere");
-            if (ModeAutoFourriere)
+            AutoPound = Config.GetSetting<bool>("AutoPound");
+
+            if (AutoPound)
                 PoundManager.Price = 0;
 
             Events.Initialize();
@@ -295,12 +296,13 @@ namespace ResurrectionRP_Server
             ServerLoaded = true;
         }
 
-        private void OnPlayerConnected(IPlayer player, string reason)
+        private Task OnPlayerConnected(IPlayer player, string reason)
         {
             if (PlayerList.Find(b => b == player) == null)
                 PlayerList.Add(player);
 
             Alt.Log($"==> {player.Name} has connected.");
+            return Task.CompletedTask;
         }
 
         private async Task OnPlayerDisconnected(ReadOnlyPlayer player, IPlayer origin, string reason)
@@ -334,7 +336,7 @@ namespace ResurrectionRP_Server
                     player.EmitLocked("SetPlayerIntoVehicle", vh.Vehicle, -1);
 
                 await vh.InsertVehicle();
-                await ph.Update();
+                ph.Update();
             }
         }
 

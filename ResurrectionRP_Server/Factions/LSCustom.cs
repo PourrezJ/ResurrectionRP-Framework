@@ -109,7 +109,7 @@ namespace ResurrectionRP_Server.Factions
                 await vehicle.SetPrimaryColorAsync(veh.PrimaryColor);
                 await vehicle.SetSecondaryColorAsync(veh.SecondaryColor);
 
-                veh.Doors[(byte)DoorID.DoorHood] = (byte)DoorState.DoorClosed;
+                veh.Doors[(int)VehicleDoor.Hood] = VehicleDoorState.Closed;
                 veh.Update();
             }
         }
@@ -379,7 +379,7 @@ namespace ResurrectionRP_Server.Factions
                             await _vh.Vehicle.RepairAsync();
                             _vh.BodyHealth = 1000;
                             _vh.Doors = new VehicleDoorState[Globals.NB_VEHICLE_DOORS] { 0, 0, 0, 0, 0, 0 };
-                            _vh.Windows = new WindowState[4] { 0, 0, 0, 0 };
+                            _vh.Windows = new WindowState[Globals.NB_VEHICLE_WINDOWS] { 0, 0, 0, 0 };
 
                             foreach (Wheel wheel in _vh.Wheels)
                             {
@@ -450,7 +450,7 @@ namespace ResurrectionRP_Server.Factions
                     break;
 
                 case "ID_BricoEngine":
-                    if (await client.GetPlayerHandler()?.HasMoney(ReparFortune))
+                    if (client.GetPlayerHandler().HasMoney(ReparFortune))
                     {
                         client.SendNotificationPicture( CharPicture.CHAR_LS_CUSTOMS ,"Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.", "Alors ce tuyau va où déjà?");
 

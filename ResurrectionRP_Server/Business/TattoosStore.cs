@@ -146,7 +146,7 @@ namespace ResurrectionRP_Server.Business
                     Entities.Players.Data.Decoration decoration = ClientSelected.Character.Decorations.FirstOrDefault(d => d.Overlay == selectedTattoo);
                     await ClientSelected.Client.RemoveDecorationAsync((uint)decoration.Collection, (uint)decoration.Overlay);
                     ClientSelected.Character.Decorations.Remove(decoration);
-                    await ClientSelected.Update();
+                    ClientSelected.Update();
                     await Update();
                     client.SendNotificationSuccess("Vous avez retiré le tatouage");
                 }
@@ -160,7 +160,7 @@ namespace ResurrectionRP_Server.Business
                             : (int)Alt.Hash(Tattoo.HashNameFemale);
 
                         ClientSelected.Character.Decorations.Add(new Entities.Players.Data.Decoration(collection, overlay));
-                        await ClientSelected.Update();
+                        ClientSelected.Update();
                         await Update();
                         client.SendNotificationSuccess("Vous avez appliqué le tatouage");
                     }
@@ -252,7 +252,7 @@ namespace ResurrectionRP_Server.Business
 
                 var ph = client.GetPlayerHandler();
 
-                if (await ph.HasMoney(amount))
+                if (ph.HasMoney(amount))
                 {
                     await BankAccount.AddMoney(amount, $"Ajout d'argent par {ph.Identite.Name}");
                     client.SendNotificationSuccess($"Vous avez déposé ${amount} dans la caisse.");

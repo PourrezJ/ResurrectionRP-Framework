@@ -12,7 +12,7 @@ namespace ResurrectionRP_Server.Society.Societies
 {
     public class Unicorn : Society
     {
-        private Teleport.Teleport Teleport;
+        // private Teleport.Teleport Teleport;
         public Door Principal = null;
         public Door Bureau1 = null;
         public Door Bureau2 = null;

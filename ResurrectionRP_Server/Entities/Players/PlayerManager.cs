@@ -114,65 +114,48 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public async Task OnPlayerDisconnected(ReadOnlyPlayer player, IPlayer origin, string reason)
         {
-            PlayerHandler.PlayerHandlerList.TryGetValue(origin, out PlayerHandler playerhandler);
+            PlayerHandler.PlayerHandlerList.TryGetValue(origin, out PlayerHandler ph);
 
+            if (ph == null)
+                return;
+
+            ph.IsOnline = false;
             MenuManager.OnPlayerDisconnect(origin);
 
             if (GameMode.Instance.PhoneManager.PhoneClientList.ContainsKey(origin))
-            {
                 GameMode.Instance.PhoneManager.PhoneClientList.TryRemove(origin, out List<Phone.Phone> phoneList);
-            }
-
-            if (HouseManager.IsInHouse(origin))
-            {
-                var house = HouseManager.GetHouse(origin);
-                playerhandler.Location = new Location(house.Position, new Vector3());
-                house.PlayersInside.Remove(origin);
-            }
 
             if (RPGInventoryManager.HasInventoryOpen(origin))
             {
                 var rpg = RPGInventoryManager.GetRPGInventory(origin);
-                if (rpg != null)
-                {
-                    if (rpg.OnClose != null)
-                       await  rpg.OnClose.Invoke(origin, rpg);
-                }
+
+                if (rpg != null && rpg.OnClose != null)
+                    await rpg.OnClose.Invoke(origin, rpg);
+
                 GameMode.Instance.RPGInventory.OnPlayerQuit(origin);
             }
-            
-            playerhandler.IsOnline = false;
 
-            VehicleHandler veh = null;
-            
-            IVehicle vehicle = player.Vehicle;
-            
-            if (vehicle != null && vehicle.Exists)
+            if (HouseManager.IsInHouse(origin))
             {
-                if (await vehicle.GetDriverAsync() == origin)
-                    veh = vehicle.GetVehicleHandler();
-
-                playerhandler.Location = new Location(await vehicle.GetPositionAsync(), await vehicle.GetRotationAsync());
+                House house = HouseManager.GetHouse(origin);
+                ph.Location = new Location(house.Position, new Vector3());
+                house.PlayersInside.Remove(origin);
             }
-            else if (HouseManager.IsInHouse(origin))
-                playerhandler.Location = new Location(HouseManager.GetHouse(origin).Position, new Vector3());
             else
-                playerhandler.Location = new Location(player.Position, player.Rotation);
-             
-            if (veh != null)
-                veh.Update();
+                ph.Location = new Location(player.Position, player.Rotation);
 
-            if ((DateTime.Now - playerhandler.LastUpdate).Minutes >= 1)
+            if ((DateTime.Now - ph.LastUpdate).Minutes >= 1)
             {
-                playerhandler.TimeSpent += (DateTime.Now - playerhandler.LastUpdate).Minutes;
-                playerhandler.LastUpdate = DateTime.Now;
+                ph.TimeSpent += (DateTime.Now - ph.LastUpdate).Minutes;
+                ph.LastUpdate = DateTime.Now;
             }
            
-            playerhandler.SaveAsync();
+            ph.SaveAsync();
 
-            PlayerHandler.PlayerHandlerList.Remove(origin, out PlayerHandler value);
-            Alt.Server.LogInfo($"Joueur social: {playerhandler.PID} || Nom: {playerhandler.Identite.Name} est déconnecté raison: {reason}.");
+            PlayerHandler.PlayerHandlerList.Remove(origin, out _);
+            Alt.Server.LogInfo($"Joueur social: {ph.PID} || Nom: {ph.Identite.Name} est déconnecté raison: {reason}.");
         }
+
         private async Task Events_PlayerDeath(IPlayer player, IEntity killer, uint weapon)
         {
             if (!player.Exists)
@@ -189,7 +172,8 @@ namespace ResurrectionRP_Server.Entities.Players
                         await player.Revive(105);
                 });
             }
-            await player.GetPlayerHandler()?.Update();
+
+            player.GetPlayerHandler()?.Update();
         }
 
         public async Task Events_PlayerJoin(IPlayer player, object[] args)
@@ -325,10 +309,10 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        private async Task UpdateHungerThirst(IPlayer client, object[] arg)
+        private Task UpdateHungerThirst(IPlayer client, object[] arg)
         {
             if (!client.Exists)
-                return;
+                return Task.CompletedTask;
 
             PlayerHandler ph = client.GetPlayerHandler();
 
@@ -336,8 +320,10 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 ph.Hunger = Convert.ToInt32(arg[0]);
                 ph.Thirst = Convert.ToInt32(arg[1]);
-                await ph.Update();
+                ph.Update();
             }
+
+            return Task.CompletedTask;
         }
 
         private async Task LogPlayer(IPlayer client, object[] args)
@@ -400,7 +386,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList.Count > 0)
                 {
                     ph.PocketInventory.Clear();
-                    await ph.HasMoney(ph.Money);
+                    ph.HasMoney(ph.Money);
                 }
 
                 await ph.UpdateHungerThirst(100, 100);

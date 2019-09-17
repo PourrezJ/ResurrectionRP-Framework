@@ -245,7 +245,7 @@ namespace ResurrectionRP_Server.Factions
                     var inv = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, BoatInventory);
                     inv.OnMove += async (cl, inventaire) =>
                     {
-                        await ph.Update();
+                        ph.Update();
                         await UpdateDatabase();
                     };
                     await inv.OpenMenu(client);

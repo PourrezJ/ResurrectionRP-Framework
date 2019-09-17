@@ -1,10 +1,8 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
-using AltV.Net.NetworkingEntity;
 using MongoDB.Driver;
 using ResurrectionRP_Server.Entities.Players;
-using ResurrectionRP_Server.Entities.Vehicles;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -17,16 +15,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
     public class VehiclesManager
     {
         #region Fields
-        private ConcurrentDictionary<IVehicle, VehicleHandler> _VehicleHandlerList = new ConcurrentDictionary<IVehicle, VehicleHandler>();
-        public ConcurrentDictionary<IVehicle, VehicleHandler> VehicleHandlerList
-        {
-            get
-            {
-                if (_VehicleHandlerList == null) _VehicleHandlerList = new ConcurrentDictionary<IVehicle, VehicleHandler>();
-                return _VehicleHandlerList;
-            }
-            set => _VehicleHandlerList = value;
-        }
+        // Use ConcurrentDictionary as ther eis no concurrent list
+        private static ConcurrentDictionary<string, VehicleHandler> _vehicleHandlers = new ConcurrentDictionary<string, VehicleHandler>();
+        public static ConcurrentDictionary<IVehicle, VehicleHandler> VehicleHandlerList { get; } = new ConcurrentDictionary<IVehicle, VehicleHandler>();
+
         #endregion
 
         #region Ctor
@@ -42,7 +34,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Server Events
-        private Task UpdateFuelAndMilage(IPlayer client, object[] args)
+        private static Task UpdateFuelAndMilage(IPlayer client, object[] args)
         {
             IVehicle vehicle = (IVehicle)args[0];
             float fuel = float.Parse(args[1].ToString());
@@ -58,16 +50,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return Task.CompletedTask;
         }
 
-        private async Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
+        private static Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
             PlayerHandler ph = player.GetPlayerHandler();
             VehicleHandler vh = vehicle.GetVehicleHandler();
 
             if (ph != null)
             {
-                await ph.Update();
-                await player.EmitAsync("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32(seat), vh.Fuel, vh.FuelMax, vh.Milage , vh.FuelConsumption);
+                ph.Update();
+                player.EmitLocked("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32(seat), vh.Fuel, vh.FuelMax, vh.Milage , vh.FuelConsumption);
             }
+
+            return Task.CompletedTask;
         }
 
         public static Task OpenXtremVehicle(IPlayer client, object[] args)
@@ -78,7 +72,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return client.GetNearestVehicleHandler()?.OpenXtremMenu(client);
         }
 
-        private async Task LockUnlockVehicle(IPlayer player, object[] args)
+        private static async Task LockUnlockVehicle(IPlayer player, object[] args)
         {
             if (GameMode.Instance.IsDebug)
                 Alt.Server.LogColored("~b~VehicleManager ~w~| " + player.GetSocialClub() + " is trying to lock/unlock a car");
@@ -109,7 +103,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }
 
-        private async Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
+        private static Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
             VehicleHandler vh = vehicle.GetVehicleHandler();
             PlayerHandler ph = player.GetPlayerHandler();
@@ -119,56 +113,39 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             if (ph != null)
             {
-                await ph.Update();
-                await player.EmitAsync("OnPlayerLeaveVehicle", vehicle);
+                ph.Update();
+                player.EmitLocked("OnPlayerLeaveVehicle", vehicle);
             }
+
+            return Task.CompletedTask;
         }
         #endregion
 
         #region Database
-        public async Task LoadAllVehiclesActive()
+        public static async Task LoadAllVehicles()
         {
             Alt.Server.LogInfo("--- Start loading all vehicle in database ---");
-            var vehicleList = await Database.MongoDB.GetCollectionSafe<VehicleHandler>("vehicles").AsQueryable().ToListAsync();
+            List<VehicleHandler> vehicles = await Database.MongoDB.GetCollectionSafe<VehicleHandler>("vehicles").AsQueryable().ToListAsync();
 
-            if (GameMode.Instance.ModeAutoFourriere)
+            if (GameMode.Instance.AutoPound)
             {
                 //GameMode.Instance.PoundManager.PoundVehicleList.AddRange(vehicleList);
                 await GameMode.Instance.Save();
             }
             else
             {
-                List<string> checkedPlate = new List<string>(); // for check if the vehicle is duplicated
-                for (int i = 0; i < vehicleList.Count; i++)
+                foreach (VehicleHandler vehicle in vehicles)
                 {
-                    var vehicle = vehicleList[i];
+                    _vehicleHandlers.TryAdd(vehicle.Plate, vehicle);
 
-                    if (vehicle == null)
-                        continue;
-                    if (vehicle.IsParked)
-                        continue;
-                    if (vehicle.IsInPound)
+                    if (vehicle.IsParked || vehicle.IsInPound)
                         continue;
 
-                    //await DeleteVehicleInAllParking(vehicle.Plate);
-                    //DeleteVehicleInPound(vehicle.Plate);
-
-                    if (!checkedPlate.Contains(vehicle.Plate))
-                    {
-
-                        checkedPlate.Add(vehicle.Plate);
-                        await vehicle.SpawnVehicle();
-                    }
-                    else
-                    {
-                        vehicleList.Remove(vehicle);
-                        i--;
-                        Alt.Server.LogInfo($"Vehicle duplicated plate: {vehicle.Plate} Owner: {vehicle.OwnerID} ");
-                    }
+                    await vehicle.SpawnVehicle();
                 }
             }
 
-            Alt.Server.LogInfo($"--- Finish loading all vehicle in database: {vehicleList.Count} ---");
+            Alt.Server.LogInfo($"--- Finish loading all vehicle in database: {_vehicleHandlers.Count} ---");
         }
 
         #endregion
@@ -183,13 +160,6 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
 
             VehicleHandler veh = new VehicleHandler(socialClubName, model, position, rotation, (byte)primaryColor, (byte)secondaryColor, fuel, fuelMax, plate, engineStatus, locked, client, mods, neon, spawnVeh, (short)dimension, inventory, freeze, dirt, health);
             await veh.SpawnVehicle(new Models.Location(position, rotation));
-
-            if (!veh.SpawnVeh && IsPlateUnique(veh.Plate))
-            {
-                //await veh.InsertVehicle();
-                GameMode.Instance.PlateList.Add(veh.Plate);
-            }
-
             return veh;
         }
         public static bool IsVehicleInSpawn(Models.Location location, float distance = 4, short dimension = short.MaxValue) =>
@@ -205,6 +175,8 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
             return false;
         }
 
+        private static bool IsPlateUnique(string plate) => !_vehicleHandlers.ContainsKey(plate);
+
         public static string GenerateRandomPlate()
         {
             string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -215,11 +187,13 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
             do
             {
                 for (int i = 0; i < stringChars.Length; i++)
-                {
                     stringChars[i] = chars[random.Next(chars.Length)];
-                }
-                return generatedPlate = new string(stringChars);
-            } while (!IsPlateUnique(generatedPlate));
+
+                generatedPlate = new string(stringChars);
+            }
+            while (!IsPlateUnique(generatedPlate));
+
+            return generatedPlate;
         }
         public static async Task<IVehicle> GetNearestVehicle(IPlayer client, float distance = 3.0f, short dimension = short.MaxValue) =>
             GetNearestVehicle(await client.GetPositionAsync(), distance, dimension);
@@ -246,14 +220,12 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
 
         public static ICollection<IVehicle> GetAllVehicles()
         {
-            return GameMode.Instance.VehicleManager.VehicleHandlerList.Select(v => v.Value.Vehicle).ToArray();
+            return VehicleHandlerList.Select(v => v.Value.Vehicle).ToArray();
         }
 
-        public static bool IsPlateUnique(string plate) => !GameMode.Instance.PlateList.Exists(x => x == plate);
-
-        public IVehicle GetVehicleByPlate(string plate)
+        public static IVehicle GetVehicleByPlate(string plate)
         {
-            foreach(KeyValuePair<IVehicle, VehicleHandler> entity in this.VehicleHandlerList)
+            foreach(KeyValuePair<IVehicle, VehicleHandler> entity in VehicleHandlerList)
             {
                 if (entity.Value.Plate == plate)
                     return entity.Key; 
@@ -281,13 +253,19 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
 
         public static VehicleHandler GetVehicleHandler(IVehicle vehicle)
         {
-            GameMode.Instance.VehicleManager.VehicleHandlerList.TryGetValue(vehicle, out VehicleHandler vh);
+            VehicleHandlerList.TryGetValue(vehicle, out VehicleHandler vh);
+            return vh;
+        }
+
+        public static VehicleHandler GetVehicleHandler(string plate)
+        {
+            _vehicleHandlers.TryGetValue(plate, out VehicleHandler vh);
             return vh;
         }
 
         public static VehicleHandler GetVehicleHandlerWithPlate(string Plate)
         {
-            foreach(KeyValuePair<IVehicle, VehicleHandler> veh in GameMode.Instance.VehicleManager.VehicleHandlerList)
+            foreach(KeyValuePair<IVehicle, VehicleHandler> veh in VehicleHandlerList)
             {
                 if (veh.Value.Plate == Plate)
                     return veh.Value;
@@ -298,7 +276,7 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
 
         public static IVehicle GetVehicleWithPlate(string Plate)
         {
-            foreach(KeyValuePair<IVehicle, VehicleHandler> veh in GameMode.Instance.VehicleManager.VehicleHandlerList)
+            foreach(KeyValuePair<IVehicle, VehicleHandler> veh in VehicleHandlerList)
             {
                 if (veh.Value.Plate == Plate)
                     return veh.Key;

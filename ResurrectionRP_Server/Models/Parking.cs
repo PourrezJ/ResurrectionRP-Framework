@@ -28,24 +28,20 @@ namespace ResurrectionRP_Server.Models
         #region Fields
         [BsonId]
         public string Plate;
-        public string Owner;
-        public int VehicleClass;
         public DateTime ParkTime;
         #endregion
 
         #region Constructor
-        public ParkedCar(string plate, string owner, int vehicleClass, DateTime date)
+        public ParkedCar(string plate, DateTime date)
         {
             Plate = plate;
-            Owner = owner;
-            VehicleClass = vehicleClass;
             ParkTime = date;
         }
         #endregion
 
         #region Methods
-        public IVehicle GetVehicle() => GameMode.Instance.VehicleManager.GetVehicleByPlate(Plate);
-        public VehicleHandler GetVehicleHandler() => GameMode.Instance.VehicleManager.GetVehicleByPlate(Plate)?.GetVehicleHandler();
+        public IVehicle GetVehicle() => VehiclesManager.GetVehicleByPlate(Plate);
+        public VehicleHandler GetVehicleHandler() => VehiclesManager.GetVehicleByPlate(Plate)?.GetVehicleHandler();
         #endregion
     }
 
@@ -62,7 +58,7 @@ namespace ResurrectionRP_Server.Models
         public Vector3 Location;
         public Location Spawn1;
         public Location Spawn2;
-        public int Limite;
+        public int MaxVehicles;
         public ParkingType ParkingType;
 
         private List<ParkedCar> _listvehiclestored = new List<ParkedCar>();
@@ -106,7 +102,7 @@ namespace ResurrectionRP_Server.Models
         #endregion
 
         #region Constructor
-        public Parking(Vector3 location = new Vector3(), Location spawn1 = null, Location spawn2 = null, string name = "", string owner = "", int price = 0, int limite = 999, bool hidden = true)
+        public Parking(Vector3 location = new Vector3(), Location spawn1 = null, Location spawn2 = null, string name = "", string owner = "", int price = 0, int maxVehicles = 999, bool hidden = true)
         {
             ID = GenerateRandomID();
             Name = name;
@@ -116,7 +112,7 @@ namespace ResurrectionRP_Server.Models
             Spawn1 = spawn1;
             Spawn2 = spawn2;
             Owner = owner;
-            Limite = limite;
+            MaxVehicles = maxVehicles;
         }
         #endregion
 
@@ -275,9 +271,9 @@ namespace ResurrectionRP_Server.Models
                 menu.ItemSelectCallback = menuCallback;
             }
 
-            if (await client.IsInVehicleAsync() && await client.GetSeatAsync() == 1 ) // I store my vehicle
+            if (client.IsInVehicle && await client.GetSeatAsync() == 1) // I store my vehicle
             {
-                var vehplayer = await client.GetVehicleAsync();
+                IVehicle vehplayer = client.Vehicle;
 
                 if (!vehplayer.Exists)
                     return;
@@ -287,19 +283,18 @@ namespace ResurrectionRP_Server.Models
                 if (vehicle == null)
                     return;
 
-                // some check
                 if (vehicle.SpawnVeh)
                 {
                     client.SendNotificationError("Vous ne pouvez pas garer un véhicule de location dans le parking!");
                     return;
                 }
 
-                if (ListVehicleStored.Count + 1 >= Limite)
+                if (ListVehicleStored.Count + 1 >= MaxVehicles)
                 {
                     client.SendNotificationError("Le parking est plein!");
                     return;
                 }
-                // it's ok!
+                
                 var item = new MenuItem("Ranger votre voiture", "", "ID_StoreVehicle", true, rightLabel: $"{((Price > 0) ? "$" + Price.ToString() : "")}");
                 item.OnMenuItemCallback = StoreVehicle;
                 menu.Add(item);
@@ -318,9 +313,9 @@ namespace ResurrectionRP_Server.Models
                 if (canGetAllVehicle)
                     vehicleListParked = ListVehicleStored;
                 else if (vehicleType == -1)
-                    vehicleListParked = ListVehicleStored.FindAll(p => p.Owner == social || ph.ListVehicleKey.Exists(v => v.Plate == p.Plate));
+                    vehicleListParked = ListVehicleStored.FindAll(p => VehiclesManager.GetVehicleHandler(p.Plate).OwnerID == social || ph.ListVehicleKey.Exists(v => v.Plate == p.Plate));
                 else
-                    vehicleListParked = ListVehicleStored.FindAll(p => (p.Owner == social || ph.ListVehicleKey.Exists(v => v.Plate == p.Plate) && p.VehicleClass == vehicleType));
+                    vehicleListParked = ListVehicleStored.FindAll(p => (VehiclesManager.GetVehicleHandler(p.Plate).OwnerID == social || ph.ListVehicleKey.Exists(v => v.Plate == p.Plate) && VehiclesManager.GetVehicleHandler(p.Plate).VehicleManifest.VehicleClass == vehicleType));
 
                 FilterDefinition<VehicleHandler> filter = Builders<VehicleHandler>.Filter.AnyIn("_id", vehicleListParked.Select(v => v.Plate).ToArray());
                 List<VehicleHandler> vehicleList = await Database.MongoDB.GetCollectionSafe<VehicleHandler>("vehicles").Find(filter).ToListAsync();
@@ -370,7 +365,7 @@ namespace ResurrectionRP_Server.Models
 
             try
             {
-                if (!await client.GetPlayerHandler().HasMoney(Price))
+                if (!client.GetPlayerHandler().HasMoney(Price))
                 {
                     client.SendNotificationError($"Vous n'avez pas les ${Price} en poche pour payer le ticket.");
                     return;
@@ -392,7 +387,7 @@ namespace ResurrectionRP_Server.Models
 
                     lock (ListVehicleStored)
                     {
-                        ListVehicleStored.Add(new Models.ParkedCar(veh.Plate, veh.OwnerID, veh.VehicleManifest.VehicleClass, DateTime.Now)); // Store vehicle into a list
+                        ListVehicleStored.Add(new ParkedCar(veh.Plate, DateTime.Now)); // Store vehicle into a list
                         veh.IsParked = true;
                     }
 

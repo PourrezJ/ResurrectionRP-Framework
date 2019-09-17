@@ -96,7 +96,7 @@ namespace ResurrectionRP_Server.Business.Barber
 
                 var ph = client.GetPlayerHandler();
 
-                if (await ph.HasMoney(result))
+                if (ph.HasMoney(result))
                 {
                     await BankAccount.AddMoney(result, $"Ajout d'argent par {ph.Identite.Name}");
                     client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
@@ -160,7 +160,7 @@ namespace ResurrectionRP_Server.Business.Barber
                 ClientSelected.Character.Appearance[1].Opacity = 255;
 
                 ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
-                await ClientSelected.Update();
+                ClientSelected.Update();
                 await Update();
             }
             else
@@ -216,7 +216,7 @@ namespace ResurrectionRP_Server.Business.Barber
             {
                 ClientSelected.Character.Hair.Hair = hair.ID;
                 ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
-                await ClientSelected.Update();
+                ClientSelected.Update();
                 await Update();
             }
             else
@@ -284,7 +284,7 @@ namespace ResurrectionRP_Server.Business.Barber
                     ClientSelected.Character.Appearance[1] = head;
 
                     ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
-                    await ClientSelected.Update();
+                    ClientSelected.Update();
                     await Update();
                     await menu.CloseMenu(client);
                 }

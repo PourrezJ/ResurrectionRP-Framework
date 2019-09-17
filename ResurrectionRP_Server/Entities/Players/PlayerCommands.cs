@@ -19,6 +19,7 @@ namespace ResurrectionRP_Server.Entities.Players
             Chat.RegisterCmd("cloth", Cloth);
             Chat.RegisterCmd("refuel", Refuel);
             Chat.RegisterCmd("repair", Repair);
+            Chat.RegisterCmd("wheel", Wheel);
         }
 
         private async Task TpCoord(IPlayer player, string[] args)
@@ -40,6 +41,7 @@ namespace ResurrectionRP_Server.Entities.Players
             player.EmitLocked("EmptyChat");
             return Task.CompletedTask;
         }
+
         public Task Refuel(IPlayer player, string[] args)
         {
             if(player.Vehicle == null)
@@ -47,10 +49,12 @@ namespace ResurrectionRP_Server.Entities.Players
                 player.DisplaySubtitle("Vous devez être dans un véhicule", 10000);
                 return Task.CompletedTask;
             }
+
             player.Vehicle.GetVehicleHandler()?.SetFuel(player.Vehicle.GetVehicleHandler().FuelMax);
             player.DisplaySubtitle("Vehicule restoré", 5000);
             return Task.CompletedTask;
         }
+
         public async Task Repair(IPlayer player, string[] args)
         {
             if(player.Vehicle == null)
@@ -58,6 +62,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 player.DisplaySubtitle("Vous devez être dans un véhicule", 10000);
                 return ;
             }
+
             await player.Vehicle.RepairAsync();
             player.DisplaySubtitle("Vehicule restoré", 5000);
         }
@@ -66,6 +71,20 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             player.SetCloth((Models.ClothSlot)Convert.ToInt32(args[0]), (int)args[1], (int)args[2], (int)args[3]);
             return Task.CompletedTask;
+        }
+
+        public async Task Wheel(IPlayer player, string[] args)
+        {
+            if (player.Vehicle == null)
+            {
+                player.DisplaySubtitle("Vous devez être dans un véhicule", 10000);
+                return;
+            }
+
+            player.SendChatMessage($"Wheel health: {player.Vehicle.GetWheelHealth(0)}");
+            player.SendChatMessage($"Wheel HasTire: {player.Vehicle.DoesWheelHasTire(0)}");
+            player.SendChatMessage($"Wheel Burst: {player.Vehicle.IsWheelBurst(0)}");
+            await Task.CompletedTask;
         }
     }
 }

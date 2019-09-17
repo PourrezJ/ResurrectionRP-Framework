@@ -47,13 +47,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public byte PrimaryColor { get; set; } = 0;
         public byte SecondaryColor { get; set; } = 0;
 
-        public byte WindowTint { get; set; } = 0;
-        public bool ArmoredWindows { get; set; } = false;
+        // public byte WindowTint { get; set; } = 0;
+        // public bool ArmoredWindows { get; set; } = false;
 
-        public byte SirenActive { get; set; } = 0;
-
-        public byte FrontBumperDamage { get; set; } = 0;
-        public byte RearBumperDamage { get; set; } = 0;
+        // public byte FrontBumperDamage { get; set; } = 0;
+        // public byte RearBumperDamage { get; set; } = 0;
 
         public VehicleDoorState[] Doors { get; set; } = new VehicleDoorState[Globals.NB_VEHICLE_DOORS];
         public WindowState[] Windows { get; set; } = new WindowState[4] { 0, 0, 0, 0 };
@@ -79,7 +77,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Vehicle.Position = value.Pos;
                     Vehicle.Rotation = value.Rot;
                 }
-
+                
                 LastKnowLocation = value;
             }
         }

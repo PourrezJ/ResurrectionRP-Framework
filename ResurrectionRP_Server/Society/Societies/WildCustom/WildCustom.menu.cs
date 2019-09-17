@@ -162,7 +162,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                 {
                     if (response)
                     {
-                        if (await ph.HasMoney(PriceChangePlate) == true)
+                        if (ph.HasMoney(PriceChangePlate) == true)
                         {
                             VehicleHandler vh = _vehicleBench.GetVehicleHandler();
 
@@ -170,7 +170,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                             {
                                 vh.PlateHide = true;
                                 client.SendNotificationSuccess("La plaque du véhicule a été retirée du registre");
-                                await ph.Update();
+                                ph.Update();
                                 vh.Update();
                             }
                         }

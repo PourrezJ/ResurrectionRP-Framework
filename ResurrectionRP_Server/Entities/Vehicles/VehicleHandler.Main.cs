@@ -166,6 +166,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 for(byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
                     await Vehicle.SetDoorStateAsync(i,(byte) Doors[i]);
 
+                for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
+                {
+                    if (Windows[i] == WindowState.WindowBroken)
+                        Vehicle.SetWindowDamaged(i, true);
+                    else if (Windows[i] == WindowState.WindowDown)
+                        await Vehicle.SetWindowOpenedAsync(i, true);
+                }
+
                 await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
                 await Vehicle.SetEngineOnAsync(Engine);
                 await Vehicle.SetPositionAsync( Vehicle.Position.X, Vehicle.Position.Y, Vehicle.Position.Z );
@@ -177,7 +185,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Location = location;
 
                 VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
-                GameMode.Instance.VehicleManager.VehicleHandlerList.TryAdd(Vehicle, this);
+                VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
 
                 if (Vehicle.GetVehicleHandler()?.FuelConsumption == 0)
                     Vehicle.GetVehicleHandler().FuelConsumption = 5.5f;
@@ -199,17 +207,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (Vehicle.Exists)
                 await Vehicle.RemoveAsync();
 
-            if (GameMode.Instance.VehicleManager.VehicleHandlerList.TryRemove(Vehicle, out VehicleHandler _))
+            if (VehiclesManager.VehicleHandlerList.TryRemove(Vehicle, out VehicleHandler _))
             {
                 if (perm && !SpawnVeh)
                 {
                     if (!await RemoveInDatabase())
                         return false;
-
-                    lock (GameMode.Instance.PlateList)
-                    {
-                        GameMode.Instance.PlateList.Remove(Plate);
-                    }
                 }
 
                 return true;
@@ -289,6 +292,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
                     Doors[i] = (VehicleDoorState)Vehicle.GetDoorState(i);
+
+                for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
+                {
+                    if (Vehicle.IsWindowDamaged(i))
+                        Windows[i] = WindowState.WindowBroken;
+                    else if (Vehicle.IsWindowOpened(i))
+                        Windows[i] = WindowState.WindowDown;
+                    else
+                        Windows[i] = WindowState.WindowFixed;
+                }
 
                 for (byte i = 0; i < Vehicle.WheelsCount; i++)
                 {

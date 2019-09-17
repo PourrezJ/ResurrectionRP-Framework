@@ -61,7 +61,7 @@ namespace ResurrectionRP_Server.Houses
         private IPlayer OwnerHandle;
 
         // misc
-        [JsonIgnore]
+        [JsonIgnore, BsonIgnore]
         public List<IPlayer> PlayersInside = new List<IPlayer>();
 
         public House(int id, string owner, int type, Vector3 position, int price, bool locked, string name = "", Parking parking = null)

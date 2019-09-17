@@ -194,7 +194,7 @@ namespace ResurrectionRP_Server.Farms
                 }
             }
 
-            await player.Update();
+            player.Update();
             vehHandler.Update();
         }
         #endregion
@@ -272,7 +272,7 @@ namespace ResurrectionRP_Server.Farms
                 {
                     sender.EmitLocked("StopProgressBar");
                     sender.DisplaySubtitle($"Traitement de la citerne terminé: Vous avez traité ~r~ {vehHandler.OilTank.Traite}L {_itemTraite.name}(s)", 15000);
-                    await player.Update();
+                    player.Update();
                     vehHandler.Update();
                     player.IsOnProgress = false;
                     return;
@@ -374,7 +374,7 @@ namespace ResurrectionRP_Server.Farms
             }
 
             player.IsOnProgress = false;
-            await player.Update();
+            player.Update();
         }
     }
 }

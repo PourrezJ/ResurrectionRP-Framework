@@ -37,9 +37,9 @@ namespace ResurrectionRP_Server.Models
                 return player?.Identite;
 
             }
-            catch (Exception ex )
+            catch (Exception)
             {
-                Alt.Server.LogError("Erreur : Identite.cs, ce problème est généralement dû au fait que le Handler du owner ne correspond pas à celui du noueau sur Alt:V");
+                Alt.Server.LogError("Erreur : Identite.cs, ce problème est généralement dû au fait que le Handler du owner ne correspond pas à celui du nouveau sur Alt:V");
                 return null;
             }
         }

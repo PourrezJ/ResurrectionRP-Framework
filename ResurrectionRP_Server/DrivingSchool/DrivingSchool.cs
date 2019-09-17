@@ -183,14 +183,14 @@ namespace ResurrectionRP_Server.DrivingSchool
                     await client.EmitAsync("EndDrivingExamen");
 
                     if (ph != null)
-                        await ph.AddMoney(_price);
+                        ph.AddMoney(_price);
                 }
             }
             else if (menuItem.Id == "ID_Car")
             {
                 if (!Entities.Vehicles.VehiclesManager.IsVehicleInSpawn(_spawnVeh, 2))
                 {
-                    if (await ph.HasMoney(_price))
+                    if (ph.HasMoney(_price))
                     {
                         client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANDREAS, "Auto-école", "Examinateur", "Votre examen de conduite commence! Vous avez le droit à ~r~5 erreurs~w~.");
                         await BeginDrivingExamen(client);

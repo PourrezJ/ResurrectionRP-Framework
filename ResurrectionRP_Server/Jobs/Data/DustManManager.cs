@@ -23,10 +23,10 @@ namespace ResurrectionRP_Server.Jobs
 
         public  DustManManager(IPlayer client, TrashZone zone,Vector3 pos )
         {
-            this.DustManClient = client;
-            this.Zone = zone;
-            this.Truck = client.Vehicle;
-            this.DepotZone = pos;
+            DustManClient = client;
+            Zone = zone;
+            Truck = client.Vehicle;
+            DepotZone = pos;
             Task.Run(async () =>
             {
                 await Init();      
@@ -35,68 +35,69 @@ namespace ResurrectionRP_Server.Jobs
 
         public async Task Init()
         {
-            Alt.OnClient("Jobs_Dustman_Depot", this.OnDepot);
-            this.DustManClient.SendNotificationSuccess($"Vous devez vous rendre dans la zone de ~g~{this.Zone.NameZone}~w~.");
+            AltAsync.OnClient("Jobs_Dustman_Depot", OnDepot);
+            DustManClient.SendNotificationSuccess($"Vous devez vous rendre dans la zone de ~g~{Zone.NameZone}~w~.");
             if (GameMode.Instance.IsDebug)
-            this.DustManClient.SetWaypoint(this.Zone.ZonePosition, true);
-            await this.DustManClient.EmitAsync("Jobs_Dustman", JsonConvert.SerializeObject(this.Zone.ZonePosition), JsonConvert.SerializeObject(this.Zone.TrashList));
+            DustManClient.SetWaypoint(Zone.ZonePosition, true);
+            await DustManClient.EmitAsync("Jobs_Dustman", JsonConvert.SerializeObject(Zone.ZonePosition), JsonConvert.SerializeObject(Zone.TrashList));
         }
 
-        public void OnDepot(IPlayer client, object[] args)
+        public Task OnDepot(IPlayer client, object[] args)
         {
-            if (client.Id != this.DustManClient.Id)
-                return;
-            this.depotColShape = Alt.CreateColShapeCircle(this.DepotZone, 8);
-            Alt.OnColShape += this.OnEnterColShape;
-            client.SetWaypoint(this.DepotZone);
+            if (client.Id != DustManClient.Id)
+                return Task.CompletedTask;
+
+            depotColShape = Alt.CreateColShapeCircle(DepotZone, 8);
+            AltAsync.OnColShape += OnEnterColShape;
+            client.SetWaypoint(DepotZone);
+            return Task.CompletedTask;
         }
 
-        public void OnEnterColShape(IColShape colShape, IEntity entity, bool state)
+        public Task OnEnterColShape(IColShape colShape, IEntity entity, bool state)
         {
             if (!entity.Exists || entity.Type != BaseObjectType.Player)
-                return;
+                return Task.CompletedTask;
+
             IPlayer client = entity as IPlayer;
-            if(state && this.depotInProgress == false)
+            if (state && depotInProgress == false)
             {
-                this.depotInProgress = true;
+                depotInProgress = true;
                 client.SendNotificationSuccess("Génial ! Restez ici pour vider votre camion !");
                 client.DisplayHelp("Déchargement de la remorque en cours, veuillez patenter! ", 30000);
-                this.timer = Utils.Utils.Delay(30000, false, () =>
+                timer = Utils.Utils.Delay(30000, false, () =>
                 {
                     if (!depotInProgress)
-                        this.timer.Stop();
-                    switch (this.ProgressState)
+                        timer.Stop();
+                    switch (ProgressState)
                     {
                         case 0:
-                            this.ProgressState++;
+                            ProgressState++;
                             break;
                         case 1:
                             client.DisplayHelp("On décharge ! Attendez encore un peu ! ", 30000);
-                            this.ProgressState++;
+                            ProgressState++;
                             break;
                         case 2:
                             client.DisplayHelp("On y est presque, un p'tit peu plus, et vous êtes libre ! ", 30000);
-                            this.ProgressState++;
+                            ProgressState++;
                             break;
                         default:
                             client.DisplayHelp("~g~C'est bon! ~w~Tu es libre ! ", 10000);
-                            this.ProgressState = 0;
-                            this.timer.Stop();
-                            this.timer = null;
-                            this.DustManClient.EmitLocked("DustMan_Callback");
+                            ProgressState = 0;
+                            timer.Stop();
+                            timer = null;
+                            DustManClient.EmitLocked("DustMan_Callback");
                             break;
                     }
                 });
-
-            } else
-            {
-                if(depotInProgress)
-                {
-                    this.depotInProgress = false;
-                    client.SendNotificationError("Vous aviez pour mission de rester ici, revenez !");
-                }
             }
-                
+            else if (depotInProgress)
+            {
+                depotInProgress = false;
+                client.SendNotificationError("Vous aviez pour mission de rester ici, revenez !");
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

@@ -141,14 +141,14 @@ namespace ResurrectionRP_Server.Phone
                     else if (phone.TryEditContact(client, contact.contactName, contact.phoneNumber, contact.originalNumber))
                         client.SendNotificationSuccess($"Vous avez édité le contact {contact.contactName}");
 
-                    await ph.Update();
+                    ph.Update();
                     break;
 
                 case "RemoveContact":
                     if (phone.RemoveContactFromAddressBook(args[1].ToString()))
                         client.SendNotificationSuccess("Contact Supprimé!!");
 
-                    await ph.Update();
+                    ph.Update();
                     break;
 
                 case "getConversationsV2":

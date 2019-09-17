@@ -28,7 +28,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Methods
-        public static async Task<Rack> CreateRackAsync(string rackName, Vector3 rackPos, Location boxLocation, bool empty = false)
+        public static Rack CreateRack(string rackName, Vector3 rackPos, Location boxLocation, bool empty = false)
         {
             var rack = new Rack()
             {
@@ -38,14 +38,14 @@ namespace ResurrectionRP_Server.Factions
             };
 
             if (!empty)
-                rack.InventoryBox = await InventoryBox.CreateInventoryBox(rackName, boxLocation, new Inventory.Inventory(500, 20));
+                rack.InventoryBox = InventoryBox.CreateInventoryBox(rackName, boxLocation, new Inventory.Inventory(500, 20));
 
-            await rack.Load(empty);
+            rack.Load(empty);
 
             return rack;
         }
 
-        public async Task Load(bool empty = false)
+        public void Load(bool empty = false)
         {
             if (GameMode.Instance.IsDebug)
                 Entities.Marker.CreateMarker(Entities.MarkerType.VerticalCylinder,RackPos ,new Vector3(1,1,1), Color.FromArgb(80, 255, 255, 255) );
@@ -55,12 +55,11 @@ namespace ResurrectionRP_Server.Factions
             }
             else if (!empty && InventoryBox == null)
             {
-                InventoryBox = await InventoryBox.CreateInventoryBox(RackName, BoxLocation, new Inventory.Inventory(500, 20));
+                InventoryBox = InventoryBox.CreateInventoryBox(RackName, BoxLocation, new Inventory.Inventory(500, 20));
             }
 
             RefreshLabel();
             Colshape = Alt.CreateColShapeCylinder(RackPos - new Vector3(0,0,1), 2, 4);
-            
         }
 
         public async Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)

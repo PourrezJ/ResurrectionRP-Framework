@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AltV.Net.Elements.Entities;
+using System;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Utils
@@ -34,5 +35,8 @@ namespace ResurrectionRP_Server.Utils
         }
 
         public static void StopTimer(System.Timers.Timer timer) => timer.Stop();
+
+        public static void SendNotificationPicture(Enums.CharPicture img, string sender, string subject, string message) =>
+            AltV.Net.Alt.EmitAllClients("SetNotificationMessage", img.ToString(), sender, subject, message);
     }
 }

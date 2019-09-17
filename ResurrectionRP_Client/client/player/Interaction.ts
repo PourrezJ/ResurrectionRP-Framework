@@ -24,7 +24,7 @@ var canClose: boolean;
 
 export class Interaction {
 
-
+    private tick: number = 0;
     constructor() {
         alt.onServer("SetStateInColShape", (state: boolean) => {
             isInColshape = state;
@@ -45,78 +45,85 @@ export class Interaction {
             if (game.isPauseMenuActive() || chat.isOpened() || MenuManager.hasMenuOpen() && !canClose)
                 return;
 
-            if (key == 69) { // E
-                if (isInColshape) {
-                    alt.emitServer("InteractionInColshape", key);
+            switch (key) {
+                case 69:    // E
+                case 85:    // U
+                case 113:   // F2
+                case 114:   // F3
+                case 115:   // F4
+                case 116:   // F5
+                case 84:    // T
+                case 73:    // I
+                case 77:    // M
+                case 8:     // BackSpace
+                case 71:    // G
+                case 33:    // PageUP
+                case 34:    // PageDown
+                case 38:    // ArrowUP
+                case 40:    // ArrowDown
+                case 96:    // 0
+                case 97:    // 1
+                case 98:    // 2
+                case 99:    // 3    
+                case 100:   // 4
+                case 101:   // 5
+                case 102:   // 6
+                case 103:   // 7
+                case 104:   // 8
+                case 105:   // 9
+
+                    if (key == 69 && isInColshape)
+                        alt.emitServer("InteractionInColshape", key);
+
+                    let vehicle: alt.Vehicle = null;
+                    let player: alt.Player = null;
+
+                    if (raycastResult.isHit && raycastResult.entityType == 2) {
+                        vehicle = alt.Vehicle.all.find(v => v.scriptID == raycastResult.hitEntity);
+                    }
+                    else if (raycastResult.isHit && raycastResult.entityType == 1) {
+                         player  = alt.Player.all.find(p => p.scriptID == raycastResult.hitEntity);
+                    }
+
+                    alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), vehicle, player);
+                    break;
+            }
+        });
+
+        alt.everyTick(() =>
+        {
+            this.tick++;
+            if (this.tick % 20) {
+                if (!alt.Player.local.getMeta("IsConnected"))
+                    return;
+
+                if (game.isEntityDead(alt.Player.local.scriptID, false))
+                    return;
+
+                raycastResult = Raycast.line(2, -1, alt.Player.local.scriptID);
+                if (raycastResult.isHit && raycastResult.entityType == 2 && alt.Player.local.vehicle == null) {
+                    Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le véhicule");
+                }
+                else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isAtm(raycastResult.entityHash))
+                {
+                    Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec l'ATM");
+                }
+                else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isPompe(raycastResult.entityHash)) {
+                    Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec la pompe à essence");
                 }
 
                 if (game.isAnyObjectNearPoint(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, 2, true) &&
-                    game.getClosestObjectOfType(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, 2, game.getHashKey("prop_money_bag_01"), false, true, false) != 0) {
-                    alt.emit("interactWithPickableObject", game.getClosestObjectOfType(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, 2, game.getHashKey("prop_money_bag_01"), false, true, false) );
-
-                }
-
-                if (raycastResult.isHit && raycastResult.entityType == 2) {
-                    var vehicle: alt.Vehicle = alt.Vehicle.all.find(v => v.scriptID == raycastResult.hitEntity);
-
-                    if (vehicle == null || vehicle == undefined)
-                        return;
-
-                    alt.emitServer('OpenXtremVehicle', vehicle.id);
-                } else if (raycastResult.isHit && raycastResult.entityType == 1) {
-                    var player: alt.Player = alt.Player.all.find(p => p.scriptID == raycastResult.hitEntity);
-
-                    if (player == null || player == undefined)
-                        return;
-
-                    alt.emitServer('OpenXtremPlayer', player.id);
-                }
-                else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isPompe(raycastResult.entityHash)) {
-                    alt.logError(game.getDistanceBetweenCoords(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, raycastResult.pos.x, raycastResult.pos.y, raycastResult.pos.z, false));
-                    if (game.getDistanceBetweenCoords(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, raycastResult.pos.x, raycastResult.pos.y, raycastResult.pos.z, false) < 5) {
-                        alt.emitServer('OpenGasPumpMenu');
-                    }
-                    
-                }
-                else
-                    alt.emitServer('OnKeyPress', key);
-            }
-            else if (key == 85) { // U
-                let resultVeh = Raycast.line(5, 2, alt.Player.local.scriptID);
-
-                if (resultVeh.isHit && resultVeh.entityType == 2) {
-                    var vehicle: alt.Vehicle = alt.Vehicle.all.find(p => p.scriptID == resultVeh.hitEntity);
-                    alt.emitServer('LockUnlockVehicle', vehicle);
-                }
-            }
-            else { // Optimiser ce call ? En envoyant que les clés qui sont succeptibles d'être utilisée pour une interaction
-                alt.emitServer('OnKeyPress', key);
+                    game.getClosestObjectOfType(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, 2, game.getHashKey("prop_money_bag_01"), false, true, false) != 0
+                )
+                Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour ramasser l'objet");
             }
         });
+    }
 
-        alt.everyTick(() => {
-
-            if (!alt.Player.local.getMeta("IsConnected"))
-                return;
-
-            if (game.isEntityDead(alt.Player.local.scriptID, false))
-                return;
-
-            raycastResult = Raycast.line(2, -1, alt.Player.local.scriptID);
-            if (raycastResult.isHit && raycastResult.entityType == 2 && alt.Player.local.vehicle == null) {
-                alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le véhicule", 100)
-            } else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isAtm(raycastResult.entityHash)) {
-                alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec l'ATM", 100)
-            } else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isPompe(raycastResult.entityHash)) {
-                alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec la pompe à essence", 100)
-            }
-
-            if (game.isAnyObjectNearPoint(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, 2, true) &&
-                game.getClosestObjectOfType(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, 2, game.getHashKey("prop_money_bag_01"), false, true, false) != 0
-            )
-                alt.emit("Display_Help", "Appuyez sur ~INPUT_CONTEXT~ pour ramasser l'objet", 100);
-
-        });
+    private static displayHelp(text: string) {
+        game.beginTextCommandDisplayHelp('STRING');
+        game.addTextComponentSubstringPlayerName(text);
+        game.endTextCommandDisplayHelp(0, false, true, 5000);
     }
 
     private static isAtm(entityHash: number): boolean {
@@ -136,16 +143,15 @@ export class Interaction {
             case 1933174915:
             case -2007231801:
             case -462817101:
-            case -462817101:
             case -469694731:
             case 1694452750:
             case 1694:
             case 750:
                 return true;
         }
-
         return false;
     }
+
     public static isPickable(entityHash: number): boolean {
         if (game.objectValueGetString(entityHash, "pickup")[0] == "")
             return false;

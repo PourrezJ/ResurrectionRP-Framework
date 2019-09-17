@@ -22,7 +22,6 @@ export class NetworkingEntityClient {
 
         alt.everyTick(() => {
             this.EntityList.forEach((item, index) => {
-                
                 if (item != null && item["Text"] != null) {
                     this.displayTextLabel(item);
                 } else if (item != null && item["scalex"] != null) {

@@ -88,10 +88,11 @@ namespace ResurrectionRP_Server.Entities.Objects
 
         }
 
-        public static async Task DetachFromEntity(IEntity ent1, Object target)
+        public static Task DetachFromEntity(IEntity ent1, Object target)
         {
             target.attach = null;
             GameMode.Instance.Streamer.UpdateEntityObject(target);
+            return Task.CompletedTask;
             //switch (ent1.Type)
             //{
             //    case EntityType.Object:

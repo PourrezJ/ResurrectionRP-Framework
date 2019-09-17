@@ -46,11 +46,15 @@ namespace ResurrectionRP_Server.Houses
 
             if (ph.StaffRank >= AdminRank.Moderator || houseMenu._house.Owner.ToLower() == (client.GetSocialClub()).ToLower())
             {
-
                 List<object> _playerlist = new List<object>();
-                foreach (PlayerHandler player in client.GetNearestPlayers(7f))
-                    _playerlist.Add(player.Identite.Name);
 
+                foreach (IPlayer player in house.PlayersInside)
+                {
+                    if (player == client)
+                        continue;
+                    _playerlist.Add(player.GetPlayerHandler()?.Identite.Name);
+                }
+                    
                 _playerlist.Remove(ph.Identite.Name);
                 if (_playerlist.Count > 0)
                 {

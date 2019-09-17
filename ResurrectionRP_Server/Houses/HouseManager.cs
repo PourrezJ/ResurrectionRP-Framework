@@ -2,12 +2,14 @@
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Driver;
+using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.Utils.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Houses
@@ -29,6 +31,11 @@ namespace ResurrectionRP_Server.Houses
             AltAsync.OnClient("OutHouse", OutHouse);
             AltAsync.OnClient("ParkingHouse", ParkingHouse);
 
+            for(int i = 0; i < HouseTypes.HouseTypeList.Count; i++)
+            {
+                Marker.CreateMarker(MarkerType.VerticalCylinder, HouseTypes.HouseTypeList[i].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), null, null);
+            }
+
             Utils.Utils.Delay((int)TimeSpan.FromMinutes(10).TotalMilliseconds, false, async () =>
             {
                 foreach (var house in Houses)
@@ -38,6 +45,12 @@ namespace ResurrectionRP_Server.Houses
                 }
             });
 
+            EventHandlers.Events.OnPlayerInteractHouse += OnPlayerInteractHouse;
+        }
+
+        private async Task OnPlayerInteractHouse(IColShape colShape, IPlayer client, House house)
+        {
+            await house.RemovePlayer(client);
         }
         #endregion
 
@@ -48,7 +61,8 @@ namespace ResurrectionRP_Server.Houses
         public static House GetHouseWithID(int id) => Houses.Find(h => h.ID == id) ?? null;
         public static House GetHouse(IPlayer client)
         {
-            if (IsInHouse(client)) return ClientHouse.GetValueOrDefault(client);
+            if (IsInHouse(client))
+                return ClientHouse.GetValueOrDefault(client);
             return null;
         }
         public static bool RemoveClientHouse(IPlayer client) => ClientHouse.Remove(client);
@@ -80,7 +94,7 @@ namespace ResurrectionRP_Server.Houses
                     {
                         await house.Load();
                         Houses.Add(house);
-                        await Task.Delay(20);
+                        //await Task.Delay(20);
                     }
                 }
                 catch (Exception ex)
@@ -209,6 +223,7 @@ namespace ResurrectionRP_Server.Houses
 
                 case "ID_Enter":
                     await house.SendPlayer(client);
+                    await menu.CloseMenu(client);
                     break;
 
                 case "ID_Sonner":

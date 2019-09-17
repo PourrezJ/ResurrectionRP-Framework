@@ -28,7 +28,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
 
             AltAsync.OnClient("LockUnlockVehicle", LockUnlockVehicle);
-            AltAsync.OnClient("OpenXtremVehicle", OpenXtremVehicle);
             AltAsync.OnClient("UpdateFuelAndMilage", UpdateFuelAndMilage);
         }
         #endregion
@@ -36,7 +35,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Server Events
         private static Task UpdateFuelAndMilage(IPlayer client, object[] args)
         {
-            IVehicle vehicle = (IVehicle)args[0];
+            if (args[0] == null)
+                return Task.CompletedTask;
+
+            var veh = (IVehicle)args[0];
+
+            if (!veh.Exists)
+                return Task.CompletedTask;
+
             float fuel = float.Parse(args[1].ToString());
             float mile = float.Parse(args[2].ToString());
             VehicleHandler veh = GetVehicleHandler(vehicle);
@@ -62,14 +68,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
 
             return Task.CompletedTask;
-        }
-
-        public static Task OpenXtremVehicle(IPlayer client, object[] args)
-        {
-            if (!client.Exists)
-                return Task.CompletedTask;
-
-            return client.GetNearestVehicleHandler()?.OpenXtremMenu(client);
         }
 
         private static async Task LockUnlockVehicle(IPlayer player, object[] args)
@@ -105,6 +103,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         private static Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
+            if (!player.Exists)
+                return;
+
+            if (!vehicle.Exists)
+                return;
+
             VehicleHandler vh = vehicle.GetVehicleHandler();
             PlayerHandler ph = player.GetPlayerHandler();
 
@@ -114,7 +118,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (ph != null)
             {
                 ph.Update();
-                player.EmitLocked("OnPlayerLeaveVehicle", vehicle);
+
+                try
+                {
+                    player.EmitLocked("OnPlayerLeaveVehicle", vehicle);
+                }
+                catch
+                {
+                    player.EmitLocked("HideSpeedometer");
+                }
+               
             }
 
             return Task.CompletedTask;

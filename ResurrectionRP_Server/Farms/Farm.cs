@@ -15,6 +15,7 @@ using ResurrectionRP_Server.Entities.Blips;
 using AltV.Net;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities;
+using AltV.Net.Data;
 
 namespace ResurrectionRP_Server.Farms
 {
@@ -53,14 +54,21 @@ namespace ResurrectionRP_Server.Farms
 
         public static Farm PlayerInFarmZone(IPlayer client)
         {
-            foreach(Farm farm in FarmList)
+            Position pos = Position.Zero;
+            if (client.GetPositionLocked(ref pos))
             {
-                foreach(Vector3 farmPos in farm.Harvest_Position)
+                for(int i = 0; i < FarmList.Count; i++)
                 {
-                    if (farmPos.DistanceTo2D(client.Position) <= farm.Harvest_Range)
-                        return farm;
+                    Farm farm = FarmList[i];
+
+                    for (int a = 0; a < farm.Harvest_Position.Count; a++)
+                    {
+                        if (farm.Harvest_Position[a].DistanceTo2D(pos) <= farm.Harvest_Range)
+                            return farm;
+                    }
                 }
             }
+
             return null;
         }
 

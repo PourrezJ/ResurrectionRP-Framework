@@ -3,6 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Houses;
 using System;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace ResurrectionRP_Server.EventHandlers
     {
         #region Delegates
         public delegate Task ColShapePlayerEventHandler(IColShape colShape, IPlayer client);
+        public delegate Task ColShapePlayerInteractHouse(IColShape colShape, IPlayer client, House house);
         public delegate Task ColShapePlayerInteract(BsonObjectId ID, IPlayer client);
         public delegate Task ColShapeVehicleEventHandler(IColShape colShape, IVehicle vehicle);
         #endregion
@@ -23,7 +25,7 @@ namespace ResurrectionRP_Server.EventHandlers
         public static event ColShapeVehicleEventHandler OnVehicleLeaveColShape;
 
         public static event ColShapePlayerInteract OnPlayerInteractClothingShop;
-        public static event ColShapePlayerEventHandler OnPlayerInteractHouse;
+        public static event ColShapePlayerInteractHouse OnPlayerInteractHouse;
         public static event ColShapePlayerEventHandler OnPlayerInteractTeleporter;
         #endregion
 
@@ -118,8 +120,13 @@ namespace ResurrectionRP_Server.EventHandlers
                         if (key != 69)
                             return;
 
-                        if (OnPlayerInteractHouse != null)
-                            await OnPlayerInteractHouse.Invoke(colshape, client);
+                        var house = HouseManager.GetHouse(client);
+
+                        if (house != null)
+                        {
+                            if (OnPlayerInteractHouse != null)
+                                await OnPlayerInteractHouse.Invoke(colshape, client, house);
+                        }
                         return;
                     }
                 }

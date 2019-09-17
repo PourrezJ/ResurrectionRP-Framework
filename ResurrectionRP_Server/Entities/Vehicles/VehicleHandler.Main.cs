@@ -111,7 +111,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (Dimension.ToString() == "-1")
                 Dimension = short.MaxValue;
 
-            await AltAsync.Do(async () =>
+            await AltAsync.Do(() =>
             {
                 try
                 {
@@ -176,13 +176,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
                 await Vehicle.SetEngineOnAsync(Engine);
-                await Vehicle.SetPositionAsync( Vehicle.Position.X, Vehicle.Position.Y, Vehicle.Position.Z );
+                await Vehicle.SetPositionAsync(Vehicle.Position.X, Vehicle.Position.Y, Vehicle.Position.Z );
 
                 if (setLastUse)
                     LastUse = DateTime.Now;
 
                 if (location != null)
                     Location = location;
+
+
+                Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
+                Vehicle.EngineOn = Engine;
+                Vehicle.Position = Location.Pos;
 
                 VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
                 VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
@@ -241,7 +246,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 Locked = await Vehicle.GetLockStateAsync() == VehicleLockState.Locked ? false : true;
                 await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
-                client.SendNotification($"Vous avez {(Locked ? " ~r~fermé" : "~g~ouvert")} ~w~le véhicule");
+                client.SendNotification($"Vous avez {(Locked ? " fermé" : "ouvert")} le véhicule");
 
                 return true;
             }

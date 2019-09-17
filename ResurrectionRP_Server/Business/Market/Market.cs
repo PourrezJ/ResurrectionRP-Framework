@@ -46,7 +46,7 @@ namespace ResurrectionRP_Server.Business
             MarketsList.Add(this);
         }
 
-        private async Task Events_PlayerExitColshape(IColShape colShape, IPlayer client)
+        private Task Events_PlayerExitColshape(IColShape colShape, IPlayer client)
         {
             if (!client.Exists)
                 return;

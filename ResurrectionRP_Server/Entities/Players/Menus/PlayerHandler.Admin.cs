@@ -116,34 +116,32 @@ namespace ResurrectionRP_Server.Entities.Players
             };
             mainMenu.Add(hungeritem);
             #endregion
-            /*
+            
             #region GodMod
-            var godMod = new CheckboxItem("God Mode", "", "", _playerSelected.IsInvinsible(), true);
+            var godMod = new CheckboxItem("God Mode", "", "", _playerSelected.IsInvincible(), true);
             godMod.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                bool invinsible = !_playerSelected.IsInvinsible();
-                await _playerSelected.SetInvincible(invinsible);
+                bool invinsible = !_playerSelected.IsInvincible();
+                _playerSelected.SetInvincible(invinsible);
 
                 if (invinsible)
                 {
-                    await _playerSelected.Client.NotifyAsync("~r~[ADMIN]~w~ Vous êtes invincible.");
-                    // LogManager.Log($"~r~[ADMIN]~w~ {PlayerSelected.Name} est invincible.");
+                    _playerSelected.Client.SendNotification("~r~[ADMIN]~w~ Vous êtes invincible.");
 
                     if (_playerSelected != this)
-                        await Client.NotifyAsync($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} est invincible.");
+                        Client.SendNotification($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} est invincible.");
                 }
                 else
                 {
-                    await _playerSelected.Client.NotifyAsync("~r~[ADMIN]~w~ Vous n'êtes plus invincible.");
-                    // LogManager.Log($"~r~[ADMIN]~w~ {PlayerSelected.Name} n'est plus invincible.");
+                    _playerSelected.Client.SendNotification("~r~[ADMIN]~w~ Vous n'êtes plus invincible.");
 
                     if (_playerSelected != this)
-                        await Client.NotifyAsync($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} n'est plus invincible.");
+                        Client.SendNotification($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} n'est plus invincible.");
                 }
             };
             mainMenu.Add(godMod);
             #endregion
-
+            /*
             #region Invisible
             var invisible = new CheckboxItem("Invisible", "", "", await _playerSelected.Client.IsInvisible(), true);
             invisible.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>

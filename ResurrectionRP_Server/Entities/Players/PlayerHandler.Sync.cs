@@ -23,6 +23,12 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public bool IsCuff() => PlayerSync.IsCuff;
 
-        public bool IsInvinsible() => PlayerSync.IsInvincible;
+        public bool IsInvincible() => PlayerSync.IsInvincible;
+
+        public void SetInvincible(bool value)
+        {
+            PlayerSync.IsInvincible = value;
+            Client.EmitLocked("SetInvincible", value);
+        }
     }
 }

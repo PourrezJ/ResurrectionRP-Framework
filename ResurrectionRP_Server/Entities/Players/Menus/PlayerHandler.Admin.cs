@@ -339,7 +339,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #endregion
 
             #region Revive
-            var resuitem = new MenuItem("Réanimmer le joueur", "", "", true);
+            var resuitem = new MenuItem("Réanimer le joueur", "", "", true);
             resuitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 await _playerSelected.Client.Revive();

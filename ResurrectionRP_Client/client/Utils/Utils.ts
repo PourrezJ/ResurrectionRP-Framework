@@ -33,7 +33,7 @@ export function initialize() {
     alt.onServer('SetPlayerIntoVehicle', (vehicle, seat) => {
         alt.setTimeout(() => {
             game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle.scriptID, seat);
-        }, 20);
+        }, 50);
     });
 
     alt.onServer('SetPlayerOutOfVehicle', (force: boolean) => {

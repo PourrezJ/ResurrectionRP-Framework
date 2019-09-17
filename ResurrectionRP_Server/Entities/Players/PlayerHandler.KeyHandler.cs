@@ -164,7 +164,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.U:
-                    await vh?.LockUnlock(client);
+                    if (vh != null)
+                        await vh.LockUnlock(client);
+
                     break;
                     
                 case ConsoleKey.M:

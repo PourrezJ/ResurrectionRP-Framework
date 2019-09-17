@@ -1,10 +1,7 @@
-﻿using AltV.Net;
-using AltV.Net.Async;
-using AltV.Net.Elements.Entities;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using ResurrectionRP_Server.Entities.Vehicles;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
 using VehicleInfoLoader.Data;
@@ -59,7 +56,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
 
             if (manifest != null)
             {
-                place.VehicleHandler = await Entities.Vehicles.VehiclesManager.SpawnVehicle("", (uint)place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot, color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
+                place.VehicleHandler = await VehiclesManager.SpawnVehicle("", (uint)place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot, color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
 
                 if (place.VehicleHandler == null)
                     return;

@@ -111,7 +111,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (Dimension.ToString() == "-1")
                 Dimension = short.MaxValue;
 
-            await AltAsync.Do(() =>
+            await AltAsync.Do(async () =>
             {
                 try
                 {
@@ -158,9 +158,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 for (byte i = 0; i < Vehicle.WheelsCount; i++)
                 {
-                    Vehicle.SetWheelBurst(i, Wheels[i].Burst);
-                    Vehicle.SetWheelHealth(i, Wheels[i].Health);
-                    Vehicle.SetWheelHasTire(i, Wheels[i].HasTire);
+                    // TODO : Wheels == null when spawned vehicle
+                    // Vehicle.SetWheelBurst(i, Wheels[i].Burst);
+                    // Vehicle.SetWheelHealth(i, Wheels[i].Health);
+                    // Vehicle.SetWheelHasTire(i, Wheels[i].HasTire);
                 }
 
                 for(byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
@@ -184,7 +185,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (location != null)
                     Location = location;
 
-
                 Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
                 Vehicle.EngineOn = Engine;
                 Vehicle.Position = Location.Pos;
@@ -194,16 +194,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 if (Vehicle.GetVehicleHandler()?.FuelConsumption == 0)
                     Vehicle.GetVehicleHandler().FuelConsumption = 5.5f;
+
+                if (HaveTowVehicle())
+                {
+                    IVehicle _vehtowed = VehiclesManager.GetVehicleWithPlate(TowTruck.VehPlate);
+
+                    if (_vehtowed != null)
+                        await TowVehicle(_vehtowed);
+                }
             });
             
-            if (HaveTowVehicle())
-            {
-                IVehicle _vehtowed = VehiclesManager.GetVehicleWithPlate(TowTruck.VehPlate);
-
-                if (_vehtowed != null)
-                    await TowVehicle(_vehtowed);
-            }
-
             return Vehicle;
         }
 
@@ -250,6 +250,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 return true;
             }
+
             return false;
         }
         

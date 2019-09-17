@@ -3,6 +3,7 @@ using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Enums;
 using ResurrectionRP_Server.Entities;
+using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils;
@@ -47,7 +48,7 @@ namespace ResurrectionRP_Server.DrivingSchool
         #region Private methods
         private async Task BeginDrivingExamen(IPlayer client)
         {
-            var veh = await Entities.Vehicles.VehiclesManager.SpawnVehicle(client.GetSocialClub(), (uint)_vehicleModel, _spawnVeh.Pos, _spawnVeh.Rot, plate: "School", spawnVeh: true, locked: false);
+            var veh = await VehiclesManager.SpawnVehicle(client.GetSocialClub(), (uint)_vehicleModel, _spawnVeh.Pos, _spawnVeh.Rot, plate: "School", spawnVeh: true, locked: false);
             Exam Examitem = new Exam(client, veh, _circuit, this.Id);
             //Examitem.endExam = End();
             _clientsInExamen.GetOrAdd(client.GetSocialClub(), Examitem);

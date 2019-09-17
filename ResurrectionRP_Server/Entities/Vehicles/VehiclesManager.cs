@@ -38,19 +38,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (args[0] == null)
                 return Task.CompletedTask;
 
-            var veh = (IVehicle)args[0];
-
-            if (!veh.Exists)
-                return Task.CompletedTask;
-
+            VehicleHandler vh = GetVehicleHandler((IVehicle)args[0]);
             float fuel = float.Parse(args[1].ToString());
             float mile = float.Parse(args[2].ToString());
-            VehicleHandler veh = GetVehicleHandler(vehicle);
 
-            if (veh != null)
+            if (vh != null)
             {
-                veh.Milage = mile;
-                veh.SetFuel(fuel);
+                vh.Milage = mile;
+                vh.SetFuel(fuel);
             }
 
             return Task.CompletedTask;
@@ -61,10 +56,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             PlayerHandler ph = player.GetPlayerHandler();
             VehicleHandler vh = vehicle.GetVehicleHandler();
 
-            if (ph != null)
+            if (ph != null && vh != null)
             {
                 ph.Update();
-                player.EmitLocked("OnPlayerEnterVehicle", vehicle.Id, Convert.ToInt32(seat), vh.Fuel, vh.FuelMax, vh.Milage , vh.FuelConsumption);
+                player.EmitLocked("OnPlayerEnterVehicle", vehicle, Convert.ToInt32(seat), vh.Fuel, vh.FuelMax, vh.Milage , vh.FuelConsumption);
             }
 
             return Task.CompletedTask;
@@ -103,11 +98,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         private static Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
-            if (!player.Exists)
-                return;
-
-            if (!vehicle.Exists)
-                return;
+            if (!player.Exists || !vehicle.Exists)
+                return Task.CompletedTask;
 
             VehicleHandler vh = vehicle.GetVehicleHandler();
             PlayerHandler ph = player.GetPlayerHandler();
@@ -118,16 +110,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (ph != null)
             {
                 ph.Update();
-
-                try
-                {
-                    player.EmitLocked("OnPlayerLeaveVehicle", vehicle);
-                }
-                catch
-                {
-                    player.EmitLocked("HideSpeedometer");
-                }
-               
+                player.EmitLocked("OnPlayerLeaveVehicle", vehicle);
             }
 
             return Task.CompletedTask;
@@ -137,7 +120,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Database
         public static async Task LoadAllVehicles()
         {
-            Alt.Server.LogInfo("--- Start loading all vehicle in database ---");
+            Alt.Server.LogInfo("--- Start loading all vehicles in database ---");
             List<VehicleHandler> vehicles = await Database.MongoDB.GetCollectionSafe<VehicleHandler>("vehicles").AsQueryable().ToListAsync();
 
             if (GameMode.Instance.AutoPound)
@@ -158,9 +141,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 }
             }
 
-            Alt.Server.LogInfo($"--- Finish loading all vehicle in database: {_vehicleHandlers.Count} ---");
+            Alt.Server.LogInfo($"--- Finish loading all vehicles in database: {_vehicleHandlers.Count} ---");
         }
-
         #endregion
 
         #region Methods
@@ -172,6 +154,7 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
                 return null;
 
             VehicleHandler veh = new VehicleHandler(socialClubName, model, position, rotation, (byte)primaryColor, (byte)secondaryColor, fuel, fuelMax, plate, engineStatus, locked, client, mods, neon, spawnVeh, (short)dimension, inventory, freeze, dirt, health);
+            _vehicleHandlers.TryAdd(veh.Plate, veh);
             await veh.SpawnVehicle(new Models.Location(position, rotation));
             return veh;
         }

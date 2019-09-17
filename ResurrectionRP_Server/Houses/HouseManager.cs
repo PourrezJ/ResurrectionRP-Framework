@@ -81,7 +81,7 @@ namespace ResurrectionRP_Server.Houses
         #region Events        
         public async Task LoadAllHouses()
         {
-            Alt.Server.LogInfo($"Loadings houses ...");
+            Alt.Server.LogInfo($"Loading houses ...");
             
             var housesList = await Database.MongoDB.GetCollectionSafe<House>("houses").AsQueryable().ToListAsync();
             

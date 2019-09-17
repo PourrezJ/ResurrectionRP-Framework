@@ -177,7 +177,7 @@ namespace ResurrectionRP_Server.Services
                 {
                     VehicleHandler veh = menuItem.GetData("Vehicle");
                     await veh.SpawnVehicle(PoundSpawn);
-                    await veh.InsertVehicle();
+                    veh.Update();
                     PoundVehicleList.Remove(PoundVehicleList.Find(v => v.Plate == veh.Plate));
                     await GameMode.Instance.Save();
                     client.SendNotificationPicture(Utils.Enums.CharPicture.DIA_GARDENER,"Fourrière", "","~g~Votre véhicule vous attend sur le parking." );

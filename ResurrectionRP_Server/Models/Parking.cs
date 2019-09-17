@@ -212,7 +212,11 @@ namespace ResurrectionRP_Server.Models
                 //     await client.PutIntoVehicleAsync(veh.Vehicle, -1);
 
                 RemoveVehicle(veh); // retrait du véhicule dans la liste
-                await OnVehicleOut?.Invoke(client, veh, Spawn); // callback (ex carpark)
+                veh.Update();
+
+                if (OnVehicleOut != null)
+                    await OnVehicleOut.Invoke(client, veh, Spawn); // callback (ex carpark)
+
                 await MenuManager.CloseMenu(client);
             }
             catch (Exception ex)
@@ -387,7 +391,9 @@ namespace ResurrectionRP_Server.Models
 
                     lock (ListVehicleStored)
                     {
-                        ListVehicleStored.Add(new ParkedCar(veh.Plate, DateTime.Now)); // Store vehicle into a list
+                        if (ListVehicleStored.Find(p => p.Plate == veh.Plate) == null)
+                            ListVehicleStored.Add(new ParkedCar(veh.Plate, DateTime.Now));
+
                         veh.IsParked = true;
                     }
 

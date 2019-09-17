@@ -109,7 +109,7 @@ namespace ResurrectionRP_Server.Factions
                 await vehicle.SetPrimaryColorAsync(veh.PrimaryColor);
                 await vehicle.SetSecondaryColorAsync(veh.SecondaryColor);
 
-                veh.Door[(byte)DoorID.DoorHood] = (byte)DoorState.DoorClosed;
+                veh.Doors[(byte)DoorID.DoorHood] = (byte)DoorState.DoorClosed;
                 veh.Update();
             }
         }
@@ -377,10 +377,17 @@ namespace ResurrectionRP_Server.Factions
                         {
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~g~Terminé~w~.", "Elle est niquel!");
                             await _vh.Vehicle.RepairAsync();
-                            _vh.BodyHealth = (uint)1000;
-                            _vh.Door = new VehicleDoorState[6] { 0, 0, 0, 0, 0, 0 };
-                            _vh.Window = new WindowState[6] { 0, 0, 0, 0, 0, 0 };
-                            _vh.Wheel = new WheelsStruct();
+                            _vh.BodyHealth = 1000;
+                            _vh.Doors = new VehicleDoorState[Globals.NB_VEHICLE_DOORS] { 0, 0, 0, 0, 0, 0 };
+                            _vh.Windows = new WindowState[4] { 0, 0, 0, 0 };
+
+                            foreach (Wheel wheel in _vh.Wheels)
+                            {
+                                wheel.Health = 1000;
+                                wheel.Burst = false;
+                                wheel.HasTire = true;
+                            }
+
                             _vh.Update();
                         });
 

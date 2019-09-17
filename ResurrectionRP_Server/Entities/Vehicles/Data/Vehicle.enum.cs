@@ -57,16 +57,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         WheelOnRim,
     }
 
-    public class WheelStruct
+    public class Wheel
     {
         public float Health;
         public bool Burst;
-    }
-    public class WheelsStruct
-    {
-        public WheelStruct[] Wheels;
-        public byte Type = 255;
-        public byte Variation = 0;
+        public bool HasTire;
     }
 }
 

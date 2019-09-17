@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles.Data;
 using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Utils;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -133,7 +134,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.PrimaryColor = PrimaryColor;
                 Vehicle.SecondaryColor = SecondaryColor;
 
-
                 if (Mods.Count > 0)
                 {
                     foreach (KeyValuePair<int, int> mod in Mods)
@@ -156,19 +156,19 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.RadioStation = RadioID;
                 IsParked = false;
 
-                for (byte i = 0; i < await Vehicle.GetWheelsCountAsync(); i++)
+                for (byte i = 0; i < Vehicle.WheelsCount; i++)
                 {
-                    // Vehicle.SetWheelBurst(i, Wheel.Wheels[i].Burst );
-                    // Vehicle.SetWheelHealth(i, Wheel.Wheels[i].Health);
+                    Vehicle.SetWheelBurst(i, Wheels[i].Burst);
+                    Vehicle.SetWheelHealth(i, Wheels[i].Health);
+                    Vehicle.SetWheelHasTire(i, Wheels[i].HasTire);
                 }
 
-                for(byte i = 0; i < (byte)VehicleDoor.Trunk; i++)
-                    await Vehicle.SetDoorStateAsync(i,(byte) Door[i]);
+                for(byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
+                    await Vehicle.SetDoorStateAsync(i,(byte) Doors[i]);
 
                 await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
                 await Vehicle.SetEngineOnAsync(Engine);
                 await Vehicle.SetPositionAsync( Vehicle.Position.X, Vehicle.Position.Y, Vehicle.Position.Z );
-
 
                 if (setLastUse)
                     LastUse = DateTime.Now;
@@ -178,6 +178,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
                 GameMode.Instance.VehicleManager.VehicleHandlerList.TryAdd(Vehicle, this);
+
                 if (Vehicle.GetVehicleHandler()?.FuelConsumption == 0)
                     Vehicle.GetVehicleHandler().FuelConsumption = 5.5f;
             });
@@ -247,8 +248,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public void SetFuel(float fuel)
         {
             Fuel = fuel;
+
             if(Vehicle.Driver != null)
                 Vehicle.Driver.EmitLocked("UpdateFuel", fuel);
+
             Update();
         }
 
@@ -267,14 +270,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public void UpdateProperties()
         {
-            if (Door == null)
-                Door = new VehicleDoorState[7];
+            if (Doors == null)
+                Doors = new VehicleDoorState[Globals.NB_VEHICLE_DOORS];
 
-            if (Wheel == null)
-                Wheel = new WheelsStruct();
-
-            if (Wheel.Wheels == null)
-                Wheel.Wheels = new WheelStruct[Vehicle.WheelsCount];
+            if (Wheels == null)
+                Wheels = new Wheel[Vehicle.WheelsCount];
 
             try
             {
@@ -287,18 +287,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Tuple<bool, bool, bool, bool> NeonState = new Tuple<bool, bool, bool, bool>(neonActive, neonActive, neonActive, neonActive);
                 NeonsColor = Vehicle.NeonColor;
 
-                for (byte i = 0; i < 5; i++)
-                    Door[i] = (VehicleDoorState)Vehicle.GetDoorState(i);
+                for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
+                    Doors[i] = (VehicleDoorState)Vehicle.GetDoorState(i);
 
                 for (byte i = 0; i < Vehicle.WheelsCount; i++)
                 {
-                    Wheel.Wheels[i] = new WheelStruct();
-                    Wheel.Wheels[i].Health = Vehicle.GetWheelHealth(i);
-                    Wheel.Wheels[i].Burst = Vehicle.IsWheelBurst(i);
+                    Wheels[i] = new Wheel();
+                    Wheels[i].Health = Vehicle.GetWheelHealth(i);
+                    Wheels[i].Burst = Vehicle.IsWheelBurst(i);
                 }
-
-                Wheel.Type = Vehicle.WheelType;
-                Wheel.Variation = Vehicle.WheelVariation;
 
                 Location.Pos = Vehicle.Position;
                 Location.Rot = Vehicle.Rotation;

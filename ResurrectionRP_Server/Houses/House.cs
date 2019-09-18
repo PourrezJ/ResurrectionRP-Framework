@@ -195,10 +195,9 @@ namespace ResurrectionRP_Server.Houses
 
         public void SetOwnerHandle(IPlayer player)
         {
-            OwnerHandle = player;
-            /*
+            OwnerHandle = player;   
             if (player != null)
-                await player.CreateBlip(411, Position, Name, 1, 69, 255, 1, true);*/
+                player.CreateBlip(411, Position, Name, 1, 69, 255, true);
         }
 
         public async Task SetName(string new_name)

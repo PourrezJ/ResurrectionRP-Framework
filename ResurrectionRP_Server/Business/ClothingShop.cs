@@ -511,7 +511,7 @@ namespace ResurrectionRP_Server.Business
 
             var componentID = menu.GetData("componentID");
 
-            ClothManifest? clothdata = await ClothingLoader.FindCloths(client, componentID);
+            ClothManifest? clothdata = ClothingLoader.FindCloths(client, componentID);
 
             // compoList c'est l'int array correspondant aux items d'un certains type (short, pants ... ) disponible en boutique.
             foreach (int drawable in compoList)

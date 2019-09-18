@@ -24,3 +24,4 @@ function loadPhoneSettings(settings) {
 
 app.filter("moment", () => (val, format) => moment(val).format(format));
 app.filter("momentFromNow", () => val => moment(val).fromNow());
+alt.on("loadPhoneSettings", loadPhoneSettings);

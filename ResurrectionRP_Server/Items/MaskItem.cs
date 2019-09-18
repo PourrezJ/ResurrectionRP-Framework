@@ -1,11 +1,10 @@
-﻿using AltV.Net;
-using AltV.Net.Elements.Entities;
+﻿using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Models;
 using System.Threading.Tasks;
-using Mask = ResurrectionRP_Server.Models.Mask;
 
 namespace ResurrectionRP_Server.Items
 {
-    class MaskItem : Models.Item
+    class MaskItem : Item
     {
         private bool used = false;
         public Mask Mask = new Mask("",0, 0);
@@ -19,14 +18,15 @@ namespace ResurrectionRP_Server.Items
         {
             if (!used)
             {
-                client.SetCloth(Models.ClothSlot.Mask, Mask.variation, Mask.texture, 0);
+                client.SetCloth(ClothSlot.Mask, Mask.variation, Mask.texture, 0);
                 used = true;
             }
             else
             {
-                client.SetCloth(Models.ClothSlot.Mask, 0, 0, 0);
+                client.SetCloth(ClothSlot.Mask, 0, 0, 0);
                 used = false;
             }
+
             return Task.CompletedTask;
         }
 

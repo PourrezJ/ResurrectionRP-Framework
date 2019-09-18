@@ -1,11 +1,12 @@
 ﻿using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Models;
 using System.Numerics;
 using System.Threading.Tasks;
 using Flags = ResurrectionRP_Server.Utils.Enums.AnimationFlags;
 
 namespace ResurrectionRP_Server.Items
 {
-    class Alcohol : Models.Item
+    class Alcohol : Item
     {
         public int Timer = 60000;
         public int Drink;

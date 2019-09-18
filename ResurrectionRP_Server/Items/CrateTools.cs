@@ -1,10 +1,10 @@
 ﻿using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Models;
 using System.Threading.Tasks;
-using Flags = ResurrectionRP_Server.Utils.Enums.AnimationFlags;
 
 namespace ResurrectionRP_Server.Items
 {
-    class CrateTools : Models.Item
+    class CrateTools : Item
     {
         public CrateTools(Models.InventoryData.ItemID id, string name, string description, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, int itemPrice = 0, bool isDockable = false, string type = "crateTool", string icon = "unknown-item", string classes = "basic") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
         {

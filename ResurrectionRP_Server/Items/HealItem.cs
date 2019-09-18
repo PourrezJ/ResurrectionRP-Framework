@@ -1,9 +1,10 @@
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Models;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Items
 {
-    public class HealItem : Models.Item
+    public class HealItem : Item
     {
         public int Life;
 
@@ -23,6 +24,7 @@ namespace ResurrectionRP_Server.Items
                 client.GetPlayerHandler()?.BagInventory?.Delete(slot, 1);
             if (Life > 0)
                 client.SendNotification("Vous vous êtes appliqué un bandage");
+
             return Task.CompletedTask;
         }
     }

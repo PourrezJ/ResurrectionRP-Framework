@@ -1,10 +1,10 @@
 ﻿using AltV.Net.Elements.Entities;
-using System.Numerics;
+using ResurrectionRP_Server.Models;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Items
 {
-    class BuildingItem : Models.Item
+    class BuildingItem : Item
     {
         public int Hash = 0;
 
@@ -26,6 +26,7 @@ namespace ResurrectionRP_Server.Items
                 //await BuildingManager.CreateBuilding(Client, Hash, new Location(Vector3Extensions.Backward(new Vector3(Client.Position.X, Client.Position.Y, Client.Position.Z - 1f), Client.Rotation.Z, 3f), Client.Rotation), id);
                 //PlayerManager.GetPlayerByClient(Client)?.PocketInventory?.Delete(slot);
             }
+
             return Task.CompletedTask;
         }
     }

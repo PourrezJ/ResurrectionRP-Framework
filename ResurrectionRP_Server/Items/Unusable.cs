@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Models;
 using System.Threading.Tasks;
-using AltV.Net.Elements.Entities;
 
 namespace ResurrectionRP_Server.Items
 {
-    public class Unusable : Models.Item
+    public class Unusable : Item
     {
         public Unusable(Models.InventoryData.ItemID id, string name, string description, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, int itemPrice = 0, string type = "item", string icon = "unknown-item", string classes = "basic") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
         {

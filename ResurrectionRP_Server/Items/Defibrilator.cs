@@ -1,6 +1,8 @@
-﻿namespace ResurrectionRP_Server.Items
+﻿using ResurrectionRP_Server.Models;
+
+namespace ResurrectionRP_Server.Items
 {
-    public class Defibrilator : Models.Item
+    public class Defibrilator : Item
     {
         public int Usage;
 

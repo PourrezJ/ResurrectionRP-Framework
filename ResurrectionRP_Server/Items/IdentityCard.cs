@@ -1,10 +1,11 @@
 ﻿using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Items
 {
-    class IdentityCard : Models.Item
+    class IdentityCard : Item
     {
         // A MEDITER POUR FAIRE DES FAUX PAPIERS ...
 
@@ -14,7 +15,7 @@ namespace ResurrectionRP_Server.Items
 
         public override Task Use(IPlayer client, string inventoryType, int slot)
         {
-            Models.Identite identite = client.GetPlayerHandler().Identite;
+            Identite identite = client.GetPlayerHandler().Identite;
 
             List<Entities.Players.PlayerHandler> players = client.GetPlayersHandlerInRange(5f);
             foreach (Entities.Players.PlayerHandler player in players)
@@ -26,6 +27,7 @@ namespace ResurrectionRP_Server.Items
 
                 player.Client.SendNotification("Carte d'identité\n" + paper);
             }
+
             return Task.CompletedTask;
         }
     }

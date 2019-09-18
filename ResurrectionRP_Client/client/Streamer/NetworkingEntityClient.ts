@@ -352,6 +352,7 @@ export class NetworkingEntityClient {
     private OnKeyPressed = (key: number) => {
         if (game.isPauseMenuActive() || PhoneManager.IsPhoneOpen() || chat.isOpened())
             return;
+
         if (key != 69 && key != 87)
             return;
 
@@ -365,15 +366,15 @@ export class NetworkingEntityClient {
         )
 
         let resultPed = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, 4);
+
         if (!resultPed.isHit)
             return;
-        if (key == 69) // E
-        {
-            alt.emitServer("Ped_Interact", this.getPedId(resultPed.hitEntity));
+
+        if (key == 69) { // E
+            alt.emitServer('Ped_Interact', this.getPedId(resultPed.hitEntity));
         }
-        if (key == 87) // W
-        {
-            alt.emitServer("Ped_SecondaryInteract", this.getPedId(resultPed.hitEntity));
+        else if (key == 87) { // W
+            alt.emitServer('Ped_SecondaryInteract', this.getPedId(resultPed.hitEntity));
         }
     }
 
@@ -396,7 +397,6 @@ export class NetworkingEntityClient {
 }
 
 let networkingEntityClient = null;
-
 
 export function getStreamedInEntities() {
     return networkingEntityClient.streamedInEntities;

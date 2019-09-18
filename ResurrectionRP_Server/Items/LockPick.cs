@@ -1,12 +1,13 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using AltV.Net;
+﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Models;
 using Flags = ResurrectionRP_Server.Utils.Enums.AnimationFlags;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Items
 {
-    public class LockPick : Models.Item
+    public class LockPick : Item
     {
         public LockPick(Models.InventoryData.ItemID id, string name, string description, double weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, double itemPrice = 0, string type = "item", string icon = "unknown-item", string classes = "basic") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
         {

@@ -1,13 +1,11 @@
-﻿using AltV.Net;
-using AltV.Net.Elements.Entities;
+﻿using AltV.Net.Elements.Entities;
 using AltV.Net.Async;
-using System.Numerics;
+using ResurrectionRP_Server.Models;
 using System.Threading.Tasks;
-using Flags = ResurrectionRP_Server.Utils.Enums.AnimationFlags;
 
 namespace ResurrectionRP_Server.Items
 {
-    class Axe : Models.Item
+    class Axe : Item
     {
         public Axe(Models.InventoryData.ItemID id, string name, string description, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, int itemPrice = 0, string type = "axe", string icon = "unknown-item", string classes = "basic") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
         {

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ResurrectionRP_Server.Models;
 
 namespace ResurrectionRP_Server.Items
 {
-    class SeedItem : Models.Item
+    class SeedItem : Item
     {
         public Illegal.WeedLab.SeedType SeedType;
 

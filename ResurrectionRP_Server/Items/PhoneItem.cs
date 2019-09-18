@@ -1,11 +1,12 @@
 ﻿using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
+using ResurrectionRP_Server.Models;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Items
 {
     [BsonIgnoreExtraElements]
-    class PhoneItem : Models.Item
+    class PhoneItem : Item
     {
         public Phone.Phone PhoneHandler;
 

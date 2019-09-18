@@ -1,12 +1,11 @@
-﻿
-using System.Threading.Tasks;
-using AltV.Net.Elements.Entities;
+﻿using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Models;
 using RadLib = ResurrectionRP_Server.Radio;
-using MongoDB.Bson.Serialization;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Items
 {
-    public class RadioItem : Models.Item
+    public class RadioItem : Item
     {
         private RadLib.Radio _radio = null;
         public RadLib.Radio Radio

@@ -21,11 +21,15 @@ export default class PhoneManager {
             game.freezePedCameraRotation(alt.Player.local.scriptID);
 
             if (incomingCall)
-                this.browser = new alt.WebView('http://resource/client/cef/phone/oncall.html?incomingCall=true&number=' + contactNumber + '&name=' + contactName);
+                this.browser = new alt.WebView(`http://resource/client/cef/phone/oncall.html?incomingCall=true&number=${contactNumber}&name=${contactName}`);
             else
-                this.browser = new alt.WebView('http://resource/client/cef/phone/home.html?newMessages=' + idk0 + '?phoneSettings=' + idk1);
+                this.browser = new alt.WebView(`http://resource/client/cef/phone/home.html?newMessages=${idk0}&phoneSettings=${idk1}`);
 
             alt.showCursor(true);
+
+            alt.setTimeout(() => {
+                if (this.browser != null) this.browser.emit('loadPhoneSettings', idk1);
+            }, 1000);
 
             this.browser.focus();
 

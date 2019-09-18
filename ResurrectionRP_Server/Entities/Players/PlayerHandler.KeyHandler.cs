@@ -130,7 +130,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    if (vh != null)
+                    if (vh != null && !client.IsInVehicle)
                     {
                         await vh.OpenXtremMenu(client);
                         return;

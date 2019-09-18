@@ -1,8 +1,6 @@
 ﻿using AltV.Net;
-using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.EventHandlers;
@@ -21,7 +19,7 @@ namespace ResurrectionRP_Server.Business
 {
     public class ClothingStore : Business
     {
-        #region Variables
+        #region Fields
         public Vector3 ClothingPos;
 
         [BsonIgnore]
@@ -60,7 +58,7 @@ namespace ResurrectionRP_Server.Business
         public int[] GirlHats;
         #endregion
 
-        #region Ctor
+        #region Constructor
         public ClothingStore(string businnessName, Location location, uint blipSprite, int inventoryMax, Vector3 clothingPos, PedModel pedhash = 0, string owner = null, int bannerStyle = 0) : base(businnessName, location, blipSprite, inventoryMax, pedhash, owner)
         {
             ClothingPos = clothingPos;
@@ -92,34 +90,17 @@ namespace ResurrectionRP_Server.Business
             await base.Init();
 
             _clothingColShape = Alt.CreateColShapeCylinder(ClothingPos - new Vector3(0, 0, 1), 4f, 3f);
-            _clothingColShape.SetData("ClothingID", _id);
             Marker.CreateMarker(MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 4f), new Vector3(0, 0, 3f), Color.FromArgb(80, 255, 255, 255));
             Entities.Blips.BlipsManager.SetColor(Blip, 25);
 
-            Events.OnPlayerInteractClothingShop += ClothingID_Open;
-
             _clothingColShape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
             _clothingColShape.SetOnPlayerLeaveColShape(OnPlayerLeaveColShape);
-        }
-
-        private async Task ClothingID_Open(BsonObjectId ID, IPlayer client)
-        {
-            if (!client.Exists)
-                return;
-
-            if (ID == null)
-                return;
-
-            if (ID.ToString() != _id.ToString())
-                return;
-
-            await OpenClothingMenu(client);
+            _clothingColShape.SetOnPlayerInteractInColShape(OnPlayerInteractInColShape);
         }
 
         public Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
-            if (colShape == _clothingColShape)
-                client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
+            client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
             return Task.CompletedTask;
         }
 
@@ -127,11 +108,19 @@ namespace ResurrectionRP_Server.Business
         {
             PlayerHandler player = client.GetPlayerHandler();
 
-            if (player == null || colShape != _clothingColShape)
+            if (player == null)
                 return;
 
             if (player.HasOpenMenu())
                 await MenuManager.CloseMenu(client);
+        }
+
+        private async Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
+        {
+            if (!client.Exists)
+                return;
+
+            await OpenClothingMenu(client);
         }
 
         public override Task OpenMenu(IPlayer client, Entities.Peds.Ped npc)
@@ -161,7 +150,7 @@ namespace ResurrectionRP_Server.Business
         private async Task BuyCloth(IPlayer client, byte componentID, int drawable, int variation, double price, string clothName)
         {
             ClothItem item = null;
-            var clothdata = ClothingLoader.FindCloths(client, componentID) ?? null;
+            ClothManifest? clothdata = ClothingLoader.FindCloths(client, componentID) ?? null;
 
             if (clothdata == null)
                 return;
@@ -190,6 +179,7 @@ namespace ResurrectionRP_Server.Business
                     break;
 
                 case 7:
+                    // item = new ClothItem(ItemID., clothdata.Value.DrawablesList[drawable].Variations[(byte)variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "", icon: "");
                     break;
 
                 case 8:
@@ -207,12 +197,15 @@ namespace ResurrectionRP_Server.Business
             if (ph == null)
                 return;
 
-            if (await ph.HasBankMoney(price, $"Achat vêtement {clothName}"))
+            if (ph.BankAccount.Balance >= price)
             {
                 if (await ph.AddItem(item, 1))
                 {
-                    client.SendNotificationSuccess($"Vous avez acheté le vêtement {clothName} pour la somme de ${price}");
-                    ph.Update();
+                    if (await ph.HasBankMoney(price, $"Achat vêtement {clothName}"))
+                    {
+                        client.SendNotificationSuccess($"Vous avez acheté le vêtement {clothName} pour la somme de ${price}");
+                        ph.Update();
+                    }
                 }
                 else
                     client.SendNotificationError("Vous n'avez pas la place pour cette élément.");
@@ -235,7 +228,7 @@ namespace ResurrectionRP_Server.Business
                 return;
             }
 
-            if (await client.GetModelAsync() == (uint)PedModel.FreemodeMale01)
+            if (client.Model == (uint)PedModel.FreemodeMale01)
             {
                 if (MenTops != null && MenTops.Length > 0)
                     menu.Add(new MenuItem("Haut", "", "ID_Haut", true));
@@ -248,8 +241,11 @@ namespace ResurrectionRP_Server.Business
 
                 if (MenFeet != null && MenFeet.Length > 0)
                     menu.Add(new MenuItem("Chaussure", "", "ID_Chaussure", true));
+
+                if (MenAccessories != null && MenAccessories.Length > 0)
+                    menu.Add(new MenuItem("Accessoire", "", "ID_Accessoire", true));
             }
-            else if (await client.GetModelAsync() == (uint)PedModel.FreemodeFemale01)
+            else if (client.Model == (uint)PedModel.FreemodeFemale01)
             {
                 if (GirlTops != null && GirlTops.Length > 0)
                     menu.Add(new MenuItem("Haut", "", "ID_Haut", true));
@@ -259,13 +255,15 @@ namespace ResurrectionRP_Server.Business
 
                 if (GirlLegs != null && GirlLegs.Length > 0)
                     menu.Add(new MenuItem("Pantalon", "", "ID_Pantalon", true));
+
                 if (GirlFeet != null && GirlFeet.Length > 0)
                     menu.Add(new MenuItem("Chaussure", "", "ID_Chaussure", true));
+
+                if (GirlAccessories != null && GirlAccessories.Length > 0)
+                    menu.Add(new MenuItem("Accessoire", "", "ID_Accessoire", true));
             }
             else
-            {
                 client.SendNotificationError("Vous n'êtes pas autorisé à utiliser la boutique de vêtements avec ce skin.");
-            }
 
             await menu.OpenMenu(client);
         }
@@ -289,6 +287,10 @@ namespace ResurrectionRP_Server.Business
                 case "ID_Chaussure":
                     await OpenComponentMenu(client, menu, 6);
                     break;
+
+                case "ID_Accessoire":
+                    await OpenComponentMenuWithoutCat(client, menu, 7, false);
+                    break;
             }
         }
         #endregion
@@ -307,7 +309,7 @@ namespace ResurrectionRP_Server.Business
             menu.ItemSelectCallback = OnTopsCategorieCallBack;
             menu.IndexChangeCallback = null;
 
-            var compoList = (await client.GetModelAsync() == (uint)PedModel.FreemodeMale01) ? MenTops : GirlTops;
+            var compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenTops : GirlTops;
 
             foreach (var compo in compoList)
             {
@@ -342,7 +344,7 @@ namespace ResurrectionRP_Server.Business
             }
 
             menu.ClearItems();
-            var compoList = (await client.GetModelAsync() == (uint)PedModel.FreemodeMale01) ? MenTops : GirlTops;
+            var compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenTops : GirlTops;
             menu.SubTitle = menuItem.Text.ToUpper();
             menu.ItemSelectCallback = OnTopsCallBack;
             menu.IndexChangeCallback = PreviewTopsItem;
@@ -415,7 +417,7 @@ namespace ResurrectionRP_Server.Business
         #region WithCategorie
         public async Task OpenComponentMenu(IPlayer client, Menu menu, byte componentID)
         {
-            var data = ClothingLoader.FindCloths(client, componentID) ?? null;
+            ClothManifest? data = ClothingLoader.FindCloths(client, componentID) ?? null;
 
             if (data == null)
                 return;
@@ -435,11 +437,11 @@ namespace ResurrectionRP_Server.Business
                     break;
 
                 case 3:
-                    compoList = (await client.GetModelAsync() == (uint)PedModel.FreemodeMale01) ? MenGlove : GirlGlove;
+                    compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenGlove : GirlGlove;
                     break;
 
                 case 4:
-                    compoList = (await client.GetModelAsync() == (uint)PedModel.FreemodeMale01) ? MenLegs : GirlLegs;
+                    compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenLegs : GirlLegs;
                     break;
 
                 case 5:
@@ -447,23 +449,21 @@ namespace ResurrectionRP_Server.Business
                     break;
 
                 case 6:
-                    compoList = (await client.GetModelAsync() == (uint)PedModel.FreemodeMale01) ? MenFeet : GirlFeet;
+                    compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenFeet : GirlFeet;
                     break;
 
                 case 11:
                     compoList = MenTops;
                     break;
-
             }
 
             if (compoList == null)
                 return;
 
-            foreach (var compo in compoList)
+            foreach (int compo in compoList)
             {
-                var drawables = data.Value.DrawablesList[compo];
-
-                var price = drawables.Price / 3;
+                ClothDrawable drawables = data.Value.DrawablesList[compo];
+                int price = drawables.Price / 3;
 
                 for (int b = 0; b < drawables.Variations.Count; b++)
                 {
@@ -472,7 +472,7 @@ namespace ResurrectionRP_Server.Business
                         if (drawables.Categorie == null || drawables.Categorie == "NULL")
                             continue;
 
-                        var ui = new MenuItem(drawables.Categorie, executeCallback: true);
+                        MenuItem ui = new MenuItem(drawables.Categorie, executeCallback: true);
                         menu.Add(ui);
                     }
                 }
@@ -499,15 +499,15 @@ namespace ResurrectionRP_Server.Business
             menu.ItemSelectCallback = OnCallBackWithCat;
             menu.IndexChangeCallback = OnCurrentItem;
 
-            var componentID = menu.GetData("componentID");
+            byte componentID = menu.GetData("componentID");
 
             ClothManifest? clothdata = ClothingLoader.FindCloths(client, componentID);
 
             // compoList c'est l'int array correspondant aux items d'un certains type (short, pants ... ) disponible en boutique.
             foreach (int drawable in compoList)
             {
-                if (drawable > 255 || !clothdata.Value.DrawablesList.ContainsKey(drawable))
-                    continue; // RAGEMP super fix! ... 
+                if (!clothdata.Value.DrawablesList.ContainsKey(drawable))
+                    continue; 
 
                 ClothDrawable drawables = clothdata.Value.DrawablesList[drawable]; // recup des données sur ces tenues
                 int price = drawables.Price / 3;
@@ -522,7 +522,7 @@ namespace ResurrectionRP_Server.Business
                     if (variation.Gxt == "NULL" || variation.Gxt == null)
                         continue;
 
-                    var ui = new MenuItem(variation.Gxt, executeCallback: true);
+                    MenuItem ui = new MenuItem(variation.Gxt, executeCallback: true);
                     ui.RightLabel = $"${price}";
                     ui.SetData("drawable", drawable);
                     ui.SetData("variation", pair.Key);
@@ -565,6 +565,7 @@ namespace ResurrectionRP_Server.Business
             {
                 Alt.Server.LogError("OnCurrentItem" + ex);
             }
+
             return Task.CompletedTask;
         }
         #endregion
@@ -572,7 +573,7 @@ namespace ResurrectionRP_Server.Business
         #region WithoutCategorie
         private async Task OpenComponentMenuWithoutCat(IPlayer client, Menu menu, byte componentID, bool backCloseMenu)
         {
-            var data = ClothingLoader.FindCloths(client, componentID) ?? null;
+            ClothManifest? data = ClothingLoader.FindCloths(client, componentID) ?? null;
 
             if (data == null)
                 return;
@@ -591,8 +592,12 @@ namespace ResurrectionRP_Server.Business
                     compoList = Mask;
                     break;
 
+                case 7:
+                    compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenAccessories : GirlAccessories;
+                    break;
+
                 case 8:
-                    compoList = (await client.GetModelAsync() == (uint)PedModel.FreemodeMale01) ? MenUnderShirt : GirlUnderShirt;
+                    compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenUnderShirt : GirlUnderShirt;
                     break;
             }
 
@@ -601,20 +606,20 @@ namespace ResurrectionRP_Server.Business
 
             foreach (int compo in compoList)
             {
-                if (compo > 255 || !data.Value.DrawablesList.ContainsKey(compo))
-                    continue; // RAGEMP super fix! ...
+                if (!data.Value.DrawablesList.ContainsKey(compo))
+                    continue;
 
                 ClothDrawable drawables = data.Value.DrawablesList[compo];
                 int price = drawables.Price;
 
                 foreach (KeyValuePair<int, ClothVariation> pair in drawables.Variations)
                 {
-                    var name = drawables.Variations[pair.Key].Gxt;
+                    string name = drawables.Variations[pair.Key].Gxt;
 
                     if (name == "NULL")
                         continue;
 
-                    var ui = new MenuItem(drawables.Variations[pair.Key].Gxt, executeCallback: true);
+                    MenuItem ui = new MenuItem(drawables.Variations[pair.Key].Gxt, executeCallback: true);
                     ui.RightLabel = $"${price}";
                     ui.SetData("drawable", compo);
                     ui.SetData("variation", pair.Key);

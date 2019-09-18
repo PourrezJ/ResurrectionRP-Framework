@@ -91,6 +91,11 @@ export function initialize() {
         alt.showCursor(state);
     });
 
+    alt.onServer('CreateBlip', (sprite: number, position: alt.Vector3, name: string, scale: number, color: number, alpha: number, shortRange: boolean) =>
+    {
+        createBlip(position, sprite, color, name, alpha, scale, shortRange);
+    });
+
     alt.onServer('ShowNotification', (text) => {
         game.setNotificationTextEntry("STRING");
         game.addTextComponentSubstringPlayerName(text);
@@ -463,4 +468,22 @@ export function loadModelAsync(model) {
             }
         }, 0);
     });
+}
+
+export function createBlip(pos: alt.Vector3, sprite: number, color: number, name: string, alpha: number, scale: number, shortRange: boolean): alt.PointBlip {
+
+    let x: number = pos.x as number;
+    let y: number = pos.y as number;
+    let z: number = pos.z as number;
+
+    const blip = new alt.PointBlip(x, y, z);
+    blip.shortRange = true;
+    blip.sprite = sprite;
+    blip.color = color;
+    blip.name = name;
+    blip.alpha = alpha;
+    blip.scale = scale;
+    blip.shortRange = shortRange;
+
+    return blip;
 }

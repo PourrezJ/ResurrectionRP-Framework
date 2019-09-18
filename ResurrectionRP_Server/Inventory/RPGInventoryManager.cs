@@ -522,19 +522,20 @@ namespace ResurrectionRP_Server.Inventory
 
                 RPGInventoryMenu menu = null;
                 _clientMenus.TryGetValue(client, out menu);
+
                 if (menu != null)
                 {
                     Inventory oldInventory = null;
 
                     switch (oldRPGInv) // OLD Inventory
                     {
-                        case Utils.Enums.InventoryTypes.Pocket:
+                        case InventoryTypes.Pocket:
                             oldInventory = menu.Inventory;
                             break;
-                        case Utils.Enums.InventoryTypes.Bag:
+                        case InventoryTypes.Bag:
                             oldInventory = menu.Bag;
                             break;
-                        case Utils.Enums.InventoryTypes.Distant:
+                        case InventoryTypes.Distant:
                             oldInventory = menu.Distant;
                             break;
                     }
@@ -587,13 +588,13 @@ namespace ResurrectionRP_Server.Inventory
 
                             switch (oldRPGInv) // OLD Inventory
                             {
-                                case Utils.Enums.InventoryTypes.Pocket:
+                                case InventoryTypes.Pocket:
                                     menu.Inventory = oldInventory;
                                     break;
-                                case Utils.Enums.InventoryTypes.Bag:
+                                case InventoryTypes.Bag:
                                     menu.Bag = oldInventory;
                                     break;
-                                case Utils.Enums.InventoryTypes.Distant:
+                                case InventoryTypes.Distant:
                                     menu.Distant = oldInventory;
                                     break;
                             }
@@ -603,6 +604,7 @@ namespace ResurrectionRP_Server.Inventory
                             if (stack.Item.id == ItemID.Bag && targetRPGInv != Utils.Enums.InventoryTypes.Outfit)
                             {
                                 var backpack = item as Items.BagItem;
+
                                 if (!backpack.InventoryBag.IsEmpty())
                                 {
                                     await menu.CloseMenu(client);
@@ -613,7 +615,7 @@ namespace ResurrectionRP_Server.Inventory
 
                             switch (targetRPGInv) // NEW Inventory
                             {
-                                case Utils.Enums.InventoryTypes.Pocket:
+                                case InventoryTypes.Pocket:
                                     if (!menu.Inventory.IsFull(stack.Quantity * stack.Item.weight)) // vérification si y'a de la place
                                     {
                                         if (menu.Inventory.InventoryList[slotID] != null)
@@ -636,7 +638,7 @@ namespace ResurrectionRP_Server.Inventory
 
                                     break;
 
-                                case Utils.Enums.InventoryTypes.Bag:
+                                case InventoryTypes.Bag:
                                     if (!menu.Bag.IsFull(stack.Quantity * stack.Item.weight)) // vérification si y'a de la place
                                     {
                                         if (stack.Item.id == ItemID.Bag)
@@ -922,7 +924,6 @@ namespace ResurrectionRP_Server.Inventory
                                 player.Clothing.UpdatePlayerClothing();
                             }
                             #endregion
-
                         }
                     }
 

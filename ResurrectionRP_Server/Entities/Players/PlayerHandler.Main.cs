@@ -180,7 +180,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     PocketInventory.AddItem(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.JambonBeurre), 1);
                     PocketInventory.AddItem(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.Eau), 1);
 
-                    OutfitInventory.Slots[11] = new ItemStack(new ClothItem(Models.InventoryData.ItemID.Shoes, "Chaussure", "", new ClothData((Character.Gender == 0) ? (byte)1 : (byte)3, 0, 0), 0, true, false, false, true, false, 0, classes: "shoes", icon: "shoes"), 1, 11);
+                    OutfitInventory.Slots[11] = new ItemStack(new ClothItem(Models.InventoryData.ItemID.Shoes, "Chaussure", "", new ClothData((Character.Gender == 0) ? 1 : 3, 0, 0), 0, true, false, false, true, false, 0, classes: "shoes", icon: "shoes"), 1, 11);
                     OutfitInventory.Slots[9] = new ItemStack(new ClothItem(Models.InventoryData.ItemID.Pant, "Pantalon", "", new ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "pants", icon: "pants"), 1, 9);
                     OutfitInventory.Slots[5] = new ItemStack(new ClothItem(Models.InventoryData.ItemID.Jacket, "Resurrection", "", new ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "jacket", icon: "jacket"), 1, 9);
                     //OutfitInventory.Slots[13] = new ItemStack(new BagItem(ItemID.Bag, "Backpack", "", new ClothData(1, 0, 0), new Inventory(25, 20, InventoryType.Bag),0, true, false, false, true, false, 0, classes: "backpack", icon: "backpack"), 1, 9);
@@ -381,7 +381,7 @@ namespace ResurrectionRP_Server.Entities.Players
                                 else
                                     torso = Loader.ClothingLoader.ClothingsFemaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
 
-                                Clothing.Torso = new ClothData((byte)torso, 0, 0);
+                                Clothing.Torso = new ClothData(torso, 0, 0);
                             }
                             else
                             {

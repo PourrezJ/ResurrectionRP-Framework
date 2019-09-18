@@ -36,7 +36,7 @@ namespace ResurrectionRP_Server.Loader
         public int[] UnderShirt;
 
         [JsonProperty("Variations")]
-        public IDictionary<byte, ClothVariation> Variations;
+        public IDictionary<int, ClothVariation> Variations;
     }
 
     public struct ClothVariation

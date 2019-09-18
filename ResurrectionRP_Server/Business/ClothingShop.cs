@@ -160,7 +160,7 @@ namespace ResurrectionRP_Server.Business
         #region Private methods
         private async Task BuyCloth(IPlayer client, byte componentID, int drawable, int variation, double price, string clothName)
         {
-            Item item = null;
+            ClothItem item = null;
             var clothdata = ClothingLoader.FindCloths(client, componentID) ?? null;
 
             if (clothdata == null)
@@ -169,7 +169,7 @@ namespace ResurrectionRP_Server.Business
             switch (componentID)
             {
                 case 1:
-                    item = new ClothItem(ItemID.Mask, clothdata.Value.DrawablesList[drawable].Variations[(byte)variation].Gxt, "", new ClothData((byte)drawable, (byte)variation, 0), 0, true, false, false, true, false, 0, classes: "mask", icon: "mask");
+                    item = new ClothItem(ItemID.Mask, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "mask", icon: "mask");
                     break;
 
                 case 2:
@@ -179,24 +179,29 @@ namespace ResurrectionRP_Server.Business
                     break;
 
                 case 4:
-                    item = new ClothItem(ItemID.Pant, clothdata.Value.DrawablesList[drawable].Variations[(byte)variation].Gxt, "", new ClothData((byte)drawable, (byte)variation, 0), 0, true, false, false, true, false, 0, classes: "pants", icon: "pants");
+                    item = new ClothItem(ItemID.Pant, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "pants", icon: "pants");
                     break;
 
                 case 5:
                     break;
 
                 case 6:
-                    item = new ClothItem(ItemID.Shoes, clothdata.Value.DrawablesList[drawable].Variations[(byte)variation].Gxt, "", new ClothData((byte)drawable, (byte)variation, 0), 0, true, false, false, true, false, 0, classes: "shoes", icon: "shoes");
+                    item = new ClothItem(ItemID.Shoes, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "shoes", icon: "shoes");
                     break;
 
                 case 7:
                     break;
 
                 case 8:
-                    item = new ClothItem(ItemID.TShirt, clothdata.Value.DrawablesList[drawable].Variations[(byte)variation].Gxt, "", new ClothData((byte)drawable, (byte)variation, 0), 0, true, false, false, true, false, 0, classes: "shirt", icon: "shirt");
+                    item = new ClothItem(ItemID.TShirt, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "shirt", icon: "shirt");
                     break;
             }
 
+            await BuyCloth(client, item, price, clothName);
+        }
+
+        private async Task BuyCloth(IPlayer client, ClothItem item, double price, string clothName)
+        {
             var ph = client.GetPlayerHandler();
 
             if (ph == null)
@@ -359,7 +364,7 @@ namespace ResurrectionRP_Server.Business
 
                 for (int b = 0; b < drawables.Variations.Count; b++)
                 {
-                    var variation = drawables.Variations[(byte)b];
+                    var variation = drawables.Variations[b];
 
                     if (variation.Gxt == "NULL")
                         continue;
@@ -402,23 +407,8 @@ namespace ResurrectionRP_Server.Business
             int variation = menuItem.GetData("variation");
             double price = menuItem.GetData("price");
 
-            var ph = client.GetPlayerHandler();
-
-            if (ph == null)
-                return;
-
-            if (await ph.HasBankMoney(price, $"Achat vêtement {menuItem.Text}"))
-            {
-                if (await ph.AddItem(new ClothItem(ItemID.Jacket, menuItem.Text, "", new ClothData((byte)drawable, (byte)variation, 0), 0.2, true, false, false, true, false, classes: "jacket", icon: "jacket"), 1))
-                {
-                    client.SendNotificationSuccess($"Vous avez acheté le vêtement {menuItem.Text} pour la somme de ${price}");
-                    ph.Update();
-                }
-                else
-                    client.SendNotificationError("Vous n'avez pas la place pour cette élément.");
-            }
-            else
-                client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque.");
+            ClothItem item = new ClothItem(ItemID.Jacket, menuItem.Text, "", new ClothData(drawable, variation, 0), 0.2, true, false, false, true, false, classes: "jacket", icon: "jacket");
+            await BuyCloth(client, item, price, menuItem.Text);
         }
         #endregion
 
@@ -525,7 +515,7 @@ namespace ResurrectionRP_Server.Business
                 if (drawables.Categorie != menuItem.Text)
                     continue;
 
-                foreach (KeyValuePair<byte, ClothVariation> pair in drawables.Variations)
+                foreach (KeyValuePair<int, ClothVariation> pair in drawables.Variations)
                 {
                     ClothVariation variation = pair.Value;
 
@@ -617,7 +607,7 @@ namespace ResurrectionRP_Server.Business
                 ClothDrawable drawables = data.Value.DrawablesList[compo];
                 int price = drawables.Price;
 
-                foreach (KeyValuePair<byte, ClothVariation> pair in drawables.Variations)
+                foreach (KeyValuePair<int, ClothVariation> pair in drawables.Variations)
                 {
                     var name = drawables.Variations[pair.Key].Gxt;
 

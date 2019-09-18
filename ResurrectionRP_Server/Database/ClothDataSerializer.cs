@@ -39,7 +39,7 @@ namespace ResurrectionRP_Server.Database
             {
                 try
                 {
-                    var clothdata = new ClothData((byte)doc.GetElement("Drawable").Value.ToInt32(), (byte)doc.GetElement("Texture").Value.ToInt32(), (byte)doc.GetElement("Palette").Value.ToInt32());
+                    var clothdata = new ClothData(doc.GetElement("Drawable").Value.ToInt32(), doc.GetElement("Texture").Value.ToInt32(), doc.GetElement("Palette").Value.ToInt32());
                     return clothdata;
                 }
                 catch (Exception ex)

@@ -253,7 +253,7 @@ namespace ResurrectionRP_Server.Business
                 Loader.ClothDrawable drawables = data.Value.DrawablesList[compo];
                 int price = drawables.Price;
 
-                foreach (KeyValuePair<byte, Loader.ClothVariation> pair in drawables.Variations)
+                foreach (KeyValuePair<int, Loader.ClothVariation> pair in drawables.Variations)
                 {
                     string name = drawables.Variations[pair.Key].Gxt;
 
@@ -297,23 +297,23 @@ namespace ResurrectionRP_Server.Business
             switch (compomentID)
             {
                 case 0:
-                    item = new ClothItem(Models.InventoryData.ItemID.Hats, clothdata.Value.DrawablesList[drawable].Variations[(byte)variation].Gxt, "", new Models.ClothData((byte)drawable, (byte)variation, 0), 0, true, false, false, true, false, 0, classes: "cap", icon: "cap");
+                    item = new ClothItem(Models.InventoryData.ItemID.Hats, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new Models.ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "cap", icon: "cap");
                     break;
 
                 case 1:
-                    item = new ClothItem(Models.InventoryData.ItemID.Glasses, clothdata.Value.DrawablesList[drawable].Variations[(byte)variation].Gxt, "", new Models.ClothData((byte)drawable, (byte)variation, 0), 0, true, false, false, true, false, 0, classes: "glasses", icon: "glasses");
+                    item = new ClothItem(Models.InventoryData.ItemID.Glasses, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new Models.ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "glasses", icon: "glasses");
                     break;
 
                 case 2:
-                    item = new ClothItem(Models.InventoryData.ItemID.Ears, clothdata.Value.DrawablesList[drawable].Variations[(byte)variation].Gxt, "", new Models.ClothData((byte)drawable, (byte)variation, 0), 0, true, false, false, true, false, 0, classes: "earring", icon: "earring");
+                    item = new ClothItem(Models.InventoryData.ItemID.Ears, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new Models.ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "earring", icon: "earring");
                     break;
 
                 case 6:
-                    item = new ClothItem(Models.InventoryData.ItemID.Watch, clothdata.Value.DrawablesList[drawable].Variations[(byte)variation].Gxt, "", new Models.ClothData((byte)drawable, (byte)variation, 0), 0, true, false, false, true, false, 0, classes: "watch", icon: "watch");
+                    item = new ClothItem(Models.InventoryData.ItemID.Watch, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new Models.ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "watch", icon: "watch");
                     break;
 
                 case 7:
-                    item = new ClothItem(Models.InventoryData.ItemID.Bracelet, clothdata.Value.DrawablesList[drawable].Variations[(byte)variation].Gxt, "", new Models.ClothData((byte)drawable, (byte)variation, 0), 0, true, false, false, true, false, 0, classes: "bracelet", icon: "bracelet");
+                    item = new ClothItem(Models.InventoryData.ItemID.Bracelet, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new Models.ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "bracelet", icon: "bracelet");
                     break;
             }
 

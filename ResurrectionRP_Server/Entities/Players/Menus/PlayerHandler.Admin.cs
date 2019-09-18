@@ -121,9 +121,9 @@ namespace ResurrectionRP_Server.Entities.Players
             };
             mainMenu.Add(hungeritem);
             #endregion
-            
+
             #region GodMod
-            var godMod = new MenuItem("God Mode", "", "", true);
+            var godMod = new CheckboxItem("God Mode", "", "", _playerSelected.IsInvincible(), true);
             godMod.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 bool invinsible = !_playerSelected.IsInvincible();

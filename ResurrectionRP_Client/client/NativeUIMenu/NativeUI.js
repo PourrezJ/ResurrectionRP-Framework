@@ -415,7 +415,7 @@ export default class NativeUI {
             this._justOpened = false;
             return;
         }
-        if (game.isControlJustReleased(0, 177)) {
+        if (game.isControlJustReleased(0, 194)) {
             this.GoBack();
         }
         if (this.MenuItems.length === 0)

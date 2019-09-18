@@ -80,6 +80,7 @@ namespace ResurrectionRP_Server.Loader
             if (maskFile != null)
             {
                 var cloths = Get(maskFile);
+
                 if (cloths == null)
                     return Task.CompletedTask;
 
@@ -95,6 +96,7 @@ namespace ResurrectionRP_Server.Loader
                     if (Path.GetFileName(file) == "male_tops.json")
                     {
                         var cloths = Get(@"male/cloths/" + filename);
+
                         if (cloths == null)
                             continue;
 
@@ -103,6 +105,7 @@ namespace ResurrectionRP_Server.Loader
                     else
                     {
                         var cloths = Get(@"male/cloths/" + filename);
+
                         if (cloths == null)
                             continue;
 
@@ -147,12 +150,15 @@ namespace ResurrectionRP_Server.Loader
             }
             #endregion
 
+            Alt.Server.LogInfo("[ClothingLoader] Loading all props file...");
+
             #region Props
             foreach (var file in Directory.GetFiles(MakePath(@"male/props"), "*.json"))
             {
                 try
                 {
                     var cloths = Get(@"male/props/" + Path.GetFileName(@"male/props" + file));
+
                     if (cloths == null)
                         continue;
 
@@ -170,6 +176,7 @@ namespace ResurrectionRP_Server.Loader
                 try
                 {
                     var cloths = Get(@"female/props/" + Path.GetFileName(file));
+
                     if (cloths == null)
                         continue;
 
@@ -183,11 +190,6 @@ namespace ResurrectionRP_Server.Loader
             }
             #endregion
 
-            Alt.Server.LogInfo("[ClothingLoader] Loading all props file...");
-
-            //test();
-
-            // MP.Events.Add("ClothNameUpdate", ClothNameUpdate);
             Alt.Server.LogInfo("[ClothingLoader] Loading completed!");
             return Task.CompletedTask;
         }

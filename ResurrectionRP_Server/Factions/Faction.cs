@@ -171,6 +171,7 @@ namespace ResurrectionRP_Server.Factions
 
         public virtual async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
         {
+            client.SetPlayerIntoVehicle(vehicle.Vehicle);
             await UpdateDatabase();
         }
 

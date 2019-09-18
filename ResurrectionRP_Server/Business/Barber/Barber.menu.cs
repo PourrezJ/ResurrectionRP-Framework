@@ -31,14 +31,16 @@ namespace ResurrectionRP_Server.Business.Barber
             Menu mainmenu = new Menu("ID_BarberMain", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Barber);
 
             List<object> _playerlist = new List<object>();
-            foreach (PlayerHandler player in  client.GetNearestPlayers(5f)) { _playerlist.Add(player.Identite.Name); };
+
+            foreach (IPlayer player in client.GetNearestPlayers(5f, false))
+                _playerlist.Add(player.GetPlayerHandler().Identite.Name);
 
             if (_playerlist.Count > 0)
             {
-                //Reset old client choise
+                // Reset old client choice
                 ClientSelected = null;
 
-                //List client choise
+                // List client choice
                 mainmenu.Add(new ListItem("Client:", "Choix du client", "ID_PlayerSelect", _playerlist, 0, true));
 
                 // If is Owner ...

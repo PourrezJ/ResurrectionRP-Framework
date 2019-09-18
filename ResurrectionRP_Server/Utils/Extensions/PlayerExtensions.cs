@@ -32,11 +32,13 @@ namespace ResurrectionRP_Server
         {
             client.EmitLocked("PropVariation", (int)slot, item.Drawable, item.Texture);
         }
+
         public static void SetWaypoint(this IPlayer client, Vector3 pos, bool overrideOld = true) => 
             client.EmitLocked("SetWaypoint", pos.X, pos.Y, overrideOld);
 
         public static void DisplayHelp(this IPlayer client, string text, int timeMs) =>
             client.EmitLocked("Display_Help", text, timeMs);
+
         public static void DisplaySubtitle(this IPlayer client, string text, int timeMs) =>
             client.EmitLocked("Display_subtitle", text, timeMs);
 
@@ -50,6 +52,7 @@ namespace ResurrectionRP_Server
 
             return null;
         }
+
         public static bool IsDead(this IPlayer player)
         {
             var ph = player.GetPlayerHandler();
@@ -59,8 +62,7 @@ namespace ResurrectionRP_Server
 
             return ph.PlayerSync.IsDead;
         }
-
-
+        
         public static void SendNotification(this IPlayer client, string text)
         {
             if (text == "")
@@ -68,10 +70,12 @@ namespace ResurrectionRP_Server
 
             client.EmitLocked("notify", "Notification", text, 7000);
         }
+
         public static void SendNotificationError(this IPlayer client, string text)
         {
             client.EmitLocked("alertNotify", "Erreur", text, 7000);
         }
+
         public static void SendNotificationSuccess(this IPlayer client, string text)
         {
             client.EmitLocked("successNotify", "Succès", text, 7000);
@@ -101,6 +105,7 @@ namespace ResurrectionRP_Server
             }
             return endup;
         }
+
         public static List<IPlayer> GetPlayersInRange(this IPlayer client, float Range)
         {
             var vehs = Alt.GetAllPlayers();
@@ -119,6 +124,7 @@ namespace ResurrectionRP_Server
             }
             return endup;
         }
+
         public static List<PlayerHandler> GetPlayersHandlerInRange(this IPlayer client, float Range)
         {
             var vehs = Alt.GetAllPlayers();
@@ -137,52 +143,44 @@ namespace ResurrectionRP_Server
             }
             return endup;
         }
+
         public static IPlayer GetNearestPlayer(this IPlayer client)
         {
-            var vehs = Alt.GetAllPlayers();
-            IPlayer endup = null;
-            var position = client.GetPosition();
-            Vector3 osition = new Vector3(position.X, position.Y, position.Z);
-            foreach (IPlayer veh in vehs)
-            {
-                if (!veh.Exists)
-                    continue;
-                if (endup == null)
-                    endup = veh;
-                var vehpos = veh.GetPosition();
-                var enduppos = endup.GetPosition();
-                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= osition.DistanceTo2D(new Vector3(enduppos.X, enduppos.Y, enduppos.Z)))
-                {
-                    endup = veh;
-                }
-            }
-            return endup;
-        }
-        public static List<IPlayer> GetNearestPlayers(this IPlayer client, float range, int dimension = GameMode.GlobalDimension)
-        {
-            var players = Alt.GetAllPlayers();
-            List<IPlayer> endup = null;
-            var position = client.GetPosition();
-            Vector3 osition = new Vector3(position.X, position.Y, position.Z);
+            ICollection<IPlayer> players = Alt.GetAllPlayers();
+            IPlayer nearestPlayer = null;
+
             foreach (IPlayer player in players)
             {
-                if (!player.Exists)
+                if (player == client || !player.Exists || player.Dimension != player.Dimension)
                     continue;
 
-                if (player.Dimension != dimension)
-                    return endup;
-
-                Position pos = Position.Zero;
-                if (player.GetPositionLocked(ref pos))
-                {
-                    if (osition.DistanceTo2D(new Vector3(pos.X, pos.Y, pos.Z)) <= range)
-                    {
-                        endup.Add(player);
-                    }
-                }
+                if (nearestPlayer == null || client.Position.Distance(player.Position) <= client.Position.Distance(nearestPlayer.Position))
+                    nearestPlayer = player;
             }
-            return endup;
+
+            return nearestPlayer;
         }
+
+        public static List<IPlayer> GetNearestPlayers(this IPlayer client, float range, bool withoutme = true, int dimension = GameMode.GlobalDimension)
+        {
+            ICollection<IPlayer> players = Alt.GetAllPlayers();
+            List<IPlayer> nearestPlayers = new List<IPlayer>();
+
+            foreach (IPlayer player in players)
+            {
+                if (!player.Exists || player.Dimension != dimension)
+                    continue;
+
+                if (client.Position.Distance(player.Position) <= range)
+                    nearestPlayers.Add(player);
+            }
+
+            if (withoutme)
+                nearestPlayers.Remove(client);
+
+            return nearestPlayers;
+        }
+
         public static IVehicle GetNearestVehicle(this IPlayer client)
         {
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
@@ -209,6 +207,7 @@ namespace ResurrectionRP_Server
         }
         public static Entities.Vehicles.VehicleHandler GetNearestVehicleHandler(this IPlayer client) =>
             client.GetNearestVehicle()?.GetVehicleHandler();
+
         public static void SetRotation(this IPlayer client, Vector3 rotate)
         {
             Rotation rotating = new Rotation(rotate.X, rotate.Y, rotate.Z);
@@ -234,10 +233,12 @@ namespace ResurrectionRP_Server
         {
             await Task.CompletedTask;
         }
+
         public async static Task PlaySoundFromEntity(this IPlayer client, IVehicle initiator, int id, string dict, string anim)
         {
             await Task.CompletedTask;
         }
+
         public async static Task PlaySoundFromEntity(this IPlayer client, IEntity initiator, int id, string dict, string anim)
         {
             await Task.CompletedTask;
@@ -248,11 +249,13 @@ namespace ResurrectionRP_Server
             // TODO
             return Task.CompletedTask;
         }
+
         public static Task RemoveDecorationAsync(this IPlayer client, uint collection, uint overlay)
         {
             // TODO
             return Task.CompletedTask;
         }
+
         public static void SetDecoration(this IPlayer client, uint collection, uint overlay)
         {
             // TODO
@@ -262,6 +265,7 @@ namespace ResurrectionRP_Server
         {
             // TODO
         }
+
         public static Task ClearDecorationsAsync(this IPlayer client)
         {
             // TODO
@@ -273,6 +277,7 @@ namespace ResurrectionRP_Server
             // TODO
             return Task.CompletedTask;
         }
+
         public static void SetHeadOverlay(this IPlayer client, int overlayId, Business.Barber.HeadOverlayData overlayData)
         {
             // TODO
@@ -282,6 +287,7 @@ namespace ResurrectionRP_Server
         {
             // TOOD
         }
+
         public static Task SetHairColorAsync(this IPlayer client,  uint color, uint hightlightColor)
         {
             return Task.CompletedTask;

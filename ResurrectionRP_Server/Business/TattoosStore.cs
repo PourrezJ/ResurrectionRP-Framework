@@ -44,7 +44,9 @@ namespace ResurrectionRP_Server.Business
             };
 
             List<object> _playerlist = new List<object>();
-            foreach (IPlayer player in client.GetNearestPlayers(5f)) { _playerlist.Add(player.GetPlayerHandler()?.Identite.Name); };
+
+            foreach (IPlayer player in client.GetNearestPlayers(5f, false))
+                _playerlist.Add(player.GetPlayerHandler().Identite.Name);
 
             if (_playerlist.Count > 0)
             {

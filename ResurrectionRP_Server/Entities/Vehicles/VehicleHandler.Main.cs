@@ -22,7 +22,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
     [BsonIgnoreExtraElements]
     public partial class VehicleHandler
     {
-        #region Variable
+        #region Fields
         [BsonId]
         public string Plate { get; set; }
 
@@ -58,7 +58,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         [BsonIgnoreIfNull]
         public OilTank OilTank = null;
-
         #endregion
 
         #region Events
@@ -277,6 +276,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             Update();
         }
+
         public float GetFuel() => Fuel;
 
         public void UpdateProperties()
@@ -331,6 +331,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         }
 
         public void SetOwner(IPlayer player) => OwnerID = player.GetSocialClub();
+
         public void SetOwner(PlayerHandler player) => OwnerID = player.Client.GetSocialClub();
         #endregion
     }

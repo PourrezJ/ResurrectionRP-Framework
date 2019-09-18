@@ -64,7 +64,7 @@ export class Survival {
         });
     }
 
-    UpdateHungerThirst = (Thirst: number, Hunger: number) => {
+    UpdateHungerThirst = (Hunger: number, Thirst: number) => {
         Survival.Hunger = Hunger;
         Survival.Thirst = Thirst;
     } 

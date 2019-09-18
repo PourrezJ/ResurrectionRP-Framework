@@ -116,7 +116,7 @@ namespace ResurrectionRP_Server.Entities.Players
             var hungeritem = new MenuItem("Reset faim et soif", "", "", true);
             hungeritem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                await _playerSelected.UpdateHungerThirst(100, 100);
+                _playerSelected.UpdateHungerThirst(100, 100);
             };
             mainMenu.Add(hungeritem);
             #endregion

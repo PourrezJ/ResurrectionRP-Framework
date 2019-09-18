@@ -1,24 +1,14 @@
-﻿using System;
-using MongoDB.Bson.Serialization.Attributes;
-using Newtonsoft.Json;
-using AltV.Net.Elements.Entities;
-using System.Collections.Generic;
-using System.Linq;
+﻿using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Models;
 using System.Threading.Tasks;
 using System.Numerics;
-using AltV.Net;
-using AltV.Net.Data;
-using AltV.Net.Async;
-using AltV.Net.Async.Events;
 
 using Flags = ResurrectionRP_Server.Utils.Enums.AnimationFlags;
 
 namespace ResurrectionRP_Server.Items
 {
-    public class Eat : Models.Item
+    public class Eat : Item
     {
-       // private ObjectHandler obj = null;
-
         public int Food;
         public int Drink;
 
@@ -31,20 +21,20 @@ namespace ResurrectionRP_Server.Items
         public override async Task Use(IPlayer client, string inventoryType, int slot)
         {
             Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
+
             if (ph != null)
             {
                 if (ph.DeleteItem(slot, inventoryType, 1))
                 {
                     if (ph.Hunger + Food > 100)
-                        await ph.UpdateHungerThirst(100);
+                        ph.UpdateHungerThirst(100);
                     else
-                        await ph.UpdateHungerThirst(ph.Hunger + Food);
+                        ph.UpdateHungerThirst(ph.Hunger + Food);
 
                     if (ph.Thirst + Drink > 100)
-                        await ph.UpdateHungerThirst(-1, 100);
+                         ph.UpdateHungerThirst(-1, 100);
                     else
-                        await ph.UpdateHungerThirst(-1, ph.Thirst + Drink);
-
+                        ph.UpdateHungerThirst(-1, ph.Thirst + Drink);
                 }
 
                 switch (id)
@@ -70,7 +60,6 @@ namespace ResurrectionRP_Server.Items
                         break;
                 }
             }
-            //await MenuManager.CloseMenu(client);
         }
 
         public async Task AnimateEatDrink(IPlayer client, Entities.Players.PlayerHandler ph, string props, Vector3 position, Vector3 rotation)

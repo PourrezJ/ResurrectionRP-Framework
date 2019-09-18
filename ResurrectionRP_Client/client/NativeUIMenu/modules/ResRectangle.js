@@ -1,8 +1,7 @@
-import Point from "client/NativeUIMenu/utils/Point.js";
-import Size from "client/NativeUIMenu/utils/Size.js";
-import Rectangle from "client/NativeUIMenu/modules/Rectangle.js";
-import { Screen } from "client/NativeUIMenu/utils/Screen.js";
-import * as alt from 'alt';
+import Point from "../utils/Point.js";
+import Size from "../utils/Size.js";
+import Rectangle from "../modules/Rectangle.js";
+import { Screen } from "../utils/Screen.js";
 import * as game from 'natives';
 
 export default class ResRectangle extends Rectangle {

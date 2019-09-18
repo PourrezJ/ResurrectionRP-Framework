@@ -1,6 +1,5 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import * as Game from 'client/player/Game';
 
 export class Weather {
 

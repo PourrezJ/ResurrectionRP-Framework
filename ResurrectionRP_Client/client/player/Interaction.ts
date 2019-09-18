@@ -1,9 +1,9 @@
 import * as alt from 'alt';
 import * as game from 'natives';
-import Raycast, * as raycast from 'client/Utils/Raycast';
-import * as chat from 'client/chat/chat';
-import * as MenuManager from 'client/MenuManager/MenuManager';
-import * as Utils from 'client/Utils/utils';
+import Raycast, * as raycast from '../Utils/Raycast';
+import * as chat from '../chat/chat';
+import * as MenuManager from '../MenuManager/MenuManager';
+import * as Utils from '../Utils/utils';
 
 /*
  * POUR LE RAY CAST LES FLAGS

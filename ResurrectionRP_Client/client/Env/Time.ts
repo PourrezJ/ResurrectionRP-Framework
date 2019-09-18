@@ -1,6 +1,7 @@
-﻿import * as alt from 'alt';
-import * as game from 'natives';
+﻿import * as game from 'natives';
+
 export class Time {
+
     public Hours: number;
     public Minutes: number;
     public Seconds: number;

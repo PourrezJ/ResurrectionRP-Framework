@@ -1,8 +1,8 @@
-import Color from "client/NativeUIMenu/utils/Color.js";
-import Point from "client/NativeUIMenu/utils/Point.js";
-import Size from "client/NativeUIMenu/utils/Size.js";
-import Text from "client/NativeUIMenu/modules/Text.js";
-import { Screen } from "client/NativeUIMenu/utils/Screen.js";
+import Color from "../utils/Color.js";
+import Point from "../utils/Point.js";
+import Size from "../utils/Size.js";
+import Text from "../modules/Text.js";
+import { Screen } from "../utils/Screen.js";
 import * as alt from 'alt';
 import * as game from 'natives';
 

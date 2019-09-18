@@ -1,7 +1,6 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
 
-
 // https://github.com/combowomb0/altv-notification-system
 export class Notify {
         public notify = {

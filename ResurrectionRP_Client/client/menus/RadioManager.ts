@@ -1,11 +1,11 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import * as chat from 'client/chat/chat';
-import * as utils from 'client/Utils/Utils';
+import * as chat from '../chat/chat';
+import * as utils from '../Utils/Utils';
 import { VoiceChat } from '../Voice/VoiceChat';
 
-export class RadioManager
-{
+export class RadioManager {
+
     private view: alt.WebView;
     private favoris: object;
     private frequence: number;
@@ -15,8 +15,7 @@ export class RadioManager
     private volume: number = 10;
     private muted :boolean = false;
 
-    constructor()
-    {
+    constructor() {
         alt.onServer('OpenRadio', (favoris: string, frequence: number, status: RadioModes, volume: number) =>
         {
             if (chat.isOpened() || game.isPauseMenuActive())

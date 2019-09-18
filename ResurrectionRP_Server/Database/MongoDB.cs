@@ -268,7 +268,7 @@ namespace ResurrectionRP_Server.Database
         public static IMongoCollection<T> GetCollectionSafe<T>(string collectionName)
         {
             if (_database.GetCollection<T>(collectionName) == null)
-                _database.CreateCollectionAsync(collectionName);
+                _database.CreateCollection(collectionName);
 
             return _database.GetCollection<T>(collectionName);
         }

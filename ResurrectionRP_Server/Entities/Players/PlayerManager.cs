@@ -199,10 +199,12 @@ namespace ResurrectionRP_Server.Entities.Players
             }
 
             Alt.Server.LogInfo($" {player.SocialClubId} ({player.Ip}) en attente de connexion.");
+
             while (!GameMode.Instance.ServerLoaded)
                 await Task.Delay(100);
 
             await player.SetDimensionAsync(Dimension++);
+
             if (!GameMode.Instance.IsDebug)
             {
                 try
@@ -213,7 +215,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                   Models.Whitelist whitelist = await Models.Whitelist.GetWhitelistFromAPI(socialclub);
+                   Whitelist whitelist = await Whitelist.GetWhitelistFromAPI(socialclub);
 
                     if (whitelist != null && whitelist.Whitelisted)
                     {
@@ -230,9 +232,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             await player.KickAsync(_kickMessage);
                         }
                         else
-                        {
                             player.EmitLocked("OpenLogin", socialclub);
-                        }
                     }
                     else
                     {
@@ -249,9 +249,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
             }
             else
-            {
                 await ConnectPlayer(player);
-            }
         }
         #endregion
 

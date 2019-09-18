@@ -4,8 +4,9 @@ using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Entities.Vehicles;
-using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Inventory;
+using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Utils.Enums;
 using System;
 using System.Collections.Concurrent;
 using System.Numerics;
@@ -34,14 +35,16 @@ namespace ResurrectionRP_Server.Entities.Players
         [BsonIgnore]
         public DateTime LastUpdate { get; set; }
 
-        private Utils.Enums.AdminRank _adminrank;
-        public Utils.Enums.AdminRank StaffRank
+        private AdminRank _adminrank;
+        public AdminRank StaffRank
         {
             get => _adminrank;
             set
             {
                 _adminrank = value;
-                Client?.EmitAsync("SetRank", _adminrank);
+
+                if (Client != null && Client.Exists)
+                    Client.EmitLocked("SetRank", _adminrank);
             }
         }
         public Identite Identite { get; set; }
@@ -73,7 +76,7 @@ namespace ResurrectionRP_Server.Entities.Players
         [BsonIgnore]
         public Inventory.Inventory BagInventory { get; set; }
 
-        public Inventory.OutfitInventory OutfitInventory { get; set; } = new Inventory.OutfitInventory();
+        public OutfitInventory OutfitInventory { get; set; } = new Inventory.OutfitInventory();
         public double Money { get; private set; }
         public Bank.BankAccount BankAccount { get; set; }
         public int Hunger { get; set; } = 100;

@@ -17,7 +17,7 @@ var GameClass: Game;
 
 const init = async () => {
     try {
-        alt.log("Chargement des events.");
+        alt.log('Chargement des events.');
 
         alt.onServer("PlayerInitialised", (
             StaffRank: number,

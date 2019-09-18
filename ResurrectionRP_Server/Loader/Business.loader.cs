@@ -1,13 +1,8 @@
 ﻿using AltV.Net;
-using AltV.Net.Elements.Entities;
-using Newtonsoft.Json;
+using MongoDB.Driver;
 using System;
-using System.IO;
-using System.Numerics;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using ResurrectionRP_Server.Business;
-using MongoDB.Driver;
 
 namespace ResurrectionRP_Server.Loader
 {
@@ -19,11 +14,9 @@ namespace ResurrectionRP_Server.Loader
             Alt.Server.LogColored("--- Start loading all businesses in database ---");
 
             var _businessesList = await Database.MongoDB.GetCollectionSafe<Business.Business>("businesses").AsQueryable().ToListAsync();
-            foreach (var _businesses in _businessesList)
-            {
-                await _businesses.Init();
-            }
 
+            foreach (var _businesses in _businessesList)
+                await _businesses.Init();
 
             Utils.Utils.Delay((int)TimeSpan.FromMinutes(5).TotalMilliseconds, false, async () =>
             {

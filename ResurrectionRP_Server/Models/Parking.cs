@@ -181,7 +181,7 @@ namespace ResurrectionRP_Server.Models
 
                 if (menu.GetData("Location") != null)
                 {
-                    if (!await VehiclesManager.IsVehicleInSpawn(menu.GetData("Location")))
+                    if (!VehiclesManager.IsVehicleInSpawn(menu.GetData("Location")))
                     {
                         Spawn = menu.GetData("Location");
                         await veh.SpawnVehicle(Spawn);

@@ -103,7 +103,7 @@ export class Game {
             game.setAudioFlag('LoadMPData', true);
             game.setAudioFlag('DisableFlightMusic', true);
             game.setAudioFlag('PoliceScannerDisabled', true);
-
+           
             for (var i: number = 0; i <= 5; i++)
                 game.disableHospitalRestart(i, true);
 

@@ -590,6 +590,7 @@ namespace ResurrectionRP_Server.Factions
                             Parking?.OpenParkingMenu(client, location: loc, menu: menu, menuCallback: ConcessCallBack);
                         else
                             Parking?.OpenParkingMenu(client, location: loc, vehicleType: 15, menu: menu, menuCallback: ConcessCallBack);
+
                         break;
 
                     case "ID_ShopVehicleMenu":
@@ -653,7 +654,7 @@ namespace ResurrectionRP_Server.Factions
                 {
                     VehicleHandler vh = await VehiclesManager.SpawnVehicle(client.GetSocialClub(), (uint)fv.Hash, location.Pos, location.Rot, inventory: new Inventory.Inventory(fv.Weight, fv.MaxSlot), primaryColor: fv.PrimaryColor, secondaryColor: fv.SecondaryColor);
                     await vh.InsertVehicle();
-                    await vh.PutPlayerInVehicle(client);
+                    client.SetPlayerIntoVehicle(vh.Vehicle);
                     await OnVehicleOut(client, vh);
                     ph.ListVehicleKey.Add(new VehicleKey(vhname, vh.Plate));
                     ph.Update();

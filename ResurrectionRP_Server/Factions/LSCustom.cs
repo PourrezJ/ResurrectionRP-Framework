@@ -307,20 +307,22 @@ namespace ResurrectionRP_Server.Factions
             menu.SetData("Vehicle", vehicle);
             menu.ItemSelectCallback = MenuCallBack;
 
-            if ( HasPlayerIntoFaction(client))
+            if (HasPlayerIntoFaction(client))
             {
-                menu.Add(new MenuItem("Diagnostique véhicule", "", "ID_Diag", true));
-                menu.Add(new MenuItem("Réparer la carrosserie", "", "ID_Body", true));
-                menu.Add(new MenuItem("Réparer le moteur", "", "ID_Engine", true));
-                menu.Add(new MenuItem("Nettoyer le véhicule", "", "ID_Clean", true));
-            }
-            else
-            {
-                if (( GetEmployeeOnline()).Count > 0)
-                    client.SendNotificationError("Vous devez passer par un mécanicien.");
+                if (GetEmployeeOnline().Contains(client))
+                {
+                    menu.Add(new MenuItem("Diagnostique véhicule", "", "ID_Diag", true));
+                    menu.Add(new MenuItem("Réparer la carrosserie", "", "ID_Body", true));
+                    menu.Add(new MenuItem("Réparer le moteur", "", "ID_Engine", true));
+                    menu.Add(new MenuItem("Nettoyer le véhicule", "", "ID_Clean", true));
+                }
                 else
-                    menu.Add(new MenuItem("Bricoler le moteur", "Faites une réparation à 50% des dégâts moteur.", "ID_BricoEngine", true, rightLabel: $"${ReparFortune}"));
+                    client.SendNotificationError("Vous devez prendre votre service pour réparer un véhicule.");
             }
+            else if (GetEmployeeOnline().Count > 0)
+                client.SendNotificationError("Vous devez passer par un mécanicien.");
+            else
+                menu.Add(new MenuItem("Bricoler le moteur", "Faites une réparation à 50% des dégâts moteur.", "ID_BricoEngine", true, rightLabel: $"${ReparFortune}"));
 
             await menu.OpenMenu(client);
         }

@@ -51,8 +51,7 @@ namespace ResurrectionRP_Server
 
                 return true;
         }
- 
-
+        
         public static void SetOnPlayerEnterColShape(this IColShape colshape, Events.ColShapePlayerEventHandler method)
         {
             lock (colshape)
@@ -177,6 +176,38 @@ namespace ResurrectionRP_Server
                 {
                     eventHandler -= method;
                     colshape.SetData("OnVehicleLeaveColShape", eventHandler);
+                }
+            }
+        }
+
+        public static void SetOnPlayerInteractInColShape(this IColShape colshape, Events.ColShapePlayerEventHandler method)
+        {
+            lock (colshape)
+            {
+                colshape.GetData("OnPlayerInteractInColShape", out Events.ColShapePlayerEventHandler eventHandler);
+
+                if (eventHandler != null)
+                    eventHandler += method;
+                else
+                {
+                    eventHandler += method;
+                    colshape.SetData("OnPlayerInteractInColShape", eventHandler);
+                }
+            }
+        }
+
+        public static void UnsetOnPlayerInteractInColShape(this IColShape colshape, Events.ColShapePlayerEventHandler method)
+        {
+            lock (colshape)
+            {
+                colshape.GetData("OnPlayerInteractInColShape", out Events.ColShapePlayerEventHandler eventHandler);
+
+                if (eventHandler != null)
+                    eventHandler -= method;
+                else
+                {
+                    eventHandler -= method;
+                    colshape.SetData("OnPlayerInteractInColShape", eventHandler);
                 }
             }
         }

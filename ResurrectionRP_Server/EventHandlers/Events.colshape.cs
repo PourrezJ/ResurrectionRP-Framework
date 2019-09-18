@@ -23,10 +23,10 @@ namespace ResurrectionRP_Server.EventHandlers
         public static event ColShapePlayerEventHandler OnPlayerLeaveColShape;
         public static event ColShapeVehicleEventHandler OnVehicleEnterColShape;
         public static event ColShapeVehicleEventHandler OnVehicleLeaveColShape;
+        public static event ColShapePlayerEventHandler OnPlayerInteractInColShape;
 
-        public static event ColShapePlayerInteract OnPlayerInteractClothingShop;
-        public static event ColShapePlayerInteractHouse OnPlayerInteractHouse;
-        public static event ColShapePlayerEventHandler OnPlayerInteractTeleporter;
+        // public static event ColShapePlayerInteractHouse OnPlayerInteractHouse;
+        // public static event ColShapePlayerEventHandler OnPlayerInteractTeleporter;
         #endregion
 
         #region Private methods
@@ -93,42 +93,21 @@ namespace ResurrectionRP_Server.EventHandlers
             if (!int.TryParse(args[0].ToString(), out int key))
                 return;
 
+            if (key != 69)
+                return;
+
             foreach (IColShape colshape in Alt.GetAllColShapes())
             {
                 // V752 : Bug ColShape.IsEntityIn() returns always false
                 if (colshape.IsEntityInColShape(client))
                 {
-                    if (colshape.GetData("ClothingID", out BsonObjectId clothing) && clothing != null)
-                    {
-                        if (key != 69)
-                            return;
+                    if (OnPlayerInteractInColShape != null)
+                        await OnPlayerInteractInColShape.Invoke(colshape, client);
 
-                        if (OnPlayerInteractClothingShop != null)
-                            await OnPlayerInteractClothingShop.Invoke(clothing, client);
-                    }
-                    else if (colshape.GetData("Teleport", out string TeleportID) && TeleportID != null )
-                    {
-                        if (key != 69)
-                            return;
+                    if (colshape.GetData("OnPlayerInteractInColShape", out ColShapePlayerEventHandler onPlayerInteractInColShape))
+                        await onPlayerInteractInColShape.Invoke(colshape, client);
 
-                        if (OnPlayerInteractTeleporter != null)
-                            await OnPlayerInteractTeleporter.Invoke(colshape, client);
-                        return;
-                    }
-                    else if (colshape.GetData("House", out int HouseID))
-                    {
-                        if (key != 69)
-                            return;
-
-                        var house = HouseManager.GetHouse(client);
-
-                        if (house != null)
-                        {
-                            if (OnPlayerInteractHouse != null)
-                                await OnPlayerInteractHouse.Invoke(colshape, client, house);
-                        }
-                        return;
-                    }
+                    break;
                 }
             }
         }

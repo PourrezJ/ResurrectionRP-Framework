@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using AltV.Net.Elements.Entities;
+using AltV.Net.Async;
+using Newtonsoft.Json;
+using ResurrectionRP_Server.EventHandlers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AltV.Net;
-using AltV.Net.Elements.Entities;
-using AltV.Net.Async;
 
 namespace ResurrectionRP_Server.Teleport
 {
@@ -19,7 +19,7 @@ namespace ResurrectionRP_Server.Teleport
 
         public TeleportManager()
         {
-            EventHandlers.Events.OnPlayerInteractTeleporter += OnTeleportColshape;
+            Events.OnPlayerInteractInColShape += OnTeleportColshape;
         }
 
         private async Task OnTeleportColshape(IColShape colshape, IPlayer player)
@@ -27,10 +27,12 @@ namespace ResurrectionRP_Server.Teleport
             if (!player.Exists)
                 return;
 
+            colshape.GetData("Teleport", out string datad);
+
+            if (datad == null)
+                return;
 
             var definition = new { ID = 0, State = new TeleportState() };
-
-            colshape.GetData("Teleport", out string datad);
             var data = JsonConvert.DeserializeAnonymousType(datad, definition);
             Teleport teleport = GetTeleport(data.ID);
 

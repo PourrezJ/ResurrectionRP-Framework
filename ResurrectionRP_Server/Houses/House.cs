@@ -91,13 +91,14 @@ namespace ResurrectionRP_Server.Houses
             // create colshape
             ColShapeEnter = AltV.Net.Alt.CreateColShapeCylinder(Position - new Vector3(0, 0, 1), 1f, 3f);
             ColShapeEnter.Dimension = GameMode.GlobalDimension;
-            ColShapeEnter.SetData("House", this.ID);
+            ColShapeEnter.SetData("House", ID);
             ColShapeEnter.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
 
             ColShapeOut = AltV.Net.Alt.CreateColShapeCylinder(HouseTypes.HouseTypeList[Type].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), 1f, 3f);
             ColShapeOut.Dimension = (short)ID;
-            ColShapeOut.SetData("House", this.ID);
+            ColShapeOut.SetData("House", ID);
             ColShapeOut.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
+            ColShapeOut.SetOnPlayerInteractInColShape(OnPlayerInteractInColShape);
 
             IColShape parkingColshape = null;
             if (Parking != null)
@@ -139,6 +140,11 @@ namespace ResurrectionRP_Server.Houses
                 await HouseManager.OpenHouseMenu(client, this);
             else
                 client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
+        }
+
+        private async Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
+        {
+            await RemovePlayer(client, true);
         }
 
         private async Task OnParkingSaveNeeded()
@@ -226,6 +232,7 @@ namespace ResurrectionRP_Server.Houses
 
         public bool SetIntoHouse(IPlayer client) 
             => HouseManager.SetIntoHouse(client, this);
+
         public bool RemoveIntoHouse(IPlayer client) 
             => HouseManager.RemoveClientHouse(client);
 

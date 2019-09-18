@@ -28,13 +28,10 @@ namespace ResurrectionRP_Server.Houses
         #region Constructor
         public HouseManager()
         {
-            AltAsync.OnClient("OutHouse", OutHouse);
             AltAsync.OnClient("ParkingHouse", ParkingHouse);
 
             for(int i = 0; i < HouseTypes.HouseTypeList.Count; i++)
-            {
                 Marker.CreateMarker(MarkerType.VerticalCylinder, HouseTypes.HouseTypeList[i].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), null, null);
-            }
 
             Utils.Utils.Delay((int)TimeSpan.FromMinutes(10).TotalMilliseconds, false, async () =>
             {
@@ -44,27 +41,24 @@ namespace ResurrectionRP_Server.Houses
                     await Task.Delay(100);
                 }
             });
-
-            EventHandlers.Events.OnPlayerInteractHouse += OnPlayerInteractHouse;
-        }
-
-        private async Task OnPlayerInteractHouse(IColShape colShape, IPlayer client, House house)
-        {
-            await house.RemovePlayer(client);
         }
         #endregion
 
         #region Methods
-
         public static bool SetIntoHouse(IPlayer client, House house) => ClientHouse.TryAdd(client, house);
+
         public static bool IsInHouse(IPlayer client) => ClientHouse.ContainsKey(client);
+
         public static House GetHouseWithID(int id) => Houses.Find(h => h.ID == id) ?? null;
+
         public static House GetHouse(IPlayer client)
         {
             if (IsInHouse(client))
                 return ClientHouse.GetValueOrDefault(client);
+
             return null;
         }
+
         public static bool RemoveClientHouse(IPlayer client) => ClientHouse.Remove(client);
 
         public async Task RemovePlayerFromHouseList(IPlayer player)
@@ -72,8 +66,12 @@ namespace ResurrectionRP_Server.Houses
             if (IsInHouse(player))
             {
                 House house = GetHouse(player);
-                if (house == null) return;
-                if (RemoveClientHouse(player)) await house.RemovePlayer(player, false);                
+
+                if (house == null)
+                    return;
+
+                if (RemoveClientHouse(player))
+                    await house.RemovePlayer(player, false);                
             }
         }
         #endregion
@@ -94,7 +92,6 @@ namespace ResurrectionRP_Server.Houses
                     {
                         house.Load();
                         Houses.Add(house);
-                        //await Task.Delay(20);
                     }
                 }
                 catch (Exception ex)
@@ -112,28 +109,13 @@ namespace ResurrectionRP_Server.Houses
                 return;
 
             House house = GetHouseWithID((int)args[0]);
+
             if (house != null)
             {
                 if(house.Owner == player.GetSocialClub())
-                {
                     await house.Parking.OpenParkingMenu(player, "", ((player.GetPlayerHandler()?.StaffRank > Utils.Enums.AdminRank.Player) ? house.ID.ToString() : ""), true);
-                }
                 else
-                {
                     player.SendNotificationError("Vous n'êtes pas autorisé à utiliser ce parking.");
-                }
-            }
-        }
-
-        private async Task OutHouse(IPlayer player, object[] args)
-        {
-            if (!player.Exists)
-                return;
-
-            House house = GetHouseWithID((int)args[0]);
-            if (house != null)
-            {
-                await house.RemovePlayer(player);
             }
         }
 
@@ -200,13 +182,18 @@ namespace ResurrectionRP_Server.Houses
         private static async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             House house = menu.GetData("House");
-            if (house == null) return;
+
+            if (house == null)
+                return;
 
             switch (menuItem.Id)
             {
                 case "ID_Acheter":
                     PlayerHandler player = client.GetPlayerHandler();
-                    if (player == null) return;
+
+                    if (player == null)
+                        return;
+
                     if (await player.HasBankMoney(house.Price, "Achat immobilier."))
                     {
                         //GameMode.Instance.Economy.CaissePublique += house.Price;
@@ -216,9 +203,7 @@ namespace ResurrectionRP_Server.Houses
                         client.SendNotificationSuccess("Vous avez acheté ce logement.");
                     }
                     else
-                    {
                         player.Client.SendNotificationError("Vous n'avez pas l'argent sur votre compte en banque.");
-                    }
                     break;
 
                 case "ID_Enter":
@@ -231,14 +216,10 @@ namespace ResurrectionRP_Server.Houses
                         clientInside.SendNotification("Quelqu'un sonne à la porte.");
                     break;
                 case "ID_AddParking":
-                    if (HouseManager.AddParkingList.TryAdd(client, house))
-                    {
+                    if (AddParkingList.TryAdd(client, house))
                         client.SendChatMessage("Taper dans le tchat la commande /addparkinghouse pour ajouter le parking");
-                    }
                     else
-                    {
                         client.SendNotificationError("Un parking est déjà disponible pour cette maison.");
-                    }
                     break;
                 case "ID_Delete":
                     await house.Destroy(true);
@@ -273,6 +254,7 @@ namespace ResurrectionRP_Server.Houses
         public static void OnPlayerConnected(IPlayer player)
         {
             var social = player.GetSocialClub();
+
             foreach (House house in Houses.Where(h => h.Owner == social))
                 house.SetOwnerHandle(player);
         }
@@ -290,6 +272,7 @@ namespace ResurrectionRP_Server.Houses
                 await Houses[i].Save();
                 await Houses[i].Destroy(true);
             }
+
             Houses.Clear();
         }
         #endregion

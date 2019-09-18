@@ -304,14 +304,14 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region Misc
-        public async Task UpdateHungerThirst(int hunger = -1, int thirst = -1)
+        public void UpdateHungerThirst(int hunger = -1, int thirst = -1)
         {
-            if (!Client.Exists)
-                return;
             Thirst = (thirst == -1) ? Thirst : thirst;
             Hunger = (hunger == -1) ? Hunger : hunger;
-            await  Client?.EmitAsync("UpdateHungerThirst", Hunger, Thirst);
             Update();
+
+            if (Client != null && Client.Exists)
+                Client.EmitLocked("UpdateHungerThirst", Hunger, Thirst);
         }
 
         public bool HasOpenMenu()

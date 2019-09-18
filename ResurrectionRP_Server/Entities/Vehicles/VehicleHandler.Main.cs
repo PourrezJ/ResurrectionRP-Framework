@@ -22,7 +22,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
     [BsonIgnoreExtraElements]
     public partial class VehicleHandler
     {
-        #region Variable
+        #region Fields
         [BsonId]
         public string Plate { get; set; }
 
@@ -34,8 +34,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         [BsonRepresentation(BsonType.Int32, AllowOverflow = true)]
         public uint Model { get; private set; }
-
-
+        
         public string OwnerID { get; set; } // SocialClubName
         [BsonRepresentation(BsonType.Int32, AllowOverflow = true)]
         public short Dimension { get; set; } = short.MaxValue;
@@ -51,15 +50,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         [BsonIgnore]
         public bool SpawnVeh { get; set; }
         public bool Locked { get; set; } = true;
-
-
+        
         public DateTime LastUse { get; set; } = DateTime.Now;
         public string LastDriver { get; set; }
 
         public bool PlateHide;
 
+        [BsonIgnoreIfNull]
         public OilTank OilTank = null;
-
         #endregion
 
         #region Events
@@ -78,15 +76,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             if (model == 0)
                 return;
+
             OwnerID = socialClubName;
             Model = model;
             PrimaryColor = primaryColor;
             SecondaryColor = secondaryColor;
 
             FreezePosition = freeze;
-
-            Plate = (string.IsNullOrEmpty(plate)) ? VehiclesManager.GenerateRandomPlate() : plate;
-
+            Plate = string.IsNullOrEmpty(plate) ? VehiclesManager.GenerateRandomPlate() : plate;
             Locked = locked;
             Owner = owner;
 
@@ -156,16 +153,23 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.RadioStation = RadioID;
                 IsParked = false;
 
+                if (Wheels == null)
+                {
+                    Wheels = new Wheel[Vehicle.WheelsCount];
+
+                    for (int i = 0; i < Wheels.Length; i++)
+                        Wheels[i] = new Wheel();
+                }
+
                 for (byte i = 0; i < Vehicle.WheelsCount; i++)
                 {
-                    // TODO : Wheels == null when spawned vehicle
-                    // Vehicle.SetWheelBurst(i, Wheels[i].Burst);
-                    // Vehicle.SetWheelHealth(i, Wheels[i].Health);
-                    // Vehicle.SetWheelHasTire(i, Wheels[i].HasTire);
+                    Vehicle.SetWheelBurst(i, Wheels[i].Burst);
+                    Vehicle.SetWheelHealth(i, Wheels[i].Health);
+                    Vehicle.SetWheelHasTire(i, Wheels[i].HasTire);
                 }
-                /*
+                
                 for(byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
-                    Vehicle.SetDoorState(i,(byte) Doors[i]);
+                    Vehicle.SetDoorState(i, (byte)Doors[i]);
 
                 for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
                 {
@@ -174,7 +178,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     else if (Windows[i] == WindowState.WindowDown)
                         Vehicle.SetWindowOpened(i, true);
                 }
-                */
+                
                 if (setLastUse)
                     LastUse = DateTime.Now;
 
@@ -186,14 +190,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.Position = Location.Pos;
 
                 VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
-
-                lock (VehiclesManager.VehicleHandlerList)
-                {
-                    VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
-                }
-         
-                if (Vehicle.GetVehicleHandler()?.FuelConsumption == 0)
-                    Vehicle.GetVehicleHandler().FuelConsumption = 5.5f;
+                VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
+                
+                // Needed as vehicles in database don't have this value
+                if (FuelConsumption == 0)
+                    FuelConsumption = 5.5f;
             });
 
             if (HaveTowVehicle())
@@ -275,16 +276,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             Update();
         }
+
         public float GetFuel() => Fuel;
 
         public void UpdateProperties()
         {
-            if (Doors == null)
-                Doors = new VehicleDoorState[Globals.NB_VEHICLE_DOORS];
-
-            if (Wheels == null)
-                Wheels = new Wheel[Vehicle.WheelsCount];
-
             try
             {
                 Dirt = Vehicle.DirtLevel;
@@ -335,6 +331,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         }
 
         public void SetOwner(IPlayer player) => OwnerID = player.GetSocialClub();
+
         public void SetOwner(PlayerHandler player) => OwnerID = player.Client.GetSocialClub();
         #endregion
     }

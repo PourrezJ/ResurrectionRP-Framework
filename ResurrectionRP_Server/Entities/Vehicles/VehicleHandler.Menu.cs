@@ -126,8 +126,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             else if (state == VehicleDoorState.DoesNotExists)
                 return XMenuItemIcons.BROKEN_IMAGE;
             return XMenuItemIcons.DEVICE_UNKNOWN;
-
-
         }
 
         #region Callback

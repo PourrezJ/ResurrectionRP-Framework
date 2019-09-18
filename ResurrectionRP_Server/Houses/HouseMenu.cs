@@ -35,7 +35,7 @@ namespace ResurrectionRP_Server.Houses
             houseMenu._menu.Add(new MenuItem("Ouvrir le coffre", "", "openInventory", executeCallback: true));
 
             if (house.Locked)
-                houseMenu._menu.Add(new MenuItem("Ouvrir la porte à clef", "", "opencloseDoor", executeCallback: true));
+                houseMenu._menu.Add(new MenuItem("Déverrouiller la porte", "", "opencloseDoor", executeCallback: true));
             else
                 houseMenu._menu.Add(new MenuItem("Fermer la porte à clef", "", "opencloseDoor", executeCallback: true));
 

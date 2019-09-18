@@ -31,9 +31,18 @@ export function initialize() {
 
 
     alt.onServer('SetPlayerIntoVehicle', (vehicle, seat) => {
-        alt.setTimeout(() => {
-            game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle.scriptID, seat);
-        }, 50);
+        let timeout = alt.setTimeout(() => {
+            alt.clearInterval(interval);
+        }, 5000);
+
+        let interval = alt.setInterval(() => {
+            if (alt.Player.local.vehicle == null) {
+                game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle.scriptID, seat);
+            } else {
+                alt.clearInterval(interval);
+                alt.clearTimeout(timeout);
+            }
+        }, 20);
     });
 
     alt.onServer('SetPlayerOutOfVehicle', (force: boolean) => {

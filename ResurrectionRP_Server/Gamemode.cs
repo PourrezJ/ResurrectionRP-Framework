@@ -242,14 +242,12 @@ namespace ResurrectionRP_Server
             VoiceController.OnResourceStart();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
-
             AutoPound = Config.GetSetting<bool>("AutoPound");
 
             if (AutoPound)
                 PoundManager.Price = 0;
 
             Events.Initialize();
-
 
             Utils.Utils.Delay(15000, false, async () => await Save());
 
@@ -339,7 +337,7 @@ namespace ResurrectionRP_Server
                 ph.ListVehicleKey.Add(new VehicleKey(vh.VehicleManifest.DisplayName, vh.Plate));
 
                 if (vh.Vehicle != null)
-                    player.EmitLocked("SetPlayerIntoVehicle", vh.Vehicle, -1);
+                    player.SetPlayerIntoVehicle(vh.Vehicle);
 
                 await vh.InsertVehicle();
                 ph.Update();

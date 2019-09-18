@@ -54,7 +54,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         // public byte RearBumperDamage { get; set; } = 0;
 
         public VehicleDoorState[] Doors { get; set; } = new VehicleDoorState[Globals.NB_VEHICLE_DOORS];
-        public WindowState[] Windows { get; set; } = new WindowState[4] { 0, 0, 0, 0 };
+        public WindowState[] Windows { get; set; } = new WindowState[Globals.NB_VEHICLE_WINDOWS] { 0, 0, 0, 0 };
 
         public Wheel[] Wheels { get; set; }
 

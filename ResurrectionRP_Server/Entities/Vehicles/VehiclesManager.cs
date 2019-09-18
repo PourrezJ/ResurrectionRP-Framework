@@ -158,6 +158,7 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
             await veh.SpawnVehicle(new Models.Location(position, rotation));
             return veh;
         }
+
         public static bool IsVehicleInSpawn(Models.Location location, float distance = 4, short dimension = short.MaxValue) =>
             IsVehicleInSpawn(location.Pos, distance, dimension);
 

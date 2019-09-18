@@ -24,9 +24,9 @@ namespace ResurrectionRP_Server.Items
                 if (ph.DeleteItem(slot, inventoryType, 1))
                 {
                     if (ph.Thirst + Drink > 100)
-                        await ph.UpdateHungerThirst(-1, 100);
+                        ph.UpdateHungerThirst(-1, 100);
                     else
-                        await ph.UpdateHungerThirst(-1, ph.Thirst + Drink);
+                        ph.UpdateHungerThirst(-1, ph.Thirst + Drink);
 
                 }
 
@@ -53,7 +53,6 @@ namespace ResurrectionRP_Server.Items
                         break;
                 }
             }
-            //await MenuManager.CloseMenu(client);
         }
 
         public async Task AnimateEatDrink(IPlayer client, Entities.Players.PlayerHandler ph, string props, Vector3 position, Vector3 rotation)

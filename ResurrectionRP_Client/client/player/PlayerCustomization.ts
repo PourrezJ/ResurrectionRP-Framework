@@ -1,7 +1,7 @@
 ﻿
 import * as alt from 'alt';
 import * as game from 'natives';
-import * as utils from 'client/Utils/Utils';
+import * as utils from '../Utils/Utils';
 
 export function init() {
     alt.onServer('ComponentVariation', (arg: number, arg1: number, arg2: number, arg3: number) => {

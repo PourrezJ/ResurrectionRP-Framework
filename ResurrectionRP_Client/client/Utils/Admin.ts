@@ -1,18 +1,17 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import * as utils from 'client/Utils/Utils';
-import * as ui from 'client/Helpers/UiHelper';
+import * as utils from '../Utils/Utils';
+import * as ui from '../Helpers/UiHelper';
 
-export class Admin
-{
+export class Admin {
+
     private noclip: boolean;
     private loopID: number;
 
     private speed: number = 1;
     private fspeed: number = 4;
 
-    constructor()
-    {
+    constructor() {
         alt.onServer('TeleportToWaypoint', async () => {
             game.doScreenFadeOut(10);
             let pos: alt.Vector3 = await utils.ForceGroundZ(utils.GetWaypointPos());
@@ -83,7 +82,7 @@ export class Admin
             y = y - this.speed * dy;
             z = z - this.speed * dz;
         }
+
         game.setEntityCoordsNoOffset(alt.Player.local.scriptID, x, y, z, false, false, false);
-  
     }
 }

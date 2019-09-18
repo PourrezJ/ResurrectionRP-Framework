@@ -1,11 +1,12 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import PhoneManager from 'client/phone/PhoneManager';
-import * as chat from 'client/chat/chat';
-import * as utils from 'client/Utils/Utils';
-import Raycast, * as raycast from 'client/Utils/Raycast';
+import PhoneManager from '../phone/PhoneManager';
+import * as chat from '../chat/chat';
+import * as utils from '../Utils/Utils';
+import Raycast, * as raycast from '../Utils/Raycast';
 
 export class NetworkingEntityClient {
+
     webview: alt.WebView;
     defaultToken: boolean;
     defaultWebView: boolean;

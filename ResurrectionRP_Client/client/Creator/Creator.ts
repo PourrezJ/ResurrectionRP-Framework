@@ -1,6 +1,6 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import { Camera } from 'client/Models/Camera';
+import { Camera } from '../Models/Camera';
 
 const playerPoint = {
     x:  402.8664,

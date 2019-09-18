@@ -1,6 +1,6 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import { Trash } from 'client/Jobs/Data/Trash';
+import { Trash } from './Data/Trash';
 
 export class DustManManager {
 

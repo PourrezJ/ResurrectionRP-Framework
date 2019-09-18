@@ -1,9 +1,8 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import * as ui from 'client/Helpers/UiHelper';
-import { Survival } from 'client/player/Survival';
-import { VoiceChat } from 'client/Voice/VoiceChat';
-import { Game } from 'client/player/Game';
+import * as ui from '../Helpers/UiHelper';
+import { Survival } from '../player/Survival';
+import { VoiceChat } from '../Voice/VoiceChat';
 
 export class Hud {
 

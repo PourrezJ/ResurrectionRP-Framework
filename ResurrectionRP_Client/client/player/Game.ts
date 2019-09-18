@@ -1,22 +1,20 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import * as enums from 'client/Utils/Enums/Enums';
-import * as chat from 'client/chat/chat';
-import Raycast, * as raycast from 'client/Utils/Raycast';
+import * as enums from '../Utils/Enums/Enums';
 
-import { Time as TimeLib } from 'client/Env/Time';
-import { Survival as SurvivalLib } from 'client/player/Survival';
-import { Hud as HudLib } from 'client/player/Hud';
-import { RPGInventoryManager } from 'client/menus/rpgInventory/RPGinventory';
-import { Weather as WeatherLib } from 'client/Env/Weather';
-import { Interaction as InteractionLib } from 'client/Player/Interaction';
-import { Doors as DoorsManagerLib } from 'client/Env/Doors';
-import PhoneManager from 'client/phone/PhoneManager';
-import { DrivingSchool } from 'client/DrivingSchool';
-import { RadioManager } from 'client/menus/RadioManager';
-import { DustManManager } from 'client/Jobs/DustManManager';
-import { VoiceChat } from 'client/Voice/VoiceChat';
-import { Medical } from 'client/Medical';
+import { Time as TimeLib } from '../Env/Time';
+import { Survival as SurvivalLib } from '../player/Survival';
+import { Hud as HudLib } from '../player/Hud';
+import { RPGInventoryManager } from '../menus/rpgInventory/RPGinventory';
+import { Weather as WeatherLib } from '../Env/Weather';
+import { Interaction as InteractionLib } from '../Player/Interaction';
+import { Doors as DoorsManagerLib } from '../Env/Doors';
+import PhoneManager from '../phone/PhoneManager';
+import { DrivingSchool } from '../DrivingSchool';
+import { RadioManager } from '../menus/RadioManager';
+import { DustManManager } from '../Jobs/DustManManager';
+import { VoiceChat } from '../Voice/VoiceChat';
+import { Medical } from '../Medical';
 
 export class Game {
     //region Static Var   

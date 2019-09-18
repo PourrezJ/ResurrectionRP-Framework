@@ -1,5 +1,6 @@
 export default function UUIDV4() {
     var uuid = "", ii;
+
     for (ii = 0; ii < 32; ii += 1) {
         switch (ii) {
             case 8:
@@ -19,5 +20,6 @@ export default function UUIDV4() {
                 uuid += ((Math.random() * 16) | 0).toString(16);
         }
     }
+
     return uuid;
 }

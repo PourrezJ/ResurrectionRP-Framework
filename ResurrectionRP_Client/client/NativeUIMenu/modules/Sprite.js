@@ -1,5 +1,5 @@
-import Color from "client/NativeUIMenu/utils/Color.js";
-import { Screen } from "client/NativeUIMenu/utils/Screen.js";
+import Color from "../utils/Color.js";
+import { Screen } from "../utils/Screen.js";
 import * as alt from 'alt';
 import * as game from 'natives';
 

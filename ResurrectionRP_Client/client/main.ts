@@ -1,17 +1,17 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import * as chat from 'client/chat/chat';
+import * as chat from './chat/chat';
 import * as speedometer from './vehicle/vehicle';
-import * as xtreamMenu from 'client/menus/xtreamMenu/xtreamMenuManager';
-import * as utils from 'client/Utils/utils';
-import * as login from 'client/login/Login';
-import * as PlayerCustomization from 'client/player/PlayerCustomization';
-import { Game } from 'client/player/Game';
-import { OpenCharCreator } from 'client/Creator/Creator';
-import { NetworkingEntityClient } from 'client/Streamer/NetworkingEntityClient';
-import { Notify } from 'client/Notify/Notify';
-import menuManager from 'client/MenuManager/MenuManager';
-import { Admin } from 'client/Utils/Admin';
+import * as xtreamMenu from './menus/xtreamMenu/xtreamMenuManager';
+import * as utils from './Utils/utils';
+import * as login from './login/Login';
+import * as PlayerCustomization from './player/PlayerCustomization';
+import { Game } from './player/Game';
+import { OpenCharCreator } from './Creator/Creator';
+import { NetworkingEntityClient } from './Streamer/NetworkingEntityClient';
+import { Notify } from './Notify/Notify';
+import menuManager from './MenuManager/MenuManager';
+import { Admin } from './Utils/Admin';
 
 var GameClass: Game;
 

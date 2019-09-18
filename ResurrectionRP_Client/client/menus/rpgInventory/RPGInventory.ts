@@ -1,6 +1,6 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import * as chat from 'client/chat/chat';
+import * as chat from '../../chat/chat';
 
 export class RPGInventoryManager {
     public loading: boolean;

@@ -1,12 +1,12 @@
-import BadgeStyle from "client/NativeUIMenu/enums/BadgeStyle.js";
-import Font from "client/NativeUIMenu/enums/Font.js";
-import ResRectangle from "client/NativeUIMenu/modules/ResRectangle.js";
-import ResText, { Alignment } from "client/NativeUIMenu/modules/ResText.js";
-import Sprite from "client/NativeUIMenu/modules/Sprite.js";
-import Color from "client/NativeUIMenu/utils/Color.js";
-import Point from "client/NativeUIMenu/utils/Point.js";
-import Size from "client/NativeUIMenu/utils/Size.js";
-import UUIDV4 from "client/NativeUIMenu/utils/UUIDV4.js";
+import BadgeStyle from "../enums/BadgeStyle.js";
+import Font from "../enums/Font.js";
+import ResRectangle from "../modules/ResRectangle.js";
+import ResText, { Alignment } from "../modules/ResText.js";
+import Sprite from "../modules/Sprite.js";
+import Color from "../utils/Color.js";
+import Point from "../utils/Point.js";
+import Size from "../utils/Size.js";
+import UUIDV4 from "../utils/UUIDV4.js";
 
 export default class UIMenuItem {
     constructor(text, description = "", backColor = UIMenuItem.DefaultBackColor, highlightColor = UIMenuItem.DefaultHighlightedBackColor) {

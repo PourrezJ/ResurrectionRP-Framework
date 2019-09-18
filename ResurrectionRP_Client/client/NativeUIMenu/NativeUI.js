@@ -1,27 +1,27 @@
-import BadgeStyle from "client/NativeUIMenu/enums/BadgeStyle.js";
-import Font from "client/NativeUIMenu/enums/Font.js";
+import BadgeStyle from "./enums/BadgeStyle.js";
+import Font from "./enums/Font.js";
 
-import Container from "client/NativeUIMenu/modules/Container.js";
-import ItemsCollection from "client/NativeUIMenu/modules/ItemsCollection.js";
-import ResRectangle from "client/NativeUIMenu/modules/ResRectangle.js";
-import ResText, { Alignment } from "client/NativeUIMenu/modules/ResText.js";
-import Sprite from "client/NativeUIMenu/modules/Sprite.js";
+import Container from "./modules/Container.js";
+import ItemsCollection from "./modules/ItemsCollection.js";
+import ResRectangle from "./modules/ResRectangle.js";
+import ResText, { Alignment } from "./modules/ResText.js";
+import Sprite from "./modules/Sprite.js";
 
-import ListItem from "client/NativeUIMenu/modules/ListItem.js";
+import ListItem from "./modules/ListItem.js";
 
-import Color from "client/NativeUIMenu/utils/Color.js";
-import Common from "client/NativeUIMenu/utils/Common.js";
-import LiteEvent from "client/NativeUIMenu/utils/LiteEvent.js";
-import Point from "client/NativeUIMenu/utils/Point.js";
-import Size from "client/NativeUIMenu/utils/Size.js";
-import StringMeasurer from "client/NativeUIMenu/modules/StringMeasurer.js";
-import UUIDV4 from "client/NativeUIMenu/utils/UUIDV4.js";
-import { Screen } from "client/NativeUIMenu/utils/Screen.js";
+import Color from "./utils/Color.js";
+import Common from "./utils/Common.js";
+import LiteEvent from "./utils/LiteEvent.js";
+import Point from "./utils/Point.js";
+import Size from "./utils/Size.js";
+import StringMeasurer from "./modules/StringMeasurer.js";
+import UUIDV4 from "./utils/UUIDV4.js";
+import { Screen } from "./utils/Screen.js";
 
-import UIMenuItem from "client/NativeUIMenu/items/UIMenuItem.js";
-import UIMenuCheckboxItem from "client/NativeUIMenu/items/UIMenuCheckboxItem.js";
-import UIMenuListItem from "client/NativeUIMenu/items/UIMenuListItem.js";
-import UIMenuSliderItem from "client/NativeUIMenu/items/UIMenuSliderItem.js";
+import UIMenuItem from "./items/UIMenuItem.js";
+import UIMenuCheckboxItem from "./items/UIMenuCheckboxItem.js";
+import UIMenuListItem from "./items/UIMenuListItem.js";
+import UIMenuSliderItem from "./items/UIMenuSliderItem.js";
 
 import * as alt from 'alt';
 import * as game from 'natives';

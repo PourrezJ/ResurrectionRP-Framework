@@ -1,4 +1,4 @@
-import ListItem from "client/NativeUIMenu/modules/ListItem.js";
+import ListItem from "../modules/ListItem.js";
 
 export default class ItemsCollection {
     constructor(items) {

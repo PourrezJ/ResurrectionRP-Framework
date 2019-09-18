@@ -1,6 +1,5 @@
-import { Screen } from "client/NativeUIMenu/utils/Screen.js";
-import ResText from "client/NativeUIMenu/modules/ResText.js";
-import * as alt from 'alt';
+import { Screen } from "../utils/Screen.js";
+import ResText from "../modules/ResText.js";
 import * as game from 'natives';
 
 export default class StringMeasurer {

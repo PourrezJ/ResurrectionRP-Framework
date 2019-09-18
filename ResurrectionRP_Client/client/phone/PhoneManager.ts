@@ -1,11 +1,10 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import * as Game from 'client/player/game';
-import * as utils from 'client/Utils/Utils';
-import * as voice from 'client/Voice/VoiceChat';
-
+import * as utils from '../Utils/Utils';
+import * as voice from '../Voice/VoiceChat';
 
 var isPhoneOpen: boolean = false;
+
 export default class PhoneManager {
 
     public browser: alt.WebView = null;

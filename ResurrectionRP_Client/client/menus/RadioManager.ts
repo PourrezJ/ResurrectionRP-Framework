@@ -13,7 +13,8 @@ export class RadioManager {
     private pressed: boolean;
     private status: RadioModes;
     private volume: number = 10;
-    private muted :boolean = false;
+    private muted: boolean = false;
+    private tick: number;
 
     constructor() {
         alt.onServer('OpenRadio', (favoris: string, frequence: number, status: RadioModes, volume: number) =>
@@ -80,28 +81,14 @@ export class RadioManager {
             });
         });
 
-        alt.onServer('HideRadio', (favoris: string, frequence: number) => {
+        alt.onServer('CloseRadio', () => {
             if (this.view == null)
                 return;
-
-            this.view.emit('hide');
-            this.view.unfocus();
-            alt.showCursor(false);
-            alt.toggleGameControls(true);
-        });
-
-        alt.onServer('CloseRadio', (favoris: string, frequence: number) => {
-            if (this.view == null)
-                return;
-            alt.toggleGameControls(true);
             this.CloseRadio();
         });
 
-        alt.everyTick( () =>
+        this.tick = alt.everyTick( () =>
         {
-            //if (this.lastcheck > alt.getMsPerGameMinute()) {
-
-            //}
             if (this.view != null)
             {
                 utils.DisEnableControls(false);
@@ -115,7 +102,7 @@ export class RadioManager {
         this.view.unfocus();
         this.view.destroy();
         this.view = null;
-
+        alt.clearEveryTick(this.tick);
         alt.showCursor(false);
         alt.toggleGameControls(true);
         alt.emit("toggleChatAdminRank");

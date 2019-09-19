@@ -258,11 +258,11 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    await RadioManager.OpenRadio(client, ph.RadioSelected);
+                    RadioManager.OpenRadio(client, ph.RadioSelected);
                     break;
 
                 case ConsoleKey.PageDown:
-                    await RadioManager.Close(client);
+                    RadioManager.Close(client);
                     break;
 
                 case ConsoleKey.UpArrow:

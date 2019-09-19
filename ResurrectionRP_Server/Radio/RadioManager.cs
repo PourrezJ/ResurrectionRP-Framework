@@ -58,14 +58,14 @@ namespace ResurrectionRP_Server.Radio
         {
             AltAsync.OnClient("RadioManager", EventTrigered);
         }
-        public static async Task Close(IPlayer client)
+        public static void Close(IPlayer client)
         {
             Radio radio = null;
             if (_clientMenus.TryGetValue(client, out radio))
-                await radio.HideRadio(client);
+                radio.CloseRadio(client);
         }
 
-        public static async Task<bool> OpenRadio(IPlayer client, Radio radio)
+        public static bool OpenRadio(IPlayer client, Radio radio)
         {
             Radio oldRadio = null;
             _clientMenus.TryRemove(client, out oldRadio);
@@ -77,34 +77,34 @@ namespace ResurrectionRP_Server.Radio
 
             if (_clientMenus.TryAdd(client, radio))
             {
-                await radio.OpenRadio(client);
+                radio.OpenRadio(client);
                // await client.EmitAsync("ShowCursor", true);
                 return true;
             }
             return false;
         }
 
-        private async Task EventTrigered(IPlayer client, object[] args)
+        private Task EventTrigered(IPlayer client, object[] args)
         {
             if (!client.Exists)
-                return;
+                return Task.CompletedTask;
 
             var player = client;
 
             var ph = player.GetPlayerHandler();
             if (ph == null)
-                return;
+                return Task.CompletedTask;
 
             Radio radio = null;
             _clientMenus.TryGetValue(player, out radio);
 
             if (radio == null)
-                return;
+                return Task.CompletedTask;
 
             switch (args[0])
             {
                 case "Open":
-                    await OpenRadio(player, ph.RadioSelected);
+                    OpenRadio(player, ph.RadioSelected);
                     break;
 
                 case "OnOff":
@@ -131,7 +131,7 @@ namespace ResurrectionRP_Server.Radio
 
                 case "Close":     
                     if(_clientMenus.TryRemove(player, out radio))
-                        await radio.HideRadio(player);
+                        radio.CloseRadio(player);
                     break;
 
                 case "SaveFrequence":
@@ -163,7 +163,7 @@ namespace ResurrectionRP_Server.Radio
                     Alt.Server.LogError("RadioManager RadioChange Hm args[0] is not valid... problem in client side ? args 0 mmust be the event name");
                     break;
             }
-            return;
+            return Task.CompletedTask;
         }
 
         public int FindRadioInItemList(Radio radio, List<Items.RadioItem> itemList)

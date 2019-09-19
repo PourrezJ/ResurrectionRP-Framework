@@ -1,23 +1,20 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using System;
-using MongoDB.Bson.Serialization.Attributes;
-using System.Numerics;
-using System.Drawing;
-using MongoDB.Driver;
-using ResurrectionRP_Server.Models;
-using ResurrectionRP_Server.Inventory;
-using ResurrectionRP_Server.Streamer.Data;
-using AltV.Net.Elements.Entities;
-using ResurrectionRP_Server.Entities.Vehicles;
-using ResurrectionRP_Server;
-using ResurrectionRP_Server.Utils.Enums;
+﻿using AltV.Net;
 using AltV.Net.Async;
-using ResurrectionRP_Server.Entities.Players;
+using AltV.Net.Elements.Entities;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
+using Newtonsoft.Json;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Blips;
-using MongoDB.Bson;
+using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Utils.Enums;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Numerics;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Houses
 {
@@ -28,6 +25,7 @@ namespace ResurrectionRP_Server.Houses
         private const ushort DIMENSION_START = 1000;
         #endregion
 
+        #region Fields
         [BsonId]
         public int ID { get; set; }
 
@@ -65,7 +63,9 @@ namespace ResurrectionRP_Server.Houses
         // misc
         [JsonIgnore, BsonIgnore]
         public List<IPlayer> PlayersInside = new List<IPlayer>();
+        #endregion
 
+        #region Constructor
         public House(int id, string owner, int type, Vector3 position, int price, bool locked, string name = "", Parking parking = null)
         {
             ID = id;
@@ -83,7 +83,9 @@ namespace ResurrectionRP_Server.Houses
         
             OwnerHandle = null;
         }
+        #endregion
 
+        #region Methods
         public void Load()
         {
             // create marker
@@ -246,12 +248,17 @@ namespace ResurrectionRP_Server.Houses
         public bool SetIntoHouse(IPlayer client) 
             => HouseManager.SetIntoHouse(client, this);
 
-        public bool RemoveIntoHouse(IPlayer client) 
+        public bool RemoveFromHouse(IPlayer client) 
             => HouseManager.RemoveClientHouse(client);
 
         public async Task SendPlayer(IPlayer player)
         {
-            if (SetIntoHouse(player))
+            if (!player.Exists)
+                return;
+
+            if (!SetIntoHouse(player))
+                Alt.Server.LogWarning($"Player {player.GetPlayerHandler().Identite.Name} trying to enter house {ID} but already registered in another house");
+            else
             {
                 await player.SetPositionAsync(HouseTypes.HouseTypeList[Type].Position.Pos);
                 await player.SetRotationAsync(HouseTypes.HouseTypeList[Type].Position.Rot);
@@ -261,7 +268,13 @@ namespace ResurrectionRP_Server.Houses
 
         public async Task RemovePlayer(IPlayer player, bool set_pos = true)
         {
-            if (RemoveIntoHouse(player) && set_pos)
+            if (!player.Exists)
+                return;
+
+            if (!RemoveFromHouse(player))
+                Alt.Server.LogWarning($"Exiting unregistered player {player.GetPlayerHandler().Identite.Name} from house {ID}");
+
+            if (set_pos)
             {
                 await player.SetPositionAsync(Position);
                 await player.SetDimensionAsync(GameMode.GlobalDimension);
@@ -273,7 +286,7 @@ namespace ResurrectionRP_Server.Houses
             for (int i = PlayersInside.Count - 1; i >= 0; i--)
             {
                 IPlayer player = PlayersInside[i];
-                if (player != null && RemoveIntoHouse(player))
+                if (player != null && RemoveFromHouse(player))
                 {
                     await player.SetPositionAsync(Position);
                     await player.SetDimensionAsync(GameMode.GlobalDimension);
@@ -309,6 +322,7 @@ namespace ResurrectionRP_Server.Houses
 
             return id +1;
         }
+        #endregion
     }
     #endregion
 }

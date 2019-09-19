@@ -24,6 +24,10 @@ namespace ResurrectionRP_Server.Houses
     #region House Class
     public class House
     {
+        #region Constants
+        private const ushort DIMENSION_START = 1000;
+        #endregion
+
         [BsonId]
         public int ID { get; set; }
 
@@ -32,13 +36,10 @@ namespace ResurrectionRP_Server.Houses
             get => _owner;
             private set {
                 if (string.IsNullOrEmpty(value))
-                {
                     if (Marker != null) Marker.SetColor(Color.FromArgb(80, 255, 0, 0));
-                }
                 else
-                {
                     if (Marker != null) Marker.SetColor(Color.FromArgb(80, 255, 255, 255));
-                }
+
                 _owner = value;
             }
         }
@@ -93,14 +94,16 @@ namespace ResurrectionRP_Server.Houses
             ColShapeEnter.Dimension = GameMode.GlobalDimension;
             ColShapeEnter.SetData("House", ID);
             ColShapeEnter.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
+            ColShapeEnter.SetOnPlayerLeaveColShape(OnPlayerLeaveColshape);
 
             ColShapeOut = AltV.Net.Alt.CreateColShapeCylinder(HouseTypes.HouseTypeList[Type].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), 1f, 3f);
-            ColShapeOut.Dimension = (short)ID;
+            ColShapeOut.Dimension = (short)(DIMENSION_START + ID);
             ColShapeOut.SetData("House", ID);
             ColShapeOut.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
             ColShapeOut.SetOnPlayerInteractInColShape(OnPlayerInteractInColShape);
 
             IColShape parkingColshape = null;
+
             if (Parking != null)
             {
                 parkingColshape = AltV.Net.Alt.CreateColShapeCylinder(Parking.Spawn1.Pos - new Vector3(0, 0, 1), 3f, 3f);
@@ -126,10 +129,9 @@ namespace ResurrectionRP_Server.Houses
                 BlipsManager.CreateBlip(Name, Position, 4, 1);
 
             this.Inventory.MaxSlot = 40;
+
             if (Inventory.InventoryList.Length != Inventory.MaxSlot)
-            {
-                Array.Resize<ItemStack>(ref Inventory.InventoryList, Inventory.MaxSlot);
-            }
+                Array.Resize(ref Inventory.InventoryList, Inventory.MaxSlot);
 
             PlayersInside = new List<IPlayer>();
         }
@@ -140,6 +142,17 @@ namespace ResurrectionRP_Server.Houses
                 await HouseManager.OpenHouseMenu(client, this);
             else
                 client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
+        }
+
+        private async Task OnPlayerLeaveColshape(IColShape colShape, IPlayer client)
+        {
+            PlayerHandler ph = client.GetPlayerHandler();
+
+            if (ph == null)
+                return;
+
+            if (ph.HasOpenMenu())
+                await MenuManager.CloseMenu(client);
         }
 
         private async Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
@@ -242,7 +255,7 @@ namespace ResurrectionRP_Server.Houses
             {
                 await player.SetPositionAsync(HouseTypes.HouseTypeList[Type].Position.Pos);
                 await player.SetRotationAsync(HouseTypes.HouseTypeList[Type].Position.Rot);
-                await player.SetDimensionAsync((short)ID);
+                await player.SetDimensionAsync((short)(DIMENSION_START + ID));
             }
         }
 

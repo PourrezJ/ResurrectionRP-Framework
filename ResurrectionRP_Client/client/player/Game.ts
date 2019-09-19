@@ -105,8 +105,6 @@ export class Game {
             for (var i: number = 0; i <= 5; i++)
                 game.disableHospitalRestart(i, true);
 
-            for (var i: number = 12; i <= 19; i++)
-                game.disableControlAction(0, i, true);
             game.setPlayerHealthRechargeMultiplier(playerId, 0);
 
             alt.log('Données chargées');
@@ -147,9 +145,9 @@ export class Game {
         }
         
         alt.everyTick(() => {
-            /*
+            
             for (let i = 12; i <= 19; i++)
-                game.disableControlAction(2, i, true);*/
+                game.disableControlAction(2, i, true);
 
             //game.disableControlAction(2, 23, true);
 

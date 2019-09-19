@@ -10,9 +10,9 @@ const hairColors = [];
 const hairList = [
     // male
     [
-        { ID: 0, Name: "Rasage de prés", Collection: "mpbeach_overlays", Overlay: "FM_Hair_Fuzz" },
-        { ID: 1, Name: "Boule à zéro", Collection: "multiplayer_overlays", Overlay: "NG_M_Hair_001" },
-        { ID: 2, Name: "Crête avec côtés rasés ", Collection: "multiplayer_overlays", Overlay: "NG_M_Hair_002" },
+        { ID: 0, Name: "Boule à zéro", Collection: "mpbeach_overlays", Overlay: "FM_Hair_Fuzz" },
+        { ID: 1, Name: "Rasage de près", Collection: "multiplayer_overlays", Overlay: "NG_M_Hair_001" },
+        { ID: 2, Name: "Crête avec côtés rasés", Collection: "multiplayer_overlays", Overlay: "NG_M_Hair_002" },
         { ID: 3, Name: "Hipster", Collection: "multiplayer_overlays", Overlay: "NG_M_Hair_003" },
         { ID: 4, Name: "Raie d'un côté", Collection: "multiplayer_overlays", Overlay: "NG_M_Hair_004" },
         { ID: 5, Name: "Coupe courte", Collection: "multiplayer_overlays", Overlay: "NG_M_Hair_005" },
@@ -59,12 +59,12 @@ const hairList = [
         { ID: 82, Name: "Hairmod8", Collection: "mpgunrunning_overlays", Overlay: "MP_Gunrunning_Hair_M_000_M" },
         { ID: 83, Name: "Hairmod9", Collection: "mpgunrunning_overlays", Overlay: "MP_Gunrunning_Hair_M_000_M" },
         { ID: 84, Name: "Hairmod10", Collection: "mpgunrunning_overlays", Overlay: "MP_Gunrunning_Hair_M_000_M" },
-        //{ ID: 85, Name: "Hairmod10", Collection: "mpgunrunning_overlays", Overlay: "MP_Gunrunning_Hair_M_000_M" },
+        { ID: 85, Name: "Hairmod10", Collection: "mpgunrunning_overlays", Overlay: "MP_Gunrunning_Hair_M_000_M" },
         { ID: 86, Name: "Hairmod11", Collection: "mpgunrunning_overlays", Overlay: "MP_Gunrunning_Hair_M_000_M" }*/
     ],
     // female
     [
-        { ID: 0, Name: "Rasage de prés", Collection: "mpbeach_overlays", Overlay: "FM_Hair_Fuzz" },
+        { ID: 0, Name: "Boule à zéro", Collection: "mpbeach_overlays", Overlay: "FM_Hair_Fuzz" },
         { ID: 1, Name: "Court", Collection: "multiplayer_overlays", Overlay: "NG_F_Hair_001" },
         { ID: 2, Name: "Layered Mod", Collection: "multiplayer_overlays", Overlay: "NG_F_Hair_002" },
         { ID: 3, Name: "Queue de cochon", Collection: "multiplayer_overlays", Overlay: "NG_F_Hair_003" },

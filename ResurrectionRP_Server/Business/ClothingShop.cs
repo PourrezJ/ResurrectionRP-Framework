@@ -82,7 +82,7 @@ namespace ResurrectionRP_Server.Business
             await base.Init();
 
             _clothingColShape = Alt.CreateColShapeCylinder(ClothingPos - new Vector3(0, 0, 1), 4f, 3f);
-            Marker.CreateMarker(MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 4f), new Vector3(0, 0, 3f), Color.FromArgb(80, 255, 255, 255));
+            Marker.CreateMarker(MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 3f), new Vector3(0, 0, 3f), Color.FromArgb(80, 255, 255, 255));
             Entities.Blips.BlipsManager.SetColor(Blip, 25);
 
             _clothingColShape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
@@ -651,7 +651,7 @@ namespace ResurrectionRP_Server.Business
 
             menu.ClearItems();
 
-            int[] compoList = menu.GetData("Categorie");
+            List<int> compoList = menu.GetData("Categorie");
             menu.SubTitle = menuItem.Text.ToUpper();
             menu.BackCloseMenu = false;
             menu.ItemSelectCallback = OnCallBackWithCat;

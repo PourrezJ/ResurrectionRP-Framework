@@ -68,7 +68,7 @@ export class Game {
     private _Radio: RadioManager;
     public get Radio(): RadioManager { return this._Radio; }
 
-    public DebugInfo: boolean;
+    public DebugInfo: boolean = false;
 
     constructor(
         StaffRank: number,

@@ -68,7 +68,11 @@ export class Interaction {
                 case 103:   // 7
                 case 104:   // 8
                 case 105:   // 9
-                case 20:
+                case 20:    // Verr Maj
+                case 49:    // &
+                case 50:    // é
+                case 51:    // "
+
                     if (key == 69 && isInColshape)
                         alt.emitServer("InteractionInColshape", key);
 

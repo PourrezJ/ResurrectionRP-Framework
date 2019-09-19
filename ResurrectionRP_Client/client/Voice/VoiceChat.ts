@@ -133,27 +133,22 @@ export class VoiceChat
         });
 
         alt.onServer('Voice_TalkingOnRadio', (playerName: string, isOnRadio: boolean, frequence: number) => {
-            if (alt.Player.local.getSyncedMeta("Voice_TeamSpeakName") == playerName ) {
-                this.PlaySound("selfMicClick", false, "MicClick");
+            if (isOnRadio) {
+                VoiceChat.ExecuteCommand(
+                    new PluginCommand(Command.RadioCommunicationUpdate, VoiceChat.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, VoiceChat.radioVolume / 10, true, null)))
+
+                game.stopSound(-1);
+                game.stopSound(1);
+                game.playSoundFrontend(-1, "Start_Squelch", "CB_RADIO_SFX", true);
+                game.playSoundFrontend(1, "Background_Loop", "CB_RADIO_SFX", true);
             }
             else {
-                if (isOnRadio) {
-                    VoiceChat.ExecuteCommand(
-                        new PluginCommand(Command.RadioCommunicationUpdate, VoiceChat.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, VoiceChat.radioVolume / 10, true, null)))
+                VoiceChat.ExecuteCommand(
+                    new PluginCommand(Command.StopRadioCommunication, VoiceChat.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, VoiceChat.radioVolume / 10, true, null)))
 
-                    game.stopSound(-1);
-                    game.stopSound(1);
-                    game.playSoundFrontend(-1, "Start_Squelch", "CB_RADIO_SFX", true);
-                    game.playSoundFrontend(1, "Background_Loop", "CB_RADIO_SFX", true);
-                }
-                else {
-                    VoiceChat.ExecuteCommand(
-                        new PluginCommand(Command.StopRadioCommunication, VoiceChat.serverUniqueIdentifier, new RadioCommunication(playerName, RadioType.LongRange, RadioType.LongRange, true, VoiceChat.radioVolume / 10, true, null)))
-
-                    game.stopSound(-1);
-                    game.stopSound(1);
-                    game.playSoundFrontend(1, "End_Squelch", "CB_RADIO_SFX", true);
-                }
+                game.stopSound(-1);
+                game.stopSound(1);
+                game.playSoundFrontend(1, "End_Squelch", "CB_RADIO_SFX", true);
             }
         });
     

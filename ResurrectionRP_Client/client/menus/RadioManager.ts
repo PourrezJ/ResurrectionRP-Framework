@@ -55,12 +55,14 @@ export class RadioManager {
                 alt.emitServer('RadioManager', 'ChangeVolume', VoiceChat.radioVolume);
                 alt.emit("Display_Help", "Volume: " + this.volume, 5000);
             });
+
             this.view.on('volumeDown', () => {
                 VoiceChat.radioVolume = (this.volume - 1 < 0) ? 0 : this.volume - 1 ;
                 this.volume = VoiceChat.radioVolume;
                 alt.emit("Display_Help", "Volume: " + this.volume, 5000);
                 alt.emitServer("RadioManager", 'ChangeVolume', VoiceChat.radioVolume);
             });
+
             this.view.on('volumeMuted', () => {
                 VoiceChat.radioVolume = (this.muted) ? 10 : 0;
                 this.volume = VoiceChat.radioVolume;

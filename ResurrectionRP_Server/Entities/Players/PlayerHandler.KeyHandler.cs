@@ -1,5 +1,4 @@
 ﻿using AltV.Net.Async;
-using AltV.Net.Async.Events;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Entities.Vehicles;
@@ -7,10 +6,8 @@ using ResurrectionRP_Server.Farms;
 using ResurrectionRP_Server.Inventory;
 using ResurrectionRP_Server.Radio;
 using ResurrectionRP_Server.Utils;
-using ResurrectionRP_Server.Utils.Extensions;
 using System;
 using System.Threading.Tasks;
-using AltV.Net;
 using ResurrectionRP_Server.Entities.Players.Data;
 using ResurrectionRP_Server.Bank;
 using System.Linq;
@@ -295,8 +292,6 @@ namespace ResurrectionRP_Server.Entities.Players
                     await ph.RadioSelected?.UseRadio(client);
                     break;
 
-                    /*
-
                 case ConsoleKey.D1:
                     if (ph.HasOpenMenu())
                         return;
@@ -305,14 +300,14 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.D2:
-                    if (client.HasOpenMenu())
+                    if (ph.HasOpenMenu())
                         return;
 
                     await SwitchWeapon(2);
                     break;
 
                 case ConsoleKey.D3:
-                    if (client.HasOpenMenu())
+                    if (ph.HasOpenMenu())
                         return;
 
                     await SwitchWeapon(3);
@@ -327,10 +322,46 @@ namespace ResurrectionRP_Server.Entities.Players
                 case ConsoleKey.NumPad7:
                 case ConsoleKey.NumPad8:
                 case ConsoleKey.NumPad9:
-                    await OnAnimationKeyPressed(Keycode);
-                    break;*/
+                    //await OnAnimationKeyPressed(Keycode);
+                    break;
             }
         }
+
+        #region Misc
+        public async Task SwitchWeapon(int slot)
+        {
+            switch (slot)
+            {
+                case 1:
+                    if (OutfitInventory.Slots[16] != null)
+                    {
+                        var weaponItem = (OutfitInventory.Slots[16].Item) as Items.Weapons;
+                        if (weaponItem != null)
+                        {
+                            await Client.GiveWeaponAsync((uint)weaponItem.Hash, 99999, true);
+                        }
+                    }
+                    else await Client.RemoveAllWeaponsAsync();
+                    break;
+
+                case 2:
+                    if (OutfitInventory.Slots[17] != null)
+                    {
+                        var weaponItem = (OutfitInventory.Slots[17].Item) as Items.Weapons;
+                        if (weaponItem != null)
+                        {
+                            await Client.GiveWeaponAsync((uint)weaponItem.Hash, 99999, true);
+                        }
+                    }
+                    else await Client.RemoveAllWeaponsAsync();
+                    break;
+                case 3:
+                    await Client.RemoveAllWeaponsAsync();
+                    break;
+            }
+
+        }
+        #endregion
 
         private Task OnKeyReleasedCallback(IPlayer client, ConsoleKey Keycode)
         {

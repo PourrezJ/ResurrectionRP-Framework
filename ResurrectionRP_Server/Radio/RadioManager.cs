@@ -70,15 +70,9 @@ namespace ResurrectionRP_Server.Radio
             Radio oldRadio = null;
             _clientMenus.TryRemove(client, out oldRadio);
 
-            if (oldRadio != null)
-            {
-                // oldRadio.ShutdownRadio();     
-            }
-
             if (_clientMenus.TryAdd(client, radio))
             {
                 radio.OpenRadio(client);
-               // await client.EmitAsync("ShowCursor", true);
                 return true;
             }
             return false;

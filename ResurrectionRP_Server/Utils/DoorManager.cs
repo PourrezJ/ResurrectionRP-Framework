@@ -22,11 +22,6 @@ namespace ResurrectionRP_Server.Utils
         [JsonIgnore]
         public InteractDelegate Interact { get; set; }
 
-        public Door()
-        {
-
-        }
-
         public static Door CreateDoor(int hash, Vector3 position, bool locked = false, bool hide = false)
         {
             var door = new Door()
@@ -77,20 +72,9 @@ namespace ResurrectionRP_Server.Utils
     {
         public List<Door> DoorList = new List<Door>();
 
-        public DoorManager()
-        {
-            AltAsync.OnClient("DoorManager_Interact", DoorManager_Interact);
-        }
-
         public void OnPlayerConnected(IPlayer client)
         {
             client.EmitLocked("SetAllDoorStatut", JsonConvert.SerializeObject(DoorList));
-        }
-
-        private async Task DoorManager_Interact(IPlayer client, object[] args)
-        {
-            Door door = DoorList.Find(d => d.ID == (int)args[0]);
-            await door.Interact?.Invoke(client, door);
         }
     }
 }

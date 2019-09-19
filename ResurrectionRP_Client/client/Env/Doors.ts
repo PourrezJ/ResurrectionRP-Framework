@@ -5,11 +5,11 @@ class Door {
 
     public ID: number;
     public Hash: number;
-    public Position: alt.Vector3;
+    public Position: Vector3;
     public Locked: boolean;
     public Hide: boolean;
 
-    constructor(id: number, hash: number, position: alt.Vector3, locked: boolean = false) {
+    constructor(id: number, hash: number, position: Vector3, locked: boolean = false) {
         this.ID = id;
         this.Hash = hash;
         this.Position = position;
@@ -17,12 +17,12 @@ class Door {
     }
 
     public setDoorLockStatus = (locked: boolean) => {
-        game.doorControl(this.Hash, Number.parseInt(this.Position.x + ""), Number.parseInt(this.Position.y + ""), Number.parseInt(this.Position.z + ""), locked, 0, 0, 0);
+        game.doorControl(this.Hash, this.Position.x, this.Position.y, this.Position.z, locked, 0, 0, 0);
     }
 
     public setDoorOpenStatus = (angle: number) => {
         if (!this.Locked)
-            game.setStateOfClosestDoorOfType(this.Hash, Number.parseInt(this.Position.x + ""), Number.parseInt(this.Position.y + ""), Number.parseInt(this.Position.z + ""), this.Locked, angle, false);
+            game.setStateOfClosestDoorOfType(this.Hash, this.Position.x, this.Position.y, this.Position.z, this.Locked, angle, false);
     }
 }
 
@@ -32,21 +32,19 @@ export class Doors {
     constructor() {
         alt.onServer("SetAllDoorStatut", (items: string) => {
             var tDoorsList = JSON.parse(items);
-            tDoorsList.forEach((item: Door, index) => {
-                this.DoorsList[index] = new Door(item.ID, item.Hash, item.Position, item.Locked);
-                this.DoorsList[index].setDoorLockStatus(item.Locked);
+
+            tDoorsList.forEach((item: any) => {
+
+                let pos = new alt.Vector3(item.Position.X, item.Position.Y, item.Position.Z);
+
+                let door = new Door(item.ID, item.Hash, pos as Vector3, item.Locked);
+                door.setDoorLockStatus(item.Locked);
+                this.DoorsList.push(door);
             });
         });
 
         alt.onServer("SetDoorLockState", this.setDoorLockState);
-        alt.on("SetDoorLockState", this.setDoorLockState);
-
-
-
         alt.onServer("SetDoorOpenState", this.setDoorOpenState);
-        alt.on("SetDoorOpenState", this.setDoorOpenState);
-
-
     }
 
     public setDoorOpenState = (first: number, second: number) => {

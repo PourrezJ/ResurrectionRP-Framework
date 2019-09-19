@@ -211,7 +211,7 @@ export function initialize() {
                 return;
             }
 
-            drawText(this.text, 0.5, 0.85, 0.8, 4, 255, 255, 255, this.alpha, true);
+            drawText(this.text, 0.5, 0.80, 0.8, 4, 255, 255, 255, this.alpha, true);
         }
     }
     class Loading {

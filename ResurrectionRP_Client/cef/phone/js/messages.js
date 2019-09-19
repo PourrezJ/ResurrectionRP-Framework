@@ -48,6 +48,10 @@ app.controller("MessageViewCtrl", function ($scope) {
         $scope.messageBox = null;
     };
 
+    canClose = () => {
+        alt.emit("CanClose", false);
+    };
+
     $(function () {
         alt.emit("getMessages", $scope.conversationId, $scope.receiverNumber);
     });

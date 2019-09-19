@@ -157,7 +157,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    Door door = GameMode.Instance.DoorManager.DoorList.Find(p => p.Position.DistanceTo2D(client.Position) <= 1.5f);
+                    Door door = GameMode.Instance.DoorManager.DoorList.Find(p => p.Position.DistanceTo2D(Raycastdata.pos) <= 1 && p.Hash == Raycastdata.entityHash && Raycastdata.isHit);
                     if (door != null)
                         await door.Interact?.Invoke(client, door);
 
@@ -258,11 +258,11 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    await RadioManager.OpenRadio(client, ph.RadioSelected);
+                    RadioManager.OpenRadio(client, ph.RadioSelected);
                     break;
 
                 case ConsoleKey.PageDown:
-                    await RadioManager.Close(client);
+                    RadioManager.Close(client);
                     break;
 
                 case ConsoleKey.UpArrow:

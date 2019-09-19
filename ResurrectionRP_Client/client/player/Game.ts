@@ -140,13 +140,16 @@ export class Game {
 
             alt.Player.local.setMeta("IsConnected", true);
             alt.Player.local.setMeta("LevelRank", this.LevelRank);
-        } catch (ex) {
+        }
+        catch (ex)
+        {
             alt.log(ex);
         }
         
         alt.everyTick(() => {
+            /*
             for (let i = 12; i <= 19; i++)
-                game.disableControlAction(2, i, true);
+                game.disableControlAction(2, i, true);*/
 
             //game.disableControlAction(2, 23, true);
 

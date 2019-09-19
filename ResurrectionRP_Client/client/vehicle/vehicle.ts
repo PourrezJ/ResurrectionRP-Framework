@@ -95,3 +95,8 @@ export function show(vehicle, seat, currentFuel, maxFuel, milage, fuelconsumptio
     fuelMax = maxFuel;
     fuelCur = currentFuel;
 }
+
+export function getFuel(): number { return fuelCur; }
+export function getFuelConsumption(): number { return fuelConsum; }
+export function getMaxFuel(): number { return fuelMax; }
+export function getKm(): number { return CurrentMilage; }

@@ -68,7 +68,10 @@ export class Hud {
             if (!game.hasStreamedTextureDictLoaded("srange_gen"))
                 game.requestStreamedTextureDict("srange_gen", true);
 
-            if (!VoiceChat.isConnected && !alt.Player.local.getMeta("IsDebug") && !alt.Player.local.getMeta("LevelRank")) {
+            if (!VoiceChat.isConnected && !alt.Player.local.getMeta("IsDebug") && alt.Player.local.getMeta("LevelRank") == null) {
+                if (alt.Player.local.getMeta("LevelRank") > 0)
+                    return;
+
                 this._advert++;
                 if (this._advert >= 2000) {
                     let screenRes = game.getScreenResolution(0, 0);

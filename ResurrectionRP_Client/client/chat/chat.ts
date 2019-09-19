@@ -55,6 +55,12 @@ export function initialize() {
         if (!loaded)
             return;
 
+        if (alt.Player.local.getMeta("LevelRank") == null)
+            return;
+
+        if (alt.Player.local.getMeta("LevelRank") == 0)
+            return;
+
         if (!opened && key === 0x54 && alt.gameControlsEnabled()) {
             opened = true;
             view.emit('openChat', false);
@@ -89,6 +95,11 @@ export function pushMessage(text: string): void {
     } else {
         addMessage(text);
     }
+}
+
+export function hide(hide: boolean) {
+    hidden = hide;
+    view.emit('hideChat', hidden);
 }
 
 export function isHidden(): boolean {

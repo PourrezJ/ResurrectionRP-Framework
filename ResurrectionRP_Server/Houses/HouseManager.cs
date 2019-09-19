@@ -7,6 +7,7 @@ using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.Utils.Enums;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -22,7 +23,7 @@ namespace ResurrectionRP_Server.Houses
         // settings
         public static List<House> Houses = new List<House>();
 
-        private static Dictionary<IPlayer, House> ClientHouse = new Dictionary<IPlayer, House>();
+        private static ConcurrentDictionary<IPlayer, House> ClientHouse = new ConcurrentDictionary<IPlayer, House>();
         #endregion
 
         #region Constructor
@@ -59,7 +60,7 @@ namespace ResurrectionRP_Server.Houses
             return null;
         }
 
-        public static bool RemoveClientHouse(IPlayer client) => ClientHouse.Remove(client);
+        public static bool RemoveClientHouse(IPlayer client) => ClientHouse.TryRemove(client, out _);
 
         public async Task RemovePlayerFromHouseList(IPlayer player)
         {

@@ -13,8 +13,6 @@ namespace ResurrectionRP_Server.EventHandlers
     {
         #region Delegates
         public delegate Task ColShapePlayerEventHandler(IColShape colShape, IPlayer client);
-        public delegate Task ColShapePlayerInteractHouse(IColShape colShape, IPlayer client, House house);
-        public delegate Task ColShapePlayerInteract(BsonObjectId ID, IPlayer client);
         public delegate Task ColShapeVehicleEventHandler(IColShape colShape, IVehicle vehicle);
         #endregion
 
@@ -24,9 +22,6 @@ namespace ResurrectionRP_Server.EventHandlers
         public static event ColShapeVehicleEventHandler OnVehicleEnterColShape;
         public static event ColShapeVehicleEventHandler OnVehicleLeaveColShape;
         public static event ColShapePlayerEventHandler OnPlayerInteractInColShape;
-
-        // public static event ColShapePlayerInteractHouse OnPlayerInteractHouse;
-        // public static event ColShapePlayerEventHandler OnPlayerInteractTeleporter;
         #endregion
 
         #region Private methods
@@ -39,7 +34,7 @@ namespace ResurrectionRP_Server.EventHandlers
 
                 if (state)
                 {
-                    // V752 : Bug ColShape.IsEntityIn() returns always false
+                    // BUG V784 : Bug ColShape.IsEntityIn() returns always false
                     colShape.AddEntity(targetEntity);
 
                     if (targetEntity.Type == BaseObjectType.Vehicle)
@@ -61,7 +56,7 @@ namespace ResurrectionRP_Server.EventHandlers
                 }
                 else
                 {
-                    // V752 : Bug ColShape.IsEntityIn() returns always false
+                    // BUG V784 : Bug ColShape.IsEntityIn() returns always false
                     colShape.RemoveEntity(targetEntity as IPlayer);
 
                     if (targetEntity.Type == BaseObjectType.Vehicle)
@@ -98,7 +93,7 @@ namespace ResurrectionRP_Server.EventHandlers
 
             foreach (IColShape colshape in Alt.GetAllColShapes())
             {
-                // V752 : Bug ColShape.IsEntityIn() returns always false
+                // BUG V784 : Bug ColShape.IsEntityIn() returns always false
                 if (colshape.IsEntityInColShape(client))
                 {
                     if (OnPlayerInteractInColShape != null)

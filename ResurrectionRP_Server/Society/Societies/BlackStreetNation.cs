@@ -28,7 +28,7 @@ namespace ResurrectionRP_Server.Society.Societies
             List<TeleportEtage> etages = new List<TeleportEtage>()
             {
                 new TeleportEtage() { Name = "Bar", Location = new Location(new Vector3(-1385.479f, -606.451f, 30.31957f), new Vector3(0, 0, 130.858f))},
-                new TeleportEtage() { Name = "Sorti arrière", Location = new Location(new Vector3(-1368.322f, -647.4513f, 28.69429f), new Vector3(0, 0, 124.4904f))}
+                new TeleportEtage() { Name = "Sortie arrière", Location = new Location(new Vector3(-1368.322f, -647.4513f, 28.69429f), new Vector3(0, 0, 124.4904f))}
             };
 
             Teleport.Teleport.CreateTeleport(new Location(new Vector3(-1386.159f, -627.3551f, 30.81957f), new Vector3(0, 0, 309.1539f)), etages, menutitle: "Porte");

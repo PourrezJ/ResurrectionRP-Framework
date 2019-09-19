@@ -31,7 +31,7 @@ namespace ResurrectionRP_Server.Teleport
         public int ID { get; private set; }
         public bool VehicleAllowed { get; set; }
         public Location Entree { get; set; }
-        public List<TeleportEtage> Sorti { get; set; }
+        public List<TeleportEtage> Sortie { get; set; }
         public string MenuTitle { get; set; }
         public bool IsWhitelisted { get; set; }
 
@@ -58,7 +58,7 @@ namespace ResurrectionRP_Server.Teleport
             var teleport = new Teleport()
             {
                 Entree = entree,
-                Sorti = sorti,
+                Sortie = sorti,
                 VehicleAllowed = vehicleAllowed,
                 IsWhitelisted = iswhitelisted,
                 MenuTitle = menutitle,

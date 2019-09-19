@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ResurrectionRP_Server
 {
-    // BUG v752 : ColShape.IsEntityIn() returns always false
+    // BUG v784 : ColShape.IsEntityIn() returns always false
     public static class ColshapeExtension
     {
         public static void AddEntity(this IColShape colshape, IEntity entity)

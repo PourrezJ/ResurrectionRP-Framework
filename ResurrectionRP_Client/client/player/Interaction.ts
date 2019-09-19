@@ -180,3 +180,7 @@ export class Interaction {
         canClose = close;
     }
 }
+
+export function getRaycastResult() {
+    return raycastResult;
+}

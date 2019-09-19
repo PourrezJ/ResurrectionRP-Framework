@@ -50,7 +50,7 @@ namespace ResurrectionRP_Server.Entities.Players
             AltAsync.OnClient("OnKeyPress", OnKeyPress);
             AltAsync.OnClient("OnKeyUp", OnKeyReleased);
 
-            AltAsync.OnPlayerDead += Events_PlayerDeath;
+            Alt.OnPlayerDead += Alt_OnPlayerDead;
             /*
             Utils.Utils.Delay(300000, false, async () =>
             {
@@ -83,6 +83,7 @@ namespace ResurrectionRP_Server.Entities.Players
             });*/
 
         }
+
 
         /**
         private async Task PlayerSync_TaskStartScenarioAtPosition(object sender, Models.PlayerRemoteEventEventArgs eventArgs)
@@ -154,13 +155,13 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.Server.LogInfo($"Joueur social: {ph.PID} || Nom: {ph.Identite.Name} est déconnecté raison: {reason}.");
         }
 
-        private async Task Events_PlayerDeath(IPlayer player, IEntity killer, uint weapon)
+        private void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
         {
             if (!player.Exists)
                 return;
 
             if (weapon != 2725352035)
-                await player.EmitAsync("ONU_PlayerDeath", weapon);
+                player.EmitLocked("ONU_PlayerDeath", weapon);
             else
             {
                 player.SendNotification($"Ne va pas vers la lumière, tu vas te relever.");

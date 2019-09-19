@@ -1,6 +1,7 @@
 ﻿using AltV.Net.Elements.Entities;
 using AltV.Net.Async;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.EventHandlers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,11 +21,12 @@ namespace ResurrectionRP_Server.Teleport
         public TeleportManager()
         {
             Events.OnPlayerInteractInColShape += OnTeleportColshape;
+            Events.OnPlayerLeaveColShape += OnPlayerLeaveColShape;
         }
 
-        private async Task OnTeleportColshape(IColShape colshape, IPlayer player)
+        private async Task OnTeleportColshape(IColShape colshape, IPlayer client)
         {
-            if (!player.Exists)
+            if (!client.Exists)
                 return;
 
             colshape.GetData("Teleport", out string datad);
@@ -38,52 +40,52 @@ namespace ResurrectionRP_Server.Teleport
 
             if (teleport != null)
             {
-                if (teleport.IsWhitelisted && !teleport.Whileliste.Contains(player.GetSocialClub()))
+                if (teleport.IsWhitelisted && !teleport.Whileliste.Contains(client.GetSocialClub()))
                 {
-                    player.SendNotificationError("Vous n'êtes pas autorisé à utiliser cette porte.");
+                    client.SendNotificationError("Vous n'êtes pas autorisé à utiliser cette porte.");
                     return;
                 }
 
-                if (teleport.Sorti.Count > 1)
+                if (teleport.Sortie.Count > 1)
                 {
-                    if (!teleport.VehicleAllowed && await player.GetVehicleAsync() != null)
+                    if (!teleport.VehicleAllowed && await client.GetVehicleAsync() != null)
                         return;
 
-                    Menu _menu = new Menu("ID_SellMenu", teleport.MenuTitle, backCloseMenu: true);
+                    Menu _menu = new Menu("ID_TeleportMenu", teleport.MenuTitle, backCloseMenu: true);
                     _menu.ItemSelectCallback = MenuCallBack;
 
                     if (data.State == TeleportState.Out)
                     {
-                        var item = new MenuItem("Sorti", executeCallback: true);
+                        var item = new MenuItem("Sortie", executeCallback: true);
                         item.SetData("Location", teleport.Entree);
                         _menu.Add(item);
                     }
 
-                    foreach (var etage in teleport.Sorti)
+                    foreach (var etage in teleport.Sortie)
                     {
                         var item = new MenuItem(etage.Name, executeCallback: true);
                         item.SetData("Location", etage.Location);
                         _menu.Add(item);
                     }
 
-                    await _menu.OpenMenu(player);
+                    await _menu.OpenMenu(client);
                 }
                 else
                 {
-                    if (teleport.VehicleAllowed && await player.GetVehicleAsync() != null)
+                    if (teleport.VehicleAllowed && await client.GetVehicleAsync() != null)
                     {
-                        var vehicle = await player.GetVehicleAsync();
+                        var vehicle = await client.GetVehicleAsync();
 
                         if (data.State == TeleportState.Enter)
                         {
-                            var location = teleport.Sorti[0].Location;
-                            player.RequestCollisionAtCoords(location.Pos);
+                            var location = teleport.Sortie[0].Location;
+                            client.RequestCollisionAtCoords(location.Pos);
                             await vehicle.SetPositionAsync(location.Pos);
                             await vehicle.SetRotationAsync(location.Rot);
                         }
                         else
                         {
-                            player.RequestCollisionAtCoords(teleport.Entree.Pos);
+                            client.RequestCollisionAtCoords(teleport.Entree.Pos);
                             await vehicle.SetPositionAsync(teleport.Entree.Pos);
                             await vehicle.SetRotationAsync(teleport.Entree.Rot);
                         }
@@ -92,24 +94,43 @@ namespace ResurrectionRP_Server.Teleport
                     {
                         if (data.State == TeleportState.Enter)
                         {
-                            var location = teleport.Sorti[0].Location;
-                            player.RequestCollisionAtCoords(location.Pos);
-                            await player.SetPositionAsync(location.Pos);
-                            await player.SetRotationAsync(location.Rot);
+                            var location = teleport.Sortie[0].Location;
+                            client.RequestCollisionAtCoords(location.Pos);
+                            await client.SetPositionAsync(location.Pos);
+                            await client.SetRotationAsync(location.Rot);
                         }
                         else
                         {
-                            player.RequestCollisionAtCoords(teleport.Entree.Pos);
-                            await player.SetPositionAsync(teleport.Entree.Pos);
-                            await player.SetRotationAsync(teleport.Entree.Rot);
+                            client.RequestCollisionAtCoords(teleport.Entree.Pos);
+                            await client.SetPositionAsync(teleport.Entree.Pos);
+                            await client.SetRotationAsync(teleport.Entree.Rot);
                         }
                     }
 
-                     player.Freeze(true);
+                     client.Freeze(true);
                     await Task.Delay(250);
-                     player.Freeze(false);
+                     client.Freeze(false);
                 }
             }
+        }
+
+        private async Task OnPlayerLeaveColShape(IColShape colshape, IPlayer client)
+        {
+            if (!client.Exists)
+                return;
+
+            colshape.GetData("Teleport", out string datad);
+
+            if (datad == null)
+                return;
+
+            PlayerHandler ph = client.GetPlayerHandler();
+
+            if (ph == null)
+                return;
+
+            if (ph.HasOpenMenu())
+                await MenuManager.CloseMenu(client);
         }
 
         private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -123,6 +144,6 @@ namespace ResurrectionRP_Server.Teleport
             await client.SetRotationAsync(etage.Rot);
         }
 
-        public Teleport GetTeleport(int id) => this.Teleports.Find(t => t.ID == id);
+        public Teleport GetTeleport(int id) => Teleports.Find(t => t.ID == id);
     }
 }

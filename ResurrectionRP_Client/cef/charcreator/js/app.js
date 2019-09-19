@@ -233,8 +233,8 @@ app.controller("CharCtrl", function ($scope, $ngConfirm, $timeout) {
         $scope.char.Appearance =
             [
                 { Index: -1, Opacity: 1, Color: -1, SecondaryColor: 0 },
-                { Index: -1, Opacity: 1, Color: -1, SecondaryColor: 0 },
-                { Index: -1, Opacity: 1, Color: -1, SecondaryColor: 0 },
+                { Index: -1, Opacity: 1, Color: 0, SecondaryColor: 0 },
+                { Index: -1, Opacity: 1, Color: 0, SecondaryColor: 0 },
                 { Index: -1, Opacity: 1, Color: -1, SecondaryColor: 0 },
                 { Index: -1, Opacity: 1, Color: -1, SecondaryColor: 0 },
                 { Index: -1, Opacity: 1, Color: -1, SecondaryColor: 0 },

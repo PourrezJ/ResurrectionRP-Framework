@@ -92,13 +92,13 @@ namespace ResurrectionRP_Server.Houses
             Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, Position - new Vector3(0.0f, 0.0f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f), Color.FromArgb(80, 255, 0, 0));
 
             // create colshape
-            ColShapeEnter = AltV.Net.Alt.CreateColShapeCylinder(Position - new Vector3(0, 0, 1), 1f, 3f);
+            ColShapeEnter = Alt.CreateColShapeCylinder(Position - new Vector3(0, 0, 1), 1f, 3f);
             ColShapeEnter.Dimension = GameMode.GlobalDimension;
             ColShapeEnter.SetData("House", ID);
             ColShapeEnter.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
             ColShapeEnter.SetOnPlayerLeaveColShape(OnPlayerLeaveColshape);
 
-            ColShapeOut = AltV.Net.Alt.CreateColShapeCylinder(HouseTypes.HouseTypeList[Type].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), 1f, 3f);
+            ColShapeOut = Alt.CreateColShapeCylinder(HouseTypes.HouseTypeList[Type].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), 1f, 3f);
             ColShapeOut.Dimension = (short)(DIMENSION_START + ID);
             ColShapeOut.SetData("House", ID);
             ColShapeOut.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
@@ -108,7 +108,6 @@ namespace ResurrectionRP_Server.Houses
 
             if (Parking != null)
             {
-                parkingColshape = AltV.Net.Alt.CreateColShapeCylinder(Parking.Spawn1.Pos - new Vector3(0, 0, 1), 3f, 3f);
                 Parking.OnSaveNeeded = OnParkingSaveNeeded;
                 Parking.OnVehicleStored = OnVehicleStored;
                 Parking.OnVehicleOut = OnVehicleOutParking;

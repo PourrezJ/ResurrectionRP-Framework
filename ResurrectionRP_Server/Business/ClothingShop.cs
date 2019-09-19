@@ -3,7 +3,6 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Entities.Players;
-using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Loader;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
@@ -28,34 +27,27 @@ namespace ResurrectionRP_Server.Business
         public Banner BannerStyle;
 
         #region All
-        public int[] Mask;
-        public int[] BackPack;
+        public List<int> Mask;
+        public List<int> BackPack;
         #endregion
 
         #region Men
-        public int[] MenLegs;
-        public int[] MenFeet;
-        public int[] MenGlove;
-        public int[] MenUnderShirt;
-        public int[] MenTops;
+        public List<int> MenLegs;
+        public List<int> MenFeet;
+        public List<int> MenGlove;
+        public List<int> MenUnderShirt;
+        public List<int> MenTops;
+        public List<int> MenAccessories;
         #endregion
 
         #region Girl
-        public int[] GirlLegs;
-        public int[] GirlFeet;
-        public int[] GirlGlove;
-        public int[] GirlUnderShirt;
-        public int[] GirlTops;
+        public List<int> GirlLegs;
+        public List<int> GirlFeet;
+        public List<int> GirlGlove;
+        public List<int> GirlUnderShirt;
+        public List<int> GirlTops;
+        public List<int> GirlAccessories;
         #endregion
-
-        public int[] MenGlasses;
-        public int[] Glasses;
-
-        public int[] MenAccessories;
-        public int[] GirlAccessories;
-
-        public int[] MenHats;
-        public int[] GirlHats;
         #endregion
 
         #region Constructor
@@ -90,7 +82,7 @@ namespace ResurrectionRP_Server.Business
             await base.Init();
 
             _clothingColShape = Alt.CreateColShapeCylinder(ClothingPos - new Vector3(0, 0, 1), 4f, 3f);
-            Marker.CreateMarker(MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 4f), new Vector3(0, 0, 3f), Color.FromArgb(80, 255, 255, 255));
+            Marker.CreateMarker(MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 1), new Vector3(3, 3, 0.3f), Color.FromArgb(80, 255, 255, 255));
             Entities.Blips.BlipsManager.SetColor(Blip, 25);
 
             _clothingColShape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
@@ -130,7 +122,173 @@ namespace ResurrectionRP_Server.Business
 
         public override async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
         {
+            if (client.GetPlayerHandler().StaffRank >= Utils.Enums.AdminRank.Moderator)
+            {
+                menu.ItemSelectCallback += AdminMenuCallback;
+                menu.Add(new MenuItem("~r~Gérer les catégories en vente", "", "ID_Components", true));
+            }
+
             return await base.OpenSellMenu(client, menu);
+        }
+
+        public async Task OpenComponentsMenu(IPlayer client, Menu menu)
+        {
+            menu.ClearItems();
+            menu.BackCloseMenu = false;
+            menu.ResetData("Categories");
+            menu.SubTitle = "Composants";
+
+            MenuItem menuItem = new MenuItem("Accessoires homme", "", "ID_Component", true);
+            menuItem.SetData("Categories", MenAccessories);
+            menu.Add(menuItem);
+
+            menuItem = new MenuItem("Accessoires femme", "", "ID_Component", true);
+            menuItem.SetData("Categories", GirlAccessories);
+            menu.Add(menuItem);
+
+            menuItem = new MenuItem("Chaussures homme", "", "ID_Component", true);
+            menuItem.SetData("Categories", MenFeet);
+            menu.Add(menuItem);
+
+            menuItem = new MenuItem("Chaussures femme", "", "ID_Component", true);
+            menuItem.SetData("Categories", GirlFeet);
+            menu.Add(menuItem);
+
+            menuItem = new MenuItem("Gants homme", "", "ID_Component", true);
+            menuItem.SetData("Categories", MenGlove);
+            menu.Add(menuItem);
+
+            menuItem = new MenuItem("Gants femme", "", "ID_Component", true);
+            menuItem.SetData("Categories", GirlGlove);
+            menu.Add(menuItem);
+
+            menuItem = new MenuItem("Hauts homme", "", "ID_Component", true);
+            menuItem.SetData("Categories", MenTops);
+            menu.Add(menuItem);
+
+            menuItem = new MenuItem("Hauts femme", "", "ID_Component", true);
+            menuItem.SetData("Categories", GirlTops);
+            menu.Add(menuItem);
+
+            menuItem = new MenuItem("Pantalons homme", "", "ID_Component", true);
+            menuItem.SetData("Categories", MenLegs);
+            menu.Add(menuItem);
+
+            menuItem = new MenuItem("Pantalons femme", "", "ID_Component", true);
+            menuItem.SetData("Categories", GirlLegs);
+            menu.Add(menuItem);
+
+            menuItem = new MenuItem("T-shirt homme", "", "ID_Component", true);
+            menuItem.SetData("Categories", MenUnderShirt);
+            menu.Add(menuItem);
+
+            menuItem = new MenuItem("T-shirt femme", "", "ID_Component", true);
+            menuItem.SetData("Categories", GirlUnderShirt);
+            menu.Add(menuItem);
+
+            menuItem = new MenuItem("Masques", "", "ID_Component", true);
+            menuItem.SetData("Categories", Mask);
+            menu.Add(menuItem);
+
+            menuItem = new MenuItem("Sacs à dos", "", "ID_Component", true);
+            menuItem.SetData("Categories", BackPack);
+            menu.Add(menuItem);
+
+            await menu.OpenMenu(client);
+        }
+
+        public async Task AdminMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        {
+            if (menuItem == null && menu.HasData("Categories"))
+            {
+                await OpenComponentsMenu(client, menu);
+                return;
+            }
+            else if (menuItem == null)
+            {
+                await OnNpcSecondaryInteract(client, Ped);
+                return;
+            }
+
+            if (menuItem.Id == "ID_Components")
+            {
+                await OpenComponentsMenu(client, menu);
+            }
+            else if (menuItem.Id == "ID_Component")
+            {
+                menu.ClearItems();
+                menu.SubTitle = menuItem.Text;
+                menu.SetData("Categories", menuItem.GetData("Categories"));
+
+                MenuItem item = new MenuItem("~r~Lister les catégories", "", "ID_ListCategory", true);
+                menu.Add(item);
+
+                item = new MenuItem("~r~Ajouter une catégorie", "", "ID_AddCategory", true);
+                item.InputType = InputType.UNumber;
+                item.InputMaxLength = 3;
+                menu.Add(item);
+
+                item = new MenuItem("~r~Retirer une catégorie", "", "ID_RemCategory", true);
+                item.InputType = InputType.UNumber;
+                item.InputMaxLength = 3;
+                menu.Add(item);
+
+                await menu.OpenMenu(client);
+            }
+            else if (menuItem.Id == "ID_ListCategory")
+            {
+                List<int> categories = menu.GetData("Categories");
+
+                string message = $"{menu.SubTitle}: ";
+
+                if (categories != null)
+                {
+                    for (int i = 0; i < categories.Count; i++)
+                    {
+                        if (i != 0)
+                            message += ", ";
+
+                        message += categories[i];
+                    }
+                }
+
+                client.SendChatMessage(message);
+            }
+            else if (menuItem.Id == "ID_AddCategory")
+            {
+                if (!int.TryParse(menuItem.InputValue, out int category))
+                    return;
+
+                List<int> categories = menu.GetData("Categories");
+
+                if (categories.Contains(category))
+                {
+                    client.SendNotificationError($"Catégorie {category} déjà présente");
+                    return;
+                }
+
+                categories.Add(category);
+                categories.Sort();
+                await Update();
+                client.SendNotificationSuccess($"Catégorie {category} ajoutée");
+            }
+            else if (menuItem.Id == "ID_RemCategory")
+            {
+                if (!int.TryParse(menuItem.InputValue, out int category))
+                    return;
+
+                List<int> categories = menu.GetData("Categories");
+
+                if (!categories.Contains(category))
+                {
+                    client.SendNotificationError($"Catégorie {category} non présente");
+                    return;
+                }
+
+                categories.Remove(category);
+                await Update();
+                client.SendNotificationSuccess($"Catégorie {category} retirée");
+            }
         }
 
         private Task MenuClose(IPlayer client, Menu menu)
@@ -222,7 +380,7 @@ namespace ResurrectionRP_Server.Business
             menu.ItemSelectCallback = MenuCallBack;
             menu.Finalizer = MenuClose;
 
-            if (Mask != null && Mask.Length > 0)
+            if (Mask != null && Mask.Count > 0)
             {
                 await OpenComponentMenuWithoutCat(client, menu, 1, true);
                 return;
@@ -230,36 +388,36 @@ namespace ResurrectionRP_Server.Business
 
             if (client.Model == (uint)PedModel.FreemodeMale01)
             {
-                if (MenTops != null && MenTops.Length > 0)
+                if (MenTops != null && MenTops.Count > 0)
                     menu.Add(new MenuItem("Haut", "", "ID_Haut", true));
 
-                if (MenUnderShirt != null && MenUnderShirt.Length > 0)
+                if (MenUnderShirt != null && MenUnderShirt.Count > 0)
                     menu.Add(new MenuItem("T-Shirt", "", "ID_TShirt", true));
 
-                if (MenLegs != null && MenLegs.Length > 0)
+                if (MenLegs != null && MenLegs.Count > 0)
                     menu.Add(new MenuItem("Pantalon", "", "ID_Pantalon", true));
 
-                if (MenFeet != null && MenFeet.Length > 0)
+                if (MenFeet != null && MenFeet.Count > 0)
                     menu.Add(new MenuItem("Chaussure", "", "ID_Chaussure", true));
 
-                if (MenAccessories != null && MenAccessories.Length > 0)
+                if (MenAccessories != null && MenAccessories.Count > 0)
                     menu.Add(new MenuItem("Accessoire", "", "ID_Accessoire", true));
             }
             else if (client.Model == (uint)PedModel.FreemodeFemale01)
             {
-                if (GirlTops != null && GirlTops.Length > 0)
+                if (GirlTops != null && GirlTops.Count > 0)
                     menu.Add(new MenuItem("Haut", "", "ID_Haut", true));
 
-                if (GirlUnderShirt != null && GirlUnderShirt.Length > 0)
+                if (GirlUnderShirt != null && GirlUnderShirt.Count > 0)
                     menu.Add(new MenuItem("T-Shirt", "", "ID_TShirt", true));
 
-                if (GirlLegs != null && GirlLegs.Length > 0)
+                if (GirlLegs != null && GirlLegs.Count > 0)
                     menu.Add(new MenuItem("Pantalon", "", "ID_Pantalon", true));
 
-                if (GirlFeet != null && GirlFeet.Length > 0)
+                if (GirlFeet != null && GirlFeet.Count > 0)
                     menu.Add(new MenuItem("Chaussure", "", "ID_Chaussure", true));
 
-                if (GirlAccessories != null && GirlAccessories.Length > 0)
+                if (GirlAccessories != null && GirlAccessories.Count > 0)
                     menu.Add(new MenuItem("Accessoire", "", "ID_Accessoire", true));
             }
             else
@@ -428,7 +586,7 @@ namespace ResurrectionRP_Server.Business
             menu.ItemSelectCallback = CategorieCallBack;
             menu.IndexChangeCallback = null;
 
-            int[] compoList = null;
+            List<int> compoList = null;
 
             switch (componentID)
             {
@@ -493,7 +651,7 @@ namespace ResurrectionRP_Server.Business
 
             menu.ClearItems();
 
-            int[] compoList = menu.GetData("Categorie");
+            List<int> compoList = menu.GetData("Categorie");
             menu.SubTitle = menuItem.Text.ToUpper();
             menu.BackCloseMenu = false;
             menu.ItemSelectCallback = OnCallBackWithCat;
@@ -584,7 +742,7 @@ namespace ResurrectionRP_Server.Business
             menu.ItemSelectCallback = OnCallBackWithoutCat;
             menu.IndexChangeCallback = OnCurrentItem;
 
-            int[] compoList = null;
+            List<int> compoList = null;
 
             switch (componentID)
             {

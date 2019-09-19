@@ -3,7 +3,6 @@ import * as game from 'natives';
 import * as ui from '../Helpers/UiHelper';
 import { Survival } from '../player/Survival';
 import { VoiceChat } from '../Voice/VoiceChat';
-import * as veh from '../vehicle/vehicle';
 
 export class Hud {
 
@@ -89,17 +88,11 @@ export class Hud {
             if (this.Hide)
                 return;
 
-             /*
-             *  STRESS  TEST
-             */
-            if (alt.Player.local.getMeta("IsDebug")) {
-                ui.DrawText2d("~r~RESURRECTIONRP ALT:V !STRESS-TEST! V0.2", 0.5, 0.03, 0.7, 4, 255, 255, 255, 255, true, true, 99);
-                ui.DrawText2d(alt.Player.local.name, 0.5, 0.005, 0.3, 4, 255, 255, 255, 90, true, true, 99);
-                ui.DrawText2d("X: " + Math.round(alt.Player.local.pos.x * 1000) / 1000 + " Y: " + Math.round(1000 * alt.Player.local.pos.y) / 1000 + " Z: " + Math.round(1000 * alt.Player.local.pos.z) / 1000, 0.5, 0.08, 0.3, 4, 255, 255, 255, 180, true, true, 99);
-                if (alt.Player.local.vehicle != null) {
-                    ui.DrawText2d("Essence: " + Math.round(100*veh.getFuel())/100 + "/" + veh.getMaxFuel() + " Consommation: " + Math.round(1000 * veh.getFuelConsumption()) /1000 , 0.5, 0.10, 0.3, 4, 255, 255, 255, 180, true, true, 99);
-                }
-            }
+            /*
+            *  STRESS  TEST
+            */
+            ui.DrawText2d("~r~RESURRECTIONRP ALT:V !STRESS-TEST! V0.2", 0.5, 0.03, 0.7, 4, 255, 255, 255, 255, true, true, 99);
+            ui.DrawText2d(alt.Player.local.name, 0.5, 0.005, 0.3, 4, 255, 255, 255, 90, true, true, 99);
 
             let health = (game.getEntityHealth(alt.Player.local.scriptID) - 100);
             if (health <= 70) {

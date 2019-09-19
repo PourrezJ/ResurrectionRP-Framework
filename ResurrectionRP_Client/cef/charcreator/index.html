@@ -230,17 +230,17 @@
 
                 <h3>Couleur principale</h3>
                 <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[2].Color == 0}" ng-click="updateHeadOverlay(2, 'Color', 0);"></i>
-                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[2].Color == 0}" ng-mousedown="mouseDown = true; updateHeadOverlay(2, 'Color', char.Appearance[2].Color - 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[2].Color == 0}" ng-mousedown="mouseDown = true; updateHeadOverlay(2, 'Color', char.Appearance[2].Color - 1, limits.hairColor);" ng-mouseup="mouseDown = false;"></i>
                 <span class="labelHolder">Type {{char.Appearance[2].Color}}</span>
-                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[2].Color == limits.hairColor}" ng-mousedown="mouseDown = true; updateHeadOverlay(2, 'Color', char.Appearance[2].Color + 1);" ng-mouseup="mouseDown = false;"></i>
-                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[2].Color == limits.hairColor}" ng-click="updateHeadOverlay(2, 'Color', limits.hairColor);"></i>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[2].Color == limits.hairColor}" ng-mousedown="mouseDown = true; updateHeadOverlay(2, 'Color', char.Appearance[2].Color + 1, limits.hairColor);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[2].Color == limits.hairColor}" ng-click="updateHeadOverlay(2, 'Color', limits.hairColor, limits.hairColor);"></i>
 
                 <h3>Couleur secondaire</h3>
                 <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[2].SecondaryColor == 0}" ng-click="updateHeadOverlay(2, 'SecondaryColor', 0);"></i>
-                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[2].SecondaryColor == 0}" ng-mousedown="mouseDown = true; updateHeadOverlay(2, 'SecondaryColor', char.Appearance[2].SecondaryColor - 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[2].SecondaryColor == 0}" ng-mousedown="mouseDown = true; updateHeadOverlay(2, 'SecondaryColor', char.Appearance[2].SecondaryColor - 1, limits.hairColor);" ng-mouseup="mouseDown = false;"></i>
                 <span class="labelHolder">Type {{char.Appearance[2].SecondaryColor}}</span>
-                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[2].SecondaryColor == limits.hairColor}" ng-mousedown="mouseDown = true; updateHeadOverlay(2, 'SecondaryColor', char.Appearance[2].SecondaryColor + 1);" ng-mouseup="mouseDown = false;"></i>
-                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[2].SecondaryColor == limits.hairColor}" ng-click="updateHeadOverlay(2, 'SecondaryColor', limits.hairColor);"></i>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[2].SecondaryColor == limits.hairColor}" ng-mousedown="mouseDown = true; updateHeadOverlay(2, 'SecondaryColor', char.Appearance[2].SecondaryColor + 1, limits.hairColor);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[2].SecondaryColor == limits.hairColor}" ng-click="updateHeadOverlay(2, 'SecondaryColor', limits.hairColor, limits.hairColor);"></i>
 
                 <h3>Opacité</h3>
                 <div class="">
@@ -336,7 +336,6 @@
             </section>
             <!-- Pilosité -->
             <section ng-show="currentMenu == 7">
-
                 <h3>Pilosité faciale</h3>
                 <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Index == limits.headOverlay[1].min}" ng-click="updateHeadOverlay(1, 'Index', limits.headOverlay[1].min);"></i>
                 <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Index == limits.headOverlay[1].min}" ng-mousedown="mouseDown = true; updateHeadOverlay(1, 'Index', char.Appearance[1].Index - 1);" ng-mouseup="mouseDown = false;"></i>
@@ -346,17 +345,17 @@
 
                 <h3>Couleur principale</h3>
                 <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Color == 0}" ng-click="updateHeadOverlay(1, 'Color', 0);"></i>
-                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Color == 0}" ng-mousedown="mouseDown = true; updateHeadOverlay(1, 'Color', char.Appearance[1].Color - 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Color == 0}" ng-mousedown="mouseDown = true; updateHeadOverlay(1, 'Color', char.Appearance[1].Color - 1, limits.hairColor);" ng-mouseup="mouseDown = false;"></i>
                 <span class="labelHolder">Type {{char.Appearance[1].Color}}</span>
-                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Color == limits.hairColor}" ng-mousedown="mouseDown = true; updateHeadOverlay(1, 'Color', char.Appearance[1].Color + 1);" ng-mouseup="mouseDown = false;"></i>
-                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Color == limits.hairColor}" ng-click="updateHeadOverlay(1, 'Color', limits.hairColor);"></i>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Color == limits.hairColor}" ng-mousedown="mouseDown = true; updateHeadOverlay(1, 'Color', char.Appearance[1].Color + 1, limits.hairColor);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[1].Color == limits.hairColor}" ng-click="updateHeadOverlay(1, 'Color', limits.hairColor, limits.hairColor);"></i>
 
                 <h3>Couleur secondaire</h3>
                 <i class="fas fa-angle-double-left fa-2x" ng-class="{'fa-disabled':char.Appearance[1].SecondaryColor == 0}" ng-click="updateHeadOverlay(1, 'SecondaryColor', 0);"></i>
-                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[1].SecondaryColor == 0}" ng-mousedown="mouseDown = true; updateHeadOverlay(1, 'SecondaryColor', char.Appearance[1].SecondaryColor - 1);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-left fa-2x" ng-class="{'fa-disabled':char.Appearance[1].SecondaryColor == 0}" ng-mousedown="mouseDown = true; updateHeadOverlay(1, 'SecondaryColor', char.Appearance[1].SecondaryColor - 1, limits.hairColor);" ng-mouseup="mouseDown = false;"></i>
                 <span class="labelHolder">Type {{char.Appearance[1].SecondaryColor}}</span>
-                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[1].SecondaryColor == limits.hairColor}" ng-mousedown="mouseDown = true; updateHeadOverlay(1, 'SecondaryColor', char.Appearance[1].SecondaryColor + 1);" ng-mouseup="mouseDown = false;"></i>
-                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[1].SecondaryColor == limits.hairColor}" ng-click="updateHeadOverlay(1, 'SecondaryColor', limits.hairColor);"></i>
+                <i class="fas fa-angle-right fa-2x" ng-class="{'fa-disabled':char.Appearance[1].SecondaryColor == limits.hairColor}" ng-mousedown="mouseDown = true; updateHeadOverlay(1, 'SecondaryColor', char.Appearance[1].SecondaryColor + 1, limits.hairColor);" ng-mouseup="mouseDown = false;"></i>
+                <i class="fas fa-angle-double-right fa-2x" ng-class="{'fa-disabled':char.Appearance[1].SecondaryColor == limits.hairColor}" ng-click="updateHeadOverlay(1, 'SecondaryColor', limits.hairColor, limits.hairColor);"></i>
 
                 <h3>Opacité</h3>
                 <div class="row">

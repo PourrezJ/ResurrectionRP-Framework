@@ -83,7 +83,7 @@ namespace ResurrectionRP_Server.Business
                 return;
             }
 
-            Entities.Players.PlayerHandler player = client.GetPlayerHandler();
+            PlayerHandler player = client.GetPlayerHandler();
 
             switch (menuItem.Id)
             {

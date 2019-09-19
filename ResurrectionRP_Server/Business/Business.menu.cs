@@ -18,14 +18,11 @@ namespace ResurrectionRP_Server.Business
         public virtual async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
         {
             menu.ItemSelectCallback += MenuCallBack;
+
             if (Buyable && OnSale && Owner == client.GetSocialClub())
-            {
                 menu.Add(new MenuItem("~r~Annuler la mise en vente", "", id: "ID_CancellSell", executeCallback: true));
-            }
             else if (Buyable && OnSale)
-            {
                 menu.Add(new MenuItem("~r~Acheter le commerce", $"Acheter le commerce pour la somme de ${BusinessPrice}", "ID_Buy", true, rightLabel: $"${BusinessPrice}"));
-            }
             else if (Buyable && !OnSale && Owner ==  client.GetSocialClub())
             {
                 MenuItem _item = new MenuItem("~r~Mettre en vente votre commerce", "ATTENTION! Vous ne toucherez la somme qu'une fois le commerce vendu.", id: "ID_Sell", executeCallback: true);
@@ -40,10 +37,12 @@ namespace ResurrectionRP_Server.Business
             {
                 var old = (await Models.Identite.GetOfflineIdentite(Owner));
                 var identite = "No Owner";
+
                 if (old != null)
                     identite = old.Name;
                 else
                     identite = Owner;
+
                 menu.SubTitle = $"Owner: {identite} | Inactivité: {this.Inactivity.ToShortDateString()}";
                 menu.Add(new MenuItem("~r~Retirer le propriétaire", "Remet en vente le commerce", "ID_ClearAdmin", true));
             }
@@ -56,9 +55,11 @@ namespace ResurrectionRP_Server.Business
             return menu;
         }
 
-
         private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
+            if (menuItem == null)
+                return;
+
             if (menu.Id == "ID_SellMenu")
             {
                 if (menuItem.Id == "ID_Buy")
@@ -108,7 +109,6 @@ namespace ResurrectionRP_Server.Business
             }
         }
 
-
         public virtual async Task GestionEmployee(IPlayer client, Menu menu)
         {
             menu.Reset();
@@ -133,7 +133,6 @@ namespace ResurrectionRP_Server.Business
 
             await menu.OpenMenu(client);
         }
-
 
         private async Task GestionEmployeeCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
@@ -192,7 +191,6 @@ namespace ResurrectionRP_Server.Business
             }
         }
 
-
         public async Task Buy(IPlayer client)
         {
             Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
@@ -211,7 +209,6 @@ namespace ResurrectionRP_Server.Business
                     client.SendNotification("Vous n'avez pas l'argent nécessaire pour acheter le commerce.");
             }
         }
-
 
         public async Task Sell(IPlayer client, int money)
         {

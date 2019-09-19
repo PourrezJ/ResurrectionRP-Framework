@@ -1,9 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
-using MongoDB.Bson;
-using Newtonsoft.Json;
-using ResurrectionRP_Server.Houses;
 using System;
 using System.Threading.Tasks;
 
@@ -27,15 +24,15 @@ namespace ResurrectionRP_Server.EventHandlers
         #region Private methods
         private static async Task OnEntityColshape(IColShape colShape, IEntity targetEntity, bool state)
         {
+            // Alt.Server.LogInfo("Event AltAsync.OnColShape");
+
             try
             {
-                if (targetEntity.Type == BaseObjectType.Player && colShape.Exists)
-                    (targetEntity as IPlayer).EmitLocked("SetStateInColShape", state);
-
                 if (state)
                 {
                     // BUG V784 : Bug ColShape.IsEntityIn() returns always false
                     colShape.AddEntity(targetEntity);
+                    // Alt.Server.LogInfo($"Entity {targetEntity.Id} enter colshape {colShape.NativePointer.ToString()}");
 
                     if (targetEntity.Type == BaseObjectType.Vehicle)
                     {
@@ -58,6 +55,7 @@ namespace ResurrectionRP_Server.EventHandlers
                 {
                     // BUG V784 : Bug ColShape.IsEntityIn() returns always false
                     colShape.RemoveEntity(targetEntity as IPlayer);
+                    // Alt.Server.LogInfo($"Entity {targetEntity.Id} leave colshape {colShape.NativePointer.ToString()}");
 
                     if (targetEntity.Type == BaseObjectType.Vehicle)
                     {
@@ -76,8 +74,11 @@ namespace ResurrectionRP_Server.EventHandlers
                             await onPlayerLeaveColShape?.Invoke(colShape, (IPlayer)targetEntity);
                     }
                 }
+
+                if (targetEntity.Type == BaseObjectType.Player)
+                    (targetEntity as IPlayer).EmitLocked("SetStateInColShape", state);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Alt.Server.LogError(ex.ToString());
             }

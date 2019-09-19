@@ -141,15 +141,14 @@ export function DrawText2d(
 export function WeazelNews(text: string, title: string, othertitle: string)
 {
     alt.emit("hideHud", true);
-
-    let annonce = new Scaleforms("BREAKING_NEWS");
-
+/*
+    let annonce = new Scaleforms("BREAKING_NEWS") TODO
     annonce.call("SET_TEXT", title, text);
     annonce.call("SET_SCROLL_TEXT", 0, 0, othertitle);
-    annonce.call("DISPLAY_SCROLL_TEXT", 0, 0);
-
+    annonce.call("DISPLAY_SCROLL_TEXT", 0, 0);*/
+    alt.emit("Display_subtitle", "~r~" + title + " \n ~w~" + text, 30000);
     alt.setTimeout(() => {
-        annonce = null;
+        //annonce = null;
         alt.emit("hideHud", false);
-    }, 60000);
+    }, 30000);
 }

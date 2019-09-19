@@ -1,9 +1,10 @@
-﻿import * as alt from 'alt';
+import * as alt from 'alt';
 import * as game from 'natives';
 import * as enums from '../Utils/Enums/Enums';
 
 import { Time as TimeLib } from '../Env/Time';
 import { Survival as SurvivalLib } from '../player/Survival';
+import * as ui from '../Helpers/UiHelper';
 import { Hud as HudLib } from '../player/Hud';
 import { RPGInventoryManager } from '../menus/rpgInventory/RPGinventory';
 import { Weather as WeatherLib } from '../Env/Weather';
@@ -15,6 +16,8 @@ import { RadioManager } from '../menus/RadioManager';
 import { DustManManager } from '../Jobs/DustManManager';
 import { VoiceChat } from '../Voice/VoiceChat';
 import { Medical } from '../Medical';
+import * as veh from '../vehicle/vehicle';
+import * as interaction from '../player/Interaction';
 
 export class Game {
     //region Static Var   
@@ -64,6 +67,8 @@ export class Game {
 
     private _Radio: RadioManager;
     public get Radio(): RadioManager { return this._Radio; }
+
+    public DebugInfo: boolean = false;
 
     constructor(
         StaffRank: number,
@@ -138,6 +143,11 @@ export class Game {
 
             alt.Player.local.setMeta("IsConnected", true);
             alt.Player.local.setMeta("LevelRank", this.LevelRank);
+
+            alt.on('keydown', (key) => {
+                if (key == 117)
+                    this.DebugInfo = !this.DebugInfo
+            });
         }
         catch (ex)
         {
@@ -150,6 +160,16 @@ export class Game {
                 game.disableControlAction(2, i, true);
 
             //game.disableControlAction(2, 23, true);
+            /*
+            *  STRESS  TEST // SET TOGGLE TO F6
+            */
+            if (this.DebugInfo) {
+                ui.DrawText2d("X: " + Math.round(alt.Player.local.pos.x * 1000) / 1000 + " Y: " + Math.round(1000 * alt.Player.local.pos.y) / 1000 + " Z: " + Math.round(1000 * alt.Player.local.pos.z) / 1000, 0.5, 0.08, 0.3, 4, 255, 255, 255, 180, true, true, 99);
+                ui.DrawText2d("Raycast type: " + (interaction.getRaycastResult().isHit) ? interaction.getRaycastResult().entityType : "0", 0.5, 0.09, 0.3, 4, 255, 255, 255, 90, true, true, 99);
+                if (alt.Player.local.vehicle != null) {
+                    ui.DrawText2d("Essence: " + Math.round(100 * veh.getFuel()) / 100 + "/" + veh.getMaxFuel() + " Consommation: " + Math.round(1000 * veh.getFuelConsumption()) / 1000, 0.5, 0.10, 0.3, 4, 255, 255, 255, 180, true, true, 99);
+                }
+            }
 
             this._Time.OnTick();
         });

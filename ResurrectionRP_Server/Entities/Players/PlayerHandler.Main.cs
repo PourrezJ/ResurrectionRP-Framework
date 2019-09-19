@@ -168,8 +168,7 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 if (BankAccount == null)
                     BankAccount = new Bank.BankAccount(Bank.AccountType.Personal, await Bank.BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
-
-                GameMode.Instance.Streamer.LoadStreamPlayer(client);
+  
                 BankAccount.Owner = this;
 
                 if (firstspawn)
@@ -236,10 +235,10 @@ namespace ResurrectionRP_Server.Entities.Players
                     await SetCuff(true);
 
                 PlayerSync.IsDead = (Health <= 0);
-
+                await Task.Delay(500);
+                GameMode.Instance.Streamer.LoadStreamPlayer(client);
                 GameMode.Instance.DoorManager.OnPlayerConnected(client);
                 Houses.HouseManager.OnPlayerConnected(client);
-                //await GameMode.Instance.PedManager.OnPlayerConnected(client);
                 await GameMode.Instance.VoiceController.OnPlayerConnected(client);
                 //await GameMode.Instance.IllegalManager.OnPlayerConnected(client);
 

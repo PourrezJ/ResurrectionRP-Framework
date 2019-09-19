@@ -41,10 +41,20 @@ namespace SaltyServer
 
         public async Task OnPlayerConnected(IPlayer client)
         {
-            await client.SetSyncedMetaDataAsync(SaltyShared.SharedData.Voice_TeamSpeakName, Voice.GetTeamSpeakName());
-            await client.SetSyncedMetaDataAsync(SaltyShared.SharedData.Voice_VoiceRange, "Parler");
+            if (!client.Exists)
+                return;
+            try
+            {
+                await client.SetSyncedMetaDataAsync(SaltyShared.SharedData.Voice_TeamSpeakName, Voice.GetTeamSpeakName());
+                await client.SetSyncedMetaDataAsync(SaltyShared.SharedData.Voice_VoiceRange, "Parler");
 
-            await client.EmitAsync(SaltyShared.Event.Voice_Initialize, Voice.ServerUniqueIdentifier, Voice.RequiredUpdateBranch, Voice.MinimumPluginVersion, Voice.SoundPack, Voice.IngameChannel, Voice.IngameChannelPassword);
+                client.EmitLocked(SaltyShared.Event.Voice_Initialize, Voice.ServerUniqueIdentifier, Voice.RequiredUpdateBranch, Voice.MinimumPluginVersion, Voice.SoundPack, Voice.IngameChannel, Voice.IngameChannelPassword);
+
+            }
+            catch (Exception ex)
+            {
+                Alt.Server.LogError(ex.ToString());
+            }
         }
 
         public void OnPlayerDisconnected(IPlayer client)

@@ -365,7 +365,7 @@ export class NetworkingEntityClient {
             _pos.z + (_dir.z * 3),
         )
 
-        let resultPed = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, 4);
+        let resultPed = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, 5);
 
         if (!resultPed.isHit)
             return;

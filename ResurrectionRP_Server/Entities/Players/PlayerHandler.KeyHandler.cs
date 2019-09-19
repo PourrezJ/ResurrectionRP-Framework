@@ -170,25 +170,31 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (ph.HasOpenMenu())
                         return;
 
-                    if (client.GetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, out object data))
+                    await AltAsync.Do(() =>
                     {
-                        string voiceRange = (string)data;
+                        if (!client.Exists)
+                            return;
 
-                        switch (voiceRange)
+                        if (client.GetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, out object data))
                         {
-                            case "Parler":
-                                voiceRange = "Crier";
-                                break;
-                            case "Crier":
-                                voiceRange = "Chuchoter";
-                                break;
-                            case "Chuchoter":
-                                voiceRange = "Parler";
-                                break;
-                        }
+                            string voiceRange = (string)data;
 
-                        await client.SetSyncedMetaDataAsync(SaltyShared.SharedData.Voice_VoiceRange, voiceRange);
-                    }
+                            switch (voiceRange)
+                            {
+                                case "Parler":
+                                    voiceRange = "Crier";
+                                    break;
+                                case "Crier":
+                                    voiceRange = "Chuchoter";
+                                    break;
+                                case "Chuchoter":
+                                    voiceRange = "Parler";
+                                    break;
+                            }
+
+                            client.SetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, voiceRange);
+                        }
+                    });
                     break;
 
                 case ConsoleKey.G:

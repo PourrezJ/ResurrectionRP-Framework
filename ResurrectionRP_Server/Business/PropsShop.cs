@@ -393,7 +393,7 @@ namespace ResurrectionRP_Server.Business
                 byte componentID = menu.GetData("componentID");
                 int drawable = menuItem.GetData("drawable");
                 int variation = menuItem.GetData("variation");
-                client.SetCloth((ClothSlot)componentID, drawable, variation, 0);
+                client.SetProp((PropSlot)componentID, new PropData(drawable, variation));
             }
             catch (Exception ex)
             {

@@ -53,7 +53,7 @@
 			</div>
 
 			<div class="tabbar">
-				<input type="text" id="inputMsg" minlength="1" maxlength="512" class="text-input msg-send" onfocus="alt.emit('CanClose', false);" placeholder="Votre message..." ng-model="messageBox">
+				<input type="text" id="inputMsg" minlength="1" maxlength="512" class="text-input msg-send" onfocus="canClose()" placeholder="Votre message..." ng-model="messageBox">
 				<div class="emoji"><i class="far fa-smile"></i></div>
 				<button class="tabbar__button msg-send-btn" ng-click="sendMessage()">
 					<i class="ion-ios-paperplane"></i>

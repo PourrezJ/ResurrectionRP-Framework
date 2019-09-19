@@ -20,18 +20,15 @@ import * as Utils from '../Utils/utils';
  * */
 var isInColshape: boolean = false;
 var raycastResult = null;
-var canClose: boolean;
+var canClose: boolean = true;
 
 export class Interaction {
 
     private tick: number = 0;
-    constructor() {
+    constructor()
+    {
         alt.onServer("SetStateInColShape", (state: boolean) => {
             isInColshape = state;
-        });
-
-        alt.on('CanClose', (status) => {
-            canClose = status;
         });
 
         alt.on('keyup', (key) => {
@@ -147,6 +144,7 @@ export class Interaction {
 
         return false;
     }
+
     private static isPompe(entityHash: number): boolean {
         switch (entityHash) {
             case 1339433404:
@@ -166,5 +164,15 @@ export class Interaction {
         if (game.objectValueGetString(entityHash, "pickup")[0] == "")
             return false;
         return true;
+    }
+
+    public static GetCanClose(): boolean {
+        alt.log("get close: " + canClose);
+        return canClose;
+    }
+
+    public static SetCanClose(close: boolean) {
+        alt.log("set close: " + close);
+        canClose = close;
     }
 }

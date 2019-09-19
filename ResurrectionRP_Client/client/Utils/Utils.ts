@@ -337,7 +337,7 @@ export function ArrayRemove(arr, value) {
 }
 
 //let _necessaryControlsForController = [2,1,25,24];
-let _necessaryControlsForKeyboard = [201,195,196,187,188,189,190,202,217,242,241,239,240,31,30,21,22,23,75,71,72,89,9,8,90,76];
+let _necessaryControlsForKeyboard = [201, 195, 196, 187, 188, 189, 190, 202, 217, 242, 241, 239, 240, 31, 30, 21, 22, 23, 71, 72, 89, 9, 8, 90, 76];
 
 export function DisEnableControls(enabled: boolean) {
 
@@ -350,7 +350,7 @@ export function DisEnableControls(enabled: boolean) {
         return;
 
     _necessaryControlsForKeyboard.forEach((control) => {
-        game.enableControlAction(2, control, true);
+        game.enableControlAction(0, control, true);
     });
 
 }
@@ -368,9 +368,9 @@ export function playAnimation(dictionary, name, speed, durationInMS, flag) {
             durationInMS,
             flag,
             1.0,
-            true,
-            true,
-            true
+            false,
+            false,
+            false
         );
     });
 }

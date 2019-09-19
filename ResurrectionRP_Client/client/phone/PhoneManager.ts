@@ -2,14 +2,15 @@
 import * as game from 'natives';
 import * as utils from '../Utils/Utils';
 import * as voice from '../Voice/VoiceChat';
+import { Interaction } from '../player/Interaction';
 
 var isPhoneOpen: boolean = false;
 
 export default class PhoneManager {
 
     public browser: alt.WebView = null;
-    public LockControls: boolean = false;
     private animStage: number = 0;
+    private onTick: number;
 
     constructor()
     {
@@ -18,7 +19,6 @@ export default class PhoneManager {
                 return;
 
             isPhoneOpen = true;
-            game.freezePedCameraRotation(alt.Player.local.scriptID);
 
             if (incomingCall)
                 this.browser = new alt.WebView(`http://resource/client/cef/phone/oncall.html?incomingCall=true&number=${contactNumber}&name=${contactName}`);
@@ -44,21 +44,15 @@ export default class PhoneManager {
             //this.browser.on("callPolice", () => alt.emitServer("ONU_CallUrgenceMedic")); NEED MENU MANAGER
 
             this.browser.on("getMessages", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "GetMessages", arg2));
-            this.browser.on("sendMessage", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "SendMessage", arg, arg2));
-            this.browser.on("deleteConversation", (arg, arg2) => { if (this.browser != null) { this.browser.url = "http://resource/client/cef/phone/messages.html" } });
+
+            this.browser.on("sendMessage", (arg, arg2) => {
+                alt.emitServer("PhoneMenuCallBack", "SendMessage", arg, arg2);
+                Interaction.SetCanClose(true);
+            });
+
             this.browser.on("deleteConversation", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "DeleteConversation", arg));
-            alt.onServer("ContactEdited", (args) => { if (this.browser != null) { this.browser.url = "http://resource/client/cef/phone/contacts.html" } });
-            alt.onServer("ConversationsReturnedV2", (args) => { if (this.browser != null) { this.browser.emit("loadConversations", args) } });
-            alt.onServer("MessagesReturned", (args) => { if (this.browser != null) { this.browser.emit("loadMessages", args) } });
-            alt.onServer("ContactReturned", (args) => { if (this.browser != null) { this.browser.emit("loadContacts", args) } });
-            alt.onServer("ClosePhone", () => this.ClosePhone());
-            alt.onServer("initiatedCall", (phoneNumber: string, contactName: string) => { if (this.browser != null) { this.browser.url = 'http://resource/client/cef/phone/oncall.html?incomingCall=true&number=' + phoneNumber + '&name=' + contactName }  });
-
-            alt.on("ClosePhone", () => this.ClosePhone());
-
             this.browser.on("initiateCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "initiateCall", arg));
             this.browser.on("acceptCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "acceptCall", arg));
-
             this.browser.on("cancelCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "cancelCall", arg));
 
             this.browser.on("canceledCall", (arg, arg2) => {
@@ -76,7 +70,23 @@ export default class PhoneManager {
             });
 
             this.browser.on("endCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "endCall", arg));
+            this.browser.on("CanClose", (canClose: boolean) => Interaction.SetCanClose(canClose));
 
+            alt.onServer("ContactEdited", (args) => { if (this.browser != null) { this.browser.url = "http://resource/client/cef/phone/contacts.html" } });
+            alt.onServer("ConversationsReturnedV2", (args) => { if (this.browser != null) { this.browser.emit("loadConversations", args) } });
+
+            alt.onServer("MessagesReturned", (args) =>
+            {
+                if (this.browser != null)
+                    this.browser.emit("loadMessages", args)
+            });
+
+            alt.onServer("ContactReturned", (args) => { if (this.browser != null) { this.browser.emit("loadContacts", args) } });
+            alt.onServer("ClosePhone", () => this.ClosePhone());
+            alt.onServer("initiatedCall", (phoneNumber: string, contactName: string) => { if (this.browser != null) { this.browser.url = 'http://resource/client/cef/phone/oncall.html?incomingCall=true&number=' + phoneNumber + '&name=' + contactName }  });
+            alt.onServer("deleteConversation", (arg, arg2) => { if (this.browser != null) { this.browser.url = "http://resource/client/cef/phone/messages.html" } });
+
+            alt.on("ClosePhone", () => this.ClosePhone());
             alt.onServer("endedCall", (playerName: string) => {
                 if (this.browser != null)
                     this.browser.emit("callEvent", "ended");
@@ -95,12 +105,17 @@ export default class PhoneManager {
                     this.browser.emit("callEvent", "started");
 
                 voice.VoiceChat.OnEstablishCall(player.getSyncedMeta("Voice_TeamSpeakName").toString());
-                
             });
 
-            alt.everyTick(() => {
+            this.onTick = alt.everyTick(() => {
                 if (this.browser == null)
                     return;
+
+                utils.DisEnableControls(false);
+
+                if (!Interaction.GetCanClose())
+                    game.disableAllControlActions(0);  
+
                 // Ouverture du téléphone
                 if (this.animStage == 0 && (game.isEntityPlayingAnim(alt.Player.local.scriptID, "cellphone@in_car@ds", "cellphone_text_in", 3) || game.isEntityPlayingAnim(alt.Player.local.scriptID, (alt.Player.local.model == 2627665880) ? "cellphone@female" : "cellphone@", "cellphone_text_in", 3))) {
                     if (game.getEntityAnimCurrentTime(alt.Player.local.scriptID, (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : (alt.Player.local.model == 2627665880) ? "cellphone@female" : "cellphone@", "cellphone_text_in") >= 0.95) {
@@ -133,8 +148,6 @@ export default class PhoneManager {
 
                     this.animStage = 4;
                 }
-
-                utils.DisEnableControls(false);
             });
         });
     }
@@ -143,20 +156,21 @@ export default class PhoneManager {
         if (this.browser == null)
             return;
 
+        alt.clearEveryTick(this.onTick);
+
+        game.clearPedTasks(alt.Player.local.scriptID);
+
         utils.playAnimation(
-            (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : (alt.Player.local.model == 2627665880) ? "cellphone@female" : "cellphone@",
-            "cellphone_text_out",
-            8,
-            -1,
-            0
+            (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : "cellphone@", "cellphone_text_out", 8, 0, 0
         );
+
 
         alt.showCursor(false);
         this.browser.destroy();
-        this.browser = null;
-        game.freezePedCameraRotation(alt.Player.local.scriptID);
+        this.browser = null;    
         isPhoneOpen = false;
         alt.emit("toggleChatAdminRank");
+        this.animStage = 0;
     }
 
     public static IsPhoneOpen() {

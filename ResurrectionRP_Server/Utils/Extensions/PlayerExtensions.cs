@@ -274,22 +274,23 @@ namespace ResurrectionRP_Server
 
         public static Task SetHeadOverlayAsync(this IPlayer client, int overlayId, Business.Barber.HeadOverlayData overlayData)
         {
-            // TODO
+            client.EmitLocked("HeadOverlayVariation", overlayData.Index, overlayData.Opacity, overlayData.ColorId, overlayData.SecondaryColorId, overlayId);
             return Task.CompletedTask;
         }
 
         public static void SetHeadOverlay(this IPlayer client, int overlayId, Business.Barber.HeadOverlayData overlayData)
         {
-            // TODO
+            client.Emit("HeadOverlayVariation", overlayData.Index, overlayData.Opacity, overlayData.ColorId, overlayData.SecondaryColorId, overlayId);
         }
 
-        public static void SetHairColor(this IPlayer client, uint color, uint highlightColor)
+        public static void SetHairColor(this IPlayer client, uint color, uint hightlightColor)
         {
-            // TOOD
+            client.Emit("HairVariation", color, hightlightColor);
         }
 
         public static Task SetHairColorAsync(this IPlayer client,  uint color, uint hightlightColor)
         {
+            client.EmitLocked("HairVariation", color, hightlightColor);
             return Task.CompletedTask;
         }
 

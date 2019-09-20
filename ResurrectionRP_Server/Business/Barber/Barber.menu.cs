@@ -5,6 +5,7 @@ using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AltV.Net;
 
 namespace ResurrectionRP_Server.Business.Barber
 {
@@ -24,7 +25,7 @@ namespace ResurrectionRP_Server.Business.Barber
         {
             if (!( IsOwner(client) ||  IsEmployee(client)))
             {
-                client.SendNotification("Men, tu n'est pas coiffeur!");
+                client.SendNotification("Men, tu n'es pas coiffeur!");
                 return;
             }
 
@@ -232,12 +233,11 @@ namespace ResurrectionRP_Server.Business.Barber
         private async Task ColorChoise(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             var listItem = menu.Items.Find(m => m.Id == "ID_PlayerSelect") as ListItem;
-
+            
             var selected = listItem.SelectedItem;
             var name = listItem.Items[selected];
-
             ClientSelected = PlayerManager.GetPlayerByName(name.ToString());
-
+            Alt.Server.LogInfo("Changing color for " + ClientSelected.Identite.Name);
             if (ClientSelected == null) return;
 
             _firstcolorprev = ClientSelected.Character.Hair.Color;
@@ -252,7 +252,7 @@ namespace ResurrectionRP_Server.Business.Barber
 
             List<object> _colorlist = new List<object>();
 
-            for (int i = 0; i <= 63; i++) { _colorlist.Add(i); };
+            for (int i = 0; i <= 63; i++) { _colorlist.Add(i.ToString()); }; // 63
 
             menu.Add(new ListItem("Couleur cheveux principal", "Changer la couleur de cheveux principal.", "ID_FirstColor", _colorlist, ClientSelected.Character.Hair.Color, true, true));
             menu.Add(new ListItem("Couleur cheveux secondaire", "Changer la couleur de cheveux secondaire.", "ID_SecondColor", _colorlist, ClientSelected.Character.Hair.HighlightColor, true, true));
@@ -322,6 +322,7 @@ namespace ResurrectionRP_Server.Business.Barber
 
         private async Task ColorPreview(IPlayer client, Menu menu, IMenuItem menuItem, int listindex)
         {
+            Alt.Server.LogInfo("Hair Preview");
             if (menuItem.Id == "ID_FirstColor")
             {
                 _firstcolorprev = (byte)listindex;

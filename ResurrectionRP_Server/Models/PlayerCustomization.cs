@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Async;
@@ -40,8 +40,8 @@ namespace ResurrectionRP_Server.Models
     {
         public int Index;
         public float Opacity;
-        public int Color;
-        public int SecondaryColor;
+        public int Color = 0;
+        public int SecondaryColor = 0;
     }
 
     public class PlayerCustomization
@@ -92,7 +92,9 @@ namespace ResurrectionRP_Server.Models
                 player.EmitLocked("HeadVariation", Parents.ShapeFirst, Parents.ShapeSecond, Parents.ShapeThird, Parents.SkinFirst, Parents.SkinSecond, Parents.SkinThird, Parents.ShapeMix, Parents.SkinMix, Parents.ThirdMix);
 
                 for (int i = 0; i < Features.Length; i++)
+                {
                     player.EmitLocked("FaceFeatureVariation", i, Features[i]);
+                }
 
                 for (int i = 0; i < Appearance.Length; i++)
                 {

@@ -264,7 +264,7 @@ namespace ResurrectionRP_Server.Entities.Players
             try
             {
                 ph.Character = JsonConvert.DeserializeObject<Models.PlayerCustomization>((string)args[0]);
-                //ph.Clothing = new Clothings(client);
+                ph.Clothing = new Clothings(client);
                 ph.Identite = JsonConvert.DeserializeObject<Models.Identite>( (string)args[1], new JsonSerializerSettings { DateParseHandling = DateParseHandling.DateTime } );
             } catch ( Exception ex) {
                 Alt.Server.LogWarning("Character Creator Error | " + ex.Data);

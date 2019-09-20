@@ -62,26 +62,26 @@ export default () => {
         let pos = null;
 
         const screen = game.getActiveScreenResolution(0, 0);
-        let factor = 1080 / screen[2];
+        let width = 1080 * screen[1] / screen[2] - 431;
 
         if (menuData.Anchor == MenuAnchor.TopLeft) {
             pos = new NativeUI.Point(menuData.PosX, menuData.PosY);
         } else if (menuData.Anchor == MenuAnchor.TopCenter) {
-            pos = new NativeUI.Point(menuData.PosX + 745 * factor, menuData.PosY);
+            pos = new NativeUI.Point(menuData.PosX + width / 2, menuData.PosY);
         } else if (menuData.Anchor == MenuAnchor.TopRight) {
-            pos = new NativeUI.Point(menuData.PosX + 1489 * factor, menuData.PosY);
+            pos = new NativeUI.Point(menuData.PosX + width, menuData.PosY);
         } else if (menuData.Anchor == MenuAnchor.MiddleLeft) {
             pos = new NativeUI.Point(menuData.PosX, menuData.PosY + 260);
         } else if (menuData.Anchor == MenuAnchor.MiddleCenter) {
-            pos = new NativeUI.Point(menuData.PosX + 745 * factor, menuData.PosY + 260);
+            pos = new NativeUI.Point(menuData.PosX + width / 2, menuData.PosY + 260);
         } else if (menuData.Anchor == MenuAnchor.MiddleRight) {
-            pos = new NativeUI.Point(menuData.PosX + 1489 * factor, menuData.PosY + 260);
+            pos = new NativeUI.Point(menuData.PosX + width, menuData.PosY + 260);
         } else if (menuData.Anchor == MenuAnchor.BottomLeft) {
             pos = new NativeUI.Point(menuData.PosX, menuData.PosY + 520);
         } else if (menuData.Anchor == MenuAnchor.BottomCenter) {
-            pos = new NativeUI.Point(menuData.PosX + 745 * factor, menuData.PosY + 520);
+            pos = new NativeUI.Point(menuData.PosX + width / 2, menuData.PosY + 520);
         } else if (menuData.Anchor == MenuAnchor.BottomRight) {
-            pos = new NativeUI.Point(menuData.PosX + 1489 * factor, menuData.PosY + 520);
+            pos = new NativeUI.Point(menuData.PosX + width, menuData.PosY + 520);
         }
 
         if (menuData.BannerSprite != undefined) {

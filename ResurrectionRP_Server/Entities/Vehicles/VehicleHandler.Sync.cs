@@ -31,7 +31,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         public ConcurrentDictionary<int, int> Mods { get; set; }
-= new ConcurrentDictionary<int, int>();
+            = new ConcurrentDictionary<int, int>();
 
         public uint BodyHealth { get; set; } = 1000;
         public int EngineHealth { get; set; } = 1000;

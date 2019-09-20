@@ -27,10 +27,8 @@ namespace ResurrectionRP_Server.Factions
         public Door Cellule3;
         public Door Cellule4;
 
-        private IColShape ColShapePortique;
+        private IColShape colShapePortique;
         //private IObject _obj;
-
-        private readonly Vector3 _portiquePos = new Vector3(438.4902f, -981.9595f, 30.76797f);
 
         public List<Invoice> InvoiceList = new List<Invoice>();
         private Ped armurerie;
@@ -104,7 +102,7 @@ namespace ResurrectionRP_Server.Factions
 
             #region Portique
 
-            ColShapePortique = Alt.CreateColShapeCylinder(_portiquePos, 1f,  2f);
+            colShapePortique = Alt.CreateColShapeCylinder(new Vector3(438.4902f, -981.9595f, 30.76797f), 1f,  2f);
             //_obj = await MP.Objects.NewAsync(MP.Utility.Joaat("hei_prop_carrier_docklight_01"), new Vector3(PortiquePos.X, PortiquePos.Y, PortiquePos.Z + 2), new Vector3());
             //await _obj.SetAlphaAsync(0);
             #endregion

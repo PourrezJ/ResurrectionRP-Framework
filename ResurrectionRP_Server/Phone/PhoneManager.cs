@@ -42,11 +42,6 @@ namespace ResurrectionRP_Server.Phone
                 Phone oldMenu = null;
                 _ClientPhoneMenu.Remove(client, out oldMenu);
 
-                if (oldMenu != null)
-                {
-                    // Callback fermeture telephone
-                }
-
                 if (_ClientPhoneMenu.TryAdd(client, phone))
                 {
                     // phone.props = await ObjectHandlerManager.CreateObject(MP.Utility.Joaat("prop_npc_phone_02"), client.Position, client.Rotation);

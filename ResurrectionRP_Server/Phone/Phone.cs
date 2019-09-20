@@ -191,8 +191,8 @@ namespace ResurrectionRP_Server.Phone
             {
                  calledPlayer.ResetData("InToPhoneCommunication");
                  player.ResetData("InToPhoneCommunication");
-                 calledPlayer.EmitLocked("canceledCall");
-                 player.EmitLocked("canceledCall");
+                 calledPlayer.EmitLocked("CanceledCall");
+                 player.EmitLocked("CanceledCall");
             }
         }
 
@@ -310,7 +310,9 @@ namespace ResurrectionRP_Server.Phone
 
         public void SendContactListToClient(IPlayer client)
         {
-            client.EmitLocked("ContactReturned", JsonConvert.SerializeObject(AddressBook));
+            List<Address> contacts = AddressBook.GetRange(1, AddressBook.Count - 1).OrderBy(c => c.contactName).ToList();
+            contacts.Insert(0, AddressBook[0]);
+            client.EmitLocked("ContactReturned", JsonConvert.SerializeObject(contacts));
         }
 
         #endregion

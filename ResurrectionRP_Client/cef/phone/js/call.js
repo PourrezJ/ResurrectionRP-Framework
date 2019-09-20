@@ -40,7 +40,8 @@ app.controller("OnCallCtrl", function ($scope, $interval, $timeout) {
     $scope.calledNumber = urlParams.get("number");
     $scope.contactName = (urlParams.get("name") == null ? "Inconnu" : urlParams.get("name"));
     $scope.incomingCall = (urlParams.get("incomingCall"));
-    $scope.callStatus = ($scope.incomingCall ? "Appel..." : "Appel entrant...");
+    console.log($scope.incomingCall);
+    $scope.callStatus = ($scope.incomingCall ? "Appel entrant..." : "Appel...");
 
     $scope.callStart = null;
     $scope.timerInterval = null;
@@ -58,6 +59,8 @@ app.controller("OnCallCtrl", function ($scope, $interval, $timeout) {
         while (diffSec >= 60) {
             diffMinutes++;
             diffSec -= 60;
+            if ($scope.timerInterval == null)
+                return;
         }
 
         $scope.callStatus = addZeros(diffMinutes) + ":" + addZeros(diffSec);
@@ -66,6 +69,7 @@ app.controller("OnCallCtrl", function ($scope, $interval, $timeout) {
     $scope.callEnded = function () {
         if ($scope.timerInterval != null) {
             $interval.cancel($scope.timerInterval);
+            $scope.timerInterval = null;
         }
 
         $scope.$apply(() => {

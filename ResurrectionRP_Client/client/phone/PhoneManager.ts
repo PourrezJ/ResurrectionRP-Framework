@@ -9,16 +9,22 @@ var isPhoneOpen: boolean = false;
 export default class PhoneManager {
 
     public browser: alt.WebView = null;
-    private animStage: number = 0;
+    public animStage: number = 0;
+
     private onTick: number;
 
     constructor()
     {
+
         alt.onServer("OpenPhone", (idk0: any, idk1: any, incomingCall: boolean, contactNumber: string, contactName: string) => {
             if (game.isPauseMenuActive())
                 return;
 
+            this.animStage = 0;
             isPhoneOpen = true;
+
+            if (this.browser != null)
+                this.ClosePhone();
 
             if (incomingCall)
                 this.browser = new alt.WebView(`http://resource/client/cef/phone/oncall.html?incomingCall=true&number=${contactNumber}&name=${contactName}`);
@@ -54,21 +60,6 @@ export default class PhoneManager {
             this.browser.on("initiateCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "initiateCall", arg));
             this.browser.on("acceptCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "acceptCall", arg));
             this.browser.on("cancelCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "cancelCall", arg));
-
-            this.browser.on("canceledCall", (arg, arg2) => {
-                utils.playAnimation(
-                    (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : (alt.Player.local.model == 2627665880) ? "cellphone@female" : "cellphone@",
-                    "cellphone_text_in",
-                    8,
-                    -1,
-                    0
-                );
-
-                this.animStage = 0;
-                if (this.browser != null)
-                    this.browser.emit("callEvent", "canceled");
-            });
-
             this.browser.on("endCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "endCall", arg));
             this.browser.on("CanClose", (canClose: boolean) => Interaction.SetCanClose(canClose));
 
@@ -83,7 +74,13 @@ export default class PhoneManager {
 
             alt.onServer("ContactReturned", (args) => { if (this.browser != null) { this.browser.emit("loadContacts", args) } });
             alt.onServer("ClosePhone", () => this.ClosePhone());
-            alt.onServer("initiatedCall", (phoneNumber: string, contactName: string) => { if (this.browser != null) { this.browser.url = 'http://resource/client/cef/phone/oncall.html?incomingCall=true&number=' + phoneNumber + '&name=' + contactName }  });
+
+            alt.onServer("initiatedCall", (phoneNumber: string, contactName: string) => {
+                if (this.browser != null)
+                    this.browser.url = `http://resource/client/cef/phone/oncall.html?number=${phoneNumber}&name=${contactName}`;
+            });
+
+
             alt.onServer("deleteConversation", (arg, arg2) => { if (this.browser != null) { this.browser.url = "http://resource/client/cef/phone/messages.html" } });
 
             alt.on("ClosePhone", () => this.ClosePhone());
@@ -100,11 +97,25 @@ export default class PhoneManager {
 
             alt.onServer("StartedCall", (player: alt.Player) => {
                 this.animStage = 3;
-
                 if (this.browser != null)
                     this.browser.emit("callEvent", "started");
 
                 voice.VoiceChat.OnEstablishCall(player.getSyncedMeta("Voice_TeamSpeakName").toString());
+            });
+
+            alt.onServer("CanceledCall", () => {
+                if (this.browser != null)
+                    this.browser.emit("callEvent", "canceled");
+
+                this.animStage = 0;
+
+                utils.playAnimation(
+                    (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : (alt.Player.local.model == 2627665880) ? "cellphone@female" : "cellphone@",
+                    "cellphone_text_in",
+                    8,
+                    -1,
+                    49
+                );
             });
 
             this.onTick = alt.everyTick(() => {
@@ -132,7 +143,6 @@ export default class PhoneManager {
                         -1,
                         0
                     );
-
                     this.animStage = 2;
                 }
                 // Animation Appel
@@ -143,9 +153,8 @@ export default class PhoneManager {
                         "cellphone_call_listen_base",
                         8,
                         -1,
-                        0
+                        49
                     );
-
                     this.animStage = 4;
                 }
             });
@@ -161,7 +170,7 @@ export default class PhoneManager {
         game.clearPedTasks(alt.Player.local.scriptID);
 
         utils.playAnimation(
-            (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : "cellphone@", "cellphone_text_out", 8, 0, 0
+            (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : "cellphone@", "cellphone_text_out", 8, -1, 49
         );
 
 

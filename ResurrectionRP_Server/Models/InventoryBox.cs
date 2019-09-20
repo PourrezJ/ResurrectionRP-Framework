@@ -51,7 +51,7 @@ namespace ResurrectionRP_Server.Models
         }
 
         public void Spawn() =>
-            Obj = Entities.Objects.ObjectManager.CreateObject((int)Model, new Vector3(Location.Pos.X, Location.Pos.Y, Location.Pos.Z - 1f), Location.Rot);
+            Obj = Entities.Objects.ObjectManager.CreateObject((int)Model, new Vector3(Location.Pos.X, Location.Pos.Y, Location.Pos.Z ), Location.Rot);
 
         public void Destruct() =>
             Obj?.Destroy();

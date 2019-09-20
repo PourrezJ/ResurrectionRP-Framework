@@ -104,6 +104,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             VehicleHandler vh = vehicle.GetVehicleHandler();
             PlayerHandler ph = player.GetPlayerHandler();
 
+
+            vehicle.SetEngineOnAsync(vh.Engine);
+
             if (vh != null)
                 vh.Update();
 

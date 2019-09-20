@@ -21,7 +21,7 @@ namespace ResurrectionRP_Server.Economy
         public static double CalculPriceTaxe(double Price, double Taxes)
         {
             double _price = Price * (Taxes / 100);
-            return _price;
+            return Math.Round( _price,3);
         }
 
         public static double CalculNewPrice(double Price, double Taxes)

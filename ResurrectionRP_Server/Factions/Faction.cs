@@ -115,7 +115,7 @@ namespace ResurrectionRP_Server.Factions
         #region Start
         public virtual Task<Faction> OnFactionInit()
         {
-            if (ServiceLocation != null)
+            if (ServiceLocation != null && ServiceLocation != Vector3.Zero)
             {
                 Vestiaire_colShape = Alt.CreateColShapeCylinder(ServiceLocation - new Vector3(0, 0, 1), 1.0f, 1f);
                 Vestiaire_colShape.SetOnPlayerEnterColShape(OnPlayerEnterVestiaire);

@@ -170,13 +170,11 @@ export class Interaction {
         return true;
     }
 
-    public static GetCanClose(): boolean {
-        alt.log("get close: " + canClose);
+    public static GetCanClose(): boolean {   
         return canClose;
     }
 
     public static SetCanClose(close: boolean) {
-        alt.log("set close: " + close);
         canClose = close;
     }
 }

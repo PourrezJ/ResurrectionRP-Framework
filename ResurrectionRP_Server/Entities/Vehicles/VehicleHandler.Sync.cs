@@ -59,6 +59,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public Wheel[] Wheels { get; set; }
 
         public Location LastKnowLocation;
+
         public Location Location
         {
             get

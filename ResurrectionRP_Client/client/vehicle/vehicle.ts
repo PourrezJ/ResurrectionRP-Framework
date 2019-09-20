@@ -18,6 +18,16 @@ export function initialize() {
         fuelCur = fuel;
     });
 
+    alt.on("syncedMetaChange", (entity: alt.Vehicle, key: string, value: boolean) => {
+        switch (key) {
+            case "sirenDisabled":
+                game.setDisableVehicleSirenSound(entity.scriptID, value);
+                break;
+        }
+    });
+
+
+    // need to be passed on server side
     alt.everyTick(() => {
         if ((Date.now() - lastSent) > 33) {
             lastSent = Date.now();

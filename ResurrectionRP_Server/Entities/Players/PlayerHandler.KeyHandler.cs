@@ -212,7 +212,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     vh.SirenSound = !vh.SirenSound;
 
-                    await client.EmitAsync("VehicleSetSirenSound", vehicle, vh.SirenSound);
+                    await vehicle.SetSyncedMetaDataAsync("sirenDisabled", vh.SirenSound);
 
                     break;
                     /*

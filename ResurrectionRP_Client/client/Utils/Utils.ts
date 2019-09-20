@@ -1,6 +1,7 @@
 ﻿
 import * as alt from 'alt';
 import * as game from 'natives';
+import * as enums from '../Utils/Enums/Enums';
 
 var helpText;
 var subtitle;
@@ -337,19 +338,49 @@ export function ArrayRemove(arr, value) {
 }
 
 //let _necessaryControlsForController = [2,1,25,24];
-let _necessaryControlsForKeyboard = [201, 195, 196, 187, 188, 189, 190, 202, 217, 242, 241, 239, 240, 31, 30, 21, 22, 23, 71, 72, 89, 9, 8, 90, 76];
+//let _necessaryControlsForKeyboard = [201, 195, 196, 187, 188, 189, 190, 202, 217, 242, 241, 239, 240, 31, 30, 21, 22, 23, 71, 72, 89, 9, 8, 90, 76, 63, 64, 278, 279, 34, 35, 189, 190];
+let _necessaryControls =
+    [
+        enums.Control.FrontendAccept,
+        enums.Control.FrontendAxisX,
+        enums.Control.FrontendAxisY,
+        enums.Control.FrontendDown,
+        enums.Control.FrontendUp,
+        enums.Control.FrontendLeft,
+        enums.Control.FrontendRight,
+        enums.Control.FrontendCancel,
+        enums.Control.FrontendSelect,
+        enums.Control.CursorScrollDown,
+        enums.Control.CursorScrollUp,
+        enums.Control.CursorX,
+        enums.Control.CursorY,
+        enums.Control.MoveUpDown,
+        enums.Control.MoveLeftRight,
+        enums.Control.Sprint,
+        //enums.Control.Jump,
+        enums.Control.Enter,
+        enums.Control.VehicleExit,
+        enums.Control.VehicleAccelerate,
+        enums.Control.VehicleBrake,
+        enums.Control.VehicleMoveLeftRight,
+        enums.Control.VehicleFlyYawLeft,
+        enums.Control.FlyLeftRight,
+        enums.Control.FlyUpDown,
+        enums.Control.VehicleFlyYawRight,
+        enums.Control.VehicleHandbrake,
+    ];
 
 export function DisEnableControls(enabled: boolean) {
 
     if (enabled)
-        game.enableAllControlActions(2);
+        game.enableAllControlActions(0);
     else
-        game.disableAllControlActions(2);
+        game.disableAllControlActions(0);
 
     if (enabled)
         return;
 
-    _necessaryControlsForKeyboard.forEach((control) => {
+    _necessaryControls.forEach((control: number) => {
         game.enableControlAction(0, control, true);
     });
 

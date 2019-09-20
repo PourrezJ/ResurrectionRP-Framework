@@ -149,7 +149,7 @@ namespace ResurrectionRP_Server.Factions
                 Marker.CreateMarker(MarkerType.VerticalCylinder, HeliportLocation.Pos - new Vector3(0, 0, 0), new Vector3(3, 3, 3));
             }
 
-            if (ShopLocation != null)
+            if (ShopLocation != null && ShopLocation != Vector3.Zero)
             {
                 Shop_colShape = Alt.CreateColShapeCylinder(ShopLocation, 1.0f, 2f);
                 Shop_colShape.SetOnPlayerEnterColShape(OnPlayerEnterShop);

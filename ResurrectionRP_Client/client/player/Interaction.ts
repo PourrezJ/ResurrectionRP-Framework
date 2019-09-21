@@ -74,20 +74,23 @@ export class Interaction {
                 case 50:    // é
                 case 51:    // "
 
-                    if (key == 69 && isInColshape)
-                        alt.emitServer('InteractionInColshape', key);
-
                     let vehicle: alt.Vehicle = null;
                     let player: alt.Player = null;
 
-                    if (raycastResult.isHit && raycastResult.entityType == 2) {
+                    if (raycastResult.isHit && raycastResult.entityType == 1 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= MAX_INTERACTION_DISTANCE) {
+                        player = alt.Player.all.find(p => p.scriptID == raycastResult.hitEntity);
+                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, player);
+                    }
+                    else if (raycastResult.isHit && raycastResult.entityType == 2 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= MAX_INTERACTION_DISTANCE) {
                         vehicle = alt.Vehicle.all.find(v => v.scriptID == raycastResult.hitEntity);
+                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), vehicle, null);
                     }
-                    else if (raycastResult.isHit && raycastResult.entityType == 1 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= MAX_INTERACTION_DISTANCE) {
-                         player = alt.Player.all.find(p => p.scriptID == raycastResult.hitEntity);
+                    else if (key == 69 && isInColshape) {
+                        alt.emitServer('InteractionInColshape', key);
                     }
-
-                    alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), vehicle, player);
+                    else {
+                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null);
+                    }
                     break;
             }
         });

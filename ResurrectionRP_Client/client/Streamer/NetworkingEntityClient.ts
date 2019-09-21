@@ -42,6 +42,7 @@ export class NetworkingEntityClient {
                 }
             });
         });
+
         alt.on("keydown", this.OnKeyPressed.bind(this));
         alt.on("disconnect", this.unloadStream.bind(this));
 
@@ -384,7 +385,7 @@ export class NetworkingEntityClient {
             _pos.z + (_dir.z * 3),
         )
 
-        let resultPed = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, 5);
+        let resultPed = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, 12);
 
         if (!resultPed.isHit)
             return;
@@ -420,5 +421,3 @@ let networkingEntityClient = null;
 export function getStreamedInEntities() {
     return networkingEntityClient.streamedInEntities;
 }
-
-

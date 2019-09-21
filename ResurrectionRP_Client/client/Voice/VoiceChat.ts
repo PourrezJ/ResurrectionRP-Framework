@@ -25,6 +25,7 @@ export class VoiceChat
     private static _isIngame: boolean;
 
     public static radioVolume: number = 1;
+    public static isRadioTalking: boolean;
 
     constructor()
     {
@@ -36,6 +37,7 @@ export class VoiceChat
             VoiceChat.soundPack = soundPack;
             VoiceChat.ingameChannel = ingameChannel;
             VoiceChat.ingameChannelPassword = ingameChannelPassword;
+            VoiceChat.isRadioTalking = false;
 
             VoiceChat.nextUpdate = Date.now() + 300;
             VoiceChat.deadplayers = [];
@@ -141,6 +143,7 @@ export class VoiceChat
                 game.stopSound(1);
                 game.playSoundFrontend(-1, "Start_Squelch", "CB_RADIO_SFX", true);
                 game.playSoundFrontend(1, "Background_Loop", "CB_RADIO_SFX", true);
+                VoiceChat.isRadioTalking = true;
             }
             else {
                 VoiceChat.ExecuteCommand(
@@ -149,6 +152,7 @@ export class VoiceChat
                 game.stopSound(-1);
                 game.stopSound(1);
                 game.playSoundFrontend(1, "End_Squelch", "CB_RADIO_SFX", true);
+                VoiceChat.isRadioTalking = false;
             }
         });
     

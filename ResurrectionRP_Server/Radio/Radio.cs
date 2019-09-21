@@ -63,7 +63,6 @@ namespace ResurrectionRP_Server.Radio
             if (Statut == RadioModes.LISTENING)
             {
                 Statut = RadioModes.SPEAKING;
-                Alt.Server.LogError("Client " + client.Name + " is speaking on frequency " + GetCurrentFrequence());
                 SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), true); 
 
                 await client.PlayAnimation("random@arrests", "generic_radio_chatter", 4, -8, -1, (AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.AllowPlayerControl));
@@ -76,7 +75,6 @@ namespace ResurrectionRP_Server.Radio
             if (Statut == RadioModes.SPEAKING || Statut == RadioModes.LISTENING)
             {
                 Statut = RadioModes.LISTENING;
-                Alt.Server.LogError("Client " + client.Name + " is not speaking on frequency " + GetCurrentFrequence());
                 SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), false);
 
                 var ph = client.GetPlayerHandler();

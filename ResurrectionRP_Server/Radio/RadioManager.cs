@@ -151,7 +151,6 @@ namespace ResurrectionRP_Server.Radio
                     break;
                 case "ChangeVolume":
                     radio.Volume = int.Parse(args[1].ToString());
-                    Alt.Server.LogError("New volume: " + radio.Volume);
                     break;
                 default:
                     Alt.Server.LogError("RadioManager RadioChange Hm args[0] is not valid... problem in client side ? args 0 mmust be the event name");

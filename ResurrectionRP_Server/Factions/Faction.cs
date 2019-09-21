@@ -120,7 +120,7 @@ namespace ResurrectionRP_Server.Factions
                 Vestiaire_colShape = Alt.CreateColShapeCylinder(ServiceLocation - new Vector3(0, 0, 1), 1.0f, 1f);
                 Vestiaire_colShape.SetOnPlayerEnterColShape(OnPlayerEnterVestiaire);
                 Vestiaire_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveVestiaire);
-                Marker.CreateMarker(MarkerType.HorizontalCircleArrow, ServiceLocation - new Vector3(0, 0, 1), new Vector3(1, 1, 1));
+                Marker.CreateMarker(MarkerType.HorizontalCircleArrow, ServiceLocation - new Vector3(0, 0, 0.95f), new Vector3(1, 1, 1));
             }
 
             if (ParkingLocation != null)

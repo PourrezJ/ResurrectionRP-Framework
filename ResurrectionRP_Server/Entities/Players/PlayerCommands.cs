@@ -50,7 +50,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 return Task.CompletedTask;
             }
 
-            player.Vehicle.GetVehicleHandler()?.SetFuel(player.Vehicle.GetVehicleHandler().FuelMax);
+            player.Vehicle.GetVehicleHandler().Fuel = (player.Vehicle.GetVehicleHandler().FuelMax);
             player.DisplaySubtitle("Vehicule restoré", 5000);
             return Task.CompletedTask;
         }

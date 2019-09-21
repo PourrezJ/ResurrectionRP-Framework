@@ -124,7 +124,6 @@ namespace ResurrectionRP_Server.Models
 
             if (ParkingType != ParkingType.Society)
                 await OpenParkingMenu(client);
-
         }
 
         private async Task OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
@@ -318,9 +317,9 @@ namespace ResurrectionRP_Server.Models
                 if (canGetAllVehicle)
                     vehicleListParked = ListVehicleStored;
                 else if (vehicleType == -1)
-                    vehicleListParked = ListVehicleStored.FindAll(p =>  ph.ListVehicleKey.Exists(v => v.Plate == p.Plate));
+                    vehicleListParked = ListVehicleStored.FindAll(p => VehiclesManager.GetVehicleHandler(p.Plate).OwnerID == social || ph.ListVehicleKey.Exists(v => v.Plate == p.Plate));
                 else
-                    vehicleListParked = ListVehicleStored.FindAll(p => (ph.ListVehicleKey.Exists(v => v.Plate == p.Plate) && VehiclesManager.GetVehicleHandler(p.Plate).VehicleManifest.VehicleClass == vehicleType));
+                    vehicleListParked = ListVehicleStored.FindAll(p => (VehiclesManager.GetVehicleHandler(p.Plate).OwnerID == social || ph.ListVehicleKey.Exists(v => v.Plate == p.Plate) && VehiclesManager.GetVehicleHandler(p.Plate).VehicleManifest.VehicleClass == vehicleType));
 
                 FilterDefinition<VehicleHandler> filter = Builders<VehicleHandler>.Filter.AnyIn("_id", vehicleListParked.Select(v => v.Plate).ToArray());
                 List<VehicleHandler> vehicleList = await Database.MongoDB.GetCollectionSafe<VehicleHandler>("vehicles").Find(filter).ToListAsync();

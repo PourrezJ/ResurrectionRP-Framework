@@ -21,6 +21,7 @@ import * as Utils from '../Utils/utils';
 var isInColshape: boolean = false;
 var raycastResult = null;
 var canClose: boolean = true;
+const MAX_INTERACTION_DISTANCE = 1.5;
 
 export class Interaction {
 
@@ -73,20 +74,23 @@ export class Interaction {
                 case 50:    // é
                 case 51:    // "
 
-                    if (key == 69 && isInColshape)
-                        alt.emitServer("InteractionInColshape", key);
-
                     let vehicle: alt.Vehicle = null;
                     let player: alt.Player = null;
 
-                    if (raycastResult.isHit && raycastResult.entityType == 2) {
+                    if (raycastResult.isHit && raycastResult.entityType == 1 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= MAX_INTERACTION_DISTANCE) {
+                        player = alt.Player.all.find(p => p.scriptID == raycastResult.hitEntity);
+                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, player);
+                    }
+                    else if (raycastResult.isHit && raycastResult.entityType == 2 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= MAX_INTERACTION_DISTANCE) {
                         vehicle = alt.Vehicle.all.find(v => v.scriptID == raycastResult.hitEntity);
+                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), vehicle, null);
                     }
-                    else if (raycastResult.isHit && raycastResult.entityType == 1) {
-                         player  = alt.Player.all.find(p => p.scriptID == raycastResult.hitEntity);
+                    else if (key == 69 && isInColshape) {
+                        alt.emitServer('InteractionInColshape', key);
                     }
-
-                    alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), vehicle, player);
+                    else {
+                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null);
+                    }
                     break;
             }
         });
@@ -104,29 +108,27 @@ export class Interaction {
                 var _pos = game.getGameplayCamCoord();
                 var _dir: any = Utils.GetCameraDirection();
 
+                // Origin is camera position, not player position, so need to set higher values when player has its camera far for character
                 var _farAway = new alt.Vector3(
-                    _pos.x + (_dir.x * 5),
-                    _pos.y + (_dir.y * 5),
-                    _pos.z + (_dir.z * 5),
+                    _pos.x + (_dir.x * 9),
+                    _pos.y + (_dir.y * 9),
+                    _pos.z + (_dir.z * 9),
                 )
 
-                raycastResult = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, -1);
+                raycastResult = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, 18);
 
-                if (raycastResult.isHit && raycastResult.entityType == 2 && alt.Player.local.vehicle == null) {
+                if (raycastResult.isHit && raycastResult.entityType == 2 && alt.Player.local.vehicle == null && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= MAX_INTERACTION_DISTANCE) {
                     Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le véhicule");
                 }
-                else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isAtm(raycastResult.entityHash))
-                {
+                else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isAtm(raycastResult.entityHash) && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= MAX_INTERACTION_DISTANCE) {
                     Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec l'ATM");
                 }
-                else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isPompe(raycastResult.entityHash)) {
+                else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isPompe(raycastResult.entityHash) && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= MAX_INTERACTION_DISTANCE) {
                     Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec la pompe à essence");
                 }
-
-                if (game.isAnyObjectNearPoint(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, 2, true) &&
-                    game.getClosestObjectOfType(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, 2, game.getHashKey("prop_money_bag_01"), false, true, false) != 0
-                )
-                Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour ramasser l'objet");
+                else if (game.isAnyObjectNearPoint(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, MAX_INTERACTION_DISTANCE, true) && game.getClosestObjectOfType(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, MAX_INTERACTION_DISTANCE, game.getHashKey("prop_money_bag_01"), false, true, false) != 0) {
+                    Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour ramasser l'objet");
+                }
             }
         });
     }

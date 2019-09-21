@@ -23,22 +23,22 @@ export class NetworkingEntityClient {
 
         alt.everyTick(() => {
             this.EntityList.forEach((item, index) => {
-                if (item != null && item["Text"] != null) {
+                if (item != null && item.Text != null) {
                     this.displayTextLabel(item);
-                } else if (item != null && item["scalex"] != null) {
+                } else if (item != null && item.scalex != null) {
                     game.drawMarker(
-                        item["type"],
-                        item["PosX"],
-                        item["PosY"],
-                        item["PosZ"],
+                        item.type,
+                        item.PosX,
+                        item.PosY,
+                        item.PosZ,
                         0, 0, 0, 0, 0, 0,
-                        item["scalex"],
-                        item["scaley"],
-                        item["scalez"],
-                        item["Color"]["r"],
-                        item["Color"]["g"],
-                        item["Color"]["b"],
-                        item["Color"]["a"], false, false, 0, false, undefined, undefined, false)
+                        item.scalex,
+                        item.scaley,
+                        item.scalez,
+                        item.Color.r,
+                        item.Color.g,
+                        item.Color.b,
+                        item.Color.a, false, false, 0, false, undefined, undefined, false)
                 }
             });
         });
@@ -75,6 +75,7 @@ export class NetworkingEntityClient {
         this.webview.on("dataChange", (entityAndNewData) => {
             const entityAndNewDataParsed = JSON.parse(entityAndNewData);
             const currEntity = this.streamedInEntities[entityAndNewDataParsed.entity.id];
+
             if (currEntity) {
                 currEntity.data = entityAndNewDataParsed.entity.data;
                 this.onDataChange(currEntity, entityAndNewDataParsed.data);
@@ -104,6 +105,7 @@ export class NetworkingEntityClient {
     destroy() {
         this.webview.emit("entityDestroy");
         alt.clearInterval(this.interval);
+
         if (this.defaultToken) {
             alt.offServer("streamingToken", this.tokenCallback);
         }
@@ -113,102 +115,119 @@ export class NetworkingEntityClient {
         this.init(url, token);
     }
 
-    onDataChange = (entity: object, data: object) => {
-        switch (entity["data"]["entityType"]["intValue"]) {
-            case 0:
-                game.deletePed(this.EntityList[entity["data"]["id"]["intValue"]])
-                this.onStreamIn(entity);
-                break;
-            case 1:
-                //game.deleteObject(this.EntityList[entity["data"]["id"]["intValue"]])
-                this.onStreamIn(entity);
-                
-                break;
-            case 2:
-                this.EntityList[entity["data"]["id"]["intValue"]] = undefined;
-                this.onStreamIn(entity);
-                break;
-            case 3:
-                this.EntityList[entity["data"]["id"]["intValue"]] = undefined;
-                this.onStreamIn(entity);
-                break;
-            case 4:
-                this.StaticEntityList[entity["data"]["id"]["intValue"]].destroy();
-                break;
-        }
+    onDataChange = async (entity: any, data: any) => {
+        let count = 0;
+
+        // Creating an entity can take some time so wait until it is created before updating it
+        const interval = alt.setInterval(() => {
+            if (this.EntityList[entity.id] == undefined || this.EntityList[entity.id] == null) {
+                count++;
+
+                if (count == 500) {
+                    alt.clearTimeout(interval);
+                }
+
+                return;
+            }
+
+            alt.clearInterval(interval);
+
+            switch (entity.data.entityType.intValue) {
+                case 0:
+                    game.deletePed(this.EntityList[entity.id])
+                    this.onStreamIn(entity);
+                    break;
+                case 1:
+                    //game.deleteObject(this.EntityList[entity.id])
+                    this.onStreamIn(entity);
+                    break;
+                case 2:
+                    this.EntityList[entity.id] = undefined;
+                    this.onStreamIn(entity);
+                    break;
+                case 3:
+                    this.EntityList[entity.id] = undefined;
+                    this.onStreamIn(entity);
+                    break;
+                case 4:
+                    this.StaticEntityList[entity.id].destroy();
+                    break;
+            }
+        }, 10);
     }
 
-    onStreamOut = async (entity: object) => {
-
+    onStreamOut = async (entity: any) => {
         this.EntityList.forEach((item, index) => {
-            if (entity["data"]["Text"])
+            if (entity.data.Text)
                 return;
-            if (index != entity["data"]["id"]["intValue"])
+
+            if (index != entity.id)
                 return;
-            if (entity["data"]["entityType"]["intValue"] == 0 || entity["data"]["entityType"]["intValue"] == 1) {
+
+            if (entity.data.entityType.intValue == 0 || entity.data.entityType.intValue == 1) {
                 game.deleteEntity(item);
             }
+
             this.EntityList[index] = null;
         });
 
     }
 
-    onStreamIn = async (entity: object) => {
-        switch (entity["data"]["entityType"]["intValue"]) {
+    onStreamIn = async (entity: any) => {
+        switch (entity.data.entityType.intValue) {
             case 0:
-                await utils.loadModelAsync(entity["data"]["model"]["uintValue"]);
+                await utils.loadModelAsync(entity.data.model.uintValue);
                 this.streamPed(
-                    entity["data"]["id"]["intValue"],
-                    entity["data"]["model"]["uintValue"],
-                    entity["position"]["x"],
-                    entity["position"]["y"],
-                    entity["position"]["z"],
-                    entity["data"]["heading"]["doubleValue"]
+                    entity.id,
+                    entity.data.model.uintValue,
+                    entity.position.x,
+                    entity.position.y,
+                    entity.position.z,
+                    entity.data.heading.doubleValue
                 );
                 break;
             case 1:
-                await utils.loadModelAsync(game.getHashKey( entity["data"]["model"]["stringValue"]));
+                await utils.loadModelAsync(game.getHashKey(entity.data.model.stringValue));
                 await this.streamObject(
-                    entity["data"]["id"]["intValue"],
-                    ( entity["data"]["model"]["intValue"]),
-                    entity["position"]["x"],
-                    entity["position"]["y"],
-                    entity["position"]["z"],
-                    entity["data"]["freeze"]["boolValue"]
+                    entity.id,
+                    entity.data.model.intValue,
+                    entity.position.x,
+                    entity.position.y,
+                    entity.position.z,
+                    entity.data.freeze.boolValue
                 );
-                if (JSON.parse(entity["data"]["attach"]["stringValue"])  != null)
-                    this.objectAttach(entity["data"]["id"]["intValue"], JSON.parse(entity["data"]["attach"]["stringValue"])) 
+
+                if (JSON.parse(entity.data.attach.stringValue) != null)
+                    this.objectAttach(entity.id, JSON.parse(entity.data.attach.stringValue)) 
                 break;
             case 2:
                 await this.streamTextLabel(
-                    entity["data"]["id"]["intValue"],
-                    entity["data"]["text"]["stringValue"],
-                    entity["position"]["x"],
-                    entity["position"]["y"],
-                    entity["position"]["z"],
-                    entity["data"]["font"]["intValue"],
-                    { r: entity["data"]["r"]["intValue"], g: entity["data"]["g"]["intValue"], b: entity["data"]["b"]["intValue"], a: entity["data"]["a"]["intValue"] }
+                    entity.id,
+                    entity.data.text.stringValue,
+                    entity.position.x,
+                    entity.position.y,
+                    entity.position.z,
+                    entity.data.font.intValue,
+                    { r: entity.data.r.intValue, g: entity.data.g.intValue, b: entity.data.b.intValue, a: entity.data.a.intValue }
                 );
                 break;
             case 3:
                 await this.streamMarker(
-                    entity["data"]["id"]["intValue"],
-                    entity["data"]["type"]["intValue"],
-                    entity["position"]["x"],
-                    entity["position"]["y"],
-                    entity["position"]["z"],
-                    entity["data"]["scalex"]["doubleValue"],
-                    entity["data"]["scaley"]["doubleValue"],
-                    entity["data"]["scalez"]["doubleValue"],
-                    { r: entity["data"]["r"]["intValue"], g: entity["data"]["g"]["intValue"], b: entity["data"]["b"]["intValue"], a: entity["data"]["a"]["intValue"] }
+                    entity.id,
+                    entity.data.type.intValue,
+                    entity.position.x,
+                    entity.position.y,
+                    entity.position.z,
+                    entity.data.scalex.doubleValue,
+                    entity.data.scaley.doubleValue,
+                    entity.data.scalez.doubleValue,
+                    { r: entity.data.r.intValue, g: entity.data.g.intValue, b: entity.data.b.intValue, a: entity.data.a.intValue }
                 );
                 break;
         }
     }
 
     private displayTextLabel(textLabel) {
-        //alt.log(textLabel["PosX"] + " " +  textLabel["PosY"] + " " +  textLabel["PosZ"])
-
         const [bol, _x, _y] = game.getScreenCoordFromWorldCoord(textLabel["PosX"], textLabel["PosY"], textLabel["PosZ"], 0, 0);
         const camCord = game.getGameplayCamCoords();
         const dist = game.getDistanceBetweenCoords(camCord.x, camCord.y, camCord.z, textLabel["PosX"], textLabel["PosY"], textLabel["PosZ"], true);

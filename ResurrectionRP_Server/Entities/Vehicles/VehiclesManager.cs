@@ -21,36 +21,17 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         #endregion
 
-        #region Ctor
+        #region Constructor
         public VehiclesManager()
         {
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
 
             AltAsync.OnClient("LockUnlockVehicle", LockUnlockVehicle);
-            AltAsync.OnClient("UpdateFuelAndMilage", UpdateFuelAndMilage);
         }
         #endregion
 
         #region Server Events
-        private static Task UpdateFuelAndMilage(IPlayer client, object[] args)
-        {
-            if (args[0] == null)
-                return Task.CompletedTask;
-
-            VehicleHandler vh = GetVehicleHandler((IVehicle)args[0]);
-            float fuel = float.Parse(args[1].ToString());
-            float mile = float.Parse(args[2].ToString());
-
-            if (vh != null)
-            {
-                vh.Milage = mile;
-                vh.SetFuel(fuel);
-            }
-
-            return Task.CompletedTask;
-        }
-
         private static Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
             PlayerHandler ph = player.GetPlayerHandler();
@@ -59,7 +40,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (ph != null && vh != null)
             {
                 ph.Update();
-                player.EmitLocked("OnPlayerEnterVehicle", vehicle, Convert.ToInt32(seat), vh.Fuel, vh.FuelMax, vh.Milage , vh.FuelConsumption);
+                player.EmitLocked("OnPlayerEnterVehicle", vehicle, Convert.ToInt32(seat), vh.Fuel, vh.FuelMax, vh.Milage, vh.FuelConsumption);
             }
 
             return Task.CompletedTask;
@@ -79,10 +60,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             if (veh == null)
                 return;
-            
+
             if (await veh.LockUnlock(player))
             {
-                var receverList =  vehicle.GetPlayersInRange(5f);
+                var receverList = vehicle.GetPlayersInRange(5f);
 
                 foreach (IPlayer recever in receverList)
                 {
@@ -205,7 +186,7 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
             ICollection<IVehicle> vehs = GetAllVehicles();
             IVehicle nearest = null;
 
-            foreach(IVehicle veh in vehs)
+            foreach (IVehicle veh in vehs)
             {
                 if (!veh.Exists || veh.Dimension != dimension || position.DistanceTo2D(veh.Position) > distance)
                     continue;
@@ -225,15 +206,15 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
 
         public static IVehicle GetVehicleByPlate(string plate)
         {
-            foreach(KeyValuePair<IVehicle, VehicleHandler> entity in VehicleHandlerList)
+            foreach (KeyValuePair<IVehicle, VehicleHandler> entity in VehicleHandlerList)
             {
                 if (entity.Value.Plate == plate)
-                    return entity.Key; 
+                    return entity.Key;
             }
             return null;
         }
 
-        public static async Task DeleteVehicleFromAllParkings(string Plate )
+        public static async Task DeleteVehicleFromAllParkings(string Plate)
         {
             foreach (Models.Parking parking in Models.Parking.ParkingList)
             {
@@ -246,7 +227,8 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
                     parking.ListVehicleStored.RemoveAll(p => p.Plate == Plate);
                     saveNeeded = true;
                 }
-                if(saveNeeded)
+
+                if (saveNeeded)
                     await parking.OnSaveNeeded.Invoke();
             }
         }
@@ -265,13 +247,24 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
 
         public static IVehicle GetVehicleWithPlate(string Plate)
         {
-            foreach(KeyValuePair<IVehicle, VehicleHandler> veh in VehicleHandlerList)
+            foreach (KeyValuePair<IVehicle, VehicleHandler> veh in VehicleHandlerList)
             {
                 if (veh.Value.Plate == Plate)
                     return veh.Key;
             }
 
             return null;
+        }
+
+        public static void UpdateVehiclesMilageAndFuel()
+        {
+            DateTime start = DateTime.Now;
+
+            foreach (IVehicle vehicle in Alt.GetAllVehicles())
+            {
+                if (vehicle.Exists && vehicle.EngineOn)
+                    vehicle.GetVehicleHandler().UpdateMilageAndFuel();
+            }
         }
         #endregion
     }

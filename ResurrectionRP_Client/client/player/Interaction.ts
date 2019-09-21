@@ -3,7 +3,8 @@ import * as game from 'natives';
 import Raycast, * as raycast from '../Utils/Raycast';
 import * as chat from '../chat/chat';
 import * as MenuManager from '../MenuManager/MenuManager';
-import * as Utils from '../Utils/utils';
+import * as Utils from '../Utils/Utils';
+import * as Globals from '../Utils/Globals';
 
 /*
  * POUR LE RAY CAST LES FLAGS
@@ -21,7 +22,6 @@ import * as Utils from '../Utils/utils';
 var isInColshape: boolean = false;
 var raycastResult = null;
 var canClose: boolean = true;
-const MAX_INTERACTION_DISTANCE = 1.5;
 
 export class Interaction {
 
@@ -77,11 +77,11 @@ export class Interaction {
                     let vehicle: alt.Vehicle = null;
                     let player: alt.Player = null;
 
-                    if (raycastResult.isHit && raycastResult.entityType == 1 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= MAX_INTERACTION_DISTANCE) {
+                    if (raycastResult.isHit && raycastResult.entityType == 1 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
                         player = alt.Player.all.find(p => p.scriptID == raycastResult.hitEntity);
                         alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, player);
                     }
-                    else if (raycastResult.isHit && raycastResult.entityType == 2 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= MAX_INTERACTION_DISTANCE) {
+                    else if (raycastResult.isHit && raycastResult.entityType == 2 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
                         vehicle = alt.Vehicle.all.find(v => v.scriptID == raycastResult.hitEntity);
                         alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), vehicle, null);
                     }
@@ -117,16 +117,16 @@ export class Interaction {
 
                 raycastResult = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, 18);
 
-                if (raycastResult.isHit && raycastResult.entityType == 2 && alt.Player.local.vehicle == null && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= MAX_INTERACTION_DISTANCE) {
+                if (raycastResult.isHit && raycastResult.entityType == 2 && alt.Player.local.vehicle == null && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
                     Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le véhicule");
                 }
-                else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isAtm(raycastResult.entityHash) && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= MAX_INTERACTION_DISTANCE) {
+                else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isAtm(raycastResult.entityHash) && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
                     Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec l'ATM");
                 }
-                else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isPompe(raycastResult.entityHash) && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= MAX_INTERACTION_DISTANCE) {
+                else if (raycastResult.isHit && raycastResult.entityType == 3 && Interaction.isPompe(raycastResult.entityHash) && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
                     Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec la pompe à essence");
                 }
-                else if (game.isAnyObjectNearPoint(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, MAX_INTERACTION_DISTANCE, true) && game.getClosestObjectOfType(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, MAX_INTERACTION_DISTANCE, game.getHashKey("prop_money_bag_01"), false, true, false) != 0) {
+                else if (game.isAnyObjectNearPoint(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, Globals.MAX_INTERACTION_DISTANCE, true) && game.getClosestObjectOfType(alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, Globals.MAX_INTERACTION_DISTANCE, game.getHashKey("prop_money_bag_01"), false, true, false) != 0) {
                     Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour ramasser l'objet");
                 }
             }

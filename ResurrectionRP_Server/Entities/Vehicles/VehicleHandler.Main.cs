@@ -198,6 +198,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
                 Vehicle.EngineOn = Engine;
                 Vehicle.Position = Location.Pos;
+                _previousPosition = Location.Pos;
 
                 VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
                 VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
@@ -265,16 +266,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return false;
         }
         
-        public void SetFuel(float fuel)
-        {
-            Fuel = fuel;
-
-            if(Vehicle.Driver != null)
-                Vehicle.Driver.EmitLocked("UpdateFuel", fuel);
-
-            Update();
-        }
-
         public void AddFuel(float fuel)
         {
             if (Fuel + fuel > FuelMax)
@@ -293,9 +284,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             try
             {
-                Dirt = Vehicle.DirtLevel;
-                Engine = Vehicle.EngineOn;
+                if (Fuel != 0)
+                    Engine = Vehicle.EngineOn;
+
                 EngineHealth = Vehicle.EngineHealth;
+                Dirt = Vehicle.DirtLevel;
                 BodyHealth = Vehicle.BodyHealth;
                 RadioID = Vehicle.RadioStation;
                 bool neonActive = Vehicle.IsNeonActive;

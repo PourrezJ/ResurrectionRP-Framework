@@ -51,9 +51,14 @@ namespace ResurrectionRP_Server.Factions
         #region Event listeners
         public override async Task<Faction> OnFactionInit()
         {
-            Marker.CreateMarker(MarkerType.VerticalCylinder, new Vector3(-324.7894f, -134.2555f, 35.54341f), new Vector3(1, 1, 1));
 
-            ReparationVLColshape = Alt.CreateColShapeCylinder(new Vector3(-324.7894f, -134.2555f, 39.54341f), 3, 1);
+            Vector3 reparZone = new Vector3(-324.7894f, -134.2555f, 35.54341f);
+            Marker.CreateMarker(MarkerType.VerticalCylinder, reparZone, new Vector3(4, 4, 3), System.Drawing.Color.White, GameMode.GlobalDimension);
+            ReparationVLColshape = Alt.CreateColShapeCylinder(reparZone, 4, 4);
+            ReparationVLColshape.SetOnPlayerInteractInColShape(OnEnterReparZoneVL);
+            ReparationVLColshape.SetOnPlayerEnterColShape(OnEnterColshapeInteract);
+
+
             PeintureColshape = Alt.CreateColShapeCylinder(PeintureZone, 3, 1);
 
             FactionRang = new FactionRang[] {
@@ -80,12 +85,10 @@ namespace ResurrectionRP_Server.Factions
             return await base.OnFactionInit();
         }
 
-        public override async Task OnPlayerEnterColShape(IColShape colshapePointer, IPlayer player)
+        private Task OnEnterColshapeInteract(IColShape colShape, IPlayer client)
         {
-            if (colshapePointer == ReparationVLColshape)
-                await OnEnterReparZoneVL(colshapePointer, player);
-            else if (colshapePointer == PeintureColshape)
-                await OnEnterPeintureZone(colshapePointer, player);
+            client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
+            return Task.CompletedTask;
         }
 
         public override async Task OnPlayerExitColShape(IColShape colshapePointer, IPlayer player)
@@ -215,13 +218,13 @@ namespace ResurrectionRP_Server.Factions
 
         private async Task OnEnterReparZoneVL(IColShape colShape, IPlayer client)
         {
-            if ( VehiclesManager.IsVehicleInSpawn(ReparZoneVL.Pos))
+            if (VehiclesManager.IsVehicleInSpawn(ReparZoneVL.Pos))
             {
-                var vehs =  ReparZoneVL.Pos.GetVehiclesInRange(4f);
+                var vehs = ReparZoneVL.Pos.GetVehiclesInRange(4f);
 
                 if (vehs.Count > 0)
                 {
-                   await OpenMenu(client, vehs[0]);
+                    await OpenMenu(client, vehs[0]);
                 }
             }
         }
@@ -343,7 +346,11 @@ namespace ResurrectionRP_Server.Factions
         private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             IVehicle veh = menu.GetData("Vehicle");
-            if (veh == null) return;
+            if (veh == null)
+                return;
+
+            if (!veh.Exists)
+                return;
 
             PlayerHandler ph = client.GetPlayerHandler();
             VehicleHandler _vh = veh.GetVehicleHandler();
@@ -360,13 +367,13 @@ namespace ResurrectionRP_Server.Factions
 
                     Utils.Utils.Delay(20000, true, async () =>
                     {
-                        if (!client.Exists)
+                        if (!veh.Exists || !client.Exists)
                             return;
 
                         string str = $"Body: {Math.Floor(await veh.GetBodyHealthAsync() * 0.1)}% \n" +
                         $"Engine: {Math.Floor(await veh.GetEngineHealthAsync() * 0.1)} %";
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Diagnostique: ~g~Terminé~w~.", str);
-                        await client.StopAnimationAsync();
+                        client.StopAnimation();
                     });
 
                     break;
@@ -376,8 +383,9 @@ namespace ResurrectionRP_Server.Factions
                     {
                         Utils.Utils.Delay(20000, true, async () =>
                         {
+                            if (!veh.Exists || !client.Exists)
+                                return;
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~g~Terminé~w~.", "Elle est niquel!");
-                            await _vh.Vehicle.RepairAsync();
                             _vh.BodyHealth = 1000;
                             _vh.Doors = new VehicleDoorState[Globals.NB_VEHICLE_DOORS] { 0, 0, 0, 0, 0, 0 };
                             _vh.Windows = new WindowState[Globals.NB_VEHICLE_WINDOWS] { 0, 0, 0, 0 };
@@ -389,6 +397,7 @@ namespace ResurrectionRP_Server.Factions
                                 wheel.HasTire = true;
                             }
 
+                            await veh.RepairAsync();
                             _vh.Update();
                         });
 
@@ -404,24 +413,28 @@ namespace ResurrectionRP_Server.Factions
                     if (await BankAccount.GetBankMoney(ReparEnginePrice, $"Réparation moteur {_vh.Plate} par {ph.Identite.Name}"))
                     {
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.","C'est parti!");
-                        var pos = await client.GetPositionAsync();
+                        //var pos = client.Position;
 
-                        _vh.Freeze(true);
-                        var bite = (new Vector3(client.Position.X, client.Position.Y, client.Position.Z)).Forward((await veh.GetRotationAsync()).Yaw, 2.2f);
-                        await client.SetPositionAsync(bite);
-                        await client.SetRotationAsync(await veh.GetRotationAsync());
+                        //_vh.Freeze(true);
+                        //var rotation = await veh.GetRotationAsync();
+
+                        //var posForward = new Vector3(client.Position.X, client.Position.Y, client.Position.Z).Forward(rotation.Yaw, 2.2f);
+                        //client.Position = posForward;
+                        //client.Rotation = veh.Rotation;
                         //await client.PlayScenarioAsync("WORLD_HUMAN_VEHICLE_MECHANIC"); TODO
 
-                        Utils.Utils.Delay(20000, true, async () =>
+                        Utils.Utils.Delay(20000, true, () =>
                         {
+                            if (!veh.Exists || !client.Exists)
+                                return;
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~g~Terminé~w~.","Il est niquel!");
 
-                            _vh.EngineHealth = 1000;
+                            _vh.EngineHealth = 1000;    
                             _vh.Update();
                             _vh.UpdateProperties();
-                            await client.SetPositionAsync(pos);
-                            await client.StopAnimationAsync();
-                            _vh.Freeze(false);
+                            //client.SetPositionLocked(pos);
+                            //client.StopAnimation();
+                            //_vh.Freeze(false);
                         });
 
                         await UpdateDatabase();
@@ -438,6 +451,8 @@ namespace ResurrectionRP_Server.Factions
 
                         Utils.Utils.Delay(20000, true, () =>
                         {
+                            if (!veh.Exists || !client.Exists)
+                                return;
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~g~Terminé~w~.","Elle est niquel!");
                             _vh.Dirt = 0;
                             _vh.Update();
@@ -457,6 +472,8 @@ namespace ResurrectionRP_Server.Factions
 
                         Utils.Utils.Delay(20000, true, () =>
                         {
+                            if (!veh.Exists || !client.Exists)
+                                return;
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~g~Terminé~w~.","Le moteur démarre, c'est déjà ça!");
                             _vh.EngineHealth = 400;
                             _vh.Update();

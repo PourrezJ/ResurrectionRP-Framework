@@ -120,7 +120,7 @@ namespace ResurrectionRP_Server.Factions
                 Vestiaire_colShape = Alt.CreateColShapeCylinder(ServiceLocation - new Vector3(0, 0, 1), 1.0f, 1f);
                 Vestiaire_colShape.SetOnPlayerEnterColShape(OnPlayerEnterVestiaire);
                 Vestiaire_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveVestiaire);
-                Marker.CreateMarker(MarkerType.HorizontalCircleArrow, ServiceLocation - new Vector3(0, 0, 1), new Vector3(1, 1, 1));
+                Marker.CreateMarker(MarkerType.HorizontalCircleArrow, ServiceLocation - new Vector3(0, 0, 0.95f), new Vector3(1, 1, 1));
             }
 
             if (ParkingLocation != null)
@@ -143,10 +143,10 @@ namespace ResurrectionRP_Server.Factions
             if (HeliportLocation != null)
             {
                 if (Parking == null) Parking = new Parking(HeliportLocation.Pos, HeliportLocation);
-                Heliport_colShape = Alt.CreateColShapeCylinder(HeliportLocation.Pos, 3.0f, 1f);
+                Heliport_colShape = Alt.CreateColShapeCylinder(HeliportLocation.Pos - new Vector3(0, 0, 1), 3.0f, 1f);
                 Heliport_colShape.SetOnPlayerEnterColShape(OnPlayerEnterHeliport);
                 Heliport_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveHeliport);
-                Marker.CreateMarker(MarkerType.VerticalCylinder, HeliportLocation.Pos - new Vector3(0, 0, 0), new Vector3(3, 3, 3));
+                Marker.CreateMarker(MarkerType.VerticalCylinder, HeliportLocation.Pos - new Vector3(0, 0, 3), new Vector3(3, 3, 3));
             }
 
             if (ShopLocation != null && ShopLocation != Vector3.Zero)

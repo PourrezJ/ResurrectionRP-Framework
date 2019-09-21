@@ -90,7 +90,7 @@ namespace ResurrectionRP_Server.Entities.Players
             set
             {
                 if (Client != null)
-                    Client.SetHealthAsync((ushort)value);
+                    Client.Health = ((ushort)value);
 
                 _health = value;
             }

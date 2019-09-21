@@ -9,6 +9,8 @@ var CurrentMilage = 0.0;
 let speedoWindow = new alt.WebView('http://resource/client/cef/speedometer/speedometer.html');
 let lastSent = Date.now();
 let lastPos = null;
+let playerVehicle: alt.Vehicle = null;
+let keepEngineOn: boolean = false;
 
 export function initialize() {
     alt.onServer('HideSpeedometer', hide2);
@@ -17,6 +19,9 @@ export function initialize() {
     alt.onServer('UpdateFuel', (fuel: number) => {
         fuelCur = fuel;
     });
+    alt.onServer('keepEngineState', (state: boolean) => {
+        keepEngineOn = state;
+    })
 
     alt.on("syncedMetaChange", (entity: alt.Vehicle, key: string, value: boolean) => {
         switch (key) {
@@ -82,12 +87,13 @@ export function initialize() {
     });
 }
 
-export function hide(vehicle) {
+export function hide(vehicle = null) {
     if (speedoWindow !== null) {
         speedoWindow.emit('hideSpeedometer');
     }
-
-    alt.emitServer('UpdateFuelAndMilage', vehicle, fuelCur, CurrentMilage);
+    game.setVehicleEngineOn(playerVehicle.scriptID, keepEngineOn, true, true);
+    if(vehicle != null)
+        alt.emitServer('UpdateFuelAndMilage', vehicle, fuelCur, CurrentMilage);
 }
 
 export function hide2() {
@@ -97,9 +103,12 @@ export function hide2() {
 }
 
 export function show(vehicle, seat, currentFuel, maxFuel, milage, fuelconsumption) {
-    if (speedoWindow !== null) {
+    if (speedoWindow !== null && game.getPedInVehicleSeat(player.vehicle.scriptID, -1, player.scriptID) == player.scriptID) {
         speedoWindow.emit('showSpeedometer');
     }
+
+    playerVehicle = alt.Player.local.vehicle;
+    
 
     CurrentMilage = milage;
     fuelMax = maxFuel;

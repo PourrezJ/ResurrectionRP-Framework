@@ -27,7 +27,7 @@ namespace ResurrectionRP_Server.Entities.Players
         [BsonIgnore]
         public KeyReleasedDelegate OnKeyReleased { get; set; }
 
-        private async Task OnKeyPressedCallback(IPlayer client, ConsoleKey Keycode, RaycastData Raycastdata, IVehicle vehicleDistant, IPlayer playerDistant)
+        private async Task OnKeyPressedCallback(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicleDistant, IPlayer playerDistant)
         {
             if (!client.Exists)
                 return;
@@ -121,7 +121,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    if (IsAtm(Raycastdata.entityHash))
+                    if (IsAtm(raycastData.entityHash) && client.Position.Distance(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE)
                     {
                         await BankMenu.OpenBankMenu(ph, ph.BankAccount);
                         return;
@@ -148,13 +148,13 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    if (Raycastdata.isHit && IsPump(Raycastdata.entityHash))
+                    if (raycastData.isHit && IsPump(raycastData.entityHash) && client.Position.Distance(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE)
                     {
                         await Business.Market.OpenGasPumpMenu(client);
                         return;
                     }
 
-                    Door door = GameMode.Instance.DoorManager.DoorList.Find(p => p.Position.DistanceTo2D(Raycastdata.pos) <= 1 && p.Hash == Raycastdata.entityHash && Raycastdata.isHit);
+                    Door door = GameMode.Instance.DoorManager.DoorList.Find(p => p.Position.DistanceTo2D(raycastData.pos) <= 1 && p.Hash == raycastData.entityHash && raycastData.isHit);
                     if (door != null)
                         await door.Interact?.Invoke(client, door);
 

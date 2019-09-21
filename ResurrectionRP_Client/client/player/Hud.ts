@@ -1,6 +1,7 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
 import * as ui from '../Helpers/UiHelper';
+import * as veh from '../vehicle/vehicle';
 import { Survival } from '../player/Survival';
 import { VoiceChat } from '../Voice/VoiceChat';
 
@@ -29,6 +30,7 @@ export class Hud {
 
         alt.on('hideHud', (value: boolean) => {
             this.setHide(value);
+            veh.hide2();
         });
 
         alt.on('keyup', (key) => {

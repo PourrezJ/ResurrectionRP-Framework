@@ -1,5 +1,6 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
+import * as chat from '../chat/chat';
 
 let player = alt.Player.local;
 let fuelMax = 100;
@@ -14,8 +15,12 @@ export function initialize() {
     alt.onServer('HideSpeedometer', hide2);
     alt.onServer('OnPlayerLeaveVehicle', hide);
     alt.onServer('OnPlayerEnterVehicle', show);
+    alt.onServer('SetDoorState', setDoorState);
     alt.onServer('UpdateFuel', (fuel: number) => {
         fuelCur = fuel;
+    });
+    alt.onServer('UpdateMilage', (milage: number) => {
+        CurrentMilage = milage;
     });
 
     alt.on("syncedMetaChange", (entity: alt.Vehicle, key: string, value: boolean) => {
@@ -26,16 +31,16 @@ export function initialize() {
         }
     });
 
-
-    // need to be passed on server side
     alt.everyTick(() => {
         if ((Date.now() - lastSent) > 33) {
             lastSent = Date.now();
+
             if (player.vehicle === null)
                 return;
 
             let speed = player.vehicle.speed * 3.6;
             let rpm = player.vehicle.rpm * 591;
+
             if (speedoWindow !== null) {
 
                 if (rpm >= 591)
@@ -52,32 +57,6 @@ export function initialize() {
                 let engineHealth = game.getVehicleEngineHealth(player.vehicle.scriptID);
                 speedoWindow.emit('setSpeed', speed, rpm, player.vehicle.gear, light, engineHealth, fuelCur, fuelMax, CurrentMilage);
             }
-
-            if (player.vehicle == null)
-                return;
-            if (game.getPedInVehicleSeat(player.vehicle.scriptID, -1, player.scriptID)) {
-                var newPos = alt.Player.local.pos;
-                if (lastPos == null)
-                    lastPos = newPos;
-
-                var deltaX = newPos.x - lastPos.x;
-                var deltaY = newPos.y - lastPos.y;
-                var deltaZ = newPos.z - lastPos.z;
-                lastPos = newPos;
-                var distance = (Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) / 1000);
-
-                CurrentMilage += distance;
-
-                if (game.getIsVehicleEngineRunning(player.vehicle.scriptID)) {
-                    var SpeedFuel = 0;
-                    if (speed > 100) {
-                        SpeedFuel = (speed / 100) * 5;
-                    } else {
-                        SpeedFuel = (-(speed - 50)/100)*5
-                    }
-                    fuelCur -= (fuelConsum * distance * SpeedFuel) / 100;
-                }
-            }
         }
     });
 }
@@ -86,8 +65,6 @@ export function hide(vehicle) {
     if (speedoWindow !== null) {
         speedoWindow.emit('hideSpeedometer');
     }
-
-    alt.emitServer('UpdateFuelAndMilage', vehicle, fuelCur, CurrentMilage);
 }
 
 export function hide2() {
@@ -104,6 +81,16 @@ export function show(vehicle, seat, currentFuel, maxFuel, milage, fuelconsumptio
     CurrentMilage = milage;
     fuelMax = maxFuel;
     fuelCur = currentFuel;
+}
+
+export function setDoorState(vehicle: alt.Vehicle, door: number, state: number, option: boolean) {
+    if (state == 0) {
+        game.setVehicleDoorShut(vehicle.scriptID, door, option);
+    } else if (state == 255) {
+        game.setVehicleDoorBroken(vehicle.scriptID, door, option);
+    } else {
+        game.setVehicleDoorOpen(vehicle.scriptID, door, false, option);
+    }
 }
 
 export function getFuel(): number { return fuelCur; }

@@ -17,8 +17,40 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
     public partial class VehicleHandler
     {
+        #region constants
+        const double FUEL_FACTOR = 5;
+        #endregion
+
+        #region Fields
+        private DateTime _previousUpdate = DateTime.Now;
+        private Vector3 _previousPosition;
+        private float _milage = 0;
+        private float _fuel = 100;
         public TowTruck TowTruck { get; set; }
-        public float Fuel { get; set; } = 100;
+        public float Fuel
+        {
+            get => _fuel;
+
+            set
+            {
+                float oldFuel = _fuel;
+
+                if (value < 0)
+                    _fuel = 0;
+                else
+                    _fuel = value;
+
+                if (_fuel == 0 && Vehicle != null && Vehicle.Exists)
+                {
+                    Vehicle.SetEngineOnAsync(false);
+                    Engine = false;
+                    Update();
+                }
+
+                if (Math.Floor(oldFuel * 10) != Math.Floor(_fuel * 10) && Vehicle != null && Vehicle.Driver != null && Vehicle.Driver.Exists)
+                    Vehicle.Driver.EmitLocked("UpdateFuel", _fuel);
+            }
+        }
         public float FuelMax { get; set; } = 100;
         public float FuelConsumption { get; set; } = 5.5f;
         public bool Siren { get; set; } = false;
@@ -27,7 +59,19 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public bool FreezePosition { get; set; }
         public float TorqueMultiplicator { get; set; }
         public float PowerMultiplicator { get; set; }
-        public float Milage { get; set; }
+        public float Milage
+        {
+            get => _milage;
+
+            set
+            {
+                float oldMilage = _milage;
+                _milage = value;
+
+                if (Math.Floor(oldMilage * 10) != Math.Floor(_milage * 10) && Vehicle != null && Vehicle.Driver != null && Vehicle.Driver.Exists)
+                    Vehicle.Driver.EmitLocked("UpdateMilage", _milage);
+            }
+        }
 
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         public ConcurrentDictionary<int, int> Mods { get; set; }
@@ -84,8 +128,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         }
 
         public Attachment Attachment { get; set; }
+        #endregion
 
-        public VehicleDoorState GetDoorState(VehicleDoor door) => Doors[(byte)door]; 
+        public VehicleDoorState GetDoorState(VehicleDoor door) => Doors[(byte)door];
+
         public async Task SetDoorState(VehicleDoor door, VehicleDoorState state)
         {
             Doors[(byte)door] = state;
@@ -141,6 +187,49 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             temp.GetVehicleHandler()?.Update();
 
             return temp;
+        }
+
+        public void UpdateMilageAndFuel()
+        {
+            DateTime updateTime = DateTime.Now;
+            Vector3 oldPos = _previousPosition;
+            Vector3 newPos = Vehicle.Position;
+            double distance = 0;
+            double speed = 0;
+
+            if (newPos != oldPos)
+            {
+                float deltaX = newPos.X - oldPos.X;
+                float deltaY = newPos.Y - oldPos.Y;
+                float deltaZ = newPos.Z - oldPos.Z;
+                double oldDistance = distance;
+                distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) / 1000;
+                Milage += (float)distance;
+                _previousPosition = newPos;
+                speed = distance * 3600000 / (updateTime - _previousUpdate).TotalMilliseconds;
+            }
+
+            if (Vehicle.EngineOn)
+            {
+                if (speed == 0)
+                    Fuel -= FuelConsumption / 10000;
+                else
+                {
+                    double speedFuel;
+
+                    if (speed < 80)
+                        speedFuel = (2 * FUEL_FACTOR) - speed * FUEL_FACTOR / 80;
+                    else
+                        speedFuel = speed / 80 * FUEL_FACTOR;
+
+                    Fuel -= (float)(FuelConsumption * distance * speedFuel / 100);
+
+                    if (Vehicle.Driver != null)
+                        Vehicle.Driver.EmitLocked("UpdateFuel", Fuel);
+                }
+            }
+
+            _previousUpdate = updateTime;
         }
     }
 }

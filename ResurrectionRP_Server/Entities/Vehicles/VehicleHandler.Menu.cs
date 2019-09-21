@@ -26,19 +26,20 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             PlayerHandler = client.GetPlayerHandler();
 
-            if (PlayerHandler == null || Vehicle == null) return;
+            if (PlayerHandler == null || Vehicle == null)
+                return;
 
             XMenu xmenu = new XMenu("VehiculeMenu");
             xmenu.Callback = VehicleXMenuCallback;
 
-            var locked = await Vehicle.GetLockStateAsync();
+            VehicleLockState locked = Vehicle.LockState;
 
-            if (await client.IsInVehicleAsync())
+            if (client.IsInVehicle)
             {
                 xmenu.Add((locked == VehicleLockState.Locked ? new XMenuItem("Déverrouiller", "Déverrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_OPEN_SOLID, false)
                      : new XMenuItem("Verrouiller", "Verrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_SOLID, false)));
 
-                if (await client.IsInVehicleAsync() && await client.GetSeatAsync() == 1)
+                if (client.IsInVehicle && client.Seat == 1)
                 {
                     xmenu.Add(new XMenuItem($"{(client.Vehicle.EngineOn ? "Eteindre" : "Allumer")} le véhicule", "", "ID_start", XMenuItemIcons.KEY_SOLID, executeCallback: true));
                     
@@ -224,12 +225,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     await XMenuManager.CloseMenu(client);
                     break;
                     */
-                    case "ID_start":
-                        var engineCurrent = await Vehicle.IsEngineOnAsync();
+                case "ID_start":
+                    bool engineCurrent = Vehicle.EngineOn;
+
+                    if (engineCurrent || Fuel > 0)
+                    {
+                        Engine = !engineCurrent;
                         await Vehicle.SetEngineOnAsync(!engineCurrent);
-                        Vehicle.GetVehicleHandler().Engine = !engineCurrent;
                         await XMenuManager.XMenuManager.CloseMenu(client);
-                        break;
+                    }
+                    break;
                         /*
                     case "ID_give":
                         List<PlayerHandler> players = await PlayerManager.GetNearestPlayers(client);

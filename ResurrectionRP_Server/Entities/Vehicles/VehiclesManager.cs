@@ -104,11 +104,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             VehicleHandler vh = vehicle.GetVehicleHandler();
             PlayerHandler ph = player.GetPlayerHandler();
 
-
-            vehicle.SetEngineOnAsync(vh.Engine);
-
             if (vh != null)
+            {
+                vehicle.SetEngineOnAsync(vh.Engine);
                 vh.Update();
+            }
 
             if (ph != null)
             {
@@ -261,17 +261,6 @@ IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = 
         {
             _vehicleHandlers.TryGetValue(plate, out VehicleHandler vh);
             return vh;
-        }
-
-        public static VehicleHandler GetVehicleHandlerWithPlate(string Plate)
-        {
-            foreach(KeyValuePair<IVehicle, VehicleHandler> veh in VehicleHandlerList)
-            {
-                if (veh.Value.Plate == Plate)
-                    return veh.Value;
-            }
-
-            return null;
         }
 
         public static IVehicle GetVehicleWithPlate(string Plate)

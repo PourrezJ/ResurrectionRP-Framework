@@ -145,11 +145,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }
 
-        // public byte WindowTint { get; set; } = 0;
-        // public bool ArmoredWindows { get; set; } = false;
+        public WindowTint WindowTint { get; set; } = 0;
+        //public bool ArmoredWindows { get; set; } = false;
 
-        // public byte FrontBumperDamage { get; set; } = 0;
-        // public byte RearBumperDamage { get; set; } = 0;
+        public VehicleBumperDamage FrontBumperDamage { get; set; } = 0;
+        public VehicleBumperDamage RearBumperDamage { get; set; } = 0;
+
+/*        public string AppearanceData { get; set; }
+        public string DamageData { get; set; }*/
+
 
         public VehicleDoorState[] Doors { get; set; } = new VehicleDoorState[Globals.NB_VEHICLE_DOORS];
         public WindowState[] Windows { get; set; } = new WindowState[Globals.NB_VEHICLE_WINDOWS] { 0, 0, 0, 0 };

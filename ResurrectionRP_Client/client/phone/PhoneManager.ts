@@ -178,7 +178,6 @@ export default class PhoneManager {
         this.browser.destroy();
         this.browser = null;    
         isPhoneOpen = false;
-        alt.emit("toggleChatAdminRank");
         this.animStage = 0;
     }
 

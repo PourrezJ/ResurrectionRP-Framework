@@ -180,7 +180,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     else if (Windows[i] == WindowState.WindowDown)
                         Vehicle.SetWindowOpened(i, true);
                 }
-                
+
+                Vehicle.SetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Front, FrontBumperDamage);
+                Vehicle.SetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Rear, RearBumperDamage);
+
+                Vehicle.SetWindowTint(WindowTint);
+
+                Vehicle.Dimension = 1;
+                Vehicle.Dimension = short.MaxValue;
+
                 if (setLastUse)
                     LastUse = DateTime.Now;
 
@@ -313,10 +321,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Wheels[i].Health = Vehicle.GetWheelHealth(i);
                     Wheels[i].Burst = Vehicle.IsWheelBurst(i);
                 }
+
                 for (byte i  = 0; i < 100; i++)
                     if(Enum.IsDefined( typeof(AltV.Net.Enums.VehicleModType), i))
                         if(Vehicle.GetMod(i) > 0)
                             Mods[i] = Vehicle.GetMod(i);
+
+                FrontBumperDamage = Vehicle.GetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Front);
+                RearBumperDamage = Vehicle.GetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Rear);
+                WindowTint = Vehicle.GetWindowTint();
+
 
                 Location.Pos = Vehicle.Position;
                 Location.Rot = Vehicle.Rotation;

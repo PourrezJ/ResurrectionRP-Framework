@@ -106,6 +106,7 @@
     <TypeScriptCompile Include="client\Streamer\NetworkingEntityClient.ts" />
     <TypeScriptCompile Include="client\Utils\Admin.ts" />
     <TypeScriptCompile Include="client\Utils\Enums\Enums.ts" />
+    <TypeScriptCompile Include="client\Utils\Globals.ts" />
     <TypeScriptCompile Include="client\Utils\Raycast.ts" />
     <TypeScriptCompile Include="client\vehicle\vehicle.ts" />
     <TypeScriptCompile Include="client\Voice\VoiceChat.ts" />

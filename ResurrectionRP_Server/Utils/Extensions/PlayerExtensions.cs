@@ -317,10 +317,9 @@ namespace ResurrectionRP_Server
             await client.EmitAsync("PlayAnimation", JsonConvert.SerializeObject(animsync));
         }
 
-        public static Task StopAnimationAsync(this IPlayer client)
+        public static void StopAnimation(this IPlayer client)
         {
-            //TODO
-            return Task.CompletedTask;
+            client.EmitLocked("StopAnimation");
         }
 
         public static void RequestCollisionAtCoords(this IPlayer client, Vector3 pos)

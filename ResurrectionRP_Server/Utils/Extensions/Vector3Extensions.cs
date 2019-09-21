@@ -5,6 +5,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net;
 using System.Collections.Generic;
 using AltV.Net.Enums;
+using System.Linq;
 
 namespace ResurrectionRP_Server
 {
@@ -60,25 +61,19 @@ namespace ResurrectionRP_Server
 
         public static Vector3 Subtract(this Vector3 left, Vector3 right) => new Vector3(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
 
-        public static AltV.Net.Data.Position ConvertToPosition(this Vector3 pos) =>  new Position { X = pos.X, Y=pos.Y, Z=pos.Z };
+        public static Position ConvertToPosition(this Vector3 pos) =>  new Position { X = pos.X, Y=pos.Y, Z=pos.Z };
         public static Entity.Position ConvertToEntityPosition(this Vector3 pos) =>  new Entity.Position { X = pos.X, Y=pos.Y, Z=pos.Z };
         
-        public static AltV.Net.Data.Rotation ConvertToEntityRotation(this Vector3 pos) => new AltV.Net.Data.Rotation(pos.X, pos.Y, pos.Z );
+        public static Rotation ConvertToEntityRotation(this Vector3 pos) => new Rotation(pos.X, pos.Y, pos.Z );
 
-        public static List<IVehicle> GetVehiclesInRange(this Vector3 pos, float range)
+        public static List<IVehicle> GetVehiclesInRange(this Vector3 pos, float range, short dimension = GameMode.GlobalDimension)
         {
-            // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
-            // ICollection<IVehicle> vehicles = Alt.GetAllVehicles();
-            ICollection<IVehicle> vehicles = Entities.Vehicles.VehiclesManager.GetAllVehicles();
+            List<IVehicle> vehicles = Alt.GetAllVehicles().ToList();
 
-            List<IVehicle> end = new List<IVehicle>();
-            foreach(IVehicle veh in vehicles)
-            {
-                if (pos.DistanceTo2D(new Vector3(veh.Position.X, veh.Position.Y, veh.Position.Y)) <= range)
-                    end.Add(veh);
-            }
-            return end;
-        }        public static List<IPlayer> GetPlayersInRange(this Vector3 pos, float range)
+            return vehicles.FindAll(v => v.Exists && v.Dimension == dimension && v.Position.Distance(pos) <= range);
+        }
+
+        public static List<IPlayer> GetPlayersInRange(this Vector3 pos, float range)
         {
             ICollection<IPlayer> vehicles = Alt.GetAllPlayers();
             List<IPlayer> end = new List<IPlayer>();

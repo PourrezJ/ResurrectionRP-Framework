@@ -8,6 +8,12 @@ var subtitle;
 var loading;
 
 export function initialize() {
+
+    alt.onServer('StopAnimation', () =>
+    {
+        game.clearPedTasks(alt.Player.local.scriptID);
+    })
+
     alt.onServer('SetWaypoint', (posx: number, posy: number, override: boolean) => {
         if (game.isWaypointActive() && override)
             game.setWaypointOff();

@@ -70,7 +70,6 @@ namespace ResurrectionRP_Server.Factions
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Flatbed, 230000));
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.TowTruck, 150000));
 
-            ServiceLocation = new Vector3(-324.7894f, -134.2555f, 35.54341f);
             BlipPosition = new Vector3(-324.7894f, -134.2555f, 35.54341f);
             BlipColor = BlipColor.White;
             BlipSprite = 446;

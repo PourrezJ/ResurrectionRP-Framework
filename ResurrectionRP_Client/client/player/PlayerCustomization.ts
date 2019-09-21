@@ -1,4 +1,4 @@
-﻿
+
 import * as alt from 'alt';
 import * as game from 'natives';
 import * as utils from '../Utils/Utils';
@@ -29,8 +29,8 @@ export function init() {
     });
 
     alt.onServer('HeadOverlayVariation', (args0: number, args1: number, args2: number, args3: number, args4: number) => {
-        game.setPedHeadOverlay(alt.Player.local.scriptID, args0, args1, args2);
-        game.setPedHeadOverlayColor(alt.Player.local.scriptID, args0, 1, args2, args3);
+        game.setPedHeadOverlay(alt.Player.local.scriptID, args4, args0, args1);
+        game.setPedHeadOverlayColor(alt.Player.local.scriptID, args4, 1, args2, args3);
     });
 
     alt.onServer('DecorationVariation', (args0: number, args1: number) => {

@@ -227,6 +227,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     case "ID_start":
                         var engineCurrent = await Vehicle.IsEngineOnAsync();
                         await Vehicle.SetEngineOnAsync(!engineCurrent);
+                        Vehicle.GetVehicleHandler().Engine = !engineCurrent;
                         await XMenuManager.XMenuManager.CloseMenu(client);
                         break;
                         /*

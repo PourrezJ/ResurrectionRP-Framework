@@ -124,6 +124,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 if (Vehicle == null)
                     return;
+
+                Vehicle.ModKit = 1;
                 
                 Vehicle.SetData("VehicleHandler", this);
                 Vehicle.Dimension = Dimension;
@@ -311,6 +313,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Wheels[i].Health = Vehicle.GetWheelHealth(i);
                     Wheels[i].Burst = Vehicle.IsWheelBurst(i);
                 }
+                for (byte i  = 0; i < 100; i++)
+                    if(Enum.IsDefined( typeof(AltV.Net.Enums.VehicleModType), i))
+                        if(Vehicle.GetMod(i) > 0)
+                            Mods[i] = Vehicle.GetMod(i);
 
                 Location.Pos = Vehicle.Position;
                 Location.Rot = Vehicle.Rotation;

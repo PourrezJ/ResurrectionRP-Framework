@@ -23,7 +23,6 @@ using ResurrectionRP_Server.Utils.Enums;
 
 namespace ResurrectionRP_Server.Factions
 {
-
     public partial class Dock : Faction
     {
         public Rack Quai;

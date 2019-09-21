@@ -30,7 +30,7 @@ export class Hud {
 
         alt.on('hideHud', (value: boolean) => {
             this.setHide(value);
-            veh.hide();
+            veh.hideSpeedometer();
         });
 
         alt.on('keyup', (key) => {

@@ -71,7 +71,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                 door.Interact = OpenCelluleDoor;
 
             Location pnjPos = new Location(new Vector3(974.9861f, -111.0525f, 74.35313f), new Vector3(0, 0, 239.715f));
-            var npc = Entities.Peds. Ped.CreateNPC(PedModel.Benny,pnjPos.Pos, pnjPos.Rot.Z, GameMode.GlobalDimension);
+            var npc = Entities.Peds.Ped.CreateNPC(PedModel.Benny, pnjPos.Pos, pnjPos.Rot.Z, GameMode.GlobalDimension);
             npc.NpcInteractCallBack = OnInteractWithPnj;
 
             Vector3 workZonePos = new Vector3(970.89f, -115.2172f, 74.35314f);

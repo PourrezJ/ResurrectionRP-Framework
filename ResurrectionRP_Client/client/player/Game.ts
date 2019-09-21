@@ -1,4 +1,4 @@
-import * as alt from 'alt';
+﻿import * as alt from 'alt';
 import * as game from 'natives';
 import * as enums from '../Utils/Enums/Enums';
 
@@ -166,7 +166,6 @@ export class Game {
             */
             if (this.DebugInfo) {
                 ui.DrawText2d("X: " + Math.round(alt.Player.local.pos.x * 1000) / 1000 + " Y: " + Math.round(1000 * alt.Player.local.pos.y) / 1000 + " Z: " + Math.round(1000 * alt.Player.local.pos.z) / 1000, 0.5, 0.08, 0.3, 4, 255, 255, 255, 180, true, true, 99);
-                ui.DrawText2d("Raycast type: " + (interaction.getRaycastResult().isHit) ? interaction.getRaycastResult().entityType : "0", 0.5, 0.09, 0.3, 4, 255, 255, 255, 90, true, true, 99);
                 if (alt.Player.local.vehicle != null) {
                     ui.DrawText2d("Essence: " + Math.round(100 * veh.getFuel()) / 100 + "/" + veh.getMaxFuel() + " Consommation: " + Math.round(1000 * veh.getFuelConsumption()) / 1000, 0.5, 0.10, 0.3, 4, 255, 255, 255, 180, true, true, 99);
                 }

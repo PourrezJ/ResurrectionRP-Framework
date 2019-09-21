@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
-
     public partial class VehicleHandler
     {
         #region constants
@@ -77,19 +76,118 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public ConcurrentDictionary<int, int> Mods { get; set; }
             = new ConcurrentDictionary<int, int>();
 
-        public uint BodyHealth { get; set; } = 1000;
-        public int EngineHealth { get; set; } = 1000;
-        public int PetrolTankHealth { get; set; } = 1000;
+        private uint bodyhealth;
+        public uint BodyHealth
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    return Vehicle.BodyHealth;
+                return bodyhealth;
+            }
+            set
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.BodyHealth = value;
+                bodyhealth = value;
+            }
+        }
+
+        private int enginehealth = 1000;
+        public int EngineHealth
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    return Vehicle.EngineHealth;
+                return enginehealth;
+
+            }
+            set
+            {
+                enginehealth = value;
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.EngineHealth = value;
+            }
+        }
+
+        public int PetrolTankHealth
+        {
+            get;
+            set;
+        } = 1000;
 
         public Tuple<bool, bool, bool, bool> NeonState { get; set; } = new Tuple<bool, bool, bool, bool>(false, false, false, false);
         public Color NeonsColor { get; set; } = Color.Empty;
 
-        public byte Dirt { get; set; } = 0;
-        public bool Engine { get; set; } = false;
+        private int dirt;
+        public byte Dirt
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    return Vehicle.DirtLevel;
+                return 0;
+            }
+            set
+            {
+                dirt = value;
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.DirtLevel = value;
+            }
+        }
 
+        private bool engine = false;
+        public bool Engine
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    return Vehicle.EngineOn;
+                return engine;
+            }
+            set
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.EngineOn = value;
+                engine = value;
+            }
+        }
 
-        public byte PrimaryColor { get; set; } = 0;
-        public byte SecondaryColor { get; set; } = 0;
+        private byte primaryColor;
+        public byte PrimaryColor
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    return Vehicle.PrimaryColor;
+                return primaryColor;
+            }
+
+            set
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.PrimaryColor = value;
+                primaryColor = value;
+            }
+        }
+        private byte secondaryColor;
+        public byte SecondaryColor
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    return Vehicle.SecondaryColor;
+                return secondaryColor;
+            }
+
+            set
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.SecondaryColor = value;
+                secondaryColor = value;
+            }
+        }
 
         // public byte WindowTint { get; set; } = 0;
         // public bool ArmoredWindows { get; set; } = false;

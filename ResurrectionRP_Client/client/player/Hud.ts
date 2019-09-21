@@ -1,6 +1,7 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
 import * as ui from '../Helpers/UiHelper';
+import * as veh from '../vehicle/vehicle';
 import { Survival } from '../player/Survival';
 import { VoiceChat } from '../Voice/VoiceChat';
 
@@ -29,6 +30,7 @@ export class Hud {
 
         alt.on('hideHud', (value: boolean) => {
             this.setHide(value);
+            veh.hide();
         });
 
         alt.on('keyup', (key) => {
@@ -83,6 +85,10 @@ export class Hud {
                 }
                 return;
             }
+
+            if (VoiceChat.isRadioTalking && VoiceChat.radioChannel != "")
+                ui.DrawText2d("Transmission en cours (" + VoiceChat.radioChannel + "MHz)", 0.1, 0.75, 0.4, 4, 255, 255, 255, 255, true, true, 99);
+
             this._advert = 0;
 
             if (this.Hide)

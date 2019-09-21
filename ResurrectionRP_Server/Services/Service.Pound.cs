@@ -107,7 +107,7 @@ namespace ResurrectionRP_Server.Services
                 VehicleHandler _vh = vehicle.GetVehicleHandler();
                 if (_vh != null)
                 {
-                    VehicleHandler _towedvehicle = VehiclesManager.GetVehicleHandlerWithPlate(_vh.TowTruck.VehPlate);
+                    VehicleHandler _towedvehicle = VehiclesManager.GetVehicleHandler(_vh.TowTruck.VehPlate);
 
                     if (_towedvehicle != null)
                     {
@@ -192,15 +192,12 @@ namespace ResurrectionRP_Server.Services
 
         public List<VehicleHandler> GetVehicleInPound(IPlayer client)
         {
-            List<ParkedCar> List = PoundVehicleList.FindAll(
-                                v => VehiclesManager.GetVehicleHandler(v.Plate).OwnerID == client.GetSocialClub() ||
-                                client.GetPlayerHandler().HasKey(v.Plate)
-            ).ToList();
+            List<ParkedCar> List = PoundVehicleList.FindAll(v => VehiclesManager.GetVehicleHandler(v.Plate).OwnerID == client.GetSocialClub() || client.GetPlayerHandler().HasKey(v.Plate)).ToList();
             List<VehicleHandler> endup = new List<VehicleHandler>();
+
             foreach(ParkedCar car in List)
-            {
-                endup.Add(VehiclesManager.GetVehicleHandlerWithPlate(car.Plate));
-            }
+                endup.Add(VehiclesManager.GetVehicleHandler(car.Plate));
+
             return endup;
         }
 

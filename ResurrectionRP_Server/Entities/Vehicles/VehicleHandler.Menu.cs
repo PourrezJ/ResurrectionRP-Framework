@@ -232,6 +232,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     {
                         Engine = !engineCurrent;
                         await Vehicle.SetEngineOnAsync(!engineCurrent);
+                        Vehicle.GetVehicleHandler().Engine = !engineCurrent;
+                        client.EmitLocked("keepEngineState", !engineCurrent);
                         await XMenuManager.XMenuManager.CloseMenu(client);
                     }
                     break;

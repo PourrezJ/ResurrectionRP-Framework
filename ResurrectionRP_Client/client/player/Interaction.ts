@@ -115,7 +115,7 @@ export class Interaction {
                     _pos.z + (_dir.z * 9),
                 )
 
-                raycastResult = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, 18);
+                raycastResult = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, 30);
 
                 if (raycastResult.isHit && raycastResult.entityType == 2 && alt.Player.local.vehicle == null && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
                     Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le véhicule");

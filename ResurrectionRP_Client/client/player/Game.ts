@@ -115,7 +115,7 @@ export class Game {
             alt.log('Données chargées');
 
             alt.log('Chargement des pools');
-            //this._Voice = new VoiceChat();
+            this._Voice = new VoiceChat();
             this._Hud = new HudLib(Money);
             this._Doors = new DoorsManagerLib();
             this._Inventory = new RPGInventoryManager();

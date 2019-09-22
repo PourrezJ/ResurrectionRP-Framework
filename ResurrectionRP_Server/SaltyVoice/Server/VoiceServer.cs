@@ -39,22 +39,23 @@ namespace SaltyServer
             AltAsync.OnClient(SaltyShared.Event.Voice_TalkingOnRadio, OnPlayerTalkingOnRadio);
         }
 
-        public async Task OnPlayerConnected(IPlayer client)
+        public Task OnPlayerConnected(IPlayer client)
         {
             if (!client.Exists)
-                return;
+                return Task.CompletedTask;
+
             try
             {
-                await client.SetSyncedMetaDataAsync(SaltyShared.SharedData.Voice_TeamSpeakName, Voice.GetTeamSpeakName());
-                await client.SetSyncedMetaDataAsync(SaltyShared.SharedData.Voice_VoiceRange, "Parler");
+                client.SetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, Voice.GetTeamSpeakName());
+                client.SetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, "Parler");
 
-                client.EmitLocked(SaltyShared.Event.Voice_Initialize, Voice.ServerUniqueIdentifier, Voice.RequiredUpdateBranch, Voice.MinimumPluginVersion, Voice.SoundPack, Voice.IngameChannel, Voice.IngameChannelPassword);
-
+                client.EmitLocked(SaltyShared.Event.Voice_Initialize, Voice.ServerUniqueIdentifier, Voice.RequiredUpdateBranch, Voice.MinimumPluginVersion, Voice.SoundPack, Voice.IngameChannel, Voice.IngameChannelPassword);        
             }
             catch (Exception ex)
             {
                 Alt.Server.LogError(ex.ToString());
             }
+            return Task.CompletedTask;
         }
 
         public void OnPlayerDisconnected(IPlayer client)
@@ -158,7 +159,7 @@ namespace SaltyServer
                     name = name.Remove(29, name.Length - 30);
                 }
             }
-            while (playerList.Any(p => p.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName) && tsName.ToString() == name));
+            while (playerList.Any(p => p.Exists && p.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName) && tsName.ToString() == name));
 
             return name;
         }

@@ -169,7 +169,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                                 PlayerHandler.Update();
                             }
 
-                            this.Update();
+                            this.UpdateFull();
                             return Task.CompletedTask;
                         });
                         inv.OnClose = ((IPlayer c, RPGInventoryMenu m) =>

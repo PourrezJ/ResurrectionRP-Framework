@@ -18,14 +18,25 @@ export function initialize() {
     alt.onServer('OnPlayerLeaveVehicle', hideSpeedometer);
     alt.onServer('OnPlayerEnterVehicle', showSpeedometer);
     alt.onServer('SetDoorState', setDoorState);
+
     alt.onServer('UpdateFuel', (fuel: number) => {
         fuelCur = fuel;
     });
+
     alt.onServer('UpdateMilage', (milage: number) => {
         CurrentMilage = milage;
     });
+
     alt.onServer('keepEngineState', (state: boolean) => {
         keepEngineOn = state;
+    })
+
+    alt.onServer('keepEngineState', (state: boolean) => {
+        keepEngineOn = state;
+    })
+
+    alt.onServer('vehicleFix', (vehicle: alt.Vehicle) => {
+        game.setVehicleFixed(vehicle.scriptID);
     })
 
     alt.on("syncedMetaChange", (entity: alt.Vehicle, key: string, value: boolean) => {

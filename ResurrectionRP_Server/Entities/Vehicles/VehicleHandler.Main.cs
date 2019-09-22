@@ -186,9 +186,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.SetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Rear, RearBumperDamage);
 
                 Vehicle.SetWindowTint(WindowTint);
+                /*
+                if (!string.IsNullOrEmpty(DamageData))
+                    Vehicle.DamageData = DamageData;
 
-                Vehicle.Dimension = 1;
-                Vehicle.Dimension = short.MaxValue;
+                if (!string.IsNullOrEmpty(AppearanceData))
+                    Vehicle.AppearanceData = AppearanceData;*/
 
                 if (setLastUse)
                     LastUse = DateTime.Now;
@@ -287,7 +290,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             else
                 Fuel += fuel;
 
-            Update();
+            UpdateFull();
         }
 
         public float GetFuel() => Fuel;
@@ -336,7 +339,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 FrontBumperDamage = Vehicle.GetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Front);
                 RearBumperDamage = Vehicle.GetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Rear);
                 WindowTint = Vehicle.GetWindowTint();
-
+                AppearanceData = Vehicle.AppearanceData;
+                DamageData = Vehicle.DamageData;
 
                 Location.Pos = Vehicle.Position;
                 Location.Rot = Vehicle.Rotation;

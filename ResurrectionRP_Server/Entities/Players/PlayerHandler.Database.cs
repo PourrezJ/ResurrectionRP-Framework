@@ -50,7 +50,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     Location = new Location(Client.Position, Client.Rotation);
 
                 if (veh != null)
-                    veh.Update();
+                    veh.UpdateFull();
 
                 if ((DateTime.Now - LastUpdate).Minutes >= 1)
                 {

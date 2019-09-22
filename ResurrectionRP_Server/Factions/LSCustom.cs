@@ -146,7 +146,7 @@ namespace ResurrectionRP_Server.Factions
                 await vehicle.SetSecondaryColorAsync(veh.SecondaryColor);
 
                 veh.Doors[(int)VehicleDoor.Hood] = VehicleDoorState.Closed;
-                veh.Update();
+                veh.UpdateFull();
             }
         }
 
@@ -241,7 +241,7 @@ namespace ResurrectionRP_Server.Factions
                     vh.SecondaryColor = (byte)color;
                 }
 
-                vh.Update();
+                vh.UpdateFull();
                 client.SendNotificationSuccess("Peinture effectuée!");
             }
             else
@@ -408,8 +408,8 @@ namespace ResurrectionRP_Server.Factions
                 case "ID_Body":
                     if (await BankAccount.GetBankMoney(ReparBody, $"Réparation carrosserie {_vh.Plate} par {ph.Identite.Name}"))
                     {
-                        //Utils.Utils.Delay(20000, true, async () =>
-                        Utils.Utils.Delay(200, true, async () =>
+                        _vh.UpdateProperties();
+                        Utils.Utils.Delay(20000, true, async () =>
                         {
                             if (!veh.Exists || !client.Exists)
                                 return;
@@ -418,41 +418,12 @@ namespace ResurrectionRP_Server.Factions
                             _vh.BodyHealth = 1000;
                             _vh.Doors = new VehicleDoorState[Globals.NB_VEHICLE_DOORS] { 0, 0, 0, 0, 0, 0 };
                             _vh.Windows = new WindowState[Globals.NB_VEHICLE_WINDOWS] { 0, 0, 0, 0 };
+                            _vh.FrontBumperDamage = 0;
+                            _vh.RearBumperDamage = 0;
 
-                            await AltAsync.Do(() =>
-                            {
-                                try
-                                {
-                                    for (byte w = 0; w < _vh.Wheels.Length; w++)
-                                    {
-                                        var wheel = _vh.Wheels[w];
-                                        wheel.Health = 1000;
-                                        wheel.Burst = false;
-                                        wheel.HasTire = true;
-                                        veh.SetWheelHealth(w, 100);
-                                    }
-
-                                    for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
-                                    {
-                                        veh.SetWindowDamaged(i, false);
-                                        veh.SetWindowOpened(i, false);
-                                    }
-
-                                    for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
-                                        veh.SetDoorState(i, (byte)_vh.Doors[i]);
-
-                                    veh.BodyHealth = 1000;
-                                    veh.BodyAdditionalHealth = 1000;
-                                }
-                                catch(Exception ex)
-                                {
-                                    Alt.Server.LogError(ex.ToString());
-                                }
-                               
-                            });
-
-                            await _vh.ApplyDamageAsync();
-                            _vh.Update();
+                            await veh.RepairAsync(client);
+                            await veh.SetEngineHealthAsync(_vh.EngineHealth);
+                            _vh.UpdateAsync();
                         });
 
                         await UpdateDatabase();
@@ -467,8 +438,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.","C'est parti!");
 
-                       // Utils.Utils.Delay(20000, true, async () =>
-                        Utils.Utils.Delay(100, true, async () =>
+                        Utils.Utils.Delay(20000, true, async () =>
                         {
                             if (!veh.Exists || !client.Exists)
                                 return;
@@ -498,7 +468,7 @@ namespace ResurrectionRP_Server.Factions
                                 }
                             });
                                        
-                            _vh.Update();
+                            _vh.UpdateFull();
                             _vh.UpdateProperties();
                             await _vh.ApplyDamageAsync();
                         });
@@ -522,7 +492,7 @@ namespace ResurrectionRP_Server.Factions
 
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~g~Terminé~w~.","Elle est niquel!");
                             _vh.Dirt = 0;
-                            _vh.Update();
+                            _vh.UpdateFull();
                             await veh.SetDirtLevelAsync(0);
                             await _vh.ApplyDamageAsync();
                         });
@@ -546,7 +516,7 @@ namespace ResurrectionRP_Server.Factions
 
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~g~Terminé~w~.","Le moteur démarre, c'est déjà ça!");
                             _vh.EngineHealth = 400;
-                            _vh.Update();
+                            _vh.UpdateFull();
                             await _vh.ApplyDamageAsync();
                         });
 
@@ -648,12 +618,12 @@ namespace ResurrectionRP_Server.Factions
                 case "ID_detach":
                     var rot = await veh.GetRotationAsync();
                     await vh.UnTowVehicle(new Location((new Vector3(client.Position.X, client.Position.Y, client.Position.Z)).Forward(rot.Yaw, -10), rot));
-                    vh.Update();
+                    vh.UpdateFull();
                     await XMenuManager.XMenuManager.CloseMenu(client);
                     break;
                 case "ID_atelier":
                     await vh.UnTowVehicle(LSCustom.ReparZoneVL);
-                    vh.Update();
+                    vh.UpdateFull();
 
                     await XMenuManager.XMenuManager.CloseMenu(client);
                     break;

@@ -599,7 +599,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             if (await BankAccount.GetBankMoney(price, $"{SocietyName}: Néons"))
             {
                 vh.NeonsColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
-                vh.Update();
+                vh.UpdateFull();
 
                 client.SendNotificationSuccess($"Vous avez installé des Néons pour la somme de ${price}");
                 await OpenNeonsMenu(client);
@@ -639,7 +639,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
 
                 vh.Mods.AddOrUpdate(_modType, selected, (key, oldvalue) => selected);
                 await _vehicleBench.SetModAsync(_modType, selected);
-                vh.Update();
+                vh.UpdateFull();
                 string str = $"Vous avez installé {modName}";
 
                 if (price != 0)

@@ -73,7 +73,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     await recever.PlaySoundFromEntity(veh.Vehicle, 0, "5_SEC_WARNING", "HUD_MINI_GAME_SOUNDSET");
                 }
 
-                veh.Update();
+                veh.UpdateFull();
             }
         }
 
@@ -88,7 +88,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (vh != null)
             {
                 vehicle.SetEngineOnAsync(vh.Engine);
-                vh.Update();
+                vh.UpdateFull();
             }
 
             if (ph != null)

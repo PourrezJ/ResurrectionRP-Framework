@@ -43,7 +43,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 {
                     Vehicle.SetEngineOnAsync(false);
                     Engine = false;
-                    Update();
+                    UpdateFull();
                 }
 
                 if (Math.Floor(oldFuel * 10) != Math.Floor(_fuel * 10) && Vehicle != null && Vehicle.Driver != null && Vehicle.Driver.Exists)
@@ -195,8 +195,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public VehicleBumperDamage FrontBumperDamage { get; set; } = 0;
         public VehicleBumperDamage RearBumperDamage { get; set; } = 0;
 
-/*        public string AppearanceData { get; set; }
-        public string DamageData { get; set; }*/
+        public string AppearanceData { get; set; }
+        public string DamageData { get; set; }
 
 
         public VehicleDoorState[] Doors { get; set; } = new VehicleDoorState[Globals.NB_VEHICLE_DOORS];
@@ -286,7 +286,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             await temp.SetPositionAsync(position.Pos);
             await temp.SetRotationAsync(position.Rot);
-            temp.GetVehicleHandler()?.Update();
+            temp.GetVehicleHandler()?.UpdateFull();
 
             return temp;
         }

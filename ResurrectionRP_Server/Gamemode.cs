@@ -289,7 +289,7 @@ namespace ResurrectionRP_Server
             Chat.RegisterCmd("save", (IPlayer player, string[] args) =>
             {
                 player.GetPlayerHandler()?.Update();
-                player.Vehicle?.GetVehicleHandler()?.Update();
+                player.Vehicle?.GetVehicleHandler()?.UpdateFull();
                 return Task.CompletedTask;
             });
 

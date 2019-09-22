@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.Factions
             ServicePlayerList = new List<string>();
 
             AltAsync.OnClient("ONU_CallUrgenceMedic", ONU_CallUrgenceMedic);
-            AltAsync.OnClient("ONU_IAccept_Accept", ONU_IAccept);
+            AltAsync.OnClient("ONU_ImAccept", ONU_IAccept);
             AltAsync.OnClient("ONU_BlesseRemoveBlip", ONU_BlesseRemoveBlip);
 
             ItemShop.Add(new FactionShop(new Weapons(ItemID.Pistol, "Pistol MK2", "", hash: WeaponHash.PistolMk2), 0, 1));
@@ -137,16 +137,16 @@ namespace ResurrectionRP_Server.Factions
                 foreach (IPlayer player in players)
                 {
                     if (player.Exists && player != client)
-                        await player.EmitAsync("ONU_BlesseCalled", client, "INCONNU", JsonConvert.SerializeObject(await client.GetPositionAsync()));
+                        player.EmitLocked("ONU_BlesseCalled", client, "INCONNU", JsonConvert.SerializeObject(client.Position.ConvertToEntityPosition())); ;
                 }
             }
-            await client.EmitAsync("ONU_Callback", ServicePlayerList.Count);
+            client.EmitLocked("ONU_Callback", ServicePlayerList.Count);
         }
 
         private Task ONU_IAccept(IPlayer client, object[] args)
         {
-
-            IPlayer victim = GameMode.Instance.PlayerList[(int)args[0]];
+            Alt.Server.LogInfo("ONU_IAccept " + args[0] + " emitter : " + client.Id);
+            IPlayer victim = GameMode.Instance.PlayerList.Find(p => p.Id == ushort.Parse(args[0].ToString()));
 
             if (victim == null)
                 return Task.CompletedTask;
@@ -163,7 +163,7 @@ namespace ResurrectionRP_Server.Factions
             }
 
             EmergencyCalls.FindLast(b => (b.player.Id == victim.Id))?.TakeCall();
-            client.EmitLocked("ONU_IAccept_Client", victim);
+            client.EmitLocked("ONU_IAccept", victim);
 
             var players =  GetEmployeeOnline();
 

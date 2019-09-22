@@ -1,5 +1,6 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
+import * as Utils from './Utils/Utils';
 import Scaleforms from './Helpers/Scaleform';
 
 export class Blesse {
@@ -11,33 +12,41 @@ export class Blesse {
     public Blip: alt.Blip;
     public Marker: alt.Entity;
 
-    constructor(player: alt.Player, id: string, position: alt.Vector3, enMission: boolean) {
+    constructor(player: alt.Player, id: string, position: alt.Vector3) {
         this.ID = id;
         this.BlessePlayer = player;
         this.Position = position;
 
-        if (!enMission)
+        this.Blip = new alt.PointBlip(parseFloat(position.x + ""), parseFloat(position.x + "") + 100, parseFloat(position.x + ""))
+        this.Blip.sprite = 280;
+        this.Blip.color = 1;
+        this.Blip.name = id;
+        this.Blip.scale = 1;
+        this.Blip.shrinked = true;
+        this.Blip.shortRange = false;
+         
+        if (!Medical.isInMission)
         {
             alt.on('keydown', this.KeyHandler);
         }
     }
 
-    private RemoveBindKey()
+    private RemoveBindKey = () =>
     {
         alt.off('keydown', this.KeyHandler)
         alt.off('keydown', this.CallAcceptHandler)
     }
 
-    private KeyHandler(key) {
+    private KeyHandler = (key) => {
         if (key == 'Y'.charCodeAt(0)) {
-            alt.emitServer("ONU_IAccept_Server", this.BlessePlayer.id);
+            alt.emitServer("ONU_ImAccept", this.BlessePlayer.id);
         }
         else if (key == 'N'.charCodeAt(0)) {
             this.CallRefuse();
         }
     }
 
-    private CallAccept()
+    public CallAccept = () =>
     {
         this.Traited = true;
         this.Blip.color = 2;
@@ -48,22 +57,23 @@ export class Blesse {
         alt.on('keydown', this.CallAcceptHandler);
     }
 
-    private CallAcceptHandler(key) {
+    public CallAcceptHandler = (key) => {
         if (key == 'Y'.charCodeAt(0)) {
             alt.emit("ONU_Available");
+            alt.off('keydown', this.CallAcceptHandler)
         }
     }
 
-    public CallTaken() {
+    public CallTaken = () => {
         this.RemoveBindKey();
     }
 
-    private CallRefuse() {
+    private CallRefuse = () => {
         alt.emit("notify", "APPEL D'URGENCE", "Vous avez refusé l'appel du numéro: " + this.ID);
         this.Destroy();
     }
 
-    public Destroy(keepWaypoint : boolean = false) {
+    public Destroy = (keepWaypoint : boolean = false) => {
         this.Traited = false;
         this.Blip.destroy();
         this.RemoveBindKey();
@@ -73,45 +83,45 @@ export class Blesse {
 }
 
 export class Medical {
-    private scaleForm: Scaleforms;
-    private BlesseList: Blesse[];
-    private isInMission: boolean;
-    private deathMessage: string;
-    public RequestedTimeMedic: number = 0;
-    private everyTick: number;
+    public static scaleForm: Scaleforms;
+    public static BlesseList: Blesse[] = [];
+    public static isInMission: boolean = false;
+    public static deathMessage: string;
+    public static RequestedTimeMedic: number = 0;
+    public static everyTick: number;
 
     constructor()
     {
-        this.scaleForm = new Scaleforms("mp_big_message_freemode");
-        this.RequestedTimeMedic = Date.now();
+        Medical.scaleForm = new Scaleforms("mp_big_message_freemode");
+        Medical.RequestedTimeMedic = Date.now();
 
-        alt.onServer("ONU_IAccept_Client", (player: alt.Player) => {
-            this.isInMission = true;
-            let call = this.BlesseList.find(p => p.BlessePlayer.id == player.id);
+        alt.onServer("ONU_IAccept", (player: alt.Player) => {
+            Medical.isInMission = true;
+            let call = Medical.BlesseList.find(p => p.BlessePlayer.id == player.id);
             if (call != null)
-                call.CallTaken();
+                call.CallAccept();
         });
 
         alt.onServer("ONU_Available", (player: alt.Player) => {
-            this.isInMission = false;
-            let call = this.BlesseList.find(p => p.BlessePlayer.id == player.id);
+            Medical.isInMission = false;
+            let call = Medical.BlesseList.find(p => p.BlessePlayer.id == player.id);
             if (call != null)
                 call.CallTaken();
         });
 
-        alt.onServer("ONU_BlesseCalled", (player: alt.Player, name: string, position: alt.Vector3) => {
-            let call = this.BlesseList.find(p => p.BlessePlayer.id == player.id && p.Traited == false);
+        alt.onServer("ONU_BlesseCalled", (player: alt.Player, name: string, position: any) => {
+            let call = Medical.BlesseList.find(p => p.BlessePlayer.id == player.id && p.Traited == false);
             if (call != null)
                 call.Destroy();
-
-            this.BlesseList.push(new Blesse(player, name, position, this.isInMission));
-            if (!this.isInMission)
+            position = JSON.parse(position);
+            Medical.BlesseList.push(new Blesse(player, name, new alt.Vector3(position.X, position.Y, position.Z) ));
+            if (!Medical.isInMission)
                 alt.emit("notify", "APPEL D'URGENCE", "Appuyer sur Y pour accepter, N pour refuser.");
         });
 
         alt.onServer("ONU_BlesseCallTaken", (player: alt.Player) => {
             alt.emit("notify", "APPEL D'URGENCE", "L'appel a déjà été pris en charge par un médecin.");
-            let call = this.BlesseList.find(p => p.BlessePlayer.id == player.id);
+            let call = Medical.BlesseList.find(p => p.BlessePlayer.id == player.id);
             if (call != null)
                 call.CallTaken();
         });
@@ -125,12 +135,12 @@ export class Medical {
 
         alt.onServer("ONU_CallbackAccept", () => {
             //Game.Instance.KeyHandler.Remove((int)ConsoleKey.R);
-            this.deathMessage = "~g~Votre appel à été reçu, quelqu'un arrive ! ";
-            alt.emit("notify", "APPEL D'URGENCE", this.deathMessage);
+            Medical.deathMessage = "~g~Votre appel à été reçu, quelqu'un arrive ! ";
+            alt.emit("notify", "APPEL D'URGENCE", Medical.deathMessage);
         });
 
         alt.onServer("ONU_BlesseCalled_Accepted", (player: alt.Player, medecin: string) => {
-            let blesse = this.BlesseList.find(p => p.BlessePlayer.id == player.id);
+            let blesse = Medical.BlesseList.find(p => p.BlessePlayer.id == player.id);
             if (blesse != null) {
                 blesse.CallTaken();
                 blesse.Blip.color = 68;
@@ -141,18 +151,18 @@ export class Medical {
         });
 
         alt.onServer("ONU_BlesseEnd", (player: alt.Player) => {
-            let blesse = this.BlesseList.find(p => p.BlessePlayer.id == player.id);
+            let blesse = Medical.BlesseList.find(p => p.BlessePlayer.id == player.id);
             if (blesse != null)
                 blesse.Destroy();
         });
 
         alt.onServer("ONU_PlayerDeath", (weapon: number) => {
             alt.on('keydown', this.KeyHandler);
-            this.everyTick = alt.everyTick(this.OnTick.bind(this));
+            Medical.everyTick = alt.everyTick(this.OnTick.bind(this));
         });
 
         alt.onServer("ResurrectPlayer", (health: number) => {
-            alt.clearEveryTick(this.everyTick);
+            alt.clearEveryTick(Medical.everyTick);
             alt.off('keydown', this.KeyHandler);
             game.setPlayerHealthRechargeMultiplier(alt.Player.local.scriptID, 0);
 
@@ -167,10 +177,10 @@ export class Medical {
     private KeyHandler(key)
     {
         if (key == 'Y'.charCodeAt(0)) {
-            if (new Date(Date.now()).getTime() >= new Date(this.RequestedTimeMedic).getTime()) // <--- Besoin d'améliorer prochainement se check.
+            if (new Date(Date.now()).getTime() >= new Date(Medical.RequestedTimeMedic).getTime()) // <--- Besoin d'améliorer prochainement se check.
             {
                 alt.emitServer("ONU_CallUrgenceMedic");
-                this.RequestedTimeMedic = Date.now() + new Date().setMinutes(3)
+                Medical.RequestedTimeMedic = Date.now() + new Date().setMinutes(3)
             }
         }
         else if (key == 'R'.charCodeAt(0)) {
@@ -184,26 +194,41 @@ export class Medical {
     private OnTick() {
         if (game.isPlayerDead(0))
         {
-            if (Date.now() >= this.RequestedTimeMedic) // <--- Besoin d'améliorer prochainement se check.
+            if (Date.now() >= Medical.RequestedTimeMedic) // <--- Besoin d'améliorer prochainement se check.
             {
-                this.deathMessage = "Appuyer sur ~g~Y~w~ pour utiliser l'appel d'urgence ou ~r~R~w~ pour en finir :(";
+                Medical.deathMessage = "Appuyer sur ~g~Y~w~ pour utiliser l'appel d'urgence ou ~r~R~w~ pour en finir :(";
             } 
 
-            if (new Date(Date.now()).getTime() >= new Date(this.RequestedTimeMedic).getTime()) // <--- Besoin d'améliorer prochainement se check.
+            if (new Date(Date.now()).getTime() >= new Date(Medical.RequestedTimeMedic).getTime()) // <--- Besoin d'améliorer prochainement se check.
             {
-                this.deathMessage = "Appuyer sur ~g~Y~w~ pour utiliser l'appel d'urgence ou ~r~R~w~ pour en finir :(";
+                Medical.deathMessage = "Appuyer sur ~g~Y~w~ pour utiliser l'appel d'urgence ou ~r~R~w~ pour en finir :(";
             } 
             else {
-                if (new Date(Date.now()).getTime() - new Date(this.RequestedTimeMedic).getTime() > -1) {
-                    this.deathMessage = `Il vous reste à attendre ${new Date(new Date(Date.now()).getTime() - new Date(this.RequestedTimeMedic).getTime()).getSeconds()} secondes pour re-contacter les secours.`;
+                if (new Date(Date.now()).getTime() - new Date(Medical.RequestedTimeMedic).getTime() > -1) {
+                    Medical.deathMessage = `Il vous reste à attendre ${new Date(new Date(Date.now()).getTime() - new Date(Medical.RequestedTimeMedic).getTime()).getSeconds()} secondes pour re-contacter les secours.`;
                 }
                 else {
-                    this.deathMessage = `Il vous reste à attendre ${new Date(new Date(Date.now()).getTime() - new Date(this.RequestedTimeMedic).getTime()).getMinutes()} minutes pour re-contacter les secours.`;
+                    Medical.deathMessage = `Il vous reste à attendre ${new Date(new Date(Date.now()).getTime() - new Date(Medical.RequestedTimeMedic).getTime()).getMinutes()} minutes pour re-contacter les secours.`;
                 }
             }
            
-            this.scaleForm.call("SHOW_SHARD_WASTED_MP_MESSAGE", "~r~Vous êtes dans le Coma!", this.deathMessage);
-            this.scaleForm.render2D();
+            Medical.scaleForm.call("SHOW_SHARD_WASTED_MP_MESSAGE", "~r~Vous êtes dans le Coma!", Medical.deathMessage);
+            Medical.scaleForm.render2D();
+            
+        }
+
+        for (var i = 0; i < Medical.BlesseList.length; i++) {
+            var blesse: Blesse = Medical.BlesseList[i];
+            if (blesse == undefined || blesse ==  null)
+                continue;
+
+            if (game.getDistanceBetweenCoords(parseFloat(blesse.Position.x + ""), parseFloat(blesse.Position.y + ""), parseFloat(blesse.Position.z + ""), alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, false)) {
+                Medical.isInMission = false;
+                alt.emitServer('ONU_BlesseRemoveBlip', blesse.BlessePlayer.id);
+                blesse.Destroy();
+                delete Medical.BlesseList[i];
+                return;
+            }
         }
     }
 }

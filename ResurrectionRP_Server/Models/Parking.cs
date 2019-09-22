@@ -212,7 +212,7 @@ namespace ResurrectionRP_Server.Models
                 //     await client.PutIntoVehicleAsync(veh.Vehicle, -1);
 
                 RemoveVehicle(veh); // retrait du véhicule dans la liste
-                veh.Update();
+                veh.UpdateFull();
 
                 if (OnVehicleOut != null)
                     await OnVehicleOut.Invoke(client, veh, Spawn); // callback (ex carpark)
@@ -397,7 +397,7 @@ namespace ResurrectionRP_Server.Models
                         veh.IsParked = true;
                     }
 
-                    veh.Update();
+                    veh.UpdateFull();
                     await veh.Delete(false);
                     await OnVehicleStored?.Invoke(client, veh); // call event for success storage
                 }

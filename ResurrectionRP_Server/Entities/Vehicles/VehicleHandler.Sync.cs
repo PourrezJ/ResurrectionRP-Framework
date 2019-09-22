@@ -61,8 +61,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (_fuel == 0 && Vehicle != null && Vehicle.Exists)
                 {
                     Vehicle.SetEngineOnAsync(false);
-                    EngineOn = false;
-                    Update();
+                    Engine = false;
+                    UpdateFull();
                 }
 
                 if (Math.Floor(oldFuel * 10) != Math.Floor(_fuel * 10) && Vehicle != null && Vehicle.Driver != null && Vehicle.Driver.Exists)
@@ -520,7 +520,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             await temp.SetPositionAsync(position.Pos);
             await temp.SetRotationAsync(position.Rot);
-            temp.GetVehicleHandler()?.Update();
+            temp.GetVehicleHandler()?.UpdateFull();
 
             return temp;
         }

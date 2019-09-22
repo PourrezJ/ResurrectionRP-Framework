@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using System;
+using AltV.Net.Enums;
+using ResurrectionRP_Server.Utils;
 
 namespace ResurrectionRP_Server
 {
@@ -107,10 +109,15 @@ namespace ResurrectionRP_Server
             return false;
         }
 
-        public static Task RepairAsync(this IVehicle vehicle)
+        public static async Task RepairAsync(this IVehicle veh, IPlayer player)
         {
-            // TODO
-            return Task.CompletedTask;
+            if (!veh.Exists)
+                return;
+
+            if (!player.Exists)
+                return;
+
+            await player.EmitAsync("vehicleFix", veh);
         }
     }
 }

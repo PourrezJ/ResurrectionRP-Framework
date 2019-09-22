@@ -183,9 +183,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.SetBumperDamageLevel(VehicleBumper.Rear, RearBumperDamage);
 
                 Vehicle.SetWindowTint(WindowTint);
+                /*
+                if (!string.IsNullOrEmpty(DamageData))
+                    Vehicle.DamageData = DamageData;
 
-                Vehicle.Dimension = 1;
-                Vehicle.Dimension = short.MaxValue;
+                if (!string.IsNullOrEmpty(AppearanceData))
+                    Vehicle.AppearanceData = AppearanceData;*/
 
                 if (setLastUse)
                     LastUse = DateTime.Now;
@@ -282,7 +285,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             else
                 Fuel += fuel;
 
-            Update();
+            UpdateFull();
         }
 
         public void UpdateProperties()
@@ -307,6 +310,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         Mods[(int)vehicleModType] = Vehicle.GetMod(vehicleModType);
                 }
                 */
+                DamageData = Vehicle.DamageData;
             }
             catch (Exception ex)
             {

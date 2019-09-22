@@ -63,7 +63,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
             }
 
-            await player.Vehicle.RepairAsync();
+            await player.Vehicle.RepairAsync(player);
             player.DisplaySubtitle("Vehicule restoré", 5000);
         }
 

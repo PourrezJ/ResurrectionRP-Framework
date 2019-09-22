@@ -393,8 +393,25 @@ export function DisEnableControls(enabled: boolean) {
 }
 
 export function playAnimation(dictionary, name, speed, durationInMS, flag) {
-    let res = loadAnim(dictionary);
 
+    if (game.hasAnimDictLoaded(dictionary)) {
+        game.taskPlayAnim(
+            alt.Player.local.scriptID,
+            dictionary,
+            name,
+            speed,
+            -1,
+            durationInMS,
+            flag,
+            1.0,
+            false,
+            false,
+            false
+        );
+        return;
+    }
+
+    let res = loadAnim(dictionary);
     res.then(() => {
         game.taskPlayAnim(
             alt.Player.local.scriptID,

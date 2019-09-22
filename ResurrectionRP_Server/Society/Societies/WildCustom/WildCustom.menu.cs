@@ -145,7 +145,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                     return;
 
                 vh.Dirt = 0;
-                vh.Update();
+                vh.UpdateFull();
             });
         }
 
@@ -172,7 +172,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                                 vh.PlateHide = true;
                                 client.SendNotificationSuccess("La plaque du véhicule a été retirée du registre");
                                 ph.Update();
-                                vh.Update();
+                                vh.UpdateFull();
                             }
                         }
                         else
@@ -670,8 +670,8 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
 
             if (await BankAccount.GetBankMoney(price, $"{SocietyName}: Néons"))
             {
-                vh.NeonColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
-                vh.Update();
+                vh.NeonsColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
+                vh.UpdateFull();
 
                 client.SendNotificationSuccess($"Vous avez installé des Néons pour la somme de ${price}");
                 await OpenNeonsMenu(client);
@@ -710,8 +710,8 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                     return;
 
                 vh.Mods.AddOrUpdate(_modType, selected, (key, oldvalue) => selected);
-                _vehicleBench.SetMod(_modType, selected);
-                vh.Update();
+                await _vehicleBench.SetModAsync(_modType, selected);
+                vh.UpdateFull();
                 string str = $"Vous avez installé {modName}";
 
                 if (price != 0)

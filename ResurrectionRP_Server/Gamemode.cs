@@ -288,7 +288,7 @@ namespace ResurrectionRP_Server
             Chat.RegisterCmd("save", (IPlayer player, string[] args) =>
             {
                 player.GetPlayerHandler()?.Update();
-                player.Vehicle?.GetVehicleHandler()?.Update();
+                player.Vehicle?.GetVehicleHandler()?.UpdateFull();
                 return Task.CompletedTask;
             });
             Chat.RegisterCmd("tpto", async (IPlayer player, string[] args) =>
@@ -321,11 +321,6 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Methods
-        private async Task CommandVeh(IPlayer player, string[] args)
-        {
-
-        }
-
         public async Task Save()
         {
             await Database.MongoDB.Update(this, "gamemode", _id);

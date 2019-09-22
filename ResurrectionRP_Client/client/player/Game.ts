@@ -106,7 +106,7 @@ export class Game {
             game.setAudioFlag('LoadMPData', true);
             game.setAudioFlag('DisableFlightMusic', true);
             game.setAudioFlag('PoliceScannerDisabled', true);
-           
+
             for (var i: number = 0; i <= 5; i++)
                 game.disableHospitalRestart(i, true);
 
@@ -115,7 +115,7 @@ export class Game {
             alt.log('Données chargées');
 
             alt.log('Chargement des pools');
-            this._Voice = new VoiceChat();
+            //this._Voice = new VoiceChat();
             this._Hud = new HudLib(Money);
             this._Doors = new DoorsManagerLib();
             this._Inventory = new RPGInventoryManager();
@@ -131,6 +131,7 @@ export class Game {
             game.setPedConfigFlag(alt.Player.local.scriptID, 35, false);
             game.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
             
+            game.setTimeScale(1);
 
             alt.setStat('stamina', 100);
             alt.setStat('strength', 100);

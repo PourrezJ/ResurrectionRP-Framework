@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }
 
-        public void Update(Location location = null)
+        public void UpdateFull(Location location = null)
         {
             if (SpawnVeh)
                 return;
@@ -57,7 +57,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }
 
-        private void UpdateAsync()
+        public void UpdateAsync()
         {
             _lastUpdateRequest = DateTime.Now;
 

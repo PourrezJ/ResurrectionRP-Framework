@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using AltV.Net;
 using ResurrectionRP_Server.Factions;
 using ResurrectionRP_Server.Inventory;
+using ResurrectionRP_Server.Utils;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
@@ -169,7 +170,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                                 PlayerHandler.Update();
                             }
 
-                            this.Update();
+                            this.UpdateFull();
                             return Task.CompletedTask;
                         });
                         inv.OnClose = ((IPlayer c, RPGInventoryMenu m) =>
@@ -237,30 +238,31 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         await XMenuManager.XMenuManager.CloseMenu(client);
                     }
                     break;
-                        /*
+                        
                     case "ID_give":
-                        List<PlayerHandler> players = await PlayerManager.GetNearestPlayers(client);
+                        List<IPlayer> players = client.GetNearestPlayers(5f);
                         if (players.Count > 0)
                         {
                             Menu menugive = new Menu("ID_GiveVehicle", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
 
-                            foreach (PlayerHandler player in players)
+                            foreach (IPlayer cliente in players)
                             {
+                                PlayerHandler player = cliente.GetPlayerHandler();
                                 MenuItem pitem = new MenuItem(player.Identite.Name, executeCallback: true, id: "Give");
                                 menugive.Add(pitem);
                             }
 
-                            menugive.Callback = (async (_client, _menu, _menuitem, _menuindex, _data) =>
+                            menugive.ItemSelectCallback = (async (_client, _menu, _menuitem, _menuindex) =>
                             {
                                 PlayerHandler destinataire = PlayerManager.GetPlayerByName(_menuitem.Text);
                                 if (destinataire != null)
                                 {
-                                    await SetOwner(destinataire);
+                                    SetOwner(destinataire);
                                     var vehinfo = VehicleInfoLoader.VehicleInfoLoader.Get(await Vehicle.GetModelAsync());
-                                    await _client.SendNotificationSuccess("Vous avez donné votre " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " à " + destinataire.Identite.Name);
-                                    await destinataire.Client.SendNotificationSuccess("Vous avez reçu un(e) " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " par " + PlayerManager.GetPlayerByClient(_client)?.Identite.Name);
+                                    _client.SendNotificationSuccess("Vous avez donné votre " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " à " + destinataire.Identite.Name);
+                                    destinataire.Client.SendNotificationSuccess("Vous avez reçu un(e) " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " par " + _client.GetPlayerHandler()?.Identite.Name);
 
-                                    await this.Update();
+                                    this.UpdateFull();
                                     await MenuManager.CloseMenu(_client);
                                 }
                             });
@@ -269,11 +271,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         }
                         else
                         {
-                            await client.SendNotificationError("Personne autour de vous.");
-                            await XMenuManager.CloseMenu(client);
+                            client.SendNotificationError("Personne autour de vous.");
+                            await XMenuManager.XMenuManager.CloseMenu(client);
                         }
                         break;
-                        */
+                        
                     case "ID_Buy":
                         try
                         {
@@ -353,7 +355,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             }
                         }
                         break;
-
+                        */
 
                     case "ID_Faction":
                         menu.ClearItems();
@@ -364,7 +366,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                     default:
                         break;
-                }*/
+                
             }
             #endregion
         }

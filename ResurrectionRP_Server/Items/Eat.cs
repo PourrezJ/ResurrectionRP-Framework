@@ -62,47 +62,33 @@ namespace ResurrectionRP_Server.Items
             }
         }
 
-        public async Task AnimateEatDrink(IPlayer client, Entities.Players.PlayerHandler ph, string props, Vector3 position, Vector3 rotation)
+        public Task AnimateEatDrink(IPlayer client, Entities.Players.PlayerHandler ph, string props, Vector3 position, Vector3 rotation)
         {
-            //obj = await ObjectHandlerManager.CreateObject(MP.Utility.Joaat(props), await client.GetPositionAsync(), await client.GetRotationAsync());
-           //await obj.AttachObject(client, "PH_L_Hand", position, rotation);
-
             if (Food > 0)
             {
-                await client.PlayAnimation("mp_player_inteat@burger", "mp_player_int_eat_burger", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
+                client.PlayAnimation("mp_player_inteat@burger", "mp_player_int_eat_burger", 4, -8, -1);
 
-                Utils.Utils.Delay(4000, true, async () =>
+                Utils.Utils.Delay(4000, true, () =>
                 {
                     if (!client.Exists)
                         return;
 
-                    await client.PlayAnimation("mp_player_inteat@burger", "mp_player_int_eat_exit_burger", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
-                    
-/*                    if (obj != null)
-                    {
-                        await ph.PlayAnimation("mp_player_inteat@burger", "mp_player_int_eat_exit_burger", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
-                       // await obj.Destroy();
-                    }*/
+                    client.PlayAnimation("mp_player_inteat@burger", "mp_player_int_eat_exit_burger", 4, -8, -1);
                 });
             }
             else
             {
-                await client.PlayAnimation("mp_player_intdrink", "loop_bottle", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
+                client.PlayAnimation("mp_player_intdrink", "loop_bottle", 4, -8, -1);
 
-                Utils.Utils.Delay(4000, true,async () =>
+                Utils.Utils.Delay(4000, true, () =>
                 {
                     if (!client.Exists)
                         return;
 
-                    await client.PlayAnimation("mp_player_intdrink", "outro_bottle", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
-                    
-/*                    if (obj != null)
-                    {
-                        await ph.PlayAnimation("mp_player_intdrink", "outro_bottle", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
-                        //await obj.Destroy();
-                    }*/
+                    client.PlayAnimation("mp_player_intdrink", "outro_bottle", 4, -8, -1);
                 });
             }
+            return Task.CompletedTask;
         }
     }
 }

@@ -65,7 +65,7 @@ namespace ResurrectionRP_Server.Radio
                 Statut = RadioModes.SPEAKING;
                 SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), true); 
 
-                await client.PlayAnimation("random@arrests", "generic_radio_chatter", 4, -8, -1, (AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.AllowPlayerControl));
+                client.PlayAnimation("random@arrests", "generic_radio_chatter", 4, -8, -1, (AnimationFlags)49);
             }
         }
 
@@ -82,7 +82,8 @@ namespace ResurrectionRP_Server.Radio
                 if (ph == null)
                     return;
 
-                //await ph.StopAnimation("random@arrests", "generic_radio_chatter"); // TODO
+                //client.StopAnimation("random@arrests", "generic_radio_chatter"); // TODO
+                client.StopAnimation(); // TODO
             }
         }
 

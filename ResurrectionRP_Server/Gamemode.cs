@@ -20,6 +20,7 @@ using AltV.Net.Async;
 using AltV.Net.Data;
 using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Services;
+using ResurrectionRP_Server.Utils;
 
 namespace ResurrectionRP_Server
 {
@@ -256,7 +257,6 @@ namespace ResurrectionRP_Server
             Utils.Utils.Delay(60000, false, async () => await FactionManager.Update());
 
             Chat.Initialize();
-            Chat.RegisterCmd("veh", CommandVeh);
 
             Chat.RegisterCmd("coords", (IPlayer player, string[] args) =>
             {
@@ -295,7 +295,24 @@ namespace ResurrectionRP_Server
 
             Chat.RegisterCmd("tpto", async (IPlayer player, string[] args) =>
             {
+                if (player.GetPlayerHandler()?.StaffRank <= 0)
+                    return;
                 await player.SetPositionAsync(new Position(float.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
+            });
+
+            Chat.RegisterCmd("test", (IPlayer player, string[] args) =>
+            {
+                if (player.GetPlayerHandler()?.StaffRank <= 0)
+                    return Task.CompletedTask;
+
+                if (player.Vehicle != null)
+                {
+                    for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
+                    {
+                        player.Vehicle.SetWindowDamaged(i, true);
+                    }
+                }
+                return Task.CompletedTask;
             });
             ServerLoaded = true;
         }
@@ -321,27 +338,7 @@ namespace ResurrectionRP_Server
         #region Methods
         private async Task CommandVeh(IPlayer player, string[] args)
         {
-            if (args == null)
-            {
-                player.SendChatMessage("{FF0000}Usage: /veh [vehicle name]");
-                return;
-            }
 
-            VehicleHandler vh = new VehicleHandler(player.GetSocialClub(), Alt.Hash(args[0]), new Vector3(player.Position.X+5, player.Position.Y, player.Position.Z), player.Rotation, locked:false);
-
-            await vh.SpawnVehicle(null);
-            PlayerHandler ph = player.GetPlayerHandler();
-
-            if (ph != null)
-            {
-                ph.ListVehicleKey.Add(new VehicleKey(vh.VehicleManifest.DisplayName, vh.Plate));
-
-                if (vh.Vehicle != null)
-                    player.SetPlayerIntoVehicle(vh.Vehicle);
-
-                await vh.InsertVehicle();
-                ph.Update();
-            }
         }
 
         public async Task Save()

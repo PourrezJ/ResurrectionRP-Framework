@@ -58,6 +58,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         [BsonIgnoreIfNull]
         public OilTank OilTank = null;
+
         #endregion
 
         #region Events
@@ -128,7 +129,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.ModKit = 1;
                 
                 Vehicle.SetData("VehicleHandler", this);
-                Vehicle.Dimension = Dimension;
+                
                 Vehicle.NumberplateText = Plate;
                 Vehicle.PrimaryColor = PrimaryColor;
                 Vehicle.SecondaryColor = SecondaryColor;
@@ -197,6 +198,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 // Needed as vehicles in database don't have this value
                 if (FuelConsumption == 0)
                     FuelConsumption = 5.5f;
+
+                Vehicle.Dimension = Dimension;
             });
 
             if (HaveTowVehicle())
@@ -227,6 +230,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
 
             return false;
+        }
+
+        public async Task ApplyDamageAsync()
+        {
+            if (Vehicle != null && Vehicle.Exists)
+            {
+                await Vehicle.SetDimensionAsync(-1);
+                await Vehicle.SetDimensionAsync(GameMode.GlobalDimension);
+            }
         }
         
         public async Task LockUnlock(IPlayer client, bool statut)
@@ -293,6 +305,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 bool neonActive = Vehicle.IsNeonActive;
                 Tuple<bool, bool, bool, bool> NeonState = new Tuple<bool, bool, bool, bool>(neonActive, neonActive, neonActive, neonActive);
                 NeonsColor = Vehicle.NeonColor;
+                
 
                 for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
                     Doors[i] = (VehicleDoorState)Vehicle.GetDoorState(i);

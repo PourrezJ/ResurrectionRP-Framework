@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
+
     public partial class VehicleHandler
     {
         public TowTruck TowTruck { get; set; }
@@ -30,120 +31,21 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         public ConcurrentDictionary<int, int> Mods { get; set; }
-            = new ConcurrentDictionary<int, int>();
+= new ConcurrentDictionary<int, int>();
 
-        private uint bodyhealth;
-        public uint BodyHealth
-        {
-            get
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    return Vehicle.BodyHealth;
-                return bodyhealth;
-            }
-            set
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    Vehicle.BodyHealth = value;
-                bodyhealth = value;
-            }
-        }
-
-        private int enginehealth = 1000;
-        public int EngineHealth
-        {
-            get
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    return Vehicle.EngineHealth;
-                return enginehealth;
-
-            }
-            set
-            {
-                enginehealth = value;
-                if (Vehicle != null && Vehicle.Exists)
-                    Vehicle.EngineHealth = value;
-            }
-        }
-
-        public int PetrolTankHealth
-        {
-            get;
-            set;
-        } = 1000;
+        public uint BodyHealth { get; set; } = 1000;
+        public int EngineHealth { get; set; } = 1000;
+        public int PetrolTankHealth { get; set; } = 1000;
 
         public Tuple<bool, bool, bool, bool> NeonState { get; set; } = new Tuple<bool, bool, bool, bool>(false, false, false, false);
         public Color NeonsColor { get; set; } = Color.Empty;
 
-        private int dirt;
-        public byte Dirt
-        {
-            get
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    return Vehicle.DirtLevel;
-                return 0;
-            }
-            set
-            {
-                dirt = value;
-                if (Vehicle != null && Vehicle.Exists)
-                    Vehicle.DirtLevel = value;
-            }
-        }
+        public byte Dirt { get; set; } = 0;
+        public bool Engine { get; set; } = false;
 
-        private bool engine = false;
-        public bool Engine
-        {
-            get
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    return Vehicle.EngineOn;
-                return engine;
-            }
-            set
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    Vehicle.EngineOn = value;
-                engine = value;
-            }
-        }
 
-        private byte primaryColor;
-        public byte PrimaryColor
-        {
-            get
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    return Vehicle.PrimaryColor;
-                return primaryColor;
-            }
-
-            set
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    Vehicle.PrimaryColor = value;
-                primaryColor = value;
-            }
-        }
-        private byte secondaryColor;
-        public byte SecondaryColor
-        {
-            get
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    return Vehicle.SecondaryColor;
-                return secondaryColor;
-            }
-
-            set
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    Vehicle.SecondaryColor = value;
-                secondaryColor = value;
-            }
-        }
+        public byte PrimaryColor { get; set; } = 0;
+        public byte SecondaryColor { get; set; } = 0;
 
         // public byte WindowTint { get; set; } = 0;
         // public bool ArmoredWindows { get; set; } = false;
@@ -176,14 +78,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Vehicle.Position = value.Pos;
                     Vehicle.Rotation = value.Rot;
                 }
-                
+
                 LastKnowLocation = value;
             }
         }
 
         public Attachment Attachment { get; set; }
 
-        public VehicleDoorState GetDoorState(VehicleDoor door) => Doors[(byte)door]; 
+        public VehicleDoorState GetDoorState(VehicleDoor door) => Doors[(byte)door];
         public async Task SetDoorState(VehicleDoor door, VehicleDoorState state)
         {
             Doors[(byte)door] = state;
@@ -206,23 +108,23 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             TowTruck = new TowTruck(vehicle.NumberplateText, new Vector3(0, -2, 1));
 #pragma warning disable CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
-/*            Task.Run(async () =>
-            {
-                await UpdateAsync();
-                while (HaveTowVehicle())
-                {
-                    if (!vehicle.Exists)
-                        return;
-                    await Task.Delay(500);
-                    if (HaveTowVehicle())
-                    {
-                        AltV.Net.Data.Position pos = await Vehicle.GetPositionAsync();
-                        await vehicle.SetPositionAsync( new AltV.Net.Data.Position(pos.X, pos.Y + 2, pos.Z + 3));
-                        await vehicle.SetRotationAsync(await Vehicle.GetRotationAsync());
-                    }
+            /*            Task.Run(async () =>
+                        {
+                            await UpdateAsync();
+                            while (HaveTowVehicle())
+                            {
+                                if (!vehicle.Exists)
+                                    return;
+                                await Task.Delay(500);
+                                if (HaveTowVehicle())
+                                {
+                                    AltV.Net.Data.Position pos = await Vehicle.GetPositionAsync();
+                                    await vehicle.SetPositionAsync( new AltV.Net.Data.Position(pos.X, pos.Y + 2, pos.Z + 3));
+                                    await vehicle.SetRotationAsync(await Vehicle.GetRotationAsync());
+                                }
 
-                }
-            }); TODO VERIFIER POSITION VOITURE A L'ARRIERE ? NEST PAS CORRECT SPAWN EN DESSOUS DU VEH*/
+                            }
+                        }); TODO VERIFIER POSITION VOITURE A L'ARRIERE ? NEST PAS CORRECT SPAWN EN DESSOUS DU VEH*/
 #pragma warning restore CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
         }
 

@@ -81,7 +81,6 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
             veh.Vehicle.SetSyncedMetaData("VehicleRent", DateTime.Now.ToString());
             vehicleplace.VehicleHandler.SpawnVeh = true;
             vehicleplace.VehicleHandler.SetOwner(ph);
-            vehicleplace.VehicleHandler.FreezePosition = (false);
             vehicleplace.VehicleHandler.Vehicle.ResetData("RentShop");
             ph.ListVehicleKey.Add(Models.VehicleKey.GenerateVehicleKey(vehicleplace.VehicleHandler));
             ph.Client.SendNotificationSuccess($"Vous avez loué un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");

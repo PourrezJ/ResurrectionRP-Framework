@@ -12,12 +12,11 @@ namespace ResurrectionRP_Server.Business.Barber
 
     public partial class BarberStore
     {
-        #region Menu
         #region Private fields
-        private int _firstcolorprev = 0;
-        private int _secondcolorprev = 0;
-        private int _beardfirstcolor = 0;
-        private int _beardsecondcolor = 0;
+        private int _hairFirstColor = 0;
+        private int _hairSecondColor = 0;
+        private int _beardFirstColor = 0;
+        private int _beardSecondColor = 0;
         #endregion
 
         #region Main
@@ -29,7 +28,7 @@ namespace ResurrectionRP_Server.Business.Barber
                 return;
             }
 
-            Menu mainmenu = new Menu("ID_BarberMain", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Barber);
+            Menu mainMenu = new Menu("ID_BarberMain", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Barber);
 
             List<object> _playerlist = new List<object>();
 
@@ -42,43 +41,77 @@ namespace ResurrectionRP_Server.Business.Barber
                 ClientSelected = null;
 
                 // List client choice
-                mainmenu.Add(new ListItem("Client:", "Choix du client", "ID_PlayerSelect", _playerlist, 0, true));
+                mainMenu.Add(new ListItem("Client:", "Choix du client", "ID_PlayerSelect", _playerlist, 0, true));
 
                 // If is Owner ...
                 if ( IsOwner(client))
                 {
                     MenuItem getmoney = new MenuItem("Gérer les finances", "", "ID_TakeMoney", true, rightLabel: $"${BankAccount.Balance}");
-                    getmoney.OnMenuItemCallback = GetMoneyMenu;
-                    mainmenu.Add(getmoney);
+                    getmoney.OnMenuItemCallback = BankAccountMenu;
+                    mainMenu.Add(getmoney);
                 }
 
                 MenuItem depot = new MenuItem("Déposer de l'argent", "", "ID_Depot", true);
                 depot.SetInput("", 10, InputType.UFloat, true);
                 depot.OnMenuItemCallback = DepotMoneyMenu;
-                mainmenu.Add(depot);
+                mainMenu.Add(depot);
 
                 MenuItem haircut = new MenuItem("Faire une coupe de cheveux", "", "ID_Hair", true);
-                haircut.OnMenuItemCallback = HairCutChoise;
-                mainmenu.Add(haircut);
+                haircut.OnMenuItemCallback = HairCutChoice;
+                mainMenu.Add(haircut);
 
                 MenuItem beardcut = new MenuItem("Tailler une barbe", "", "ID_Beard", true);
-                beardcut.OnMenuItemCallback = BeardCutChoise;
-                mainmenu.Add(beardcut);
+                beardcut.OnMenuItemCallback = BeardCutChoice;
+                mainMenu.Add(beardcut);
 
 
                 MenuItem colorchange = new MenuItem($"Faire une couleur (${ColorPrice})", "", "ID_Color", true);
-                colorchange.OnMenuItemCallback = ColorChoise;
-                mainmenu.Add(colorchange);
+                colorchange.OnMenuItemCallback = ColorChoice;
+                mainMenu.Add(colorchange);
 
-                await MenuManager.OpenMenu(client, mainmenu);
+                await MenuManager.OpenMenu(client, mainMenu);
             }
             else
-                client.SendNotificationError("Aucun client autour.");
+                client.SendNotificationError("Aucun client à proximité.");
         }
-        #endregion
 
-        #region Depot
-        private async Task GetMoneyMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private async Task BarberMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        {
+            if (ClientSelected == null || ClientSelected.Client == null || !ClientSelected.Client.Exists)
+            {
+                await OpenMenu(client);
+                return;
+            }
+
+            if (menuItem == null)
+            {
+                if (menu.Id == "ID_BarberHair")
+                    ClientSelected.Client.SetCloth(ClothSlot.Hair, ClientSelected.Character.Hair.Hair, 0, 0);
+                else if (menu.Id == "ID_BarberBeard")
+                {
+                    HeadOverlay hairs = ClientSelected.Character.Appearance[1];
+                    ClientSelected.Client.SetHeadOverlay(1, new HeadOverlayData((uint)hairs.Index, hairs.Opacity, (uint)hairs.Color, (uint)hairs.SecondaryColor));
+                }
+                else if (menu.Id == "ID_BarberColor")
+                {
+                    ClientSelected.Client.SetHairColor((uint)ClientSelected.Character.Hair.Color, (uint)ClientSelected.Character.Hair.HighlightColor);
+
+                    HeadOverlayData head = new HeadOverlayData()
+                    {
+                        Index = (uint)ClientSelected.Character.Appearance[1].Index,
+                        ColorId = (uint)ClientSelected.Character.Hair.Color,
+                        SecondaryColorId = (uint)ClientSelected.Character.Hair.HighlightColor,
+                        Opacity = 255
+                    };
+
+                    ClientSelected.Client.SetHeadOverlay(1, head);
+                }
+
+                await OpenMenu(client);
+            }
+        }
+
+        private async Task BankAccountMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
@@ -86,10 +119,9 @@ namespace ResurrectionRP_Server.Business.Barber
                 return;
             }
 
-            await BankMenu.OpenBankMenu(client, BankAccount, AtmType.Business, menu, GetMoneyMenu);
+            await BankMenu.OpenBankMenu(client, BankAccount, AtmType.Business, menu, BankAccountMenu);
         }
 
-        // Depot d'argent dans la caisse.
         private async Task DepotMoneyMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (double.TryParse(menuItem.InputValue, out double result))
@@ -111,7 +143,7 @@ namespace ResurrectionRP_Server.Business.Barber
         #endregion
 
         #region Beard
-        private async Task BeardCutChoise(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private async Task BeardCutChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             var listItem = menu.Items.Find(m => m.Id == "ID_PlayerSelect") as ListItem;
             var selected = listItem.SelectedItem;
@@ -169,12 +201,12 @@ namespace ResurrectionRP_Server.Business.Barber
             else
                 client.SendNotificationError("Vous n'avez pas de fond de caisse.");
 
-            await menu.CloseMenu(client);
+            await OpenMenu(client);
         }
         #endregion
 
         #region HairCut
-        private async Task HairCutChoise(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private async Task HairCutChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             var listItem = menu.Items.Find(m => m.Id == "ID_PlayerSelect") as ListItem;
             var selected = listItem.SelectedItem;
@@ -225,87 +257,9 @@ namespace ResurrectionRP_Server.Business.Barber
             else
                 client.SendNotificationError("Vous n'avez pas de fond de caisse.");
 
-            await menu.CloseMenu(client);
-        }
-        #endregion
-
-        #region Color
-        private async Task ColorChoise(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            var listItem = menu.Items.Find(m => m.Id == "ID_PlayerSelect") as ListItem;
-            
-            var selected = listItem.SelectedItem;
-            var name = listItem.Items[selected];
-            ClientSelected = PlayerManager.GetPlayerByName(name.ToString());
-            Alt.Server.LogInfo("Changing color for " + ClientSelected.Identite.Name);
-            if (ClientSelected == null) return;
-
-            _firstcolorprev = ClientSelected.Character.Hair.Color;
-            _secondcolorprev = ClientSelected.Character.Hair.HighlightColor;
-            _beardfirstcolor = ClientSelected.Character.Appearance[1].Color;
-            _beardsecondcolor = ClientSelected.Character.Appearance[1].SecondaryColor;
-
-            menu = new Menu("ID_BarberColor", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Barber);
-            menu.ItemSelectCallback = BarberMenuCallBack;
-            menu.ListCallback = ColorPreview;
-            menu.Finalizer = MenuFinalizer;
-
-            List<object> _colorlist = new List<object>();
-
-            for (int i = 0; i <= 63; i++) { _colorlist.Add(i.ToString()); }; // 63
-
-            menu.Add(new ListItem("Couleur cheveux principal", "Changer la couleur de cheveux principal.", "ID_FirstColor", _colorlist, ClientSelected.Character.Hair.Color, true, true));
-            menu.Add(new ListItem("Couleur cheveux secondaire", "Changer la couleur de cheveux secondaire.", "ID_SecondColor", _colorlist, ClientSelected.Character.Hair.HighlightColor, true, true));
-            menu.Add(new ListItem("Couleur barbe primaire", "Changer la couleur de la barbe secondaire.", "ID_BeardFirstColor", _colorlist, ClientSelected.Character.Hair.HighlightColor, true, true));
-            menu.Add(new ListItem("Couleur barbe secondaire", "Changer la couleur de la barbe secondaire.", "ID_BeardSecondColor", _colorlist, ClientSelected.Character.Hair.HighlightColor, true, true));
-
-            MenuItem valid = new MenuItem("~g~Valider les choix", executeCallback: true);
-            valid.OnMenuItemCallback = ColorValidChoise;
-            menu.Add(valid);
-
-            await menu.OpenMenu(client);
+            await OpenMenu(client);
         }
 
-        private async Task ColorValidChoise(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            try
-            {
-                if (await BankAccount.GetBankMoney(ColorPrice, $"Couleur par {client.GetPlayerHandler().Identite.Name}"))
-                {
-                    ClientSelected.Character.Hair.Color = _firstcolorprev;
-                    ClientSelected.Character.Hair.HighlightColor = _secondcolorprev;
-
-                    var head = new HeadOverlay()
-                    {
-                        Index = ClientSelected.Character.Appearance[1].Index,
-                        Color = _beardfirstcolor,
-                        SecondaryColor = _beardsecondcolor,
-                        Opacity = 255
-                    };
-
-                    ClientSelected.Character.Appearance[1] = head;
-
-                    ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
-                    ClientSelected.Update();
-                    await Update();
-                    await menu.CloseMenu(client);
-                }
-                else
-                {
-                    client.SendNotificationError("Vous n'avez pas de fond de caisse.");
-                    ClientSelected?.Character.ApplyCharacter(client);
-                }
-            }
-            catch
-            {
-                client.SendNotificationError("Pour appliquer la couleur.");
-                ClientSelected?.Character.ApplyCharacter(client);
-
-            }
-        }
-        #endregion
-
-        #region Preview
         private async Task HairCutPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
             if (menuItem.Id == "ID_Hair")
@@ -316,43 +270,113 @@ namespace ResurrectionRP_Server.Business.Barber
             else if (menuItem.Id == "ID_Beard")
             {
                 var hair = ClientSelected.Character.Hair;
-                await ClientSelected?.Client?.SetHeadOverlayAsync(1, new HeadOverlayData((byte)itemIndex, 255, (uint)hair.Color, (uint)hair.HighlightColor));
+
+                if (ClientSelected.Client != null)
+                ClientSelected?.Client?.SetHeadOverlay(1, new HeadOverlayData((byte)itemIndex, 255, (uint)hair.Color, (uint)hair.HighlightColor));
             }
         }
+        #endregion
 
-        private async Task ColorPreview(IPlayer client, Menu menu, IMenuItem menuItem, int listindex)
+        #region Color
+        private async Task ColorChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            Alt.Server.LogInfo("Hair Preview");
-            if (menuItem.Id == "ID_FirstColor")
-            {
-                _firstcolorprev = (byte)listindex;
-            }
-            else if (menuItem.Id == "ID_SecondColor")
-            {
-                _secondcolorprev = (byte)listindex;
-            }
-            else if (menuItem.Id == "ID_BeardFirstColor")
-            {
-                _beardfirstcolor = (byte)listindex;
-            }
-            else if (menuItem.Id == "ID_BeardSecondColor")
-            {
-                _beardsecondcolor = (byte)listindex;
-            }
+            var listItem = menu.Items.Find(m => m.Id == "ID_PlayerSelect") as ListItem;
+            
+            var selected = listItem.SelectedItem;
+            var name = listItem.Items[selected];
+            ClientSelected = PlayerManager.GetPlayerByName(name.ToString());
 
-            await ClientSelected?.Client?.SetHairColorAsync((uint)_firstcolorprev, (uint)_secondcolorprev);
+            if (ClientSelected == null)
+                return;
 
-            HeadOverlayData head = new HeadOverlayData()
-            {
-                Index = (uint)ClientSelected.Character.Appearance[1].Index,
-                ColorId = (uint)_beardfirstcolor,
-                SecondaryColorId = (uint)_beardsecondcolor,
-                Opacity = 255
-            };
+            _hairFirstColor = ClientSelected.Character.Hair.Color;
+            _hairSecondColor = ClientSelected.Character.Hair.HighlightColor;
+            _beardFirstColor = ClientSelected.Character.Appearance[1].Color;
+            _beardSecondColor = ClientSelected.Character.Appearance[1].SecondaryColor;
 
-            await ClientSelected?.Client?.SetHeadOverlayAsync(1, head);
+            menu = new Menu("ID_BarberColor", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Barber);
+            menu.ItemSelectCallback = BarberMenuCallBack;
+            menu.ListItemChangeCallback = ColorPreview;
+            menu.Finalizer = MenuFinalizer;
+
+            List<object> _colorlist = new List<object>();
+
+            for (int i = 0; i <= 63; i++)
+                _colorlist.Add(i.ToString());
+
+            menu.Add(new ListItem("Couleur cheveux principal", "Changer la couleur de cheveux principal.", "ID_HairFirstColor", _colorlist, ClientSelected.Character.Hair.Color, true, true));
+            menu.Add(new ListItem("Couleur cheveux secondaire", "Changer la couleur de cheveux secondaire.", "ID_HairSecondColor", _colorlist, ClientSelected.Character.Hair.HighlightColor, true, true));
+            menu.Add(new ListItem("Couleur barbe primaire", "Changer la couleur de la barbe secondaire.", "ID_BeardFirstColor", _colorlist, ClientSelected.Character.Hair.HighlightColor, true, true));
+            menu.Add(new ListItem("Couleur barbe secondaire", "Changer la couleur de la barbe secondaire.", "ID_BeardSecondColor", _colorlist, ClientSelected.Character.Hair.HighlightColor, true, true));
+
+            MenuItem valid = new MenuItem("~g~Valider les choix", executeCallback: true);
+            valid.OnMenuItemCallback = ColorValidChoice;
+            menu.Add(valid);
+
+            await menu.OpenMenu(client);
         }
 
+        private async Task ColorValidChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        {
+            if (await BankAccount.GetBankMoney(ColorPrice, $"Couleur par {client.GetPlayerHandler().Identite.Name}"))
+            {
+                ClientSelected.Character.Hair.Color = _hairFirstColor;
+                ClientSelected.Character.Hair.HighlightColor = _hairSecondColor;
+
+                var head = new HeadOverlay()
+                {
+                    Index = ClientSelected.Character.Appearance[1].Index,
+                    Color = _beardFirstColor,
+                    SecondaryColor = _beardSecondColor,
+                    Opacity = 255
+                };
+
+                ClientSelected.Character.Appearance[1] = head;
+                ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
+                ClientSelected.Update();
+                await Update();
+            }
+            else
+            {
+                client.SendNotificationError("Vous n'avez pas de fond de caisse.");
+                ClientSelected?.Character.ApplyCharacter(client);
+            }
+
+            await OpenMenu(client);
+        }
+
+        private async Task ColorPreview(IPlayer client, Menu menu, IListItem listItem, int listindex)
+        {
+            if (ClientSelected == null)
+                await OpenMenu(client);
+
+            if (listItem.Id == "ID_HairFirstColor")
+                _hairFirstColor = listindex;
+            else if (listItem.Id == "ID_HairSecondColor")
+                _hairSecondColor = listindex;
+            else if (listItem.Id == "ID_BeardFirstColor")
+                _beardFirstColor = listindex;
+            else if (listItem.Id == "ID_BeardSecondColor")
+                _beardSecondColor = listindex;
+
+            if (listItem.Id == "ID_HairFirstColor" || listItem.Id == "ID_HairSecondColor" && ClientSelected.Client.Exists)
+                await ClientSelected.Client.SetHairColorAsync((uint)_hairFirstColor, (uint)_hairSecondColor);
+            else if (ClientSelected.Client.Exists)
+            {
+                HeadOverlayData head = new HeadOverlayData()
+                {
+                    Index = (uint)ClientSelected.Character.Appearance[1].Index,
+                    ColorId = (uint)_beardFirstColor,
+                    SecondaryColorId = (uint)_beardSecondColor,
+                    Opacity = 255
+                };
+
+                await ClientSelected.Client.SetHeadOverlayAsync(1, head);
+            }
+        }
+        #endregion
+
+        #region Finalizer
         private Task MenuFinalizer(IPlayer client, Menu menu)
         {
             if (ClientSelected == null)
@@ -360,39 +384,6 @@ namespace ResurrectionRP_Server.Business.Barber
 
             ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
             return Task.CompletedTask;
-        }
-        #endregion
-        #endregion
-
-        #region Callbacks
-        private async Task BarberMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            if (menuItem == null)
-            {
-                if (menu.Id == "ID_BarberHair")
-                    ClientSelected?.Client?.SetCloth(ClothSlot.Hair, ClientSelected.Character.Hair.Hair, 0, 0);
-                else if (menu.Id == "ID_BarberBeard")
-                {
-                    HeadOverlay hairs = ClientSelected.Character.Appearance[1];
-                    ClientSelected?.Client?.SetHeadOverlay(1, new HeadOverlayData((uint)hairs.Index, hairs.Opacity, (uint)hairs.Color, (uint)hairs.SecondaryColor));
-                }
-                else if (menu.Id == "ID_BarberColor")
-                {
-                    await ClientSelected?.Client?.SetHairColorAsync((uint)ClientSelected.Character.Hair.Color, (uint)ClientSelected.Character.Hair.HighlightColor);
-
-                    HeadOverlayData head = new HeadOverlayData()
-                    {
-                        Index = (uint)ClientSelected.Character.Appearance[1].Index,
-                        ColorId = (uint)ClientSelected.Character.Hair.Color,
-                        SecondaryColorId = (uint)ClientSelected.Character.Hair.HighlightColor,
-                        Opacity = 255
-                    };
-
-                    await ClientSelected?.Client?.SetHeadOverlayAsync(1, head);
-                }
-
-                await OpenMenu(client);
-            }
         }
         #endregion
     }

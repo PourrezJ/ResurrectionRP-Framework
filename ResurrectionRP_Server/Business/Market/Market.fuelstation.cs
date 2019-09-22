@@ -44,7 +44,8 @@ namespace ResurrectionRP_Server.Business
                 if (vehicle == null)
                     continue;
                 VehicleHandler vh = vehicle.GetVehicleHandler();
-                if (vh.GetFuel() > vh.FuelMax - 2)
+
+                if (vh.Fuel > vh.FuelMax - 2)
                 {
                     client.DisplayHelp("Il se peut que certains véhicule n'aient pas besoin de plein!", 10000);
                     continue;

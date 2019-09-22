@@ -20,11 +20,30 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         const double FUEL_FACTOR = 5;
         #endregion
 
-        #region Fields
+        #region Private fields
         private DateTime _previousUpdate = DateTime.Now;
         private Vector3 _previousPosition;
         private float _milage = 0;
         private float _fuel = 100;
+        private uint _bodyhealth;
+        private int _engineHealth = 1000;
+        private int _petrolTankHealth = 1000;
+        private byte _primaryColor;
+        private byte _secondaryColor;
+        private bool _engineOn = false;
+        private byte _dirt = 0;
+        private uint _radioStation = 255;
+        private Tuple<bool, bool, bool, bool> _neonState = new Tuple<bool, bool, bool, bool>(false, false, false, false);
+        private Color _neonColor = Color.Empty;
+        private WindowTint _windowTint = WindowTint.None;
+        private VehicleBumperDamage _frontBumperDamage = VehicleBumperDamage.NotDamaged;
+        private VehicleBumperDamage _rearBumperDamage = VehicleBumperDamage.NotDamaged;
+        private VehicleDoorState[] _doors = new VehicleDoorState[Globals.NB_VEHICLE_DOORS] { 0, 0, 0, 0, 0, 0, 0, 0 };
+        private WindowState[] _windows = new WindowState[Globals.NB_VEHICLE_WINDOWS] { 0, 0, 0, 0 };
+        private Wheel[] _wheels; // Number of wheels is defined at runtime so no default initialization possible
+        #endregion
+
+        #region Public fields and properties
         public TowTruck TowTruck { get; set; }
         public float Fuel
         {
@@ -42,7 +61,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (_fuel == 0 && Vehicle != null && Vehicle.Exists)
                 {
                     Vehicle.SetEngineOnAsync(false);
-                    Engine = false;
+                    EngineOn = false;
                     UpdateFull();
                 }
 
@@ -54,10 +73,29 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public float FuelConsumption { get; set; } = 5.5f;
         public bool Siren { get; set; } = false;
         public bool SirenSound { get; set; } = false;
-        public uint RadioID { get; set; } = 255;
-        public bool FreezePosition { get; set; }
+
+        public uint RadioStation
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    _radioStation = Vehicle.RadioStation;
+
+                return _radioStation;
+            }
+
+            set
+            {
+                _radioStation = value;
+
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.RadioStation = value;
+            }
+        }
+
         public float TorqueMultiplicator { get; set; }
         public float PowerMultiplicator { get; set; }
+
         public float Milage
         {
             get => _milage;
@@ -73,68 +111,364 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         }
 
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        public ConcurrentDictionary<int, int> Mods { get; set; }
-            = new ConcurrentDictionary<int, int>();
+        public ConcurrentDictionary<byte, byte> Mods { get; set; } = new ConcurrentDictionary<byte, byte>();
 
-        public uint BodyHealth { get; set; }
+        public uint BodyHealth
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    _bodyhealth = Vehicle.BodyHealth;
 
-        public int EngineHealth { get; set; }
+                return _bodyhealth;
+            }
+
+            set
+            {
+                _bodyhealth = value;
+
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.BodyHealth = value;
+            }
+        }
+
+        public int EngineHealth
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    _engineHealth = Vehicle.EngineHealth;
+
+                return _engineHealth;
+            }
+
+            set
+            {
+                _engineHealth = value;
+
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.EngineHealth = value;
+            }
+        }
 
         public int PetrolTankHealth
         {
-            get;
-            set;
-        } = 1000;
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    _petrolTankHealth = Vehicle.PetrolTankHealth;
 
-        public Tuple<bool, bool, bool, bool> NeonState { get; set; } = new Tuple<bool, bool, bool, bool>(false, false, false, false);
-        public Color NeonsColor { get; set; } = Color.Empty;
+                return _petrolTankHealth;
+            }
 
-        public byte Dirt { get; set; }
+            set
+            {
+                _petrolTankHealth = value;
 
-        public bool Engine { get; set; }
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.PetrolTankHealth = value;
+            }
+        }
 
-        public byte PrimaryColor { get; set; }
-        public byte SecondaryColor { get; set; }
+        public Tuple<bool, bool, bool, bool> NeonState
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                {
+                    bool neonActive = Vehicle.IsNeonActive;
+                    _neonState = new Tuple<bool, bool, bool, bool>(neonActive, neonActive, neonActive, neonActive);
+                }
+
+                return _neonState;
+            }
+
+            set
+            {
+                _neonState = value;
+
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.SetNeonActive(_neonState.Item1, _neonState.Item2, _neonState.Item3, _neonState.Item4);
+            }
+        }
+
+        public Color NeonColor
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    _neonColor = Vehicle.NeonColor;
+
+                return _neonColor;
+            }
+
+            set
+            {
+                _neonColor = value;
+
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.NeonColor = value;
+            }
+        }
+
+        public byte Dirt
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    _dirt = Vehicle.DirtLevel;
+
+                return _dirt;
+            }
+            set
+            {
+                _dirt = value;
+
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.DirtLevel = value;
+            }
+        }
+
+        public bool EngineOn
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    _engineOn = Vehicle.EngineOn;
+
+                return _engineOn;
+            }
+
+            set
+            {
+                _engineOn = value;
+
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.EngineOn = value;
+            }
+        }
+
+        public byte PrimaryColor
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    _primaryColor = Vehicle.PrimaryColor;
+
+                return _primaryColor;
+            }
+
+            set
+            {
+                _primaryColor = value;
+
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.PrimaryColor = value;
+            }
+        }
+
+        public byte SecondaryColor
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    _secondaryColor = Vehicle.SecondaryColor;
+
+                return _secondaryColor;
+            }
+
+            set
+            {
+                _secondaryColor = value;
+
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.SecondaryColor = value;
+            }
+        }
 
         public byte PearlColor { get; internal set; }
 
-        public WindowTint WindowTint { get; set; } = 0;
+        public WindowTint WindowTint
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    _windowTint = Vehicle.GetWindowTint();
+
+                return _windowTint;
+            }
+
+            set
+            {
+                _windowTint = value;
+
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.SetWindowTint(value);
+            }
+        }
+
         //public bool ArmoredWindows { get; set; } = false;
 
-        public VehicleBumperDamage FrontBumperDamage { get; set; } = 0;
-        public VehicleBumperDamage RearBumperDamage { get; set; } = 0;
+        public VehicleBumperDamage FrontBumperDamage
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    _frontBumperDamage = Vehicle.GetBumperDamageLevel(VehicleBumper.Front);
 
-        public string AppearanceData { get; set; }
+                return _frontBumperDamage;
+            }
+
+            set
+            {
+                _frontBumperDamage = value;
+
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.SetBumperDamageLevel(VehicleBumper.Front, value);
+            }
+        }
+
+        public VehicleBumperDamage RearBumperDamage
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    _rearBumperDamage = Vehicle.GetBumperDamageLevel(VehicleBumper.Rear);
+
+                return _rearBumperDamage;
+            }
+
+            set
+            {
+                _rearBumperDamage = value;
+
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.SetBumperDamageLevel(VehicleBumper.Rear, value);
+            }
+        }
+
+        // public string AppearanceData { get; set; }
         public string DamageData { get; set; }
 
+        public VehicleDoorState[] Doors
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                {
+                    for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
+                        _doors[i] = (VehicleDoorState)Vehicle.GetDoorState(i);
+                }
 
-        public VehicleDoorState[] Doors { get; set; } = new VehicleDoorState[Globals.NB_VEHICLE_DOORS];
-        public WindowState[] Windows { get; set; } = new WindowState[Globals.NB_VEHICLE_WINDOWS] { 0, 0, 0, 0 };
+                return _doors;
+            }
 
-        public Wheel[] Wheels { get; set; }
+            set
+            {
+                _doors = value;
 
-        public Location LastKnowLocation;
+                if (Vehicle != null && Vehicle.Exists)
+                {
+                    for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
+                        Vehicle.SetDoorState(i, (byte)_doors[i]);
+                }
+            }
+        }
+
+        public WindowState[] Windows
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                {
+                    for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
+                    {
+                        if (Vehicle.IsWindowDamaged(i))
+                            _windows[i] = WindowState.WindowBroken;
+                        else if (Vehicle.IsWindowOpened(i))
+                            _windows[i] = WindowState.WindowDown;
+                        else
+                            _windows[i] = WindowState.WindowFixed;
+                    }
+                }
+
+                return _windows;
+            }
+
+            set
+            {
+                _windows = value;
+
+                if (Vehicle != null && Vehicle.Exists)
+                {
+                    for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
+                    {
+                        if (_windows[i] == WindowState.WindowBroken)
+                            Vehicle.SetWindowDamaged(i, true);
+                        else if (_windows[i] == WindowState.WindowDown)
+                            Vehicle.SetWindowOpened(i, true);
+                        else
+                            Vehicle.SetWindowOpened(i, false);
+                    }
+                }
+            }
+        }
+
+        public Wheel[] Wheels
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                {
+                    _wheels = new Wheel[Vehicle.WheelsCount];
+
+                    for (byte i = 0; i < Vehicle.WheelsCount; i++)
+                    {
+                        _wheels[i] = new Wheel();
+                        _wheels[i].Health = Vehicle.GetWheelHealth(i);
+                        _wheels[i].Burst = Vehicle.IsWheelBurst(i);
+                    }
+                }
+
+                return _wheels;
+            }
+
+            set
+            {
+                _wheels = value;
+
+                if (Vehicle != null && Vehicle.Exists)
+                {
+                    for (byte i = 0; i < Vehicle.WheelsCount; i++)
+                    {
+                        Vehicle.SetWheelHealth(i, _wheels[i].Health);
+                        Vehicle.SetWheelBurst(i, _wheels[i].Burst);
+                    }
+                }
+            }
+        }
+
+        public Location LastKnowLocation { get; set; }
 
         public Location Location
         {
             get
             {
                 if (Vehicle != null && Vehicle.Exists)
-                {
-                    return new Location(Vehicle.Position, Vehicle.Rotation);
-                }
+                    LastKnowLocation = new Location(Vehicle.Position, Vehicle.Rotation);
 
                 return LastKnowLocation;
             }
+
             set
             {
+                LastKnowLocation = value;
+
                 if (Vehicle != null && Vehicle.Exists)
                 {
                     Vehicle.Position = value.Pos;
                     Vehicle.Rotation = value.Rot;
                 }
-                
-                LastKnowLocation = value;
             }
         }
 
@@ -147,16 +481,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             Doors[(byte)door] = state;
             await Vehicle.SetDoorStateAsync(door, state);
-
         }
 
         public bool HaveTowVehicle() => TowTruck != null;
-
-        public void Freeze(bool statut)
-        {
-            FreezePosition = statut;
-            UpdateProperties();
-        }
 
         public async Task TowVehicle(IVehicle vehicle)
         {

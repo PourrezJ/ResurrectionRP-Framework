@@ -15,11 +15,11 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
     {
         public struct EsthetiqueData
         {
-            public readonly int ModID;
+            public readonly byte ModID;
             public readonly string ModName;
             public readonly double ModPrice;
 
-            public EsthetiqueData(int modID, string modName, double modPrice)
+            public EsthetiqueData(byte modID, string modName, double modPrice)
             {
                 ModID = modID;
                 ModName = modName;
@@ -29,11 +29,11 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
         public struct PerformanceData
         {
-            public readonly int ModID;
+            public readonly byte ModID;
             public readonly string ModName;
             public readonly double[] ModPrice;
 
-            public PerformanceData(int modID, string modName, double[] modPrice)
+            public PerformanceData(byte modID, string modName, double[] modPrice)
             {
                 ModID = modID;
                 ModName = modName;

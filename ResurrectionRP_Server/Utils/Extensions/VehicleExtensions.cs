@@ -119,13 +119,5 @@ namespace ResurrectionRP_Server
 
             await player.EmitAsync("vehicleFix", veh);
         }
-
-        public static async Task SetModAsync(this IVehicle vehicle, int type, int mod)
-        {
-            if (mod < 0)
-                Alt.Server.LogError("VehicleExtension: " + "Mod type must not be negativ ! It's a byte !");
-
-            await vehicle.SetModAsync((byte)type, (byte)mod);
-        }
     }
 }

@@ -47,7 +47,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     if (locked == VehicleLockState.Unlocked)
                         xmenu.Add(new XMenuItem("Gestion des portes", "", "ID_doors", XMenuItemIcons.DOOR_CLOSED_SOLID, executeCallback: true));
                         
-                    if ((NeonsColor != Color.Empty &&  NeonsColor != null) && (VehicleManifest?.Neon == true))
+                    if ((NeonColor != Color.Empty &&  NeonColor != null) && (VehicleManifest?.Neon == true))
                         xmenu.Add(new XMenuItem($"{(NeonState.Item1 ? "Eteindre" : "Allumer")} les neons", "", "ID_neons", XMenuItemIcons.LIGHTBULB_SOLID, executeCallback: true));
                 }
             }
@@ -109,12 +109,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             XMenu menu = new XMenu("DoorMenu");
             menu.Callback = VehicleXMenuCallback;
             
-            menu.Add(new XMenuItem("Porte avant gauche", "", "ID_frontLeft",  GetXMenuIconDoor( this.GetDoorState(VehicleDoor.DriverFront) ) )    );
-            menu.Add(new XMenuItem("Porte avant droite", "", "ID_frontRight", GetXMenuIconDoor(this.GetDoorState(VehicleDoor.PassengerFront))));
-            menu.Add(new XMenuItem("Porte arrière gauche", "", "ID_backLeft", GetXMenuIconDoor(this.GetDoorState(VehicleDoor.DriverRear))));
-            menu.Add(new XMenuItem("Porte arrière droite", "", "ID_backRight", GetXMenuIconDoor(this.GetDoorState(VehicleDoor.PassengerRear))));
-            menu.Add(new XMenuItem("Capot", "", "ID_hood", GetXMenuIconDoor(this.GetDoorState(VehicleDoor.Hood))));
-            menu.Add(new XMenuItem("Coffre", "", "ID_trunk", GetXMenuIconDoor(this.GetDoorState(VehicleDoor.Trunk) )));
+            menu.Add(new XMenuItem("Porte avant gauche", "", "ID_frontLeft",  GetXMenuIconDoor(GetDoorState(VehicleDoor.DriverFront))));
+            menu.Add(new XMenuItem("Porte avant droite", "", "ID_frontRight", GetXMenuIconDoor(GetDoorState(VehicleDoor.PassengerFront))));
+            menu.Add(new XMenuItem("Porte arrière gauche", "", "ID_backLeft", GetXMenuIconDoor(GetDoorState(VehicleDoor.DriverRear))));
+            menu.Add(new XMenuItem("Porte arrière droite", "", "ID_backRight", GetXMenuIconDoor(GetDoorState(VehicleDoor.PassengerRear))));
+            menu.Add(new XMenuItem("Capot", "", "ID_hood", GetXMenuIconDoor(GetDoorState(VehicleDoor.Hood))));
+            menu.Add(new XMenuItem("Coffre", "", "ID_trunk", GetXMenuIconDoor(GetDoorState(VehicleDoor.Trunk))));
             
             await menu.OpenXMenu(client);
         }
@@ -231,9 +231,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                     if (engineCurrent || Fuel > 0)
                     {
-                        Engine = !engineCurrent;
+                        EngineOn = !engineCurrent;
                         await Vehicle.SetEngineOnAsync(!engineCurrent);
-                        Vehicle.GetVehicleHandler().Engine = !engineCurrent;
+                        Vehicle.GetVehicleHandler().EngineOn = !engineCurrent;
                         client.EmitLocked("keepEngineState", !engineCurrent);
                         await XMenuManager.XMenuManager.CloseMenu(client);
                     }

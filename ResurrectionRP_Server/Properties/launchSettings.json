@@ -2,7 +2,7 @@
   "profiles": {
     "ResurrectionRP_Server": {
       "commandName": "Executable",
-      "executablePath": "C:\\altv\\server-files\\altv-server.exe",
+      "executablePath": "C:\\AltV\\server-files\\altv-server.exe",
       "workingDirectory": "C:\\altv\\server-files",
       "nativeDebugging": false
     }

@@ -6,6 +6,9 @@ using AltV.Net;
 using System.Collections.Generic;
 using AltV.Net.Enums;
 using System.Linq;
+using AltV.Net.Async;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace ResurrectionRP_Server
 {
@@ -66,11 +69,18 @@ namespace ResurrectionRP_Server
         
         public static Rotation ConvertToEntityRotation(this Vector3 pos) => new Rotation(pos.X, pos.Y, pos.Z );
 
-        public static List<IVehicle> GetVehiclesInRange(this Vector3 pos, float range, short dimension = GameMode.GlobalDimension)
+        public static async Task<List<IVehicle>> GetVehiclesInRange(this Vector3 pos, float range, short dimension = GameMode.GlobalDimension)
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
             List<IVehicle> vehicles = Alt.GetAllVehicles().ToList();
-
-            return vehicles.FindAll(v => v.Exists && v.Dimension == dimension && v.Position.Distance(pos) <= range);
+            List<IVehicle> end = new List<IVehicle>();
+            foreach (IVehicle veh in vehicles)
+            {
+                if (pos.DistanceTo2D(await veh.GetPositionAsync()) <= range && await veh.GetDimensionAsync() == dimension)
+                    end.Add(veh);
+            }
+            Console.WriteLine(stopwatch.ElapsedMilliseconds);
+            return end;
         }
 
         public static List<IPlayer> GetPlayersInRange(this Vector3 pos, float range)

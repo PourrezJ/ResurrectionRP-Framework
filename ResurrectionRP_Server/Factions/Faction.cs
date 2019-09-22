@@ -142,8 +142,10 @@ namespace ResurrectionRP_Server.Factions
 
             if (HeliportLocation != null)
             {
-                if (Parking == null) Parking = new Parking(HeliportLocation.Pos, HeliportLocation);
-                Heliport_colShape = Alt.CreateColShapeCylinder(HeliportLocation.Pos - new Vector3(0, 0, 1), 3.0f, 1f);
+                if (Parking == null)
+                    Parking = new Parking(HeliportLocation.Pos, HeliportLocation);
+
+                Heliport_colShape = Alt.CreateColShapeCylinder(HeliportLocation.Pos - new Vector3(0, 0, 1), 3.0f, 2f);
                 Heliport_colShape.SetOnPlayerEnterColShape(OnPlayerEnterHeliport);
                 Heliport_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveHeliport);
                 Marker.CreateMarker(MarkerType.VerticalCylinder, HeliportLocation.Pos - new Vector3(0, 0, 3), new Vector3(3, 3, 3));
@@ -232,7 +234,7 @@ namespace ResurrectionRP_Server.Factions
 
         public async Task OnPlayerEnterHeliport(IColShape colShape, IPlayer client)
         {
-            await OpenConcessMenu(client, ConcessType.Helico, ParkingLocation, FactionName);
+            await OpenConcessMenu(client, ConcessType.Helico, HeliportLocation, FactionName);
         }
 
         public async Task OnPlayerLeaveHeliport(IColShape colShape, IPlayer client)

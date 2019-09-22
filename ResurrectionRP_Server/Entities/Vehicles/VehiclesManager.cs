@@ -87,7 +87,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             if (vh != null)
             {
-                vehicle.SetEngineOnAsync(vh.Engine);
+                vehicle.SetEngineOnAsync(vh.EngineOn);
                 vh.Update();
             }
 
@@ -132,7 +132,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Methods
         public static async Task<VehicleHandler> SpawnVehicle(string socialClubName, uint model, Vector3 position, Vector3 rotation, int primaryColor = 0, int secondaryColor = 0,
 float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
-IPlayer client = null, ConcurrentDictionary<int, int> mods = null, int[] neon = null, bool spawnVeh = false, uint dimension = (uint)short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
+IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, uint dimension = (uint)short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
         {
             if (model == 0)
                 return null;

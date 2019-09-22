@@ -73,7 +73,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Constructor
         public VehicleHandler(string socialClubName, uint model, Vector3 position, Vector3 rotation, byte primaryColor = 0, byte secondaryColor = 0,
             float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
-            IPlayer owner = null, ConcurrentDictionary<int, int> mods = null, int[] neon = null, bool spawnVeh = false, short dimension = short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
+            IPlayer owner = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, short dimension = short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
         {
             if (model == 0)
                 return;
@@ -83,7 +83,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             PrimaryColor = primaryColor;
             SecondaryColor = secondaryColor;
 
-            FreezePosition = freeze;
             Plate = string.IsNullOrEmpty(plate) ? VehiclesManager.GenerateRandomPlate() : plate;
             Locked = locked;
             Owner = owner;
@@ -127,33 +126,31 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     return;
 
                 Vehicle.ModKit = 1;
-                
                 Vehicle.SetData("VehicleHandler", this);
-                
                 Vehicle.NumberplateText = Plate;
                 Vehicle.PrimaryColor = PrimaryColor;
                 Vehicle.SecondaryColor = SecondaryColor;
 
                 if (Mods.Count > 0)
                 {
-                    foreach (KeyValuePair<int, int> mod in Mods)
+                    foreach (KeyValuePair<byte, byte> mod in Mods)
                     {
-                        Vehicle.SetMod((byte)mod.Key, (byte)mod.Value);
+                        Vehicle.SetMod(mod.Key, mod.Value);
 
                         if (mod.Key == 69)
-                            Vehicle.WindowTint = (byte)mod.Value;
+                            Vehicle.WindowTint = mod.Value;
                     }
                 }
 
-                if (NeonsColor != null && NeonsColor != new Color())
-                    Vehicle.NeonColor = NeonsColor;
+                if (NeonColor != null && NeonColor != new Color())
+                    Vehicle.NeonColor = NeonColor;
 
                 Vehicle.DirtLevel = Dirt;
                 Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
-                Vehicle.EngineOn = Engine;
+                Vehicle.EngineOn = EngineOn;
                 Vehicle.EngineHealth = EngineHealth;
                 Vehicle.BodyHealth = BodyHealth;
-                Vehicle.RadioStation = RadioID;
+                Vehicle.RadioStation = RadioStation;
                 IsParked = false;
 
                 if (Wheels == null)
@@ -182,8 +179,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         Vehicle.SetWindowOpened(i, true);
                 }
 
-                Vehicle.SetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Front, FrontBumperDamage);
-                Vehicle.SetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Rear, RearBumperDamage);
+                Vehicle.SetBumperDamageLevel(VehicleBumper.Front, FrontBumperDamage);
+                Vehicle.SetBumperDamageLevel(VehicleBumper.Rear, RearBumperDamage);
 
                 Vehicle.SetWindowTint(WindowTint);
 
@@ -197,7 +194,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Location = location;
 
                 Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
-                Vehicle.EngineOn = Engine;
+                Vehicle.EngineOn = EngineOn;
                 Vehicle.Position = Location.Pos;
                 _previousPosition = Location.Pos;
 
@@ -281,73 +278,40 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public void AddFuel(float fuel)
         {
             if (Fuel + fuel > FuelMax)
-            {
                 Fuel = FuelMax;
-            }
             else
                 Fuel += fuel;
 
             Update();
         }
 
-        public float GetFuel() => Fuel;
-
         public void UpdateProperties()
         {
             try
             {
+                // Needed as when fuel gets to 0 there is a vehicle save and engine stop information hasn't been set back from client
                 if (Fuel != 0)
-                    Engine = Vehicle.EngineOn;
+                    EngineOn = Vehicle.EngineOn;
 
-                EngineHealth = Vehicle.EngineHealth;
-                Dirt = Vehicle.DirtLevel;
-                BodyHealth = Vehicle.BodyHealth;
-                RadioID = Vehicle.RadioStation;
-                bool neonActive = Vehicle.IsNeonActive;
-                Tuple<bool, bool, bool, bool> NeonState = new Tuple<bool, bool, bool, bool>(neonActive, neonActive, neonActive, neonActive);
-                NeonsColor = Vehicle.NeonColor;
-                
-
-                for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
-                    Doors[i] = (VehicleDoorState)Vehicle.GetDoorState(i);
-
-                for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
+                for (byte i = 0; i < 100; i++)
                 {
-                    if (Vehicle.IsWindowDamaged(i))
-                        Windows[i] = WindowState.WindowBroken;
-                    else if (Vehicle.IsWindowOpened(i))
-                        Windows[i] = WindowState.WindowDown;
-                    else
-                        Windows[i] = WindowState.WindowFixed;
+                    if (Enum.IsDefined(typeof(AltV.Net.Enums.VehicleModType), i) && Vehicle.GetMod(i) > 0)
+                        Mods[i] = Vehicle.GetMod(i);
                 }
+                /*
+                AltV.Net.Enums.VehicleModType[] values = (AltV.Net.Enums.VehicleModType[])Enum.GetValues(typeof(AltV.Net.Enums.VehicleModType));
 
-                for (byte i = 0; i < Vehicle.WheelsCount; i++)
+                foreach (AltV.Net.Enums.VehicleModType vehicleModType in values)
                 {
-                    Wheels[i] = new Wheel();
-                    Wheels[i].Health = Vehicle.GetWheelHealth(i);
-                    Wheels[i].Burst = Vehicle.IsWheelBurst(i);
+                    if (Vehicle.GetMod(vehicleModType) > 0)
+                        Mods[(int)vehicleModType] = Vehicle.GetMod(vehicleModType);
                 }
-
-                for (byte i  = 0; i < 100; i++)
-                    if(Enum.IsDefined( typeof(AltV.Net.Enums.VehicleModType), i))
-                        if(Vehicle.GetMod(i) > 0)
-                            Mods[i] = Vehicle.GetMod(i);
-
-                FrontBumperDamage = Vehicle.GetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Front);
-                RearBumperDamage = Vehicle.GetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Rear);
-                WindowTint = Vehicle.GetWindowTint();
-
-
-                Location.Pos = Vehicle.Position;
-                Location.Rot = Vehicle.Rotation;
+                */
             }
             catch (Exception ex)
             {
-                Alt.Server.LogError("Error on veicle save: " + ex.ToString());
+                Alt.Server.LogError("Error on vehicle save: " + ex.ToString());
             }
-
-            //this.NeonState.Clear();
-            //this.NeonState.Add(NeonState.Item1);
         }
 
         public Task PutPlayerInVehicle( IPlayer client )

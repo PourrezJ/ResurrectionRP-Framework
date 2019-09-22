@@ -12,7 +12,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
     {
         #region Fields
         [BsonIgnore]
-        private static readonly double _updateWaitTime = 1000.0;
+        private static readonly double _updateWaitTime = 10000.0;
         [BsonIgnore]
         private DateTime _lastUpdateRequest;
         [BsonIgnore]

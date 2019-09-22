@@ -88,7 +88,6 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
 
             vehicleplace.VehicleHandler.SpawnVeh = false;
             vehicleplace.VehicleHandler.SetOwner(ph);
-            vehicleplace.VehicleHandler.FreezePosition = false;
             vehicleplace.VehicleHandler.Vehicle.ResetData("CarDealer");
             ph.ListVehicleKey.Add(Models.VehicleKey.GenerateVehicleKey(vehicleplace.VehicleHandler));
             await vehicleplace.VehicleHandler.InsertVehicle();

@@ -442,7 +442,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
             Menu menu = new Menu("ID_Neons", "", "Néons :", banner: Banner.SuperMod);
             menu.ItemSelectCallback = NeonsMenuCallback;
-            menu.ListCallback = NeonListItemChangeCallback;
+            menu.ListItemChangeCallback = NeonListItemChangeCallback;
             menu.Finalizer = Finalizer;
 
             _red = vh.NeonsColor.R / 17;
@@ -506,7 +506,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
                 _blue = int.Parse(listItem.Items[listIndex].ToString());
 
             Color color = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
-             _vehicleBench.NeonColor = (color);
+             _vehicleBench.NeonColor = color;
         }
 
         private async Task ModPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)

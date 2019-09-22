@@ -86,7 +86,7 @@ namespace ResurrectionRP_Server
         [JsonIgnore]
         public MenuCallback ItemSelectCallback { get; set; }
         [JsonIgnore]
-        public MenuListCallback ListCallback { get; set; }
+        public MenuListCallback ListItemChangeCallback { get; set; }
         [JsonIgnore]
         public MenuCurrentIndex IndexChangeCallback { get; set; }
         [JsonIgnore]

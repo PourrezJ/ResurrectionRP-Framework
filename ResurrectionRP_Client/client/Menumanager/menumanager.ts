@@ -35,7 +35,7 @@ var inputItem = null;
 var inputIndex = -1;
 
 export default () => {
-    alt.onServer("MenuManager_OpenMenu", (data) => {
+    alt.onServer('MenuManager_OpenMenu', (data) => {
         menuItems = new Array();
         menuData = JSON.parse(data);
 
@@ -104,15 +104,15 @@ export default () => {
             let menuItem;
 
             if (item.Id == undefined) {
-                item.Id = "";
+                item.Id = '';
             }
 
             if (item.Text == undefined) {
-                item.Text = "";
+                item.Text = '';
             }
 
             if (item.Description == undefined) {
-                item.Description = "";
+                item.Description = '';
             }
 
             if (item.Type == 0 || item.Type == 2) {
@@ -174,15 +174,21 @@ export default () => {
 
             if (menuItem.ExecuteCallback) {
                 let data = saveData();
-                alt.emitServer("MenuManager_ExecuteCallback", menuData.Id, menuItem.Id, index, false, JSON.stringify(data));
+                alt.emitServer('MenuManager_ExecuteCallback', index, false, JSON.stringify(data));
             }
         });
 
         menu.ListChange.on((item, index) => {
-            menuData.Items[getIndexOfMenuItem(item)].SelectedItem = index;
+            let itemIndex = getIndexOfMenuItem(item);
+            let listItem = menuData.Items[itemIndex];
+            listItem.SelectedItem = index;
 
-            if (menuData.OnListChange != undefined) {
+            if (listItem.OnListChange != undefined) {
                 eval(menuData.OnListChange);
+            }
+
+            if (listItem.ExecuteCallbackListChange) {
+                alt.emitServer('MenuManager_ListChanged', itemIndex, index);
             }
         });
 
@@ -218,7 +224,7 @@ export default () => {
 
             if (inputView == null && menuItem.ExecuteCallback) {
                 let data = saveData();
-                alt.emitServer("MenuManager_ExecuteCallback", menuData.Id, menuItem.Id, index, false, JSON.stringify(data));
+                alt.emitServer('MenuManager_ExecuteCallback', index, false, JSON.stringify(data));
             }
         });
 
@@ -232,7 +238,7 @@ export default () => {
                 menu.Visible = true;
             } else if (menuData.BackCloseMenu) {
                 CloseMenu();
-                alt.emitServer("MenuManager_ClosedMenu");
+                alt.emitServer('MenuManager_ClosedMenu');
             } else {
                 menu.Visible = true;
 
@@ -240,7 +246,7 @@ export default () => {
                     eval(menuData.OnBackKey);
                 }
 
-                alt.emitServer("MenuManager_BackKey");
+                alt.emitServer('MenuManager_BackKey');
             }
         });
 
@@ -256,18 +262,18 @@ export default () => {
         menu.Open();
 
         if (!newMenu) {
-            menu.AUDIO_BACK = "BACK";
+            menu.AUDIO_BACK = 'BACK';
         }
 
-        alt.emit("MenuManager_MenuOpened");
+        alt.emit('MenuManager_MenuOpened');
     });
 
-    alt.onServer("MenuManager_ForceCallback", () => {
+    alt.onServer('MenuManager_ForceCallback', () => {
         let data = saveData();
-        alt.emitServer("MenuManager_ExecuteCallback", menuData.Id, "", menu.CurrentSelection, true, JSON.stringify(data));
+        alt.emitServer("MenuManager_ExecuteCallback", menu.CurrentSelection, true, JSON.stringify(data));
     });
 
-    alt.onServer("MenuManager_CloseMenu", () => {
+    alt.onServer('MenuManager_CloseMenu', () => {
         CloseMenu();
     });
 };
@@ -284,7 +290,7 @@ function CloseMenu() {
 
         menu.Close();
         menu = null;
-        alt.emit("MenuManager_MenuClosed");
+        alt.emit('MenuManager_MenuClosed');
     }
 }
 
@@ -357,7 +363,7 @@ function saveInput(inputText) {
 
         if (menuItem.ExecuteCallback) {
             let data = saveData();
-            alt.emitServer("MenuManager_ExecuteCallback", menuData.Id, menuItem.Id, inputIndex, false, JSON.stringify(data));
+            alt.emitServer('MenuManager_ExecuteCallback', inputIndex, false, JSON.stringify(data));
         }
 
         inputItem = null;
@@ -394,8 +400,8 @@ function saveData() {
             data[menuItem.Id] = menuItem.Checked;
         } else if (menuItem.Type == 3) {
             data[menuItem.Id] = new Object();
-            data[menuItem.Id]["Index"] = menuItem.SelectedItem;
-            data[menuItem.Id]["Value"] = menuItem.Items[menuItem.SelectedItem];
+            data[menuItem.Id]['Index'] = menuItem.SelectedItem;
+            data[menuItem.Id]['Value'] = menuItem.Items[menuItem.SelectedItem];
         } else if (menuItem.InputMaxLength > 0 && menuItem.InputValue != undefined && menuItem.InputValue.length > 0) {
             data[menuItem.Id] = menuItem.InputValue;
         }

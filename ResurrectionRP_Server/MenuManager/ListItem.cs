@@ -9,6 +9,8 @@ namespace ResurrectionRP_Server
         public List<object> Items { get; set; }
         public int SelectedItem { get; set; } = 0;
         public bool ExecuteCallbackListChange { get; set; }
+        [JsonIgnore]
+        public Menu.MenuListCallback ListItemChangeCallback { get; set; }
         #endregion
 
         #region Constructor

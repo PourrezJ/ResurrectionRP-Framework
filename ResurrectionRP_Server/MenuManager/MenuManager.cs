@@ -62,11 +62,9 @@ namespace ResurrectionRP_Server
 
             if (menu != null)
             {
-                string menuId = (string)args[0];
-                string itemId = (string)args[1];
-                int itemIndex = Convert.ToInt32(args[2]);
-                bool forced = (bool)args[3];
-                dynamic data = JsonConvert.DeserializeObject(args[4].ToString());
+                int itemIndex = Convert.ToInt32(args[0]);
+                bool forced = (bool)args[1];
+                dynamic data = JsonConvert.DeserializeObject(args[2].ToString());
 
                 foreach (MenuItem menuItem in menu.Items)
                 {
@@ -127,8 +125,8 @@ namespace ResurrectionRP_Server
 
             _clientMenus.TryGetValue(player, out Menu menu);
 
-            if (menu != null && menu.ListCallback != null)
-             await menu.ListCallback(player, menu, (ListItem)menu.Items[(int)args[0]], (int)args[1]);
+            if (menu != null && menu.ListItemChangeCallback != null)
+             await menu.ListItemChangeCallback(player, menu, (ListItem)menu.Items[Convert.ToInt32(args[0])], Convert.ToInt32(args[1]));
         }
 
         public async Task MenuManager_ClosedMenu(IPlayer player, object[] args)

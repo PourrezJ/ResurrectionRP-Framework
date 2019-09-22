@@ -515,7 +515,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
 
             Menu menu = new Menu("ID_Neons", "", "Néons :", banner: Banner.Garage);
             menu.ItemSelectCallback = NeonsMenuCallback;
-            menu.ListCallback = NeonListItemChangeCallback;
+            menu.ListItemChangeCallback = NeonListItemChangeCallback;
             menu.Finalizer = Finalizer;
 
             _red = vh.NeonsColor.R / 17;

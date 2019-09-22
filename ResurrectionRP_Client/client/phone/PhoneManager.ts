@@ -170,7 +170,7 @@ export default class PhoneManager {
         game.clearPedTasks(alt.Player.local.scriptID);
 
         utils.playAnimation(
-            (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : "cellphone@", "cellphone_text_out", 8, -1, 49
+            (alt.Player.local.vehicle != null) ? "cellphone@in_car@ds" : "cellphone@", "cellphone_text_out", 8, -1, 0
         );
 
 

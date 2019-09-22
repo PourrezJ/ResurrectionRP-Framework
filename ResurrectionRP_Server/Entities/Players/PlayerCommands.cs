@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using AltV.Net.Async;
+﻿using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Utils.Enums;
+using System;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -20,6 +17,7 @@ namespace ResurrectionRP_Server.Entities.Players
             Chat.RegisterCmd("refuel", Refuel);
             Chat.RegisterCmd("repair", Repair);
             Chat.RegisterCmd("wheel", Wheel);
+            Chat.RegisterCmd("doorstate", Doorstate);
         }
 
         private async Task TpCoord(IPlayer player, string[] args)
@@ -44,23 +42,25 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public Task Refuel(IPlayer player, string[] args)
         {
-            if(player.Vehicle == null)
+            if (player.Vehicle == null)
             {
-                player.DisplaySubtitle("Vous devez être dans un véhicule", 10000);
+                player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
                 return Task.CompletedTask;
             }
 
-            player.Vehicle.GetVehicleHandler()?.SetFuel(player.Vehicle.GetVehicleHandler().FuelMax);
-            player.DisplaySubtitle("Vehicule restoré", 5000);
+            if (player.Vehicle.GetVehicleHandler() != null)
+                player.Vehicle.GetVehicleHandler().Fuel = player.Vehicle.GetVehicleHandler().FuelMax;
+
+            player.DisplaySubtitle("Essence restaurée", 5000);
             return Task.CompletedTask;
         }
 
         public async Task Repair(IPlayer player, string[] args)
         {
-            if(player.Vehicle == null)
+            if (player.Vehicle == null)
             {
-                player.DisplaySubtitle("Vous devez être dans un véhicule", 10000);
-                return ;
+                player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
+                return;
             }
 
             await player.Vehicle.RepairAsync();
@@ -77,7 +77,7 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             if (player.Vehicle == null)
             {
-                player.DisplaySubtitle("Vous devez être dans un véhicule", 10000);
+                player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
                 return;
             }
 
@@ -85,6 +85,17 @@ namespace ResurrectionRP_Server.Entities.Players
             player.SendChatMessage($"Wheel HasTire: {player.Vehicle.DoesWheelHasTire(0)}");
             player.SendChatMessage($"Wheel Burst: {player.Vehicle.IsWheelBurst(0)}");
             await Task.CompletedTask;
+        }
+
+        public async Task Doorstate(IPlayer player, string[] args)
+        {
+            if (player.Vehicle == null)
+            {
+                player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
+                return;
+            }
+
+            await player.EmitAsync("SetDoorState", player.Vehicle, int.Parse(args[0]), int.Parse(args[1]), bool.Parse(args[2]));
         }
     }
 }

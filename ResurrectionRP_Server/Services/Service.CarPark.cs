@@ -23,7 +23,7 @@ namespace ResurrectionRP_Server.Services
         #endregion
 
         #region Methods
-        public void Load()
+        public async void Load()
         {
             if (Parking != null)
             {
@@ -39,11 +39,11 @@ namespace ResurrectionRP_Server.Services
                 {
                     ve.ParkTime = DateTime.Now;
                     Alt.Server.LogError("Service CarPark | Checking for too long parked car is not done yet, consider finishing it (Service.Carpark.cs)");
-                    //GameMode.Instance?.PoundManager.AddVehicleInPound(ve);
-                    //Parking.RemoveVehicle(ve); TODO Add after done pound 
+                    GameMode.Instance?.PoundManager.AddVehicleInPound( Entities.Vehicles.VehiclesManager.GetVehicleHandler(ve.Plate) );
+                    Parking.RemoveVehicle(Entities.Vehicles.VehiclesManager.GetVehicleHandler(ve.Plate) ); 
                 }
-                /*if (_poundList.Count != 0)
-                    await Update();*/
+                if (_poundList.Count != 0)
+                    await Update();
             }
         }
 

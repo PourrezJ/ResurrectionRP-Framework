@@ -207,7 +207,7 @@ namespace ResurrectionRP_Server.Services
             if (!PoundVehicleList.Exists(p => p.Plate == veh.Plate))
                 PoundVehicleList.Add(new ParkedCar(veh.Plate, DateTime.Now));
             veh.IsInPound = true;
-            await veh.RemoveInDatabase();
+            veh.IsParked = false;
             await veh.Delete();
         }
     }

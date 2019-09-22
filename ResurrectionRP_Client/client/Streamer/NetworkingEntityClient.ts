@@ -4,6 +4,8 @@ import PhoneManager from '../phone/PhoneManager';
 import * as chat from '../chat/chat';
 import * as utils from '../Utils/Utils';
 import Raycast, * as raycast from '../Utils/Raycast';
+import * as Utils from '../Utils/Utils';
+import * as Globals from '../Utils/Globals';
 
 export class NetworkingEntityClient {
 
@@ -380,14 +382,14 @@ export class NetworkingEntityClient {
         var _dir: any = utils.GetCameraDirection();
 
         var _farAway = new alt.Vector3(
-            _pos.x + (_dir.x * 3),
-            _pos.y + (_dir.y * 3),
-            _pos.z + (_dir.z * 3),
+            _pos.x + (_dir.x * 9),
+            _pos.y + (_dir.y * 9),
+            _pos.z + (_dir.z * 9),
         )
 
         let resultPed = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, 12);
 
-        if (!resultPed.isHit)
+        if (!resultPed.isHit || Utils.Distance(alt.Player.local.pos, resultPed.pos) > Globals.MAX_INTERACTION_DISTANCE)
             return;
 
         if (key == 69) { // E

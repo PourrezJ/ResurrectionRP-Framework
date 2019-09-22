@@ -70,7 +70,7 @@ namespace ResurrectionRP_Server.Business
                 {
                     if (await client.GetPlayerHandler().HasBankMoney(price, $"Plein d'essence {vh.Plate}."))
                     {
-                        vh.SetFuel(vh.FuelMax);
+                        vh.Fuel = vh.FuelMax;
                         await BankAccount.AddMoney(price, $"Plein du véhicule {vh.Plate}");
                         client.DisplayHelp($"Le plein est fait.\n Vous avez payé ~r~${price}", 6000);
                         await Update();

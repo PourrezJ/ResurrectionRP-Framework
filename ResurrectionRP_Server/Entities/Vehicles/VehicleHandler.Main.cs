@@ -181,7 +181,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     else if (Windows[i] == WindowState.WindowDown)
                         Vehicle.SetWindowOpened(i, true);
                 }
-                
+
+                Vehicle.SetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Front, FrontBumperDamage);
+                Vehicle.SetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Rear, RearBumperDamage);
+
+                Vehicle.SetWindowTint(WindowTint);
+
+                Vehicle.Dimension = 1;
+                Vehicle.Dimension = short.MaxValue;
+
                 if (setLastUse)
                     LastUse = DateTime.Now;
 
@@ -191,6 +199,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
                 Vehicle.EngineOn = Engine;
                 Vehicle.Position = Location.Pos;
+                _previousPosition = Location.Pos;
 
                 VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
                 VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
@@ -269,16 +278,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return false;
         }
         
-        public void SetFuel(float fuel)
-        {
-            Fuel = fuel;
-
-            if(Vehicle.Driver != null)
-                Vehicle.Driver.EmitLocked("UpdateFuel", fuel);
-
-            Update();
-        }
-
         public void AddFuel(float fuel)
         {
             if (Fuel + fuel > FuelMax)
@@ -297,9 +296,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             try
             {
-                Dirt = Vehicle.DirtLevel;
-                Engine = Vehicle.EngineOn;
+                if (Fuel != 0)
+                    Engine = Vehicle.EngineOn;
+
                 EngineHealth = Vehicle.EngineHealth;
+                Dirt = Vehicle.DirtLevel;
                 BodyHealth = Vehicle.BodyHealth;
                 RadioID = Vehicle.RadioStation;
                 bool neonActive = Vehicle.IsNeonActive;
@@ -326,10 +327,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Wheels[i].Health = Vehicle.GetWheelHealth(i);
                     Wheels[i].Burst = Vehicle.IsWheelBurst(i);
                 }
+
                 for (byte i  = 0; i < 100; i++)
                     if(Enum.IsDefined( typeof(AltV.Net.Enums.VehicleModType), i))
                         if(Vehicle.GetMod(i) > 0)
                             Mods[i] = Vehicle.GetMod(i);
+
+                FrontBumperDamage = Vehicle.GetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Front);
+                RearBumperDamage = Vehicle.GetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Rear);
+                WindowTint = Vehicle.GetWindowTint();
+
 
                 Location.Pos = Vehicle.Position;
                 Location.Rot = Vehicle.Rotation;

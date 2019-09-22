@@ -14,11 +14,42 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
-
     public partial class VehicleHandler
     {
+        #region constants
+        const double FUEL_FACTOR = 5;
+        #endregion
+
+        #region Fields
+        private DateTime _previousUpdate = DateTime.Now;
+        private Vector3 _previousPosition;
+        private float _milage = 0;
+        private float _fuel = 100;
         public TowTruck TowTruck { get; set; }
-        public float Fuel { get; set; } = 100;
+        public float Fuel
+        {
+            get => _fuel;
+
+            set
+            {
+                float oldFuel = _fuel;
+
+                if (value < 0)
+                    _fuel = 0;
+                else
+                    _fuel = value;
+
+                if (_fuel == 0 && Vehicle != null && Vehicle.Exists)
+                {
+                    Vehicle.SetEngineOnAsync(false);
+                    Engine = false;
+                    Update();
+                }
+
+                if (Math.Floor(oldFuel * 10) != Math.Floor(_fuel * 10) && Vehicle != null && Vehicle.Driver != null && Vehicle.Driver.Exists)
+                    Vehicle.Driver.EmitLocked("UpdateFuel", _fuel);
+            }
+        }
         public float FuelMax { get; set; } = 100;
         public float FuelConsumption { get; set; } = 5.5f;
         public bool Siren { get; set; } = false;
@@ -27,31 +58,146 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public bool FreezePosition { get; set; }
         public float TorqueMultiplicator { get; set; }
         public float PowerMultiplicator { get; set; }
-        public float Milage { get; set; }
+        public float Milage
+        {
+            get => _milage;
+
+            set
+            {
+                float oldMilage = _milage;
+                _milage = value;
+
+                if (Math.Floor(oldMilage * 10) != Math.Floor(_milage * 10) && Vehicle != null && Vehicle.Driver != null && Vehicle.Driver.Exists)
+                    Vehicle.Driver.EmitLocked("UpdateMilage", _milage);
+            }
+        }
 
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         public ConcurrentDictionary<int, int> Mods { get; set; }
-= new ConcurrentDictionary<int, int>();
+            = new ConcurrentDictionary<int, int>();
 
-        public uint BodyHealth { get; set; } = 1000;
-        public int EngineHealth { get; set; } = 1000;
-        public int PetrolTankHealth { get; set; } = 1000;
+        private uint bodyhealth;
+        public uint BodyHealth
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    return Vehicle.BodyHealth;
+                return bodyhealth;
+            }
+            set
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.BodyHealth = value;
+                bodyhealth = value;
+            }
+        }
+
+        private int enginehealth = 1000;
+        public int EngineHealth
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    return Vehicle.EngineHealth;
+                return enginehealth;
+
+            }
+            set
+            {
+                enginehealth = value;
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.EngineHealth = value;
+            }
+        }
+
+        public int PetrolTankHealth
+        {
+            get;
+            set;
+        } = 1000;
 
         public Tuple<bool, bool, bool, bool> NeonState { get; set; } = new Tuple<bool, bool, bool, bool>(false, false, false, false);
         public Color NeonsColor { get; set; } = Color.Empty;
 
-        public byte Dirt { get; set; } = 0;
-        public bool Engine { get; set; } = false;
+        private int dirt;
+        public byte Dirt
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    return Vehicle.DirtLevel;
+                return 0;
+            }
+            set
+            {
+                dirt = value;
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.DirtLevel = value;
+            }
+        }
 
+        private bool engine = false;
+        public bool Engine
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    return Vehicle.EngineOn;
+                return engine;
+            }
+            set
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.EngineOn = value;
+                engine = value;
+            }
+        }
 
-        public byte PrimaryColor { get; set; } = 0;
-        public byte SecondaryColor { get; set; } = 0;
+        private byte primaryColor;
+        public byte PrimaryColor
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    return Vehicle.PrimaryColor;
+                return primaryColor;
+            }
 
-        // public byte WindowTint { get; set; } = 0;
-        // public bool ArmoredWindows { get; set; } = false;
+            set
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.PrimaryColor = value;
+                primaryColor = value;
+            }
+        }
+        private byte secondaryColor;
+        public byte SecondaryColor
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    return Vehicle.SecondaryColor;
+                return secondaryColor;
+            }
 
-        // public byte FrontBumperDamage { get; set; } = 0;
-        // public byte RearBumperDamage { get; set; } = 0;
+            set
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.SecondaryColor = value;
+                secondaryColor = value;
+            }
+        }
+
+        public WindowTint WindowTint { get; set; } = 0;
+        //public bool ArmoredWindows { get; set; } = false;
+
+        public VehicleBumperDamage FrontBumperDamage { get; set; } = 0;
+        public VehicleBumperDamage RearBumperDamage { get; set; } = 0;
+
+/*        public string AppearanceData { get; set; }
+        public string DamageData { get; set; }*/
+
 
         public VehicleDoorState[] Doors { get; set; } = new VehicleDoorState[Globals.NB_VEHICLE_DOORS];
         public WindowState[] Windows { get; set; } = new WindowState[Globals.NB_VEHICLE_WINDOWS] { 0, 0, 0, 0 };
@@ -78,14 +224,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Vehicle.Position = value.Pos;
                     Vehicle.Rotation = value.Rot;
                 }
-
+                
                 LastKnowLocation = value;
             }
         }
 
         public Attachment Attachment { get; set; }
+        #endregion
 
         public VehicleDoorState GetDoorState(VehicleDoor door) => Doors[(byte)door];
+
         public async Task SetDoorState(VehicleDoor door, VehicleDoorState state)
         {
             Doors[(byte)door] = state;
@@ -108,23 +256,23 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             TowTruck = new TowTruck(vehicle.NumberplateText, new Vector3(0, -2, 1));
 #pragma warning disable CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
-            /*            Task.Run(async () =>
-                        {
-                            await UpdateAsync();
-                            while (HaveTowVehicle())
-                            {
-                                if (!vehicle.Exists)
-                                    return;
-                                await Task.Delay(500);
-                                if (HaveTowVehicle())
-                                {
-                                    AltV.Net.Data.Position pos = await Vehicle.GetPositionAsync();
-                                    await vehicle.SetPositionAsync( new AltV.Net.Data.Position(pos.X, pos.Y + 2, pos.Z + 3));
-                                    await vehicle.SetRotationAsync(await Vehicle.GetRotationAsync());
-                                }
+/*            Task.Run(async () =>
+            {
+                await UpdateAsync();
+                while (HaveTowVehicle())
+                {
+                    if (!vehicle.Exists)
+                        return;
+                    await Task.Delay(500);
+                    if (HaveTowVehicle())
+                    {
+                        AltV.Net.Data.Position pos = await Vehicle.GetPositionAsync();
+                        await vehicle.SetPositionAsync( new AltV.Net.Data.Position(pos.X, pos.Y + 2, pos.Z + 3));
+                        await vehicle.SetRotationAsync(await Vehicle.GetRotationAsync());
+                    }
 
-                            }
-                        }); TODO VERIFIER POSITION VOITURE A L'ARRIERE ? NEST PAS CORRECT SPAWN EN DESSOUS DU VEH*/
+                }
+            }); TODO VERIFIER POSITION VOITURE A L'ARRIERE ? NEST PAS CORRECT SPAWN EN DESSOUS DU VEH*/
 #pragma warning restore CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
         }
 
@@ -141,6 +289,49 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             temp.GetVehicleHandler()?.Update();
 
             return temp;
+        }
+
+        public void UpdateMilageAndFuel()
+        {
+            DateTime updateTime = DateTime.Now;
+            Vector3 oldPos = _previousPosition;
+            Vector3 newPos = Vehicle.Position;
+            double distance = 0;
+            double speed = 0;
+
+            if (newPos != oldPos)
+            {
+                float deltaX = newPos.X - oldPos.X;
+                float deltaY = newPos.Y - oldPos.Y;
+                float deltaZ = newPos.Z - oldPos.Z;
+                double oldDistance = distance;
+                distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) / 1000;
+                Milage += (float)distance;
+                _previousPosition = newPos;
+                speed = distance * 3600000 / (updateTime - _previousUpdate).TotalMilliseconds;
+            }
+
+            if (Vehicle.EngineOn)
+            {
+                if (speed == 0)
+                    Fuel -= FuelConsumption / 10000;
+                else
+                {
+                    double speedFuel;
+
+                    if (speed < 80)
+                        speedFuel = (2 * FUEL_FACTOR) - speed * FUEL_FACTOR / 80;
+                    else
+                        speedFuel = speed / 80 * FUEL_FACTOR;
+
+                    Fuel -= (float)(FuelConsumption * distance * speedFuel / 100);
+
+                    if (Vehicle.Driver != null)
+                        Vehicle.Driver.EmitLocked("UpdateFuel", Fuel);
+                }
+            }
+
+            _previousUpdate = updateTime;
         }
     }
 }

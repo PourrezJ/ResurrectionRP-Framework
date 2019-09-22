@@ -61,7 +61,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (_fuel == 0 && Vehicle != null && Vehicle.Exists)
                 {
                     Vehicle.SetEngineOnAsync(false);
-                    Engine = false;
+                    EngineOn = false;
                     UpdateFull();
                 }
 
@@ -286,6 +286,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }
 
+        public byte PearlColor { get; internal set; }
+
         public WindowTint WindowTint
         {
             get
@@ -346,7 +348,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         }
 
         // public string AppearanceData { get; set; }
-        // public string DamageData { get; set; }
+        public string DamageData { get; set; }
 
         public VehicleDoorState[] Doors
         {

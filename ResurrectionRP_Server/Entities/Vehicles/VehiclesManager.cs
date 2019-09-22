@@ -87,7 +87,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             if (vh != null)
             {
-                vehicle.SetEngineOnAsync(vh.Engine);
+                vehicle.SetEngineOnAsync(vh.EngineOn);
                 vh.UpdateFull();
             }
 

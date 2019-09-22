@@ -597,7 +597,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
 
             if (await BankAccount.GetBankMoney(price, $"{SocietyName}: Néons"))
             {
-                vh.NeonsColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
+                vh.NeonColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
                 vh.UpdateFull();
 
                 client.SendNotificationSuccess($"Vous avez installé des Néons pour la somme de ${price}");

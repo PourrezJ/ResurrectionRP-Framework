@@ -223,11 +223,11 @@ namespace ResurrectionRP_Server
                 PoundManager = new Services.Pound();
 
             Alt.Server.LogColored("~g~Initialisations des controlleurs...");
+            await VehiclesManager.LoadAllVehicles();
             await Loader.CarParkLoader.LoadAllCarPark();
             await Loader.CarDealerLoaders.LoadAllCardealer();
             await Loader.VehicleRentLoaders.LoadAllVehicleRent();
             await Loader.TattooLoader.TattooLoader.LoadAllTattoo();
-            await VehiclesManager.LoadAllVehicles();
             await FactionManager.InitAllFactions();
             await Loader.ClothingLoader.LoadAllCloth();
             await Loader.BusinessesLoader.LoadAllBusinesses();
@@ -292,7 +292,6 @@ namespace ResurrectionRP_Server
                 player.Vehicle?.GetVehicleHandler()?.UpdateFull();
                 return Task.CompletedTask;
             });
-
             Chat.RegisterCmd("tpto", async (IPlayer player, string[] args) =>
             {
                 if (player.GetPlayerHandler()?.StaffRank <= 0)
@@ -300,20 +299,7 @@ namespace ResurrectionRP_Server
                 await player.SetPositionAsync(new Position(float.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
             });
 
-            Chat.RegisterCmd("test", (IPlayer player, string[] args) =>
-            {
-                if (player.GetPlayerHandler()?.StaffRank <= 0)
-                    return Task.CompletedTask;
 
-                if (player.Vehicle != null)
-                {
-                    for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
-                    {
-                        player.Vehicle.SetWindowDamaged(i, true);
-                    }
-                }
-                return Task.CompletedTask;
-            });
             ServerLoaded = true;
         }
 

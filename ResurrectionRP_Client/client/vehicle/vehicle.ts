@@ -90,6 +90,7 @@ export function showSpeedometer(vehicle, seat, currentFuel, maxFuel, milage, fue
     if (speedoWindow !== null && game.getPedInVehicleSeat(player.vehicle.scriptID, -1, player.scriptID) == player.scriptID) {
         speedoWindow.emit('showSpeedometer');
     }
+    keepEngineOn = false;
 
     playerVehicle = alt.Player.local.vehicle;
     

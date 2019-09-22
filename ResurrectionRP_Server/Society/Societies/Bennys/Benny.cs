@@ -63,25 +63,25 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             await base.Load();
         }
 
-        private async Task PreviewKlaxon(IVehicle vehicle)
+        private void PreviewKlaxon(IVehicle vehicle)
         {
             foreach (IPlayer client in vehicle.GetPlayersInRange(10f))
             {
                 if (!client.Exists)
                     continue;
 
-                await client.EmitAsync("VehicleSync_KlaxonPreview", vehicle.Id);
+                client.EmitLocked("VehicleSync_KlaxonPreview", vehicle.Id);
             }
         }
 
-        private async Task StopKlaxon(IVehicle vehicle)
+        private void StopKlaxon(IVehicle vehicle)
         {
             foreach (IPlayer client in vehicle.GetPlayersInRange(58f))
             {
                 if (!client.Exists)
                     continue;
 
-                await client.EmitAsync("VehicleSync_KlaxonPreview", vehicle.Id, false);
+                client.EmitLocked("VehicleSync_KlaxonPreview", vehicle.Id, false);
             }
         }
         #endregion

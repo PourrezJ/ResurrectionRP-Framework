@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using VehicleInfoLoader.Data;
 
 namespace ResurrectionRP_Server.Society.Societies.WildCustom
 {
@@ -19,7 +20,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
         private static double PriceChangePlate = 50000;
         private static List<int> blackListModel = new List<int> { 5, 6, 7, 10, 13, 14, 15, 16, 17, 18, 19, 20, 21 };
         private IPlayer ClientInMenu;
-        private int _modType;
+        private byte _modType;
         private string _subtitle;
         private double _price;
         private int _red;
@@ -74,12 +75,12 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             }
             catch (Exception ex)
             {
-                Alt.Server.LogError ("OpenMainMenu"+ex);
+                Alt.Server.LogError("OpenMainMenu" + ex);
                 client.SendNotificationError("Erreur inconnue, contactez un membre du staff.");
                 return;
             }
 
-            Menu mainMenu = new Menu("ID_Main", "", SocietyName, backCloseMenu: true, banner: Banner.Garage);
+            Menu mainMenu = new Menu("ID_Main", "", SocietyName, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Garage);
             mainMenu.ItemSelectCallback = MainMenuCallback;
             mainMenu.Finalizer = Finalizer;
 
@@ -198,7 +199,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                 return;
             }
 
-            Menu menu = new Menu("ID_Perf", "", "Choisissez l'élément à installer :", banner: Banner.Garage);
+            Menu menu = new Menu("ID_Perf", "", "Choisissez l'élément à installer :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.Garage);
             menu.ItemSelectCallback = PerformanceMenuCallback;
 
             foreach (var mod in BennysData.PerformanceModList)
@@ -240,10 +241,10 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
 
             _modType = menuItem.GetData("mod");
             _subtitle = $"{menuItem.Text} :";
-            await OpenPerformanceChoiseMenu(client);
+            await OpenPerformanceChoiceMenu(client);
         }
 
-        private async Task OpenPerformanceChoiseMenu(IPlayer client)
+        private async Task OpenPerformanceChoiceMenu(IPlayer client)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
                 return;
@@ -257,17 +258,14 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                 await OpenPerformanceMenu(client);
             }
 
-            Menu menu = new Menu("ID_Perfs", "", _subtitle, banner: Banner.Garage);
-            menu.ItemSelectCallback = PerformanceChoiseMenuCallback;
+            Menu menu = new Menu("ID_Perfs", "", _subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.Garage);
+            menu.ItemSelectCallback = PerformanceChoiceMenuCallback;
             menu.IndexChangeCallback = ModPreview;
             menu.Finalizer = Finalizer;
 
             var mods = manifest.Mods(_modType);
             var perfdata = BennysData.GetPerformanceData(_modType).Value;
-            int valueInstalled = 0;
-
-            if (!vh.Mods.TryGetValue(_modType, out valueInstalled))
-                valueInstalled = -1;
+            vh.Mods.TryGetValue(_modType, out byte valueInstalled);
 
             for (int i = 0; i < mods.Count(); i++)
             {
@@ -288,7 +286,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
 
                 MenuItem item = null;
 
-                if (i - 1 == valueInstalled)
+                if (i == valueInstalled)
                 {
                     item = new MenuItem(modName, executeCallbackIndexChange: true);
 
@@ -306,7 +304,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                         item.RightLabel = $"${price}";
 
                     item.SetData("price", price);
-                    item.OnMenuItemCallback = ModChoise;
+                    item.OnMenuItemCallback = ModChoice;
                 }
 
                 menu.Add(item);
@@ -316,7 +314,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             ClientInMenu = client;
         }
 
-        private async Task PerformanceChoiseMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private async Task PerformanceChoiceMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
             {
@@ -329,9 +327,9 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             if (menuItem == null)
             {
                 if (vh.Mods.ContainsKey(_modType))
-                    await _vehicleBench.SetModAsync(_modType, vh.Mods[_modType]);
+                    _vehicleBench.SetMod(_modType, vh.Mods[_modType]);
                 else
-                    await _vehicleBench.SetModAsync(_modType, -1);
+                    _vehicleBench.SetMod(_modType, 0);
 
                 await OpenPerformanceMenu(client);
             }
@@ -344,7 +342,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             if (_vehicleBench == null || !_vehicleBench.Exists)
                 return;
 
-            Menu menu = new Menu("ID_Design", "", "Choisissez l'élément à installer :", banner: Banner.Garage);
+            Menu menu = new Menu("ID_Design", "", "Choisissez l'élément à installer :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.Garage);
             menu.ItemSelectCallback = DesignMenuCallback;
             menu.Finalizer = Finalizer;
 
@@ -414,10 +412,10 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             _modType = menuItem.GetData("mod");
             _price = menuItem.GetData("price");
             _subtitle = $"{menuItem.Text} :";
-            await OpenDesignChoiseMenu(client);
+            await OpenDesignChoiceMenu(client);
         }
 
-        private async Task OpenDesignChoiseMenu(IPlayer client)
+        private async Task OpenDesignChoiceMenu(IPlayer client)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
                 return;
@@ -431,16 +429,13 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                 await OpenDesignMenu(client);
             }
 
-            Menu menu = new Menu("ID_DesignChoise", "", _subtitle, banner: Banner.Garage);
+            Menu menu = new Menu("ID_DesignChoice", "", _subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.Garage);
             menu.IndexChangeCallback = ModPreview;
-            menu.ItemSelectCallback= DesignChoiseCallback;
+            menu.ItemSelectCallback= DesignChoiceCallback;
             menu.Finalizer = Finalizer;
 
             var mods = manifest.Mods(_modType);
-            int valueInstalled = 0;
-
-            if (!vh.Mods.TryGetValue(_modType, out valueInstalled))
-                valueInstalled = -1;
+            vh.Mods.TryGetValue(_modType, out byte valueInstalled);
 
             for (int i = 0; i < mods.Count(); i++)
             {
@@ -450,14 +445,12 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                     continue;
 
                 MenuItem item = null;
-
-                int modCheck = i - 1;
                 string modName = mod.LocalizedName;
 
                 if (modName == string.Empty)
                     modName = mod.Name;
 
-                if (modCheck == valueInstalled)
+                if (i == valueInstalled)
                 {
                     item = new MenuItem(modName, executeCallbackIndexChange: true);
 
@@ -468,12 +461,11 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                 }
                 else
                 {
-                    //if (mod.HasFlag("stock")) continue;
                     item = new MenuItem(modName, executeCallback: true, executeCallbackIndexChange: true, rightLabel: $"${_price}");
                     item.SetData("price", _price);
                 }
 
-                item.OnMenuItemCallback = ModChoise;
+                item.OnMenuItemCallback = ModChoice;
                 menu.Add(item);
             }
 
@@ -482,7 +474,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             await ModPreview(client, menu, 0, menu.Items[0]);
         }
 
-        private async Task DesignChoiseCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private async Task DesignChoiceCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
             {
@@ -495,12 +487,12 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             if (menuItem == null)
             {
                 if (vh.Mods.ContainsKey(_modType))
-                    await _vehicleBench.SetModAsync(_modType, vh.Mods[_modType]);
+                    _vehicleBench.SetMod(_modType, vh.Mods[_modType]);
                 else
-                    await _vehicleBench.SetModAsync(_modType, -1);
+                    _vehicleBench.SetMod(_modType, 0);
 
                 if (_modType == 14)
-                    await StopKlaxon(_vehicleBench);
+                    StopKlaxon(_vehicleBench);
 
                 await OpenDesignMenu(client);
             }
@@ -513,14 +505,14 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
 
             VehicleHandler vh = _vehicleBench.GetVehicleHandler();
 
-            Menu menu = new Menu("ID_Neons", "", "Néons :", banner: Banner.Garage);
+            Menu menu = new Menu("ID_Neons", "", "Néons :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.Garage);
             menu.ItemSelectCallback = NeonsMenuCallback;
             menu.ListItemChangeCallback = NeonListItemChangeCallback;
             menu.Finalizer = Finalizer;
 
-            _red = vh.NeonsColor.R / 17;
-            _green = vh.NeonsColor.G / 17;
-            _blue = vh.NeonsColor.B / 17;
+            _red = vh.NeonColor.R / 17;
+            _green = vh.NeonColor.G / 17;
+            _blue = vh.NeonColor.B / 17;
             List<object> colorItems = GetColorListItems();
             menu.Add(new ListItem("Rouge", "", "Red", colorItems, _red, false, true));
             menu.Add(new ListItem("Vert", "", "Green", colorItems, _green, false, true));
@@ -547,9 +539,9 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
 
             if (menuItem == null)
             {
-                int red = vh.NeonsColor.R;
-                int green = vh.NeonsColor.G;
-                int blue = vh.NeonsColor.B;
+                int red = vh.NeonColor.R;
+                int green = vh.NeonColor.G;
+                int blue = vh.NeonColor.B;
                  _vehicleBench.NeonColor = (Color.FromArgb(red, green, blue));
 
                 await OpenDesignMenu(client);
@@ -582,20 +574,22 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             _vehicleBench.NeonColor = (color);
         }
 
-        private async Task ModPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        private Task ModPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
-                return;
+                return Task.CompletedTask;
 
-            int selected = itemIndex - 1;
+            byte selected = (byte)itemIndex;
 
             if (_modType == 14)
             {
-                await _vehicleBench.SetModAsync(_modType, selected);
-                await PreviewKlaxon(_vehicleBench);
+                _vehicleBench.SetMod(_modType, selected);
+                PreviewKlaxon(_vehicleBench);
             }
             else
-                await _vehicleBench.SetModAsync(_modType, selected);
+                _vehicleBench.SetMod(_modType, selected);
+
+            return Task.CompletedTask;
         }
         #endregion
 
@@ -620,13 +614,18 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             }
             else if (vh.Mods.Count >= 1)
             {
-                Menu menu = new Menu("ID_Histo", "", "Historique :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, banner: Banner.Garage);
+                Menu menu = new Menu("ID_Histo", "", "Historique :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Garage);
                 menu.ItemSelectCallback = HistoricMenuCallback;
                 menu.Finalizer = Finalizer;
 
                 foreach (var mod in vh.Mods)
                 {
-                    var modData = vh.VehicleManifest.GetMod(mod.Key, mod.Value);
+                    VehicleMod modData;
+
+                    if (mod.Key == 22)
+                        modData = vh.VehicleManifest.GetMod(mod.Key, mod.Value);
+                    else
+                        modData = vh.VehicleManifest.GetMod(mod.Key, mod.Value - 1);
 
                     if (modData != null)
                     {
@@ -643,9 +642,9 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                     }
                 }
 
-                if (vh.NeonsColor != null && vh.NeonsColor.ToArgb() != 0)
+                if (vh.NeonColor != null && vh.NeonColor.ToArgb() != 0)
                 {
-                    Color color = vh.NeonsColor;
+                    Color color = vh.NeonColor;
                     menu.Add(new MenuItem($"Néons : Rouge {color.R / 17} - Vert {color.G / 17} - Bleu {color.B / 17}"));
                 }
 
@@ -671,7 +670,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
 
             if (await BankAccount.GetBankMoney(price, $"{SocietyName}: Néons"))
             {
-                vh.NeonsColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
+                vh.NeonColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
                 vh.Update();
 
                 client.SendNotificationSuccess($"Vous avez installé des Néons pour la somme de ${price}");
@@ -679,12 +678,12 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             }
         }
 
-        private async Task ModChoise(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private async Task ModChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
                 return;
 
-            int selected = itemIndex - 1;
+            byte selected = (byte)itemIndex;
 
             VehicleHandler vh = _vehicleBench?.GetVehicleHandler();
             double price = menu.HasData("price") ? menu.GetData("price") : menuItem.GetData("price");
@@ -693,11 +692,11 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
 
             // Bug with xenons
             if (_modType == 22)
-                modName = vh.VehicleManifest.GetMod(_modType, selected + 1).LocalizedName;
-            else
                 modName = vh.VehicleManifest.GetMod(_modType, selected).LocalizedName;
+            else
+                modName = vh.VehicleManifest.GetMod(_modType, selected - 1).LocalizedName;
 
-            if (_modType == 11 && vh.VehicleManifest.GetMod(_modType, selected).Name == "CMOD_ARM_0")
+            if (_modType == 11 && vh.VehicleManifest.GetMod(_modType, selected - 1).Name == "CMOD_ARM_0")
                 modName = "Gestion moteur de série";
 
             bool hasMoney = true;
@@ -711,7 +710,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                     return;
 
                 vh.Mods.AddOrUpdate(_modType, selected, (key, oldvalue) => selected);
-                await _vehicleBench.SetModAsync(_modType, selected);
+                _vehicleBench.SetMod(_modType, selected);
                 vh.Update();
                 string str = $"Vous avez installé {modName}";
 
@@ -723,10 +722,10 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             else
                 client.SendNotificationError("Vous n'avez pas assez sur le compte de l'entreprise.");
 
-            if (menu.Id == "ID_DesignChoise")
-                await OpenDesignChoiseMenu(client);
+            if (menu.Id == "ID_DesignChoice")
+                await OpenDesignChoiceMenu(client);
             else if (menu.Id == "ID_Perfs")
-                await OpenPerformanceChoiseMenu(client);
+                await OpenPerformanceChoiceMenu(client);
         }
 
         private async Task Finalizer(IPlayer client, Menu menu)

@@ -98,8 +98,9 @@ export class Hud {
             /*
             *  STRESS  TEST
             */
+
             ui.DrawText2d("~r~RESURRECTIONRP ALT:V !STRESS-TEST! V0.3", 0.5, 0.03, 0.7, 4, 255, 255, 255, 255, true, true, 99);
-            ui.DrawText2d(alt.Player.local.name, 0.5, 0.005, 0.3, 4, 255, 255, 255, 90, true, true, 99);
+            ui.DrawText2d(game.getClockHours() + ":" + game.getClockMinutes(), 0.5, 0.005, 0.3, 4, 255, 255, 255, 90, true, true, 99);
 
             let health = (game.getEntityHealth(alt.Player.local.scriptID) - 100);
             if (health <= 70) {

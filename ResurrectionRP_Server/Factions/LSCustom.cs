@@ -127,8 +127,6 @@ namespace ResurrectionRP_Server.Factions
 
             if (vehicle.Driver != null)
                 await MenuManager.CloseMenu(vehicle.Driver);
-
-            return Task.CompletedTask;
         }
 
         private Task OnVehicleEnterColshape(IColShape colShape, IVehicle vehicle)

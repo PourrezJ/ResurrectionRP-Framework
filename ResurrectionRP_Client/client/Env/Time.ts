@@ -13,13 +13,15 @@ export class Time {
         this.Hours = Hours;
         this.Minutes = Minutes;
         this.Seconds = Seconds;
+        game.pauseClock(true);
+        game.setClockTime(this.Hours, this.Minutes, this.Seconds);
     }
 
     public OnTick() {
+        
         if (game.getGameTimer() - this.lastcheck < 1000)
             return;
         this.lastcheck = game.getGameTimer();
-
         this.Seconds += this.Multiplicator;
         if (this.Seconds >= 60) {
             this.Seconds = 0;

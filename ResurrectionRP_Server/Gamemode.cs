@@ -322,11 +322,6 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Methods
-        private async Task CommandVeh(IPlayer player, string[] args)
-        {
-
-        }
-
         public async Task Save()
         {
             await Database.MongoDB.Update(this, "gamemode", _id);

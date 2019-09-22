@@ -28,7 +28,7 @@ namespace ResurrectionRP_Server.Factions
         public static Vector3 DepotVehicle = new Vector3(-357.0305f, -134.4201f, 38.93036f);
         public static Location ReparZoneVL = new Location(new Vector3(-325.1813f, -134.0631f, 38.5204f), new Vector3(-0.992146f, -1.029223f, 306.1207f));
 
-        public static Vector3 PeintureZone = new Vector3(-326.7145f, -144.8862f, 38.55893f);
+        public static Vector3 PeintureZone = new Vector3(-326.7145f, -144.8862f, 37.55893f);
 
         private static readonly int ReparEnginePrice = 900;
         private static readonly int ReparBody = 700;
@@ -58,14 +58,21 @@ namespace ResurrectionRP_Server.Factions
         public override async Task<Faction> OnFactionInit()
         {
             Vector3 reparZone = new Vector3(-324.7894f, -134.2555f, 35.54341f);
-            Marker.CreateMarker(MarkerType.VerticalCylinder, reparZone, new Vector3(4, 4, 3), System.Drawing.Color.White, GameMode.GlobalDimension);
+            Marker.CreateMarker(MarkerType.VerticalCylinder, reparZone, new Vector3(4, 4, 1), System.Drawing.Color.White, GameMode.GlobalDimension);
             ReparationVLColshape = Alt.CreateColShapeCylinder(reparZone, 4, 4);
+            ReparationVLColshape.Dimension = GameMode.GlobalDimension;
             ReparationVLColshape.SetOnPlayerInteractInColShape(OnEnterReparZoneVL);
             ReparationVLColshape.SetOnPlayerEnterColShape(OnEnterColshapeInteract);
             ReparationVLColshape.SetOnVehicleEnterColShape(OnVehicleEnterColshape);
             ReparationVLColshape.SetOnVehicleLeaveColShape(OnVehicleQuitColshape);
 
-            PeintureColshape = Alt.CreateColShapeCylinder(PeintureZone, 3, 1);
+            PeintureColshape = Alt.CreateColShapeCylinder(PeintureZone, 4, 4);
+            PeintureColshape.Dimension = GameMode.GlobalDimension;
+            Marker.CreateMarker(MarkerType.VerticalCylinder, PeintureZone, new Vector3(4, 4, 1), System.Drawing.Color.White, GameMode.GlobalDimension);
+            PeintureColshape.SetOnPlayerInteractInColShape(OnEnterPaintZoneVL);
+            PeintureColshape.SetOnPlayerEnterColShape(OnEnterColshapeInteract);
+            PeintureColshape.SetOnVehicleEnterColShape(OnVehicleEnterColshape);
+            PeintureColshape.SetOnVehicleLeaveColShape(OnVehicleQuitColshape);
 
             FactionRang = new FactionRang[] {
                 new FactionRang(0,"Dépanneur", false, 2500, true),
@@ -91,7 +98,23 @@ namespace ResurrectionRP_Server.Factions
             return await base.OnFactionInit();
         }
 
-        private Task OnVehicleQuitColshape(IColShape colShape, IVehicle vehicle)
+        private async Task OnEnterPaintZoneVL(IColShape colShape, IPlayer client)
+        {
+            if (VehicleInColorCabin == null)
+            {
+                client.SendNotificationError("Le véhicule doit être dans la cabine de peinture pour être repeint.");
+                return;
+            }
+            var employees = GetAllSocialClubName();
+            var social = client.GetSocialClub();
+
+            if (employees.Contains(social))
+            {
+                await OpenPeintureMenu(client);
+            }    
+        }
+
+        private async Task OnVehicleQuitColshape(IColShape colShape, IVehicle vehicle)
         {
             if (colShape == ReparationVLColshape)
             {
@@ -101,6 +124,9 @@ namespace ResurrectionRP_Server.Factions
             {
                 VehicleInColorCabin = null;
             }
+
+            if (vehicle.Driver != null)
+                await MenuManager.CloseMenu(vehicle.Driver);
 
             return Task.CompletedTask;
         }
@@ -125,65 +151,15 @@ namespace ResurrectionRP_Server.Factions
             return Task.CompletedTask;
         }
 
-        public override async Task OnPlayerExitColShape(IColShape colshapePointer, IPlayer player)
-        {
-            if (colshapePointer != ReparationVLColshape && colshapePointer != PeintureColshape)
-                return;
-
-            var vehicle = await player.GetVehicleAsync();
-
-            if (vehicle != null)
-            {
-                if (!vehicle.Exists)
-                    return;
-
-                VehicleHandler veh = vehicle.GetVehicleHandler();
-
-                if (veh == null)
-                    return;
-
-                await vehicle.SetPrimaryColorAsync(veh.PrimaryColor);
-                await vehicle.SetSecondaryColorAsync(veh.SecondaryColor);
-
-                veh.Doors[(int)VehicleDoor.Hood] = VehicleDoorState.Closed;
-                veh.UpdateFull();
-            }
-        }
-
-        private async Task OnEnterPeintureZone(IColShape colShape, IPlayer client)
-        {
-            var employees = GetAllSocialClubName();
-            var social =  client.GetSocialClub();
-
-            if (!employees.Contains(social))
-            {
-                client.SendNotificationError("Vous n'êtes pas autorisé à être là.");
-                return;
-            }
-            else if (employees.Contains(social) && !await client.IsInVehicleAsync())
-            {
-                client.SendNotificationError("Tu dois venir avec la voiture dans la chambre de peinture!");
-                return;
-            }
-            else if (employees.Contains(social) && ! IsOnService(client))
-            {
-                client.SendNotificationError("Va te changer, tu ne vas pas peindre cette voiture comme ça!");
-                return;
-            }
-
-            await OpenPeintureMenu(client);
-        }
-
         private async Task OnPeintureSelect(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            if (!await client.IsInVehicleAsync())
+            if (VehicleInColorCabin == null)
             {
-                client.SendNotificationError("Tu dois rester dans le véhicule!");
+                client.SendNotificationError("Le véhicule doit être dans la cabine de peinture pour être repeint.");
                 return;
             }
 
             menu = new Menu(menuItem.Id, "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.CarMod);
-            menu.SetData("Vehicle", await client.GetVehicleAsync());
             menu.ItemSelectCallback = PeintureSelectCallback;
             menu.IndexChangeCallback = PeinturePreview;
 
@@ -192,7 +168,7 @@ namespace ResurrectionRP_Server.Factions
                 MenuItem item = new MenuItem(color.ToString(), executeCallback: true, executeCallbackIndexChange: true);
                 item.RightLabel = $"${PeinturePrice}";
                 item.SetData("Color", Convert.ToInt32(color));
-                item.OnMenuItemCallback = OnColorChoise;
+                item.OnMenuItemCallback += OnColorChoise;
                 menu.Add(item);
             }
 
@@ -202,29 +178,26 @@ namespace ResurrectionRP_Server.Factions
 
         private async Task PeintureSelectCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            if (menuItem == null)
+            if (menuItem != null && VehicleInColorCabin != null) 
             {
-                IVehicle vehicle = menu.GetData("Vehicle");
-                VehicleHandler vh = vehicle.GetVehicleHandler();
-                await vehicle.SetPrimaryColorAsync(vh.PrimaryColor);
-                await vehicle.SetSecondaryColorAsync(vh.SecondaryColor);
+                VehicleHandler vh = VehicleInColorCabin.GetVehicleHandler();
+                VehicleInColorCabin.PrimaryColor = vh.PrimaryColor;
+                VehicleInColorCabin.SecondaryColor = vh.SecondaryColor;
                 await OpenPeintureMenu(client);
             }
         }
 
         private async Task OnColorChoise(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            IVehicle vehicle = menu.GetData("Vehicle");
             int color = menuItem.GetData("Color");
-            if (vehicle == null) return;
+            if (VehicleInColorCabin == null)
+                return;
 
             var ph = client.GetPlayerHandler();
-
             if (ph == null)
                 return;
 
-            var vh = vehicle.GetVehicleHandler();
-
+            var vh = VehicleInColorCabin.GetVehicleHandler();
             if (vh == null)
                 return;
 
@@ -232,13 +205,18 @@ namespace ResurrectionRP_Server.Factions
             {
                 if (menu.Id == "ID_First")
                 {
-                    await vehicle.SetPrimaryColorAsync((byte)color);
+                    VehicleInColorCabin.PrimaryColor = ((byte)color);
                     vh.PrimaryColor = (byte)color;
                 }
                 else if (menu.Id == "ID_Second")
                 {
-                    await vehicle.SetSecondaryColorAsync((byte)color);
+                    VehicleInColorCabin.SecondaryColor = (byte)color;
                     vh.SecondaryColor = (byte)color;
+                }
+                else if (menu.Id == "ID_Pearl")
+                {
+                    VehicleInColorCabin.PearlColor = (byte)color;
+                    vh.PearlColor = (byte)color;
                 }
 
                 vh.UpdateFull();
@@ -282,20 +260,44 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Methods
-        private async Task PeinturePreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        public async Task OpenPeintureMenu(IPlayer client)
         {
-            IVehicle vehicle = menu.GetData("Vehicle");
+            if (VehicleInColorCabin == null)
+            {
+                client.SendNotificationError("Le véhicule doit être dans la cabine de peinture pour être repeint.");
+                return;
+            }
+            Menu menu = new Menu("ID_MainReparMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.CarMod);
+
+            MenuItem primary = new MenuItem("Peinture Principal", "", "ID_First", executeCallback: true, executeCallbackIndexChange: true);
+            primary.OnMenuItemCallback = OnPeintureSelect;
+            menu.Add(primary);
+
+            MenuItem secondary = new MenuItem("Peinture Secondaire", "", "ID_Second", executeCallback: true, executeCallbackIndexChange: true);
+            secondary.OnMenuItemCallback = OnPeintureSelect;
+            menu.Add(secondary);
+
+            MenuItem pearl = new MenuItem("Peinture Pearler", "", "ID_Pearl", executeCallback: true, executeCallbackIndexChange: true);
+            pearl.OnMenuItemCallback = OnPeintureSelect;
+            menu.Add(pearl);
+
+            await menu.OpenMenu(client);
+        }
+
+        private Task PeinturePreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        {
             int color = menuItem.GetData("Color");
 
-            if (vehicle == null)
-                return;
-
-            var veh = vehicle.GetVehicleHandler();
+            if (VehicleInColorCabin == null)
+                return Task.CompletedTask;
 
             if (menu.Id == "ID_First")
-                await vehicle.SetPrimaryColorAsync((byte)color);
+                VehicleInColorCabin.PrimaryColor = (byte)color;
             else if (menu.Id == "ID_Second")
-                await vehicle.SetSecondaryColorAsync((byte)color);
+                VehicleInColorCabin.SecondaryColor = (byte)color;
+            else if (menu.Id == "ID_Pearl")
+                VehicleInColorCabin.PearlColor = (byte)color;
+            return Task.CompletedTask;
         }
         #endregion
 
@@ -338,16 +340,10 @@ namespace ResurrectionRP_Server.Factions
 
             if (HasPlayerIntoFaction(client))
             {
-                //if (GetEmployeeOnline().Contains(client))
-                if (true)
-                {
-                    menu.Add(new MenuItem("Diagnostique véhicule", "", "ID_Diag", true));
-                    menu.Add(new MenuItem("Réparer la carrosserie", "", "ID_Body", true));
-                    menu.Add(new MenuItem("Réparer le moteur", "", "ID_Engine", true));
-                    menu.Add(new MenuItem("Nettoyer le véhicule", "", "ID_Clean", true));
-                }
-                else
-                    client.SendNotificationError("Vous devez prendre votre service pour réparer un véhicule.");
+                menu.Add(new MenuItem("Diagnostique véhicule", "", "ID_Diag", true));
+                menu.Add(new MenuItem("Réparer la carrosserie", "", "ID_Body", true));
+                menu.Add(new MenuItem("Réparer le moteur", "", "ID_Engine", true));
+                menu.Add(new MenuItem("Nettoyer le véhicule", "", "ID_Clean", true));
             }
             else if (GetEmployeeOnline().Count > 0)
                 client.SendNotificationError("Vous devez passer par un mécanicien.");
@@ -357,19 +353,6 @@ namespace ResurrectionRP_Server.Factions
             await menu.OpenMenu(client);
         }
 
-        public async Task OpenPeintureMenu(IPlayer client)
-        {
-            Menu menu = new Menu("ID_MainReparMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.CarMod);
-
-            MenuItem primary = new MenuItem("Peinture principal", "", "ID_First", executeCallback: true, executeCallbackIndexChange: true);
-            primary.OnMenuItemCallback = OnPeintureSelect;
-            menu.Add(primary);
-            MenuItem secondary = new MenuItem("Peinture secondaire", "", "ID_Second", executeCallback: true, executeCallbackIndexChange: true);
-            secondary.OnMenuItemCallback = OnPeintureSelect;
-            menu.Add(secondary);
-
-            await menu.OpenMenu(client);
-        }
 
         private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {

@@ -76,40 +76,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public ConcurrentDictionary<int, int> Mods { get; set; }
             = new ConcurrentDictionary<int, int>();
 
-        private uint bodyhealth;
-        public uint BodyHealth
-        {
-            get
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    return Vehicle.BodyHealth;
-                return bodyhealth;
-            }
-            set
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    Vehicle.BodyHealth = value;
-                bodyhealth = value;
-            }
-        }
+        public uint BodyHealth { get; set; }
 
-        private int enginehealth = 1000;
-        public int EngineHealth
-        {
-            get
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    return Vehicle.EngineHealth;
-                return enginehealth;
-
-            }
-            set
-            {
-                enginehealth = value;
-                if (Vehicle != null && Vehicle.Exists)
-                    Vehicle.EngineHealth = value;
-            }
-        }
+        public int EngineHealth { get; set; }
 
         public int PetrolTankHealth
         {
@@ -120,74 +89,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public Tuple<bool, bool, bool, bool> NeonState { get; set; } = new Tuple<bool, bool, bool, bool>(false, false, false, false);
         public Color NeonsColor { get; set; } = Color.Empty;
 
-        private int dirt;
-        public byte Dirt
-        {
-            get
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    return Vehicle.DirtLevel;
-                return 0;
-            }
-            set
-            {
-                dirt = value;
-                if (Vehicle != null && Vehicle.Exists)
-                    Vehicle.DirtLevel = value;
-            }
-        }
+        public byte Dirt { get; set; }
 
-        private bool engine = false;
-        public bool Engine
-        {
-            get
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    return Vehicle.EngineOn;
-                return engine;
-            }
-            set
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    Vehicle.EngineOn = value;
-                engine = value;
-            }
-        }
+        public bool Engine { get; set; }
 
-        private byte primaryColor;
-        public byte PrimaryColor
-        {
-            get
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    return Vehicle.PrimaryColor;
-                return primaryColor;
-            }
+        public byte PrimaryColor { get; set; }
+        public byte SecondaryColor { get; set; }
 
-            set
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    Vehicle.PrimaryColor = value;
-                primaryColor = value;
-            }
-        }
-        private byte secondaryColor;
-        public byte SecondaryColor
-        {
-            get
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    return Vehicle.SecondaryColor;
-                return secondaryColor;
-            }
-
-            set
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                    Vehicle.SecondaryColor = value;
-                secondaryColor = value;
-            }
-        }
+        public byte PearlColor { get; internal set; }
 
         public WindowTint WindowTint { get; set; } = 0;
         //public bool ArmoredWindows { get; set; } = false;

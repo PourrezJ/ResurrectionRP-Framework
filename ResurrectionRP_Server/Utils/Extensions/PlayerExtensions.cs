@@ -302,7 +302,7 @@ namespace ResurrectionRP_Server
         public static void CreateBlip(this IPlayer client, uint sprite, Vector3 position, string name = "", float scale = 1, int color = 0, int alpha = 255, bool shortRange = false) 
             => client.EmitLocked("CreateBlip", sprite, position.ConvertToVector3Serialized(), name, scale, color, alpha, shortRange);
 
-        public static async Task PlayAnimation(this IPlayer client, string animDict, string animName, float blendInSpeed = 8f, float blendOutSpeed = -8f, int duration = -1, ResurrectionRP_Server.Utils.Enums.AnimationFlags flags = (ResurrectionRP_Server.Utils.Enums.AnimationFlags)0, float playbackRate = 0f)
+        public static void PlayAnimation(this IPlayer client, string animDict, string animName, float blendInSpeed = 8f, float blendOutSpeed = -8f, int duration = -1, Utils.Enums.AnimationFlags flags = 0, float playbackRate = 0f)
         {
             var animsync = new AnimationsSync()
             {
@@ -315,7 +315,7 @@ namespace ResurrectionRP_Server
                 PlaybackRate = playbackRate
             };
 
-            await client.EmitAsync("PlayAnimation", JsonConvert.SerializeObject(animsync));
+            client.EmitLocked("PlayAnimation", JsonConvert.SerializeObject(animsync));
         }
 
         public static void StopAnimation(this IPlayer client)

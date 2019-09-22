@@ -14,6 +14,8 @@ using System.Linq;
 using AltV.Net.Data;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Houses;
+using ResurrectionRP_Server.Utils.Enums;
+using ResurrectionRP_Server.Items;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -44,31 +46,31 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
 
             switch (Keycode)
-            {/**
+            {
                 case ConsoleKey.NumPad0:
                     if (ph.HasOpenMenu())
                         return;
 
                     if (ph.IsCuff())
                     {
-                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
+                        client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
                         return;
                     }
 
                     if (client.HasData("VehicleLockPicking"))
                     {
-                        await LockPick.StopLockPicking(client);
+                        //await LockPick.StopLockPicking(client);
                     }
                     else if (client.HasData("VehicleRepair"))
                     {
-                        await CrateTools.StopRepair(client);
+                        //await CrateTools.StopRepair(client);
                     }
                     else
                     {
-                        await client.StopAnimationAsync();
+                        client.StopAnimation();
                     }
                     break;
-            */
+            
                 case ConsoleKey.F2:
                     if (ph.IsCuff())
                     {
@@ -328,7 +330,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 case ConsoleKey.NumPad7:
                 case ConsoleKey.NumPad8:
                 case ConsoleKey.NumPad9:
-                    //await OnAnimationKeyPressed(Keycode);
+                   OnAnimationKeyPressed(Keycode);
                     break;
             }
         }
@@ -391,6 +393,59 @@ namespace ResurrectionRP_Server.Entities.Players
             }
 
             return Task.CompletedTask;
+        }
+
+        public void OnAnimationKeyPressed(ConsoleKey key)
+        {
+            switch (key)
+            {
+                case ConsoleKey.NumPad1:
+                    if (AnimSettings[0] != null) PlayAnimation(AnimSettings[0].AnimDict, AnimSettings[0].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    break;
+
+                case ConsoleKey.NumPad2:
+                    if (AnimSettings[1] != null) PlayAnimation(AnimSettings[1].AnimDict, AnimSettings[1].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    break;
+
+                case ConsoleKey.NumPad3:
+                    if (AnimSettings[2] != null) PlayAnimation(AnimSettings[2].AnimDict, AnimSettings[2].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    break;
+
+                case ConsoleKey.NumPad4:
+                    if (AnimSettings[3] != null) PlayAnimation(AnimSettings[3].AnimDict, AnimSettings[3].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    break;
+
+                case ConsoleKey.NumPad5:
+                    if (AnimSettings[4] != null) PlayAnimation(AnimSettings[4].AnimDict, AnimSettings[4].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    break;
+
+                case ConsoleKey.NumPad6:
+                    if (AnimSettings[5] != null) PlayAnimation(AnimSettings[5].AnimDict, AnimSettings[5].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    break;
+
+                case ConsoleKey.NumPad7:
+                    if (AnimSettings[6] != null) PlayAnimation(AnimSettings[6].AnimDict, AnimSettings[6].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    break;
+
+                case ConsoleKey.NumPad8:
+                    if (AnimSettings[7] != null) PlayAnimation(AnimSettings[7].AnimDict, AnimSettings[7].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    break;
+
+                case ConsoleKey.NumPad9:
+                    if (AnimSettings[8] != null) PlayAnimation(AnimSettings[8].AnimDict, AnimSettings[8].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    break;
+            }
+        }
+
+        public void PlayAnimation(string animDict, string animName, float blendInSpeed = 8f, float blendOutSpeed = -8f, int duration = -1, AnimationFlags flags = (ResurrectionRP_Server.Utils.Enums.AnimationFlags)49, float playbackRate = 0f)
+        {
+            if (Client == null)
+                return;
+
+            if (!Client.Exists)
+                return;
+
+            Client.PlayAnimation(animDict, animName, blendInSpeed, blendOutSpeed, duration, flags, playbackRate);
         }
 
         private static bool IsAtm(uint entityHash) {

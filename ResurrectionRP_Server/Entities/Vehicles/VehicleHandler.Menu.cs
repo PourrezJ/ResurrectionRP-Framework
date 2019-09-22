@@ -262,7 +262,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                                     _client.SendNotificationSuccess("Vous avez donné votre " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " à " + destinataire.Identite.Name);
                                     destinataire.Client.SendNotificationSuccess("Vous avez reçu un(e) " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " par " + _client.GetPlayerHandler()?.Identite.Name);
 
-                                    this.Update();
+                                    this.UpdateFull();
                                     await MenuManager.CloseMenu(_client);
                                 }
                             });

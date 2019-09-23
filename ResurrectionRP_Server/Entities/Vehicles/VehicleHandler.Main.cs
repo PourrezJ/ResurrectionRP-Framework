@@ -134,6 +134,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 vehicle.NumberplateText = Plate;
                 vehicle.PrimaryColor = PrimaryColor;
                 vehicle.SecondaryColor = SecondaryColor;
+                vehicle.PearlColor = PearlColor;
 
                 if (Mods.Count > 0)
                 {

@@ -1,11 +1,6 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import PhoneManager from '../phone/PhoneManager';
-import * as chat from '../chat/chat';
 import * as utils from '../Utils/Utils';
-import Raycast, * as raycast from '../Utils/Raycast';
-import * as Utils from '../Utils/Utils';
-import * as Globals from '../Utils/Globals';
 
 export class NetworkingEntityClient {
 
@@ -18,6 +13,7 @@ export class NetworkingEntityClient {
     EntityList: any[] = [];
 
     constructor() {
+        alt.log("Chargement controleur du streamer ...");
         this.webview = new alt.WebView("http://resource/client/Streamer/index.html");
         this.defaultToken = true;
         this.defaultWebView = true;
@@ -45,7 +41,6 @@ export class NetworkingEntityClient {
             });
         });
 
-        alt.on("keydown", this.OnKeyPressed.bind(this));
         alt.on("disconnect", this.unloadStream.bind(this));
 
         alt.onServer('createStaticEntity', this.createStaticEntity.bind(this));
@@ -90,6 +85,7 @@ export class NetworkingEntityClient {
         if (this.defaultToken) {
             alt.onServer("streamingToken", this.tokenCallback.bind(this));
         }
+        alt.log("Streamer Initialisé");
     }
 
     init(url, token) {
@@ -103,9 +99,11 @@ export class NetworkingEntityClient {
                 pos.y,
                 pos.z)
         }, 100);
+        alt.log("Initialisation du streamer...");
     }
 
     destroy() {
+        alt.log(`Network: destroy`);
         this.webview.emit("entityDestroy");
         alt.clearInterval(this.interval);
 
@@ -115,6 +113,7 @@ export class NetworkingEntityClient {
     }
 
     tokenCallback(url: string, token: any) {
+        alt.log(`Network: token: ${url} ${token}`);
         this.init(url, token);
     }
 
@@ -371,35 +370,6 @@ export class NetworkingEntityClient {
         }
     }
 
-    private OnKeyPressed = (key: number) => {
-        if (game.isPauseMenuActive() || PhoneManager.IsPhoneOpen() || chat.isOpened())
-            return;
-
-        if (key != 69 && key != 87)
-            return;
-
-        var _pos = game.getGameplayCamCoord();
-        var _dir: any = utils.GetCameraDirection();
-
-        var _farAway = new alt.Vector3(
-            _pos.x + (_dir.x * 9),
-            _pos.y + (_dir.y * 9),
-            _pos.z + (_dir.z * 9),
-        )
-
-        let resultPed = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, 12);
-
-        if (!resultPed.isHit || Utils.Distance(alt.Player.local.pos, resultPed.pos) > Globals.MAX_INTERACTION_DISTANCE)
-            return;
-
-        if (key == 69) { // E
-            alt.emitServer('Ped_Interact', this.getPedId(resultPed.hitEntity));
-        }
-        else if (key == 87) { // W
-            alt.emitServer('Ped_SecondaryInteract', this.getPedId(resultPed.hitEntity));
-        }
-    }
-
     private unloadStream = async () => {
         this.EntityList.forEach((item, index) => {
             game.deleteEntity(item);
@@ -416,10 +386,4 @@ export class NetworkingEntityClient {
         });
         return indexer;
     }
-}
-
-let networkingEntityClient = null;
-
-export function getStreamedInEntities() {
-    return networkingEntityClient.streamedInEntities;
 }

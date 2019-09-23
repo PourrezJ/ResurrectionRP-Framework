@@ -5,6 +5,7 @@ import * as chat from '../chat/chat';
 import * as MenuManager from '../MenuManager/MenuManager';
 import * as Utils from '../Utils/Utils';
 import * as Globals from '../Utils/Globals';
+import * as Streamer from '../Streamer/NetworkingEntityClient';
 
 /*
  * POUR LE RAY CAST LES FLAGS
@@ -46,6 +47,7 @@ export class Interaction {
             switch (key) {
                 case 69:    // E
                 case 85:    // U
+                case 87:    // W
                 case 113:   // F2
                 case 114:   // F3
                 case 115:   // F4

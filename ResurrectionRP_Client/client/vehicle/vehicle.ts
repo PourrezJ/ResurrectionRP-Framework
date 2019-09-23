@@ -1,6 +1,5 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import * as chat from '../chat/chat';
 
 let player = alt.Player.local;
 let fuelMax = 100;
@@ -9,7 +8,6 @@ let fuelConsum = 5.5;
 var CurrentMilage = 0.0;
 let speedoWindow = new alt.WebView('http://resource/client/cef/speedometer/speedometer.html');
 let lastSent = Date.now();
-let lastPos = null;
 let playerVehicle: alt.Vehicle = null;
 let keepEngineOn: boolean = false;
 

@@ -421,10 +421,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             Doors[(byte)door] = state;
 
-            if (Vehicle == null)
-                return;
-
-            if (!Vehicle.Exists)
+            if (Vehicle == null || !Vehicle.Exists)
                 return;
 
             Vehicle.SetDoorStateFix(player, door, state, false);

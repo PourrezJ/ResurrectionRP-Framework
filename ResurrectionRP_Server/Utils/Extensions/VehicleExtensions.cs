@@ -89,13 +89,10 @@ namespace ResurrectionRP_Server
 
         public static void SetDoorStateFix(this IVehicle vehicle, IPlayer client, VehicleDoor door, VehicleDoorState state, bool direct)
         {
-            if (!vehicle.Exists)
+            if (!vehicle.Exists || client == null || !client.Exists)
                 return;
 
-            if (!client.Exists)
-                return;
-
-            client.EmitLocked("SetDoorState", vehicle,(int)door, (int)state, direct);
+            client.EmitLocked("SetDoorState", vehicle, (int)door, (int)state, direct);
         }
 
         public static async Task SetPlayerIntoVehicle(this IVehicle client, IPlayer target)

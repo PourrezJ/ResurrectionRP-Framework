@@ -18,11 +18,6 @@ export function initialize() {
     alt.onServer('SetDoorState', setDoorState);
     alt.onServer('HornPreview', hornPreview);
 
-    alt.onServer('SetDoorState', (vehicle: alt.Vehicle, door: number, state: number, option: boolean) => {
-        alt.log("debug 1 ");
-        setDoorState(vehicle, door, state, option);
-    });
-
     alt.onServer('UpdateFuel', (fuel: number) => {
         fuelCur = fuel;
     });

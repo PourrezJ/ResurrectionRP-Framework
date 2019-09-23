@@ -515,9 +515,12 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public bool HasItemID(Models.InventoryData.ItemID id)
         {
-            if (PocketInventory.HasItemID(id)) return true;
-            else if (BagInventory != null && BagInventory.HasItemID(id)) return true;
-            else return false;
+            if (PocketInventory.HasItemID(id)) 
+                return true;
+            else if (BagInventory != null && BagInventory.HasItemID(id)) 
+                return true;
+            else 
+                return false;
         }
 
         public List<ItemStack> GetAllItems()

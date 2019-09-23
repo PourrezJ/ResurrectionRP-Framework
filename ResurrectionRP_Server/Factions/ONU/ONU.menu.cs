@@ -6,6 +6,7 @@ using ResurrectionRP_Server.XMenuManager;
 using ResurrectionRP_Server.Models.InventoryData;
 using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Utils.Enums;
+using System;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -42,23 +43,31 @@ namespace ResurrectionRP_Server.Factions
         #region Interaction
         public override XMenu InteractPlayerMenu(IPlayer client, IPlayer target, XMenu xmenu)
         {
-            var playerHandler = client.GetPlayerHandler();
-            xmenu.SetData("Player", target);
-
-            xmenu.Add(new XMenuItem("Facturer", "Envoyer une facture au patient", "ID_SendInvoice", XMenuItemIcons.FILE_INVOICE_DOLLAR_SOLID, false));
-
-            if (target.IsDead() && playerHandler.GetStacksItems(Models.InventoryData.ItemID.Defibrilateur).Count > 0)
+            try
             {
-                xmenu.Add(new XMenuItem("RPC", "Réanimer la victime", "ID_Reanimate", XMenuItemIcons.HEART_SOLID, false));
+                var playerHandler = client.GetPlayerHandler();
+                xmenu.SetData("Player", target);
+
+                xmenu.Add(new XMenuItem("Facturer", "Envoyer une facture au patient", "ID_SendInvoice", XMenuItemIcons.FILE_INVOICE_DOLLAR_SOLID, false));
+
+                if (target.IsDead && playerHandler.HasItemID(ItemID.Defibrilateur))
+                {
+                     xmenu.Add(new XMenuItem("RPC", "Réanimer la victime", "ID_Reanimate", XMenuItemIcons.HEART_SOLID, false));
+                }
+
+                if (playerHandler.HasItemID(ItemID.Bandages))
+                    xmenu.Add(new XMenuItem("Bandage", "Appliquer un bandage au patient", "ID_Bandage", XMenuItemIcons.HEART_SOLID, false));
+
+                if (playerHandler.HasItemID(ItemID.KitSoin))
+                    xmenu.Add(new XMenuItem("Kit de Soin", "Appliquer un kit de soin au patient", "ID_KitSoin", XMenuItemIcons.HEART_SOLID, false));
+
+                xmenu.Callback += OnInteractCallBack;
+            }
+            catch(Exception ex)
+            {
+                AltV.Net.Alt.Server.LogError(ex.ToString());
             }
 
-            if (playerHandler.HasItemID(ItemID.Bandages))
-                xmenu.Add(new XMenuItem("Bandage", "Appliquer un bandage au patient", "ID_Bandage", XMenuItemIcons.HEART_SOLID, false));
-
-            if (playerHandler.HasItemID(ItemID.KitSoin))
-                xmenu.Add(new XMenuItem("Kit de Soin", "Appliquer un kit de soin au patient", "ID_KitSoin", XMenuItemIcons.HEART_SOLID, false));
-
-            xmenu.Callback += OnInteractCallBack;
 
             return base.InteractPlayerMenu(client, target, xmenu);
         }
@@ -105,8 +114,8 @@ namespace ResurrectionRP_Server.Factions
                 case "ID_KitSoin":
                     if (ph.DeleteOneItemWithID(ItemID.KitSoin))
                     {
-                        if ((healthActual += 75) > 100)
-                            await _target.SetHealthAsync(100);
+                        if ((healthActual += 75) > 200)
+                            await _target.SetHealthAsync(200);
                         else
                             await _target.SetHealthAsync((ushort)(healthActual + 75));
                         client.SendNotificationSuccess("Vous avez appliqué un kit de soin au patient.");
@@ -116,8 +125,8 @@ namespace ResurrectionRP_Server.Factions
                 case "ID_Bandage":
                     if (ph.DeleteOneItemWithID(ItemID.Bandages))
                     {
-                        if ((healthActual + 5) > 100)
-                            await _target.SetHealthAsync(100);
+                        if ((healthActual + 5) > 200)
+                            await _target.SetHealthAsync(200);
                         else
                             await _target.SetHealthAsync(healthActual += 5);
                         client.SendNotificationSuccess("Vous avez appliqué un bandage au patient.");

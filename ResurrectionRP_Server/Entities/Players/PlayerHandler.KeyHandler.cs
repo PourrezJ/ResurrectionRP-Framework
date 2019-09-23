@@ -116,16 +116,16 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
 
                     Farm farm = FarmManager.PlayerInFarmZone(client);
-
                     if (farm != null)
                     {
                         await farm.StartFarming(client);
                         return;
                     }
-
-                    if (playerDistant != null)
+                    
+                    var Ph = PlayerManager.GetPlayersList().Find(p => p.Location.Pos.DistanceTo(raycastData.pos) < 1);
+                    if (playerDistant != null || Ph != null)
                     {
-                        await ph.OpenXtremPlayer(playerDistant);
+                        await ph.OpenXtremPlayer(playerDistant ?? Ph.Client);
                         return;
                     }
 

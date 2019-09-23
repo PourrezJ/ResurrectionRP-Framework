@@ -258,24 +258,11 @@ IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon 
 
         public static async Task UpdateVehiclesMilageAndFuel()
         {
-            /*
-            await AltAsync.Do(() =>
+            foreach (IVehicle vehicle in VehiclesManager.GetAllVehicles())
             {
-                DateTime start = DateTime.Now;
-
-                foreach (IVehicle vehicle in Alt.GetAllVehicles())
-                {
-                    try
-                    {
-                        if (vehicle.Exists && vehicle.EngineOn)
-                            vehicle.GetVehicleHandler().UpdateMilageAndFuel();
-                    }
-                    catch (Exception ex)
-                    {
-                        Alt.Server.LogError(ex.ToString());
-                    }
-                }
-            });*/
+                if (await vehicle.ExistsAsync() && await vehicle.IsEngineOnAsync())
+                    vehicle.GetVehicleHandler()?.UpdateMilageAndFuel();
+            }
         }
         #endregion
     }

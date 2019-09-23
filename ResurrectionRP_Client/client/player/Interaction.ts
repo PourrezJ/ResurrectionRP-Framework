@@ -177,6 +177,7 @@ export class Interaction {
     }
 
     public static SetCanClose(close: boolean) {
+        alt.Player.local.setMeta("CanClose", close);
         canClose = close;
     }
 }

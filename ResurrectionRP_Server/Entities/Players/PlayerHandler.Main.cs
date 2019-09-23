@@ -239,7 +239,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 GameMode.Instance.Streamer.LoadStreamPlayer(client);
                 GameMode.Instance.DoorManager.OnPlayerConnected(client);
                 Houses.HouseManager.OnPlayerConnected(client);
-                await GameMode.Instance.VoiceController.OnPlayerConnected(client);
+                await GameMode.Instance.VoiceController.OnPlayerConnected(client, Identite.Name);
                 //await GameMode.Instance.IllegalManager.OnPlayerConnected(client);
 
                 await Task.Delay(500);

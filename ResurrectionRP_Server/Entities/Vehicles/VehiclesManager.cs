@@ -256,15 +256,26 @@ IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon 
             return null;
         }
 
-        public static void UpdateVehiclesMilageAndFuel()
+        public static async Task UpdateVehiclesMilageAndFuel()
         {
-            DateTime start = DateTime.Now;
-
-            foreach (IVehicle vehicle in Alt.GetAllVehicles())
+            /*
+            await AltAsync.Do(() =>
             {
-                if (vehicle.Exists && vehicle.EngineOn)
-                    vehicle.GetVehicleHandler().UpdateMilageAndFuel();
-            }
+                DateTime start = DateTime.Now;
+
+                foreach (IVehicle vehicle in Alt.GetAllVehicles())
+                {
+                    try
+                    {
+                        if (vehicle.Exists && vehicle.EngineOn)
+                            vehicle.GetVehicleHandler().UpdateMilageAndFuel();
+                    }
+                    catch (Exception ex)
+                    {
+                        Alt.Server.LogError(ex.ToString());
+                    }
+                }
+            });*/
         }
         #endregion
     }

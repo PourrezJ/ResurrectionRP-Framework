@@ -18,9 +18,10 @@ namespace SaltyServer
         public static string SoundPack { get; private set; }
         public static string IngameChannel { get; private set; }
         public static string IngameChannelPassword { get; private set; }
-
+        
         private static Dictionary<string, List<IPlayer>> RadioChannels = new Dictionary<string, List<IPlayer>>();
         private static Dictionary<string, List<IPlayer>> PlayersTalkingOnRadioChannels = new Dictionary<string, List<IPlayer>>();
+        private static List<string> TsNames = new List<string>();
         #endregion
 
         #region Events
@@ -39,14 +40,14 @@ namespace SaltyServer
             AltAsync.OnClient(SaltyShared.Event.Voice_TalkingOnRadio, OnPlayerTalkingOnRadio);
         }
 
-        public Task OnPlayerConnected(IPlayer client)
+        public Task OnPlayerConnected(IPlayer client, string name)
         {
             if (!client.Exists)
                 return Task.CompletedTask;
 
             try
             {
-                client.SetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, Voice.GetTeamSpeakName());
+                client.SetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, Voice.CreateTeamSpeakName());
                 client.SetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, "Parler");
 
                 client.EmitLocked(SaltyShared.Event.Voice_Initialize, Voice.ServerUniqueIdentifier, Voice.RequiredUpdateBranch, Voice.MinimumPluginVersion, Voice.SoundPack, Voice.IngameChannel, Voice.IngameChannelPassword);        
@@ -145,12 +146,9 @@ namespace SaltyServer
         #endregion
 
         #region Methods
-        internal static string GetTeamSpeakName()
+        internal static string CreateTeamSpeakName()
         {
             string name;
-            var playerList = Alt.GetAllPlayers();
-
-            do
             {
                 name = Guid.NewGuid().ToString().Replace("-", "");
 
@@ -159,7 +157,7 @@ namespace SaltyServer
                     name = name.Remove(29, name.Length - 30);
                 }
             }
-            while (playerList.Any(p => p.Exists && p.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName) && tsName.ToString() == name));
+            while (TsNames.Any(p => p == name));
 
             return name;
         }

@@ -3,6 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -23,6 +24,8 @@ namespace ResurrectionRP_Server
             CultureInfo.DefaultThreadCurrentCulture = ci;
             System.Threading.Thread.CurrentThread.CurrentCulture = ci;
             System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
+
+            AppDomain.CurrentDomain.UnhandledException += OnException;
 
             AltAsync.OnPlayerConnect += AltAsync_OnPlayerConnect;
 
@@ -53,6 +56,13 @@ namespace ResurrectionRP_Server
                 await gamemode.OnStartAsync();
                 await gamemode.Save();
             }
+        }
+
+        private void OnException(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.ExceptionObject;
+            Alt.Server.LogError("MyHandler caught : " + e.Message);
+            Alt.Server.LogError($"Runtime terminating: {args.IsTerminating}");
         }
 
         private async Task AltAsync_OnPlayerConnect(IPlayer player, string reason)

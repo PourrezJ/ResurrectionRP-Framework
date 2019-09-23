@@ -132,7 +132,7 @@ export class Game {
             game.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
             
             game.setTimeScale(1);
-
+            
             alt.setStat('stamina', 100);
             alt.setStat('strength', 100);
             alt.setStat('lung_capacity', 100);

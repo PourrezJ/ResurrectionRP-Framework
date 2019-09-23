@@ -42,12 +42,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 if (client.IsInVehicle && client.Seat == 1)
                 {
-                    xmenu.Add(new XMenuItem($"{(client.Vehicle.EngineOn ? "Eteindre" : "Allumer")} le véhicule", "", "ID_start", XMenuItemIcons.KEY_SOLID, executeCallback: true));
+                    xmenu.Add(new XMenuItem($"{(client.Vehicle.EngineOn ? "Eteindre" : "Allumer")} le véhicule", "", "ID_Start", XMenuItemIcons.KEY_SOLID, executeCallback: true));
                     
                     if (locked == VehicleLockState.Unlocked)
                         xmenu.Add(new XMenuItem("Gestion des portes", "", "ID_doors", XMenuItemIcons.DOOR_CLOSED_SOLID, executeCallback: true));
                         
-                    if ((NeonColor != Color.Empty &&  NeonColor != null) && (VehicleManifest?.Neon == true))
+                    if (NeonColor.IsEmpty != false)
                         xmenu.Add(new XMenuItem($"{(NeonState.Item1 ? "Eteindre" : "Allumer")} les neons", "", "ID_neons", XMenuItemIcons.LIGHTBULB_SOLID, executeCallback: true));
                 }
             }
@@ -226,13 +226,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     await XMenuManager.CloseMenu(client);
                     break;
                     */
-                case "ID_start":
+                case "ID_Start":
                     bool engineCurrent = Vehicle.EngineOn;
 
-                    if (engineCurrent || Fuel > 0)
+                    if (Fuel > 0)
                     {
                         EngineOn = !engineCurrent;
-                        await Vehicle.SetEngineOnAsync(!engineCurrent);
                         Vehicle.GetVehicleHandler().EngineOn = !engineCurrent;
                         client.EmitLocked("keepEngineState", !engineCurrent);
                         await XMenuManager.XMenuManager.CloseMenu(client);

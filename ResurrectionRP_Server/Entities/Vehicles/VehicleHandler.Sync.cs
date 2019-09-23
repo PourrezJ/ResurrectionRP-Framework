@@ -567,24 +567,21 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 speed = distance * 3600000 / (updateTime - _previousUpdate).TotalMilliseconds;
             }
 
-            if (Vehicle.EngineOn)
+            if (speed == 0)
+                Fuel -= FuelConsumption / 10000;
+            else
             {
-                if (speed == 0)
-                    Fuel -= FuelConsumption / 10000;
+                double speedFuel;
+
+                if (speed < 80)
+                    speedFuel = (2 * FUEL_FACTOR) - speed * FUEL_FACTOR / 80;
                 else
-                {
-                    double speedFuel;
+                    speedFuel = speed / 80 * FUEL_FACTOR;
 
-                    if (speed < 80)
-                        speedFuel = (2 * FUEL_FACTOR) - speed * FUEL_FACTOR / 80;
-                    else
-                        speedFuel = speed / 80 * FUEL_FACTOR;
+                Fuel -= (float)(FuelConsumption * distance * speedFuel / 100);
 
-                    Fuel -= (float)(FuelConsumption * distance * speedFuel / 100);
-
-                    if (Vehicle.Driver != null)
-                        Vehicle.Driver.EmitLocked("UpdateFuel", Fuel);
-                }
+                if (Vehicle.Driver != null)
+                    Vehicle.Driver.EmitLocked("UpdateFuel", Fuel);
             }
 
             _previousUpdate = updateTime;

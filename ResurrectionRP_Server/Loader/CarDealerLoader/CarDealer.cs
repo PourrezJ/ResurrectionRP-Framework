@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using AltV.Net.Async;
+using Newtonsoft.Json;
 using ResurrectionRP_Server.Entities.Vehicles;
 using System;
 using System.Collections.Generic;
@@ -61,8 +62,11 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
                 if (place.VehicleHandler == null)
                     return;
 
-                if (!place.VehicleHandler.Vehicle.Exists)
+                if (!await place.VehicleHandler.Vehicle.ExistsAsync())
                     return;
+
+                await place.VehicleHandler.Vehicle.FreezeAsync(true);
+                await place.VehicleHandler.Vehicle.InvincibleAsync(true);
 
                 string str = $"{manifest.DisplayName} \n" +
                 $"Prix $ {place.VehicleInfo.Price} \n" +
@@ -84,8 +88,6 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
             if (vehicleplace.TextLabelId != null)
                 vehicleplace.TextLabelId.Destroy();
 
-            //GameMode.Instance.Economy.CaissePublique += Economy.CalculPriceTaxe(vehicleplace.VehicleInfo.Price, GameMode.Instance.Economy.Taxe_Market);
-
             vehicleplace.VehicleHandler.SpawnVeh = false;
             vehicleplace.VehicleHandler.SetOwner(ph);
             vehicleplace.VehicleHandler.Vehicle.ResetData("CarDealer");
@@ -93,6 +95,8 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
             await vehicleplace.VehicleHandler.InsertVehicle();
             ph.Client.SendNotificationSuccess($"Vous avez acheté un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");
             CarDealerPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;
+            await vehicleplace.VehicleHandler.Vehicle.FreezeAsync(false);
+            await vehicleplace.VehicleHandler.Vehicle.InvincibleAsync(false);
         }
     }
 }

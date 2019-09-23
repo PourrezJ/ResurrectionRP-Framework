@@ -33,6 +33,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         private bool _engineOn = false;
         private byte _dirt = 0;
         private uint _radioStation = 255;
+        private VehicleLockState _lockState = VehicleLockState.Locked;
         private Tuple<bool, bool, bool, bool> _neonState = new Tuple<bool, bool, bool, bool>(false, false, false, false);
         private Color _neonColor = Color.Empty;
         private WindowTint _windowTint = WindowTint.None;
@@ -90,6 +91,25 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 if (Vehicle != null && Vehicle.Exists)
                     Vehicle.RadioStation = value;
+            }
+        }
+
+        public VehicleLockState LockState
+        {
+            get
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    _lockState = Vehicle.LockState;
+
+                return _lockState;
+            }
+
+            set
+            {
+                _lockState = value;
+
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.LockState = value;
             }
         }
 

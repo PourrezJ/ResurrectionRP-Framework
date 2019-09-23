@@ -17,7 +17,8 @@ namespace ResurrectionRP_Server.Entities.Players
             Chat.RegisterCmd("refuel", Refuel);
             Chat.RegisterCmd("repair", Repair);
             Chat.RegisterCmd("wheel", Wheel);
-            Chat.RegisterCmd("doorstate", Doorstate);
+            Chat.RegisterCmd("doorstate", DoorState);
+            Chat.RegisterCmd("neonstate", NeonState);
         }
 
         private async Task TpCoord(IPlayer player, string[] args)
@@ -87,7 +88,7 @@ namespace ResurrectionRP_Server.Entities.Players
             await Task.CompletedTask;
         }
 
-        public async Task Doorstate(IPlayer player, string[] args)
+        public async Task DoorState(IPlayer player, string[] args)
         {
             if (player.Vehicle == null)
             {
@@ -96,6 +97,18 @@ namespace ResurrectionRP_Server.Entities.Players
             }
 
             await player.EmitAsync("SetDoorState", player.Vehicle, int.Parse(args[0]), int.Parse(args[1]), bool.Parse(args[2]));
+        }
+
+        public Task NeonState(IPlayer player, string[] args)
+        {
+            if (player.Vehicle == null)
+            {
+                player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
+                return Task.CompletedTask;
+            }
+
+            player.Vehicle.GetVehicleHandler().NeonState = new Tuple<bool, bool, bool, bool>(bool.Parse(args[0]), bool.Parse(args[0]), bool.Parse(args[0]), bool.Parse(args[0]));
+            return Task.CompletedTask;
         }
     }
 }

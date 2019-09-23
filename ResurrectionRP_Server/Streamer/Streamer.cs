@@ -25,7 +25,7 @@ namespace ResurrectionRP_Server.Streamer
         public int StaticEntityNumber = 0;
         public ConcurrentDictionary<int, dynamic> ListStaticEntities = new ConcurrentDictionary<int, dynamic>();
 
-        public  Streamer()
+        public Streamer()
         {
             try
             {
@@ -33,6 +33,7 @@ namespace ResurrectionRP_Server.Streamer
                 {
                     if (!string.IsNullOrEmpty(Config.GetSetting<string>("StreamerIP")))
                         options.Ip = Config.GetSetting<string>("StreamerIP");
+
                     options.Port = 46429;
                 });
 

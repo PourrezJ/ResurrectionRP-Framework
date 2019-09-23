@@ -567,7 +567,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                     }
                 }
 
-                if (vh.NeonColor != null && vh.NeonColor.ToArgb() != 0)
+                if (vh.NeonColor != null && !vh.NeonColor.IsEmpty)
                 {
                     Color color = vh.NeonColor;
                     menu.Add(new MenuItem($"Néons : Rouge {color.R / 17} - Vert {color.G / 17} - Bleu {color.B / 17}"));

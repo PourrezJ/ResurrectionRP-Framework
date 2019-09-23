@@ -115,7 +115,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 try
                 {
-
                     if (location == null)
                         vehicle = Alt.CreateVehicle(Model,  Location.Pos , Location.GetRotation());
                     else
@@ -147,10 +146,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     }
                 }
 
-                if (NeonColor != null && NeonColor != new Color())
-                    vehicle.NeonColor = NeonColor;
+                // BUG v792 : NeonState and NeonColor not working properly
+                // if (NeonColor != null && NeonColor != Color.Empty)
+                //     vehicle.NeonColor = NeonColor;
+                // vehicle.SetNeonActive(NeonState.Item1, NeonState.Item2, NeonState.Item3, NeonState.Item4);
+                vehicle.SetSyncedMetaData("NeonColor", NeonColor.ToArgb());
+                vehicle.SetSyncedMetaData("NeonState", NeonState.Item1);
 
-                vehicle.DirtLevel = Dirt;
+                vehicle.DirtLevel = DirtLevel;
                 vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
                 vehicle.EngineOn = EngineOn;
                 vehicle.EngineHealth = EngineHealth;
@@ -294,32 +297,67 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public void UpdateProperties()
         {
-            try
-            {
-                // Needed as when fuel gets to 0 there is a vehicle save and engine stop information hasn't been set back from client
-                if (Fuel != 0)
-                    EngineOn = Vehicle.EngineOn;
+            RadioStation = Vehicle.RadioStation;
+            LockState = Vehicle.LockState;
+            BodyHealth = Vehicle.BodyHealth;
+            EngineHealth = Vehicle.EngineHealth;
+            PetrolTankHealth = Vehicle.PetrolTankHealth;
 
-                for (byte i = 0; i < 100; i++)
-                {
-                    if (Enum.IsDefined(typeof(AltV.Net.Enums.VehicleModType), i) && Vehicle.GetMod(i) > 0)
-                        Mods[i] = Vehicle.GetMod(i);
-                }
-                /*
-                AltV.Net.Enums.VehicleModType[] values = (AltV.Net.Enums.VehicleModType[])Enum.GetValues(typeof(AltV.Net.Enums.VehicleModType));
+            // BUG v792 : NeonColor and NeonState nor working properly 
+            // bool neonActive = Vehicle.IsNeonActive;
+            // NeonState = new Tuple<bool, bool, bool, bool>(neonActive, neonActive, neonActive, neonActive);
+            // NeonColor = Vehicle.NeonColor;
+            
+            DirtLevel = Vehicle.DirtLevel;
 
-                foreach (AltV.Net.Enums.VehicleModType vehicleModType in values)
-                {
-                    if (Vehicle.GetMod(vehicleModType) > 0)
-                        Mods[(int)vehicleModType] = Vehicle.GetMod(vehicleModType);
-                }
-                */
-                DamageData = Vehicle.DamageData;
-            }
-            catch (Exception ex)
+            // Needed as when fuel gets to 0 there is a vehicle save and engine stop information hasn't been set back from client
+            if (Fuel != 0)
+                EngineOn = Vehicle.EngineOn;
+
+            PrimaryColor = Vehicle.PrimaryColor;
+            SecondaryColor = Vehicle.SecondaryColor;
+            PearlColor = Vehicle.PearlColor;
+            WindowTint = Vehicle.GetWindowTint();
+            FrontBumperDamage = Vehicle.GetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Front);
+            RearBumperDamage = Vehicle.GetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Rear);
+            DamageData = Vehicle.DamageData;
+
+            for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
+                Doors[i] = (VehicleDoorState)Vehicle.GetDoorState(i);
+
+            for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
             {
-                Alt.Server.LogError("Error on vehicle save: " + ex.ToString());
+                if (Vehicle.IsWindowDamaged(i))
+                    Windows[i] = WindowState.WindowBroken;
+                else if (Vehicle.IsWindowOpened(i))
+                    Windows[i] = WindowState.WindowDown;
+                else
+                    Windows[i] = WindowState.WindowFixed;
             }
+
+            for (byte i = 0; i < Vehicle.WheelsCount; i++)
+            {
+                Wheels[i] = new Wheel();
+                Wheels[i].Health = Vehicle.GetWheelHealth(i);
+                Wheels[i].Burst = Vehicle.IsWheelBurst(i);
+            }
+            /*
+            for (byte i = 0; i < 100; i++)
+            {
+                if (Enum.IsDefined(typeof(AltV.Net.Enums.VehicleModType), i) && Vehicle.GetMod(i) > 0)
+                    Mods[i] = Vehicle.GetMod(i);
+            }
+            */
+            AltV.Net.Enums.VehicleModType[] values = (AltV.Net.Enums.VehicleModType[])Enum.GetValues(typeof(AltV.Net.Enums.VehicleModType));
+            
+            foreach (AltV.Net.Enums.VehicleModType vehicleModType in values)
+            {
+                if (Vehicle.GetMod(vehicleModType) > 0)
+                    Mods[(byte)vehicleModType] = Vehicle.GetMod(vehicleModType);
+            }
+
+            Location.Pos = Vehicle.Position;
+            Location.Rot = Vehicle.Rotation;
         }
 
         public Task PutPlayerInVehicle( IPlayer client )

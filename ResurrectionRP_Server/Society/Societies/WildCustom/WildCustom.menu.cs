@@ -144,7 +144,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                 if (vh == null)
                     return;
 
-                vh.Dirt = 0;
+                vh.DirtLevel = 0;
                 vh.UpdateFull();
             });
         }
@@ -640,7 +640,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                     }
                 }
 
-                if (vh.NeonColor != null && vh.NeonColor.ToArgb() != 0)
+                if (vh.NeonColor != null && !vh.NeonColor.IsEmpty)
                 {
                     Color color = vh.NeonColor;
                     menu.Add(new MenuItem($"Néons : Rouge {color.R / 17} - Vert {color.G / 17} - Bleu {color.B / 17}"));

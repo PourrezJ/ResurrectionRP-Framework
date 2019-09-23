@@ -472,7 +472,7 @@ namespace ResurrectionRP_Server.Factions
                                 return;
 
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~g~Terminé~w~.","Elle est niquel!");
-                            _vh.Dirt = 0;
+                            _vh.DirtLevel = 0;
                             _vh.UpdateFull();
                             await veh.SetDirtLevelAsync(0);
                             await _vh.ApplyDamageAsync();

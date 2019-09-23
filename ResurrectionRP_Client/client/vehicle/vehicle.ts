@@ -40,8 +40,7 @@ export function initialize() {
         game.setVehicleFixed(vehicle.scriptID);
     })
 
-    alt.on('gameEntityCreate', (entity) => {
-
+    alt.on('gameEntityCreate', (entity: alt.Entity) => {
         if (game.isEntityAVehicle(entity.scriptID)) {
             try
             {
@@ -49,7 +48,6 @@ export function initialize() {
                     game.setVehicleOnGroundProperly(alt.Player.local.scriptID, 5.0);
 
                 alt.setTimeout(() => {
-
                     let sirenSound: boolean = entity.getSyncedMeta("SirenDisabled");
                     let vehId = entity.scriptID;
                     if (sirenSound) {
@@ -65,6 +63,16 @@ export function initialize() {
                     let invincible: boolean = entity.getSyncedMeta("IsInvincible");
                     game.setEntityInvincible(entity.scriptID, (invincible == null) ? false : invincible);
 
+                    let neonState: boolean = entity.getSyncedMeta("NeonState");
+                    for (let i = 0; i < 4; i++) {
+                        game.setVehicleNeonLightEnabled(entity.scriptID, i, neonState);
+                    }
+
+                    let neonColor: number = entity.getSyncedMeta("NeonColor");
+                    const b = (neonColor & 0xFF);
+                    const g = (neonColor & 0xFF00) >>> 8;
+                    const r = (neonColor & 0xFF0000) >>> 16;
+                    game.setVehicleNeonLightsColour(entity.scriptID, r, g, b);
                 }, 500); 
             }
             catch (e) {
@@ -73,19 +81,34 @@ export function initialize() {
         }
     });
 
-    alt.on('syncedMetaChange', (entity: alt.Vehicle, key: string, value: any) => {
-        switch (key) {
-            case "SirenDisabled":
-                game.setDisableVehicleSirenSound(entity.scriptID, value);
-                break;
+    alt.on('syncedMetaChange', (entity: alt.Entity, key: string, value: any) => {
+        if (game.isEntityAVehicle(entity.scriptID)) {
+            switch (key) {
+                case 'SirenDisabled':
+                    game.setDisableVehicleSirenSound(entity.scriptID, value);
+                    break;
 
-            case "IsFreezed":
-                game.freezeEntityPosition(entity.scriptID, value);
-                break;
+                case 'IsFreezed':
+                    game.freezeEntityPosition(entity.scriptID, value);
+                    break;
 
-            case "IsInvincible":
-                game.setEntityInvincible(entity.scriptID, value);
-                break;
+                case 'IsInvincible':
+                    game.setEntityInvincible(entity.scriptID, value);
+                    break;
+
+                case 'NeonState':
+                    for (let i = 0; i < 4; i++) {
+                        game.setVehicleNeonLightEnabled(entity.scriptID, i, value);
+                    }
+                    break;
+
+                case 'NeonColor':
+                    const b = (value & 0xFF);
+                    const g = (value & 0xFF00) >>> 8;
+                    const r = (value & 0xFF0000) >>> 16;
+                    game.setVehicleNeonLightsColour(entity.scriptID, r, g, b);
+                    break;
+            }
         }
     });
 

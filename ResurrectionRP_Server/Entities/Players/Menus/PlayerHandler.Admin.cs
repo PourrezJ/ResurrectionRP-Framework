@@ -375,6 +375,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (vehicle != null)
                     {
+                        vehicle.LockState = VehicleLockState.Unlocked;
                         _playerSelected.Client.SetPlayerIntoVehicle(vehicle.Vehicle);
                         _playerSelected.ListVehicleKey.Add(new VehicleKey(manifest.DisplayName, vehicle.Plate));
                         //LogManager.Log($"~r~[ADMIN]~w~ {client.Name} a spawn le véhicule {_vehs.Model} {_vehs.Plate}");
@@ -415,6 +416,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (vehicle != null)
                     {
+                        vehicle.LockState = VehicleLockState.Unlocked;
                         _playerSelected.Client.SetPlayerIntoVehicle(vehicle.Vehicle);
                         await vehicle.InsertVehicle();
                         _playerSelected.ListVehicleKey.Add(new VehicleKey(manifest.DisplayName, vehicle.Plate));

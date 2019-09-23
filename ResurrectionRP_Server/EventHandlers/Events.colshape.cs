@@ -24,7 +24,7 @@ namespace ResurrectionRP_Server.EventHandlers
         #region Private methods
         private static async Task OnEntityColshape(IColShape colShape, IEntity targetEntity, bool state)
         {
-            // Alt.Server.LogInfo("Event AltAsync.OnColShape");
+            Alt.Server.LogInfo("Event AltAsync.OnColShape");
 
             try
             {
@@ -32,7 +32,7 @@ namespace ResurrectionRP_Server.EventHandlers
                 {
                     // BUG V784 : Bug ColShape.IsEntityIn() returns always false
                     colShape.AddEntity(targetEntity);
-                    // Alt.Server.LogInfo($"Entity {targetEntity.Id} enter colshape {colShape.NativePointer.ToString()}");
+                    Alt.Server.LogInfo($"Entity {targetEntity.Id} enter colshape {colShape.NativePointer.ToString()}");
 
                     if (targetEntity.Type == BaseObjectType.Vehicle)
                     {
@@ -55,7 +55,7 @@ namespace ResurrectionRP_Server.EventHandlers
                 {
                     // BUG V784 : Bug ColShape.IsEntityIn() returns always false
                     colShape.RemoveEntity(targetEntity as IPlayer);
-                    // Alt.Server.LogInfo($"Entity {targetEntity.Id} leave colshape {colShape.NativePointer.ToString()}");
+                    Alt.Server.LogInfo($"Entity {targetEntity.Id} leave colshape {colShape.NativePointer.ToString()}");
 
                     if (targetEntity.Type == BaseObjectType.Vehicle)
                     {
@@ -75,7 +75,7 @@ namespace ResurrectionRP_Server.EventHandlers
                     }
                 }
 
-                if (targetEntity.Type == BaseObjectType.Player)
+                if (targetEntity.Type == BaseObjectType.Player && targetEntity.Exists)
                     (targetEntity as IPlayer).EmitLocked("SetStateInColShape", state);
             }
             catch (Exception ex)

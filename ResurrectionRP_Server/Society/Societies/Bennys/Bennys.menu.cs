@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
+using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Entities.Vehicles;
@@ -21,6 +22,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
         private byte _modType;
         private string _subtitle;
         private double _price;
+        private Color _neonColor;
         private int _red;
         private int _green;
         private int _blue;
@@ -438,6 +440,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             menu.ListItemChangeCallback = NeonListItemChangeCallback;
             menu.Finalizer = Finalizer;
 
+            _neonColor = vh.NeonColor;
             _red = vh.NeonColor.R / 17;
             _green = vh.NeonColor.G / 17;
             _blue = vh.NeonColor.B / 17;
@@ -450,7 +453,8 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             menuItem.SetData("price", _price);
             menu.Add(menuItem);
 
-             vh.NeonState = new Tuple<bool,bool,bool,bool>(true, true, true, true);
+            vh.SetNeonState(true);
+            vh.EngineOn = true;
             await menu.OpenMenu(client);
             ClientInMenu = client;
         }
@@ -467,10 +471,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
             if (menuItem == null)
             {
-                int red = vh.NeonColor.R;
-                int green = vh.NeonColor.G;
-                int blue = vh.NeonColor.B;
-                 _vehicleBench.NeonColor = (Color.FromArgb(red, green, blue));
+                vh.NeonColor = _neonColor;
 
                 await OpenDesignMenu(client);
                 return;
@@ -491,6 +492,8 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
                 return;
             }
 
+            VehicleHandler vh = _vehicleBench.GetVehicleHandler();
+
             if (listItem.Id == "Red")
                 _red = int.Parse(listItem.Items[listIndex].ToString());
             else if (listItem.Id == "Green")
@@ -498,8 +501,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             else if (listItem.Id == "Blue")
                 _blue = int.Parse(listItem.Items[listIndex].ToString());
 
-            Color color = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
-             _vehicleBench.NeonColor = color;
+            vh.NeonColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
         }
 
         private Task ModPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
@@ -567,7 +569,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
                     }
                 }
 
-                if (vh.NeonColor != null && vh.NeonColor.ToArgb() != 0)
+                if (vh.NeonColor != null && !vh.NeonColor.IsEmpty)
                 {
                     Color color = vh.NeonColor;
                     menu.Add(new MenuItem($"Néons : Rouge {color.R / 17} - Vert {color.G / 17} - Bleu {color.B / 17}"));
@@ -595,7 +597,8 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
             if (await BankAccount.GetBankMoney(price, $"{SocietyName}: Néons"))
             {
-                vh.NeonColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
+                _neonColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
+                vh.NeonColor = _neonColor;
                 vh.UpdateFull();
 
                 client.SendNotificationSuccess($"Vous avez installé des Néons pour la somme de ${price}");

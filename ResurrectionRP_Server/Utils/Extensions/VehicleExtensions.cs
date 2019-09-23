@@ -66,9 +66,17 @@ namespace ResurrectionRP_Server
             return endup;
         }
 
-        public static void ResetData(this IVehicle client, string key)
+        public static void ResetData(this IVehicle vehicle, string key)
         {
-            client.SetData(key, null);
+            vehicle.SetData(key, null);
+        }
+
+        public static async Task FreezeAsync(this IVehicle vehicle, bool freeze)
+        {
+            if (!vehicle.Exists)
+                return;
+
+            await vehicle.SetSyncedMetaDataAsync("IsFreezed", freeze);
         }
 
         public static async Task SetPlayerIntoVehicle(this IVehicle client, IPlayer target)

@@ -39,10 +39,36 @@ export function initialize() {
         game.setVehicleFixed(vehicle.scriptID);
     })
 
-    alt.on("syncedMetaChange", (entity: alt.Vehicle, key: string, value: boolean) => {
+    alt.on("gameEntityCreate", (entity) => {
+
+        if (game.isEntityAVehicle(entity.scriptID)) {
+            try {
+                let sirenSound: boolean = entity.getSyncedMeta("SirenDisabled");
+                let vehId = entity.scriptID;
+                if (sirenSound) {
+                    game.setDisableVehicleSirenSound(vehId, true);
+                }
+                else if (sirenSound) {
+                    game.setDisableVehicleSirenSound(vehId, false);
+                }
+
+                let freezed: boolean = entity.getSyncedMeta("IsFreezed");
+                game.freezeEntityPosition(entity.scriptID, (freezed == null) ? false : freezed);
+
+            }
+            catch (e) {
+                alt.log("Error in setting SirenSound: " + e);
+            }
+        }
+    });
+
+    alt.on("syncedMetaChange", (entity: alt.Vehicle, key: string, value: any) => {
         switch (key) {
-            case "sirenDisabled":
+            case "SirenDisabled":
                 game.setDisableVehicleSirenSound(entity.scriptID, value);
+                break;
+            case "IsFreezed":
+                game.freezeEntityPosition(entity.scriptID, value);
                 break;
         }
     });

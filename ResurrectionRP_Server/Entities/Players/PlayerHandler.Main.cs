@@ -234,7 +234,10 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (PlayerSync.IsCuff)
                     await SetCuff(true);
 
-                PlayerSync.IsDead = (Health <= 0);
+                if (Health <= 100)
+                    Health = 0;
+
+                
                 await Task.Delay(500);
                 GameMode.Instance.Streamer.LoadStreamPlayer(client);
                 GameMode.Instance.DoorManager.OnPlayerConnected(client);

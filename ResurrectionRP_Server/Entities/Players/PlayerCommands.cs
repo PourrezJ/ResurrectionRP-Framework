@@ -18,7 +18,7 @@ namespace ResurrectionRP_Server.Entities.Players
             Chat.RegisterCmd("refuel", Refuel);
             Chat.RegisterCmd("repair", Repair);
             Chat.RegisterCmd("wheel", Wheel);
-            Chat.RegisterCmd("doorstate", Doorstate);
+            Chat.RegisterCmd("doorstate", DoorState);
             Chat.RegisterCmd("additem", AddItem);
         }
 

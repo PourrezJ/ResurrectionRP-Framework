@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     xmenu.Add(new XMenuItem($"{(client.Vehicle.EngineOn ? "Eteindre" : "Allumer")} le véhicule", "", "ID_Start", XMenuItemIcons.KEY_SOLID, executeCallback: true));
                     
                     if (locked == VehicleLockState.Unlocked)
-                        xmenu.Add(new XMenuItem("Gestion des portes", "", "ID_doors", XMenuItemIcons.DOOR_CLOSED_SOLID, executeCallback: true));
+                        xmenu.Add(new XMenuItem("Gestion des portes", "", "ID_Doors", XMenuItemIcons.DOOR_CLOSED_SOLID, executeCallback: true));
                         
                     if (NeonColor.IsEmpty != false)
                         xmenu.Add(new XMenuItem($"{(NeonState.Item1 ? "Eteindre" : "Allumer")} les neons", "", "ID_neons", XMenuItemIcons.LIGHTBULB_SOLID, executeCallback: true));
@@ -163,6 +163,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             Inventory.Locked = true;
                             return Task.CompletedTask;
                         });
+
                         inv.OnMove = ((IPlayer c, RPGInventoryMenu m) =>
                         {
                             if (PlayerHandler != null)
@@ -173,6 +174,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             this.UpdateFull();
                             return Task.CompletedTask;
                         });
+
                         inv.OnClose = ((IPlayer c, RPGInventoryMenu m) =>
                         {
                             Inventory.Locked = false;
@@ -182,32 +184,32 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         break;
                             
      
-                case "ID_doors":
+                case "ID_Doors":
                     await OpenDoorsMenu(client);
                     break;
 
                 case "ID_frontLeft":
-                    await SetDoorState(VehicleDoor.DriverFront, (this.GetDoorState(VehicleDoor.DriverFront) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
+                    SetDoorState(client, VehicleDoor.DriverFront, (this.GetDoorState(VehicleDoor.DriverFront) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
                     await OpenDoorsMenu(client);
                     break;
                 case "ID_frontRight":
-                    await SetDoorState(VehicleDoor.PassengerFront, (this.GetDoorState(VehicleDoor.PassengerFront) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
+                    SetDoorState(client, VehicleDoor.PassengerFront, (this.GetDoorState(VehicleDoor.PassengerFront) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
                     await OpenDoorsMenu(client);
                     break;
                 case "ID_backLeft":
-                    await SetDoorState(VehicleDoor.DriverRear, (this.GetDoorState(VehicleDoor.DriverRear) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
+                    SetDoorState(client, VehicleDoor.DriverRear, (this.GetDoorState(VehicleDoor.DriverRear) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
                     await OpenDoorsMenu(client);
                     break;
                 case "ID_backRight":
-                    await SetDoorState(VehicleDoor.PassengerRear, (this.GetDoorState(VehicleDoor.PassengerRear) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
+                    SetDoorState(client, VehicleDoor.PassengerRear, (this.GetDoorState(VehicleDoor.PassengerRear) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
                     await OpenDoorsMenu(client);
                     break;
                 case "ID_hood":
-                    await SetDoorState(VehicleDoor.Hood, (this.GetDoorState(VehicleDoor.Hood) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
+                    SetDoorState(client, VehicleDoor.Hood, (this.GetDoorState(VehicleDoor.Hood) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
                     await OpenDoorsMenu(client);
                     break;
                 case "ID_trunk":
-                    await SetDoorState(VehicleDoor.Trunk, (this.GetDoorState(VehicleDoor.Trunk) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
+                    SetDoorState(client, VehicleDoor.Trunk, (this.GetDoorState(VehicleDoor.Trunk) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
                     await OpenDoorsMenu(client);
                     break;
                     /*

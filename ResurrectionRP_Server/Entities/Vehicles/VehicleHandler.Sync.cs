@@ -354,24 +354,25 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             get
             {
+                /*
                 if (Vehicle != null && Vehicle.Exists)
                 {
                     for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
                         _doors[i] = (VehicleDoorState)Vehicle.GetDoorState(i);
                 }
-
+                */
                 return _doors;
             }
 
             set
             {
                 _doors = value;
-
+                /*
                 if (Vehicle != null && Vehicle.Exists)
                 {
                     for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
                         Vehicle.SetDoorState(i, (byte)_doors[i]);
-                }
+                }*/
             }
         }
 
@@ -477,10 +478,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public VehicleDoorState GetDoorState(VehicleDoor door) => Doors[(byte)door];
 
-        public async Task SetDoorState(VehicleDoor door, VehicleDoorState state)
+        public void SetDoorState(IPlayer player, VehicleDoor door, VehicleDoorState state)
         {
             Doors[(byte)door] = state;
-            await Vehicle.SetDoorStateAsync(door, state);
+
+            if (Vehicle == null)
+                return;
+
+            if (!Vehicle.Exists)
+                return;
+
+            Vehicle.SetDoorStateFix(player, door, state, false);
+            //Vehicle.SetDoorState(door, state);
         }
 
         public bool HaveTowVehicle() => TowTruck != null;

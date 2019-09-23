@@ -600,7 +600,6 @@ namespace ResurrectionRP_Server.Factions
                         menu.Id = "ID_ConcessMenuChoise";
                         menu.Title = "Concessionnaire";
                         menu.SubTitle = "Quel véhicule souhaitez-vous acheter :";
-                        menu.SetData("Faction_Location", location);
                         menu.ItemSelectCallback = ConcessCallBack;
 
                         foreach (FactionVehicle veh in VehicleAllowed)
@@ -650,6 +649,7 @@ namespace ResurrectionRP_Server.Factions
                 FactionVehicle fv = (FactionVehicle)menuItem.GetData("Veh");
                 PlayerHandler ph = client.GetPlayerHandler();
                 string vhname = (string)menuItem.GetData("Manifest");
+
                 if (await BankAccount.GetBankMoney(fv.Price, $"Achat véhicule {vhname} par {ph.Identite.Name}"))
                 {
                     VehicleHandler vh = await VehiclesManager.SpawnVehicle(client.GetSocialClub(), (uint)fv.Hash, location.Pos, location.Rot, inventory: new Inventory.Inventory(fv.Weight, fv.MaxSlot), primaryColor: fv.PrimaryColor, secondaryColor: fv.SecondaryColor);
@@ -661,9 +661,7 @@ namespace ResurrectionRP_Server.Factions
                     await MenuManager.CloseMenu(client);
                 }
                 else
-                {
                     client.SendNotificationError("Votre faction n'a pas assez d'argent.");
-                }
             }
         }
         #endregion

@@ -41,12 +41,14 @@ namespace ResurrectionRP_Server.Factions
                     new FactionRang(3,"Lieutenant", true, 3500),
                     new FactionRang(4,"Colonel", true, 4000)
                 };
+
             VehicleAllowed = new List<FactionVehicle>();
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Ambulance));
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Insurgent2));
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Insurgent3));
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Polmav));
             VehicleAllowed.Add(new FactionVehicle(3, (VehicleModel)VehicleModel2.qrv));
+            VehicleAllowed.Add(new FactionVehicle(3, VehicleModel.Apc));
 
             BlipPosition = new Vector3(298.5557f, -584.4615f, 43.26084f);
             BlipColor = (BlipColor)57;

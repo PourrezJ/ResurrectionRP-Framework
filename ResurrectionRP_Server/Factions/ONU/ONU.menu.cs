@@ -1,18 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
-using AltV.Net;
+﻿using System.Threading.Tasks;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Peds;
-using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.XMenuManager;
-using ResurrectionRP_Server.Menus;
 using ResurrectionRP_Server.Models.InventoryData;
-using ResurrectionRP_Server.Inventory;
 using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Utils.Enums;
 
@@ -31,7 +22,7 @@ namespace ResurrectionRP_Server.Factions
                 {
                     if (await c.GetPlayerHandler().HasBankMoney(healprice, "Soin Hospital"))
                     {
-                        c.Health = 100;
+                        c.Health = 200;
                         c.GetPlayerHandler().PlayerSync.Injured = false;
                         c.SendNotificationSuccess("Voilà qui est fait!");
                     }

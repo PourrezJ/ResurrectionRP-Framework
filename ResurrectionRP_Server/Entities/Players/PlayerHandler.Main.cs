@@ -83,14 +83,14 @@ namespace ResurrectionRP_Server.Entities.Players
         public int Thirst { get; set; } = 100;
         public bool Jailed { get; private set; } = false;
 
-        private float _health = 100;
-        public float Health
+        private ushort _health = 100;
+        public ushort Health
         {
             get => _health;
             set
             {
                 if (Client != null)
-                    Client.Health = ((ushort)value);
+                    Client.Health = value;
 
                 _health = value;
             }
@@ -207,7 +207,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     
                     Client.Emit
                     (
-                        Utils.Enums.Events.PlayerInitialised,
+                        Events.PlayerInitialised,
                         (int)StaffRank,
                         Identite.Name,
                         Convert.ToSingle(Money),
@@ -225,7 +225,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     Client.Spawn(Location.Pos, 0);
                     Character.ApplyCharacter(Client);
                     Client.Dimension = GameMode.GlobalDimension;
-                    Client.Health = (ushort)(Health + 100);
+                    Client.Health = Health;
                     Client.Emit("FadeIn", 3000);
                 });
 

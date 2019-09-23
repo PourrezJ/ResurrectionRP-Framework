@@ -334,7 +334,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             set
             {
                 _doors = value;
-
+                /*
                 if (Vehicle != null && Vehicle.Exists)
                 {
                     for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
@@ -417,9 +417,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public VehicleDoorState GetDoorState(VehicleDoor door) => Doors[(byte)door];
 
-        public void SetDoorState(VehicleDoor door, VehicleDoorState state)
+        public void SetDoorState(IPlayer player, VehicleDoor door, VehicleDoorState state)
         {
             Doors[(byte)door] = state;
+
+            if (Vehicle == null)
+                return;
+
+            if (!Vehicle.Exists)
+                return;
+
+            Vehicle.SetDoorStateFix(player, door, state, false);
+            //Vehicle.SetDoorState(door, state);
         }
 
         public bool HaveTowVehicle() => TowTruck != null;

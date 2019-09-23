@@ -29,6 +29,7 @@ namespace ResurrectionRP_Server.Streamer
         {
             try
             {
+                Alt.Server.LogInfo("Initialisation du streamer.");
                 AltNetworking.Configure(options =>
                 {
                     if (!string.IsNullOrEmpty(Config.GetSetting<string>("StreamerIP")))
@@ -44,6 +45,8 @@ namespace ResurrectionRP_Server.Streamer
                 AltNetworking.OnEntityStreamOut = (entity, client) =>
                 {
                 };
+
+                
             }
             catch(Exception ex)
             {

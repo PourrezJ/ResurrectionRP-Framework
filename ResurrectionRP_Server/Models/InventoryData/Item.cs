@@ -118,7 +118,7 @@ namespace ResurrectionRP_Server.Models
                 {
                     if (await ph.AddItem(pickup.Item, pickup.Quantite))
                     {
-                        client.PlayAnimation("putdown_low", "pickup_object", 0);
+                        client.PlayAnimation("putdown_low", "pickup_object", 49);
                         pickup.Delete();
                     }
                     else

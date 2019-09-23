@@ -5,6 +5,7 @@ import * as chat from '../chat/chat';
 import * as MenuManager from '../MenuManager/MenuManager';
 import * as Utils from '../Utils/Utils';
 import * as Globals from '../Utils/Globals';
+import * as Streamer from '../Streamer/NetworkingEntityClient';
 
 /*
  * POUR LE RAY CAST LES FLAGS
@@ -46,6 +47,7 @@ export class Interaction {
             switch (key) {
                 case 69:    // E
                 case 85:    // U
+                case 87:    // W
                 case 113:   // F2
                 case 114:   // F3
                 case 115:   // F4
@@ -115,7 +117,7 @@ export class Interaction {
                     _pos.z + (_dir.z * 9),
                 )
 
-                raycastResult = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, 30);
+                raycastResult = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, 255);
 
                 if (raycastResult.isHit && raycastResult.entityType == 2 && alt.Player.local.vehicle == null && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
                     Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le véhicule");

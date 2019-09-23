@@ -110,8 +110,11 @@ namespace ResurrectionRP_Server
         {
             var vehs = Alt.GetAllPlayers();
             List<IPlayer> endup = new List<IPlayer>();
-            var position = client.GetPosition();
-            Vector3 osition = new Vector3(position.X, position.Y, position.Z);
+
+            Position playerPos = Position.Zero;
+            client.GetPositionLocked(ref playerPos);
+
+            Vector3 osition = new Vector3(playerPos.X, playerPos.Y, playerPos.Z);
             foreach (IPlayer veh in vehs)
             {
                 if (!veh.Exists)

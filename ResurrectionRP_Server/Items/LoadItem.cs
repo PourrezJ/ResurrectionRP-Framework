@@ -127,7 +127,7 @@ namespace ResurrectionRP_Server.Items
                     new Weapons(ItemID.Weapon, "Katana", "", 3, hash: WeaponHash.Bottle, isDockable: true, itemPrice: 3100),
 
                     new Alcohol(ItemID.Rhum , "Rhum", "Tous les chemins mènent au Rhum", 1 , true, true, true, timer:120000, isDockable: false, itemPrice: 140, icon: "rum"),
-                    new HealItem(ItemID.RhumLiquide, "Rhum Liquide", "Déinfecte et sert de carburant.",1,true,true,true,life:-15, icon:"bandage"),
+                    new HealItem(ItemID.RhumLiquide, "Rhum Liquide", "Déinfecte et sert de carburant.",1,true,true,true, life:0, icon:"bandage"),
                     new Unusable(ItemID.Canneasurcre, "Canne a sucre", "", 2),
 
                     new Unusable(ItemID.BouquetFleur, "Bouquet de fleur", "", 1, isDockable: true, itemPrice: 100),

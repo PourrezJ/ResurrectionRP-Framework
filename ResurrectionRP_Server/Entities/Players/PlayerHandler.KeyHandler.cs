@@ -116,10 +116,31 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
 
                     Farm farm = FarmManager.PlayerInFarmZone(client);
-
                     if (farm != null)
                     {
                         await farm.StartFarming(client);
+                        return;
+                    }
+                    
+                    var Ph = PlayerManager.GetPlayersList().Find(p => p.Location.Pos.DistanceTo(raycastData.pos) < 1);
+                    if (playerDistant != null || Ph != null)
+                    {
+                        await ph.OpenXtremPlayer(playerDistant ?? Ph.Client);
+                        return;
+                    }
+
+                    if (raycastData.entityType == 1)
+                    {
+                        var ped = Peds.PedsManager.NPCList.Find(p => p.Position.DistanceTo(raycastData.pos) <= 1.5 && p.Model == (AltV.Net.Enums.PedModel)raycastData.entityHash);
+                        if (ped != null)
+                        {
+                            if (ped.Position.DistanceTo(client.Position) > 3)
+                                return;
+
+                            if (ped.NpcInteractCallBack != null)
+                                await ped.NpcInteractCallBack.Invoke(client, ped);
+                        }
+                        
                         return;
                     }
 
@@ -132,12 +153,6 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (vh != null && !client.IsInVehicle)
                     {
                         await vh.OpenXtremMenu(client);
-                        return;
-                    }
-
-                    if (playerDistant != null)
-                    {
-                        await ph.OpenXtremPlayer(playerDistant);
                         return;
                     }
 
@@ -331,6 +346,23 @@ namespace ResurrectionRP_Server.Entities.Players
                 case ConsoleKey.NumPad8:
                 case ConsoleKey.NumPad9:
                    OnAnimationKeyPressed(Keycode);
+                    break;
+
+                case ConsoleKey.W:
+                    if (raycastData.entityType == 1)
+                    {
+                        var ped = Peds.PedsManager.NPCList.Find(p => p.Position.DistanceTo(raycastData.pos) <= 1.5 && p.Model == (AltV.Net.Enums.PedModel)raycastData.entityHash);
+                        if (ped != null)
+                        {
+                            if (ped.Position.DistanceTo(client.Position) > 3)
+                                return;
+
+                            if (ped.NpcSecInteractCallBack != null)
+                                await ped.NpcSecInteractCallBack.Invoke(client, ped);
+                        }
+
+                        return;
+                    }
                     break;
             }
         }

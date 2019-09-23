@@ -1,6 +1,5 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import * as chat from '../chat/chat';
 
 let player = alt.Player.local;
 let fuelMax = 100;
@@ -9,7 +8,6 @@ let fuelConsum = 5.5;
 var CurrentMilage = 0.0;
 let speedoWindow = new alt.WebView('http://resource/client/cef/speedometer/speedometer.html');
 let lastSent = Date.now();
-let lastPos = null;
 let playerVehicle: alt.Vehicle = null;
 let keepEngineOn: boolean = false;
 
@@ -19,6 +17,11 @@ export function initialize() {
     alt.onServer('OnPlayerEnterVehicle', showSpeedometer);
     alt.onServer('SetDoorState', setDoorState);
     alt.onServer('HornPreview', hornPreview);
+
+    alt.onServer('SetDoorState', (vehicle: alt.Vehicle, door: number, state: number, option: boolean) => {
+        alt.log("debug 1 ");
+        setDoorState(vehicle, door, state, option);
+    });
 
     alt.onServer('UpdateFuel', (fuel: number) => {
         fuelCur = fuel;
@@ -44,24 +47,22 @@ export function initialize() {
         if (game.isEntityAVehicle(entity.scriptID)) {
             try
             {
+                let vehId = entity.scriptID;
+
                 if (game.isVehicleSeatFree(alt.Player.local.scriptID, -1, false))
                     game.setVehicleOnGroundProperly(alt.Player.local.scriptID, 5.0);
 
+               
                 alt.setTimeout(() => {
                     let sirenSound: boolean = entity.getSyncedMeta("SirenDisabled");
-                    let vehId = entity.scriptID;
-                    if (sirenSound) {
-                        game.setDisableVehicleSirenSound(vehId, true);
-                    }
-                    else if (sirenSound) {
-                        game.setDisableVehicleSirenSound(vehId, false);
-                    }
+                    
+                    game.setDisableVehicleSirenSound(vehId, (sirenSound == null) ? false : sirenSound)
 
                     let freezed: boolean = entity.getSyncedMeta("IsFreezed");
-                    game.freezeEntityPosition(entity.scriptID, (freezed == null) ? false : freezed);
+                    game.freezeEntityPosition(vehId, (freezed == null) ? false : freezed);
 
                     let invincible: boolean = entity.getSyncedMeta("IsInvincible");
-                    game.setEntityInvincible(entity.scriptID, (invincible == null) ? false : invincible);
+                    game.setEntityInvincible(vehId, (invincible == null) ? false : invincible);
 
                     let neonState: boolean = entity.getSyncedMeta("NeonState");
                     for (let i = 0; i < 4; i++) {
@@ -166,13 +167,26 @@ export function showSpeedometer(vehicle, seat, currentFuel, maxFuel, milage, fue
 }
 
 export function setDoorState(vehicle: alt.Vehicle, door: number, state: number, option: boolean) {
-    if (state == 0) {
-        game.setVehicleDoorShut(vehicle.scriptID, door, option);
-    } else if (state == 255) {
-        game.setVehicleDoorBroken(vehicle.scriptID, door, option);
-    } else {
-        game.setVehicleDoorOpen(vehicle.scriptID, door, false, option);
+    alt.log(`debug: ${door} ${state} ${option}`);
+
+    switch (state) {
+        case 0:
+            game.setVehicleDoorShut(vehicle.scriptID, door, option);
+            break;
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+            game.setVehicleDoorOpen(vehicle.scriptID, door, false, option);
+            break;      
+        case 255:
+            game.setVehicleDoorBroken(vehicle.scriptID, door, option);
+            break;
     }
+
 }
 
 function hornPreview(vehicle: alt.Vehicle, horn: number, preview: boolean) {

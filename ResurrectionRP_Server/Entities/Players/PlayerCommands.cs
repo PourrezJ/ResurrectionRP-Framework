@@ -1,6 +1,7 @@
 ﻿using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Utils.Enums;
 using System;
 using System.Threading.Tasks;
@@ -17,8 +18,53 @@ namespace ResurrectionRP_Server.Entities.Players
             Chat.RegisterCmd("refuel", Refuel);
             Chat.RegisterCmd("repair", Repair);
             Chat.RegisterCmd("wheel", Wheel);
-            Chat.RegisterCmd("doorstate", DoorState);
-            Chat.RegisterCmd("neonstate", NeonState);
+            Chat.RegisterCmd("doorstate", Doorstate);
+            Chat.RegisterCmd("additem", AddItem);
+        }
+
+        public async Task AddItem(IPlayer player, string[] arguments = null)
+        {
+            try
+            {
+                PlayerHandler ph = player.GetPlayerHandler();
+                if (ph?.StaffRank < AdminRank.Moderator) 
+                    return;
+
+                string command = "";
+
+                for (int i = 0; i < arguments.Length; i++)
+                {
+                    command += $" {arguments[i]}";
+                }
+                command = command.ToLower();
+
+                string[] infos = command.Split(new[] { " x" }, StringSplitOptions.RemoveEmptyEntries);
+                int number = (Convert.ToInt32(infos[1]) != 0) ? Convert.ToInt32(infos[1]) : 1;
+
+                string itemName = infos[0].Remove(0, 1);
+
+                Models.Item item = LoadItem.ItemsList.Find(x => x.name.ToLower() == itemName);
+
+                if (item != null && ph != null)
+                {
+                    if (await ph.AddItem(item, number))
+                    {
+                        player.SendNotificationSuccess($"Vous avez ajouté {number} {item.name}");
+                    }
+                    else
+                    {
+                        player.SendNotificationError($"Vous n'avez pas la place dans votre inventaire pour {item.name}");
+                    }
+                }
+                else
+                {
+                    player.SendNotificationError("Item inconnu.");
+                }
+            }
+            catch (Exception ex)
+            {
+                player.SendNotification(ex.ToString());
+            }
         }
 
         private async Task TpCoord(IPlayer player, string[] args)

@@ -117,16 +117,17 @@ namespace ResurrectionRP_Server.Factions
         private static List<EmergencyCall> EmergencyCalls = new List<EmergencyCall>();
 
 
-        private async Task ONU_CallUrgenceMedic(IPlayer client, object[] args)
+        private Task ONU_CallUrgenceMedic(IPlayer client, object[] args)
         {
             if (!client.Exists)
-                return;
+                return Task.CompletedTask;
+
             EmergencyCall result = EmergencyCalls.Find(
-                            delegate (EmergencyCall ec)
-                            {
-                                return ec.player.Id == client.Id;
-                            }
-                );
+            delegate (EmergencyCall ec)
+            {
+                return ec.player.Id == client.Id;
+            });
+
             if (result != null)
                 EmergencyCalls.Remove(result);
 
@@ -143,6 +144,7 @@ namespace ResurrectionRP_Server.Factions
                 }
             }
             client.EmitLocked("ONU_Callback", ServicePlayerList.Count);
+            return Task.CompletedTask;
         }
 
         private Task ONU_IAccept(IPlayer client, object[] args)

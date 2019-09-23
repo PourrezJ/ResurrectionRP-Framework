@@ -111,6 +111,9 @@ namespace ResurrectionRP_Server.Phone
             if (_client == null)
                 return;
 
+            if (!_client.Exists)
+                return;
+
             string contactName = GetNameForNumber(phoneNumber);
             _client.SendNotification("Nouveau message de ~b~~h~" + (contactName ?? phoneNumber));
 
@@ -125,6 +128,9 @@ namespace ResurrectionRP_Server.Phone
 
             foreach (IPlayer recever in receverList)
             {
+                if (!recever.Exists)
+                    continue;
+
                 if (recever != null && recever.Exists)
                     recever?.PlaySoundFromEntity(_client, -1, "MP_5_SECOND_TIMER", "HUD_FRONTEND_DEFAULT_SOUNDSET");
             }

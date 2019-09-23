@@ -49,6 +49,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         [BsonIgnore]
         public bool SpawnVeh { get; set; }
+
         public bool Locked { get; set; } = true;
         
         public DateTime LastUse { get; set; } = DateTime.Now;
@@ -110,85 +111,88 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             await AltAsync.Do(() =>
             {
+                IVehicle vehicle = null;
+
                 try
                 {
-                    if(location == null)
-                        Vehicle = Alt.CreateVehicle(Model,  Location.Pos , Location.GetRotation());
+
+                    if (location == null)
+                        vehicle = Alt.CreateVehicle(Model,  Location.Pos , Location.GetRotation());
                     else
-                        Vehicle = Alt.CreateVehicle(Model, location.Pos, location.GetRotation());
+                        vehicle = Alt.CreateVehicle(Model, location.Pos, location.GetRotation());
                 }
                 catch (Exception ex)
                 {
                     Alt.Server.LogError("SpawnVehicle: " + ex);
                 }
 
-                if (Vehicle == null)
+                if (vehicle == null)
                     return;
 
-                Vehicle.ModKit = 1;
-                Vehicle.SetData("VehicleHandler", this);
-                Vehicle.NumberplateText = Plate;
-                Vehicle.PrimaryColor = PrimaryColor;
-                Vehicle.SecondaryColor = SecondaryColor;
+                vehicle.ModKit = 1;
+                vehicle.SetData("VehicleHandler", this);
+                vehicle.NumberplateText = Plate;
+                vehicle.PrimaryColor = PrimaryColor;
+                vehicle.SecondaryColor = SecondaryColor;
 
                 if (Mods.Count > 0)
                 {
                     foreach (KeyValuePair<byte, byte> mod in Mods)
                     {
-                        Vehicle.SetMod(mod.Key, mod.Value);
+                        vehicle.SetMod(mod.Key, mod.Value);
 
                         if (mod.Key == 69)
-                            Vehicle.WindowTint = mod.Value;
+                            vehicle.WindowTint = mod.Value;
                     }
                 }
 
                 if (NeonColor != null && NeonColor != new Color())
-                    Vehicle.NeonColor = NeonColor;
+                    vehicle.NeonColor = NeonColor;
 
-                Vehicle.DirtLevel = Dirt;
-                Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
-                Vehicle.EngineOn = EngineOn;
-                Vehicle.EngineHealth = EngineHealth;
-                Vehicle.BodyHealth = BodyHealth;
-                Vehicle.RadioStation = RadioStation;
+                vehicle.DirtLevel = Dirt;
+                vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
+                vehicle.EngineOn = EngineOn;
+                vehicle.EngineHealth = EngineHealth;
+                vehicle.BodyHealth = BodyHealth;
+                vehicle.RadioStation = RadioStation;
                 IsParked = false;
 
                 if (Wheels == null)
                 {
-                    Wheels = new Wheel[Vehicle.WheelsCount];
+                    Wheels = new Wheel[vehicle.WheelsCount];
 
                     for (int i = 0; i < Wheels.Length; i++)
                         Wheels[i] = new Wheel();
                 }
 
-                for (byte i = 0; i < Vehicle.WheelsCount; i++)
+                for (byte i = 0; i < vehicle.WheelsCount; i++)
                 {
-                    Vehicle.SetWheelBurst(i, Wheels[i].Burst);
-                    Vehicle.SetWheelHealth(i, Wheels[i].Health);
-                    Vehicle.SetWheelHasTire(i, Wheels[i].HasTire);
+                    vehicle.SetWheelBurst(i, Wheels[i].Burst);
+                    vehicle.SetWheelHealth(i, Wheels[i].Health);
+                    vehicle.SetWheelHasTire(i, Wheels[i].HasTire);
                 }
                 
                 for(byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
-                    Vehicle.SetDoorState(i, (byte)Doors[i]);
+                    vehicle.SetDoorState(i, (byte)Doors[i]);
 
                 for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
                 {
                     if (Windows[i] == WindowState.WindowBroken)
-                        Vehicle.SetWindowDamaged(i, true);
+                        vehicle.SetWindowDamaged(i, true);
                     else if (Windows[i] == WindowState.WindowDown)
-                        Vehicle.SetWindowOpened(i, true);
+                        vehicle.SetWindowOpened(i, true);
                 }
 
-                Vehicle.SetBumperDamageLevel(VehicleBumper.Front, FrontBumperDamage);
-                Vehicle.SetBumperDamageLevel(VehicleBumper.Rear, RearBumperDamage);
+                vehicle.SetBumperDamageLevel(VehicleBumper.Front, FrontBumperDamage);
+                vehicle.SetBumperDamageLevel(VehicleBumper.Rear, RearBumperDamage);
 
-                Vehicle.SetWindowTint(WindowTint);
+                vehicle.SetWindowTint(WindowTint);
                 /*
                 if (!string.IsNullOrEmpty(DamageData))
-                    Vehicle.DamageData = DamageData;
+                    vehicle.DamageData = DamageData;
 
                 if (!string.IsNullOrEmpty(AppearanceData))
-                    Vehicle.AppearanceData = AppearanceData;*/
+                    vehicle.AppearanceData = AppearanceData;*/
 
                 if (setLastUse)
                     LastUse = DateTime.Now;
@@ -196,19 +200,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (location != null)
                     Location = location;
 
-                Vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
-                Vehicle.EngineOn = EngineOn;
-                Vehicle.Position = Location.Pos;
+                vehicle.Position = Location.Pos;
                 _previousPosition = Location.Pos;
 
+                vehicle.Dimension = Dimension;
+                Vehicle = vehicle;
+
                 VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
-                VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
+                VehiclesManager.VehicleHandlerList.TryAdd(vehicle, this);
                 
                 // Needed as vehicles in database don't have this value
                 if (FuelConsumption == 0)
                     FuelConsumption = 5.5f;
-
-                Vehicle.Dimension = Dimension;
             });
 
             if (HaveTowVehicle())

@@ -256,11 +256,11 @@ IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon 
             return null;
         }
 
-        public static async Task UpdateVehiclesMilageAndFuel()
+        public static void UpdateVehiclesMilageAndFuel()
         {
-            foreach (IVehicle vehicle in VehiclesManager.GetAllVehicles())
+            foreach (IVehicle vehicle in GetAllVehicles())
             {
-                if (await vehicle.ExistsAsync() && await vehicle.IsEngineOnAsync())
+                if (vehicle.Exists && vehicle.EngineOn)
                     vehicle.GetVehicleHandler()?.UpdateMilageAndFuel();
             }
         }

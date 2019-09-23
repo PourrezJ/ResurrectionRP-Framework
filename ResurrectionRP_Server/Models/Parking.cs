@@ -365,8 +365,6 @@ namespace ResurrectionRP_Server.Models
             if (vh == null)
                 return;
 
-            // client.EmitLocked("toggleControl", false);
-
             try
             {
                 if (!client.GetPlayerHandler().HasMoney(Price))
@@ -397,6 +395,7 @@ namespace ResurrectionRP_Server.Models
                         veh.IsParked = true;
                     }
 
+                    veh.UpdateMilageAndFuel();
                     veh.UpdateFull();
                     await veh.Delete(false);
                     await OnVehicleStored?.Invoke(client, veh); // call event for success storage
@@ -411,8 +410,6 @@ namespace ResurrectionRP_Server.Models
             {
                 Alt.Server.LogError("StoreVehicle" + ex);
             }
-
-            // await client.EmitAsync("toggleControl", true);
         }
 
         public bool RemoveVehicle(VehicleHandler veh)

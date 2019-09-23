@@ -42,22 +42,29 @@ export function initialize() {
     alt.on("gameEntityCreate", (entity) => {
 
         if (game.isEntityAVehicle(entity.scriptID)) {
-            try {
-                let sirenSound: boolean = entity.getSyncedMeta("SirenDisabled");
-                let vehId = entity.scriptID;
-                if (sirenSound) {
-                    game.setDisableVehicleSirenSound(vehId, true);
-                }
-                else if (sirenSound) {
-                    game.setDisableVehicleSirenSound(vehId, false);
-                }
-                
-                let freezed: boolean = entity.getSyncedMeta("IsFreezed");
-                game.freezeEntityPosition(entity.scriptID, (freezed == null) ? false : freezed);
+            try
+            {
+                if (game.isVehicleSeatFree(alt.Player.local.scriptID, -1, false))
+                    game.setVehicleOnGroundProperly(alt.Player.local.scriptID, 5.0);
 
-                let invincible: boolean = entity.getSyncedMeta("IsInvincible");
-                game.setEntityInvincible(entity.scriptID, (invincible == null) ? false : invincible);
-                alt.log("invincible: " + invincible);
+                alt.setTimeout(() => {
+
+                    let sirenSound: boolean = entity.getSyncedMeta("SirenDisabled");
+                    let vehId = entity.scriptID;
+                    if (sirenSound) {
+                        game.setDisableVehicleSirenSound(vehId, true);
+                    }
+                    else if (sirenSound) {
+                        game.setDisableVehicleSirenSound(vehId, false);
+                    }
+
+                    let freezed: boolean = entity.getSyncedMeta("IsFreezed");
+                    game.freezeEntityPosition(entity.scriptID, (freezed == null) ? false : freezed);
+
+                    let invincible: boolean = entity.getSyncedMeta("IsInvincible");
+                    game.setEntityInvincible(entity.scriptID, (invincible == null) ? false : invincible);
+
+                }, 500); 
             }
             catch (e) {
                 alt.log("Error in setting data: " + e);
@@ -70,8 +77,13 @@ export function initialize() {
             case "SirenDisabled":
                 game.setDisableVehicleSirenSound(entity.scriptID, value);
                 break;
+
             case "IsFreezed":
                 game.freezeEntityPosition(entity.scriptID, value);
+                break;
+
+            case "IsInvincible":
+                game.setEntityInvincible(entity.scriptID, value);
                 break;
         }
     });

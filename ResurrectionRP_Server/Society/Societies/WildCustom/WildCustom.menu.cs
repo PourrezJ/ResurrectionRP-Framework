@@ -486,13 +486,14 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
 
             if (menuItem == null)
             {
-                if (vh.Mods.ContainsKey(_modType))
+                if (_modType == 14 && vh.Mods.ContainsKey(_modType))
+                    HornStop(_vehicleBench, vh.Mods[_modType]);
+                else if (_modType == 14)
+                    HornStop(_vehicleBench, 0);
+                else if (vh.Mods.ContainsKey(_modType))
                     _vehicleBench.SetMod(_modType, vh.Mods[_modType]);
                 else
                     _vehicleBench.SetMod(_modType, 0);
-
-                if (_modType == 14)
-                    StopKlaxon(_vehicleBench);
 
                 await OpenDesignMenu(client);
             }
@@ -582,10 +583,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             byte selected = (byte)itemIndex;
 
             if (_modType == 14)
-            {
-                _vehicleBench.SetMod(_modType, selected);
-                PreviewKlaxon(_vehicleBench);
-            }
+                HornPreview(_vehicleBench, selected);
             else
                 _vehicleBench.SetMod(_modType, selected);
 
@@ -710,7 +708,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                     return;
 
                 vh.Mods.AddOrUpdate(_modType, selected, (key, oldvalue) => selected);
-                await _vehicleBench.SetModAsync(_modType, selected);
+                _vehicleBench.SetMod(_modType, selected);
                 vh.UpdateFull();
                 string str = $"Vous avez installé {modName}";
 

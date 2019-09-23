@@ -67,25 +67,25 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             _garageType = Societies.Bennys.GarageType.Car;
         }
 
-        private void PreviewKlaxon(IVehicle vehicle)
+        private void HornPreview(IVehicle vehicle, byte horn)
         {
-            foreach (IPlayer client in vehicle.GetPlayersInRange(8f))
+            foreach (IPlayer client in vehicle.GetPlayersInRange(10f))
             {
                 if (!client.Exists)
                     continue;
 
-                client.EmitLocked("VehicleSync_KlaxonPreview", vehicle.Id);
+                client.EmitLocked("HornPreview", vehicle, horn - 1, true);
             }
         }
 
-        private void StopKlaxon(IVehicle vehicle)
+        private void HornStop(IVehicle vehicle, byte horn)
         {
-            foreach (IPlayer client in vehicle.GetPlayersInRange(8f))
+            foreach (IPlayer client in vehicle.GetPlayersInRange(58f))
             {
                 if (!client.Exists)
                     continue;
 
-                client.EmitLocked("VehicleSync_KlaxonPreview", vehicle.Id, false);
+                client.EmitLocked("HornPreview", vehicle, horn - 1, false);
             }
         }
         #endregion

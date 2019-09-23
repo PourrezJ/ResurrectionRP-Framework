@@ -18,6 +18,7 @@ export function initialize() {
     alt.onServer('OnPlayerLeaveVehicle', hideSpeedometer);
     alt.onServer('OnPlayerEnterVehicle', showSpeedometer);
     alt.onServer('SetDoorState', setDoorState);
+    alt.onServer('HornPreview', hornPreview);
 
     alt.onServer('UpdateFuel', (fuel: number) => {
         fuelCur = fuel;
@@ -39,7 +40,7 @@ export function initialize() {
         game.setVehicleFixed(vehicle.scriptID);
     })
 
-    alt.on("gameEntityCreate", (entity) => {
+    alt.on('gameEntityCreate', (entity) => {
 
         if (game.isEntityAVehicle(entity.scriptID)) {
             try
@@ -72,7 +73,7 @@ export function initialize() {
         }
     });
 
-    alt.on("syncedMetaChange", (entity: alt.Vehicle, key: string, value: any) => {
+    alt.on('syncedMetaChange', (entity: alt.Vehicle, key: string, value: any) => {
         switch (key) {
             case "SirenDisabled":
                 game.setDisableVehicleSirenSound(entity.scriptID, value);
@@ -148,6 +149,20 @@ export function setDoorState(vehicle: alt.Vehicle, door: number, state: number, 
         game.setVehicleDoorBroken(vehicle.scriptID, door, option);
     } else {
         game.setVehicleDoorOpen(vehicle.scriptID, door, false, option);
+    }
+}
+
+function hornPreview(vehicle: alt.Vehicle, horn: number, preview: boolean) {
+    if (preview) {
+        game.setVehicleMod(vehicle.scriptID, 14, horn, false);
+        game.startVehicleHorn(vehicle.scriptID, 600000, game.getHashKey("HELDDOWN"), false);
+    } else {
+        // Hack to stop the horn
+        game.setVehicleMod(vehicle.scriptID, 14, -1, false);
+        game.setHornEnabled(vehicle.scriptID, false);
+        game.startVehicleHorn(vehicle.scriptID, 0, game.getHashKey("NORMAL"), false);
+        game.setHornEnabled(vehicle.scriptID, true);
+        game.setVehicleMod(vehicle.scriptID, 14, horn, false);
     }
 }
 

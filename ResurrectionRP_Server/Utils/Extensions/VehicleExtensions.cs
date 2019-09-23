@@ -79,6 +79,14 @@ namespace ResurrectionRP_Server
             await vehicle.SetSyncedMetaDataAsync("IsFreezed", freeze);
         }
 
+        public static async Task InvincibleAsync(this IVehicle vehicle, bool invincible)
+        {
+            if (!vehicle.Exists)
+                return;
+
+            await vehicle.SetSyncedMetaDataAsync("IsInvincible", invincible);
+        }
+
         public static async Task SetPlayerIntoVehicle(this IVehicle client, IPlayer target)
         {
             await target.EmitAsync("SetPlayerIntoVehicle", client, -1);

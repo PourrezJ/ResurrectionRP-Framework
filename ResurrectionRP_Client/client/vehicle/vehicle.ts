@@ -51,13 +51,16 @@ export function initialize() {
                 else if (sirenSound) {
                     game.setDisableVehicleSirenSound(vehId, false);
                 }
-
+                
                 let freezed: boolean = entity.getSyncedMeta("IsFreezed");
                 game.freezeEntityPosition(entity.scriptID, (freezed == null) ? false : freezed);
 
+                let invincible: boolean = entity.getSyncedMeta("IsInvincible");
+                game.setEntityInvincible(entity.scriptID, (invincible == null) ? false : invincible);
+                alt.log("invincible: " + invincible);
             }
             catch (e) {
-                alt.log("Error in setting SirenSound: " + e);
+                alt.log("Error in setting data: " + e);
             }
         }
     });

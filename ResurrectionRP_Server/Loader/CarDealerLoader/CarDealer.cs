@@ -66,7 +66,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
                     return;
 
                 await place.VehicleHandler.Vehicle.FreezeAsync(true);
-
+                await place.VehicleHandler.Vehicle.InvincibleAsync(true);
 
                 string str = $"{manifest.DisplayName} \n" +
                 $"Prix $ {place.VehicleInfo.Price} \n" +
@@ -96,6 +96,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
             ph.Client.SendNotificationSuccess($"Vous avez acheté un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");
             CarDealerPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;
             await vehicleplace.VehicleHandler.Vehicle.FreezeAsync(false);
+            await vehicleplace.VehicleHandler.Vehicle.InvincibleAsync(false);
         }
     }
 }

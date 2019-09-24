@@ -323,8 +323,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 _damageData = value;
 
-               //  if (Vehicle != null && Vehicle.Exists && Vehicle.DamageData != value)
-               //      AltAsync.Do(() => { Vehicle.DamageData = value; });
+                // BUG v792: DamageData makes server crash
+                // if (Vehicle != null && Vehicle.Exists && Vehicle.DamageData != value)
+                //     AltAsync.Do(() => { Vehicle.DamageData = value; });
             }
         }
 

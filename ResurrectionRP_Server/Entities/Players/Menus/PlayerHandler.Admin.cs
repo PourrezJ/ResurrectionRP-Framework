@@ -46,7 +46,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #endregion
 
             #region Menu
-            Menu mainMenu = new Menu("ID_AdminMenu", "Admin Menu", "Choisissez une option:", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Garage);
+            Menu mainMenu = new Menu("ID_AdminMenu", "Admin Menu", "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Garage);
             mainMenu.SubTitle = $"Joueur Selectionné: ~r~{_playerSelected.Identite.Name}";
             mainMenu.Finalizer += OnFinalize;
             #endregion

@@ -217,7 +217,7 @@ namespace ResurrectionRP_Server.Factions
         {
             if (HasPlayerIntoFaction(client))
             {
-                Menu menu = new Menu("ID_ServiceMenu", this.FactionName, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
+                Menu menu = new Menu("ID_ServiceMenu", FactionName, "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
 
                 MenuItem item = new MenuItem($"{(ServicePlayerList.Contains(client.GetSocialClub()) ? "Quitter" : "Prendre")} son service", "", "ID_PriseService", true);
                 item.OnMenuItemCallback = ServiceMenuCallBack;
@@ -445,7 +445,7 @@ namespace ResurrectionRP_Server.Factions
         {
             if (HasPlayerIntoFaction(client))
             {
-                Menu menu = new Menu("ID_Shop", FactionName, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
+                Menu menu = new Menu("ID_Shop", FactionName, "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
                 menu.ItemSelectCallback = ShopMenuCallBack;
                 foreach (var item in ItemShop)
                 {

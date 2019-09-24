@@ -1,5 +1,6 @@
 ﻿using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Players;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -71,12 +72,12 @@ namespace ResurrectionRP_Server.Bank
             #region Creation
             if (_atmType == AtmType.ATM || _atmType == AtmType.Bank)
             {
-                _bankMenu = new Menu("ATM_Menu", (_atmType == AtmType.ATM ? "ATM" : "Banque"), $"Compte: {_bankAccount.AccountNumber} | Solde: ${_bankAccount.Balance}", backCloseMenu: true);
+                _bankMenu = new Menu("ATM_Menu", (_atmType == AtmType.ATM ? "ATM" : "Banque"), $"Compte: {_bankAccount.AccountNumber} | Solde: ${Math.Round(_bankAccount.Balance, 2)}", backCloseMenu: true);
                 _bankMenu.BannerColor = new MenuColor(0, 0, 0, 0);
             }
             else
             {
-                _bankMenu.SubTitle = $"Compte: {_bankAccount.AccountNumber} | Solde: ${_bankAccount.Balance}";
+                _bankMenu.SubTitle = $"Compte: {_bankAccount.AccountNumber} | Solde: ${Math.Round(_bankAccount.Balance, 2)}";
                 _bankMenu.BackCloseMenu = false;
                 _bankMenu.ItemSelectCallback = BankMenuCallback;
                 _bankMenu.Reset();

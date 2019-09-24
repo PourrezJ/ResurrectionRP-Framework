@@ -49,9 +49,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         [BsonIgnore]
         public bool SpawnVeh { get; set; }
-
-        public bool Locked { get; set; } = true;
-        
+       
         public DateTime LastUse { get; set; } = DateTime.Now;
 
         public string LastDriver { get; set; }
@@ -88,7 +86,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             SecondaryColor = secondaryColor;
 
             Plate = string.IsNullOrEmpty(plate) ? VehiclesManager.GenerateRandomPlate() : plate;
-            Locked = locked;
+            LockState = locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
             Owner = owner;
 
             if (mods != null)
@@ -157,7 +155,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 vehicle.SetSyncedMetaData("NeonState", NeonState.Item1);
 
                 vehicle.DirtLevel = DirtLevel;
-                vehicle.LockState = Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
+                vehicle.LockState = LockState;
                 vehicle.EngineOn = EngineOn;
                 vehicle.EngineHealth = EngineHealth;
                 vehicle.BodyHealth = BodyHealth;
@@ -260,15 +258,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }
         
-        public async Task LockUnlock(IPlayer client, bool statut)
+        public void LockUnlock(IPlayer client, bool locked)
         {
-            VehicleHandler VH = Vehicle.GetVehicleHandler();
+            VehicleHandler vh = Vehicle.GetVehicleHandler();
 
-            if (client.HasVehicleKey(await Vehicle.GetNumberplateTextAsync()) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())
+            if (client.HasVehicleKey(vh.Plate) || vh.SpawnVeh && vh.OwnerID == client.GetSocialClub())
             {
-                Locked = statut;
-                await Vehicle.SetLockStateAsync(statut ? VehicleLockState.Locked : VehicleLockState.Unlocked);
-                client.SendNotification($"Vous avez {(statut ? " ~r~ouvert" : "~g~fermé")} ~w~le véhicule");
+                LockState = locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
+                client.SendNotification($"Vous avez {(locked ? " ~r~ouvert" : "~g~fermé")} ~w~le véhicule");
             }
         }  
 
@@ -278,9 +275,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             if (client.HasVehicleKey( await Vehicle.GetNumberplateTextAsync()) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())
             {
-                Locked = await Vehicle.GetLockStateAsync() == VehicleLockState.Locked ? false : true;
-                await Vehicle.SetLockStateAsync(Locked ? VehicleLockState.Locked : VehicleLockState.Unlocked);
-                client.SendNotification($"Vous avez {(Locked ? " fermé" : "ouvert")} le véhicule");
+                LockState = (LockState == VehicleLockState.Locked) ? VehicleLockState.Unlocked : VehicleLockState.Locked;
+                client.SendNotification($"Vous avez {(LockState == VehicleLockState.Locked ? " fermé" : "ouvert")} le véhicule");
 
                 return true;
             }

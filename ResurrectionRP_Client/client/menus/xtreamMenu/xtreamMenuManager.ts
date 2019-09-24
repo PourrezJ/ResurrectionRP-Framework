@@ -4,13 +4,13 @@ let xmenuData = null;
 let inputMenu = null;
 let browser = null;
 let inputselected = "";
+let callbackTime = Date.now();
 
 export function init()
 {
     alt.onServer('XMenuManager_OpenMenu', (menu) => {
-
         if (browser !== null)
-            closeMenu();
+            closeMenu(false);
 
         xmenuData = new Array();
         xmenuData = JSON.parse(menu);
@@ -22,6 +22,14 @@ export function init()
 
         browser.on('XMenuManager_Callback', (index) =>
         {
+            const time = Date.now() - callbackTime;
+
+            if (time < 100) {
+                alt.logWarning('Double call XMenuManager_Callback: ' + time + 'ms');
+                return;
+            }
+                
+            callbackTime = Date.now();
             let menuItem = xmenuData.Items[index];
 
             if (menuItem.InputMaxLength > 0) {
@@ -41,7 +49,8 @@ export function init()
             }
             else {
                 alt.emitServer("XMenuManager_ExecuteCallback", index, JSON.stringify(xmenuData));
-            }  
+            }
+
             closeMenu();
         });
     });
@@ -52,10 +61,13 @@ export function init()
     });
 }
 
-function closeMenu() {
+function closeMenu(enableControls: boolean = true) {
     if (browser != null) {
         browser.destroy();
         browser = null;
+    }
+
+    if (enableControls) {
         alt.toggleGameControls(true);
         alt.showCursor(false);
     }

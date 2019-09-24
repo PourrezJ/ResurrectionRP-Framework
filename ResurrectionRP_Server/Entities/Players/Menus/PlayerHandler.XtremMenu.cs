@@ -118,14 +118,14 @@ namespace ResurrectionRP_Server.Entities.Players
                     var invmenu = new Inventory.RPGInventoryMenu(TargetHandler.PocketInventory, TargetHandler.OutfitInventory, TargetHandler.BagInventory);
                     invmenu.OnMove += (p, m) =>
                     {
-                        Update();
+                        UpdateFull();
                         return Task.CompletedTask;
                     };
 
                     invmenu.OnClose += (p, m) =>
                     {
-                        Update();
-                        TargetHandler.Update();
+                        UpdateFull();
+                        TargetHandler.UpdateFull();
                         return Task.CompletedTask;
                     };
                     await invmenu.OpenMenu(client);

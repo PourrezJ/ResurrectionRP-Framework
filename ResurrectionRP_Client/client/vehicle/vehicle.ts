@@ -12,9 +12,8 @@ let lastSent = Date.now();
 let keepEngineOn: boolean = true;
 
 export function initialize() {
-    alt.onServer('HideSpeedometer', onPlayerLeaveVehicle);
-    alt.onServer('OnPlayerLeaveVehicle', onPlayerLeaveVehicle);
     alt.onServer('OnPlayerEnterVehicle', onPlayerEnterVehicle);
+    alt.onServer('OnPlayerLeaveVehicle', onPlayerLeaveVehicle);
     alt.onServer('SetDoorState', setDoorState);
     alt.onServer('HornPreview', hornPreview);
 
@@ -115,7 +114,6 @@ export function initialize() {
             let rpm = player.vehicle.rpm * 591;
 
             if (speedoWindow !== null) {
-
                 if (rpm >= 591)
                     rpm = 591;
 
@@ -128,42 +126,37 @@ export function initialize() {
                     light = 1;
 
                 let engineHealth = game.getVehicleEngineHealth(player.vehicle.scriptID);
-                speedoWindow.emit('setSpeed', speed, rpm, player.vehicle.gear, light, engineHealth, fuelCur, fuelMax, CurrentMilage);
+                let engineOn = game.getIsVehicleEngineRunning(player.vehicle.scriptID);
+                speedoWindow.emit('setSpeed', speed, rpm, player.vehicle.gear, light, engineOn, engineHealth, fuelCur, fuelMax, CurrentMilage);
             }
         }
     });
 }
 
 export function onPlayerEnterVehicle(vehicle: alt.Vehicle, seat: number, currentFuel: number, maxFuel: number, milage: number, fuelconsumption: number) {
-    showSpeedometer();
+    showSpeedometer(true);
     CurrentMilage = milage;
     fuelMax = maxFuel;
     fuelCur = currentFuel;
 }
 
 function onPlayerLeaveVehicle(vehicle: alt.Vehicle, seat: number) {
-    hideSpeedometer();
+    showSpeedometer(false);
     
     if (seat == 1) {
         game.setVehicleEngineOn(vehicle.scriptID, keepEngineOn, true, true);
     }
 }
 
-export function hideSpeedometer() {
-    if (speedoWindow !== null) {
+export function showSpeedometer(show: boolean) {
+    if (show && speedoWindow !== null && player.vehicle != null && game.getPedInVehicleSeat(player.vehicle.scriptID, -1, player.scriptID) == player.scriptID) {
+        speedoWindow.emit('showSpeedometer');
+    } else if (!show && speedoWindow !== null) {
         speedoWindow.emit('hideSpeedometer');
     }
 }
 
-export function showSpeedometer() {
-    if (speedoWindow !== null && game.getPedInVehicleSeat(player.vehicle.scriptID, -1, player.scriptID) == player.scriptID) {
-        speedoWindow.emit('showSpeedometer');
-    }
-}
-
 export function setDoorState(vehicle: alt.Vehicle, door: number, state: number, option: boolean) {
-    alt.log(`debug: ${door} ${state} ${option}`);
-
     switch (state) {
         case 0:
             game.setVehicleDoorShut(vehicle.scriptID, door, option);

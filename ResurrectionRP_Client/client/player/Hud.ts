@@ -31,12 +31,6 @@ export class Hud {
 
         alt.on('hideHud', (value: boolean) => {
             this.setHide(value);
-            alt.log('Appel hideHud');
-            if (value) {
-                veh.hideSpeedometer();
-            } else {
-                veh.showSpeedometer();
-            }
         });
 
         alt.on('keyup', (key) => {
@@ -44,7 +38,8 @@ export class Hud {
                 this._hide = !this._hide;
                 game.displayHud(!this._hide);
                 game.displayRadar(!this._hide);
-                chat.hide(!chat.isHidden());
+                chat.hide(this._hide);
+                veh.showSpeedometer(!this._hide);
 
                 if (this.Browser != null)
                     this.Browser.emit("showHide", this._hide);

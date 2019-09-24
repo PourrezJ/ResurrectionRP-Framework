@@ -107,7 +107,7 @@ export class RPGInventoryManager {
         alt.toggleGameControls(true);
         alt.showCursor(false);
         chat.hide(false);
-
     }
+
     public HasOpen() { this.view != null };
 }

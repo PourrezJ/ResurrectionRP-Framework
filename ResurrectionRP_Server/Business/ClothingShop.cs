@@ -362,7 +362,7 @@ namespace ResurrectionRP_Server.Business
                     if (await ph.HasBankMoney(price, $"Achat vêtement {clothName}"))
                     {
                         client.SendNotificationSuccess($"Vous avez acheté le vêtement {clothName} pour la somme de ${price}");
-                        ph.Update();
+                        ph.UpdateFull();
                     }
                 }
                 else

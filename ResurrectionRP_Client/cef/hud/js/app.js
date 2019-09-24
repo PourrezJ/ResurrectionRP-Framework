@@ -24,7 +24,7 @@ function setHUD(hunger, thirst, vocal, vocaltype, money, mute)
       $('.burger img').css('animation', 'none');
     }
 
-    if (mute == "1")
+    if (mute === "1")
     {
         $('#speak span').html(`MUTE`);
         $('#speak').addClass('mute');
@@ -33,7 +33,7 @@ function setHUD(hunger, thirst, vocal, vocaltype, money, mute)
     else
     {
         $('#speak span').html(`${vocaltype}`);
-        if (vocal == "1") {
+        if (vocal === "1") {
             $('.listening').css('opacity', '1');
         }
         else {
@@ -64,7 +64,7 @@ function setHUD(hunger, thirst, vocal, vocaltype, money, mute)
 
 function MakeProgressBar(duration)
 {
-    if (circle != null)
+    if (circle !== null)
     {
         circle.destroy();
         circle = null;
@@ -127,7 +127,7 @@ function MakeProgressBar(duration)
 function FinishCB() {
     // console.log('Progress complete');
 
-    if (circle == null)
+    if (circle === null)
         return;
     circle.setText('');
     circle.destroy();

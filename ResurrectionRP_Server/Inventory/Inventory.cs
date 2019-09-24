@@ -89,7 +89,7 @@ namespace ResurrectionRP_Server.Inventory
                 if (message)
                     client.EmitLocked("Display_Help", "Vous venez d'ajouter " + quantity + " " + item.name + " dans l'inventaire", 10000);
 
-                client.GetPlayerHandler()?.Update();
+                client.GetPlayerHandler()?.UpdateFull();
                 return true;
             }
 

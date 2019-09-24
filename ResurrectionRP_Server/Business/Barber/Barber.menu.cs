@@ -195,7 +195,7 @@ namespace ResurrectionRP_Server.Business.Barber
                 ClientSelected.Character.Appearance[1].Opacity = 255;
 
                 ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
-                ClientSelected.Update();
+                ClientSelected.UpdateFull();
                 await Update();
             }
             else
@@ -251,7 +251,7 @@ namespace ResurrectionRP_Server.Business.Barber
             {
                 ClientSelected.Character.Hair.Hair = hair.ID;
                 ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
-                ClientSelected.Update();
+                ClientSelected.UpdateFull();
                 await Update();
             }
             else
@@ -334,7 +334,7 @@ namespace ResurrectionRP_Server.Business.Barber
 
                 ClientSelected.Character.Appearance[1] = head;
                 ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
-                ClientSelected.Update();
+                ClientSelected.UpdateFull();
                 await Update();
             }
             else

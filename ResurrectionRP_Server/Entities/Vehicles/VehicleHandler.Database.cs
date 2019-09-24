@@ -52,11 +52,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (location != null)
                     Location = location;
 
-                UpdateAsync();
+                UpdateInBackground();
             }
         }
 
-        public void UpdateAsync()
+        public void UpdateInBackground()
         {
             _lastUpdateRequest = DateTime.Now;
 

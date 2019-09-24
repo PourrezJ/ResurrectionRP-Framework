@@ -400,7 +400,7 @@ namespace ResurrectionRP_Server.Factions
                             _vh.Repair(client);
                             _vh.EngineHealth = engineHealth;
                             _vh.PetrolTankHealth = petrolTankHealth;
-                            _vh.UpdateAsync();
+                            _vh.UpdateInBackground();
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~g~Terminé~w~.", "Elle est niquel!");
                         });
 

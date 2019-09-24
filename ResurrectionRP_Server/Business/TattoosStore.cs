@@ -148,7 +148,7 @@ namespace ResurrectionRP_Server.Business
                     Entities.Players.Data.Decoration decoration = ClientSelected.Character.Decorations.FirstOrDefault(d => d.Overlay == selectedTattoo);
                     await ClientSelected.Client.RemoveDecorationAsync((uint)decoration.Collection, (uint)decoration.Overlay);
                     ClientSelected.Character.Decorations.Remove(decoration);
-                    ClientSelected.Update();
+                    ClientSelected.UpdateFull();
                     await Update();
                     client.SendNotificationSuccess("Vous avez retiré le tatouage");
                 }
@@ -162,7 +162,7 @@ namespace ResurrectionRP_Server.Business
                             : (int)Alt.Hash(Tattoo.HashNameFemale);
 
                         ClientSelected.Character.Decorations.Add(new Entities.Players.Data.Decoration(collection, overlay));
-                        ClientSelected.Update();
+                        ClientSelected.UpdateFull();
                         await Update();
                         client.SendNotificationSuccess("Vous avez appliqué le tatouage");
                     }

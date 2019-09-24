@@ -39,7 +39,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             if (ph != null && vh != null)
             {
-                ph.Update();
+                ph.UpdateFull();
                 player.EmitLocked("OnPlayerEnterVehicle", vehicle, Convert.ToInt32(seat), vh.Fuel, vh.FuelMax, vh.Milage, vh.FuelConsumption);
             }
 
@@ -90,7 +90,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             if (ph != null)
             {
-                ph.Update();
+                ph.UpdateFull();
                 player.EmitLocked("OnPlayerLeaveVehicle", vehicle, (int)seat);
             }
 

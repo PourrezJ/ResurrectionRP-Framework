@@ -351,7 +351,7 @@ namespace ResurrectionRP_Server.Factions
             // Save Inventory on move
             _inv.OnMove = async (IPlayer c, RPGInventoryMenu m) =>
             {
-                ph.Update();
+                ph.UpdateFull();
                 await UpdateDatabase();
                 rack?.RefreshLabel();
             };
@@ -359,7 +359,7 @@ namespace ResurrectionRP_Server.Factions
             // Save Inventory on close
             _inv.OnClose = async (IPlayer c, RPGInventoryMenu m) =>
             {
-                ph.Update();
+                ph.UpdateFull();
                 await UpdateDatabase();
                 rack?.RefreshLabel();
             };

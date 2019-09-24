@@ -25,7 +25,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region Methods
-        public void Update()
+        public void UpdateFull()
         {
             if (Client == null || !Client.Exists)
                 return;
@@ -58,7 +58,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     LastUpdate = DateTime.Now;
                 }
 
-                SaveAsync();
+                UpdateInBackground();
             }
             catch (Exception ex)
             {
@@ -66,7 +66,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        public void SaveAsync()
+        public void UpdateInBackground()
         {
             _lastUpdateRequest = DateTime.Now;
 

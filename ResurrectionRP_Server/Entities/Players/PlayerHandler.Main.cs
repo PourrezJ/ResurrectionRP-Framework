@@ -248,7 +248,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 await Task.Delay(500);
 
                 if (firstspawn)
-                    Update();
+                    UpdateFull();
 
                 OnKeyPressed += OnKeyPressedCallback;
                 OnKeyReleased += OnKeyReleasedCallback;
@@ -270,7 +270,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             Money += somme;
             Client?.EmitLocked(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money));
-            Update();
+            UpdateFull();
         }
 
         public bool HasMoney(double somme)
@@ -282,7 +282,7 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 Money -= somme;
                 Client?.EmitLocked(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money)) ;
-                Update();
+                UpdateFull();
                 return true;
             }
 
@@ -311,7 +311,7 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             Thirst = (thirst == -1) ? Thirst : thirst;
             Hunger = (hunger == -1) ? Hunger : hunger;
-            Update();
+            UpdateFull();
 
             if (Client != null && Client.Exists)
                 Client.EmitLocked("UpdateHungerThirst", Hunger, Thirst);

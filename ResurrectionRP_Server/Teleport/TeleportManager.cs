@@ -51,7 +51,7 @@ namespace ResurrectionRP_Server.Teleport
                     if (!teleport.VehicleAllowed && await client.GetVehicleAsync() != null)
                         return;
 
-                    Menu _menu = new Menu("ID_TeleportMenu", teleport.MenuTitle, backCloseMenu: true);
+                    Menu _menu = new Menu("ID_TeleportMenu", teleport.MenuTitle, "Sélectionnez une destination :", backCloseMenu: true);
                     _menu.ItemSelectCallback = MenuCallBack;
 
                     if (data.State == TeleportState.Out)

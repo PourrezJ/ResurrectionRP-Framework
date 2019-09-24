@@ -360,12 +360,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             Location.Rot = Vehicle.Rotation;
         }
 
-        public Task PutPlayerInVehicle( IPlayer client )
-        {
-            //TODO
-            return Task.CompletedTask;
-        }
-
         public void Repair(IPlayer player)
         {
             if (Vehicle == null || !Vehicle.Exists || player == null || !player.Exists)

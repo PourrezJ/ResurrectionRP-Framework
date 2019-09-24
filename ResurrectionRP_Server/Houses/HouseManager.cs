@@ -72,7 +72,7 @@ namespace ResurrectionRP_Server.Houses
                     return;
 
                 if (RemoveClientHouse(player))
-                    await house.RemovePlayer(player, false);                
+                    house.RemovePlayer(player, false);                
             }
         }
         #endregion
@@ -199,7 +199,7 @@ namespace ResurrectionRP_Server.Houses
                     {
                         //GameMode.Instance.Economy.CaissePublique += house.Price;
                         await house.SetOwner(client);
-                        await house.SendPlayer(client);
+                        house.SendPlayer(client);
                         await MenuManager.CloseMenu(client);
                         client.SendNotificationSuccess("Vous avez acheté ce logement.");
                     }
@@ -208,7 +208,7 @@ namespace ResurrectionRP_Server.Houses
                     break;
 
                 case "ID_Enter":
-                    await house.SendPlayer(client);
+                    house.SendPlayer(client);
                     await menu.CloseMenu(client);
                     break;
 
@@ -262,7 +262,7 @@ namespace ResurrectionRP_Server.Houses
 
         public async Task House_PlayerDeath(IPlayer player, IPlayer killer, uint reason)
         {
-            await player.SetDimensionAsync(GameMode.GlobalDimension);
+            player.Dimension = GameMode.GlobalDimension;
             await RemovePlayerFromHouseList(player);
         }
 

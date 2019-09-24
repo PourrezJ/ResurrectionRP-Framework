@@ -576,9 +576,11 @@ namespace ResurrectionRP_Server.Factions
                 switch (menuItem.Id)
                 {
                     case "ID_StoreVehicle":
-                        if (await client.IsInVehicleAsync())
+                        if (client.IsInVehicle)
                         {
-                            await Parking?.StoreVehicle(client, await client.GetVehicleAsync());
+                            if (Parking != null)
+                                await Parking.StoreVehicle(client, client.Vehicle);
+
                             await menu.CloseMenu(client);
                         }
                         break;

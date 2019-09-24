@@ -52,6 +52,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (location != null)
                     Location = location;
 
+                UpdateProperties();
                 UpdateInBackground();
             }
         }
@@ -83,8 +84,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     await Task.Delay((int)waitTime.TotalMilliseconds);
                     updateTime = _lastUpdateRequest.AddMilliseconds(_updateWaitTime);
                 }
-
-                UpdateProperties();
 
                 try
                 {

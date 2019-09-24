@@ -140,16 +140,13 @@ namespace ResurrectionRP_Server.Society
         #region Events
         public virtual async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
         {
+            if (client == null || !client.Exists)
+                return;
+
             if (colShape == ServiceColshape)
-            {
-                if (client != null)
-                    await OpenServerJobMenu(client);
-            }
-            if (colShape == ParkingColshape)
-            {
-                if (client != null)
-                    await OpenParkingMenu(client);
-            }
+                await OpenServerJobMenu(client);
+            else if (colShape == ParkingColshape)
+                await OpenParkingMenu(client);
         }
 
         public virtual async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
@@ -160,7 +157,10 @@ namespace ResurrectionRP_Server.Society
         }
 
         public virtual async Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
-            => await Update();
+        {
+            vehicle.ParkingName = SocietyName;
+            await Update();
+        }
         #endregion
 
         #region Methods
@@ -208,8 +208,8 @@ namespace ResurrectionRP_Server.Society
         {
             ParkingColshape = parkingColshape;
             Parking.ParkingType = ParkingType.Society;
-            Parking.OnVehicleOut = OnVehicleOut;
-            Parking.OnVehicleStored = OnVehicleStored;
+            Parking.OnVehicleOut += OnVehicleOut;
+            Parking.OnVehicleStored += OnVehicleStored;
         }
 
         public async Task Insert()

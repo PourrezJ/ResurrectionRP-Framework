@@ -28,8 +28,8 @@ namespace ResurrectionRP_Server.Services
             if (Parking != null)
             {
                 Parking.Load(alpha: 150, scale: 0.7f, name: "Parkings", blip: true);
-                Parking.OnVehicleStored = OnVehicleStored;
-                Parking.OnVehicleOut = OnVehicleOut;
+                Parking.OnVehicleStored += OnVehicleStored;
+                Parking.OnVehicleOut += OnVehicleOut;
                 Parking.ParkingType = ParkingType.Public;
                 Parking.OnSaveNeeded = async () => await Update();
                 Parking.Spawn1.Rot = Parking.Spawn1.Rot.ConvertRotationToRadian();
@@ -40,9 +40,10 @@ namespace ResurrectionRP_Server.Services
                 foreach(ParkedCar ve in _poundList.ToList())
                 {
                     ve.ParkTime = DateTime.Now;
-                    GameMode.Instance?.PoundManager.AddVehicleInPound( Entities.Vehicles.VehiclesManager.GetVehicleHandler(ve.Plate) );
-                    Parking.RemoveVehicle(Entities.Vehicles.VehiclesManager.GetVehicleHandler(ve.Plate) ); 
+                    Parking.RemoveVehicle(Entities.Vehicles.VehiclesManager.GetVehicleHandler(ve.Plate));
+                    GameMode.Instance?.PoundManager.AddVehicleInPound(Entities.Vehicles.VehiclesManager.GetVehicleHandler(ve.Plate) );
                 }
+
                 if (_poundList.Count != 0)
                     await Update();
             }

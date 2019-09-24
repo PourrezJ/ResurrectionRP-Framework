@@ -110,8 +110,8 @@ namespace ResurrectionRP_Server.Houses
             if (Parking != null)
             {
                 Parking.OnSaveNeeded = OnParkingSaveNeeded;
-                Parking.OnVehicleStored = OnVehicleStored;
-                Parking.OnVehicleOut = OnVehicleOutParking;
+                Parking.OnVehicleStored += OnVehicleStored;
+                Parking.OnVehicleOut += OnVehicleOutParking;
                 Parking.ParkingType = ParkingType.House;
 
                 Parking.Location = Parking.Spawn1.Pos;
@@ -171,6 +171,7 @@ namespace ResurrectionRP_Server.Houses
 
         private async Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
         {
+            vehicle.ParkingName = $"{Name} {ID}";
             await Save();
         }
 

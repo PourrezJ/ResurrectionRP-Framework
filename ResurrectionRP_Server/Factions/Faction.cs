@@ -133,8 +133,8 @@ namespace ResurrectionRP_Server.Factions
                 Parking_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveParking);
                 Marker.CreateMarker(MarkerType.VerticalCylinder, ParkingLocation.Pos - new Vector3(0, 0, 1), new Vector3(2, 2, 2));
 
-                Parking.OnVehicleStored = OnVehicleStore;
-                Parking.OnVehicleOut = OnVehicleOut;
+                Parking.OnVehicleStored += OnVehicleStore;
+                Parking.OnVehicleOut += OnVehicleOut;
                 Parking.ParkingType = ParkingType.Faction;
                 Parking.MaxVehicles = 5;
                 Parking.Spawn1 = ParkingLocation;
@@ -180,6 +180,7 @@ namespace ResurrectionRP_Server.Factions
 
         private async Task OnVehicleStore(IPlayer client, VehicleHandler vehicle)
         {
+            vehicle.ParkingName = FactionName;
             await UpdateDatabase();
         }
         #endregion

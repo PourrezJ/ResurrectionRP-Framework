@@ -53,9 +53,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public bool Locked { get; set; } = true;
         
         public DateTime LastUse { get; set; } = DateTime.Now;
+
         public string LastDriver { get; set; }
 
-        public bool PlateHide;
+        public bool PlateHide { get; set; } = false;
+
+        public string ParkingName { get; set; }
 
         [BsonIgnoreIfNull]
         public OilTank OilTank = null;

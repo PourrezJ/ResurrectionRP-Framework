@@ -26,7 +26,6 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
         public async Task Load()
         {
             Entities.Blips.BlipsManager.CreateBlip(Name, BlipPosition, 0, (int)BlipSprite);
-            //await MP.Blips.NewAsync(BlipSprite, BlipPosition, 1, 0, Name, 255, 10, true);
 
             for (int i = 0; i < LocationList.Count; i++)
             {
@@ -40,7 +39,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
             {
                 foreach (var place in CarDealerPlaces)
                 {
-                    if (place.VehicleHandler == null && !Entities.Vehicles.VehiclesManager.IsVehicleInSpawn(place.Location.Pos, 4))
+                    if (place.VehicleHandler == null && !VehiclesManager.IsVehicleInSpawn(place.Location.Pos, 4))
                         await Respawn(place);
                 }
             });
@@ -49,7 +48,10 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
         public async Task Respawn(CarDealerPlace place)
         {
             place.VehicleInfo = VehicleInfoList[Utils.Utils.RandomNumber(VehicleInfoList.Count)];
-            place.VehicleInfo.Price = Utils.Utils.RandomNumber(Convert.ToInt32(place.VehicleInfo.Price / 1.5), Convert.ToInt32(place.VehicleInfo.Price * 1.5));
+
+            var pourcent = place.VehicleInfo.Price * 0.02;
+
+            place.VehicleInfo.Price = Utils.Utils.RandomNumber(Convert.ToInt32(place.VehicleInfo.Price - pourcent), Convert.ToInt32(place.VehicleInfo.Price + pourcent));
             Array colorArray = Enum.GetValues(typeof(Utils.Enums.VehicleColor));
             int color1 = (int)colorArray.GetValue(Utils.Utils.RandomNumber(colorArray.Length));
             int color2 = (int)colorArray.GetValue(Utils.Utils.RandomNumber(colorArray.Length));
@@ -75,7 +77,6 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
                 $"Acceleration: {manifest.MaxAcceleration} \n" +
                 $"Places: {manifest.MaxNumberOfPassengers + 1} \n";
 
-                //place.TextLabel = await MP.TextLabels.NewAsync(place.Location.Pos + new Vector3(0, 0, 1.0f), str, 1, Color.FromArgb(180, 255, 255, 255), 15);
                 place.TextLabelId = GameMode.Instance.Streamer.AddEntityTextLabel(str, place.Location.Pos, 1, 180, 255, 255, 255);
 
                 place.VehicleHandler.Vehicle.SetData("CarDealer", place);

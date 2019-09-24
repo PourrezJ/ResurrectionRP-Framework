@@ -151,6 +151,7 @@ namespace ResurrectionRP_Server.Society
 
         public virtual async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
         {
+            vehicle.Vehicle.Rotation = location.Rot.ConvertRotationToRadian();
             client.SetPlayerIntoVehicle(vehicle.Vehicle);
             await Update();
         }

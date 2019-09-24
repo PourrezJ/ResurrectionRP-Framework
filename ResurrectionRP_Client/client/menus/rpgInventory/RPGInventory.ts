@@ -91,7 +91,7 @@ export class RPGInventoryManager {
                 (this.outfit) ? this.outfit : null,
                 (this.give) ? "true" : "false");
         });
-
+        
         alt.onServer("InventoryManager_CloseMenu", () => this.CloseMenu());
         alt.on("InventoryManager_CloseMenu", () => this.CloseMenu());
     }

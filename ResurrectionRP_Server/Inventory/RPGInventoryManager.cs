@@ -512,6 +512,7 @@ namespace ResurrectionRP_Server.Inventory
         #region Switch
         private async Task RPGInventory_SwitchItemInventory_SRV(IPlayer client, object[] args)
         {
+            Alt.Server.LogColored("RPGInventory_SwitchItemInventory_SRV called!");
             try
             {
                 string targetRPGInv = Convert.ToString(args[0]);
@@ -953,7 +954,7 @@ namespace ResurrectionRP_Server.Inventory
             int oldSlot = Convert.ToInt32(args[3]);
             int oldCount = Convert.ToInt32(args[4]);
             int newCount = Convert.ToInt32(args[5]);
-            int splitCount = Convert.ToInt32(args[1]);
+            int splitCount = Convert.ToInt32(args[6]);
 
             RPGInventoryMenu menu;
             Inventory inv = null;
@@ -962,7 +963,7 @@ namespace ResurrectionRP_Server.Inventory
             {
                 switch (inventoryType)
                 {
-                    case Utils.Enums.InventoryTypes.Pocket:
+                    case InventoryTypes.Pocket:
                         inv = menu.Inventory;
                         break;
                     case Utils.Enums.InventoryTypes.Bag:

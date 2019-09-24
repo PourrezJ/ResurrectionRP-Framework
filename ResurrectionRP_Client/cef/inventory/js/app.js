@@ -13,7 +13,6 @@ app.config(['$compileProvider', ($compileProvider) => {
 }]);
 
 function loadInventory(pocket, bag, distant, outfit, give) {
-    console.log("cef: loadInventory recept");
     var event = new CustomEvent("ItemsLoaded", { "detail": { pocket, bag, distant, outfit, give } });
     window.dispatchEvent(event);
 }
@@ -156,7 +155,6 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
                 };
                 if (itemInSlot !== undefined) size += itemInSlot.quantity * itemInSlot.weight;
             }
-            console.log($scope.itemsDistant);
             $scope.itemsDistant.CurrentSize = size;
             let value = ($scope.itemsDistant.CurrentSize * 100) / $scope.itemsDistant.MaxSize;
             $(".distantBar span").css("width", value.toString() + "%");
@@ -590,7 +588,6 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
  * @returns boolean
  */
     $scope.onaccept = slot => {
-        console.log(slot.class);
         return "." + slot.class;
     };
 
@@ -726,7 +723,6 @@ app.controller("InventoryCtrl", ['$scope', '$ngConfirm', '$q', ($scope, $ngConfi
 
     window.addEventListener("ItemsLoaded", ev => {
         $scope.$apply(() => {
-            console.log(ev.detail);
             $scope.itemsPocket = ev.detail.pocket;
             $scope.itemsBag = ev.detail.bag;
             $scope.itemsDistant = ev.detail.distant;

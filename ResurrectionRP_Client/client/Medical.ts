@@ -87,13 +87,13 @@ export class Medical {
     public static BlesseList: Blesse[] = [];
     public static isInMission: boolean = false;
     public static deathMessage: string;
-    public static RequestedTimeMedic: number = 0;
+    public static RequestedTimeMedic: Date;
     public static everyTick: number;
 
     constructor()
     {
         Medical.scaleForm = new Scaleforms("mp_big_message_freemode");
-        Medical.RequestedTimeMedic = Date.now();
+        Medical.RequestedTimeMedic = new Date();
 
         alt.onServer("ONU_IAccept", (player: alt.Player) => {
             Medical.isInMission = true;
@@ -157,6 +157,8 @@ export class Medical {
         });
 
         alt.onServer("ONU_PlayerDeath", (weapon: number) => {
+            Medical.RequestedTimeMedic = new Date(Date.now() + 3 * 60000);
+
             alt.on('keydown', this.KeyHandler);
             Medical.everyTick = alt.everyTick(this.OnTick.bind(this));
         });
@@ -171,7 +173,6 @@ export class Medical {
 
             game.clearPedBloodDamage(alt.Player.local.scriptID);
         });  
-        
     }
 
     private KeyHandler(key)
@@ -180,7 +181,6 @@ export class Medical {
             if (new Date(Date.now()).getTime() >= new Date(Medical.RequestedTimeMedic).getTime()) // <--- Besoin d'améliorer prochainement se check.
             {
                 alt.emitServer("ONU_CallUrgenceMedic");
-                Medical.RequestedTimeMedic = Date.now() + new Date().setMinutes(3)
             }
         }
         else if (key == 'R'.charCodeAt(0)) {
@@ -194,24 +194,24 @@ export class Medical {
     private OnTick() {
         if (game.isPlayerDead(0))
         {
-            if (Date.now() >= Medical.RequestedTimeMedic) // <--- Besoin d'améliorer prochainement se check.
+            //alt.log(`current: ${JSON.stringify(new Date())} | needed: ${JSON.stringify(Medical.RequestedTimeMedic)}`);
+            if (new Date() >= Medical.RequestedTimeMedic) // <--- Besoin d'améliorer prochainement se check.
             {
                 Medical.deathMessage = "Appuyer sur ~g~Y~w~ pour utiliser l'appel d'urgence ou ~r~R~w~ pour en finir :(";
-            } 
-
-            if (new Date(Date.now()).getTime() >= new Date(Medical.RequestedTimeMedic).getTime()) // <--- Besoin d'améliorer prochainement se check.
+            }
+            else
             {
-                Medical.deathMessage = "Appuyer sur ~g~Y~w~ pour utiliser l'appel d'urgence ou ~r~R~w~ pour en finir :(";
-            } 
-            else {
-                if (new Date(Date.now()).getTime() - new Date(Medical.RequestedTimeMedic).getTime() > -1) {
-                    Medical.deathMessage = `Il vous reste à attendre ${new Date(new Date(Date.now()).getTime() - new Date(Medical.RequestedTimeMedic).getTime()).getSeconds()} secondes pour re-contacter les secours.`;
+                let currentDate = new Date().getTime() - Medical.RequestedTimeMedic.getTime();
+                alt.log(`current: ${JSON.stringify(currentDate)} `);
+                if (currentDate < 60000)
+                {
+                    Medical.deathMessage = `Il vous reste à attendre ${60000 * 0.001} secondes pour re-contacter les secours.`
                 }
-                else {
-                    Medical.deathMessage = `Il vous reste à attendre ${new Date(new Date(Date.now()).getTime() - new Date(Medical.RequestedTimeMedic).getTime()).getMinutes()} minutes pour re-contacter les secours.`;
+                else
+                {
+                    Medical.deathMessage = `Il vous reste à attendre ${currentDate / 60000} minutes pour re-contacter les secours.`
                 }
             }
-           
             Medical.scaleForm.call("SHOW_SHARD_WASTED_MP_MESSAGE", "~r~Vous êtes dans le Coma!", Medical.deathMessage);
             Medical.scaleForm.render2D();
             

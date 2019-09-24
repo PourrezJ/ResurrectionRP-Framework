@@ -235,7 +235,10 @@ namespace ResurrectionRP_Server.Entities.Players
                     await SetCuff(true);
 
                 if (Health <= 100)
+                {
                     Health = 0;
+                    Client.EmitLocked("ONU_PlayerDeath", WeaponHash.AdvancedRifle);
+                }
 
                 
                 await Task.Delay(500);

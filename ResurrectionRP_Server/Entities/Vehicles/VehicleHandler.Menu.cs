@@ -33,18 +33,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             XMenu xmenu = new XMenu("VehiculeMenu");
             xmenu.Callback = VehicleXMenuCallback;
 
-            VehicleLockState locked = Vehicle.LockState;
-
             if (client.IsInVehicle)
             {
-                xmenu.Add((locked == VehicleLockState.Locked ? new XMenuItem("Déverrouiller", "Déverrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_OPEN_SOLID, false)
-                     : new XMenuItem("Verrouiller", "Verrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_SOLID, false)));
+                xmenu.Add(LockState == VehicleLockState.Locked ? new XMenuItem("Déverrouiller", "Déverrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_OPEN_SOLID, false)
+                     : new XMenuItem("Verrouiller", "Verrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_SOLID, false));
 
                 if (client.IsInVehicle && client.Seat == 1)
                 {
                     xmenu.Add(new XMenuItem($"{(client.Vehicle.EngineOn ? "Eteindre" : "Allumer")} le véhicule", "", "ID_Start", XMenuItemIcons.KEY_SOLID, executeCallback: true));
                     
-                    if (locked == VehicleLockState.Unlocked)
+                    if (LockState == VehicleLockState.Unlocked)
                         xmenu.Add(new XMenuItem("Gestion des portes", "", "ID_Doors", XMenuItemIcons.DOOR_CLOSED_SOLID, executeCallback: true));
                         
                     if (NeonColor.IsEmpty != false)
@@ -69,13 +67,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 {
                     if (PlayerHandler.ListVehicleKey.Exists(key => key.Plate == Plate))
                     {
-                        xmenu.Add((locked == VehicleLockState.Locked ? new XMenuItem("Déverrouiller", "Déverrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_OPEN_SOLID, false)
-                            : new XMenuItem("Verrouiller", "Vérrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_SOLID, false)));
+                        xmenu.Add(LockState == VehicleLockState.Locked ? new XMenuItem("Déverrouiller", "Déverrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_OPEN_SOLID, false)
+                            : new XMenuItem("Verrouiller", "Vérrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_SOLID, false));
                     }
                 }
             }
 
-            if ((locked == VehicleLockState.Unlocked || PlayerHandler.ListVehicleKey.Exists(key => key.Plate == Plate))/* && Inventory != null*/)
+            if (LockState == VehicleLockState.Unlocked || PlayerHandler.ListVehicleKey.Exists(key => key.Plate == Plate)/* && Inventory != null*/)
             {
                 xmenu.Add(new XMenuItem("Inventaire", "Ouvre l'inventaire du véhicule", "ID_OpenInventory", XMenuItemIcons.SUITCASE_SOLID, false));
             }

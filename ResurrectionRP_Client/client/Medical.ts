@@ -18,7 +18,7 @@ export class Blesse {
         this.BlessePlayer = player;
         this.Position = position;
 
-        this.Blip = new alt.PointBlip(parseFloat(position.x + ""), parseFloat(position.x + "") + 100, parseFloat(position.x + ""))
+        this.Blip = new alt.PointBlip(parseFloat(position.x + ""), parseFloat(position.x + "") , parseFloat(position.x + ""))
         this.Blip.sprite = 280;
         this.Blip.color = 1;
         this.Blip.name = id;

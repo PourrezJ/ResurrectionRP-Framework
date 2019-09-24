@@ -325,7 +325,7 @@ namespace ResurrectionRP_Server.Factions
             if (add)
             {
                 client.SendNotification($"Vous êtes désormais membre de {FactionName}");
-                client.GetPlayerHandler()?.Update();
+                client.GetPlayerHandler()?.UpdateFull();
                 await UpdateDatabase();
                 await PlayerFactionAdded(client);
             }

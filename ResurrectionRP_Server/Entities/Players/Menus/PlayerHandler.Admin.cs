@@ -74,7 +74,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     _playerSelected.StaffRank = rang;
                     _playerSelected.Client.SendNotification($"Vous êtes désormais {rang}");
                     client.SendNotification($"Vous avez mis au rang: {rang} {_playerSelected.Identite.Name}");
-                    _playerSelected.Update();
+                    _playerSelected.UpdateFull();
                     return Task.CompletedTask;
                 };
 
@@ -107,7 +107,7 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 _playerSelected.Health = 200;
                 await client.SetHealthAsync(200);
-                Update();
+                UpdateFull();
             };
             mainMenu.Add(lifeitem);
             #endregion

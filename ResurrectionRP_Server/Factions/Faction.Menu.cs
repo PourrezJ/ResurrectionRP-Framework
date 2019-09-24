@@ -399,13 +399,13 @@ namespace ResurrectionRP_Server.Factions
             var invmenu = new RPGInventoryMenu(_player.PocketInventory, _player.OutfitInventory, _player.BagInventory, FactionPlayerList[client.GetSocialClub()].Inventory);
             invmenu.OnMove += async (p, m) =>
             {
-                _player.Update();
+                _player.UpdateFull();
                 await UpdateDatabase();
             };
             invmenu.PriceChange += async (p, m, stack, stackprice) =>
             {
                 client.SendNotification($"Le nouveau prix de {stack.Item.name} est de ${stackprice} ");
-                _player.Update();
+                _player.UpdateFull();
                 await UpdateDatabase();
             };
             await invmenu.OpenMenu(client);
@@ -425,7 +425,7 @@ namespace ResurrectionRP_Server.Factions
                 if (ph.HasMoney(result))
                 {
                     await BankAccount.AddMoney(result, $"Ajout d'argents par {ph.Identite.Name}");
-                    ph.Update();
+                    ph.UpdateFull();
                     client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
                 }
                 else
@@ -657,7 +657,7 @@ namespace ResurrectionRP_Server.Factions
                     client.SetPlayerIntoVehicle(vh.Vehicle);
                     await OnVehicleOut(client, vh);
                     ph.ListVehicleKey.Add(new VehicleKey(vhname, vh.Plate));
-                    ph.Update();
+                    ph.UpdateFull();
                     await MenuManager.CloseMenu(client);
                 }
                 else

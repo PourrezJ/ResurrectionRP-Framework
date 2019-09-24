@@ -96,14 +96,14 @@ namespace ResurrectionRP_Server.Business
                     Inventory.Locked = true;
                     invmenu.OnMove += async (p, m) =>
                     {
-                        player.Update();
+                        player.UpdateFull();
                         await Update();
                     };
 
                     invmenu.PriceChange += async (p, m, stack, stackprice) =>
                     {
                         client.SendNotification($"Le nouveau prix de {stack.Item.name} est de ${stackprice}");
-                        player.Update();
+                        player.UpdateFull();
                         await Update();
                     };
 

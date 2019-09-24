@@ -266,7 +266,7 @@ namespace ResurrectionRP_Server.Farms
             }
 
             player.IsOnProgress = false;
-            player.Update();
+            player.UpdateFull();
         }
 
         public virtual async Task StartProcessing(IPlayer sender)
@@ -324,7 +324,7 @@ namespace ResurrectionRP_Server.Farms
                 else
                 {
                     sender.DisplaySubtitle($"Traitement terminé: Vous avez traité ~r~ {i} {_itemTraite.name}(s)", 15000);
-                    player.Update();
+                    player.UpdateFull();
                     player.IsOnProgress = false;
                     return;
                 }
@@ -365,7 +365,7 @@ namespace ResurrectionRP_Server.Farms
                 sender.SendNotificationError("Inconnu.");
 
             player.IsOnProgress = false;
-            player.Update();
+            player.UpdateFull();
         }
 
         public virtual async Task StartDoubleProcessing(IPlayer sender)
@@ -435,7 +435,7 @@ namespace ResurrectionRP_Server.Farms
                 else
                 {
                     sender.DisplaySubtitle($"Traitement terminé: Vous avez traité ~r~ {i} {_itemTraite.name}(s)", 15000);
-                    player.Update();
+                    player.UpdateFull();
                     player.IsOnProgress = false;
                     return;
                 }

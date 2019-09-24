@@ -168,7 +168,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         {
                             if (PlayerHandler != null)
                             {
-                                PlayerHandler.Update();
+                                PlayerHandler.UpdateFull();
                             }
 
                             this.UpdateFull();

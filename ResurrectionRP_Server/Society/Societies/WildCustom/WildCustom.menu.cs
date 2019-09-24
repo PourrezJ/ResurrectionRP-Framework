@@ -171,7 +171,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                             {
                                 vh.PlateHide = true;
                                 client.SendNotificationSuccess("La plaque du véhicule a été retirée du registre");
-                                ph.Update();
+                                ph.UpdateFull();
                                 vh.UpdateFull();
                             }
                         }

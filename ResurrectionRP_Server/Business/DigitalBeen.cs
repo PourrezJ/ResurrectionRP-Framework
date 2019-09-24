@@ -104,13 +104,13 @@ namespace ResurrectionRP_Server.Business
                     var invmenu = new Inventory.RPGInventoryMenu(player.PocketInventory, player.OutfitInventory, player.BagInventory, Inventory, true);
                     invmenu.OnMove += async (p, m) =>
                     {
-                        player.Update();
+                        player.UpdateFull();
                         await Update();
                     };
                     invmenu.PriceChange += async (p, m, stack, stackprice) =>
                     {
                         client.SendNotification($"Le nouveau prix de {stack.Item.name} est de ${stackprice} ");
-                        player.Update();
+                        player.UpdateFull();
                         await Update();
                     };
                     invmenu.OnClose += (p, m) =>
@@ -127,7 +127,7 @@ namespace ResurrectionRP_Server.Business
             }
 
             await Update();
-            player.Update();
+            player.UpdateFull();
         }
 
         private async Task StoreMenuManager(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)

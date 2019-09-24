@@ -111,14 +111,14 @@ namespace ResurrectionRP_Server.Business
 
                     invmenu.OnMove += async (p, m) =>
                     {
-                        ph.Update();
+                        ph.UpdateFull();
                         await Update();
                     };
 
                     invmenu.PriceChange += async (p, m, stack, stackprice) =>
                     {
                         client.SendNotification($"Le nouveau prix de {stack.Item.name} est de ${stackprice} ");
-                        ph.Update();
+                        ph.UpdateFull();
                         await Update();
                     };
 
@@ -137,7 +137,7 @@ namespace ResurrectionRP_Server.Business
             }
 
             await Update();
-            ph.Update();
+            ph.UpdateFull();
         }
 
         private async Task StoreMenuManager(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)

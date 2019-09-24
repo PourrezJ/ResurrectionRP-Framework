@@ -134,7 +134,7 @@ namespace ResurrectionRP_Server.Radio
                         if (double.TryParse(args[2].ToString(),  NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double frequence)){
 
                             radio.SaveFrequeceRadio(Convert.ToInt32(args[1]), frequence);
-                            player.GetPlayerHandler()?.Update();
+                            player.GetPlayerHandler()?.UpdateFull();
                             SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
                         }
                     }

@@ -149,7 +149,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 ph.LastUpdate = DateTime.Now;
             }
            
-            ph.SaveAsync();
+            ph.UpdateInBackground();
 
             PlayerHandler.PlayerHandlerList.Remove(origin, out _);
             Alt.Server.LogInfo($"Joueur social: {ph.PID} || Nom: {ph.Identite.Name} est déconnecté raison: {reason}.");
@@ -172,7 +172,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 });
             }
 
-            player.GetPlayerHandler()?.Update();
+            player.GetPlayerHandler()?.UpdateFull();
         }
 
         public async Task Events_PlayerJoin(IPlayer player, object[] args)
@@ -317,7 +317,7 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 ph.Hunger = Convert.ToInt32(arg[0]);
                 ph.Thirst = Convert.ToInt32(arg[1]);
-                ph.Update();
+                ph.UpdateFull();
             }
 
             return Task.CompletedTask;

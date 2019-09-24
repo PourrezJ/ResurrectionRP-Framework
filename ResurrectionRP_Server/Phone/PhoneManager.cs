@@ -136,14 +136,14 @@ namespace ResurrectionRP_Server.Phone
                     else if (phone.TryEditContact(client, contact.contactName, contact.phoneNumber, contact.originalNumber))
                         client.SendNotificationSuccess($"Vous avez édité le contact {contact.contactName}");
 
-                    ph.Update();
+                    ph.UpdateFull();
                     break;
 
                 case "RemoveContact":
                     if (phone.RemoveContactFromAddressBook(args[1].ToString()))
                         client.SendNotificationSuccess("Contact Supprimé!!");
 
-                    ph.Update();
+                    ph.UpdateFull();
                     break;
 
                 case "getConversationsV2":

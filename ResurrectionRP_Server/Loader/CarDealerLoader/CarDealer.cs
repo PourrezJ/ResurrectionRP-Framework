@@ -95,9 +95,9 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
             ph.ListVehicleKey.Add(Models.VehicleKey.GenerateVehicleKey(vehicleplace.VehicleHandler));
             await vehicleplace.VehicleHandler.InsertVehicle();
             ph.Client.SendNotificationSuccess($"Vous avez acheté un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");
-            CarDealerPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;
             await vehicleplace.VehicleHandler.Vehicle.FreezeAsync(false);
             await vehicleplace.VehicleHandler.Vehicle.InvincibleAsync(false);
+            CarDealerPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;
         }
     }
 }

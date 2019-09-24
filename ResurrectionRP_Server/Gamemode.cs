@@ -206,7 +206,7 @@ namespace ResurrectionRP_Server
             BusinessesManager = new Loader.BusinessesLoader();
             XMenuManager = new XMenuManager.XMenuManager();
             WeatherManager = new Weather.WeatherManager();
-            DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
+            //DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
             JobsManager = new Jobs.JobsManager();
             VoiceController = new Voice();
             HouseManager = new HouseManager();

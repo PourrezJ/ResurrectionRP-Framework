@@ -158,7 +158,7 @@ export class Game {
                 let invincible: boolean = entity.getSyncedMeta("SetInvincible");
                 let invisible: boolean = entity.getSyncedMeta("SetInvisible");
 
-                game.setPlayerInvisibleLocally(entity.scriptID, invincible);
+                game.setEntityAlpha(entity.scriptID, invisible ? 0 : 255, false);
                 game.setEntityInvincible(entity.scriptID, invisible);
             });
 
@@ -169,7 +169,7 @@ export class Game {
                 switch (key) {
                     case 'SetInvisible':
                         alt.log("SetInvisible");
-                        game.setPlayerInvisibleLocally(entity.scriptID, value);
+                        game.setEntityAlpha(entity.scriptID, value ? 0 : 255, false);
                         break;
                     case 'SetInvincible':
                         alt.log("SetInvincible");

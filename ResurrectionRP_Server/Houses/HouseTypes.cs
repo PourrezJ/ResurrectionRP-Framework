@@ -1,8 +1,6 @@
 ﻿using AltV.Net.Elements.Entities;
-using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Models;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
 
@@ -22,15 +20,6 @@ namespace ResurrectionRP_Server.Houses
             Position = position;
             InventorySize = inventorySize;
             ParkingPlace = parkingPlace;
-        }
-
-        private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex, dynamic data)
-        {
-            if (menuItem.Id == "sortir")
-            {
-                if (HouseManager.IsInHouse(client))
-                    await HouseManager.GetHouse(client)?.RemovePlayer(client, true);
-            }
         }
     }
     #endregion

@@ -156,9 +156,10 @@ namespace ResurrectionRP_Server.Houses
                 await MenuManager.CloseMenu(client);
         }
 
-        private async Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
+        private Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
         {
-            await RemovePlayer(client, true);
+            RemovePlayer(client, true);
+            return Task.CompletedTask;
         }
 
         private async Task OnParkingSaveNeeded()
@@ -174,7 +175,7 @@ namespace ResurrectionRP_Server.Houses
         private async Task OnVehicleOutParking(IPlayer client, VehicleHandler vehicle, Location location)
         {
             await Save();
-            await vehicle.PutPlayerInVehicle(client);
+            client.SetPlayerIntoVehicle(vehicle.Vehicle);
         }
 
         public async Task Parking_onEntityEnterColShape(IColShape colShape, IPlayer client)
@@ -250,7 +251,7 @@ namespace ResurrectionRP_Server.Houses
         public bool RemoveFromHouse(IPlayer client) 
             => HouseManager.RemoveClientHouse(client);
 
-        public async Task SendPlayer(IPlayer player)
+        public void SendPlayer(IPlayer player)
         {
             if (!player.Exists)
                 return;
@@ -259,13 +260,14 @@ namespace ResurrectionRP_Server.Houses
                 Alt.Server.LogWarning($"Player {player.GetPlayerHandler().Identite.Name} trying to enter house {ID} but already registered in another house");
             else
             {
-                await player.SetPositionAsync(HouseTypes.HouseTypeList[Type].Position.Pos);
-                await player.SetRotationAsync(HouseTypes.HouseTypeList[Type].Position.Rot);
-                await player.SetDimensionAsync((short)(DIMENSION_START + ID));
+                player.Position = HouseTypes.HouseTypeList[Type].Position.Pos;
+                player.Rotation = HouseTypes.HouseTypeList[Type].Position.Rot;
+                player.Dimension = (short)(DIMENSION_START + ID);
+
             }
         }
 
-        public async Task RemovePlayer(IPlayer player, bool set_pos = true)
+        public void RemovePlayer(IPlayer player, bool set_pos = true)
         {
             if (!player.Exists)
                 return;
@@ -275,8 +277,8 @@ namespace ResurrectionRP_Server.Houses
 
             if (set_pos)
             {
-                await player.SetPositionAsync(Position);
-                await player.SetDimensionAsync(GameMode.GlobalDimension);
+                player.Position = Position;
+                player.Dimension = GameMode.GlobalDimension;
             }
         }
 

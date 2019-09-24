@@ -966,10 +966,10 @@ namespace ResurrectionRP_Server.Inventory
                     case InventoryTypes.Pocket:
                         inv = menu.Inventory;
                         break;
-                    case Utils.Enums.InventoryTypes.Bag:
+                    case InventoryTypes.Bag:
                         inv = menu.Bag;
                         break;
-                    case Utils.Enums.InventoryTypes.Distant:
+                    case InventoryTypes.Distant:
                         inv = menu.Distant;
                         break;
                 }

@@ -178,6 +178,5 @@ export class Game {
 
     public static closeAllMenus() {
         alt.emit("InventoryManager_CloseMenu");
-        alt.emit("toggleChat");
     }
 }

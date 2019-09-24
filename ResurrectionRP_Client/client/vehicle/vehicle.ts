@@ -135,29 +135,26 @@ export function initialize() {
 }
 
 export function onPlayerEnterVehicle(vehicle: alt.Vehicle, seat: number, currentFuel: number, maxFuel: number, milage: number, fuelconsumption: number) {
-    showSpeedometer();
+    showSpeedometer(true);
     CurrentMilage = milage;
     fuelMax = maxFuel;
     fuelCur = currentFuel;
 }
 
 function onPlayerLeaveVehicle(vehicle: alt.Vehicle, seat: number) {
-    hideSpeedometer();
+    showSpeedometer(false);
     
     if (seat == 1) {
         game.setVehicleEngineOn(vehicle.scriptID, keepEngineOn, true, true);
     }
 }
 
-export function hideSpeedometer() {
-    if (speedoWindow !== null) {
-        speedoWindow.emit('hideSpeedometer');
-    }
-}
-
-export function showSpeedometer() {
-    if (speedoWindow !== null && game.getPedInVehicleSeat(player.vehicle.scriptID, -1, player.scriptID) == player.scriptID) {
+export function showSpeedometer(show: boolean) {
+    chat.pushMessage('showSpeedometer');
+    if (show && speedoWindow !== null && player.vehicle != null && game.getPedInVehicleSeat(player.vehicle.scriptID, -1, player.scriptID) == player.scriptID) {
         speedoWindow.emit('showSpeedometer');
+    } else if (!show && speedoWindow !== null) {
+        speedoWindow.emit('hideSpeedometer');
     }
 }
 

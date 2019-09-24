@@ -2,10 +2,12 @@
 /* eslint-disable no-unused-vars */
 
 function hideSpeedometer() {
+    $('body').hide();
     $(".speedometer").css('display', 'none');
 }
 
 function showSpeedometer() {
+    $('body').show();
     $(".speedometer").css('display', 'block');
 }
 

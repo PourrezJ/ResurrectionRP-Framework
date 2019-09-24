@@ -115,6 +115,7 @@ namespace ResurrectionRP_Server.Houses
                 Parking.ParkingType = ParkingType.House;
 
                 Parking.Location = Parking.Spawn1.Pos;
+                Parking.Spawn1.Rot = Parking.Spawn1.Rot.ConvertRotationToRadian();
                 Parking.Load();
             }
 
@@ -176,7 +177,6 @@ namespace ResurrectionRP_Server.Houses
         private async Task OnVehicleOutParking(IPlayer client, VehicleHandler vehicle, Location location)
         {
             await Save();
-            vehicle.Vehicle.Rotation = location.Rot.ConvertRotationToRadian();
             client.SetPlayerIntoVehicle(vehicle.Vehicle);
         }
 

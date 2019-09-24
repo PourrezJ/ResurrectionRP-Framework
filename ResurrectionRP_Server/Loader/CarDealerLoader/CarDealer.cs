@@ -77,7 +77,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
                 $"Acceleration: {manifest.MaxAcceleration} \n" +
                 $"Places: {manifest.MaxNumberOfPassengers + 1} \n";
 
-                place.TextLabelId = GameMode.Instance.Streamer.AddEntityTextLabel(str, place.Location.Pos, 1, 180, 255, 255, 255);
+                place.TextLabelId = GameMode.Instance.Streamer.AddEntityTextLabel(str, place.Location.Pos, 1, 255, 255, 255, 180);
 
                 place.VehicleHandler.Vehicle.SetData("CarDealer", place);
                 place.VehicleHandler.Vehicle.SetData("CarDealerPrice", place.VehicleInfo.Price);

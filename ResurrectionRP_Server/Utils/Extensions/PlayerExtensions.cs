@@ -108,23 +108,34 @@ namespace ResurrectionRP_Server
 
         public static List<IPlayer> GetPlayersInRange(this IPlayer client, float Range)
         {
-            var vehs = Alt.GetAllPlayers();
             List<IPlayer> endup = new List<IPlayer>();
-
-            Position playerPos = Position.Zero;
-            client.GetPositionLocked(ref playerPos);
-
-            Vector3 osition = new Vector3(playerPos.X, playerPos.Y, playerPos.Z);
-            foreach (IPlayer veh in vehs)
+            try
             {
-                if (!veh.Exists)
-                    continue;
-                var vehpos = veh.GetPosition();
-                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= Range)
+                var players = PlayerManager.GetPlayersList();
+
+                Position playerPos = Position.Zero;
+                client.GetPositionLocked(ref playerPos);
+
+                Vector3 osition = new Vector3(playerPos.X, playerPos.Y, playerPos.Z);
+                foreach (PlayerHandler player in players)
                 {
-                    endup.Add(veh);
+                    if (!player.Client.Exists)
+                        continue;
+
+                    Position pos = Position.Zero;
+
+                    player.Client.GetPositionLocked(ref pos);
+                    if (osition.DistanceTo2D(new Vector3(pos.X, pos.Y, pos.Z)) <= Range)
+                    {
+                        endup.Add(player.Client);
+                    }
                 }
             }
+            catch(Exception ex)
+            {
+                Alt.Server.LogError(ex.ToString());
+            }
+
             return endup;
         }
 

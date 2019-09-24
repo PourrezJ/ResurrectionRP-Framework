@@ -1,4 +1,5 @@
-﻿using AltV.Net.Async;
+﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using AltV.Net.Data;
@@ -322,8 +323,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 _damageData = value;
 
-                if (Vehicle != null && Vehicle.Exists && Vehicle.DamageData != value)
-                    AltAsync.Do(() => { Vehicle.DamageData = value; });
+               //  if (Vehicle != null && Vehicle.Exists && Vehicle.DamageData != value)
+               //      AltAsync.Do(() => { Vehicle.DamageData = value; });
             }
         }
 
@@ -337,11 +338,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 
                 if (Vehicle != null && Vehicle.Exists)
                 {
-                    for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
+                    AltAsync.Do(() =>
                     {
-                        if (Vehicle.GetDoorState(i) != (byte)_doors[i])
-                            AltAsync.Do(() => { Vehicle.SetDoorState(i, (byte)_doors[i]); });
-                    }
+                        for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
+                        {
+                            if (Vehicle.GetDoorState(i) != (byte)_doors[i])
+                                Vehicle.SetDoorState(i, (byte)_doors[i]);
+                        }
+                    });
                 }
             }
         }
@@ -356,15 +360,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 if (Vehicle != null && Vehicle.Exists)
                 {
-                    for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
+                    AltAsync.Do(() =>
                     {
-                        if (_windows[i] == WindowState.WindowBroken)
-                            AltAsync.Do(() => { Vehicle.SetWindowDamaged(i, true); });
-                        else if (_windows[i] == WindowState.WindowDown)
-                            AltAsync.Do(() => { Vehicle.SetWindowOpened(i, true); });
-                        else
-                            AltAsync.Do(() => { Vehicle.SetWindowOpened(i, false); });
-                    }
+                        for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
+                        {
+                            if (_windows[i] == WindowState.WindowBroken)
+                                Vehicle.SetWindowDamaged(i, true);
+                            else if (_windows[i] == WindowState.WindowDown)
+                                Vehicle.SetWindowOpened(i, true);
+                            else
+                                Vehicle.SetWindowOpened(i, false);
+                        }
+                    });
                 }
             }
         }
@@ -379,14 +386,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 if (Vehicle != null && Vehicle.Exists)
                 {
-                    for (byte i = 0; i < Vehicle.WheelsCount; i++)
+                    AltAsync.Do(() =>
                     {
-                        AltAsync.Do(() =>
+                        for (byte i = 0; i < Vehicle.WheelsCount; i++)
                         {
                             Vehicle.SetWheelHealth(i, _wheels[i].Health);
                             Vehicle.SetWheelBurst(i, _wheels[i].Burst);
-                        });
-                    }
+                        }
+                    });
                 }
             }
         }

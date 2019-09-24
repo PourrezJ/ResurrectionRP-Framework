@@ -229,13 +229,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     break;
                     */
                 case "ID_Start":
-                    bool engineCurrent = Vehicle.EngineOn;
-
                     if (Fuel > 0)
                     {
-                        EngineOn = !engineCurrent;
-                        Vehicle.GetVehicleHandler().EngineOn = !engineCurrent;
-                        client.EmitLocked("keepEngineState", !engineCurrent);
+                        EngineOn = !Vehicle.EngineOn;
                         await XMenuManager.XMenuManager.CloseMenu(client);
                     }
                     break;

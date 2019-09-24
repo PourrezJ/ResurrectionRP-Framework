@@ -102,16 +102,17 @@ namespace ResurrectionRP_Server.Entities.Players
             return Task.CompletedTask;
         }
 
-        public async Task Repair(IPlayer player, string[] args)
+        public Task Repair(IPlayer player, string[] args)
         {
             if (player.Vehicle == null)
             {
                 player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
-                return;
+                return Task.CompletedTask;
             }
 
-            await player.Vehicle.RepairAsync(player);
-            player.DisplaySubtitle("Vehicule restoré", 5000);
+            player.Vehicle.GetVehicleHandler().Repair(player);
+            player.DisplaySubtitle("Vehicule réparé", 5000);
+            return Task.CompletedTask;
         }
 
         private Task Cloth(IPlayer player, object[] args)

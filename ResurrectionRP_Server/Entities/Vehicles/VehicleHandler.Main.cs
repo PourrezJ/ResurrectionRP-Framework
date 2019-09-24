@@ -311,7 +311,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             DirtLevel = Vehicle.DirtLevel;
 
             // Needed as when fuel gets to 0 there is a vehicle save and engine stop information hasn't been set back from client
-            if (Fuel != 0)
+            if (Fuel > 0)
                 EngineOn = Vehicle.EngineOn;
 
             PrimaryColor = Vehicle.PrimaryColor;
@@ -364,6 +364,25 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             //TODO
             return Task.CompletedTask;
+        }
+
+        public void Repair(IPlayer player)
+        {
+            if (Vehicle == null || !Vehicle.Exists || player == null || !player.Exists)
+                return;
+
+            BodyHealth = 1000;
+            Doors = new VehicleDoorState[Globals.NB_VEHICLE_DOORS] { 0, 0, 0, 0, 0, 0, 0, 0 };
+            Windows = new WindowState[Globals.NB_VEHICLE_WINDOWS] { 0, 0, 0, 0 };
+            Wheels = new Wheel[Vehicle.WheelsCount];
+
+            for (int i = 0; i < Wheels.Length; i++)
+                Wheels[i] = new Wheel();
+
+            FrontBumperDamage = 0;
+            RearBumperDamage = 0;
+            DamageData = string.Empty;
+            player.EmitLocked("vehicleFix", Vehicle);
         }
 
         public void SetOwner(IPlayer player) => OwnerID = player.GetSocialClub();

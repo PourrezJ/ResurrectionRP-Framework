@@ -380,7 +380,6 @@ namespace ResurrectionRP_Server.Factions
                         $"Moteur:    {Math.Floor(await veh.GetEngineHealthAsync() * 0.1)}%\n" +
                         $"Réservoir: {Math.Floor(await veh.GetPetrolTankHealthAsync() * 0.1)}%\n";
 
-
                         client.DisplaySubtitle(str, 5000);
                     });
 
@@ -390,21 +389,19 @@ namespace ResurrectionRP_Server.Factions
                     if (await BankAccount.GetBankMoney(ReparBody, $"Réparation carrosserie {_vh.Plate} par {ph.Identite.Name}"))
                     {
                         _vh.UpdateProperties();
-                        Utils.Utils.Delay(20000, true, async () =>
+
+                        Utils.Utils.Delay(20000, true, () =>
                         {
-                            if (!veh.Exists || !client.Exists)
+                            if (client == null || !client.Exists)
                                 return;
-                            client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~g~Terminé~w~.", "Elle est niquel!");
 
-                            _vh.BodyHealth = 1000;
-                            _vh.Doors = new VehicleDoorState[Globals.NB_VEHICLE_DOORS] { 0, 0, 0, 0, 0, 0, 0, 0 };
-                            _vh.Windows = new WindowState[Globals.NB_VEHICLE_WINDOWS] { 0, 0, 0, 0 };
-                            _vh.FrontBumperDamage = 0;
-                            _vh.RearBumperDamage = 0;
-
-                            await veh.RepairAsync(client);
-                            await veh.SetEngineHealthAsync(_vh.EngineHealth);
+                            int engineHealth = _vh.EngineHealth;
+                            int petrolTankHealth = _vh.PetrolTankHealth;
+                            _vh.Repair(client);
+                            _vh.EngineHealth = engineHealth;
+                            _vh.PetrolTankHealth = petrolTankHealth;
                             _vh.UpdateAsync();
+                            client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~g~Terminé~w~.", "Elle est niquel!");
                         });
 
                         await UpdateDatabase();

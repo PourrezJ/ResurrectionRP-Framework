@@ -132,16 +132,5 @@ namespace ResurrectionRP_Server
 
             return false;
         }
-
-        public static async Task RepairAsync(this IVehicle veh, IPlayer player)
-        {
-            if (!veh.Exists)
-                return;
-
-            if (!player.Exists)
-                return;
-
-            await player.EmitAsync("vehicleFix", veh);
-        }
     }
 }

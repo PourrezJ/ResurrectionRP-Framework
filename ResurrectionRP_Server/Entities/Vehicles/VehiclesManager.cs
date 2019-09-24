@@ -86,15 +86,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             PlayerHandler ph = player.GetPlayerHandler();
 
             if (vh != null)
-            {
-                vehicle.SetEngineOnAsync(vh.EngineOn);
                 vh.UpdateFull();
-            }
 
             if (ph != null)
             {
                 ph.Update();
-                player.EmitLocked("OnPlayerLeaveVehicle", vehicle);
+                player.EmitLocked("OnPlayerLeaveVehicle", vehicle, (int)seat);
             }
 
             return Task.CompletedTask;

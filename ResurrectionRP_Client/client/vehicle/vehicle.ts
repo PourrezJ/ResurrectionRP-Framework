@@ -1,5 +1,6 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
+import * as chat from '../chat/chat';
 
 let player = alt.Player.local;
 let fuelMax = 100;
@@ -8,13 +9,12 @@ let fuelConsum = 5.5;
 var CurrentMilage = 0.0;
 let speedoWindow = new alt.WebView('http://resource/client/cef/speedometer/speedometer.html');
 let lastSent = Date.now();
-let playerVehicle: alt.Vehicle = null;
-let keepEngineOn: boolean = false;
+let keepEngineOn: boolean = true;
 
 export function initialize() {
-    alt.onServer('HideSpeedometer', hideSpeedometer);
-    alt.onServer('OnPlayerLeaveVehicle', hideSpeedometer);
-    alt.onServer('OnPlayerEnterVehicle', showSpeedometer);
+    alt.onServer('HideSpeedometer', onPlayerLeaveVehicle);
+    alt.onServer('OnPlayerLeaveVehicle', onPlayerLeaveVehicle);
+    alt.onServer('OnPlayerEnterVehicle', onPlayerEnterVehicle);
     alt.onServer('SetDoorState', setDoorState);
     alt.onServer('HornPreview', hornPreview);
 
@@ -25,10 +25,6 @@ export function initialize() {
     alt.onServer('UpdateMilage', (milage: number) => {
         CurrentMilage = milage;
     });
-
-    alt.onServer('keepEngineState', (state: boolean) => {
-        keepEngineOn = state;
-    })
 
     alt.onServer('keepEngineState', (state: boolean) => {
         keepEngineOn = state;
@@ -138,27 +134,31 @@ export function initialize() {
     });
 }
 
-export function hideSpeedometer(vehicle = null) {
-    if (speedoWindow !== null) {
-        speedoWindow.emit('hideSpeedometer');
-    }
-    game.setVehicleEngineOn(playerVehicle.scriptID, keepEngineOn, true, true);
-    if(vehicle != null)
-        alt.emitServer('UpdateFuelAndMilage', vehicle, fuelCur, CurrentMilage);
-}
-
-export function showSpeedometer(vehicle, seat, currentFuel, maxFuel, milage, fuelconsumption) {
-    if (speedoWindow !== null && game.getPedInVehicleSeat(player.vehicle.scriptID, -1, player.scriptID) == player.scriptID) {
-        speedoWindow.emit('showSpeedometer');
-    }
-    keepEngineOn = false;
-
-    playerVehicle = alt.Player.local.vehicle;
-    
-
+export function onPlayerEnterVehicle(vehicle: alt.Vehicle, seat: number, currentFuel: number, maxFuel: number, milage: number, fuelconsumption: number) {
+    showSpeedometer();
     CurrentMilage = milage;
     fuelMax = maxFuel;
     fuelCur = currentFuel;
+}
+
+function onPlayerLeaveVehicle(vehicle: alt.Vehicle, seat: number) {
+    hideSpeedometer();
+    
+    if (seat == 1) {
+        game.setVehicleEngineOn(vehicle.scriptID, keepEngineOn, true, true);
+    }
+}
+
+export function hideSpeedometer() {
+    if (speedoWindow !== null) {
+        speedoWindow.emit('hideSpeedometer');
+    }
+}
+
+export function showSpeedometer() {
+    if (speedoWindow !== null && game.getPedInVehicleSeat(player.vehicle.scriptID, -1, player.scriptID) == player.scriptID) {
+        speedoWindow.emit('showSpeedometer');
+    }
 }
 
 export function setDoorState(vehicle: alt.Vehicle, door: number, state: number, option: boolean) {

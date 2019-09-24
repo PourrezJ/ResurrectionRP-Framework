@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
+using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
@@ -175,6 +176,7 @@ namespace ResurrectionRP_Server.Houses
         private async Task OnVehicleOutParking(IPlayer client, VehicleHandler vehicle, Location location)
         {
             await Save();
+            vehicle.Vehicle.Rotation = location.Rot.ConvertRotationToRadian();
             client.SetPlayerIntoVehicle(vehicle.Vehicle);
         }
 

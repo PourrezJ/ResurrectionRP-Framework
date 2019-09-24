@@ -260,7 +260,7 @@ namespace ResurrectionRP_Server.Business.Barber
             await OpenMenu(client);
         }
 
-        private async Task HairCutPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        private Task HairCutPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
             if (menuItem.Id == "ID_Hair")
             {
@@ -274,6 +274,7 @@ namespace ResurrectionRP_Server.Business.Barber
                 if (ClientSelected.Client != null)
                 ClientSelected?.Client?.SetHeadOverlay(1, new HeadOverlayData((byte)itemIndex, 255, (uint)hair.Color, (uint)hair.HighlightColor));
             }
+            return Task.CompletedTask;
         }
         #endregion
 

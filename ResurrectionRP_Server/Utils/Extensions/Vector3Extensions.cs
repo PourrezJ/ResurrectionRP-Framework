@@ -66,7 +66,15 @@ namespace ResurrectionRP_Server
 
         public static Position ConvertToPosition(this Vector3 pos) =>  new Position { X = pos.X, Y=pos.Y, Z=pos.Z };
         public static Entity.Position ConvertToEntityPosition(this Vector3 pos) =>  new Entity.Position { X = pos.X, Y=pos.Y, Z=pos.Z };
-        
+
+        public static Vector3 ConvertRotationToRadian(this Vector3 rot) 
+        {
+            if (rot.Z < 180.0)
+                return new Vector3(0.0f, 0.0f, (float)(rot.Z * Math.PI / 180.0));
+            else
+                return new Vector3(0.0f, 0.0f, (float)((rot.Z - 360.0) / 180.0 * Math.PI));
+        }
+
         public static Rotation ConvertToEntityRotation(this Vector3 pos) => new Rotation(pos.X, pos.Y, pos.Z );
 
         public static async Task<List<IVehicle>> GetVehiclesInRange(this Vector3 pos, float range, short dimension = GameMode.GlobalDimension)

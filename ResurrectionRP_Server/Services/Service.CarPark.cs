@@ -32,6 +32,8 @@ namespace ResurrectionRP_Server.Services
                 Parking.OnVehicleOut = OnVehicleOut;
                 Parking.ParkingType = ParkingType.Public;
                 Parking.OnSaveNeeded = async () => await Update();
+                Parking.Spawn1.Rot = Parking.Spawn1.Rot.ConvertRotationToRadian();
+                Parking.Spawn2.Rot = Parking.Spawn2.Rot.ConvertRotationToRadian();
 
                 List<ParkedCar> _poundList = Parking.ListVehicleStored.FindAll(veh => DateTime.Now > veh.ParkTime.AddMonths(1));
 
@@ -48,6 +50,7 @@ namespace ResurrectionRP_Server.Services
 
         private async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Models.Location Spawn)
         {
+            //vehicle.Vehicle.Rotation = Spawn.Rot.ConvertRotationToRadian();
             await Update();
             client.SendNotificationSuccess($"Vous avez sorti votre {vehicle.VehicleManifest.LocalizedName}!"); 
         }

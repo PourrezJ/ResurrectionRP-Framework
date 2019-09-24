@@ -3,6 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,8 +20,8 @@ namespace SaltyServer
         public static string IngameChannel { get; private set; }
         public static string IngameChannelPassword { get; private set; }
         
-        private static Dictionary<string, List<IPlayer>> RadioChannels = new Dictionary<string, List<IPlayer>>();
-        private static Dictionary<string, List<IPlayer>> PlayersTalkingOnRadioChannels = new Dictionary<string, List<IPlayer>>();
+        private static ConcurrentDictionary<string, List<IPlayer>> RadioChannels = new ConcurrentDictionary<string, List<IPlayer>>();
+        private static ConcurrentDictionary<string, List<IPlayer>> PlayersTalkingOnRadioChannels = new ConcurrentDictionary<string, List<IPlayer>>();
         private static List<string> TsNames = new List<string>();
         #endregion
 
@@ -195,8 +196,8 @@ namespace SaltyServer
             }
             else
             {
-                Voice.RadioChannels.Add(radioChannel, new List<IPlayer> { client });
-                Voice.PlayersTalkingOnRadioChannels.Add(radioChannel, new List<IPlayer>());
+                Voice.RadioChannels.TryAdd(radioChannel, new List<IPlayer> { client });
+                Voice.PlayersTalkingOnRadioChannels.TryAdd(radioChannel, new List<IPlayer>());
             }
         }
 
@@ -224,7 +225,7 @@ namespace SaltyServer
                 Voice.PlayersTalkingOnRadioChannels[radioChannel].Remove(client);
 
                 if (Voice.PlayersTalkingOnRadioChannels[radioChannel].Count == 0)
-                    Voice.PlayersTalkingOnRadioChannels.Remove(radioChannel);
+                    Voice.PlayersTalkingOnRadioChannels.Remove(radioChannel, out List<IPlayer> value);
 
                 if (client.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName))
                 {
@@ -239,8 +240,8 @@ namespace SaltyServer
 
                 if (Voice.RadioChannels[radioChannel].Count == 0)
                 {
-                    Voice.RadioChannels.Remove(radioChannel);
-                    Voice.PlayersTalkingOnRadioChannels.Remove(radioChannel);
+                    Voice.RadioChannels.Remove(radioChannel, out List<IPlayer> value);
+                    Voice.PlayersTalkingOnRadioChannels.Remove(radioChannel, out List<IPlayer> tsName);
                 }
             }
         }

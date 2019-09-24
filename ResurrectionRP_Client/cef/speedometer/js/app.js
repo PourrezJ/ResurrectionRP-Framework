@@ -11,10 +11,10 @@ function showSpeedometer() {
     $(".speedometer").css('display', 'block');
 }
 
-function setSpeed(speed, rpm, gear, light, enginehealth, currentFuel, fuelMax, milage) {
+function setSpeed(speed, rpm, gear, light, engineOn, engineHealth, currentFuel, fuelMax, milage) {
     $('.speed').html(Math.floor(speed));
 
-    if (currentFuel === 0) {
+    if (currentFuel === 0 || !engineOn) {
         $('.gear').html(`<span>0</span>`);
         $(".compteur .on").css("width", `0px`);
     } else {
@@ -43,7 +43,7 @@ function setSpeed(speed, rpm, gear, light, enginehealth, currentFuel, fuelMax, m
 
     let styles = "";
 
-    if (enginehealth <= 200) {
+    if (engineHealth <= 200) {
         styles = {
             'opacity': '1',
             'background': 'red'
@@ -51,7 +51,7 @@ function setSpeed(speed, rpm, gear, light, enginehealth, currentFuel, fuelMax, m
         $('.information .icons-status .engine span').css(styles);
         $('.information .icons-status .engine').css('opacity', '1');
     }
-    else if (enginehealth <= 500) {
+    else if (engineHealth <= 500) {
         styles = {
             'opacity': '1',
             'background': 'yellow'

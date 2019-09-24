@@ -12,9 +12,8 @@ let lastSent = Date.now();
 let keepEngineOn: boolean = true;
 
 export function initialize() {
-    alt.onServer('HideSpeedometer', onPlayerLeaveVehicle);
-    alt.onServer('OnPlayerLeaveVehicle', onPlayerLeaveVehicle);
     alt.onServer('OnPlayerEnterVehicle', onPlayerEnterVehicle);
+    alt.onServer('OnPlayerLeaveVehicle', onPlayerLeaveVehicle);
     alt.onServer('SetDoorState', setDoorState);
     alt.onServer('HornPreview', hornPreview);
 
@@ -115,7 +114,6 @@ export function initialize() {
             let rpm = player.vehicle.rpm * 591;
 
             if (speedoWindow !== null) {
-
                 if (rpm >= 591)
                     rpm = 591;
 
@@ -128,7 +126,8 @@ export function initialize() {
                     light = 1;
 
                 let engineHealth = game.getVehicleEngineHealth(player.vehicle.scriptID);
-                speedoWindow.emit('setSpeed', speed, rpm, player.vehicle.gear, light, engineHealth, fuelCur, fuelMax, CurrentMilage);
+                let engineOn = game.getIsVehicleEngineRunning(player.vehicle.scriptID);
+                speedoWindow.emit('setSpeed', speed, rpm, player.vehicle.gear, light, engineOn, engineHealth, fuelCur, fuelMax, CurrentMilage);
             }
         }
     });

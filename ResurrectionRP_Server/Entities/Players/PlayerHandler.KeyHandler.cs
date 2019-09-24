@@ -123,7 +123,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                     
                     var Ph = PlayerManager.GetPlayersList().Find(p => p.Location.Pos.DistanceTo(raycastData.pos) < 1);
-                    if (playerDistant != null || Ph != null)
+                    if (playerDistant != null || Ph != null && Ph != this)
                     {
                         await ph.OpenXtremPlayer(playerDistant ?? Ph.Client);
                         return;

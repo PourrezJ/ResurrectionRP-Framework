@@ -83,6 +83,7 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
             vehicleplace.VehicleHandler.SpawnVeh = true;
             vehicleplace.VehicleHandler.SetOwner(ph);
             vehicleplace.VehicleHandler.Vehicle.ResetData("RentShop");
+            veh.LockState = AltV.Net.Enums.VehicleLockState.Unlocked;
             ph.ListVehicleKey.Add(VehicleKey.GenerateVehicleKey(vehicleplace.VehicleHandler));
             ph.Client.SendNotificationSuccess($"Vous avez loué un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");
             VehicleRentPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;

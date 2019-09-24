@@ -171,7 +171,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                                 PlayerHandler.UpdateFull();
                             }
 
-                            this.UpdateFull();
+                            UpdateFull();
                             return Task.CompletedTask;
                         });
 
@@ -314,7 +314,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                                 {
                                     if (await ph.HasBankMoney(_place.VehicleInfo.Price, $"Location de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
                                     {
-                                        _place.RentShop.RentCar(_place, ph);
+                                        await _place.RentShop.RentCar(_place, ph);
                                     }
                                     else
                                     {

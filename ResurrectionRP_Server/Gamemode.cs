@@ -255,7 +255,7 @@ namespace ResurrectionRP_Server
             Utils.Utils.Delay(60000, false, async () => await FactionManager.Update());
             Utils.Utils.Delay(1000, false, () => VehiclesManager.UpdateVehiclesMilageAndFuel());
             
-            Utils.Utils.Delay(100, false, () => {
+            Utils.Utils.Delay(1000, false, () => {
                 Utils.FPSCounter.OnTick();
             });
 

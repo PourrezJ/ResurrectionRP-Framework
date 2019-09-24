@@ -41,7 +41,7 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
             {
                 foreach (var place in VehicleRentPlaces)
                 {
-                    if (place.VehicleHandler == null && !Entities.Vehicles.VehiclesManager.IsVehicleInSpawn(place.Location.Pos, 4))
+                    if (place.VehicleHandler == null && !VehiclesManager.IsVehicleInSpawn(place.Location.Pos, 4))
                         await Respawn(place);
                 }
             });
@@ -58,8 +58,10 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
 
             if (manifest != null)
             {
-                place.VehicleHandler = await VehiclesManager.SpawnVehicle("", place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot, color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
-                place.VehicleHandler?.Vehicle.SetData("RentShop", place);
+                place.VehicleHandler = await VehiclesManager.SpawnVehicle("", place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot.ConvertRotationToRadian(), color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
+                place.VehicleHandler.Vehicle.SetData("RentShop", place);
+                await place.VehicleHandler.Vehicle.FreezeAsync(true);
+                await place.VehicleHandler.Vehicle.InvincibleAsync(true);
                 string str = $"{manifest.DisplayName} \n" +
                 $"Prix $ {place.VehicleInfo.Price} \n" +
                 $"Coffre: {place.VehicleInfo.InventoryWeight} \n" +
@@ -67,22 +69,21 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
                 $"Acceleration: {manifest.MaxAcceleration} \n" +
                 $"Places: {manifest.MaxNumberOfPassengers + 1} \n";
 
-                place.TextLabelId = GameMode.Instance.Streamer.AddEntityTextLabel(str, place.Location.Pos + new Vector3(0,0,1f),1, 180,255,255,255);
-                    //await MP.TextLabels.NewAsync(place.Location.Pos + new Vector3(0, 0, 1.0f), str, 1, Color.FromArgb(180, 255, 255, 255), 15);
+                place.TextLabelId = GameMode.Instance.Streamer.AddEntityTextLabel(str, place.Location.Pos + new Vector3(0,0,1f),1,255,255,255, 180);
             }
         }
 
-        public void RentCar(VehicleRentPlace vehicleplace, Entities.Players.PlayerHandler ph)
+        public async Task RentCar(VehicleRentPlace vehicleplace, Entities.Players.PlayerHandler ph)
         {
             vehicleplace.TextLabelId.Destroy();
-            //GameMode.Instance.Economy.CaissePublique += Economy.CalculPriceTaxe(vehicleplace.VehicleInfo.Price, GameMode.Instance.Economy.Taxe_Market);
-
             var veh = vehicleplace.VehicleHandler;
             veh.Vehicle.SetSyncedMetaData("VehicleRent", DateTime.Now.ToString());
+            await veh.Vehicle.FreezeAsync(false);
+            await veh.Vehicle.InvincibleAsync(false);
             vehicleplace.VehicleHandler.SpawnVeh = true;
             vehicleplace.VehicleHandler.SetOwner(ph);
             vehicleplace.VehicleHandler.Vehicle.ResetData("RentShop");
-            ph.ListVehicleKey.Add(Models.VehicleKey.GenerateVehicleKey(vehicleplace.VehicleHandler));
+            ph.ListVehicleKey.Add(VehicleKey.GenerateVehicleKey(vehicleplace.VehicleHandler));
             ph.Client.SendNotificationSuccess($"Vous avez loué un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");
             VehicleRentPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;
 

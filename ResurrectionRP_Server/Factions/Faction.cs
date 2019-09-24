@@ -136,8 +136,9 @@ namespace ResurrectionRP_Server.Factions
                 Parking.OnVehicleStored = OnVehicleStore;
                 Parking.OnVehicleOut = OnVehicleOut;
                 Parking.ParkingType = ParkingType.Faction;
-                Parking.MaxVehicles = 3;
+                Parking.MaxVehicles = 5;
                 Parking.Spawn1 = ParkingLocation;
+                Parking.Spawn1.Rot = Parking.Spawn1.Rot.ConvertRotationToRadian();
             }
 
             if (HeliportLocation != null)

@@ -184,7 +184,7 @@ namespace ResurrectionRP_Server
 
             AltAsync.OnPlayerConnect += OnPlayerConnected;
             AltAsync.OnPlayerDisconnect += OnPlayerDisconnected;
-
+ 
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
             Streamer = new Streamer.Streamer();
@@ -254,6 +254,10 @@ namespace ResurrectionRP_Server
             Utils.Utils.Delay(1000, false, () => Time.Update());
             Utils.Utils.Delay(60000, false, async () => await FactionManager.Update());
             Utils.Utils.Delay(1000, false, () => VehiclesManager.UpdateVehiclesMilageAndFuel());
+            
+            Utils.Utils.Delay(100, false, () => {
+                Utils.FPSCounter.OnTick();
+            });
 
             Chat.Initialize();
 
@@ -318,6 +322,7 @@ namespace ResurrectionRP_Server
 
             await PlayerManager.OnPlayerDisconnected(player, origin, reason);   
         }
+
         #endregion
 
         #region Methods

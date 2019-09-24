@@ -105,6 +105,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Method
+        public bool IsLocked()
+        {
+            return (LockState == VehicleLockState.Locked) ? true : false;
+        }
+
         public async Task<IVehicle> SpawnVehicle(Location location = null, bool setLastUse = true)
         {
             if (Dimension.ToString() == "-1")

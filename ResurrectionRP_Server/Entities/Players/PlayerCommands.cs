@@ -81,6 +81,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 player.SendChatMessage("Erreur dans la saisie des coordonnées");
             }
         }
+
         public Task Cls(IPlayer player, string[] args)
         {
             player.EmitLocked("EmptyChat");

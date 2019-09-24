@@ -198,7 +198,7 @@ IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon 
         {
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
             // ICollection<IVehicle> vehs = Alt.GetAllVehicles();
-            ICollection<IVehicle> vehs = GetAllVehicles();
+            ICollection<IVehicle> vehs = GetAllVehiclesInGame();
             IVehicle nearest = null;
 
             foreach (IVehicle veh in vehs)
@@ -214,7 +214,12 @@ IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon 
             return nearest;
         }
 
-        public static ICollection<IVehicle> GetAllVehicles()
+        public static ICollection<VehicleHandler> GetAllVehicles()
+        {
+            return _vehicleHandlers.Values;
+        }
+
+        public static ICollection<IVehicle> GetAllVehiclesInGame()
         {
             return VehicleHandlerList.Select(v => v.Value.Vehicle).ToArray();
         }
@@ -273,7 +278,7 @@ IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon 
 
         public static void UpdateVehiclesMilageAndFuel()
         {
-            foreach (IVehicle vehicle in GetAllVehicles())
+            foreach (IVehicle vehicle in GetAllVehiclesInGame())
             {
                 if (vehicle.Exists && vehicle.EngineOn)
                     vehicle.GetVehicleHandler()?.UpdateMilageAndFuel();

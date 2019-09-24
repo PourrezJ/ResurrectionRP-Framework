@@ -88,7 +88,7 @@ namespace ResurrectionRP_Server
         {
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
             // var vehs = Alt.GetAllVehicles();
-            var vehs = Entities.Vehicles.VehiclesManager.GetAllVehicles();
+            var vehs = Entities.Vehicles.VehiclesManager.GetAllVehiclesInGame();
 
             List<IVehicle> endup = new List<IVehicle>();
             var position = client.GetPosition();
@@ -199,7 +199,7 @@ namespace ResurrectionRP_Server
         {
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
             // var vehs = Alt.GetAllVehicles();
-            var vehs = Entities.Vehicles.VehiclesManager.GetAllVehicles();
+            var vehs = Entities.Vehicles.VehiclesManager.GetAllVehiclesInGame();
 
             IVehicle endup = null;
             var position = client.GetPosition();

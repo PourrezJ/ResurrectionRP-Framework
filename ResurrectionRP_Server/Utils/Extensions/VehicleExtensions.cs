@@ -28,7 +28,7 @@ namespace ResurrectionRP_Server
         {
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
             // var vehs = Alt.GetAllVehicles();
-            var vehs = VehiclesManager.GetAllVehicles();
+            var vehs = VehiclesManager.GetAllVehiclesInGame();
 
             List<IVehicle> endup = new List<IVehicle>();
             var position = client.GetPosition();

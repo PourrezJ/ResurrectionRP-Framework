@@ -24,7 +24,7 @@ namespace ResurrectionRP_Server.EventHandlers
         #region Private methods
         private static async Task OnEntityColshape(IColShape colShape, IEntity targetEntity, bool state)
         {
-            Alt.Server.LogInfo("Event AltAsync.OnColShape");
+            // Alt.Server.LogInfo("Event AltAsync.OnColShape");
 
             try
             {

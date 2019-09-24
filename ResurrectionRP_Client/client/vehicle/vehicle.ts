@@ -39,8 +39,8 @@ export function initialize() {
             {
                 let vehId = entity.scriptID;
 
-                if (game.isVehicleSeatFree(alt.Player.local.scriptID, -1, false))
-                    game.setVehicleOnGroundProperly(alt.Player.local.scriptID, 5.0);
+                if (game.isVehicleSeatFree(vehId, -1, false))
+                    game.setVehicleOnGroundProperly(vehId, 5.0);
 
                
                 alt.setTimeout(() => {
@@ -56,14 +56,14 @@ export function initialize() {
 
                     let neonState: boolean = entity.getSyncedMeta("NeonState");
                     for (let i = 0; i < 4; i++) {
-                        game.setVehicleNeonLightEnabled(entity.scriptID, i, neonState);
+                        game.setVehicleNeonLightEnabled(vehId, i, neonState);
                     }
 
                     let neonColor: number = entity.getSyncedMeta("NeonColor");
                     const b = (neonColor & 0xFF);
                     const g = (neonColor & 0xFF00) >>> 8;
                     const r = (neonColor & 0xFF0000) >>> 16;
-                    game.setVehicleNeonLightsColour(entity.scriptID, r, g, b);
+                    game.setVehicleNeonLightsColour(vehId, r, g, b);
                 }, 500); 
             }
             catch (e) {

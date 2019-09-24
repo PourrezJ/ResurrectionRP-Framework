@@ -225,7 +225,7 @@ IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon 
                     saveNeeded = true;
                 }
 
-                if (saveNeeded)
+                if (saveNeeded && parking.OnSaveNeeded != null)
                     await parking.OnSaveNeeded.Invoke();
             }
         }

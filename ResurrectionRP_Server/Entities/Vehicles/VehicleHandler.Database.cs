@@ -12,7 +12,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
     {
         #region Fields
         [BsonIgnore]
-        private static readonly double _updateWaitTime = 1000.0;
+        private static readonly double _updateWaitTime = 2000.0;
         [BsonIgnore]
         private DateTime _lastUpdateRequest;
         [BsonIgnore]
@@ -52,6 +52,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (location != null)
                     Location = location;
 
+                UpdateProperties();
                 UpdateInBackground();
             }
         }
@@ -83,8 +84,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     await Task.Delay((int)waitTime.TotalMilliseconds);
                     updateTime = _lastUpdateRequest.AddMilliseconds(_updateWaitTime);
                 }
-
-                UpdateProperties();
 
                 try
                 {

@@ -204,10 +204,12 @@ namespace ResurrectionRP_Server.Services
         public async Task AddVehicleInPound(VehicleHandler veh)
         {
             Alt.Server.LogInfo ($"Mise en fourrière véhicule {veh.Plate}");
+
             if (!PoundVehicleList.Exists(p => p.Plate == veh.Plate))
                 PoundVehicleList.Add(new ParkedCar(veh.Plate, DateTime.Now));
+
             veh.IsInPound = true;
-            veh.IsParked = false;
+            veh.ParkingName = "Fourrière";
             await veh.Delete();
         }
     }

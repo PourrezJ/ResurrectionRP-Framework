@@ -84,10 +84,9 @@ namespace ResurrectionRP_Server.Models
             set => _whitelist = value;
         }
 
-        [BsonIgnore]
-        public OnVehicleStoredEvent OnVehicleStored { get; set; }
-        [BsonIgnore]
-        public OnVehicleOutEvent OnVehicleOut { get; set; }
+        public event OnVehicleStoredEvent OnVehicleStored;
+        public event OnVehicleOutEvent OnVehicleOut;
+
         [BsonIgnore]
         public OnSaveNeededDelegate OnSaveNeeded { get; set; }
         [BsonIgnore]
@@ -212,11 +211,12 @@ namespace ResurrectionRP_Server.Models
                 //     await client.PutIntoVehicleAsync(veh.Vehicle, -1);
 
                 RemoveVehicle(veh); // retrait du véhicule dans la liste
-                veh.UpdateFull();
+                veh.ParkingName = string.Empty;
 
                 if (OnVehicleOut != null)
                     await OnVehicleOut.Invoke(client, veh, Spawn); // callback (ex carpark)
 
+                veh.UpdateFull();
                 await MenuManager.CloseMenu(client);
             }
             catch (Exception ex)
@@ -391,14 +391,17 @@ namespace ResurrectionRP_Server.Models
                     {
                         if (ListVehicleStored.Find(p => p.Plate == veh.Plate) == null)
                             ListVehicleStored.Add(new ParkedCar(veh.Plate, DateTime.Now));
-
-                        veh.IsParked = true;
                     }
 
+                    veh.IsParked = true;
+                    veh.ParkingName = Name;
                     veh.UpdateMilageAndFuel();
+
+                    if (OnVehicleStored != null)
+                        await OnVehicleStored.Invoke(client, veh); // call event for success storage
+
                     veh.UpdateFull();
                     await veh.Delete(false);
-                    await OnVehicleStored?.Invoke(client, veh); // call event for success storage
                 }
                 else
                 {

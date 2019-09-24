@@ -1,6 +1,7 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
+using AltV.Net.Enums;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using System;
@@ -293,7 +294,7 @@ namespace ResurrectionRP_Server.Models
                     return;
                 }
 
-                if (ListVehicleStored.Count + 1 >= MaxVehicles)
+                if (ListVehicleStored.Count >= MaxVehicles)
                 {
                     client.SendNotificationError("Le parking est plein!");
                     return;
@@ -384,7 +385,7 @@ namespace ResurrectionRP_Server.Models
                         Alt.Server.LogColored($"~b~Parking ~w~| New vehicle in parking id {this.ID}");
 
                     await vh.SetEngineOnAsync(false);
-                    veh.Locked = true;
+                    veh.LockState = VehicleLockState.Locked;
                     veh.LastUse = DateTime.Now; // refresh the last use
 
                     lock (ListVehicleStored)

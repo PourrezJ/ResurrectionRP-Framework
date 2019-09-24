@@ -149,8 +149,8 @@ namespace ResurrectionRP_Server.Factions
             #region Clothings
 
             #endregion
-/*
-            MP.Events.Add("CallUrgenceLSPD", CallUrgenceLSPD); TODO HANDLING WITH EVENT MANAGER*/
+
+            Alt.OnClient("CallUrgenceLSPD", CallUrgenceLSPD);
             
 
             return await base.OnFactionInit();
@@ -347,17 +347,19 @@ namespace ResurrectionRP_Server.Factions
 
             if (Phone.PhoneManager.HasOpenPhone(client, out Phone.Phone phone))
             {
+                Phone.PhoneManager.ClosePhone(client);
+
                 var players =  GetEmployeeOnline();
 
                 if (players.Count > 0)
                 {
                     foreach (IPlayer player in players)
                     {
-                        if (player.Exists && player != client)
-                            player.EmitLocked("LSPD_Call", client.Id, phone.PhoneNumber, JsonConvert.SerializeObject(client.GetPosition()), args[0]);
+                        if (player.Exists)
+                            player.EmitLocked("LSPD_Call", client, phone.PhoneNumber, JsonConvert.SerializeObject(client.Position.ConvertToEntityPosition()), args[0]);
                     }
                 }
-                client.EmitLocked("LSPD_Call", ServicePlayerList.Count);
+                //client.EmitLocked("LSPD_Call", ServicePlayerList.Count);
             }
         }
     }

@@ -48,7 +48,23 @@ export default class PhoneManager {
 
             this.browser.on("callTaxi", () => alt.emit("alertNotify", "Les services de taxi ne sont pas encore en ville !", 10000));
             this.browser.on("callUrgences", () => alt.emitServer("ONU_CallUrgenceMedic"));
-            //this.browser.on("callPolice", () => alt.emitServer("ONU_CallUrgenceMedic")); NEED MENU MANAGER
+            this.browser.on("callPolice", () => {
+                this.ClosePhone();
+                let inputView = new alt.WebView("http://resource/client/cef/userinput/input.html");
+                inputView.focus();
+                alt.showCursor(true);
+                alt.toggleGameControls(false);
+
+                inputView.emit('Input_Data', 999, "");
+
+                inputView.on('Input_Submit', (text) => {
+                    inputView.destroy();
+                    alt.showCursor(false);
+                    alt.toggleGameControls(true);
+                    Interaction.SetCanClose(true);
+                    alt.emitServer("CallUrgenceLSPD", text);                    
+                });
+            });
 
             this.browser.on("getMessages", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "GetMessages", arg2));
 

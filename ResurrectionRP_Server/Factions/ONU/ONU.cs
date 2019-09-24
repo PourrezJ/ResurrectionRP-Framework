@@ -17,7 +17,6 @@ using ResurrectionRP_Server.Teleport;
 
 namespace ResurrectionRP_Server.Factions
 {
-
     public partial class ONU : Faction
     {
 
@@ -111,7 +110,6 @@ namespace ResurrectionRP_Server.Factions
             {
                 this.Taken = true;
             }
-
         }
 
         private static List<EmergencyCall> EmergencyCalls = new List<EmergencyCall>();

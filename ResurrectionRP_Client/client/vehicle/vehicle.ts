@@ -150,7 +150,6 @@ function onPlayerLeaveVehicle(vehicle: alt.Vehicle, seat: number) {
 }
 
 export function showSpeedometer(show: boolean) {
-    chat.pushMessage('showSpeedometer');
     if (show && speedoWindow !== null && player.vehicle != null && game.getPedInVehicleSeat(player.vehicle.scriptID, -1, player.scriptID) == player.scriptID) {
         speedoWindow.emit('showSpeedometer');
     } else if (!show && speedoWindow !== null) {
@@ -159,8 +158,6 @@ export function showSpeedometer(show: boolean) {
 }
 
 export function setDoorState(vehicle: alt.Vehicle, door: number, state: number, option: boolean) {
-    alt.log(`debug: ${door} ${state} ${option}`);
-
     switch (state) {
         case 0:
             game.setVehicleDoorShut(vehicle.scriptID, door, option);

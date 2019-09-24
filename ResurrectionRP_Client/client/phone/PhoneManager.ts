@@ -2,6 +2,7 @@
 import * as game from 'natives';
 import * as utils from '../Utils/Utils';
 import * as voice from '../Voice/VoiceChat';
+import * as chat from '../chat/chat';
 import { Interaction } from '../player/Interaction';
 
 var isPhoneOpen: boolean = false;
@@ -15,13 +16,13 @@ export default class PhoneManager {
 
     constructor()
     {
-
         alt.onServer("OpenPhone", (idk0: any, idk1: any, incomingCall: boolean, contactNumber: string, contactName: string) => {
             if (game.isPauseMenuActive())
                 return;
 
             this.animStage = 0;
             isPhoneOpen = true;
+            chat.hide(true);
 
             if (this.browser != null)
                 this.ClosePhone();
@@ -179,6 +180,7 @@ export default class PhoneManager {
         this.browser = null;    
         isPhoneOpen = false;
         this.animStage = 0;
+        chat.hide(false);
     }
 
     public static IsPhoneOpen() {

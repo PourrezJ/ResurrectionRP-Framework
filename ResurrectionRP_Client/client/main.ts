@@ -62,7 +62,6 @@ const init = async () => {
         alt.log("Chargement des controlleurs");
 
         chat.initialize();
-        chat.hide(true);
         speedometer.initialize();
         utils.initialize();
         login.init();

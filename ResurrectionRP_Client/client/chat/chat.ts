@@ -1,5 +1,6 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
+import * as enums from '../Utils/Enums/Enums';
 
 let loaded = false;
 let opened = false;
@@ -37,39 +38,16 @@ export function initialize() {
         view.emit('emptyChat');
     });
 
-    alt.on('toggleChat', (state: boolean = null) => {
-        if (!opened && state == null || state ) {
-            hidden = state == null ? !hidden : state;
-            view.emit('hideChat', state == null ? hidden : state);
-        } else {
-            hidden = !hidden;
-            view.emit('hideChat', hidden);
-        }
-    });
-
-    alt.on("isChatOpen", () => {
-        return !hidden
-    });
-
     alt.on('keyup', (key) => {
-        if (!loaded)
+        if (!loaded || hidden)
             return;
 
-        if (alt.Player.local.getMeta("LevelRank") == null)
+        if (alt.Player.local.getMeta("LevelRank") == null || alt.Player.local.getMeta("LevelRank") == enums.AdminRank.Player)
             return;
 
-        if (alt.Player.local.getMeta("LevelRank") == 0)
-            return;
-
-        if (!opened && key === 0x54 && alt.gameControlsEnabled()) {
+        if (!opened && (key == 0x54 || key == 0xBF) && alt.gameControlsEnabled()) {
             opened = true;
             view.emit('openChat', false);
-            alt.emit('chatOpened');
-            alt.toggleGameControls(false);
-        }
-        else if (!opened && key === 0xBF && alt.gameControlsEnabled()) {
-            opened = true;
-            view.emit('openChat', true);
             alt.emit('chatOpened');
             alt.toggleGameControls(false);
         }
@@ -79,13 +57,6 @@ export function initialize() {
             alt.emit('chatClosed');
             alt.toggleGameControls(true);
         }
-
-        //if (key == 0x76) {
-        //    hidden = !hidden;
-        //    game.displayHud(!hidden);
-        //    game.displayRadar(!hidden);
-        //    view.emit('hideChat', hidden);
-        //}
     });
 }
 
@@ -97,13 +68,13 @@ export function pushMessage(text: string): void {
     }
 }
 
+export function isHidden() {
+    return hidden;
+}
+
 export function hide(hide: boolean) {
     hidden = hide;
     view.emit('hideChat', hidden);
-}
-
-export function isHidden(): boolean {
-    return hidden;
 }
 
 export function isOpened(): boolean {

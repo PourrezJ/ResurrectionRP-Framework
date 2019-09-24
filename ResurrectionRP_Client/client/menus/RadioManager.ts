@@ -107,7 +107,7 @@ export class RadioManager {
         alt.clearEveryTick(this.tick);
         alt.showCursor(false);
         alt.toggleGameControls(true);
-        alt.emit("toggleChatAdminRank");
+        chat.hide(false);
     }
 }
 

@@ -148,7 +148,7 @@ function openChat(insertSlash) {
 	if (!chatOpened) {
 		document.querySelector('.chatbox').classList.add('active');
 
-		//fadeIn(msgInputBlock, 200);
+		// fadeIn(msgInputBlock, 200);
 		msgInputBlock.style.display = 'block';
 		msgInputBlock.style.opacity = 1;
 
@@ -181,7 +181,6 @@ function emptyChat() {
 }
 
 function highlightChat() {
-
 	scrollTo(document.querySelector('.msglist'), document.querySelector('.msglist').scrollHeight, 0);
 
 	if (!chatHighlighted) {
@@ -198,8 +197,11 @@ function highlightChat() {
 }
 
 function hideChat(state) {
-	console.log('hideChat called');
-	document.querySelector('.content').style.display = state ? 'none' : 'block';
+    document.querySelector('.content').style.display = state ? 'none' : 'block';
+
+    if (!state && chatOpened) {
+        msgInputLine.focus();
+    }
 }
 
 document.querySelector('#message').addEventListener('submit', function(e) {

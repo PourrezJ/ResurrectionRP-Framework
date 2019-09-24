@@ -1,5 +1,6 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
+import * as chat from '../chat/chat'
 import * as camera from '../Models/Camera';
 
 let inLogin = false;
@@ -12,7 +13,7 @@ export function init() {
             game.setPlayerInvincible(game.playerId(), true);
             game.displayRadar(false);
             game.displayHud(false);
-            alt.emit('toggleChat');
+            chat.hide(true);
             alt.toggleGameControls(false);
             alt.showCursor(true);
             inLogin = true;
@@ -44,7 +45,7 @@ export function init() {
                 game.setPlayerInvincible(game.playerId(), false);
                 game.displayRadar(true);
                 game.displayHud(true);
-                alt.emit('toggleChat');
+                chat.hide(false);
                 
                 inLogin = false;
                 alt.showCursor(false);

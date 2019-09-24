@@ -174,13 +174,6 @@ export class Game {
 
             this._Time.OnTick();
         });
-
-        alt.on("toggleChatAdminRank", this.toggleChatAdminRank);
-    }
-
-    public toggleChatAdminRank = () => {
-        if (this.LevelRank > enums.AdminRank.Player)
-            alt.emit("toggleChat", true);
     }
 
     public static closeAllMenus() {

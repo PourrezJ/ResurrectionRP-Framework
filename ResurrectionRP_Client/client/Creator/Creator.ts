@@ -1,5 +1,6 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
+import * as chat from '../chat/chat';
 import { Camera } from '../Models/Camera';
 
 const playerPoint = {
@@ -26,7 +27,7 @@ export function OpenCharCreator() {
 
     try {
         alt.showCursor(true);
-        alt.emit('toggleChat');
+        chat.hide(true);
 
         game.destroyAllCams(true);
         _camera = new Camera({ x: 402.6751, y: -997.00025, z: -98.30025 }, { x: 0, y: 0, z: 0 })

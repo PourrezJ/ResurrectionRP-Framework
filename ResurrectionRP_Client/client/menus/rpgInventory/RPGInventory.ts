@@ -98,7 +98,7 @@ export class RPGInventoryManager {
         alt.emitServer("RPGInventory_ClosedMenu_SRV");
         alt.toggleGameControls(true);
         alt.showCursor(false);
-        alt.emit("toggleChatAdminRank");
+        chat.hide(false);
 
     }
     public HasOpen() { this.view != null };

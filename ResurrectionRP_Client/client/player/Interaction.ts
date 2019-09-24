@@ -20,17 +20,22 @@ import * as Streamer from '../Streamer/NetworkingEntityClient';
     256: Intersect with vegetation (plants, coral. trees not included)
 
  * */
-var isInColshape: boolean = false;
 var raycastResult = null;
 var canClose: boolean = true;
 
 export class Interaction {
 
+    nbColshapes: number = 0;
     private tick: number = 0;
+
     constructor()
     {
         alt.onServer("SetStateInColShape", (state: boolean) => {
-            isInColshape = state;
+            if (state) {
+                this.nbColshapes++;
+            } else {
+                this.nbColshapes--;
+            }
         });
 
         alt.on('keyup', (key) => {
@@ -91,7 +96,7 @@ export class Interaction {
                         alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null);
                     }
 
-                    if (key == 69 && isInColshape) {
+                    if (key == 69 && this.isInColshape()) {
                         alt.emitServer('InteractionInColshape', key, JSON.stringify(raycastResult));
                     }
                     
@@ -135,6 +140,10 @@ export class Interaction {
                 }
             }
         });
+    }
+
+    private isInColshape() {
+        return this.nbColshapes > 0;
     }
 
     private static displayHelp(text: string) {

@@ -150,6 +150,16 @@ export class Game {
                 if (key == 117)
                     this.DebugInfo = !this.DebugInfo
             });
+
+            alt.on('syncedMetaChange', (entity: alt.Entity, key: string, value: any) => {
+                if (game.isEntityAVehicle(entity.scriptID)) {
+                    switch (key) {
+                        case 'SetInvisible':
+                            game.setPlayerInvisibleLocally(entity.scriptID, value);
+                            break;
+                    }
+                }
+            });
         }
         catch (ex)
         {

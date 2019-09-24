@@ -147,7 +147,7 @@ namespace ResurrectionRP_Server.Entities.Players
             };
             mainMenu.Add(godMod);
             #endregion
-            /*
+            
             #region Invisible
             var invisible = new CheckboxItem("Invisible", "", "", await _playerSelected.Client.IsInvisible(), true);
             invisible.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
@@ -157,24 +157,20 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 if (hidden)
                 {
-                    await _playerSelected.Client.NotifyAsync("~r~[ADMIN]~w~ Vous êtes invisible.");
-                    // LogManager.Log($"~r~[ADMIN]~w~ {PlayerSelected.Name} est invisible par " + client.Name);
-
+                    _playerSelected.Client.SendNotification("~r~[ADMIN]~w~ Vous êtes invisible.");
                     if (_playerSelected != this)
-                        await Client.NotifyAsync($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} est invisible.");
+                        Client.SendNotification($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} est invisible.");
                 }
                 else
                 {
-                    await _playerSelected.Client.NotifyAsync("~r~[ADMIN]~w~ Vous n'êtes plus invisible.");
-                    // LogManager.Log($"~r~[ADMIN]~w~ {PlayerSelected.Name} n'êtes plus invicible par " + client.Name);
-
+                    _playerSelected.Client.SendNotification("~r~[ADMIN]~w~ Vous n'êtes plus invisible.");
                     if (_playerSelected != this)
-                        await Client.NotifyAsync($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} n'est plus invisible.");
+                        Client.SendNotification($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} n'est plus invisible.");
                 }
             };
             mainMenu.Add(invisible);
             #endregion
-            */
+            
             #region VehicleUnlock
             var vehunlock = new MenuItem("(Un)Lock Véhicule", "", "", true);
             vehunlock.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>

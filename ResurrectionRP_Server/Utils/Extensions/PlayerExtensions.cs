@@ -275,6 +275,14 @@ namespace ResurrectionRP_Server
             return Task.CompletedTask;
         }
 
+        public static async Task SetInvisible(this IPlayer client, bool invisible)
+        {
+            await client.SetMetaDataAsync("SetInvisible", invisible);
+        }
+
+        public static async Task<bool> IsInvisible(this IPlayer client) 
+            => await client.GetMetaDataAsync<bool>("SetInvisible");
+
         public static Task SetHeadOverlayAsync(this IPlayer client, int overlayId, Business.Barber.HeadOverlayData overlayData)
         {
             client.EmitLocked("HeadOverlayVariation", overlayData.Index, overlayData.Opacity, overlayData.ColorId, overlayData.SecondaryColorId, overlayId);

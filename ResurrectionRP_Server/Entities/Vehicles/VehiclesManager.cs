@@ -214,6 +214,11 @@ IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon 
             return nearest;
         }
 
+        public static ICollection<VehicleHandler> GetAllVehicles()
+        {
+            return _vehicleHandlers.Values;
+        }
+
         public static ICollection<IVehicle> GetAllVehiclesInGame()
         {
             return VehicleHandlerList.Select(v => v.Value.Vehicle).ToArray();

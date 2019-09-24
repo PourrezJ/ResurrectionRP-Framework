@@ -37,6 +37,7 @@ namespace ResurrectionRP_Server.Entities.Players
         public PlayerManager()
         {
             new PlayerCommands();
+            new VehicleCommands();
             new FactionsCommands();
             new HouseCommands();
 

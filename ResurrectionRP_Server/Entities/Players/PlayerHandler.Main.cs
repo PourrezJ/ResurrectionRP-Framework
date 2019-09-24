@@ -83,7 +83,7 @@ namespace ResurrectionRP_Server.Entities.Players
         public int Thirst { get; set; } = 100;
         public bool Jailed { get; private set; } = false;
 
-        private ushort _health = 100;
+        private ushort _health = 200;
         public ushort Health
         {
             get => _health;

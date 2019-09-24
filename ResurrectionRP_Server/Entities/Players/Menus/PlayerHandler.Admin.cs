@@ -46,7 +46,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #endregion
 
             #region Menu
-            Menu mainMenu = new Menu("ID_AdminMenu", "Admin Menu", "Choisissez une option:", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Garage);
+            Menu mainMenu = new Menu("ID_AdminMenu", "Admin Menu", "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Garage);
             mainMenu.SubTitle = $"Joueur Selectionné: ~r~{_playerSelected.Identite.Name}";
             mainMenu.Finalizer += OnFinalize;
             #endregion
@@ -371,7 +371,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    VehicleHandler vehicle = await VehiclesManager.SpawnVehicle(_playerSelected.Client.GetSocialClub(), hash, await _playerSelected.Client.GetPositionAsync(), await _playerSelected.Client.GetRotationAsync(), fuel: 100, fuelMax: 100, spawnVeh: true);
+                    VehicleHandler vehicle = await VehiclesManager.SpawnVehicle(_playerSelected.Client.GetSocialClub(), hash, _playerSelected.Client.Position, _playerSelected.Client.Rotation, fuel: 100, fuelMax: 100, spawnVeh: true);
 
                     if (vehicle != null)
                     {
@@ -412,7 +412,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    VehicleHandler vehicle = await VehiclesManager.SpawnVehicle(_playerSelected.Client.GetSocialClub(), hash, await _playerSelected.Client.GetPositionAsync(), await _playerSelected.Client.GetRotationAsync(), fuel: 100, fuelMax: 100, spawnVeh: false);
+                    VehicleHandler vehicle = await VehiclesManager.SpawnVehicle(_playerSelected.Client.GetSocialClub(), hash, _playerSelected.Client.Position, _playerSelected.Client.Rotation, fuel: 100, fuelMax: 100, spawnVeh: false);
 
                     if (vehicle != null)
                     {
@@ -423,9 +423,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         //LogManager.Log($"~r~[ADMIN]~w~ {client.Name} a spawn le véhicule {_vehs.Model} {_vehs.Plate}");
                     }
                     else
-                    {
                         client.SendNotificationError("Il y a une erreur avec le véhicule demandé.");
-                    }
                 }
                 catch (Exception ex)
                 {

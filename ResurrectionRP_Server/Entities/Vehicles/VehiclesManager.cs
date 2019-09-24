@@ -26,6 +26,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
+            AltAsync.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
 
             AltAsync.OnClient("LockUnlockVehicle", LockUnlockVehicle);
         }
@@ -39,8 +40,25 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             if (ph != null && vh != null)
             {
+                if (seat == 1)
+                    vh.LastDriver = ph.Identite.Name;
+
                 ph.UpdateFull();
                 player.EmitLocked("OnPlayerEnterVehicle", vehicle, Convert.ToInt32(seat), vh.Fuel, vh.FuelMax, vh.Milage, vh.FuelConsumption);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private static Task OnPlayerChangeVehicleSeat(IVehicle vehicle, IPlayer player, byte oldSeat, byte newSeat)
+        {
+            PlayerHandler ph = player.GetPlayerHandler();
+            VehicleHandler vh = vehicle.GetVehicleHandler();
+
+            if (newSeat == 1 && vh != null)
+            {
+                vh.LastDriver = ph.Identite.Name;
+                vh.UpdateFull();
             }
 
             return Task.CompletedTask;

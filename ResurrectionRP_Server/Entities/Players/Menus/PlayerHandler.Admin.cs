@@ -42,7 +42,11 @@ namespace ResurrectionRP_Server.Entities.Players
 
             // if (_playerSelected.Client != null && _playerSelected.Client.Exists && !_playerSelected.Client.HasSharedData("AC_Immunity"))
             //     _playerSelected.Client.SetSharedData("AC_Immunity", true);
-            
+
+
+            bool isInvincible = await _playerSelected.Client.IsInvinsibleAsync();
+            bool isInvisible = await _playerSelected.Client.IsInvisibleAsync();
+
             #endregion
 
             #region Menu
@@ -123,11 +127,11 @@ namespace ResurrectionRP_Server.Entities.Players
             #endregion
 
             #region GodMod
-            var godMod = new CheckboxItem("God Mode", "", "", _playerSelected.IsInvincible(), true);
-            godMod.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            var godMod = new CheckboxItem("God Mode", "", "", isInvincible, true);
+            godMod.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                bool invinsible = !_playerSelected.IsInvincible();
-                _playerSelected.SetInvincible(invinsible);
+                bool invinsible = !isInvincible;
+                await _playerSelected.Client.SetInvincibleAsync(invinsible);
 
                 if (invinsible)
                 {
@@ -143,17 +147,16 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (_playerSelected != this)
                         Client.SendNotification($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} n'est plus invincible.");
                 }
-                return Task.CompletedTask;
             };
             mainMenu.Add(godMod);
             #endregion
             
             #region Invisible
-            var invisible = new CheckboxItem("Invisible", "", "", await _playerSelected.Client.IsInvisible(), true);
+            var invisible = new CheckboxItem("Invisible", "", "", isInvisible, true);
             invisible.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                bool hidden = ((CheckboxItem)menuItem).Checked;
-                await _playerSelected.Client.SetInvisible(hidden);
+                bool hidden = !isInvisible;
+                await _playerSelected.Client.SetInvisibleAsync(hidden);
 
                 if (hidden)
                 {

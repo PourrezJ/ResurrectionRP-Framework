@@ -41,10 +41,6 @@ export class Admin {
                 this.loopID = alt.everyTick(this.onTick.bind(this));
         });
 
-        alt.onServer('SetInvincible', (statut: boolean) => {
-            game.setEntityInvincible(alt.Player.local.scriptID, statut);
-        }); 
-
         alt.onServer('AnnonceGlobal', (text: string, title: string, othertitle: string) => {
             ui.WeazelNews(text, title, othertitle);
         }); 

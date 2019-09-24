@@ -9,6 +9,7 @@ using System.Linq;
 using AltV.Net.Async;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using ResurrectionRP_Server.Entities.Vehicles;
 
 namespace ResurrectionRP_Server
 {
@@ -106,7 +107,7 @@ namespace ResurrectionRP_Server
 
         public static IVehicle GetTowTruckInZone(this Position pos, float distance)
         {
-            foreach(IVehicle veh in Alt.GetAllVehicles())
+            foreach(IVehicle veh in VehiclesManager.GetAllVehicles())
             {
                 if (veh.Position.Distance(pos) <= distance && veh.Model == (uint)VehicleModel.Flatbed)
                     return veh;

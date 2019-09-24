@@ -151,15 +151,34 @@ export class Game {
                     this.DebugInfo = !this.DebugInfo
             });
 
+            alt.on('gameEntityCreate', (entity: alt.Entity) => {
+                if (!game.isEntityAPed(entity.scriptID))
+                    return;
+
+                let invincible: boolean = entity.getSyncedMeta("SetInvincible");
+                let invisible: boolean = entity.getSyncedMeta("SetInvisible");
+
+                game.setPlayerInvisibleLocally(entity.scriptID, invincible);
+                game.setEntityInvincible(entity.scriptID, invisible);
+            });
+
             alt.on('syncedMetaChange', (entity: alt.Entity, key: string, value: any) => {
-                if (game.isEntityAVehicle(entity.scriptID)) {
-                    switch (key) {
-                        case 'SetInvisible':
-                            game.setPlayerInvisibleLocally(entity.scriptID, value);
-                            break;
-                    }
+                if (!game.isEntityAPed(entity.scriptID))
+                    return;
+
+                switch (key) {
+                    case 'SetInvisible':
+                        alt.log("SetInvisible");
+                        game.setPlayerInvisibleLocally(entity.scriptID, value);
+                        break;
+                    case 'SetInvincible':
+                        alt.log("SetInvincible");
+                        game.setEntityInvincible(entity.scriptID, value);
+                        break;
                 }
             });
+
+            alt.log("Player Loaded.");
         }
         catch (ex)
         {

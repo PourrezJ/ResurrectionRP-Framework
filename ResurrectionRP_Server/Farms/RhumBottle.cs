@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace ResurrectionRP_Server.Farms
 {
-    class RhumBottle : Farm
+    public class RhumBottle : Farm
     {
         public RhumBottle()
         {
@@ -15,7 +15,7 @@ namespace ResurrectionRP_Server.Farms
             DoubleProcess_BlipSprite = 499;
             Selling_BlipSprite = 500;
 
-            DoubleProcess_PosRot = new Location(new Vector3(2555.167f, 4651.451f, 34.07678f), new Vector3(0, 0, 100.0674f));
+            DoubleProcess_PosRot = new Location(new Vector3(2555.167f, 4651.451f, 35.07678f), new Vector3(0, 0, 0));
             Selling_PosRot = new Location(new Vector3(-1256.917f, -1149.656f, 7.604019f), new Vector3(0, 0, 246.4353f));
 
             DoubleProcess_PedHash = AltV.Net.Enums.PedModel.Beach03AMY;

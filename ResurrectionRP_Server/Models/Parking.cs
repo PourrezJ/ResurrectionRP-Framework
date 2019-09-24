@@ -386,6 +386,7 @@ namespace ResurrectionRP_Server.Models
 
                     await vh.SetEngineOnAsync(false);
                     veh.LockState = VehicleLockState.Locked;
+                    veh.Location.Pos = Location;
                     veh.LastUse = DateTime.Now; // refresh the last use
 
                     lock (ListVehicleStored)

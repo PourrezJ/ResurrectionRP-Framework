@@ -102,7 +102,7 @@ namespace ResurrectionRP_Server.Factions
                 door.Interact = OpenCelluleDoor;
             #endregion
 
-            AltAsync.OnClient("CallUrgenceLSPD", CallUrgenceLSPD);
+            AltV.Net.Alt.OnClient("CallUrgenceLSPD", CallUrgenceLSPD);
 
             return await base.OnFactionInit();
         }
@@ -187,7 +187,7 @@ namespace ResurrectionRP_Server.Factions
             return base.OnVehicleOut(client, vehicleHandler);
         }
 
-        private async Task CallUrgenceLSPD(IPlayer player, object[] arg)
+        private void CallUrgenceLSPD(IPlayer player, object[] arg)
         {
             if (!player.Exists)
                 return;
@@ -201,10 +201,10 @@ namespace ResurrectionRP_Server.Factions
                     foreach (IPlayer client in players)
                     {
                         if (client.Exists && client != player)
-                            client.EmitLocked("LSPD_Call", player.Id, phone.PhoneNumber, JsonConvert.SerializeObject(await player.GetPositionAsync()), arg[0]);
+                            client.EmitLocked("LSPD_Call", player.Id, phone.PhoneNumber, JsonConvert.SerializeObject(client.Position.ConvertToEntityPosition()), arg[0]);
                     }
                 }
-                player.EmitLocked("LSPD_Call", ServicePlayerList.Count);
+                //player.EmitLocked("LSPD_Call", ServicePlayerList.Count);
             }
         }
     }

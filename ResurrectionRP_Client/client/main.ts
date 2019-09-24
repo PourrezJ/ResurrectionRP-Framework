@@ -12,6 +12,7 @@ import { NetworkingEntityClient } from './Streamer/NetworkingEntityClient';
 import { Notify } from './Notify/Notify';
 import menuManager from './MenuManager/MenuManager';
 import { Admin } from './Utils/Admin';
+import { LSPDManager } from './LSPDCall';
 
 var GameClass: Game;
 
@@ -66,6 +67,7 @@ const init = async () => {
         utils.initialize();
         login.init();
         xtreamMenu.init();
+        new LSPDManager();
         new Notify();
         new NetworkingEntityClient();
         new Admin();

@@ -186,6 +186,11 @@ namespace ResurrectionRP_Server.Phone
                 case "acceptCall":
                     phone.StartCall(client, args[1].ToString());
                     break;
+
+                case "ClosePhone":
+                    PhoneManager.ClosePhone(client);
+                    break;
+
                 default:
                     Alt.Server.LogError("PhoneManager  PhoneMenuCallback, is arg[0] the event name ?");
                     break;

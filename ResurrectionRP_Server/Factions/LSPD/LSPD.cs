@@ -108,8 +108,8 @@ namespace ResurrectionRP_Server.Factions
             #endregion
 
             #region Peds
-            portiqueSecu = Ped.CreateNPC(PedModel.Cop01SFY, new Vector3(438.8754f, -985.9456f, 30.68967f), 95.78963f);
-            portiqueSecu.NpcInteractCallBack = OnNPCInteract;
+            //portiqueSecu = Ped.CreateNPC(PedModel.Cop01SFY, new Vector3(438.8754f, -985.9456f, 30.68967f), 95.78963f);
+            //portiqueSecu.NpcInteractCallBack = OnNPCInteract;
 
             accueil = Ped.CreateNPC(PedModel.Cop01SMY, new Vector3(441.4182f, -978.3267f, 30.68967f), 176.1195f);
             accueil.NpcInteractCallBack = OnNPCInteract;
@@ -149,8 +149,8 @@ namespace ResurrectionRP_Server.Factions
             #region Clothings
 
             #endregion
-/*
-            MP.Events.Add("CallUrgenceLSPD", CallUrgenceLSPD); TODO HANDLING WITH EVENT MANAGER*/
+
+            Alt.OnClient("CallUrgenceLSPD", CallUrgenceLSPD);
             
 
             return await base.OnFactionInit();
@@ -347,17 +347,19 @@ namespace ResurrectionRP_Server.Factions
 
             if (Phone.PhoneManager.HasOpenPhone(client, out Phone.Phone phone))
             {
+                Phone.PhoneManager.ClosePhone(client);
+
                 var players =  GetEmployeeOnline();
 
                 if (players.Count > 0)
                 {
                     foreach (IPlayer player in players)
                     {
-                        if (player.Exists && player != client)
-                            player.EmitLocked("LSPD_Call", client.Id, phone.PhoneNumber, JsonConvert.SerializeObject(client.GetPosition()), args[0]);
+                        if (player.Exists)
+                            player.EmitLocked("LSPD_Call", client, phone.PhoneNumber, JsonConvert.SerializeObject(client.Position.ConvertToEntityPosition()), args[0]);
                     }
                 }
-                client.EmitLocked("LSPD_Call", ServicePlayerList.Count);
+                //client.EmitLocked("LSPD_Call", ServicePlayerList.Count);
             }
         }
     }

@@ -47,6 +47,10 @@ const init = async () => {
             alt.toggleGameControls(value);
         });
 
+        alt.everyTick(() => {
+            game.drawRect(0, 0, 0, 0, 0, 0, 0, 0, false);
+        });
+
         alt.on("disconnect", () => {
             alt.log("disconnect detected.");
 

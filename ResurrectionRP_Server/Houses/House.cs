@@ -113,6 +113,7 @@ namespace ResurrectionRP_Server.Houses
                 Parking.OnVehicleStored += OnVehicleStored;
                 Parking.OnVehicleOut += OnVehicleOutParking;
                 Parking.ParkingType = ParkingType.House;
+                Parking.Owner = this.Owner;
 
                 Parking.Location = Parking.Spawn1.Pos;
                 Parking.Spawn1.Rot = Parking.Spawn1.Rot.ConvertRotationToRadian();
@@ -179,14 +180,6 @@ namespace ResurrectionRP_Server.Houses
         {
             await Save();
             client.SetPlayerIntoVehicle(vehicle.Vehicle);
-        }
-
-        public async Task Parking_onEntityEnterColShape(IColShape colShape, IPlayer client)
-        {
-            if (client.GetSocialClub() == Owner && Parking != null)
-            {
-                await Parking.OpenParkingMenu(client, "", ((client.GetPlayerHandler()?.StaffRank > AdminRank.Player) ? ID.ToString() : ""));
-            }       
         }
 
         public async Task SetOwner(string owner)

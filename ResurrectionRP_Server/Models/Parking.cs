@@ -122,7 +122,7 @@ namespace ResurrectionRP_Server.Models
             if (colShape != ParkingColshape || !client.Exists)
                 return;
 
-            if (ParkingType != ParkingType.Society)
+            if (ParkingType != ParkingType.Society && ParkingType != ParkingType.House)
                 await OpenParkingMenu(client);
         }
 

@@ -9,6 +9,7 @@ using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Blips;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils.Enums;
 using System;
@@ -105,29 +106,21 @@ namespace ResurrectionRP_Server.Houses
             ColShapeOut.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
             ColShapeOut.SetOnPlayerInteractInColShape(OnPlayerInteractInColShape);
 
-            IColShape parkingColshape = null;
-
             if (Parking != null)
             {
                 Parking.OnSaveNeeded = OnParkingSaveNeeded;
                 Parking.OnVehicleStored += OnVehicleStored;
                 Parking.OnVehicleOut += OnVehicleOutParking;
                 Parking.ParkingType = ParkingType.House;
-                Parking.Owner = this.Owner;
-
+                Parking.Owner = Owner;
                 Parking.Location = Parking.Spawn1.Pos;
                 Parking.Spawn1.Rot = Parking.Spawn1.Rot.ConvertRotationToRadian();
                 Parking.Load();
+                EventHandlers.Events.OnPlayerEnterColShape += OnPlayerEnterColshape;
             }
 
             if (!string.IsNullOrEmpty(Owner))
-            {
                 Marker.SetColor(Color.FromArgb(80, 255, 255, 255));
-            }
-
-            if (parkingColshape != null)
-                parkingColshape.SetMetaData("House_Parking", ID);
-
 
             if (GameMode.Instance.IsDebug)
                 BlipsManager.CreateBlip(Name, Position, 4, 1);
@@ -142,10 +135,23 @@ namespace ResurrectionRP_Server.Houses
 
         private async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
         {
-            if (colShape == ColShapeEnter)
+            if (Parking != null && colShape == Parking.ParkingColshape)
+                await OpenParkingMenu(client);
+            else if (colShape == ColShapeEnter)
                 await HouseManager.OpenHouseMenu(client, this);
-            else
+            else if (colShape == ColShapeOut)
                 client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
+        }
+
+        private async Task OpenParkingMenu(IPlayer player)
+        {
+            if (!player.Exists)
+                return;
+
+            if (Owner == player.GetSocialClub())
+                await Parking.OpenParkingMenu(player, "", (player.GetPlayerHandler()?.StaffRank > AdminRank.Player) ? $"Logement {ID.ToString()}" : "Choisissez une option :", true);
+            else
+                player.SendNotificationError("Vous n'êtes pas autorisé à utiliser ce parking.");
         }
 
         private async Task OnPlayerLeaveColshape(IColShape colShape, IPlayer client)

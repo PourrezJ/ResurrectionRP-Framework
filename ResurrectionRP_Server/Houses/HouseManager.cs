@@ -29,7 +29,6 @@ namespace ResurrectionRP_Server.Houses
         #region Constructor
         public HouseManager()
         {
-            AltAsync.OnClient("ParkingHouse", ParkingHouse);
             Alt.OnPlayerDead += Alt_OnPlayerDead;
 
             for(int i = 0; i < HouseTypes.HouseTypeList.Count; i++)
@@ -105,28 +104,12 @@ namespace ResurrectionRP_Server.Houses
             Alt.Server.LogInfo($"Loaded {Houses.Count} houses.");
         }
 
-        private async Task ParkingHouse(IPlayer player, object[] args)
-        {
-            if (!player.Exists)
-                return;
-
-            House house = GetHouseWithID((int)args[0]);
-
-            if (house != null)
-            {
-                if(house.Owner == player.GetSocialClub())
-                    await house.Parking.OpenParkingMenu(player, "", ((player.GetPlayerHandler()?.StaffRank > Utils.Enums.AdminRank.Player) ? house.ID.ToString() : ""), true);
-                else
-                    player.SendNotificationError("Vous n'êtes pas autorisé à utiliser ce parking.");
-            }
-        }
-
         public static async Task OpenHouseMenu(IPlayer player, House house)
         {
             if (!player.Exists)
                 return;
 
-            Menu menu = new Menu("House_PurchaseMenu", HouseTypes.HouseTypeList[house.Type].Name, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
+            Menu menu = new Menu("House_PurchaseMenu", HouseTypes.HouseTypeList[house.Type].Name, "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
             menu.BannerColor = new MenuColor(0, 0, 0, 0);
             menu.SetData("House", house);
             menu.ItemSelectCallback = MenuCallBack;

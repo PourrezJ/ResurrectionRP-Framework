@@ -2,6 +2,7 @@
 import * as game from 'natives';
 import * as ui from '../Helpers/UiHelper';
 import * as veh from '../vehicle/vehicle';
+import * as chat from '../chat/chat'
 import { Survival } from '../player/Survival';
 import { VoiceChat } from '../Voice/VoiceChat';
 
@@ -30,7 +31,7 @@ export class Hud {
 
         alt.on('hideHud', (value: boolean) => {
             this.setHide(value);
-
+            alt.log('Appel hideHud');
             if (value) {
                 veh.hideSpeedometer();
             } else {
@@ -43,7 +44,8 @@ export class Hud {
                 this._hide = !this._hide;
                 game.displayHud(!this._hide);
                 game.displayRadar(!this._hide);
-                alt.emit("toggleChat");
+                chat.hide(!chat.isHidden());
+
                 if (this.Browser != null)
                     this.Browser.emit("showHide", this._hide);
             }

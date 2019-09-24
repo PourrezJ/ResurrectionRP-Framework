@@ -87,12 +87,14 @@ export class Interaction {
                         vehicle = alt.Vehicle.all.find(v => v.scriptID == raycastResult.hitEntity);
                         alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), vehicle, null);
                     }
-                    else if (key == 69 && isInColshape) {
-                        alt.emitServer('InteractionInColshape', key);
-                    }
                     else {
                         alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null);
                     }
+
+                    if (key == 69 && isInColshape) {
+                        alt.emitServer('InteractionInColshape', key, JSON.stringify(raycastResult));
+                    }
+                    
                     break;
             }
         });

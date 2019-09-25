@@ -252,7 +252,7 @@ namespace ResurrectionRP_Server.Houses
         public bool RemoveFromHouse(IPlayer client) 
             => HouseManager.RemoveClientHouse(client);
 
-        public void SendPlayer(IPlayer player)
+        public async Task SendPlayer(IPlayer player)
         {
             if (!player.Exists)
                 return;
@@ -261,10 +261,9 @@ namespace ResurrectionRP_Server.Houses
                 Alt.Server.LogWarning($"Player {player.GetPlayerHandler().Identite.Name} trying to enter house {ID} but already registered in another house");
             else
             {
-                player.Position = HouseTypes.HouseTypeList[Type].Position.Pos;
-                player.Rotation = HouseTypes.HouseTypeList[Type].Position.Rot;
+                await player.SetPositionAsync(HouseTypes.HouseTypeList[Type].Position.Pos);
+                await player.SetRotationAsync(HouseTypes.HouseTypeList[Type].Position.Rot);
                 player.Dimension = (short)(DIMENSION_START + ID);
-
             }
         }
 

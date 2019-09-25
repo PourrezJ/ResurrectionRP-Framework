@@ -183,7 +183,7 @@ namespace ResurrectionRP_Server.Houses
                     {
                         //GameMode.Instance.Economy.CaissePublique += house.Price;
                         await house.SetOwner(client);
-                        house.SendPlayer(client);
+                        await house.SendPlayer(client);
                         await MenuManager.CloseMenu(client);
                         client.SendNotificationSuccess("Vous avez acheté ce logement.");
                     }
@@ -192,7 +192,7 @@ namespace ResurrectionRP_Server.Houses
                     break;
 
                 case "ID_Enter":
-                    house.SendPlayer(client);
+                    await house.SendPlayer(client);
                     await menu.CloseMenu(client);
                     break;
 

@@ -3,6 +3,7 @@ using AltV.Net.Async;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.EventHandlers;
+using ResurrectionRP_Server.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -107,9 +108,9 @@ namespace ResurrectionRP_Server.Teleport
                         }
                     }
 
-                     client.Freeze(true);
+                    client.Freeze(true);
                     await Task.Delay(250);
-                     client.Freeze(false);
+                    client.Freeze(false);
                 }
             }
         }
@@ -135,10 +136,11 @@ namespace ResurrectionRP_Server.Teleport
 
         private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            if (!menuItem.HasData("Location")) return;
-            Models.Location etage = menuItem.GetData("Location");
+            if (!menuItem.HasData("Location"))
+                return;
 
-            client.RequestCollisionAtCoords( etage.Pos);
+            Location etage = menuItem.GetData("Location");
+            client.RequestCollisionAtCoords(etage.Pos);
 
             await client.SetPositionAsync(etage.Pos);
             await client.SetRotationAsync(etage.Rot);

@@ -41,7 +41,6 @@ export function initialize() {
 
                 if (game.isVehicleSeatFree(vehId, -1, false))
                     game.setVehicleOnGroundProperly(vehId, 5.0);
-
                
                 alt.setTimeout(() => {
                     let sirenSound: boolean = entity.getSyncedMeta("SirenDisabled");

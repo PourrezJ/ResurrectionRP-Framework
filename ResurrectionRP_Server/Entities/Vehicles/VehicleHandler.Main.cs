@@ -117,38 +117,36 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             await AltAsync.Do(() =>
             {
-                IVehicle vehicle = null;
-
                 try
                 {
                     if (location == null)
-                        vehicle = Alt.CreateVehicle(Model,  Location.Pos , Location.GetRotation());
+                        Vehicle = Alt.CreateVehicle(Model,  Location.Pos , Location.GetRotation());
                     else
-                        vehicle = Alt.CreateVehicle(Model, location.Pos, location.GetRotation());
+                        Vehicle = Alt.CreateVehicle(Model, location.Pos, location.GetRotation());
                 }
                 catch (Exception ex)
                 {
                     Alt.Server.LogError("SpawnVehicle: " + ex);
                 }
 
-                if (vehicle == null)
+                if (Vehicle == null)
                     return;
 
-                vehicle.ModKit = 1;
-                vehicle.SetData("VehicleHandler", this);
-                vehicle.NumberplateText = Plate;
-                vehicle.PrimaryColor = PrimaryColor;
-                vehicle.SecondaryColor = SecondaryColor;
-                vehicle.PearlColor = PearlColor;
+                Vehicle.ModKit = 1;
+                Vehicle.SetData("VehicleHandler", this);
+                Vehicle.NumberplateText = Plate;
+                Vehicle.PrimaryColor = PrimaryColor;
+                Vehicle.SecondaryColor = SecondaryColor;
+                Vehicle.PearlColor = PearlColor;
 
                 if (Mods.Count > 0)
                 {
                     foreach (KeyValuePair<byte, byte> mod in Mods)
                     {
-                        vehicle.SetMod(mod.Key, mod.Value);
+                        Vehicle.SetMod(mod.Key, mod.Value);
 
                         if (mod.Key == 69)
-                            vehicle.WindowTint = mod.Value;
+                            Vehicle.WindowTint = mod.Value;
                     }
                 }
 
@@ -156,47 +154,49 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 // if (NeonColor != null && NeonColor != Color.Empty)
                 //     vehicle.NeonColor = NeonColor;
                 // vehicle.SetNeonActive(NeonState.Item1, NeonState.Item2, NeonState.Item3, NeonState.Item4);
-                vehicle.SetSyncedMetaData("NeonColor", NeonColor.ToArgb());
-                vehicle.SetSyncedMetaData("NeonState", NeonState.Item1);
+                Vehicle.SetSyncedMetaData("NeonColor", NeonColor.ToArgb());
+                Vehicle.SetSyncedMetaData("NeonState", NeonState.Item1);
 
-                vehicle.DirtLevel = DirtLevel;
-                vehicle.LockState = LockState;
-                vehicle.EngineOn = EngineOn;
-                vehicle.EngineHealth = EngineHealth;
-                vehicle.BodyHealth = BodyHealth;
-                vehicle.RadioStation = RadioStation;
+                Vehicle.DirtLevel = DirtLevel;
+                Vehicle.LockState = LockState;
+                Vehicle.EngineOn = EngineOn;
+                Vehicle.EngineHealth = EngineHealth;
+                Vehicle.BodyHealth = BodyHealth;
+                Vehicle.RadioStation = RadioStation;
                 IsParked = false;
 
                 if (Wheels == null)
                 {
-                    Wheels = new Wheel[vehicle.WheelsCount];
+                    Wheel[] wheels = new Wheel[Vehicle.WheelsCount];
 
-                    for (int i = 0; i < Wheels.Length; i++)
-                        Wheels[i] = new Wheel();
+                    for (int i = 0; i < wheels.Length; i++)
+                        wheels[i] = new Wheel();
+
+                    Wheels = wheels;
                 }
 
-                for (byte i = 0; i < vehicle.WheelsCount; i++)
+                for (byte i = 0; i < Vehicle.WheelsCount; i++)
                 {
-                    vehicle.SetWheelBurst(i, Wheels[i].Burst);
-                    vehicle.SetWheelHealth(i, Wheels[i].Health);
-                    vehicle.SetWheelHasTire(i, Wheels[i].HasTire);
+                    Vehicle.SetWheelBurst(i, Wheels[i].Burst);
+                    Vehicle.SetWheelHealth(i, Wheels[i].Health);
+                    Vehicle.SetWheelHasTire(i, Wheels[i].HasTire);
                 }
                 
                 for(byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
-                    vehicle.SetDoorState(i, (byte)Doors[i]);
+                    Vehicle.SetDoorState(i, (byte)Doors[i]);
 
                 for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
                 {
                     if (Windows[i] == WindowState.WindowBroken)
-                        vehicle.SetWindowDamaged(i, true);
+                        Vehicle.SetWindowDamaged(i, true);
                     else if (Windows[i] == WindowState.WindowDown)
-                        vehicle.SetWindowOpened(i, true);
+                        Vehicle.SetWindowOpened(i, true);
                 }
 
-                vehicle.SetBumperDamageLevel(VehicleBumper.Front, FrontBumperDamage);
-                vehicle.SetBumperDamageLevel(VehicleBumper.Rear, RearBumperDamage);
+                Vehicle.SetBumperDamageLevel(VehicleBumper.Front, FrontBumperDamage);
+                Vehicle.SetBumperDamageLevel(VehicleBumper.Rear, RearBumperDamage);
 
-                vehicle.SetWindowTint(WindowTint);
+                Vehicle.SetWindowTint(WindowTint);
                 /*
                 if (!string.IsNullOrEmpty(DamageData))
                     vehicle.DamageData = DamageData;
@@ -210,14 +210,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (location != null)
                     Location = location;
 
-                vehicle.Position = Location.Pos;
+                Vehicle.Position = Location.Pos;
+                Vehicle.Rotation = Location.Rot;
                 _previousPosition = Location.Pos;
-
-                vehicle.Dimension = Dimension;
-                Vehicle = vehicle;
+                Vehicle.Dimension = Dimension;
 
                 VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
-                VehiclesManager.VehicleHandlerList.TryAdd(vehicle, this);
+                VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
                 
                 // Needed as vehicles in database don't have this value
                 if (FuelConsumption == 0)
@@ -301,49 +300,49 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public void UpdateProperties()
         {
-            RadioStation = Vehicle.RadioStation;
-            LockState = Vehicle.LockState;
-            BodyHealth = Vehicle.BodyHealth;
-            EngineHealth = Vehicle.EngineHealth;
-            PetrolTankHealth = Vehicle.PetrolTankHealth;
+            _radioStation = Vehicle.RadioStation;
+            _lockState = Vehicle.LockState;
+            _bodyhealth = Vehicle.BodyHealth;
+            _engineHealth = Vehicle.EngineHealth;
+            _petrolTankHealth = Vehicle.PetrolTankHealth;
 
             // BUG v792 : NeonColor and NeonState nor working properly 
             // bool neonActive = Vehicle.IsNeonActive;
             // NeonState = new Tuple<bool, bool, bool, bool>(neonActive, neonActive, neonActive, neonActive);
             // NeonColor = Vehicle.NeonColor;
             
-            DirtLevel = Vehicle.DirtLevel;
+            _dirtLevel = Vehicle.DirtLevel;
 
             // Needed as when fuel gets to 0 there is a vehicle save and engine stop information hasn't been set back from client
             if (Fuel > 0)
-                EngineOn = Vehicle.EngineOn;
+                _engineOn = Vehicle.EngineOn;
 
-            PrimaryColor = Vehicle.PrimaryColor;
-            SecondaryColor = Vehicle.SecondaryColor;
-            PearlColor = Vehicle.PearlColor;
-            WindowTint = Vehicle.GetWindowTint();
-            FrontBumperDamage = Vehicle.GetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Front);
-            RearBumperDamage = Vehicle.GetBumperDamageLevel(AltV.Net.Enums.VehicleBumper.Rear);
-            DamageData = Vehicle.DamageData;
+            _primaryColor = Vehicle.PrimaryColor;
+            _secondaryColor = Vehicle.SecondaryColor;
+            _pearlColor = Vehicle.PearlColor;
+            _windowTint = Vehicle.GetWindowTint();
+            _frontBumperDamage = Vehicle.GetBumperDamageLevel(VehicleBumper.Front);
+            _rearBumperDamage = Vehicle.GetBumperDamageLevel(VehicleBumper.Rear);
+            _damageData = Vehicle.DamageData;
 
             for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
-                Doors[i] = (VehicleDoorState)Vehicle.GetDoorState(i);
+                _doors[i] = (VehicleDoorState)Vehicle.GetDoorState(i);
 
             for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
             {
                 if (Vehicle.IsWindowDamaged(i))
-                    Windows[i] = WindowState.WindowBroken;
+                    _windows[i] = WindowState.WindowBroken;
                 else if (Vehicle.IsWindowOpened(i))
-                    Windows[i] = WindowState.WindowDown;
+                    _windows[i] = WindowState.WindowDown;
                 else
-                    Windows[i] = WindowState.WindowFixed;
+                    _windows[i] = WindowState.WindowFixed;
             }
 
             for (byte i = 0; i < Vehicle.WheelsCount; i++)
             {
-                Wheels[i] = new Wheel();
-                Wheels[i].Health = Vehicle.GetWheelHealth(i);
-                Wheels[i].Burst = Vehicle.IsWheelBurst(i);
+                _wheels[i] = new Wheel();
+                _wheels[i].Health = Vehicle.GetWheelHealth(i);
+                _wheels[i].Burst = Vehicle.IsWheelBurst(i);
             }
             /*
             for (byte i = 0; i < 100; i++)
@@ -360,8 +359,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Mods[(byte)vehicleModType] = Vehicle.GetMod(vehicleModType);
             }
 
-            Location.Pos = Vehicle.Position;
-            Location.Rot = Vehicle.Rotation;
+            LastKnowLocation = new Location(Vehicle.Position, Vehicle.Rotation);
         }
 
         public void Repair(IPlayer player)

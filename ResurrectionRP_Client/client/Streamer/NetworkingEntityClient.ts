@@ -46,6 +46,8 @@ export class NetworkingEntityClient {
         alt.onServer('createStaticEntity', this.createStaticEntity.bind(this));
         alt.onServer("deleteStaticEntity", this.deleteStaticEntity.bind(this));
 
+        alt.onServer("deleteObject", this.deleteObject.bind(this));
+
         alt.on("interactWithPickableObject", this.interactPickup);
 
         this.webview.on("streamIn", (entities) => {
@@ -119,7 +121,7 @@ export class NetworkingEntityClient {
 
     onDataChange = async (entity: any, data: any) => {
         let count = 0;
-
+        //alt.log(`entity: ${JSON.stringify(entity)} | data ${JSON.stringify(data)}`);
         // Creating an entity can take some time so wait until it is created before updating it
         const interval = alt.setInterval(() => {
             if (this.EntityList[entity.id] == undefined || this.EntityList[entity.id] == null) {
@@ -140,7 +142,7 @@ export class NetworkingEntityClient {
                     this.onStreamIn(entity);
                     break;
                 case 1:
-                    //game.deleteObject(this.EntityList[entity.id])
+                   // game.deleteObject(this.EntityList[entity.id])
                     this.onStreamIn(entity);
                     break;
                 case 2:
@@ -160,7 +162,7 @@ export class NetworkingEntityClient {
 
     onStreamOut = async (entity: any) => {
         this.EntityList.forEach((item, index) => {
-            if (entity.data.Text)
+           if (entity.data.Text)
                 return;
 
             if (index != entity.id)
@@ -228,6 +230,14 @@ export class NetworkingEntityClient {
                 break;
         }
     }
+
+    private deleteObject = (entityid: number) => {
+        if (this.EntityList[entityid] == undefined)
+            return;
+
+        game.deleteObject(this.EntityList[entityid]);
+    }
+
 
     private displayTextLabel(textLabel) {
         const [bol, _x, _y] = game.getScreenCoordFromWorldCoord(textLabel["PosX"], textLabel["PosY"], textLabel["PosZ"], 0, 0);
@@ -351,7 +361,7 @@ export class NetworkingEntityClient {
                 break;
         }
     }
-
+    
     private createStaticEntity = (data: any[]) => {
         switch (data["entityType"]) {
             case 4:
@@ -376,14 +386,5 @@ export class NetworkingEntityClient {
             game.deletePed(item);
             this.EntityList[index] = null;
         });
-    }
-
-    private getPedId = (scriptid: number) => {
-        var indexer = 0;
-        this.EntityList.find((p, index) => {
-            indexer = index;
-            return p == scriptid;
-        });
-        return indexer;
     }
 }

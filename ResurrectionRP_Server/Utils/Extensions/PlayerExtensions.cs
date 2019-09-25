@@ -20,7 +20,7 @@ namespace ResurrectionRP_Server
             if (player.GetData("SocialClub", out string data))
                 return data;
 
-            return "";
+            return string.Empty;
         }
 
         public static void SetCloth(this IPlayer client, ClothSlot level, int drawable, int texture, int palette)
@@ -219,6 +219,7 @@ namespace ResurrectionRP_Server
             }
             return endup;
         }
+
         public static Entities.Vehicles.VehicleHandler GetNearestVehicleHandler(this IPlayer client) =>
             client.GetNearestVehicle()?.GetVehicleHandler();
 
@@ -292,14 +293,11 @@ namespace ResurrectionRP_Server
         public static async Task<bool> IsInvisibleAsync(this IPlayer client) 
             => await client.GetSyncedMetaDataAsync<bool>("SetInvisible");
 
-
-
         public static async Task SetInvincibleAsync(this IPlayer client, bool value)
             => await client.SetSyncedMetaDataAsync("SetInvincible", value);
 
         public static async Task<bool> IsInvinsibleAsync(this IPlayer client)
             => await client.GetSyncedMetaDataAsync<bool>("SetInvincible");
-
 
         public static Task SetHeadOverlayAsync(this IPlayer client, int overlayId, Business.Barber.HeadOverlayData overlayData)
         {
@@ -396,9 +394,12 @@ namespace ResurrectionRP_Server
         public static bool HasVehicleKey(this IPlayer client, string plate)
             => client.GetPlayerHandler().ListVehicleKey.Exists(x => x.Plate == plate);
 
-        public static void SetPlayerIntoVehicle(this IPlayer target, IVehicle client)
+        public static void SetPlayerIntoVehicle(this IPlayer client, IVehicle vehicle)
         {
-            target.EmitLocked("SetPlayerIntoVehicle", client, -1);
+            client.EmitLocked("SetPlayerIntoVehicle", vehicle, -1);
         }
+
+        public static void ApplyCharacter(this IPlayer client)
+            => client.GetPlayerHandler().Character.ApplyCharacter(client);
     }
 }

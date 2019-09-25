@@ -154,7 +154,8 @@ namespace ResurrectionRP_Server.Jobs
 
         public virtual async Task QuitterService(IPlayer client)
         {
-            client.GetPlayerHandler()?.Character.ApplyCharacter(client);
+            client.ApplyCharacter();
+
             if (IsInService(client))
             {
                 var job = GetJobService(client);

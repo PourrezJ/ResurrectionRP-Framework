@@ -251,7 +251,7 @@ namespace ResurrectionRP_Server.Factions
 
         public override async Task OnPlayerServiceQuit(IPlayer client, int rang)
         {
-            client.GetPlayerHandler().Character.ApplyCharacter(client);
+            client.ApplyCharacter();
             // rendre la tenue
             await base.OnPlayerServiceQuit(client, rang);
         }

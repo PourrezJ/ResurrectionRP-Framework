@@ -194,7 +194,7 @@ namespace ResurrectionRP_Server.Business.Barber
                 ClientSelected.Character.Appearance[1].SecondaryColor = (byte)ClientSelected.Character.Hair.HighlightColor;
                 ClientSelected.Character.Appearance[1].Opacity = 255;
 
-                ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
+                ClientSelected.Client.ApplyCharacter();
                 ClientSelected.UpdateFull();
                 await Update();
             }
@@ -250,7 +250,7 @@ namespace ResurrectionRP_Server.Business.Barber
             if (await BankAccount.GetBankMoney(hair.Price, $"Coupe cheveux par {client.GetPlayerHandler().Identite.Name}"))
             {
                 ClientSelected.Character.Hair.Hair = hair.ID;
-                ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
+                ClientSelected.Client.ApplyCharacter();
                 ClientSelected.UpdateFull();
                 await Update();
             }
@@ -333,14 +333,14 @@ namespace ResurrectionRP_Server.Business.Barber
                 };
 
                 ClientSelected.Character.Appearance[1] = head;
-                ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
+                ClientSelected.Client.ApplyCharacter();
                 ClientSelected.UpdateFull();
                 await Update();
             }
             else
             {
                 client.SendNotificationError("Vous n'avez pas de fond de caisse.");
-                ClientSelected?.Character.ApplyCharacter(client);
+                ClientSelected.Client.ApplyCharacter();
             }
 
             await OpenMenu(client);
@@ -383,7 +383,7 @@ namespace ResurrectionRP_Server.Business.Barber
             if (ClientSelected == null)
                 return Task.CompletedTask;
 
-            ClientSelected.Character.ApplyCharacter(ClientSelected.Client);
+            ClientSelected.Client.ApplyCharacter();
             return Task.CompletedTask;
         }
         #endregion

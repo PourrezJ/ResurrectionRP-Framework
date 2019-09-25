@@ -223,7 +223,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     );
 
                     Client.Spawn(Location.Pos, 0);
-                    Character.ApplyCharacter(Client);
+                    Client.ApplyCharacter();
                     Client.Dimension = GameMode.GlobalDimension;
                     Client.Health = Health;
                     Client.Emit("FadeIn", 3000);

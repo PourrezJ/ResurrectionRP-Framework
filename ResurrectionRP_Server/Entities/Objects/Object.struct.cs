@@ -3,6 +3,7 @@ using ResurrectionRP_Server.Streamer.Data;
 using Newtonsoft.Json;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Data;
+using System.Collections.Concurrent;
 
 namespace ResurrectionRP_Server.Entities.Objects
 {
@@ -16,6 +17,7 @@ namespace ResurrectionRP_Server.Entities.Objects
         public bool freeze;
         public Models.Attachment attach = null;
         public string pickup = null;
+        private ConcurrentDictionary<string, object> datas;
 
         public Object(int model, Position position, Rotation rotation, int entityId, bool freeze = false, uint dimension = ushort.MaxValue)
         {
@@ -25,6 +27,7 @@ namespace ResurrectionRP_Server.Entities.Objects
             this.position = position;
             this.rotation = rotation;
             this.dimension = dimension;
+            datas = new ConcurrentDictionary<string, object>();
         }
 
         public bool SetAttachToEntity(IVehicle target, string bone, Position positionOffset, Rotation rotationOffset)
@@ -43,6 +46,12 @@ namespace ResurrectionRP_Server.Entities.Objects
         {
             GameMode.Instance.Streamer.DeleteEntityObject(this);
         }
+
+        public bool SetData(string key, object data)
+            => datas.TryAdd(key, data);
+
+        public object GetData(string key)
+            => datas[key] ?? null;
 
         public Dictionary<string, object> export()
         {

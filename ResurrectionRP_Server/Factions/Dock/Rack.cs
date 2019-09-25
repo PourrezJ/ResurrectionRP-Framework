@@ -58,6 +58,11 @@ namespace ResurrectionRP_Server.Factions
                 InventoryBox = InventoryBox.CreateInventoryBox(RackName, BoxLocation, new Inventory.Inventory(500, 20));
             }
 
+            if (InventoryBox.Obj != null)
+            {
+                InventoryBox.Obj.SetData("RackName", RackName);
+            }
+
             RefreshLabel();
             Colshape = Alt.CreateColShapeCylinder(RackPos, 3, 5);
         }

@@ -354,7 +354,7 @@ namespace ResurrectionRP_Server.Entities.Players
             var ph = client.GetPlayerHandler();
 
             if (ph != null && ph.OnKeyPressed != null)
-                await ph.OnKeyPressed.Invoke(client, (ConsoleKey)(Int64)args[0], JsonConvert.DeserializeObject<RaycastData>(args[1].ToString()), (IVehicle)args[2] ?? null, (IPlayer)args[3] ?? null);
+                await ph.OnKeyPressed.Invoke(client, (ConsoleKey)(Int64)args[0], JsonConvert.DeserializeObject<RaycastData>(args[1].ToString()), (IVehicle)args[2] ?? null, (IPlayer)args[3] ?? null, Convert.ToInt32(args[4]));
         }
 
         private async Task OnKeyReleased(IPlayer client, object[] args)

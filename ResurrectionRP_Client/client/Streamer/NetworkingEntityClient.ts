@@ -10,7 +10,7 @@ export class NetworkingEntityClient {
     streamedInEntities: {};
     interval: number;
     StaticEntityList: any[] = [];
-    EntityList: any[] = [];
+    public static EntityList: any[] = [];
 
     constructor() {
         alt.log("Chargement controleur du streamer ...");
@@ -20,7 +20,7 @@ export class NetworkingEntityClient {
         this.streamedInEntities = {};
 
         alt.everyTick(() => {
-            this.EntityList.forEach((item, index) => {
+            NetworkingEntityClient.EntityList.forEach((item, index) => {
                 if (item != null && item.Text != null) {
                     this.displayTextLabel(item);
                 } else if (item != null && item.scalex != null) {
@@ -124,7 +124,7 @@ export class NetworkingEntityClient {
         //alt.log(`entity: ${JSON.stringify(entity)} | data ${JSON.stringify(data)}`);
         // Creating an entity can take some time so wait until it is created before updating it
         const interval = alt.setInterval(() => {
-            if (this.EntityList[entity.id] == undefined || this.EntityList[entity.id] == null) {
+            if (NetworkingEntityClient.EntityList[entity.id] == undefined || NetworkingEntityClient.EntityList[entity.id] == null) {
                 count++;
 
                 if (count == 500) {
@@ -138,7 +138,7 @@ export class NetworkingEntityClient {
 
             switch (entity.data.entityType.intValue) {
                 case 0:
-                    game.deletePed(this.EntityList[entity.id])
+                    game.deletePed(NetworkingEntityClient.EntityList[entity.id])
                     this.onStreamIn(entity);
                     break;
                 case 1:
@@ -146,11 +146,11 @@ export class NetworkingEntityClient {
                     this.onStreamIn(entity);
                     break;
                 case 2:
-                    this.EntityList[entity.id] = undefined;
+                    NetworkingEntityClient.EntityList[entity.id] = undefined;
                     this.onStreamIn(entity);
                     break;
                 case 3:
-                    this.EntityList[entity.id] = undefined;
+                    NetworkingEntityClient.EntityList[entity.id] = undefined;
                     this.onStreamIn(entity);
                     break;
                 case 4:
@@ -161,7 +161,7 @@ export class NetworkingEntityClient {
     }
 
     onStreamOut = async (entity: any) => {
-        this.EntityList.forEach((item, index) => {
+        NetworkingEntityClient.EntityList.forEach((item, index) => {
            if (entity.data.Text)
                 return;
 
@@ -172,7 +172,7 @@ export class NetworkingEntityClient {
                 game.deleteEntity(item);
             }
 
-            this.EntityList[index] = null;
+            NetworkingEntityClient.EntityList[index] = null;
         });
 
     }
@@ -232,10 +232,10 @@ export class NetworkingEntityClient {
     }
 
     private deleteObject = (entityid: number) => {
-        if (this.EntityList[entityid] == undefined)
+        if (NetworkingEntityClient.EntityList[entityid] == undefined)
             return;
 
-        game.deleteObject(this.EntityList[entityid]);
+        game.deleteObject(NetworkingEntityClient.EntityList[entityid]);
     }
 
 
@@ -280,18 +280,20 @@ export class NetworkingEntityClient {
 
         //alt.logWarning("Streaming in new ped, entity ID " + entityId + " | id global : " + id + "| heading : " + JSON.stringify(heading));
         //alt.logWarning(`Model : ${model}`);
-        this.EntityList[id] = entityId;
+        NetworkingEntityClient.EntityList[id] = entityId;
     }
 
     private streamObject = async (id: number, model: any, x: number, y: number, z: number, freeze: boolean) => {
         var entityId = null;
 
-        if (this.EntityList[id] == undefined)
+        if (NetworkingEntityClient.EntityList[id] == undefined)
             entityId = game.createObject(model, x, y, z, false, true, false);
         else
-            entityId = this.EntityList[id];
+            entityId = NetworkingEntityClient.EntityList[id];
+
+
         game.freezeEntityPosition(entityId, freeze);
-        this.EntityList[id] = entityId;
+        NetworkingEntityClient.EntityList[id] = entityId;
     }
 
     private objectAttach = (entityId: number, attach: any) => {
@@ -317,7 +319,7 @@ export class NetworkingEntityClient {
                 var veh: alt.Vehicle = alt.Vehicle.all.find(p => p.id == attach.RemoteID);
 
                 var bone = game.getEntityBoneIndexByName(veh.scriptID, attach.Bone);
-                game.attachEntityToEntity(this.EntityList[entityId], veh.scriptID, bone, attach.PositionOffset.X, attach.PositionOffset.Y, attach.PositionOffset.Z, attach.RotationOffset.X, attach.RotationOffset.Y, attach.RotationOffset.Z, true, false, false, false, 0, true);
+                game.attachEntityToEntity(NetworkingEntityClient.EntityList[entityId], veh.scriptID, bone, attach.PositionOffset.X, attach.PositionOffset.Y, attach.PositionOffset.Z, attach.RotationOffset.X, attach.RotationOffset.Y, attach.RotationOffset.Z, true, false, false, false, 0, true);
                 break;
             default:
                 alt.logError("Entity attached not coded");
@@ -326,18 +328,18 @@ export class NetworkingEntityClient {
     }
 
     private interactPickup = (OID: number ) => {
-        this.EntityList.forEach((item, index) => {
+        NetworkingEntityClient.EntityList.forEach((item, index) => {
             if (item == OID)
                 alt.emitServer("ObjectManager_InteractPickup", index);
         });
     }
 
     private streamTextLabel = async (id: number, text: string, x: number, y: number, z: number, font: number, rgba: object) => {
-        this.EntityList[id] = { PosX: x, PosY: y, PosZ: z, Text: text, Font: font, Color: rgba };
+        NetworkingEntityClient.EntityList[id] = { PosX: x, PosY: y, PosZ: z, Text: text, Font: font, Color: rgba };
     }
 
     private streamMarker = async (id: number, type: number, x: number, y: number, z: number, scalex: number, scaley: number, scalez: number, rgba: object) => {
-        this.EntityList[id] = { PosX: x, PosY: y, PosZ: z, Color: rgba, type: type, scalex: scalex, scaley: scaley, scalez: scalez };
+        NetworkingEntityClient.EntityList[id] = { PosX: x, PosY: y, PosZ: z, Color: rgba, type: type, scalex: scalex, scaley: scaley, scalez: scalez };
     }
 
     private streamBlip = async (id: number, x: number, y: number, z: number, sprite: number, color: number, name: string, scale: number, shortRange: boolean) => {
@@ -381,10 +383,10 @@ export class NetworkingEntityClient {
     }
 
     private unloadStream = async () => {
-        this.EntityList.forEach((item, index) => {
+        NetworkingEntityClient.EntityList.forEach((item, index) => {
             game.deleteEntity(item);
             game.deletePed(item);
-            this.EntityList[index] = null;
+            NetworkingEntityClient.EntityList[index] = null;
         });
     }
 }

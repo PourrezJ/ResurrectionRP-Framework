@@ -13,19 +13,19 @@ namespace ResurrectionRP_Server.Factions
         #region Fields and properties
         public List<Faction> FactionList = new List<Faction>();
 
-        public Faction Onu { get; private set; }
+        public ONU Onu { get; private set; }
 
-        public Faction Lspd { get; private set; }
+        public LSPD Lspd { get; private set; }
 
-        public Faction LSCustom { get; private set; }
+        public LSCustom LSCustom { get; private set; }
 
         //public Division Rebelle { get; private set; }
 
-        public Faction Gouvernement { get; private set; }
+        public Gouv Gouvernement { get; private set; }
 
-        public Faction Dock { get; private set; }
+        public Dock Dock { get; private set; }
 
-        public Faction Nordiste { get; private set; }
+        public Nordiste Nordiste { get; private set; }
         #endregion
 
         #region Init

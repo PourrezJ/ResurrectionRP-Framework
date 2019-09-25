@@ -15,7 +15,7 @@ namespace ResurrectionRP_Server.Farms
             DoubleProcess_BlipSprite = 499;
             Selling_BlipSprite = 500;
 
-            DoubleProcess_PosRot = new Location(new Vector3(2555.167f, 4651.451f, 35.07678f), new Vector3(0, 0, 0));
+            DoubleProcess_PosRot = new Location(new Vector3(1256.3605f, -2681.9604f, 2.0336914f), new Vector3(0, 0, 1.3852f));  
             Selling_PosRot = new Location(new Vector3(-1256.917f, -1149.656f, 7.604019f), new Vector3(0, 0, 246.4353f));
 
             DoubleProcess_PedHash = AltV.Net.Enums.PedModel.Beach03AMY;

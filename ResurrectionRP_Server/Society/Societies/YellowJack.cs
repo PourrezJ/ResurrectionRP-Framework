@@ -19,9 +19,9 @@ namespace ResurrectionRP_Server.Society.Societies
 
         public List<Door> Doors { get; private set; }
 
-        public override async Task Load()
+        public override async Task Init()
         {
-            await base.Load();
+            await base.Init();
 
             //await this.Marker.SetAlphaAsync(80);
 

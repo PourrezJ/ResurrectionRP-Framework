@@ -12,16 +12,16 @@ namespace ResurrectionRP_Server.Society.Societies
         {
         }
 
-        public override async Task Load()
+        public override async Task Init()
         {
-            await base.Load();
+            await base.Init();
 
             //await Blip?.SetScaleAsync(1.2f);
         }
 
-        public override Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
+        public override Task OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
         {
-            return base.OnPlayerEnterColshape(colShape, client);
+            return base.OnPlayerEnterServiceColshape(colShape, client);
         }
     }
 }

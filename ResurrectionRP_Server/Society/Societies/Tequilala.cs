@@ -17,9 +17,9 @@ namespace ResurrectionRP_Server.Society.Societies
 
         public List<Door> Doors { get; private set; }
 
-        public override async Task Load()
+        public override async Task Init()
         {
-            await base.Load();
+            await base.Init();
 
             var PortExt = Door.CreateDoor(993120320, new Vector3(-564.3921f, 276.5233f, 83.13618f), true);
             var PortInt = Door.CreateDoor(unchecked((int)3668283177), new Vector3(-560.3441f, 291.9776f, 82.17625f), true);

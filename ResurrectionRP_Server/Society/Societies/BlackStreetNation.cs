@@ -20,7 +20,7 @@ namespace ResurrectionRP_Server.Society.Societies
         public Door PorteDevant1 { get; set; }
         public Door PorteDevant2 { get; set; }
 
-        public override async Task Load()
+        public override async Task Init()
         {
             PorteDevant1 = Door.CreateDoor(3478499199, new Vector3(-1387.809f, -586.5994f, 30.21479f), true);
             PorteDevant2 = Door.CreateDoor(2182616413, new Vector3(-1388.825f, -587.3669f, 30.2216f), true);
@@ -38,7 +38,7 @@ namespace ResurrectionRP_Server.Society.Societies
 
             ServicePos = new Vector3(-1390.743f, -600.2302f, 30.31958f);
 
-            await base.Load();
+            await base.Init();
         }
 
         #region Doors

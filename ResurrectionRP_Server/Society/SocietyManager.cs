@@ -14,12 +14,9 @@ namespace ResurrectionRP_Server.Society
         {
             Alt.Server.LogInfo("--- Start loading all businesses in database ---");
             var societyList = await Database.MongoDB.GetCollectionSafe<Society>("society").AsQueryable().ToListAsync();
-            foreach (var society in societyList)
-            {
-                await society.Load();
-                EventHandlers.Events.OnPlayerEnterColShape += society.OnPlayerEnterColshape;
-            }
 
+            foreach (var society in societyList)
+                await society.Init();
 
             Utils.Utils.Delay((int)TimeSpan.FromMinutes(7).TotalMilliseconds, false, async () =>
             {

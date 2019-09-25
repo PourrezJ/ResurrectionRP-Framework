@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                 client.SendNotificationError("Aucun véhicule devant l'établi.");
         }
 
-        public override async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
+        public override async Task OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -48,14 +48,14 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                     _vehicleBench = await client.GetVehicleAsync();
             }
 
-            await base.OnPlayerEnterColshape(colShape, client);
+            await base.OnPlayerEnterServiceColshape(colShape, client);
         }
         #endregion
 
         #region Methods
-        public override async Task Load()
+        public override async Task Init()
         {
-            await base.Load();
+            await base.Init();
 
             Location pnjPos = new Location(new Vector3(106.0419f, 6627.597f, 31.78723f), new Vector3(0, 0, 237.60875f));
             var npc = Entities.Peds.Ped.CreateNPC(PedModel.Benny, pnjPos.Pos, pnjPos.Rot.Z, GameMode.GlobalDimension);

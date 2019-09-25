@@ -38,7 +38,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                 client.SendNotificationError("Aucun véhicule devant l'établi.");
         }
 
-        public override async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
+        public override async Task OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -49,14 +49,14 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                     _vehicleBench = await client.GetVehicleAsync();
             }
 
-            await base.OnPlayerEnterColshape(colShape, client);
+            await base.OnPlayerEnterServiceColshape(colShape, client);
         }
         #endregion
 
         #region Methods
-        public override async Task Load()
+        public override async Task Init()
         {
-            await base.Load();
+            await base.Init();
 
             var PortInt = Door.CreateDoor(747286790, new Vector3(984.9756f, -94.93642f, 74.84788f), true);
             var PortExt = Door.CreateDoor(190770132, new Vector3(981.4236f, -102.6262f, 74.84506f), true);

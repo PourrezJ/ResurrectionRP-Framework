@@ -34,7 +34,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
                 client.SendNotificationError("Aucun véhicule devant l'établi.");
         }
 
-        public override async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
+        public override async Task OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -45,12 +45,12 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
                     _vehicleBench = client.Vehicle;
             }
 
-            await base.OnPlayerEnterColshape(colShape, client);
+            await base.OnPlayerEnterServiceColshape(colShape, client);
         }
         #endregion
 
         #region Methods
-        public override async Task Load()
+        public override async Task Init()
         {
             Location pnjPos = new Location(new Vector3(-227.6015f, -1327.772f, 30.89038f), new Vector3(0, 0, 239.715f));
             var npc = Entities.Peds.Ped.CreateNPC(PedModel.Benny, pnjPos.Pos, pnjPos.Rot.Z, GameMode.GlobalDimension);
@@ -60,7 +60,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             _workZone =  Alt.CreateColShapeCylinder(new Vector3(workZonePos.X, workZonePos.Y, workZonePos.Z - 1), 10, 5);
             _garageType = GarageType.Car;
 
-            await base.Load();
+            await base.Init();
         }
 
         private void HornPreview(IVehicle vehicle, byte horn)

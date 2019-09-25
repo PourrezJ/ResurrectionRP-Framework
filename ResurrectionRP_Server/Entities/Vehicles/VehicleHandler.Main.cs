@@ -119,10 +119,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 try
                 {
-                    if (location == null)
-                        Vehicle = Alt.CreateVehicle(Model,  Location.Pos , Location.GetRotation());
-                    else
-                        Vehicle = Alt.CreateVehicle(Model, location.Pos, location.GetRotation());
+                    if (location != null)
+                        Location = location;
+
+                    Vehicle = Alt.CreateVehicle(Model, Location.Pos, Location.GetRotation());
                 }
                 catch (Exception ex)
                 {
@@ -210,8 +210,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (location != null)
                     Location = location;
 
-                Vehicle.Position = Location.Pos;
-                Vehicle.Rotation = Location.Rot;
                 _previousPosition = Location.Pos;
                 Vehicle.Dimension = Dimension;
 

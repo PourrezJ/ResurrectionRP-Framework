@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
+using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson.Serialization.Attributes;
@@ -251,7 +252,7 @@ namespace ResurrectionRP_Server.Models
         public void Load(float markerscale = 3f, int opacite = 128, bool blip = false, uint sprite = 50, float scale = 1f, byte color = 0, uint alpha = 255, string name = "", short dimension = GameMode.GlobalDimension)
         {
             Marker.CreateMarker(MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale-1), new Vector3(3, 3, 3));
-            ParkingColshape = Alt.CreateColShapeCylinder(new AltV.Net.Data.Position(Location.X, Location.Y, Location.Z -1), markerscale, 4);
+            ParkingColshape = Alt.CreateColShapeCylinder(new Position(Location.X, Location.Y, Location.Z -1), markerscale, 4);
             ParkingColshape.Dimension = dimension;
             ParkingColshape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
             ParkingColshape.SetOnPlayerLeaveColShape(OnPlayerLeaveColShape);

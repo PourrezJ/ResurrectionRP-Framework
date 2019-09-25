@@ -112,9 +112,8 @@ namespace ResurrectionRP_Server.Houses
                 Parking.OnVehicleStored += OnVehicleStored;
                 Parking.OnVehicleOut += OnVehicleOutParking;
                 Parking.ParkingType = ParkingType.House;
-                Parking.Owner = Owner;
                 Parking.Location = Parking.Spawn1.Pos;
-                Parking.Spawn1.Rot = Parking.Spawn1.Rot.ConvertRotationToRadian();
+                Parking.Owner = Owner;
                 Parking.Load();
                 EventHandlers.Events.OnPlayerEnterColShape += OnPlayerEnterColshape;
             }

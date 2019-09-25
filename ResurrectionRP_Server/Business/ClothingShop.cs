@@ -475,7 +475,6 @@ namespace ResurrectionRP_Server.Business
                     continue;
 
                 var drawables = data.Value.DrawablesList[compo];
-                var price = drawables.Price / 3;
 
                 for (int b = 0; b < drawables.Variations.Count; b++)
                 {
@@ -517,8 +516,6 @@ namespace ResurrectionRP_Server.Business
             {
                 var drawables = clothdata.Value.DrawablesList[drawable]; // recup des données sur ces tenues
 
-                var price = (drawables.Price / 3);
-
                 if (drawables.Categorie != menuItem.Text)
                     continue;
 
@@ -530,10 +527,10 @@ namespace ResurrectionRP_Server.Business
                         continue;
 
                     var ui = new MenuItem(variation.Gxt, executeCallback: true);
-                    ui.RightLabel = $"${price}";
+                    ui.RightLabel = $"${ drawables.Price}";
                     ui.SetData("drawable", drawable);
                     ui.SetData("variation", b);
-                    ui.SetData("price", price);
+                    ui.SetData("price", drawables.Price);
                     ui.SetData("name", variation.Gxt);
                     ui.SetData("torso", drawables.Torso[0]);
                     menu.Add(ui);
@@ -621,7 +618,6 @@ namespace ResurrectionRP_Server.Business
             foreach (int compo in compoList)
             {
                 ClothDrawable drawables = data.Value.DrawablesList[compo];
-                int price = drawables.Price / 3;
 
                 for (int b = 0; b < drawables.Variations.Count; b++)
                 {
@@ -668,7 +664,6 @@ namespace ResurrectionRP_Server.Business
                     continue; 
 
                 ClothDrawable drawables = clothdata.Value.DrawablesList[drawable]; // recup des données sur ces tenues
-                int price = drawables.Price / 3;
 
                 if (drawables.Categorie != menuItem.Text)
                     continue;
@@ -681,10 +676,10 @@ namespace ResurrectionRP_Server.Business
                         continue;
 
                     MenuItem ui = new MenuItem(variation.Gxt, executeCallback: true);
-                    ui.RightLabel = $"${price}";
+                    ui.RightLabel = $"${ drawables.Price}";
                     ui.SetData("drawable", drawable);
                     ui.SetData("variation", pair.Key);
-                    ui.SetData("price", price);
+                    ui.SetData("price", drawables.Price);
                     menu.Add(ui);
                 }
             }

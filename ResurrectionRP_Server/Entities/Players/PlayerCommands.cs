@@ -1,9 +1,15 @@
 ﻿using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Factions.Model;
+using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Items;
+using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils.Enums;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Entities.Players
@@ -20,6 +26,105 @@ namespace ResurrectionRP_Server.Entities.Players
             Chat.RegisterCmd("wheel", Wheel);
             Chat.RegisterCmd("doorstate", DoorState);
             Chat.RegisterCmd("additem", AddItem);
+            Chat.RegisterCmd("wipe", Wipe);
+        }
+
+        private async Task Wipe(IPlayer player, string[] arguments)
+        {
+            var ph = player.GetPlayerHandler();
+
+            if (ph.StaffRank <= AdminRank.Moderator)
+                return;
+
+            var socialclub = arguments[0].ToString().ToLower();
+            PlayerHandler phWipe = PlayerManager.GetPlayerBySCN(socialclub);
+
+            if (phWipe != null && phWipe.Client != null && phWipe.Client.Exists)
+                await phWipe.Client.KickAsync("Wipe en cours...");
+
+            phWipe = await PlayerManager.GetPlayerHandlerDatabase(socialclub);
+
+            if (phWipe == null)
+                return;
+
+            if (player.Exists && player != phWipe.Client)
+                player.SendChatMessage($"Wipe de {phWipe.Identite.Name} en cours");
+
+            foreach (House house in HouseManager.Houses)
+            {
+                if (house.Owner == phWipe.PID)
+                {
+                    await house.SetOwner(string.Empty);
+
+                    if (house.Parking != null)
+                        house.Parking.ListVehicleStored = new List<ParkedCar>();
+
+                    await house.Save();
+                }
+            }
+
+            foreach (var vehicle in VehiclesManager.VehicleHandlerList.ToList())
+            {
+                if (vehicle.Value.OwnerID == phWipe.PID)
+                    await vehicle.Value.Delete(true);
+            }
+
+            List<VehicleHandler> vehicleOwned = new List<VehicleHandler>();
+
+            foreach(var vh in VehiclesManager.GetAllVehicles())
+            {
+                if (vh.OwnerID == phWipe.PID)
+                    vehicleOwned.Add(vh);
+            }
+
+            foreach (Parking parking in Parking.ParkingList)
+            {
+                bool saveNeeded = false;
+
+                foreach (var vehicle in parking.ListVehicleStored.ToList())
+                {
+                    if (vehicleOwned.Exists(p=>p.Plate == vehicle.Plate))
+                    {
+                        parking.ListVehicleStored.Remove(vehicle);
+                        saveNeeded = true;
+                    }
+                }
+
+                if (saveNeeded)
+                    await parking.OnSaveNeeded.Invoke();
+            }
+
+            foreach (var faction in GameMode.Instance.FactionManager.FactionList)
+            {
+                if (faction.FactionPlayerList.ContainsKey(phWipe.PID))
+                {
+                    faction.FactionPlayerList.Remove(phWipe.PID, out FactionPlayer useless);
+                    await faction.UpdateDatabase();
+                }
+            }
+
+            foreach (var society in GameMode.Instance.SocietyManager.SocietyList)
+            {
+                if (society.Employees.ContainsKey(phWipe.PID))
+                {
+                    society.Employees.Remove(phWipe.PID);
+                    await society.Update();
+                }
+            }
+
+            foreach (var business in GameMode.Instance.BusinessesManager.BusinessesList)
+            {
+                if (business.Employees.ContainsKey(phWipe.PID))
+                {
+                    business.Employees.Remove(phWipe.PID);
+                    await business.Update();
+                }
+            }
+
+            var result = await Database.MongoDB.Delete<PlayerHandler>("players", phWipe.PID);
+
+            if (player.Exists && player != phWipe.Client && result.DeletedCount != 0)
+                player.SendChatMessage($"Wipe de {phWipe.Identite.Name} terminé!");
         }
 
         public async Task AddItem(IPlayer player, string[] arguments = null)

@@ -36,16 +36,24 @@ export function init()
                 if (menuItem.InputValue === null) {
                     menuItem.InputValue = "";
                 }
-                /*
-                inputOpen = true;
-                inputMenu = mp.browsers.new('package://Resurrection/cef/userinput/index.html');
-                inputselected = menuItem;
-                mp.gui.chat.activate(false);
-                mp.game.controls.disableAllControlActions(0);
-                if (xtremMenu.xmenu !== undefined) {
-                    xtremMenu.xmenu.destroy();
-                    xtremMenu.xmenu = undefined;
-                }*/
+
+                let inputView = new alt.WebView("http://resource/client/cef/userinput/input.html");
+                inputView.focus();
+                alt.showCursor(true);
+                alt.toggleGameControls(false);
+
+                inputView.emit('Input_Data', menuItem.InputMaxLength, menuItem.InputValue);
+
+                inputView.on('Input_Submit', (text) => {
+                    xmenuData.Items[index].InputValue = text;
+                    alt.emitServer("XMenuManager_ExecuteCallback", index, JSON.stringify(xmenuData));
+                    xmenuData = null;
+                    inputView.destroy();
+                    browser.destroy();
+                    browser = null;
+                    alt.showCursor(false);
+                    alt.toggleGameControls(true);
+                });   
             }
             else {
                 alt.emitServer("XMenuManager_ExecuteCallback", index, JSON.stringify(xmenuData));

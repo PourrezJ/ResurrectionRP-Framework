@@ -34,7 +34,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         private byte _secondaryColor = 0;
         private byte _pearlColor = 0;
         private bool _engineOn = false;
-        private byte _dirt = 0;
+        private byte _dirtLevel = 0;
         private uint _radioStation = 255;
         private VehicleLockState _lockState = VehicleLockState.Locked;
         private Tuple<bool, bool, bool, bool> _neonState = new Tuple<bool, bool, bool, bool>(false, false, false, false);
@@ -210,11 +210,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public byte DirtLevel
         {
-            get => _dirt;
+            get => _dirtLevel;
 
             set
             {
-                _dirt = value;
+                _dirtLevel = value;
 
                 if (Vehicle != null && Vehicle.Exists && Vehicle.DirtLevel != value)
                     AltAsync.Do(() => { Vehicle.DirtLevel = value; });
@@ -403,18 +403,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public Location Location
         {
-            get => LastKnowLocation;
+            get => new Location(new Vector3(LastKnowLocation.Pos.X, LastKnowLocation.Pos.Y, LastKnowLocation.Pos.Z), new Vector3(LastKnowLocation.Rot.X, LastKnowLocation.Rot.Y, LastKnowLocation.Rot.Z));
 
             set
             {
-                LastKnowLocation = value;
+                LastKnowLocation = new Location(new Vector3(value.Pos.X, value.Pos.Y, value.Pos.Z), new Vector3(value.Rot.X, value.Rot.Y, value.Rot.Z));
 
                 if (Vehicle != null && Vehicle.Exists)
                 {
                     AltAsync.Do(() =>
                     {
-                        Vehicle.Position = value.Pos;
-                        Vehicle.Rotation = value.Rot;
+                        Vehicle.Position = LastKnowLocation.Pos;
+                        Vehicle.Rotation = LastKnowLocation.Rot;
                     });
                 }
             }

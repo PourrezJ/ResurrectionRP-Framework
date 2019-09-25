@@ -64,7 +64,7 @@ namespace ResurrectionRP_Server.Factions
             }
 
             RefreshLabel();
-            Colshape = Alt.CreateColShapeCylinder(RackPos, 3, 5);
+            Colshape = Alt.CreateColShapeCylinder(RackPos, 3, 6);
         }
 
         public async Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)
@@ -86,6 +86,9 @@ namespace ResurrectionRP_Server.Factions
                     menu.Add(new MenuItem("Déposer le box", $"Déposer le box sur le rack {RackName}", "ID_OutRack", true));
                 else if (boxOnForks == null && InventoryBox != null)
                     menu.Add(new MenuItem("Prendre le box", $"Prendre le box du rack {RackName}", "ID_TakeRack", true));
+
+                if (client.GetPlayerHandler()?.StaffRank > 0 && InventoryBox != null)
+                    menu.Add(new MenuItem("~r~Retirer le box", $"Retirer le box {RackName}", "ID_Destroy", true));
 
                 await MenuManager.OpenMenu(client, menu);
             }
@@ -123,6 +126,12 @@ namespace ResurrectionRP_Server.Factions
                         //InventoryBox.Obj.IObject.SetSharedData("ID", RackName);
                         vehicle.ResetData("BoxForks");
                     }
+                }
+                else if (menuItem.Id == "ID_Destroy")
+                {
+                    InventoryBox.Destruct();
+                    InventoryBox.Inventory = null;
+                    InventoryBox = null;
                 }
 
                 await GameMode.Instance.FactionManager.Dock.UpdateDatabase();

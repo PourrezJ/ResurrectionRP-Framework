@@ -8,6 +8,14 @@
     <StartupObject />
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Streamer\Data\Object.struct.cs old" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Streamer\Data\Object.struct.cs old" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="AltV.Net" Version="1.15.3-dev-preview" />

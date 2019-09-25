@@ -21,7 +21,7 @@ namespace ResurrectionRP_Server.Entities.Players
 {
     public partial class PlayerHandler
     {
-        public delegate Task KeyPressedDelegate(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicle, IPlayer playerDistant);
+        public delegate Task KeyPressedDelegate(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicle, IPlayer playerDistant, int streamedID);
         public delegate Task KeyReleasedDelegate(IPlayer client, ConsoleKey Keycode);
 
         [BsonIgnore]
@@ -29,7 +29,7 @@ namespace ResurrectionRP_Server.Entities.Players
         [BsonIgnore]
         public KeyReleasedDelegate OnKeyReleased { get; set; }
 
-        private async Task OnKeyPressedCallback(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicleDistant, IPlayer playerDistant)
+        private async Task OnKeyPressedCallback(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicleDistant, IPlayer playerDistant, int streamedID)
         {
             if (!client.Exists)
                 return;
@@ -143,6 +143,19 @@ namespace ResurrectionRP_Server.Entities.Players
                         
                         return;
                     }
+                    else if (raycastData.entityType == 3)
+                    {
+                        if (raycastData.entityHash == 307713837)
+                        {
+                            var rack = GameMode.Instance.FactionManager.Dock.Racks.Find(p => p.InventoryBox.Obj.id == streamedID);
+                            if (rack == null)
+                                return;
+
+                            RPGInventoryMenu rackmenu = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, rack.InventoryBox.Inventory);
+
+                            await rackmenu.OpenMenu(client);
+                        }
+                    }
 
                     if (IsAtm(raycastData.entityHash) && client.Position.Distance(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE)
                     {
@@ -192,10 +205,8 @@ namespace ResurrectionRP_Server.Entities.Players
                         if (!client.Exists)
                             return;
 
-                        if (client.GetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, out object data))
+                        if (client.GetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, out object voiceRange))
                         {
-                            string voiceRange = (string)data;
-
                             switch (voiceRange)
                             {
                                 case "Parler":

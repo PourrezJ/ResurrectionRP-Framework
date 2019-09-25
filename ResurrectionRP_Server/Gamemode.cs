@@ -233,7 +233,7 @@ namespace ResurrectionRP_Server
             await Loader.BusinessesLoader.LoadAllBusinesses();
             await WeatherManager.InitWeather();
             await Society.SocietyManager.LoadAllSociety();
-            await JobsManager.Init();
+            //await JobsManager.Init();
             await PoundManager.LoadPound();
             await FarmManager.InitAll();        
             await HouseManager.LoadAllHouses();

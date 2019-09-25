@@ -83,17 +83,26 @@ export class Interaction {
 
                     let vehicle: alt.Vehicle = null;
                     let player: alt.Player = null;
+                    let objNetId = -1;
 
                     if (raycastResult.isHit && raycastResult.entityType == 1 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
                         player = alt.Player.all.find(p => p.scriptID == raycastResult.hitEntity);
-                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, player);
+                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, player, objNetId);
                     }
                     else if (raycastResult.isHit && raycastResult.entityType == 2 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
                         vehicle = alt.Vehicle.all.find(v => v.scriptID == raycastResult.hitEntity);
-                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), vehicle, null);
+                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), vehicle, null, objNetId);
+                    }
+                    else if (raycastResult.isHit && raycastResult.entityType == 3 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
+                        Streamer.NetworkingEntityClient.EntityList.forEach((item, index) => {
+                            if (item == raycastResult.hitEntity) {
+                                objNetId = index;
+                                alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId);
+                            }          
+                        });
                     }
                     else {
-                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null);
+                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId);
                     }
 
                     if (key == 69 && this.isInColshape()) {

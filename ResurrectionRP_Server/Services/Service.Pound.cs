@@ -192,7 +192,7 @@ namespace ResurrectionRP_Server.Services
 
         public List<VehicleHandler> GetVehicleInPound(IPlayer client)
         {
-            List<ParkedCar> List = PoundVehicleList.FindAll(v => VehiclesManager.GetVehicleHandler(v.Plate).OwnerID == client.GetSocialClub() || client.GetPlayerHandler().HasKey(v.Plate)).ToList();
+            List<ParkedCar> List = PoundVehicleList.FindAll(v => VehiclesManager.GetVehicleHandler(v.Plate)?.OwnerID == client.GetSocialClub() || client.GetPlayerHandler().HasKey(v.Plate)).ToList();
             List<VehicleHandler> endup = new List<VehicleHandler>();
 
             foreach(ParkedCar car in List)

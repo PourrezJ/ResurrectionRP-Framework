@@ -127,7 +127,7 @@ namespace ResurrectionRP_Server
         }
         public static bool HasData( this IVehicle vehicle, string dataName)
         {
-            if (vehicle.GetData(dataName, out string test) && test != null)
+            if (vehicle.GetData(dataName, out string test))
                 return true;
 
             return false;

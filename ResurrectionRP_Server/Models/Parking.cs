@@ -13,6 +13,7 @@ using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Utils;
+using Newtonsoft.Json;
 
 namespace ResurrectionRP_Server.Models
 {
@@ -56,7 +57,20 @@ namespace ResurrectionRP_Server.Models
         public int Price;
         public bool Hidden;
         public string Owner; // Social Club
-        public Vector3 Location;
+
+
+        private Vector3 _location = new Vector3();
+        public Vector3 Location
+        {
+            get => _location;
+            set
+            {
+                //Alt.Log("Location Parking changed " + JsonConvert.SerializeObject(value));
+                _location = value;
+            }
+        }
+
+
         public Location Spawn1;
         public Location Spawn2;
         public int MaxVehicles;

@@ -130,10 +130,10 @@ namespace ResurrectionRP_Server.Entities.Players
             var godMod = new CheckboxItem("God Mode", "", "", isInvincible, true);
             godMod.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                bool invinsible = !isInvincible;
-                await _playerSelected.Client.SetInvincibleAsync(invinsible);
+                isInvincible = !isInvincible;
+                await _playerSelected.Client.SetInvincibleAsync(isInvincible);
 
-                if (invinsible)
+                if (isInvincible)
                 {
                     _playerSelected.Client.SendNotification("~r~[ADMIN]~w~ Vous êtes invincible.");
 
@@ -155,10 +155,10 @@ namespace ResurrectionRP_Server.Entities.Players
             var invisible = new CheckboxItem("Invisible", "", "", isInvisible, true);
             invisible.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                bool hidden = !isInvisible;
-                await _playerSelected.Client.SetInvisibleAsync(hidden);
+                isInvisible = !isInvisible;
+                await _playerSelected.Client.SetInvisibleAsync(isInvisible);
 
-                if (hidden)
+                if (isInvisible)
                 {
                     _playerSelected.Client.SendNotification("~r~[ADMIN]~w~ Vous êtes invisible.");
                     if (_playerSelected != this)

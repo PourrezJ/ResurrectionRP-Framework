@@ -155,11 +155,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                             await rackmenu.OpenMenu(client);
                         }
-
-                        return;
                     }
-
-
 
                     if (IsAtm(raycastData.entityHash) && client.Position.Distance(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE)
                     {

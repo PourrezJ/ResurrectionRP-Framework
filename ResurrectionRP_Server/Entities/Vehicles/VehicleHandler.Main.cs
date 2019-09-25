@@ -163,6 +163,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.EngineHealth = EngineHealth;
                 Vehicle.BodyHealth = BodyHealth;
                 Vehicle.RadioStation = RadioStation;
+                IsInPound = false;
                 IsParked = false;
 
                 if (Wheels == null)

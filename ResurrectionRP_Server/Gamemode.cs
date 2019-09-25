@@ -238,7 +238,7 @@ namespace ResurrectionRP_Server
             await FarmManager.InitAll();        
             await HouseManager.LoadAllHouses();
 
-            DrivingSchoolManager.InitAll();
+           // DrivingSchoolManager.InitAll();
             LifeInvader.Load();
             VoiceController.OnResourceStart();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");

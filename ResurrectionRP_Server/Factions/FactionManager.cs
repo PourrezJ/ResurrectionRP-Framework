@@ -1,11 +1,11 @@
+using AltV.Net;
 using AltV.Net.Elements.Entities;
 using MongoDB.Driver;
 using ResurrectionRP_Server.XMenuManager;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AltV.Net;
-using AltV.Net.Async;
+
 namespace ResurrectionRP_Server.Factions
 {
     public class FactionManager

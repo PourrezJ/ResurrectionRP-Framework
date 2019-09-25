@@ -2,6 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server;
+using ResurrectionRP_Server.Entities.Players;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -102,7 +103,7 @@ namespace SaltyServer
             if (!client.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName))
                 return;
 
-            foreach (IPlayer cl in Alt.GetAllPlayers())
+            foreach (IPlayer cl in PlayerManager.GetPlayersList())
             {
                 if (!cl.Exists)
                     continue;

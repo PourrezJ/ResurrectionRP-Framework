@@ -48,7 +48,7 @@ namespace ResurrectionRP_Server.Factions
         public void Load(bool empty = false)
         {
             if (GameMode.Instance.IsDebug)
-                Entities.Marker.CreateMarker(Entities.MarkerType.VerticalCylinder,RackPos ,new Vector3(1,1,1), Color.FromArgb(80, 255, 255, 255) );
+                Entities.Marker.CreateMarker(Entities.MarkerType.VerticalCylinder,RackPos ,new Vector3(2,2,1), Color.FromArgb(80, 255, 255, 255) );
             if (!empty && InventoryBox != null)
             {
                 InventoryBox.Spawn(); 
@@ -59,7 +59,7 @@ namespace ResurrectionRP_Server.Factions
             }
 
             RefreshLabel();
-            Colshape = Alt.CreateColShapeCylinder(RackPos - new Vector3(0,0,1), 2, 4);
+            Colshape = Alt.CreateColShapeCylinder(RackPos, 3, 5);
         }
 
         public async Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)
@@ -75,9 +75,11 @@ namespace ResurrectionRP_Server.Factions
                 Menu menu = new Menu("ID_Rack", RackName, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
                 menu.ItemSelectCallback = MenuCallBack;
 
-                if (vehicle.HasData("BoxForks"))
+                vehicle.GetData<InventoryBox>("BoxForks", out InventoryBox boxOnForks);
+
+                if (boxOnForks != null && InventoryBox == null)
                     menu.Add(new MenuItem("Déposer le box", $"Déposer le box sur le rack {RackName}", "ID_OutRack", true));
-                else if (!vehicle.HasData("BoxForks") && InventoryBox != null)
+                else if (boxOnForks == null && InventoryBox != null)
                     menu.Add(new MenuItem("Prendre le box", $"Prendre le box du rack {RackName}", "ID_TakeRack", true));
 
                 await MenuManager.OpenMenu(client, menu);
@@ -94,7 +96,7 @@ namespace ResurrectionRP_Server.Factions
                 {
                     InventoryBox.Obj.SetAttachToEntity(vehicle, "forks_attach", new Vector3(), new Vector3()); 
                     vehicle.SetData("BoxForks", InventoryBox);
-                    //InventoryBox = null;
+                    InventoryBox = null;
                     //client.DisplayHelp("Transport d'une box", 60000);
                 }
                 else if (menuItem.Id == "ID_OutRack")
@@ -107,7 +109,10 @@ namespace ResurrectionRP_Server.Factions
                             return;
 
                         //await ObjectHandlerManager.Detach(inventoryBox.Obj.IObject); TODO ajouter object handler
+
+                        inventoryBox.Obj.Destroy();
                         inventoryBox.Location = new Location(new Vector3(this.BoxLocation.Pos.X, this.BoxLocation.Pos.Y, this.BoxLocation.Pos.Z - 1), this.BoxLocation.Rot);
+                        inventoryBox.Spawn();
                         InventoryBox = inventoryBox;
                         inventoryBox.ID = this.RackName;
                         //InventoryBox.Obj.IObject.SetSharedData("ID", RackName);

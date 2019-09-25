@@ -9,13 +9,14 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Async;
 using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Utils;
+using System.Linq;
 
 namespace ResurrectionRP_Server.Factions
 {
-
     public partial class Gouv : Faction
     {
-/*        public virtual async Task OpenSecretaireMenu(IPlayer client) TODO
+        public virtual async Task OpenSecretaryMenu(IPlayer client)
         {
             if (client == null || !client.Exists)
                 return;
@@ -32,16 +33,16 @@ namespace ResurrectionRP_Server.Factions
             }
             else
             {
-                await client.DisplayHelp("La secrétaire vous ignore, elle ne vous connait pas !", 10000);
+                client.DisplayHelp("La secrétaire vous ignore, elle ne vous connait pas !", 10000);
             }
 
-        }*/
-/*
+        }
+
         private async Task SecretaireMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
-                await OpenSecretaireMenu(client);
+                await OpenSecretaryMenu(client);
                 return;
             }
 
@@ -50,7 +51,7 @@ namespace ResurrectionRP_Server.Factions
                 menu = new Menu("ID_Businesses", "Comptabilité", "Consulter la comptabilité d'une entreprise", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR);
                 menu.ItemSelectCallback = SecretaireMenuCallback;
 
-                foreach (Society market in GameMode.Instance.SocietyManager.SocietyList)
+                foreach (Society.Society market in GameMode.Instance.SocietyManager.SocietyList)
                 {
                     var item = new MenuItem(market.SocietyName, "", "ID_BusinessSelect", executeCallback: true);
                     item.SetData("Society", market);
@@ -63,21 +64,22 @@ namespace ResurrectionRP_Server.Factions
             {
                 if (menuItem.GetData("Society") == null)
                 {
-                    await client.DisplayHelp("Problème, faction non trouvée", 10000);
+                    client.DisplayHelp("Problème, faction non trouvée", 10000);
                     return;
                 }
 
-                Society Society = menuItem.GetData("Society");
+                Society.Society Society = menuItem.GetData("Society");
 
                 if (Society == null)
                     return;
 
-                client.Call("Display_Help", "Votre relevé sera disponible dans quelques instants sur votre tablette!", 5000);
+                client.DisplayHelp("Votre relevé sera disponible dans quelques instants sur votre tablette!", 5000);
                 await menu.CloseMenu(client);
 
-                List<BankAccountHistory> history = Society.BankAccount.History;
                 String contentData = "HISTORIQUE BANCAIRE DU " + DateTime.Now.AddYears(20) + " POUR LA SOCIETE " + Society.SocietyName;
 
+                List<BankAccountHistory> history = new List<BankAccountHistory>(Society.BankAccount.History);
+                history = history.OrderByDescending(h => h.Date).ToList();
                 foreach (BankAccountHistory fisc in history)
                     contentData += $"\n[{fisc.Date}] [${fisc.Amount}] {fisc.Text}";
 
@@ -98,25 +100,25 @@ namespace ResurrectionRP_Server.Factions
                     }
                     catch (Exception ex)
                     {
-                        await client.SendNotificationError("Ce service est actuellement indisponible, veuillez réeesayer ultérieurement");
-                        MP.Logger.Error("SecretaireMenuCallback", ex);
+                        client.SendNotificationError("Ce service est actuellement indisponible, veuillez réeesayer ultérieurement");
+                        Alt.Server.LogError("SecretaireMenuCallback: " + ex);
                         return;
                     }
 
-                    WebClient.UploadValuesCompleted += async (sender, args) => {
+                    WebClient.UploadValuesCompleted += (sender, args) => {
                         try
                         {
                             pastebinLink = Encoding.ASCII.GetString(args.Result);
-                            await client.SendSubTitle($"Dossier disponible: {pastebinLink}", 30000);
+                            client.DisplaySubtitle($"Dossier disponible: {pastebinLink}", 30000);
                         }
                         catch (Exception ex)
                         {
-                            await client.SendNotificationError("Ce service est actuellement indisponible, veuillez réeesayer ultérieurement");
-                            MP.Logger.Error("SecretaireMenuCallback", ex);
+                            client.SendNotificationError("Ce service est actuellement indisponible, veuillez réeesayer ultérieurement");
+                            Alt.Server.LogError("SecretaireMenuCallback: " + ex);
                         }
                     };
                 }
             }
-        }*/
+        }
     }
 }

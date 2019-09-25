@@ -129,6 +129,10 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
+                    Door door = GameMode.Instance.DoorManager.DoorList.Find(p => p.Position.DistanceTo2D(raycastData.pos) <= 1 && p.Hash == raycastData.entityHash && raycastData.isHit);
+                    if (door != null)
+                        await door.Interact?.Invoke(client, door);
+
                     if (raycastData.entityType == 1)
                     {
                         var ped = Peds.PedsManager.NPCList.Find(p => p.Position.DistanceTo(raycastData.pos) <= 1.5 && p.Model == (AltV.Net.Enums.PedModel)raycastData.entityHash);
@@ -183,10 +187,6 @@ namespace ResurrectionRP_Server.Entities.Players
                         await Business.Market.OpenGasPumpMenu(client);
                         return;
                     }
-
-                    Door door = GameMode.Instance.DoorManager.DoorList.Find(p => p.Position.DistanceTo2D(raycastData.pos) <= 1 && p.Hash == raycastData.entityHash && raycastData.isHit);
-                    if (door != null)
-                        await door.Interact?.Invoke(client, door);
 
                     break;
 

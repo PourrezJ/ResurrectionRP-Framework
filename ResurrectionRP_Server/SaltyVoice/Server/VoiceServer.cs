@@ -36,9 +36,9 @@ namespace SaltyServer
             Voice.IngameChannel = Config.GetSetting<string>("IngameChannel");
             Voice.IngameChannelPassword = Config.GetSetting<string>("IngameChannelPassword");
 
-            AltAsync.OnClient(SaltyShared.Event.Voice_RejectedVersion, OnRejectedVersion);
-            AltAsync.OnClient(SaltyShared.Event.Voice_IsTalking, OnPlayerTalking);
-            AltAsync.OnClient(SaltyShared.Event.Voice_TalkingOnRadio, OnPlayerTalkingOnRadio);
+            Alt.OnClient(SaltyShared.Event.Voice_RejectedVersion, OnRejectedVersion);
+            Alt.OnClient(SaltyShared.Event.Voice_TalkingOnRadio, OnPlayerTalkingOnRadio);
+            Alt.OnClient(SaltyShared.Event.Voice_IsTalking, OnPlayerTalking);
         }
 
         public Task OnPlayerConnected(IPlayer client, string name)
@@ -75,7 +75,7 @@ namespace SaltyServer
             }
         }
 
-        private async Task OnRejectedVersion(IPlayer client, object[] args)
+        private void OnRejectedVersion(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -91,39 +91,33 @@ namespace SaltyServer
             else
                 client.SendNotification($"[Salty Chat] Required version: {Voice.MinimumPluginVersion} | Your version: {version}");
 
-            await client.KickAsync("SaltyChat version");
+            client.Kick("SaltyChat version");
         }
 
-        public async Task OnPlayerTalking(IPlayer client, object[] args)
-        {
-            // #warning There seems to be an issue where the "client"-object is not correctly referenced on the client, remove workaround if the issue is resolved
-
-            await AltAsync.Do(() =>
-            {
-                if (!client.Exists)
-                    return;
-
-                if (!client.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName))
-                    return;
-
-                foreach (IPlayer cl in Alt.GetAllPlayers())
-                {
-                    if (!cl.Exists)
-                        continue;
-                    cl.EmitLocked(SaltyShared.Event.Voice_IsTalking, tsName, (bool)args[0]);
-                }
-            });
-        }
-
-        public Task OnPlayerTalkingOnRadio(IPlayer client, object[] args)
+        public void OnPlayerTalking(IPlayer client, object[] args)
         {
             if (!client.Exists)
-                return Task.CompletedTask;
+                return;
+
+            if (!client.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName))
+                return;
+
+            foreach (IPlayer cl in Alt.GetAllPlayers())
+            {
+                if (!cl.Exists)
+                    continue;
+                cl.Emit(SaltyShared.Event.Voice_IsTalking, tsName, (bool)args[0]);
+            }
+        }
+
+        public void OnPlayerTalkingOnRadio(IPlayer client, object[] args)
+        {
+            if (!client.Exists)
+                return;
 
             string radioChannel = args[0].ToString();
             bool isSending = (bool)args[1];
             Voice.SetPlayerSendingOnRadioChannel(client, radioChannel, isSending);
-            return Task.CompletedTask;
         }
 
         public void OnSetRadioChannel(IPlayer client, string radioChannel)

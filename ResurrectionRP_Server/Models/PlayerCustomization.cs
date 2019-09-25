@@ -92,14 +92,10 @@ namespace ResurrectionRP_Server.Models
                 player.EmitLocked("HeadVariation", Parents.ShapeFirst, Parents.ShapeSecond, Parents.ShapeThird, Parents.SkinFirst, Parents.SkinSecond, Parents.SkinThird, Parents.ShapeMix, Parents.SkinMix, Parents.ThirdMix);
 
                 for (int i = 0; i < Features.Length; i++)
-                {
                     player.EmitLocked("FaceFeatureVariation", i, Features[i]);
-                }
 
                 for (int i = 0; i < Appearance.Length; i++)
-                {
                     player.EmitLocked("HeadOverlayVariation", Appearance[i].Index, Appearance[i].Opacity, Appearance[i].Color, Appearance[i].SecondaryColor, i);
-                }
 
                 foreach (Decoration decoration in Decorations)
                     player.EmitLocked("DecorationVariation", decoration.Collection, decoration.Overlay);

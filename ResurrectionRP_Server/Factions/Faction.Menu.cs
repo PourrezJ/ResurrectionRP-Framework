@@ -22,7 +22,6 @@ namespace ResurrectionRP_Server.Factions
         private string _factionName;
         #endregion
 
-        #region Menus
         #region TargetMenu
         public XMenu AddFactionTargetMenu(IPlayer client, IPlayer target, XMenu xMenu, XMenuItemIconDesc icon)
         {
@@ -175,6 +174,17 @@ namespace ResurrectionRP_Server.Factions
             client.SendNotificationSuccess($"Vous avez promu {_target.GetPlayerHandler().Identite.Name} au rang de {FactionRang[itemIndex - 1].RangName}");
             await UpdateDatabase();
         }
+
+        private async Task Dismiss(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex)
+        {
+            IPlayer target = menu.GetData("Target");
+            if (target != null)
+            {
+                this.FactionPlayerList.Remove(target.GetSocialClub(), out FactionPlayer value);
+                target.SendNotification($"Vous avez été congédié de {FactionName}.");
+                await UpdateDatabase();
+            }
+        }
         #endregion
 
         #region VehicleMenu
@@ -213,6 +223,7 @@ namespace ResurrectionRP_Server.Factions
         }
         #endregion
 
+        #region Service
         public virtual async Task<Menu> PriseServiceMenu(IPlayer client)
         {
             if (HasPlayerIntoFaction(client))
@@ -267,6 +278,75 @@ namespace ResurrectionRP_Server.Factions
             return null;
         }
 
+        private async Task ServiceMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        {
+            if (menuItem == null)
+            {
+                await PriseServiceMenu(client);
+                return;
+            }
+
+            await PriseService(client);
+        }
+
+        private async Task OpenVestiaire(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        {
+            await menu.CloseMenu(client);
+
+            var _player = client.GetPlayerHandler();
+
+            if (_player == null)
+                return;
+
+            var invmenu = new RPGInventoryMenu(_player.PocketInventory, _player.OutfitInventory, _player.BagInventory, FactionPlayerList[client.GetSocialClub()].Inventory);
+            invmenu.OnMove += async (p, m) =>
+            {
+                _player.UpdateFull();
+                await UpdateDatabase();
+            };
+            invmenu.PriceChange += async (p, m, stack, stackprice) =>
+            {
+                client.SendNotification($"Le nouveau prix de {stack.Item.name} est de ${stackprice} ");
+                _player.UpdateFull();
+                await UpdateDatabase();
+            };
+            await invmenu.OpenMenu(client);
+        }
+
+        // Depot d'argent dans la caisse.
+        private async Task DepotMoneyMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        {
+            if (double.TryParse(menuItem.InputValue, out double result))
+            {
+                var ph = client.GetPlayerHandler();
+
+                if (ph == null)
+                    return;
+
+                if (result < 0)
+                    return;
+
+                if (ph.HasMoney(result))
+                {
+                    await BankAccount.AddMoney(result, $"Ajout d'argents par {ph.Identite.Name}");
+                    ph.UpdateFull();
+                    client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
+                }
+                else
+                    client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
+            }
+
+            await PriseServiceMenu(client);
+        }
+
+        // Récupérer l'argent dans la caisse.
+        private async Task FinanceMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        {
+            await Bank.BankMenu.OpenBankMenu(client, BankAccount, Bank.AtmType.Faction, menu, ServiceMenuCallBack);
+        }
+        #endregion
+
+        #region Members
         private async Task GestionMember(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             menu.ClearItems();
@@ -386,61 +466,9 @@ namespace ResurrectionRP_Server.Factions
                 }
             }
         }
+        #endregion
 
-        private async Task OpenVestiaire(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            await menu.CloseMenu(client);
-
-            var _player = client.GetPlayerHandler();
-
-            if (_player == null)
-                return;
-
-            var invmenu = new RPGInventoryMenu(_player.PocketInventory, _player.OutfitInventory, _player.BagInventory, FactionPlayerList[client.GetSocialClub()].Inventory);
-            invmenu.OnMove += async (p, m) =>
-            {
-                _player.UpdateFull();
-                await UpdateDatabase();
-            };
-            invmenu.PriceChange += async (p, m, stack, stackprice) =>
-            {
-                client.SendNotification($"Le nouveau prix de {stack.Item.name} est de ${stackprice} ");
-                _player.UpdateFull();
-                await UpdateDatabase();
-            };
-            await invmenu.OpenMenu(client);
-        }
-
-        // Depot d'argent dans la caisse.
-        private async Task DepotMoneyMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            if (double.TryParse(menuItem.InputValue, out double result))
-            {
-                var ph = client.GetPlayerHandler();
-
-                if (ph == null)
-                    return;
-
-                if (result < 0) return;
-                if (ph.HasMoney(result))
-                {
-                    await BankAccount.AddMoney(result, $"Ajout d'argents par {ph.Identite.Name}");
-                    ph.UpdateFull();
-                    client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
-                }
-                else
-                    client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
-            }
-
-            await PriseServiceMenu(client);
-        }
-
-        // Récupérer l'argent dans la caisse.
-        private async Task FinanceMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            await Bank.BankMenu.OpenBankMenu(client, BankAccount, Bank.AtmType.Faction, menu, ServiceMenuCallBack);
-        }
-
+        #region Shop
         public virtual async Task<Menu> OpenShopMenu(IPlayer client)
         {
             if (HasPlayerIntoFaction(client))
@@ -463,15 +491,52 @@ namespace ResurrectionRP_Server.Factions
             return null;
         }
 
+        private async Task ShopMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        {
+            FactionShop item = menuItem.GetData("Item");
+            PlayerHandler ph = client.GetPlayerHandler();
+
+            if (item == null || ph == null)
+                return;
+
+            if (await BankAccount.GetBankMoney(item.Price, $"Achat de {item.Item.name} par {ph.Identite.Name}"))
+            {
+                try
+                {
+                    if (item.Item.type == "weapons")
+                        item.Item.isStackable = false;
+
+                    if (await ph.AddItem(item.Item, 1))
+                    {
+                        client.SendNotificationSuccess($"Vous avez pris un(e) {item.Item.name}");
+                    }
+                    else
+                    {
+                        client.SendNotificationError($"Vous n'avez pas la place pour un(e) {item.Item.name}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Alt.Server.LogError("ShopMenuCallBack " + ex);
+                    client.SendNotificationError($"Une erreur s'est produite avec l'item: {item.Item.name}");
+                }
+            }
+            else
+                client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
+        }
+        #endregion
+
+        #region Parking
         public virtual async Task<Menu> OpenConcessMenu(IPlayer client, ConcessType type, Location location, string factionName)
         {
-            if (!HasPlayerIntoFaction(client))
+            if (client == null || !client.Exists)
+                return null;
+            else if (!HasPlayerIntoFaction(client))
             {
                 client.SendNotificationError("Vous n'êtes pas autorisé à utiliser ce parking!");
                 return null;
             }
-
-            if (GetVehicleAllowed(GetRangPlayer(client)) == null)
+            else if (GetVehicleAllowed(GetRangPlayer(client)) == null)
             {
                 client.SendNotificationError("Aucun véhicule d'autorisé");
                 return null;
@@ -501,64 +566,6 @@ namespace ResurrectionRP_Server.Factions
             await menu.OpenMenu(client);
 
             return menu;
-        }
-        #endregion
-
-        #region MenuCallBack
-        private async Task Dismiss(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex)
-        {
-            IPlayer target = menu.GetData("Target");
-            if (target != null)
-            {
-                this.FactionPlayerList.Remove( target.GetSocialClub(), out FactionPlayer value);
-                target.SendNotification($"Vous avez été congédié de {FactionName}.");
-                await UpdateDatabase();
-            }
-        }
-
-        private async Task ServiceMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            if (menuItem == null)
-            {
-                await PriseServiceMenu(client);
-                return;
-            }
-
-            await PriseService(client);
-        }
-
-        private async Task ShopMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            FactionShop item = menuItem.GetData("Item");
-            PlayerHandler ph =  client.GetPlayerHandler();
-
-            if (item == null || ph == null)
-                return;
-
-            if (await BankAccount.GetBankMoney(item.Price, $"Achat de {item.Item.name} par {ph.Identite.Name}"))
-            {
-                try
-                {
-                    if (item.Item.type == "weapons")
-                        item.Item.isStackable = false;
-
-                    if (await ph.AddItem(item.Item, 1))
-                    {
-                        client.SendNotificationSuccess($"Vous avez pris un(e) {item.Item.name}");
-                    }
-                    else
-                    {
-                        client.SendNotificationError($"Vous n'avez pas la place pour un(e) {item.Item.name}");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Alt.Server.LogError("ShopMenuCallBack " + ex);
-                    client.SendNotificationError($"Une erreur s'est produite avec l'item: {item.Item.name}");
-                }
-            }
-            else
-                client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
         }
 
         private async Task ConcessCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)

@@ -12,9 +12,10 @@ namespace ResurrectionRP_Server.Society
 {
     public partial class Society
     {
+        #region Parking menu
         public virtual async Task OpenParkingMenu(IPlayer client)
         {
-            if (Parking != null)
+            if (Parking != null && client != null)
             {
                 if (IsEmployee(client) || Owner == client.GetSocialClub())
                     await Parking.OpenParkingMenu(client);
@@ -22,11 +23,13 @@ namespace ResurrectionRP_Server.Society
                     client.SendNotificationError("Vous ne faites pas partie des employés de cette entreprise.");
             }
         }
+        #endregion
 
-        public virtual async Task<Menu> OpenServerJobMenu(IPlayer client)
+        #region Society menu
+        public virtual async Task<Menu> OpenSocietyMainMenu(IPlayer client)
         {
             Menu menu = new Menu("ID_SocietyMainMenu", SocietyName, "Administration de la société", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
-            menu.ItemSelectCallback += SocietyCallBackMenu;
+            menu.ItemSelectCallback += SocietyMainMenuCallback;
 
             if (Owner != null && (client.GetPlayerHandler().StaffRank >= AdminRank.Moderator || FactionManager.IsGouv(client)))
             {
@@ -52,7 +55,7 @@ namespace ResurrectionRP_Server.Society
 
             if (Owner == client.GetSocialClub() || IsEmployee(client))
             {
-                if (InService.Contains(client.GetSocialClub()))
+                if (InService.ContainsKey(client.GetSocialClub()))
                     menu.Add(new MenuItem("Quitter votre service", "", "qservice", executeCallback: true));
                 else
                     menu.Add(new MenuItem("Prendre votre service", "", "pservice", executeCallback: true));
@@ -108,43 +111,7 @@ namespace ResurrectionRP_Server.Society
             return menu;
         }
 
-        // Depot d'argent dans la caisse.
-        private async Task DepotMoneyMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            if (double.TryParse(menuItem.InputValue, out double result))
-            {
-                var ph = client.GetPlayerHandler();
-
-                if (ph == null)
-                    return;
-
-                if (result < 0)
-                    return;
-
-                if (ph.HasMoney(result))
-                {
-                    await BankAccount.AddMoney(result, $"Ajout d'argent par {ph.Identite.Name}");
-                    ph.UpdateFull();
-                    client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
-                }
-                else
-                    client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
-            }
-        }
-
-        // Récupérer l'argent dans la caisse.
-        private async Task FinanceMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            if (menuItem == null)
-            {
-                await OpenServerJobMenu(client);
-                return;
-            }
-
-            menu = await BankMenu.OpenBankMenu(client, BankAccount, AtmType.Faction, menu, FinanceMenu);
-        }
-
-        private async Task SocietyCallBackMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private async Task SocietyMainMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             PlayerHandler ph = client.GetPlayerHandler();
 
@@ -199,7 +166,7 @@ namespace ResurrectionRP_Server.Society
                             Owner = socialClub;
                             await Update();
                             client.SendNotificationSuccess("Propriétaire changé");
-                            await OpenServerJobMenu(client);
+                            await OpenSocietyMainMenu(client);
                         }
                     }
                     break;
@@ -263,6 +230,44 @@ namespace ResurrectionRP_Server.Society
             }
         }
 
+        // Depot d'argent dans la caisse.
+        private async Task DepotMoneyMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        {
+            if (double.TryParse(menuItem.InputValue, out double result))
+            {
+                var ph = client.GetPlayerHandler();
+
+                if (ph == null)
+                    return;
+
+                if (result < 0)
+                    return;
+
+                if (ph.HasMoney(result))
+                {
+                    await BankAccount.AddMoney(result, $"Ajout d'argent par {ph.Identite.Name}");
+                    ph.UpdateFull();
+                    client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
+                }
+                else
+                    client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
+            }
+        }
+
+        // Récupérer l'argent dans la caisse.
+        private async Task FinanceMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        {
+            if (menuItem == null)
+            {
+                await OpenSocietyMainMenu(client);
+                return;
+            }
+
+            menu = await BankMenu.OpenBankMenu(client, BankAccount, AtmType.Faction, menu, FinanceMenu);
+        }
+        #endregion
+
+        #region Employees
         public virtual async Task GestionEmployee(IPlayer client, Menu menu)
         {
             menu.Reset();
@@ -292,7 +297,7 @@ namespace ResurrectionRP_Server.Society
         {
             if (menuItem == null)
             {
-                await OpenServerJobMenu(client);
+                await OpenSocietyMainMenu(client);
                 return;
             }
 
@@ -317,8 +322,8 @@ namespace ResurrectionRP_Server.Society
 
                     if (ph != null)
                     {
-                        Employees.Add(ph.PID, ph.Identite.Name);
-                        client.SendNotificationSuccess($"{_msg} est ajouté à la liste des employés");
+                        Employees.TryAdd(ph.PID, ph.Identite.Name);
+                        client.SendNotificationSuccess($"{_msg} a été ajouté à la liste des employés");
                         await Update();
                     }
                     else
@@ -337,10 +342,10 @@ namespace ResurrectionRP_Server.Society
 
                     if (ph != null && ph.Identite.Name == menuItem.Text)
                     {
-                        if (InService.Contains(playerID.Key))
+                        if (InService.ContainsKey(playerID.Key))
                             await QuitterService(ph.Client);
 
-                        Employees.Remove(ph.PID);
+                        Employees.TryRemove(ph.PID, out _);
                         await Update();
                         client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
                         await GestionEmployee(client, menu);
@@ -348,7 +353,7 @@ namespace ResurrectionRP_Server.Society
                     }
                     else if ((await Identite.GetOfflineIdentite(playerID.Key)).Name == menuItem.Text)
                     {
-                        Employees.Remove(ph.PID);
+                        Employees.TryRemove(ph.PID, out _);
                         await Update();
                         client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
                         await GestionEmployee(client, menu);
@@ -357,5 +362,6 @@ namespace ResurrectionRP_Server.Society
                 }
             }
         }
+        #endregion
     }
 }

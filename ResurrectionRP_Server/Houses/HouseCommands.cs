@@ -44,7 +44,7 @@ namespace ResurrectionRP_Server.Houses
                 await new_house.InsertHouse();
                 HouseManager.Houses.Add(new_house);
                 player.SendNotificationSuccess("Maison ajouter.");
-                new_house.Load();
+                new_house.Init();
             }
             catch (Exception ex)
             {

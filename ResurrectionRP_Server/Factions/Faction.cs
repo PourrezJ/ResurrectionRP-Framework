@@ -21,7 +21,7 @@ namespace ResurrectionRP_Server.Factions
 {
     public partial class Faction
     {
-        #region Variables
+        #region Fields and properties
         [BsonId]
         public string FactionName;
 
@@ -86,15 +86,12 @@ namespace ResurrectionRP_Server.Factions
             set => _vehicleAllowed = value;
         }
 
-        #region Persistent Variables
         public Parking Parking;
 
         public ConcurrentDictionary<string, FactionPlayer> FactionPlayerList
             = new ConcurrentDictionary<string, FactionPlayer>(); // all players into faction
 
         public BankAccount BankAccount { get; set; }
-
-        #endregion
         #endregion
 
         #region Constructor
@@ -112,10 +109,10 @@ namespace ResurrectionRP_Server.Factions
         }
         #endregion
 
-        #region Start
-        public virtual Task<Faction> OnFactionInit()
+        #region Init
+        public virtual Faction Init()
         {
-            if (ServiceLocation != null && ServiceLocation != Vector3.Zero)
+            if (ServiceLocation != Vector3.Zero)
             {
                 Vestiaire_colShape = Alt.CreateColShapeCylinder(ServiceLocation - new Vector3(0, 0, 1), 1.0f, 1f);
                 Vestiaire_colShape.SetOnPlayerEnterColShape(OnPlayerEnterVestiaire);
@@ -128,17 +125,14 @@ namespace ResurrectionRP_Server.Factions
                 if (Parking == null)
                     Parking = new Parking(ParkingLocation.Pos, ParkingLocation);
 
-                Parking_colShape = Alt.CreateColShapeCylinder(ParkingLocation.Pos - new Vector3(0, 0, 1), 3.0f, 3f);
-                Parking_colShape.SetOnPlayerEnterColShape(OnPlayerEnterParking);
-                Parking_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveParking);
-                Marker.CreateMarker(MarkerType.VerticalCylinder, ParkingLocation.Pos - new Vector3(0, 0, 1), new Vector3(2, 2, 2));
-
-                Parking.OnVehicleStored += OnVehicleStore;
-                Parking.OnVehicleOut += OnVehicleOut;
-                Parking.ParkingType = ParkingType.Faction;
-                Parking.MaxVehicles = 5;
                 Parking.Spawn1 = ParkingLocation;
                 Parking.Spawn1.Rot = Parking.Spawn1.Rot.ConvertRotationToRadian();
+                Parking.Init();
+                Parking.ParkingType = ParkingType.Faction;
+                Parking.OnPlayerEnterParking += OnPlayerEnterParking;
+                Parking.OnVehicleEnterParking += OnVehicleEnterParking;
+                Parking.OnVehicleStored += OnVehicleStore;
+                Parking.OnVehicleOut += OnVehicleOut;
             }
 
             if (HeliportLocation != null)
@@ -150,6 +144,7 @@ namespace ResurrectionRP_Server.Factions
                 Heliport_colShape.SetOnPlayerEnterColShape(OnPlayerEnterHeliport);
                 Heliport_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveHeliport);
                 Marker.CreateMarker(MarkerType.VerticalCylinder, HeliportLocation.Pos - new Vector3(0, 0, 3), new Vector3(3, 3, 3));
+                GameMode.Instance.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", HeliportLocation.Pos, 4);
             }
 
             if (ShopLocation != null && ShopLocation != Vector3.Zero)
@@ -158,6 +153,7 @@ namespace ResurrectionRP_Server.Factions
                 Shop_colShape.SetOnPlayerEnterColShape(OnPlayerEnterShop);
                 Shop_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveShop);
                 Marker.CreateMarker(MarkerType.VerticalCylinder, ShopLocation - new Vector3(0, 0, 0), new Vector3(1, 1, 1));
+                GameMode.Instance.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", ShopLocation, 4);
             }
 
             if (BlipPosition != Vector3.Zero)
@@ -169,9 +165,11 @@ namespace ResurrectionRP_Server.Factions
             if (!string.IsNullOrEmpty(FactionName))
                 Alt.Server.LogInfo(FactionName + " is started.");
 
-            return Task.FromResult(this);
+            return this;
         }
+        #endregion
 
+        #region Event handlers
         public virtual async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
         {
             client.SetPlayerIntoVehicle(vehicle.Vehicle);
@@ -183,9 +181,7 @@ namespace ResurrectionRP_Server.Factions
             vehicle.ParkingName = FactionName;
             await UpdateDatabase();
         }
-        #endregion
 
-        #region Event
         public async Task OnPlayerEnterVestiaire(IColShape colShape, IPlayer client)
         {
             await PriseServiceMenu(client);
@@ -218,20 +214,14 @@ namespace ResurrectionRP_Server.Factions
                 await MenuManager.CloseMenu(client);
         }
 
-        public async Task OnPlayerEnterParking(IColShape colShape, IPlayer client)
+        public async Task OnPlayerEnterParking(PlayerHandler player, Parking parking)
         {
-            await OpenConcessMenu(client, ConcessType.Vehicle, ParkingLocation, FactionName);
+            await OpenConcessMenu(player?.Client, ConcessType.Vehicle, ParkingLocation, FactionName);
         }
 
-        public async Task OnPlayerLeaveParking(IColShape colShape, IPlayer client)
+        public async Task OnVehicleEnterParking(VehicleHandler vehicle, Parking parking)
         {
-            PlayerHandler player = client.GetPlayerHandler();
-
-            if (player == null)
-                return;
-
-            if (player.HasOpenMenu())
-                await MenuManager.CloseMenu(client);
+            await OpenConcessMenu(vehicle?.Vehicle?.Driver, ConcessType.Vehicle, ParkingLocation, FactionName);
         }
 
         public async Task OnPlayerEnterHeliport(IColShape colShape, IPlayer client)
@@ -293,7 +283,9 @@ namespace ResurrectionRP_Server.Factions
         {
             return Task.CompletedTask;
         }
+        #endregion
 
+        #region Methods
         public virtual async Task PayCheck()
         {
             foreach (string socialClub in ServicePlayerList.ToList())
@@ -302,7 +294,7 @@ namespace ResurrectionRP_Server.Factions
 
                 if (ph != null && FactionPlayerList.ContainsKey(socialClub) && DateTime.Now >= FactionPlayerList[socialClub].LastPayCheck)
                 {
-                    double salaire = FactionRang[ GetRangPlayer(ph.Client)].Salaire;
+                    double salaire = FactionRang[GetRangPlayer(ph.Client)].Salaire;
 
                     if (salaire == 0)
                         return;
@@ -318,9 +310,7 @@ namespace ResurrectionRP_Server.Factions
                 }
             }
         }
-        #endregion
 
-        #region Method
         public virtual async Task<bool> TryAddIntoFaction(IPlayer client, int rang = 1)
         {
             bool add = FactionPlayerList.TryAdd(client.GetSocialClub(), new FactionPlayer(client.GetSocialClub(), rang));
@@ -414,7 +404,9 @@ namespace ResurrectionRP_Server.Factions
         }
 
         public bool CanDepositMoney(IPlayer client) => FactionRang[GetRangPlayer(client)].CanDepositMoney;
+
         public bool CanTakeMoney(IPlayer client) => FactionRang[GetRangPlayer(client)].CanTakeMoney;
+
         public bool IsRecruteur(IPlayer client) => FactionRang[GetRangPlayer(client)].Recrute;
 
         public void SetRangPlayer(IPlayer client, int rang)

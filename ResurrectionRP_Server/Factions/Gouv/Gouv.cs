@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Numerics;
-using ResurrectionRP_Server.Entities.Blips;
-using System.Text;
-using AltV.Net;
+﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
-using AltV.Net.Async;
+using AltV.Net.Enums;
+using ResurrectionRP_Server.Entities.Blips;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Factions.Model;
 using ResurrectionRP_Server.Utils;
@@ -17,38 +12,53 @@ using ResurrectionRP_Server.Inventory;
 using ResurrectionRP_Server.Models.InventoryData;
 using ResurrectionRP_Server.XMenuManager;
 using ResurrectionRP_Server.Entities.Vehicles;
-using AltV.Net.Enums;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Numerics;
 
 namespace ResurrectionRP_Server.Factions
 {
 
     public partial class Gouv : Faction
     {
-        private List<Utils.Door> Doors;
-        private Teleport.Teleport Teleport;
-        private IColShape Portail1;
-        private IColShape Portail2;
-        private IColShape BoatColShape;
+        #region Private fields
+        private List<Door> _doors;
+        private Teleport.Teleport _teleport;
+        // private IColShape _portail1;
+        // private IColShape _portail2;
+        private IColShape _boatColShape;
+        private Ped _secretaire;
+        #endregion
 
+        #region Public properties
         public Door PortChancelierA { get; private set; }
+
         public Door PortChancelierB { get; private set; }
+
         public Door PortDevantA { get; private set; }
+
         public Door PortDevantB { get; private set; }
+
         public Door PortDerriereA { get; private set; }
+
         public Door PortDerriereB { get; private set; }
+
         public Door PortailA { get; private set; }
+
         public Door PortailB { get; private set; }
 
-        private Ped Secretaire;
+        public Inventory.Inventory BoatInventory { get; private set; }
+        #endregion
 
-        public Inventory.Inventory BoatInventory;
-
+        #region Constructor
         public Gouv(string FactionName, FactionType FactionType) : base(FactionName, FactionType)
         {
             BankAccount = new Bank.BankAccount(Bank.AccountType.Faction, "Gouvernement", 500000000);
         }
+        #endregion
 
-        public override async Task<Faction> OnFactionInit()
+        #region Init
+        public override Faction Init()
         {
 
             ParkingLocation = new Location(new Vector3(-580.5234f, -170.6517f, 37.02826f), new Vector3(-1.193955f, 0.651089f, 295.0412f));
@@ -84,7 +94,7 @@ namespace ResurrectionRP_Server.Factions
             PortailA = Door.CreateDoor(3945237283, new Vector3(-123.8705f, 899.3705f, 235.792f), true);
             PortailB = Door.CreateDoor(2376486946, new Vector3(-125.1007f, 902.032f, 235.7901f), true);
 
-            Doors = new List<Door>()
+            _doors = new List<Door>()
             {
                 PortChancelierA,
                 PortChancelierB,
@@ -95,11 +105,11 @@ namespace ResurrectionRP_Server.Factions
                 PortDerriereA,
                 PortDerriereB
             };
-            foreach (var door in Doors)
+            foreach (var door in _doors)
                 door.Interact = OpenCelluleDoor;
 
-            Secretaire = Ped.CreateNPC(PedModel.Bevhills03AFY, new Vector3(-550.1015f, -190.1574f, 38.22381f), 192.4752f);
-            Secretaire.NpcInteractCallBack = OnNPCInteract;
+            _secretaire = Ped.CreateNPC(PedModel.Bevhills03AFY, new Vector3(-550.1015f, -190.1574f, 38.22381f), 192.4752f);
+            _secretaire.NpcInteractCallBack = OnNPCInteract;
 
             Ped npcsecuoutside = Ped.CreateNPC(PedModel.ChemSec01SMM, new Vector3(-519.5601f, -257.3863f, 35.76096f), 299.4756f);
 
@@ -122,15 +132,16 @@ namespace ResurrectionRP_Server.Factions
             ItemShop.Add(new FactionShop(new HandCuff(ItemID.Handcuff, "Menottes", "Une paire de menottes", 0.1, true, false), 500, 0));
             ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Combat MG MK2", "", 26, hash: WeaponHash.CombatMgMk2), 40000, 2));
 
-            BoatColShape = Alt.CreateColShapeCylinder(new Vector3(-2095.39f, -1014.713f, 8.980465f), 4f, 4f);
+            _boatColShape = Alt.CreateColShapeCylinder(new Vector3(-2095.39f, -1014.713f, 8.980465f), 4f, 4f);
 
             if (BoatInventory == null)
                 BoatInventory = new Inventory.Inventory(500, 40);
 
-
-            return await base.OnFactionInit();
+            return base.Init();
         }
+        #endregion
 
+        #region Event handlers
         public override XMenu InteractPlayerMenu(IPlayer client, IPlayer target, XMenu xmenu)
         {
             xmenu.SetData("Player", target);
@@ -140,7 +151,7 @@ namespace ResurrectionRP_Server.Factions
 
         private async Task OnNPCInteract(IPlayer client, Ped npc)
         {
-            if (npc == Secretaire)
+            if (npc == _secretaire)
             {
                 await OpenSecretaryMenu(client);
             }
@@ -157,23 +168,39 @@ namespace ResurrectionRP_Server.Factions
             return base.OnVehicleOut(client, vehicleHandler, location);
         }
 
+        public override async Task OnPlayerEnterColShape(IColShape ColShapePointer, IPlayer player)
+        {
+            if (_boatColShape == ColShapePointer)
+            {
+                Menu menu = new Menu("", "", "", backCloseMenu: true);
+                menu.ItemSelectCallback = MenuCallback;
+                menu.Add(new MenuItem("Inventaire", "", "ID_Inventaire", true));
+
+                await menu.OpenMenu(player);
+            }
+
+            await base.OnPlayerEnterColShape(ColShapePointer, player);
+        }
+
         public override async Task OnPlayerPromote(IPlayer client, int rang)
         {
-            if (!Teleport.Whileliste.Contains( client.GetSocialClub()))
-                Teleport.Whileliste.Add(client.GetSocialClub());
+            if (!_teleport.Whileliste.Contains(client.GetSocialClub()))
+                _teleport.Whileliste.Add(client.GetSocialClub());
             await base.OnPlayerPromote(client, rang);
         }
 
         public override async Task PlayerFactionAdded(IPlayer client)
         {
-            if (!Teleport.Whileliste.Contains( client.GetSocialClub()))
-                Teleport.Whileliste.Add( client.GetSocialClub());
+            if (!_teleport.Whileliste.Contains( client.GetSocialClub()))
+                _teleport.Whileliste.Add( client.GetSocialClub());
             await base.PlayerFactionAdded(client);
         }
+        #endregion
 
+        #region Methods
         private async Task OpenCelluleDoor(IPlayer client, Door door)
         {
-            if ( this.HasPlayerIntoFaction(client))
+            if (HasPlayerIntoFaction(client))
             {
                 XMenu xmenu = new XMenu("ID_Door");
                 xmenu.SetData("Door", door);
@@ -216,20 +243,6 @@ namespace ResurrectionRP_Server.Factions
             await XMenuManager.XMenuManager.CloseMenu(client);
         }
 
-        public override async Task OnPlayerEnterColShape(IColShape ColShapePointer, IPlayer player)
-        {
-            if (BoatColShape == ColShapePointer)
-            {
-                Menu menu = new Menu("", "", "", backCloseMenu: true);
-                menu.ItemSelectCallback = MenuCallback;
-                menu.Add(new MenuItem("Inventaire", "", "ID_Inventaire", true));
-
-                await menu.OpenMenu(player);
-            }
-
-            await base.OnPlayerEnterColShape(ColShapePointer, player);
-        }
-
         private async Task MenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             var ph = client.GetPlayerHandler();
@@ -251,5 +264,6 @@ namespace ResurrectionRP_Server.Factions
                 }
             }
         }
+        #endregion
     }
 }

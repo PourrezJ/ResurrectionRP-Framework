@@ -91,7 +91,7 @@ namespace ResurrectionRP_Server.Houses
                     var house = housesList[i];
                     if (house != null)
                     {
-                        house.Load();
+                        house.Init();
                         Houses.Add(house);
                     }
                 }

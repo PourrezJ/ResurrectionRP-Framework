@@ -19,14 +19,38 @@ namespace ResurrectionRP_Server.Factions
 {
     public partial class ONU : Faction
     {
+        #region Private classes
+        private class EmergencyCall
+        {
+            public IPlayer player;
+            public bool Taken;
 
+            public EmergencyCall(IPlayer player)
+            {
+                this.player = player;
+                this.Taken = false;
+            }
+
+            public void TakeCall()
+            {
+                this.Taken = true;
+            }
+        }
+        #endregion
+
+        #region Static fields
         private static readonly double healprice = 1000;
+        private static List<EmergencyCall> EmergencyCalls = new List<EmergencyCall>();
+        #endregion
 
+        #region Constructor
         public ONU(string FactionName, FactionType FactionType) : base(FactionName, FactionType)
         {
         }
+        #endregion
 
-        public override async Task<Faction> OnFactionInit()
+        #region Init
+        public override Faction Init()
         {
             ServiceLocation = new Vector3(353.1839f, -581.8728f, 43.2966f);
             ShopLocation = new Vector3(349.9324f, -580.4365f, 42.29609f);
@@ -91,30 +115,11 @@ namespace ResurrectionRP_Server.Factions
             Entities.Peds.Ped npcmedic2 = Entities.Peds.Ped.CreateNPC(PedModel.Scrubs01SFY, new Vector3(-264.5344f, 6314.32f, 32.4364f), 320.3845f);
             npcmedic2.NpcInteractCallBack = OnNPCInteract;
 
-            return await base.OnFactionInit();
+            return base.Init();
         }
+        #endregion
 
-        #region Emergency
-        public class EmergencyCall
-        {
-            public IPlayer player;
-            public bool Taken;
-
-            public EmergencyCall(IPlayer player)
-            {
-                this.player = player;
-                this.Taken = false;
-            }
-
-            public void TakeCall()
-            {
-                this.Taken = true;
-            }
-        }
-
-        private static List<EmergencyCall> EmergencyCalls = new List<EmergencyCall>();
-
-
+        #region Event handlers
         private Task ONU_CallUrgenceMedic(IPlayer client, object[] args)
         {
             if (!client.Exists)
@@ -195,7 +200,7 @@ namespace ResurrectionRP_Server.Factions
                 }
             }
         }
-        #endregion
+
         public override async Task OnPlayerPromote(IPlayer client, int rang)
         {
             if (!client.Exists)
@@ -360,5 +365,6 @@ namespace ResurrectionRP_Server.Factions
 
             return base.OnVehicleOut(client, vehicle, location);
         }
+        #endregion
     }
 }

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Numerics;
+﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
+using AltV.Net.Enums;
+using AltV.Net.Async;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils.Enums;
@@ -12,34 +13,37 @@ using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Models.InventoryData;
 using ResurrectionRP_Server.Factions.Model;
 using ResurrectionRP_Server.Items;
-using AltV.Net;
-using AltV.Net.Elements.Entities;
-using AltV.Net.Enums;
-using AltV.Net.Async;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Numerics;
 
 namespace ResurrectionRP_Server.Factions
 {
-
     public partial class LSPD : Faction
     {
+        #region Private fields
+        private Ped _armurerie;
+        private Ped _accueil;
+        // private Ped _portiqueSecu;
+        #endregion
+
+        #region Public fields
         public Door Cellule1;
         public Door Cellule2;
         public Door Cellule3;
         public Door Cellule4;
-
         private IColShape colShapePortique;
-        //private IObject _obj;
-
         public List<Invoice> InvoiceList = new List<Invoice>();
-        private Ped armurerie;
-        private Ped accueil;
-        private Ped portiqueSecu;
+        #endregion
 
+        #region constructor
         public LSPD(string FactionName, FactionType FactionType) : base(FactionName, FactionType)
         {
         }
+        #endregion
 
-        public override async Task<Faction> OnFactionInit()
+        #region Init
+        public override Faction Init()
         {
             FactionRang = new FactionRang[] {
                 new FactionRang(0,"Cadet", false, 1500),
@@ -111,11 +115,11 @@ namespace ResurrectionRP_Server.Factions
             //portiqueSecu = Ped.CreateNPC(PedModel.Cop01SFY, new Vector3(438.8754f, -985.9456f, 30.68967f), 95.78963f);
             //portiqueSecu.NpcInteractCallBack = OnNPCInteract;
 
-            accueil = Ped.CreateNPC(PedModel.Cop01SMY, new Vector3(441.4182f, -978.3267f, 30.68967f), 176.1195f);
-            accueil.NpcInteractCallBack = OnNPCInteract;
+            _accueil = Ped.CreateNPC(PedModel.Cop01SMY, new Vector3(441.4182f, -978.3267f, 30.68967f), 176.1195f);
+            _accueil.NpcInteractCallBack = OnNPCInteract;
 
-            armurerie = Ped.CreateNPC(PedModel.Cop01SMY, new Vector3(454.0918f, -979.9051f, 30.68966f), 96.70792f);
-            armurerie.NpcInteractCallBack = OnNPCInteract;
+            _armurerie = Ped.CreateNPC(PedModel.Cop01SMY, new Vector3(454.0918f, -979.9051f, 30.68966f), 96.70792f);
+            _armurerie.NpcInteractCallBack = OnNPCInteract;
             #endregion
 
             #region Doors
@@ -153,16 +157,18 @@ namespace ResurrectionRP_Server.Factions
             Alt.OnClient("CallUrgenceLSPD", CallUrgenceLSPD);
             
 
-            return await base.OnFactionInit();
+            return base.Init();
         }
+        #endregion
 
+        #region Event handlers
         private async Task OnNPCInteract(IPlayer client, Ped npc)
         {
-            if (npc == armurerie)
+            if (npc == _armurerie)
             {
                 await this.OpenShopMenu(client);
             }
-            else if (npc == accueil)
+            else if (npc == _accueil)
             {
                 await this.OpenAccueilMenu(client);
             }
@@ -362,5 +368,6 @@ namespace ResurrectionRP_Server.Factions
                 //client.EmitLocked("LSPD_Call", ServicePlayerList.Count);
             }
         }
+        #endregion
     }
 }

@@ -20,14 +20,13 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Houses
 {
-    #region House Class
     public class House
     {
         #region Constants
         private const ushort DIMENSION_START = 1000;
         #endregion
 
-        #region Fields
+        #region Fields and properties
         [BsonId]
         public int ID { get; set; }
 
@@ -87,8 +86,8 @@ namespace ResurrectionRP_Server.Houses
         }
         #endregion
 
-        #region Methods
-        public void Load()
+        #region Init
+        public void Init()
         {
             // create marker
             Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, Position - new Vector3(0.0f, 0.0f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f), Color.FromArgb(80, 255, 0, 0));
@@ -108,14 +107,15 @@ namespace ResurrectionRP_Server.Houses
 
             if (Parking != null)
             {
+                Parking.Location = Parking.Spawn1.Pos;
+                Parking.Init();
+                Parking.Owner = Owner;
+                Parking.ParkingType = ParkingType.House;
                 Parking.OnSaveNeeded = OnParkingSaveNeeded;
+                Parking.OnPlayerEnterParking += OnPlayerEnterParking;
+                Parking.OnVehicleEnterParking += OnVehicleEnterParking;
                 Parking.OnVehicleStored += OnVehicleStored;
                 Parking.OnVehicleOut += OnVehicleOutParking;
-                Parking.ParkingType = ParkingType.House;
-                Parking.Location = Parking.Spawn1.Pos;
-                Parking.Owner = Owner;
-                Parking.Load();
-                EventHandlers.Events.OnPlayerEnterColShape += OnPlayerEnterColshape;
             }
 
             if (!string.IsNullOrEmpty(Owner))
@@ -131,12 +131,22 @@ namespace ResurrectionRP_Server.Houses
 
             PlayersInside = new List<IPlayer>();
         }
+        #endregion
+
+        #region Event handlers
+        private async Task OnPlayerEnterParking(PlayerHandler player, Parking parking)
+        {
+            await OpenParkingMenu(player?.Client);
+        }
+
+        private async Task OnVehicleEnterParking(VehicleHandler vehicle, Parking parking)
+        {
+            await OpenParkingMenu(vehicle?.Vehicle?.Driver);
+        }
 
         private async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
         {
-            if (Parking != null && colShape == Parking.ParkingColshape)
-                await OpenParkingMenu(client);
-            else if (colShape == ColShapeEnter)
+            if (colShape == ColShapeEnter)
                 await HouseManager.OpenHouseMenu(client, this);
             else if (colShape == ColShapeOut)
                 client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
@@ -144,7 +154,7 @@ namespace ResurrectionRP_Server.Houses
 
         private async Task OpenParkingMenu(IPlayer player)
         {
-            if (!player.Exists)
+            if (player == null || !player.Exists)
                 return;
 
             if (Owner == player.GetSocialClub())
@@ -186,7 +196,9 @@ namespace ResurrectionRP_Server.Houses
             await Save();
             client.SetPlayerIntoVehicle(vehicle.Vehicle);
         }
+        #endregion
 
+        #region Methods
         public async Task SetOwner(string owner)
         {
             if (OwnerHandle != null) OwnerHandle.EmitLocked("ResetHouseBlip", ID);
@@ -325,5 +337,4 @@ namespace ResurrectionRP_Server.Houses
         }
         #endregion
     }
-    #endregion
 }

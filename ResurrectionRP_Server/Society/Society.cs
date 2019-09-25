@@ -1,30 +1,22 @@
-﻿
+﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Driver;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
-using AltV.Net;
-using AltV.Net.Async;
-using AltV.Net.Elements.Entities;
-using AltV.Net.Enums;
 using ResurrectionRP_Server.Models;
-using ResurrectionRP_Server.Inventory;
 using ResurrectionRP_Server.Entities.Vehicles;
-using ResurrectionRP_Server.Entities.Peds;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Society.Societies;
 using ResurrectionRP_Server.Society.Societies.Bennys;
 using ResurrectionRP_Server.Society.Societies.WildCustom;
 using ResurrectionRP_Server.Society.Societies.WhiteWereWolf;
-using ResurrectionRP_Server.Streamer.Data;
 using ResurrectionRP_Server.Entities;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Numerics;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Society
 {
@@ -32,7 +24,7 @@ namespace ResurrectionRP_Server.Society
     [BsonKnownTypes(typeof(Bennys), typeof(Unicorn), typeof(Sandjob), typeof(Rhumerie), typeof(PetrolSociety), typeof(Tequilala), typeof(WhiteWereWolf), typeof(PawnCar), typeof(WildCustom), typeof(BlackStreetNation), typeof(YellowJack))]
     public partial class Society
     {
-        #region Static Variables
+        #region Static fields
         [JsonIgnore]
         public static List<Society> JobsList = new List<Society>();
 
@@ -40,16 +32,16 @@ namespace ResurrectionRP_Server.Society
         public static int PriceNameChange = 10000;
         #endregion
 
-        #region Variables
+        #region Fields and properties
         public BsonObjectId _id;
 
         [JsonIgnore]
         protected Entities.Blips.Blips Blip;
 
-        public Dictionary<string, string> Employees = new Dictionary<string, string>(); // Liste des noms RP
+        public ConcurrentDictionary<string, string> Employees = new ConcurrentDictionary<string, string>(); // Liste des noms RP
 
         [BsonIgnore]
-        public List<string> InService = new List<string>();
+        public ConcurrentDictionary<string, string> InService = new ConcurrentDictionary<string, string>();
 
         public string SocietyName { get; set; }
         public Vector3 ServicePos { get; set; }
@@ -64,8 +56,6 @@ namespace ResurrectionRP_Server.Society
 
         [BsonIgnore]
         public IColShape ServiceColshape;
-        [BsonIgnore]
-        public IColShape ParkingColshape;
         [BsonIgnore]
         public Marker Marker;
 
@@ -93,44 +83,35 @@ namespace ResurrectionRP_Server.Society
         }
         #endregion
 
-        #region Static Load
-        public static async Task LoadAllSociety()
+        #region Init
+        public virtual async Task Init()
         {
-            Console.WriteLine("--- Start loading all society in database ---");
-            var _societyList = await Database.MongoDB.GetCollectionSafe<Society>("society").AsQueryable().ToListAsync();
-            foreach (var _society in _societyList)
-                await _society.Load();
-
-            Console.WriteLine($"--- Finish loading all society in database: {_societyList.Count} ---");
-        }
-        #endregion
-
-        #region Load
-        public virtual async Task Load()
-        {
-            if (Employees == null)
-                Employees = new Dictionary<string, string>();
-
             if (ServicePos != null)
             {
                 // Blip
                 Blip = Entities.Blips.BlipsManager.CreateBlip(SocietyName, ServicePos, BlipColor,(int) BlipSprite, 1);
 
                 ServiceColshape = Alt.CreateColShapeCylinder(ServicePos - new Vector3(0.0f, 0.0f, 1f), 1f, 2f);
-                Marker = Entities.Marker.CreateMarker(MarkerType.VerticalCylinder, ServicePos - new Vector3(0.0f, 0.0f, 1f), new Vector3(1, 1f, 1f), Color.FromArgb(128, 255, 255, 255));
+                ServiceColshape.SetOnPlayerEnterColShape(OnPlayerEnterServiceColshape);
+                ServiceColshape.SetOnPlayerLeaveColShape(OnPlayerLeaveServiceColshape);
+                Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, ServicePos - new Vector3(0.0f, 0.0f, 1f), new Vector3(1, 1f, 1f), Color.FromArgb(128, 255, 255, 255));
             }
 
             if (Parking != null)
             {
-                Parking.Load();
-                InitParking(Parking.ParkingColshape);
+                Parking.Init();
+                Parking.ParkingType = ParkingType.Society;
+                Parking.OnPlayerEnterParking += OnPlayerEnterParking;
+                Parking.OnVehicleEnterParking += OnVehicleEnterParking;
+                Parking.OnVehicleOut += OnVehicleOut;
+                Parking.OnVehicleStored += OnVehicleStored;
             }
 
             if (BankAccount == null)
                 BankAccount = new BankAccount(AccountType.Society, await BankAccount.GenerateNewAccountNumber(), 0);
 
             Inventory.MaxSlot = 40;
-            InService = new List<string>();
+            InService = new ConcurrentDictionary<string, string>();
             BankAccount.Owner = this;
 
             GameMode.Instance.SocietyManager.SocietyList.Add(this);
@@ -138,15 +119,33 @@ namespace ResurrectionRP_Server.Society
         #endregion
 
         #region Events
-        public virtual async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
+        public virtual async Task OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
         {
             if (client == null || !client.Exists)
                 return;
 
-            if (colShape == ServiceColshape)
-                await OpenServerJobMenu(client);
-            else if (colShape == ParkingColshape)
-                await OpenParkingMenu(client);
+            await OpenSocietyMainMenu(client);
+        }
+
+        public virtual async Task OnPlayerLeaveServiceColshape(IColShape colShape, IPlayer client)
+        {
+            if (client == null || !client.Exists)
+                return;
+
+            PlayerHandler player = client.GetPlayerHandler();
+
+            if (player != null && player.HasOpenMenu())
+                await MenuManager.CloseMenu(client);
+        }
+
+        public async Task OnPlayerEnterParking(PlayerHandler player, Parking parking)
+        {
+            await OpenParkingMenu(player?.Client);
+        }
+
+        public async Task OnVehicleEnterParking(VehicleHandler vehicle, Parking parking)
+        {
+            await OpenParkingMenu(vehicle?.Vehicle?.Driver);
         }
 
         public virtual async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
@@ -166,15 +165,32 @@ namespace ResurrectionRP_Server.Society
         #region Methods
         public virtual Task PriseService(IPlayer client)
         {
-            InService.Add(client.GetSocialClub());
+            if (client == null || !client.Exists)
+                return Task.CompletedTask;
+
+            PlayerHandler ph = client.GetPlayerHandler();
+
+            if (ph == null)
+                return Task.CompletedTask;
+
+            InService.TryAdd(client.GetSocialClub(), ph.Identite.Name);
             client.SendNotificationSuccess("Vous avez pris votre service");
             return Task.CompletedTask;
         }
 
         public virtual Task QuitterService(IPlayer client)
         {
-            InService.Remove( client.GetSocialClub());
-            client.GetPlayerHandler()?.Character?.ApplyCharacter(client);
+            if (client == null || !client.Exists)
+                return Task.CompletedTask;
+
+            PlayerHandler ph = client.GetPlayerHandler();
+
+            if (ph == null)
+                return Task.CompletedTask;
+
+            InService.TryRemove(client.GetSocialClub(), out _);
+
+            client.ApplyCharacter();
             client.SendNotificationSuccess("Vous avez quitté votre service");
             return Task.CompletedTask;
         }
@@ -186,30 +202,23 @@ namespace ResurrectionRP_Server.Society
 
             var social = client.GetSocialClub();
 
-            return Employees.ContainsKey( client.GetSocialClub()) || Owner == social;
+            return Employees.ContainsKey(client.GetSocialClub()) || Owner == social;
         }
 
-        public int GetEmployeeOnline()
+        public int NbEmployeesOnline()
         {
-            int a = 0;
+            int employees = 0;
 
-            foreach (var player in GameMode.Instance.PlayerList)
+            foreach (IPlayer player in GameMode.Instance.PlayerList)
             {
-                if (!player.Exists)
+                if (player == null || !player.Exists)
                     continue;
 
                 if (IsEmployee(player))
-                    a++;
+                    employees++;
             }
-            return a;
-        }
 
-        public void InitParking(IColShape parkingColshape)
-        {
-            ParkingColshape = parkingColshape;
-            Parking.ParkingType = ParkingType.Society;
-            Parking.OnVehicleOut += OnVehicleOut;
-            Parking.OnVehicleStored += OnVehicleStored;
+            return employees;
         }
 
         public async Task Insert()
@@ -217,7 +226,6 @@ namespace ResurrectionRP_Server.Society
 
         public async Task Update()
             => await Database.MongoDB.Update(this, "society", _id);
-
         #endregion
     }
 }

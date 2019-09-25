@@ -21,10 +21,9 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Factions
 {
-
     public class LSCustom : Faction
     {
-        #region Fields
+        #region Fields and properties
         public static Vector3 DepotVehicle = new Vector3(-357.0305f, -134.4201f, 38.93036f);
         public static Location ReparZoneVL = new Location(new Vector3(-325.1813f, -134.0631f, 38.5204f), new Vector3(-0.992146f, -1.029223f, 306.1207f));
 
@@ -54,17 +53,17 @@ namespace ResurrectionRP_Server.Factions
         }
         #endregion
 
-        #region Event listeners
-        public override async Task<Faction> OnFactionInit()
+        #region Init
+        public override Faction Init()
         {
             Vector3 reparZone = new Vector3(-324.7894f, -134.2555f, 35.54341f);
             Marker.CreateMarker(MarkerType.VerticalCylinder, reparZone, new Vector3(4, 4, 1), System.Drawing.Color.White, GameMode.GlobalDimension);
             ReparationVLColshape = Alt.CreateColShapeCylinder(reparZone, 4, 4);
             ReparationVLColshape.Dimension = GameMode.GlobalDimension;
-            ReparationVLColshape.SetOnPlayerInteractInColShape(OnEnterReparZoneVL);
+            ReparationVLColshape.SetOnPlayerInteractInColShape(OnEnterRepairZoneVL);
             ReparationVLColshape.SetOnPlayerEnterColShape(OnEnterColshapeInteract);
             ReparationVLColshape.SetOnVehicleEnterColShape(OnVehicleEnterColshape);
-            ReparationVLColshape.SetOnVehicleLeaveColShape(OnVehicleQuitColshape);
+            ReparationVLColshape.SetOnVehicleLeaveColShape(OnVehicleLeaveColshape);
 
             PeintureColshape = Alt.CreateColShapeCylinder(PeintureZone, 4, 4);
             PeintureColshape.Dimension = GameMode.GlobalDimension;
@@ -72,7 +71,7 @@ namespace ResurrectionRP_Server.Factions
             PeintureColshape.SetOnPlayerInteractInColShape(OnEnterPaintZoneVL);
             PeintureColshape.SetOnPlayerEnterColShape(OnEnterColshapeInteract);
             PeintureColshape.SetOnVehicleEnterColShape(OnVehicleEnterColshape);
-            PeintureColshape.SetOnVehicleLeaveColShape(OnVehicleQuitColshape);
+            PeintureColshape.SetOnVehicleLeaveColShape(OnVehicleLeaveColshape);
 
             FactionRang = new FactionRang[] {
                 new FactionRang(0,"Dépanneur", false, 2500, true),
@@ -95,9 +94,11 @@ namespace ResurrectionRP_Server.Factions
             ItemShop.Add(new FactionShop(new LockPick(ItemID.LockPick, "Kit De Crochetage", "", 0.2, true, false, true, true), 5000, 1));
             ItemShop.Add(new FactionShop(new CrateTools(ItemID.CrateTool, "Caisse a outil", "De marque Facom", 1, true, false, true, true), 15000, 1));
 
-            return await base.OnFactionInit();
+            return base.Init();
         }
+        #endregion
 
+        #region Event handlers
         private async Task OnEnterPaintZoneVL(IColShape colShape, IPlayer client)
         {
             if (VehicleInColorCabin == null)
@@ -114,7 +115,7 @@ namespace ResurrectionRP_Server.Factions
             }    
         }
 
-        private async Task OnVehicleQuitColshape(IColShape colShape, IVehicle vehicle)
+        private async Task OnVehicleLeaveColshape(IColShape colShape, IVehicle vehicle)
         {
             if (colShape == ReparationVLColshape)
             {
@@ -132,13 +133,9 @@ namespace ResurrectionRP_Server.Factions
         private Task OnVehicleEnterColshape(IColShape colShape, IVehicle vehicle)
         {
             if (colShape == ReparationVLColshape)
-            {
                 VehicleInWorkbench = vehicle;
-            }
             else if (colShape == PeintureColshape)
-            {
                 VehicleInColorCabin = vehicle;
-            }
 
             return Task.CompletedTask;
         }
@@ -166,7 +163,7 @@ namespace ResurrectionRP_Server.Factions
                 MenuItem item = new MenuItem(color.ToString(), executeCallback: true, executeCallbackIndexChange: true);
                 item.RightLabel = $"${PeinturePrice}";
                 item.SetData("Color", Convert.ToInt32(color));
-                item.OnMenuItemCallback += OnColorChoise;
+                item.OnMenuItemCallback += OnColorChoice;
                 menu.Add(item);
             }
 
@@ -185,7 +182,7 @@ namespace ResurrectionRP_Server.Factions
             }
         }
 
-        private async Task OnColorChoise(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private async Task OnColorChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             int color = menuItem.GetData("Color");
             if (VehicleInColorCabin == null)
@@ -226,7 +223,7 @@ namespace ResurrectionRP_Server.Factions
             }
         }
 
-        private async Task OnEnterReparZoneVL(IColShape colShape, IPlayer client)
+        private async Task OnEnterRepairZoneVL(IColShape colShape, IPlayer client)
         {
             if (VehicleInWorkbench != null)
                 await OpenMenu(client, VehicleInWorkbench);

@@ -22,18 +22,18 @@ namespace ResurrectionRP_Server.Services
 
         #endregion
 
-        #region Methods
-        public async void Load()
+        #region Init
+        public async void Init()
         {
             if (Parking != null)
             {
-                Parking.Load(alpha: 150, scale: 0.7f, name: "Parkings", blip: true);
-                Parking.OnVehicleStored += OnVehicleStored;
-                Parking.OnVehicleOut += OnVehicleOut;
+                Parking.Init(alpha: 150, scale: 0.7f, name: "Parking", blip: true);
                 Parking.ParkingType = ParkingType.Public;
-                Parking.OnSaveNeeded = async () => await Update();
                 Parking.Spawn1.Rot = Parking.Spawn1.Rot.ConvertRotationToRadian();
                 Parking.Spawn2.Rot = Parking.Spawn2.Rot.ConvertRotationToRadian();
+                Parking.OnSaveNeeded = async () => await Update();
+                Parking.OnVehicleStored += OnVehicleStored;
+                Parking.OnVehicleOut += OnVehicleOut;
 
                 List<ParkedCar> _poundList = Parking.ListVehicleStored.FindAll(veh => DateTime.Now > veh.ParkTime.AddMonths(1));
 
@@ -48,10 +48,11 @@ namespace ResurrectionRP_Server.Services
                     await Update();
             }
         }
+        #endregion
 
+        #region Event handlers
         private async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Models.Location Spawn)
         {
-            //vehicle.Vehicle.Rotation = Spawn.Rot.ConvertRotationToRadian();
             await Update();
             client.SendNotificationSuccess($"Vous avez sorti votre {vehicle.VehicleManifest.LocalizedName}!"); 
         }
@@ -61,7 +62,9 @@ namespace ResurrectionRP_Server.Services
             await Update();
             client.SendNotificationSuccess($"Vous avez rangé votre véhicule {vehicle.VehicleManifest.LocalizedName}");
         }
+        #endregion
 
+        #region Methods
         public async Task Insert() => await Database.MongoDB.Insert("carparks", this);
 
         public async Task Update()
@@ -88,7 +91,7 @@ namespace ResurrectionRP_Server.Services
             carpark.Parking.Location = borne;
             carpark.Parking.Spawn1 = spawn1;
             carpark.Parking.Spawn2 = spawn2;
-            carpark.Load();
+            carpark.Init();
             return carpark;
         }
 
@@ -101,7 +104,7 @@ namespace ResurrectionRP_Server.Services
             _carpark.ID = ID;
             _carpark.Parking = new Models.Parking(borne, spawn1, spawn2, name, maxVehicles: 2100, hidden: false);
             await _carpark.Insert();
-            _carpark.Load();
+            _carpark.Init();
             return _carpark;
         }
         #endregion

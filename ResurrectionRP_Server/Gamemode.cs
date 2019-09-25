@@ -254,10 +254,7 @@ namespace ResurrectionRP_Server
             Utils.Utils.Delay(1000, false, () => Time.Update());
             Utils.Utils.Delay(60000, false, async () => await FactionManager.Update());
             Utils.Utils.Delay(1000, false, () => VehiclesManager.UpdateVehiclesMilageAndFuel());
-            
-            Utils.Utils.Delay(1000, false, () => {
-                Utils.FPSCounter.OnTick();
-            });
+            Utils.Utils.Delay(1000, false, () => { FPSCounter.OnTick(); });
 
             Chat.Initialize();
 

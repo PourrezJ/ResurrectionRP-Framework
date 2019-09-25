@@ -10,27 +10,35 @@ namespace ResurrectionRP_Server.Factions
 {
     public class FactionManager
     {
+        #region Fields and properties
         public List<Faction> FactionList = new List<Faction>();
 
-        public ONU Onu { get; private set; }
-        public LSPD Lspd { get; private set; }
-        public LSCustom LSCustom { get; private set; }
+        public Faction Onu { get; private set; }
+
+        public Faction Lspd { get; private set; }
+
+        public Faction LSCustom { get; private set; }
+
         //public Division Rebelle { get; private set; }
-        public Gouv Gouvernement { get; private set; }
-        public Dock Dock { get; private set; }
 
-        public Nordiste Nordiste { get; private set; }
+        public Faction Gouvernement { get; private set; }
 
+        public Faction Dock { get; private set; }
+
+        public Faction Nordiste { get; private set; }
+        #endregion
+
+        #region Init
         public async Task InitAllFactions()
         {
             FactionManager fm = GameMode.Instance.FactionManager;
-            fm.Onu = (ONU)await (await LoadFaction<ONU>("ONU") ?? new ONU("ONU", FactionType.ONU)).OnFactionInit();
-            fm.Lspd = (LSPD)await (await LoadFaction<LSPD>("LSPD") ?? new LSPD("LSPD", FactionType.LSPD)).OnFactionInit();
-            //fm.Rebelle = (Division)await (await LoadFaction<Division>("Division") ?? new Division("Division", FactionType.Division)).OnFactionInit();
-            fm.LSCustom = (LSCustom)await (await LoadFaction<LSCustom>("LSCustom") ?? new LSCustom("LSCustom", FactionType.LSCustom)).OnFactionInit();
-            fm.Gouvernement = (Gouv)await (await LoadFaction<Gouv>("Gouv") ?? new Gouv("Gouv", FactionType.Gouv)).OnFactionInit();
-            fm.Dock = (Dock)await (await LoadFaction<Dock>("Dock") ?? new Dock("Dock", FactionType.Dock)).OnFactionInit();
-            fm.Nordiste = (Nordiste)await (await LoadFaction<Nordiste>("Bureau du Shérif") ?? new Nordiste("Bureau du Shérif", FactionType.Nordiste)).OnFactionInit();
+            fm.Onu = (ONU)(await LoadFaction<ONU>("ONU") ?? new ONU("ONU", FactionType.ONU)).Init();
+            fm.Lspd = (LSPD)(await LoadFaction<LSPD>("LSPD") ?? new LSPD("LSPD", FactionType.LSPD)).Init();
+            // fm.Rebelle = (Division)(await LoadFaction<Division>("Division") ?? new Division("Division", FactionType.Division)).Init();
+            fm.LSCustom = (LSCustom)(await LoadFaction<LSCustom>("LSCustom") ?? new LSCustom("LSCustom", FactionType.LSCustom)).Init();
+            fm.Gouvernement = (Gouv)(await LoadFaction<Gouv>("Gouv") ?? new Gouv("Gouv", FactionType.Gouv)).Init();
+            fm.Dock = (Dock)(await LoadFaction<Dock>("Dock") ?? new Dock("Dock", FactionType.Dock)).Init();
+            fm.Nordiste = (Nordiste)(await LoadFaction<Nordiste>("Bureau du Shérif") ?? new Nordiste("Bureau du Shérif", FactionType.Nordiste)).Init();
 
             Utils.Utils.Delay((int)TimeSpan.FromMinutes(10).TotalMilliseconds, false, async () =>
             {
@@ -41,9 +49,40 @@ namespace ResurrectionRP_Server.Factions
                 }
             });
 
-            FactionList.AddRange(new List<Faction>() { Onu, Lspd});
+            FactionList.AddRange(new List<Faction>() { Onu, Lspd });
+        }
+        #endregion
+
+        #region Event handlers
+        public void OnPlayerConnected(IPlayer client)
+        {
+            Onu?.OnPlayerConnected(client);
+            Lspd?.OnPlayerConnected(client);
+            LSCustom?.OnPlayerConnected(client);
+            //Rebelle?.OnPlayerConnected(client);
+            Dock?.OnPlayerConnected(client);
+            Gouvernement?.OnPlayerConnected(client);
+            Nordiste?.OnPlayerConnected(client);
         }
 
+        public void OnPlayerDisconnected(IPlayer client)
+        {
+            Onu?.OnPlayerDisconnected(client);
+            Lspd?.OnPlayerDisconnected(client);
+            LSCustom?.OnPlayerDisconnected(client);
+            //Rebelle?.OnPlayerDisconnected(client);
+            Dock?.OnPlayerDisconnected(client);
+            Nordiste?.OnPlayerConnected(client);
+        }
+
+        public static async Task OnExitColShape(IPlayer player, IColShape colshapePointer)
+        {
+            for (int i = 0; i < GameMode.Instance.FactionManager.FactionList?.Count; i++)
+                await GameMode.Instance.FactionManager.FactionList[i].OnPlayerExitColShape(colshapePointer, player);
+        }
+        #endregion
+
+        #region Methods
         public static void AddFactionTargetMenu(IPlayer client, IPlayer target, XMenu xMenu)
         {
             GameMode.Instance.FactionManager.Onu?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.BRIEFCASE_MEDICAL_SOLID);
@@ -101,6 +140,7 @@ namespace ResurrectionRP_Server.Factions
             return false;
         }
 */
+
         public static bool IsLSCustom(IPlayer client)
         {
             if (GameMode.Instance.FactionManager.LSCustom != null)
@@ -129,27 +169,6 @@ namespace ResurrectionRP_Server.Factions
             return false;
         }
 
-        public void OnPlayerConnected(IPlayer client)
-        {
-            Onu?.OnPlayerConnected(client);
-            Lspd?.OnPlayerConnected(client);
-            LSCustom?.OnPlayerConnected(client);
-            //Rebelle?.OnPlayerConnected(client);
-            Dock?.OnPlayerConnected(client);
-            Gouvernement?.OnPlayerConnected(client);
-            Nordiste?.OnPlayerConnected(client);
-        }
-
-        public void OnPlayerDisconnected(IPlayer client)
-        {
-            Onu?.OnPlayerDisconnected(client);
-            Lspd?.OnPlayerDisconnected(client);
-            LSCustom?.OnPlayerDisconnected(client);
-            //Rebelle?.OnPlayerDisconnected(client);
-            Dock?.OnPlayerDisconnected(client);
-            Nordiste?.OnPlayerConnected(client);
-        }
-
         public async Task Update()
         {
             for (int i = 0; i < GameMode.Instance.FactionManager.FactionList.Count; i++)
@@ -158,11 +177,6 @@ namespace ResurrectionRP_Server.Factions
                 await GameMode.Instance.FactionManager.FactionList[i].UpdateDatabase();
             }
         }
-
-        public static async Task OnExitColShape(IPlayer player, IColShape colshapePointer)
-        {
-            for (int i = 0; i < GameMode.Instance.FactionManager.FactionList?.Count; i++)
-                await GameMode.Instance.FactionManager.FactionList[i].OnPlayerExitColShape(colshapePointer, player);
-        }
+        #endregion
     }
 }

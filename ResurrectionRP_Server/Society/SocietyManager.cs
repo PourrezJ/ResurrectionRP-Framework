@@ -8,11 +8,15 @@ namespace ResurrectionRP_Server.Society
 {
     public class SocietyManager
     {
+        #region Public fields
         public List<Society> SocietyList = new List<Society>();
         public static Dictionary<IPlayer, Society> AddParkingList = new Dictionary<IPlayer, Society>();
+        #endregion
+
+        #region Init
         public static async Task LoadAllSociety()
         {
-            Alt.Server.LogInfo("--- Start loading all businesses in database ---");
+            Alt.Server.LogInfo("--- Start loading all society in database ---");
             var societyList = await Database.MongoDB.GetCollectionSafe<Society>("society").AsQueryable().ToListAsync();
 
             foreach (var society in societyList)
@@ -26,8 +30,8 @@ namespace ResurrectionRP_Server.Society
                     await Task.Delay(50);
                 }
             });
-            Alt.Server.LogInfo($"--- Finish loading all businesses in database: {societyList.Count} ---");
+            Alt.Server.LogInfo($"--- Finish loading all society in database: {societyList.Count} ---");
         }
-
+        #endregion
     }
 }

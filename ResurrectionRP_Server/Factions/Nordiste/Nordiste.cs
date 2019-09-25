@@ -1,4 +1,5 @@
-﻿using AltV.Net.Async;
+﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using Newtonsoft.Json;
@@ -20,18 +21,25 @@ namespace ResurrectionRP_Server.Factions
 {
     public partial class Nordiste : Faction
     {
-        private Ped PedArmurerie;
-        private Ped PedAccueil;
+        #region Private fields
+        private Ped _pedArmurerie;
+        private Ped _pedAccueil;
+        #endregion
 
+        #region Fields and properties
         public List<Invoice> InvoiceList = new List<Invoice>();
-        public List<Door> Doors { get; private set; }
-        
 
+        public List<Door> Doors { get; private set; }
+        #endregion
+
+        #region Constructor
         public Nordiste(string FactionName, FactionType FactionType) : base(FactionName, FactionType)
         {
         }
+        #endregion
 
-        public override async Task<Faction> OnFactionInit()
+        #region Init
+        public override Faction Init()
         {
             FactionRang = new FactionRang[] {
                 new FactionRang(0,"Aspirant", false, 1500),
@@ -68,11 +76,11 @@ namespace ResurrectionRP_Server.Factions
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Policeb, 150000, 15, 10, 132, 0));
 
             #region Peds
-            PedArmurerie = Ped.CreateNPC(PedModel.Sheriff01SMY, new Vector3(-436.0355f, 5999.875f, 31.71611f), 52.54101f);
-            PedArmurerie.NpcInteractCallBack = OnNPCInteract;
+            _pedArmurerie = Ped.CreateNPC(PedModel.Sheriff01SMY, new Vector3(-436.0355f, 5999.875f, 31.71611f), 52.54101f);
+            _pedArmurerie.NpcInteractCallBack = OnNPCInteract;
 
-            PedAccueil = Ped.CreateNPC(PedModel.Sheriff01SFY, new Vector3(-448.7506f, 6012.733f, 31.71646f), 315.8641f);
-            PedAccueil.NpcInteractCallBack = OnNPCInteract;
+            _pedAccueil = Ped.CreateNPC(PedModel.Sheriff01SFY, new Vector3(-448.7506f, 6012.733f, 31.71646f), 315.8641f);
+            _pedAccueil.NpcInteractCallBack = OnNPCInteract;
             #endregion
 
             #region Doors
@@ -102,18 +110,20 @@ namespace ResurrectionRP_Server.Factions
                 door.Interact = OpenCelluleDoor;
             #endregion
 
-            AltV.Net.Alt.OnClient("CallUrgenceLSPD", CallUrgenceLSPD);
+            Alt.OnClient("CallUrgenceLSPD", CallUrgenceLSPD);
 
-            return await base.OnFactionInit();
+            return base.Init();
         }
+        #endregion
 
+        #region Event handlers
         private async Task OnNPCInteract(IPlayer client, Ped npc)
         {
-            if (npc == PedArmurerie)
+            if (npc == _pedArmurerie)
             {
                 await OpenShopMenu(client);
             }
-            else if (npc == PedAccueil)
+            else if (npc == _pedAccueil)
             {
                 await OpenAccueilMenu(client);
             }
@@ -207,5 +217,6 @@ namespace ResurrectionRP_Server.Factions
                 //player.EmitLocked("LSPD_Call", ServicePlayerList.Count);
             }
         }
+        #endregion
     }
 }

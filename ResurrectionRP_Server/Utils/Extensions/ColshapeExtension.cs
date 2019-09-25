@@ -59,28 +59,23 @@ namespace ResurrectionRP_Server
                 colshape.GetData("OnPlayerEnterColShape", out Events.ColShapePlayerEventHandler eventHandler);
 
                 if (eventHandler != null)
-                    eventHandler += method;
+                    eventHandler = method;
                 else
                 {
-                    eventHandler += method;
+                    eventHandler = method;
                     colshape.SetData("OnPlayerEnterColShape", eventHandler);
                 }
             }
         }
 
-        public static void UnsetOnPlayerEnterColShape(this IColShape colshape, Events.ColShapePlayerEventHandler method)
+        public static void UnsetOnPlayerEnterColShape(this IColShape colshape)
         {
             lock (colshape)
             {
                 colshape.GetData("OnPlayerEnterColShape", out Events.ColShapePlayerEventHandler eventHandler);
 
                 if (eventHandler != null)
-                    eventHandler -= method;
-                else
-                {
-                    eventHandler -= method;
-                    colshape.SetData("OnPlayerEnterColShape", eventHandler);
-                }
+                    eventHandler = null;
             }
         }
 
@@ -91,28 +86,23 @@ namespace ResurrectionRP_Server
                 colshape.GetData("OnPlayerLeaveColShape", out Events.ColShapePlayerEventHandler eventHandler);
 
                 if (eventHandler != null)
-                    eventHandler += method;
+                    eventHandler = method;
                 else
                 {
-                    eventHandler += method;
+                    eventHandler = method;
                     colshape.SetData("OnPlayerLeaveColShape", eventHandler);
                 }
             }
         }
 
-        public static void UnsetOnPlayerLeaveColShape(this IColShape colshape, Events.ColShapePlayerEventHandler method)
+        public static void UnsetOnPlayerLeaveColShape(this IColShape colshape)
         {
             lock (colshape)
             {
                 colshape.GetData("OnPlayerLeaveColShape", out Events.ColShapePlayerEventHandler eventHandler);
 
                 if (eventHandler != null)
-                    eventHandler -= method;
-                else
-                {
-                    eventHandler -= method;
-                    colshape.SetData("OnPlayerLeaveColShape", eventHandler);
-                }
+                    eventHandler = null;
             }
         }
 
@@ -123,28 +113,23 @@ namespace ResurrectionRP_Server
                 colshape.GetData("OnVehicleEnterColShape", out Events.ColShapeVehicleEventHandler eventHandler);
 
                 if (eventHandler != null)
-                    eventHandler += method;
+                    eventHandler = method;
                 else
                 {
-                    eventHandler += method;
+                    eventHandler = method;
                     colshape.SetData("OnVehicleEnterColShape", eventHandler);
                 }
             }
         }
 
-        public static void UnsetOnVehicleEnterColShape(this IColShape colshape, Events.ColShapeVehicleEventHandler method)
+        public static void UnsetOnVehicleEnterColShape(this IColShape colshape)
         {
             lock (colshape)
             {
                 colshape.GetData("OnVehicleEnterColShape", out Events.ColShapeVehicleEventHandler eventHandler);
 
                 if (eventHandler != null)
-                    eventHandler -= method;
-                else
-                {
-                    eventHandler -= method;
-                    colshape.SetData("OnVehicleEnterColShape", eventHandler);
-                }
+                    eventHandler = null;
             }
         }
 
@@ -155,28 +140,23 @@ namespace ResurrectionRP_Server
                 colshape.GetData("OnVehicleLeaveColShape", out Events.ColShapeVehicleEventHandler eventHandler);
 
                 if (eventHandler != null)
-                    eventHandler += method;
+                    eventHandler = method;
                 else
                 {
-                    eventHandler += method;
+                    eventHandler = method;
                     colshape.SetData("OnVehicleLeaveColShape", eventHandler);
                 }
             }
         }
 
-        public static void UnsetOnVehicleLeaveColShape(this IColShape colshape, Events.ColShapeVehicleEventHandler method)
+        public static void UnsetOnVehicleLeaveColShape(this IColShape colshape)
         {
             lock (colshape)
             {
                 colshape.GetData("OnVehicleLeaveColShape", out Events.ColShapeVehicleEventHandler eventHandler);
 
                 if (eventHandler != null)
-                    eventHandler -= method;
-                else
-                {
-                    eventHandler -= method;
-                    colshape.SetData("OnVehicleLeaveColShape", eventHandler);
-                }
+                    eventHandler = null;
             }
         }
 
@@ -187,28 +167,23 @@ namespace ResurrectionRP_Server
                 colshape.GetData("OnPlayerInteractInColShape", out Events.ColShapePlayerEventHandler eventHandler);
 
                 if (eventHandler != null)
-                    eventHandler += method;
+                    eventHandler = method;
                 else
                 {
-                    eventHandler += method;
+                    eventHandler = method;
                     colshape.SetData("OnPlayerInteractInColShape", eventHandler);
                 }
             }
         }
 
-        public static void UnsetOnPlayerInteractInColShape(this IColShape colshape, Events.ColShapePlayerEventHandler method)
+        public static void UnsetOnPlayerInteractInColShape(this IColShape colshape)
         {
             lock (colshape)
             {
                 colshape.GetData("OnPlayerInteractInColShape", out Events.ColShapePlayerEventHandler eventHandler);
 
                 if (eventHandler != null)
-                    eventHandler -= method;
-                else
-                {
-                    eventHandler -= method;
-                    colshape.SetData("OnPlayerInteractInColShape", eventHandler);
-                }
+                    eventHandler = null;
             }
         }
     }

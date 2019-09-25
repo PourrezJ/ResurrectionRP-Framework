@@ -50,7 +50,16 @@ namespace ResurrectionRP_Server.Models
 
     public class Parking
     {
-        #region Fields and Properties
+        #region Delegates
+        public delegate Task OnPlayerEnterParkingEvent(IPlayer client);
+        public delegate Task OnVehicleStoredEvent(IPlayer client, VehicleHandler vehicle);
+        public delegate Task OnVehicleOutEvent(IPlayer client, VehicleHandler vehicle, Location Spawn);
+        public delegate Task OnSaveNeededDelegate();
+        public delegate Task OnPlayerParkingEvent(PlayerHandler player, Parking parking);
+        public delegate Task OnVehicleParkingEvent(VehicleHandler vehicle, Parking parking);
+        #endregion
+
+        #region Fields and properties
         public static List<Parking> ParkingList = new List<Parking>();
 
         public int ID;
@@ -102,18 +111,15 @@ namespace ResurrectionRP_Server.Models
 
         public event OnVehicleStoredEvent OnVehicleStored;
         public event OnVehicleOutEvent OnVehicleOut;
+        public event OnPlayerParkingEvent OnPlayerEnterParking;
+        public event OnPlayerParkingEvent OnPlayerLeaveParking;
+        public event OnVehicleParkingEvent OnVehicleEnterParking;
+        public event OnVehicleParkingEvent OnVehicleLeaveParking;
 
         [BsonIgnore]
         public OnSaveNeededDelegate OnSaveNeeded { get; set; }
         [BsonIgnore]
         public IColShape ParkingColshape { get; private set; }
-        #endregion
-
-        #region Delegates
-        public delegate Task OnPlayerEnterParkingEvent(IPlayer client);
-        public delegate Task OnVehicleStoredEvent(IPlayer client, VehicleHandler vehicle);
-        public delegate Task OnVehicleOutEvent(IPlayer client, VehicleHandler vehicle, Location Spawn);
-        public delegate Task OnSaveNeededDelegate();
         #endregion
 
         #region Constructor
@@ -134,38 +140,51 @@ namespace ResurrectionRP_Server.Models
         #region Event handlers
         private async Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
-            if (colShape != ParkingColshape || !client.Exists)
+            if (!client.Exists)
                 return;
 
-            if (ParkingType != ParkingType.Society && ParkingType != ParkingType.House)
+            if (OnPlayerEnterParking != null)
+                await OnPlayerEnterParking.Invoke(client.GetPlayerHandler(), this);
+            else
                 await OpenParkingMenu(client);
         }
 
         private async Task OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
         {
-            if (colShape != ParkingColshape || !client.Exists)
+            if (!client.Exists)
                 return;
 
-            PlayerHandler player = client.GetPlayerHandler();
+            if (OnPlayerLeaveParking != null)
+                await OnPlayerEnterParking.Invoke(client.GetPlayerHandler(), this);
+            else
+            {
+                PlayerHandler player = client.GetPlayerHandler();
 
-            if (player != null && player.HasOpenMenu())
-                await MenuManager.CloseMenu(client);
+                if (player != null && player.HasOpenMenu())
+                    await MenuManager.CloseMenu(client);
+            }
         }
 
         private async Task OnVehicleEnterColShape(IColShape colShape, IVehicle vehicle)
         {
-            if (colShape != ParkingColshape || !vehicle.Exists || vehicle.Driver == null)
+            if (!vehicle.Exists || vehicle.Driver == null)
                 return;
 
-            await OnPlayerEnterColShape(colShape, vehicle.Driver);
+            if (OnVehicleEnterParking != null)
+                await OnVehicleEnterParking.Invoke(vehicle.GetVehicleHandler(), this);
+            else
+                await OnPlayerEnterColShape(colShape, vehicle.Driver);
         }
 
         private async Task OnVehicleLeaveColShape(IColShape colShape, IVehicle vehicle)
         {
-            if (colShape != ParkingColshape || !vehicle.Exists || vehicle.Driver == null)
+            if (!vehicle.Exists || vehicle.Driver == null)
                 return;
 
-            await OnPlayerLeaveColShape(colShape, vehicle.Driver);
+            if (OnVehicleLeaveParking != null)
+                await OnVehicleEnterParking.Invoke(vehicle.GetVehicleHandler(), this);
+            else
+                await OnPlayerLeaveColShape(colShape, vehicle.Driver);
         }
         #endregion
 
@@ -173,10 +192,10 @@ namespace ResurrectionRP_Server.Models
         private int GenerateRandomID()
         {
             int number = Utils.Utils.RandomNumber(999999999);
+
             while (ParkingList.Exists(x => x.ID == number))
-            {
                 number = Utils.Utils.RandomNumber(999999999);
-            }
+
             return number;
         }
 
@@ -223,9 +242,6 @@ namespace ResurrectionRP_Server.Models
                     }
                 }
 
-                // if (ParkingType != ParkingType.Public)
-                //     await client.PutIntoVehicleAsync(veh.Vehicle, -1);
-
                 RemoveVehicle(veh); // retrait du véhicule dans la liste
                 veh.ParkingName = string.Empty;
 
@@ -240,25 +256,23 @@ namespace ResurrectionRP_Server.Models
                 Alt.Server.LogError("Parking | " + ex.ToString());
             }
         }
-
-        private async Task<VehicleHandler> GetVehicleInParking(string plate)
-        {
-            var filter = Builders<VehicleHandler>.Filter.Eq(x => x.Plate, plate);
-            return await Database.MongoDB.GetCollectionSafe<VehicleHandler>("vehicles").FindAsync(filter).Result.SingleAsync();
-        }
         #endregion
 
         #region Public methods
-        public void Load(float markerscale = 3f, int opacite = 128, bool blip = false, uint sprite = 50, float scale = 1f, byte color = 0, uint alpha = 255, string name = "", short dimension = GameMode.GlobalDimension)
+        public void Init(float markerscale = 3f, int opacite = 128, bool blip = false, uint sprite = 50, float scale = 1f, byte color = 0, uint alpha = 255, string name = "", short dimension = GameMode.GlobalDimension)
         {
-            Marker.CreateMarker(MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale-1), new Vector3(3, 3, 3));
+            Marker.CreateMarker(MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale - 1), new Vector3(3, 3, 3));
             ParkingColshape = Alt.CreateColShapeCylinder(new Position(Location.X, Location.Y, Location.Z -1), markerscale, 4);
             ParkingColshape.Dimension = dimension;
             ParkingColshape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
             ParkingColshape.SetOnPlayerLeaveColShape(OnPlayerLeaveColShape);
             ParkingColshape.SetOnVehicleEnterColShape(OnVehicleEnterColShape);
             ParkingColshape.SetOnVehicleLeaveColShape(OnVehicleLeaveColShape);
-            GameMode.Instance.Streamer.AddEntityTextLabel(this.Name + "\n~o~Approchez pour interagir", Location, 4);
+
+            if (!string.IsNullOrEmpty(Name))
+                GameMode.Instance.Streamer.AddEntityTextLabel($"{Name}\n~o~Approchez pour intéragir", Location, 4);
+            else
+                GameMode.Instance.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", Location, 4);
 
             if (blip)
                 Entities.Blips.BlipsManager.CreateBlip(name, Location,color,(int) sprite);
@@ -283,7 +297,7 @@ namespace ResurrectionRP_Server.Models
             }
 
             if (menu == null)
-                menu = new Menu("ID_ParkingMenu", (string.IsNullOrEmpty(title) ? "Parking" : title), (string.IsNullOrEmpty(description)) ? "Choisissez une option :" : description, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
+                menu = new Menu("ID_ParkingMenu", string.IsNullOrEmpty(title) ? "Parking" : title, (string.IsNullOrEmpty(description)) ? "Choisissez une option :" : description, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
             else
             {
                 menu.ClearItems();

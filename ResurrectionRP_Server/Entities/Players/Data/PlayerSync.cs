@@ -6,7 +6,6 @@ namespace ResurrectionRP_Server.Entities.Players.Data
 {
     public class PlayerSync
     {
-        public bool IsDead { get; set; }
         public bool IsCuff { get; set; }
         public string WalkingAnim { get; set; }
         public AnimationsSync AnimationsSync { get; set; }

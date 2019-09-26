@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server.Menus
             FaceMenu faceMenu = new FaceMenu();
 
             faceMenu.facialMenu = new XMenu("ID_Face");
-            faceMenu.facialMenu.Callback = faceMenu.FacialCallback;
+            faceMenu.facialMenu.CallbackAsync = faceMenu.FacialCallback;
 
             faceMenu.facialMenu.Add(new XMenuItem("Normal", "", "ID_Normal", XMenuItemIcons.MEH_BLANK_SOLID));
 

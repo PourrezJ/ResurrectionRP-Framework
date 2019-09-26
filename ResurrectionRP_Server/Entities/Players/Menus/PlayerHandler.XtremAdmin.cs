@@ -16,7 +16,7 @@ namespace ResurrectionRP_Server.Entities.Players
         public async Task OpenXtremAdmin()
         {
             var menu = new XMenu("ID_Admin");
-            menu.Callback += XtreamCallBack;
+            menu.CallbackAsync += XtreamCallBack;
 
             if (StaffRank >= Utils.Enums.AdminRank.Moderator)
             {

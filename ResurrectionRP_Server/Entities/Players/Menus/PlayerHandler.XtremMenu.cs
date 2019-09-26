@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using VehicleInfoLoader.Data;
 using XMenuItem = ResurrectionRP_Server.XMenuManager.XMenuItem;
 using XMenu = ResurrectionRP_Server.XMenuManager.XMenu;
 using XMenuItemIcons = ResurrectionRP_Server.XMenuManager.XMenuItemIcons;
-using InputType = ResurrectionRP_Server.Utils.Enums.InputType;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Async;
@@ -21,12 +18,16 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public async Task OpenXtremPlayer(IPlayer targetClient)
         {
+            if (!await targetClient.ExistsAsync())
+                return;
+
             TargetClient = targetClient;
             TargetHandler = targetClient.GetPlayerHandler();
-            if (TargetHandler == null) return;
+            if (TargetHandler == null) 
+                return;
 
             XMenu xmenu = new XMenu("PlayerMenu");
-            xmenu.Callback = PlayerXMenuCallback;
+            xmenu.CallbackAsync = PlayerXMenuCallback;
 
             xmenu.Add(new XMenuItem("Passeport", "Montrer son passeport", "ID_ShowPassport", XMenuItemIcons.PASSPORT_SOLID, false));
             xmenu.Add(new XMenuItem("Licences", "Montrer ses permis", "ID_Licences", XMenuItemIcons.HAND_PAPER_SOLID, false));
@@ -132,8 +133,11 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case "ID_Handcuff":
-                    bool cuffed = TargetHandler.IsCuff();
-                    TargetHandler?.SetCuff(!cuffed);
+                    await AltAsync.Do(() =>
+                    {
+                        bool cuffed = TargetHandler.IsCuff();
+                        TargetHandler?.SetCuff(!cuffed);
+                    });
                     break;
 
                 case "ID_Admin":
@@ -147,7 +151,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                         if (vehicle != null)
                         {
-                            if (vehicle.LockState == AltV.Net.Enums.VehicleLockState.Locked)
+                            if (await vehicle.GetLockStateAsync() == AltV.Net.Enums.VehicleLockState.Locked)
                                 Client.SendNotificationError("Le véhicule est fermé");
                             else
                             {

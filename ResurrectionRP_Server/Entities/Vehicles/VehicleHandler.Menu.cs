@@ -31,7 +31,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 return;
 
             XMenu xmenu = new XMenu("VehiculeMenu");
-            xmenu.Callback = VehicleXMenuCallback;
+            xmenu.CallbackAsync = VehicleXMenuCallback;
 
             if (client.IsInVehicle)
             {
@@ -105,7 +105,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         private async Task OpenDoorsMenu(IPlayer client)
         {
             XMenu menu = new XMenu("DoorMenu");
-            menu.Callback = VehicleXMenuCallback;
+            menu.CallbackAsync = VehicleXMenuCallback;
             
             menu.Add(new XMenuItem("Porte avant gauche", "", "ID_frontLeft",  GetXMenuIconDoor(GetDoorState(VehicleDoor.DriverFront))));
             menu.Add(new XMenuItem("Porte avant droite", "", "ID_frontRight", GetXMenuIconDoor(GetDoorState(VehicleDoor.PassengerFront))));

@@ -61,7 +61,7 @@ namespace ResurrectionRP_Server.Factions
                 if (playerHandler.HasItemID(ItemID.KitSoin))
                     xmenu.Add(new XMenuItem("Kit de Soin", "Appliquer un kit de soin au patient", "ID_KitSoin", XMenuItemIcons.HEART_SOLID, false));
 
-                xmenu.Callback += OnInteractCallBack;
+                xmenu.CallbackAsync += OnInteractCallBack;
             }
             catch(Exception ex)
             {

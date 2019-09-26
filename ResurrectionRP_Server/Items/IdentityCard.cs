@@ -13,7 +13,7 @@ namespace ResurrectionRP_Server.Items
         {
         }
 
-        public override Task Use(IPlayer client, string inventoryType, int slot)
+        public override void Use(IPlayer client, string inventoryType, int slot)
         {
             Identite identite = client.GetPlayerHandler().Identite;
 
@@ -27,8 +27,6 @@ namespace ResurrectionRP_Server.Items
 
                 player.Client.SendNotification("Carte d'identité\n" + paper);
             }
-
-            return Task.CompletedTask;
         }
     }
 }

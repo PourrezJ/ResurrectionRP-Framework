@@ -247,7 +247,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                                 menugive.Add(pitem);
                             }
 
-                            menugive.ItemSelectCallback = (async (_client, _menu, _menuitem, _menuindex) =>
+                            menugive.ItemSelectCallbackAsync = (async (_client, _menu, _menuitem, _menuindex) =>
                             {
                                 PlayerHandler destinataire = PlayerManager.GetPlayerByName(_menuitem.Text);
                                 if (destinataire != null)

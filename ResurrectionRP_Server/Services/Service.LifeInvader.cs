@@ -44,7 +44,7 @@ namespace ResurrectionRP_Server.Services
         public async Task OpenMenuLifeInvader(IPlayer player)
         {
             Menu menu = new Menu("Id_LifeInvader", "LifeInvader", "Service d'annonce", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
-            menu.ItemSelectCallback = LifeInvaderMenuCallBack;
+            menu.ItemSelectCallbackAsync = LifeInvaderMenuCallBack;
 
             MenuItem x1 = new MenuItem("Créer une annonce", "Créer une annonce ~r~99 caractères max!", "ID_AnnonceX1", true, rightLabel: $"${(AnnoncePrice + CalcPriceAnnonce(AnnoncePrice))}");
             x1.SetInput("", 50, InputType.Text);

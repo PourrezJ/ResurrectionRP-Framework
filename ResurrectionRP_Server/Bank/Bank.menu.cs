@@ -24,7 +24,7 @@ namespace ResurrectionRP_Server.Bank
         private BankAccount _bankAccount;
         private Menu _bankMenu;
         private AtmType _atmType;
-        private Menu.MenuCallback _businessMenuCallback;
+        private Menu.MenuCallbackAsync _businessMenuCallback;
         #endregion
 
         #region Constructors
@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Bank
             _businessMenuCallback = null;
         }
 
-        public BankMenu(PlayerHandler player, BankAccount bankAccount, AtmType atmType, Menu businessMenu, Menu.MenuCallback businessMenuCallback)
+        public BankMenu(PlayerHandler player, BankAccount bankAccount, AtmType atmType, Menu businessMenu, Menu.MenuCallbackAsync businessMenuCallback)
         {
             _player = player;
             _bankAccount = bankAccount;
@@ -54,7 +54,7 @@ namespace ResurrectionRP_Server.Bank
             return await BM.OpenBankMenu(player.Client);
         }
 
-        public static async Task<Menu> OpenBankMenu(IPlayer client, BankAccount bankAccount, AtmType atmType, Menu businessMenu, Menu.MenuCallback businessMenuCallback)
+        public static async Task<Menu> OpenBankMenu(IPlayer client, BankAccount bankAccount, AtmType atmType, Menu businessMenu, Menu.MenuCallbackAsync businessMenuCallback)
         {
             #region Vérification
             PlayerHandler player = client.GetPlayerHandler();
@@ -79,34 +79,34 @@ namespace ResurrectionRP_Server.Bank
             {
                 _bankMenu.SubTitle = $"Compte: {_bankAccount.AccountNumber} | Solde: ${Math.Round(_bankAccount.Balance, 2)}";
                 _bankMenu.BackCloseMenu = false;
-                _bankMenu.ItemSelectCallback = BankMenuCallback;
+                _bankMenu.ItemSelectCallbackAsync = BankMenuCallback;
                 _bankMenu.Reset();
             }
             #endregion
 
             #region Account History
             var historyItem = new MenuItem("Historique", executeCallback: true);
-            historyItem.OnMenuItemCallback += OnHistoryAccount;
+            historyItem.OnMenuItemCallbackAsync += OnHistoryAccount;
             _bankMenu.Add(historyItem);
             #endregion
 
             #region Withdraw
             var withdrawItem = new MenuItem("Retirer", null, "ID_Withdraw", executeCallback: true);
             withdrawItem.SetInput("", (_atmType == AtmType.ATM ? (byte)4 : (byte)9), InputType.UNumber, true);
-            withdrawItem.OnMenuItemCallback += OnWithdrawItem;
+            withdrawItem.OnMenuItemCallbackAsync += OnWithdrawItem;
             _bankMenu.Add(withdrawItem);
             #endregion
 
             #region Deposit
             var depositItem = new MenuItem("Déposer", null, "ID_Deposit", executeCallback: true);
             depositItem.SetInput("", (_atmType == AtmType.ATM ? (byte)4 : (byte)9), InputType.UNumber, true);
-            depositItem.OnMenuItemCallback += OnDepositItem;
+            depositItem.OnMenuItemCallbackAsync += OnDepositItem;
             _bankMenu.Add(depositItem);
             #endregion
 
             #region Transfert
             var transfertItem = new MenuItem("Transférer", executeCallback: true);
-            transfertItem.OnMenuItemCallback += OnTransfertItem;
+            transfertItem.OnMenuItemCallbackAsync += OnTransfertItem;
             _bankMenu.Add(transfertItem);
             #endregion
 
@@ -136,7 +136,7 @@ namespace ResurrectionRP_Server.Bank
         {
             _bankMenu.SubTitle = "Historique:";
             _bankMenu.BackCloseMenu = false;
-            _bankMenu.ItemSelectCallback = HistoryAccountCallback;
+            _bankMenu.ItemSelectCallbackAsync = HistoryAccountCallback;
             _bankMenu.Reset();
             List<BankAccountHistory> history = new List<BankAccountHistory>(_bankAccount.History);
             history = history.OrderByDescending(h => h.Date).ToList();

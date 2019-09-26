@@ -112,7 +112,7 @@ namespace ResurrectionRP_Server.Houses
             Menu menu = new Menu("House_PurchaseMenu", HouseTypes.HouseTypeList[house.Type].Name, "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
             menu.BannerColor = new MenuColor(0, 0, 0, 0);
             menu.SetData("House", house);
-            menu.ItemSelectCallback = MenuCallBack;
+            menu.ItemSelectCallbackAsync = MenuCallBack;
 
             menu.SubTitle = (house.Locked) ? "La porte est ~r~fermée" : "La porte est ~g~ouverte";
 

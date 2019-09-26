@@ -155,15 +155,15 @@ namespace ResurrectionRP_Server.Factions
             }
 
             menu = new Menu(menuItem.Id, "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.CarMod);
-            menu.ItemSelectCallback = PeintureSelectCallback;
-            menu.IndexChangeCallback = PeinturePreview;
+            menu.ItemSelectCallbackAsync = PeintureSelectCallback;
+            menu.IndexChangeCallbackAsync = PeinturePreview;
 
             foreach (VehicleColor color in Enum.GetValues(typeof(VehicleColor)))
             {
                 MenuItem item = new MenuItem(color.ToString(), executeCallback: true, executeCallbackIndexChange: true);
                 item.RightLabel = $"${PeinturePrice}";
                 item.SetData("Color", Convert.ToInt32(color));
-                item.OnMenuItemCallback += OnColorChoice;
+                item.OnMenuItemCallbackAsync += OnColorChoice;
                 menu.Add(item);
             }
 
@@ -265,15 +265,15 @@ namespace ResurrectionRP_Server.Factions
             Menu menu = new Menu("ID_MainReparMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.CarMod);
 
             MenuItem primary = new MenuItem("Peinture Principal", "", "ID_First", executeCallback: true, executeCallbackIndexChange: true);
-            primary.OnMenuItemCallback = OnPeintureSelect;
+            primary.OnMenuItemCallbackAsync = OnPeintureSelect;
             menu.Add(primary);
 
             MenuItem secondary = new MenuItem("Peinture Secondaire", "", "ID_Second", executeCallback: true, executeCallbackIndexChange: true);
-            secondary.OnMenuItemCallback = OnPeintureSelect;
+            secondary.OnMenuItemCallbackAsync = OnPeintureSelect;
             menu.Add(secondary);
 
             MenuItem pearl = new MenuItem("Peinture Pearler", "", "ID_Pearl", executeCallback: true, executeCallbackIndexChange: true);
-            pearl.OnMenuItemCallback = OnPeintureSelect;
+            pearl.OnMenuItemCallbackAsync = OnPeintureSelect;
             menu.Add(pearl);
 
             await menu.OpenMenu(client);
@@ -331,7 +331,7 @@ namespace ResurrectionRP_Server.Factions
         {
             Menu menu = new Menu("ID_MainReparMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.CarMod);
             menu.SetData("Vehicle", vehicle);
-            menu.ItemSelectCallback = MenuCallBack;
+            menu.ItemSelectCallbackAsync = MenuCallBack;
 
             if (HasPlayerIntoFaction(client))
             {

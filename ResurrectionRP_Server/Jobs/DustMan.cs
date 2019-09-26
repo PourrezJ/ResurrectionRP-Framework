@@ -201,7 +201,7 @@ namespace ResurrectionRP_Server.Jobs
                 ph.AddMoney(_price);
 
                 Menu menu = new Menu("ID_DustMan", "Déchetterie", "Que voulez-vous faire?", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, true, true, false);
-                menu.ItemSelectCallback = DustManCallBack;
+                menu.ItemSelectCallbackAsync = DustManCallBack;
                 menu.Add(new MenuItem("~g~Prendre un autre quartier", "", "ID_Quartier", true));
                 menu.Add(new MenuItem("~r~Fin de mission", "", "ID_End", true));
 

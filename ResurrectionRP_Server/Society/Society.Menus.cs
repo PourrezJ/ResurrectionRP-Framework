@@ -29,7 +29,7 @@ namespace ResurrectionRP_Server.Society
         public virtual async Task<Menu> OpenSocietyMainMenu(IPlayer client)
         {
             Menu menu = new Menu("ID_SocietyMainMenu", SocietyName, "Administration de la société", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
-            menu.ItemSelectCallback += SocietyMainMenuCallback;
+            menu.ItemSelectCallbackAsync += SocietyMainMenuCallback;
 
             if (Owner != null && (client.GetPlayerHandler().StaffRank >= AdminRank.Moderator || FactionManager.IsGouv(client)))
             {
@@ -66,7 +66,7 @@ namespace ResurrectionRP_Server.Society
                 if (Owner == client.GetSocialClub() || FactionManager.IsGouv(client))
                 {
                     MenuItem getmoney = new MenuItem($"Gérer les finances", $"Caisse de l'entreprise: ${BankAccount.Balance}", "ID_money", executeCallback: true);
-                    getmoney.OnMenuItemCallback = FinanceMenu;
+                    getmoney.OnMenuItemCallbackAsync = FinanceMenu;
                     menu.Add(getmoney);
 
                     menu.Add(new MenuItem("Gestion des employés", "", "gemployee", executeCallback: true));
@@ -91,7 +91,7 @@ namespace ResurrectionRP_Server.Society
                 {
                     MenuItem depot = new MenuItem("Déposer de l'argent dans les caisses", "", "ID_Depot", true);
                     depot.SetInput("", 10, InputType.UFloat, true);
-                    depot.OnMenuItemCallback = DepotMoneyMenu;
+                    depot.OnMenuItemCallbackAsync = DepotMoneyMenu;
                     menu.Add(depot);
                 }
             }
@@ -273,7 +273,7 @@ namespace ResurrectionRP_Server.Society
             menu.Reset();
             menu.BackCloseMenu = false;
             menu.SubTitle = "Gestion des employés";
-            menu.ItemSelectCallback = GestionEmployeeCallback;
+            menu.ItemSelectCallbackAsync = GestionEmployeeCallback;
 
             MenuItem ajouter = new MenuItem("Ajouter un employé", "", "add_employe", executeCallback: true);
             ajouter.Description = "Mettez le prénom puis le nom de famille pour l'ajouter.";

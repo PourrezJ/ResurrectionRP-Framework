@@ -173,7 +173,7 @@ namespace ResurrectionRP_Server.Factions
             if (_boatColShape == ColShapePointer)
             {
                 Menu menu = new Menu("", "", "", backCloseMenu: true);
-                menu.ItemSelectCallback = MenuCallback;
+                menu.ItemSelectCallbackAsync = MenuCallback;
                 menu.Add(new MenuItem("Inventaire", "", "ID_Inventaire", true));
 
                 await menu.OpenMenu(player);

@@ -314,7 +314,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    await Phone.PhoneManager.OpenPhone(client, ph.PhoneSelected);
+                    Phone.PhoneManager.OpenPhone(client, ph.PhoneSelected);
                     break;
 
 

@@ -69,7 +69,7 @@ namespace ResurrectionRP_Server.Business
                 if (fueltruck.GetVehicleHandler().OilTank.Traite > 0 )
                 {
                     Menu RefuelMenu = new Menu("ID_RefuelMenu", "Station Service", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
-                    RefuelMenu.ItemSelectCallback = RefuelMenuCallBack;
+                    RefuelMenu.ItemSelectCallbackAsync = RefuelMenuCallBack;
                     RefuelMenu.Add(new MenuItem("Remplir la station", "", "", true));
 
                     await MenuManager.OpenMenu(client, RefuelMenu);

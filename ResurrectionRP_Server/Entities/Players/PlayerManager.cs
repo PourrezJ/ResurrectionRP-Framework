@@ -44,12 +44,12 @@ namespace ResurrectionRP_Server.Entities.Players
             AltAsync.OnClient("LogPlayer", LogPlayer);
             AltAsync.OnClient("MakePlayer", MakePlayer);
             AltAsync.OnClient("SendLogin", SendLogin );         
-            AltAsync.OnClient("Events_PlayerJoin", Events_PlayerJoin);
-            AltAsync.OnClient("UpdateHungerThirst", UpdateHungerThirst);        
-            AltAsync.OnClient("IWantToDie", IWantToDie);
-
+            AltAsync.OnClient("Events_PlayerJoin", Events_PlayerJoin);   
             AltAsync.OnClient("OnKeyPress", OnKeyPress);
             AltAsync.OnClient("OnKeyUp", OnKeyReleased);
+
+            Alt.OnClient("UpdateHungerThirst", UpdateHungerThirst);
+            Alt.OnClient("IWantToDie", IWantToDie);
 
             Alt.OnPlayerDead += Alt_OnPlayerDead;
             /*
@@ -307,10 +307,10 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        private Task UpdateHungerThirst(IPlayer client, object[] arg)
+        private void UpdateHungerThirst(IPlayer client, object[] arg)
         {
             if (!client.Exists)
-                return Task.CompletedTask;
+                return;
 
             PlayerHandler ph = client.GetPlayerHandler();
 
@@ -320,8 +320,6 @@ namespace ResurrectionRP_Server.Entities.Players
                 ph.Thirst = Convert.ToInt32(arg[1]);
                 ph.UpdateFull();
             }
-
-            return Task.CompletedTask;
         }
 
         private async Task LogPlayer(IPlayer client, object[] args)
@@ -373,7 +371,7 @@ namespace ResurrectionRP_Server.Entities.Players
         public static async Task<PlayerHandler> GetPlayerHandlerDatabase(string socialClub) =>
             await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == socialClub.ToLower()).FirstOrDefaultAsync();
 
-        private async Task IWantToDie(IPlayer client, object[] args)
+        private void IWantToDie(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -388,12 +386,12 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
 
                 ph.UpdateHungerThirst(100, 100);
-                await client.SpawnAsync(new Vector3(308.2974f, -567.4647f, 43.29008f));
-                await client.SetRotationAsync(new Rotation(0, 239.0923f, 0));
-                await client.SetHealthAsync(200);
+                client.Spawn(new Vector3(308.2974f, -567.4647f, 43.29008f));
+                client.Rotation = new Rotation(0, 239.0923f, 0);
+                client.Health = 200;
                 client.Resurrect();
-
                 ph.PlayerSync.Injured = false;
+                ph.UpdateFull();
             }
         }
 

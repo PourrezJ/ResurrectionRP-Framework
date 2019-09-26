@@ -24,7 +24,7 @@ namespace ResurrectionRP_Server.Factions
             if ( HasPlayerIntoFaction(client) &&  this.GetRangPlayer(client) >= 5)
             {
                 Menu menu = new Menu("ID_Accueil", FactionName, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
-                menu.ItemSelectCallback = SecretaireMenuCallback;
+                menu.ItemSelectCallbackAsync = SecretaireMenuCallback;
 
                 MenuItem fisc = new MenuItem("Récupérer un dossier fiscal", "Vérifier la comptabilité d'une entreprise", "ID_ListBusiness", executeCallback: true);
                 menu.Add(fisc);
@@ -49,7 +49,7 @@ namespace ResurrectionRP_Server.Factions
             if (menuItem.Id == "ID_ListBusiness")
             {
                 menu = new Menu("ID_Businesses", "Comptabilité", "Consulter la comptabilité d'une entreprise", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR);
-                menu.ItemSelectCallback = SecretaireMenuCallback;
+                menu.ItemSelectCallbackAsync = SecretaireMenuCallback;
 
                 foreach (Society.Society market in GameMode.Instance.SocietyManager.SocietyList)
                 {

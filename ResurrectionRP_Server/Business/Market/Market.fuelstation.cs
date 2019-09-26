@@ -26,7 +26,7 @@ namespace ResurrectionRP_Server.Business
             }
 
             Menu menu = new Menu("ID_GasPumpMenuMain", "Station Essence", $"Prix du litre: {fuelpump.Station.EssencePrice}", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
-            menu.ItemSelectCallback = fuelpump.FuelMenuCallBack;
+            menu.ItemSelectCallbackAsync = fuelpump.FuelMenuCallBack;
 
             menu.SubTitle = "Mettre le plein dans:";
 

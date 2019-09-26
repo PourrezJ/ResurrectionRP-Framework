@@ -35,7 +35,7 @@ namespace ResurrectionRP_Server.Phone
         #endregion
 
         #region Open Menu
-        public static async Task<bool> OpenPhone(IPlayer client, Phone phone, bool incomingCall = false, string contactNumber = null, string contactName = null)
+        public static bool OpenPhone(IPlayer client, Phone phone, bool incomingCall = false, string contactNumber = null, string contactName = null)
         {
             try
             {
@@ -50,10 +50,9 @@ namespace ResurrectionRP_Server.Phone
                          return false;
      */
 
-                    client.PlayAnimation((await client.GetVehicleAsync() != null) ? "cellphone@in_car@ds" : (await client.GetModelAsync() == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_read_base", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.Loop | AnimationFlags.SecondaryTask));
-                    await Task.Delay(200);
+                    client.PlayAnimation((client.Vehicle != null) ? "cellphone@in_car@ds" : (client.Model == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_read_base", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.Loop | AnimationFlags.SecondaryTask));
                     long newMessagesCount = GetNewMessagesOnConversationsCount(phone.PhoneNumber);
-                    client.EmitLocked("OpenPhone", newMessagesCount, JsonConvert.SerializeObject(phone.Settings), incomingCall, contactNumber, contactName);
+                    client.Emit("OpenPhone", newMessagesCount, JsonConvert.SerializeObject(phone.Settings), incomingCall, contactNumber, contactName);
                     //client.EmitLocked("ShowCursor", true);
 
                     return true;
@@ -172,7 +171,7 @@ namespace ResurrectionRP_Server.Phone
                     break;
 
                 case "initiateCall":
-                    await phone.InitiateCall(client, args[1].ToString());
+                    phone.InitiateCall(client, args[1].ToString());
                     break;
 
                 case "cancelCall":

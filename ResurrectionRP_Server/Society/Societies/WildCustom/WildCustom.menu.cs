@@ -81,8 +81,8 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             }
 
             Menu mainMenu = new Menu("ID_Main", "", SocietyName, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Garage);
-            mainMenu.ItemSelectCallback = MainMenuCallback;
-            mainMenu.Finalizer = Finalizer;
+            mainMenu.ItemSelectCallbackAsync = MainMenuCallback;
+            mainMenu.FinalizerAsync = Finalizer;
 
             MenuItem cleaning = new MenuItem("Nettoyage", "", "Cleaning", true);
             mainMenu.Add(cleaning);
@@ -200,7 +200,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             }
 
             Menu menu = new Menu("ID_Perf", "", "Choisissez l'élément à installer :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.Garage);
-            menu.ItemSelectCallback = PerformanceMenuCallback;
+            menu.ItemSelectCallbackAsync = PerformanceMenuCallback;
 
             foreach (var mod in BennysData.PerformanceModList)
             {
@@ -208,7 +208,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                 {
                     MenuItem item = new MenuItem(mod.ModName, executeCallback: true);
                     item.SetData("mod", mod.ModID);
-                    item.OnMenuItemCallback = PerformanceItemMenuCallback;
+                    item.OnMenuItemCallbackAsync = PerformanceItemMenuCallback;
                     menu.Add(item);
                 }
             }
@@ -259,9 +259,9 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             }
 
             Menu menu = new Menu("ID_Perfs", "", _subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.Garage);
-            menu.ItemSelectCallback = PerformanceChoiceMenuCallback;
-            menu.IndexChangeCallback = ModPreview;
-            menu.Finalizer = Finalizer;
+            menu.ItemSelectCallbackAsync = PerformanceChoiceMenuCallback;
+            menu.IndexChangeCallbackAsync = ModPreview;
+            menu.FinalizerAsync = Finalizer;
 
             var mods = manifest.Mods(_modType);
             var perfdata = BennysData.GetPerformanceData(_modType).Value;
@@ -304,7 +304,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                         item.RightLabel = $"${price}";
 
                     item.SetData("price", price);
-                    item.OnMenuItemCallback = ModChoice;
+                    item.OnMenuItemCallbackAsync = ModChoice;
                 }
 
                 menu.Add(item);
@@ -343,8 +343,8 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                 return;
 
             Menu menu = new Menu("ID_Design", "", "Choisissez l'élément à installer :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.Garage);
-            menu.ItemSelectCallback = DesignMenuCallback;
-            menu.Finalizer = Finalizer;
+            menu.ItemSelectCallbackAsync = DesignMenuCallback;
+            menu.FinalizerAsync = Finalizer;
 
             VehicleHandler vh = _vehicleBench.GetVehicleHandler();
             var manifest = vh.VehicleManifest;
@@ -358,7 +358,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                     MenuItem item = new MenuItem(mod.ModName, rightLabel: $"${price}", executeCallback: true);
                     item.SetData("mod", mod.ModID);
                     item.SetData("price", price);
-                    item.OnMenuItemCallback = DesignMenuItemCallback;
+                    item.OnMenuItemCallbackAsync = DesignMenuItemCallback;
                     menu.Add(item);
                 }
             }
@@ -430,9 +430,9 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             }
 
             Menu menu = new Menu("ID_DesignChoice", "", _subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.Garage);
-            menu.IndexChangeCallback = ModPreview;
-            menu.ItemSelectCallback= DesignChoiceCallback;
-            menu.Finalizer = Finalizer;
+            menu.IndexChangeCallbackAsync = ModPreview;
+            menu.ItemSelectCallbackAsync= DesignChoiceCallback;
+            menu.FinalizerAsync = Finalizer;
 
             var mods = manifest.Mods(_modType);
             vh.Mods.TryGetValue(_modType, out byte valueInstalled);
@@ -465,7 +465,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                     item.SetData("price", _price);
                 }
 
-                item.OnMenuItemCallback = ModChoice;
+                item.OnMenuItemCallbackAsync = ModChoice;
                 menu.Add(item);
             }
 
@@ -507,9 +507,9 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             VehicleHandler vh = _vehicleBench.GetVehicleHandler();
 
             Menu menu = new Menu("ID_Neons", "", "Néons :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.Garage);
-            menu.ItemSelectCallback = NeonsMenuCallback;
-            menu.ListItemChangeCallback = NeonListItemChangeCallback;
-            menu.Finalizer = Finalizer;
+            menu.ItemSelectCallbackAsync = NeonsMenuCallback;
+            menu.ListItemChangeCallbackAsync = NeonListItemChangeCallback;
+            menu.FinalizerAsync = Finalizer;
 
             _red = vh.NeonColor.R / 17;
             _green = vh.NeonColor.G / 17;
@@ -613,8 +613,8 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             else if (vh.Mods.Count >= 1)
             {
                 Menu menu = new Menu("ID_Histo", "", "Historique :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Garage);
-                menu.ItemSelectCallback = HistoricMenuCallback;
-                menu.Finalizer = Finalizer;
+                menu.ItemSelectCallbackAsync = HistoricMenuCallback;
+                menu.FinalizerAsync = Finalizer;
 
                 foreach (var mod in vh.Mods)
                 {

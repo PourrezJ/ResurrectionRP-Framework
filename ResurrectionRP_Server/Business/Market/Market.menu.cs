@@ -25,7 +25,7 @@ namespace ResurrectionRP_Server.Business
 
             if (!Inventory.IsEmpty())
             {
-                _menu.ItemSelectCallback = MarketMenuManager;
+                _menu.ItemSelectCallbackAsync = MarketMenuManager;
                 for (int a = 0; a < Inventory.InventoryList.Length; a++)
                 {
                     var inv = Inventory.InventoryList[a];
@@ -51,7 +51,7 @@ namespace ResurrectionRP_Server.Business
             if ( IsOwner(client) ||  IsEmployee(client))
             {
                 Inactivity = DateTime.Now;
-                menu.ItemSelectCallback += MarketOwnerMenuManager;
+                menu.ItemSelectCallbackAsync += MarketOwnerMenuManager;
 
                 menu.Items.AddRange(new List<MenuItem>()
                 {

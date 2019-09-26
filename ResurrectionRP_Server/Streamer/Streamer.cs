@@ -132,7 +132,7 @@ namespace ResurrectionRP_Server.Streamer
             {
                 if (!player.Exists)
                     return;
-                AltAsync.EmitLocked(player, "createStaticEntity", item.Value);
+                player.Emit("createStaticEntity", item.Value);
             }
         }
     }

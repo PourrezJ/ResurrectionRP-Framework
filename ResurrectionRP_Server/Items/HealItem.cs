@@ -2,7 +2,6 @@ using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Models;
-using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Items
 {
@@ -16,19 +15,24 @@ namespace ResurrectionRP_Server.Items
             Life = life;
         }
 
-        public override Task Use(IPlayer client, string inventoryType, int slot)
+        public override void Use(IPlayer client, string inventoryType, int slot)
         {
+            if (!client.Exists)
+                return;
+
             ushort healthActual = client.Health;
-            client.Health = (ushort)((healthActual + Life < 200) ? healthActual + Life : 200); 
+            client.Health = (ushort)((healthActual + Life < 200) ? healthActual + Life : 200);
+            var ph = client.GetPlayerHandler();
+
+            if (ph == null)
+                return;
 
             if (inventoryType == Utils.Enums.InventoryTypes.Pocket)
-                client.GetPlayerHandler()?.PocketInventory?.Delete(slot, 1);
+                ph.PocketInventory?.Delete(slot, 1);
             else if (inventoryType == Utils.Enums.InventoryTypes.Bag)
-                client.GetPlayerHandler()?.BagInventory?.Delete(slot, 1);
+                ph.BagInventory?.Delete(slot, 1);
             if (Life > 100)
                 client.SendNotification("Vous vous êtes appliqué un bandage");
-
-            return Task.CompletedTask;
         }
     }
 }

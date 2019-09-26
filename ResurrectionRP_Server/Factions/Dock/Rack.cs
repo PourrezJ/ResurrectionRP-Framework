@@ -78,7 +78,7 @@ namespace ResurrectionRP_Server.Factions
                     return;
 
                 Menu menu = new Menu("ID_Rack", RackName, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
-                menu.ItemSelectCallback = MenuCallBack;
+                menu.ItemSelectCallbackAsync = MenuCallBack;
 
                 vehicle.GetData<InventoryBox>("BoxForks", out InventoryBox boxOnForks);
 

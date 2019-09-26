@@ -25,7 +25,7 @@ namespace ResurrectionRP_Server.Menus
         {
             var animationsMenu = new AnimationsMenu();
             animationsMenu._menu = new Menu("Animation", "Réglages", "Choisissez une touche :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR);
-            animationsMenu._menu.ItemSelectCallback = animationsMenu.AnimationMenuCallBack;
+            animationsMenu._menu.ItemSelectCallbackAsync = animationsMenu.AnimationMenuCallBack;
 
             for (int i = 1; i <= 9; i++)
                 animationsMenu._menu.Add(new MenuItem($"Touche {i}", $"Configurer une animation sur la touche {i} du pavé numérique.", "ID_Key", true));

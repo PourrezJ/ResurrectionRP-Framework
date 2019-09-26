@@ -75,7 +75,7 @@ namespace ResurrectionRP_Server.Factions
                 client.DisplayHelp("Vous n'avez aucune amende à payer !", 5000);
 
             Menu menu = new Menu("ID_Accueil", FactionName, "", 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
-            menu.ItemSelectCallback = AccueilMenuCallback;
+            menu.ItemSelectCallbackAsync = AccueilMenuCallback;
             //List<Invoice> amendes = InvoiceList.FindAll(b => b.SocialClub == client.GetSocialClubName());
             //MenuItem menuitem = new MenuItem("Payer mes amendes", rightLabel: amendes.Count.ToString());
             //menu.Add(menuitem);
@@ -186,7 +186,7 @@ namespace ResurrectionRP_Server.Factions
             MotifList.Add(new Motif("Client de la prostitution", 10000));
 
             Menu motifMenu = new Menu("ID_Invoice_Motif", "Amende", backCloseMenu: true);
-            motifMenu.ItemSelectCallback = InvoiceCallBack;
+            motifMenu.ItemSelectCallbackAsync = InvoiceCallBack;
             motifMenu.SetData("Player", _target);
 
             var validate = new MenuItem("~o~Verbaliser la personne", "Confirmer la verbalisation", "ID_Validate", executeCallback: true);

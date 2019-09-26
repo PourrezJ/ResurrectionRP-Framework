@@ -280,7 +280,7 @@ namespace ResurrectionRP_Server.Models
             ParkingList.Add(this);
         }
 
-        public async Task OpenParkingMenu(IPlayer client, string title = "", string description = "", bool canGetAllVehicle = false, Location location = null, int vehicleType = -1, Menu menu = null, Menu.MenuCallback menuCallback = null)
+        public async Task OpenParkingMenu(IPlayer client, string title = "", string description = "", bool canGetAllVehicle = false, Location location = null, int vehicleType = -1, Menu menu = null, Menu.MenuCallbackAsync menuCallback = null)
         {
             if (!client.Exists)
                 return;
@@ -302,7 +302,7 @@ namespace ResurrectionRP_Server.Models
             {
                 menu.ClearItems();
                 menu.BackCloseMenu = false;
-                menu.ItemSelectCallback = menuCallback;
+                menu.ItemSelectCallbackAsync = menuCallback;
             }
 
             if (client.IsInVehicle && await client.GetSeatAsync() == 1) // I store my vehicle
@@ -330,7 +330,7 @@ namespace ResurrectionRP_Server.Models
                 }
                 
                 var item = new MenuItem("Ranger votre voiture", "", "ID_StoreVehicle", true, rightLabel: $"{((Price > 0) ? "$" + Price.ToString() : "")}");
-                item.OnMenuItemCallback = StoreVehicle;
+                item.OnMenuItemCallbackAsync = StoreVehicle;
                 menu.Add(item);
             }
             else // I want my vehicle
@@ -370,7 +370,7 @@ namespace ResurrectionRP_Server.Models
 
                             MenuItem item = new MenuItem(string.IsNullOrEmpty(veh.VehicleManifest.LocalizedName) ? veh.VehicleManifest.DisplayName : veh.VehicleManifest.LocalizedName, _description, "", true, rightLabel: veh.Plate);
                             item.SetData("Vehicle", veh);
-                            item.OnMenuItemCallback = GetVehicle;
+                            item.OnMenuItemCallbackAsync = GetVehicle;
                             menu.Add(item);
                         }
                         catch(Exception ex)

@@ -39,8 +39,8 @@ namespace ResurrectionRP_Server.Business
             Menu mainmenu = new Menu("ID_TattooMain", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true)
             {
                 BannerSprite = Banner.Tattoos2,
-                ItemSelectCallback = TattooMenuCallBack,
-                Finalizer = MenuFinalizer
+                ItemSelectCallbackAsync = TattooMenuCallBack,
+                FinalizerAsync = MenuFinalizer
             };
 
             List<object> _playerlist = new List<object>();
@@ -57,7 +57,7 @@ namespace ResurrectionRP_Server.Business
 
                 MenuItem depot = new MenuItem("Déposer de l'argent", "", "ID_Depot", true);
                 depot.SetInput("", 10, InputType.UFloat, true);
-                depot.OnMenuItemCallback = DepotMoneyMenu;
+                depot.OnMenuItemCallbackAsync = DepotMoneyMenu;
                 mainmenu.Add(depot);
 
                 mainmenu.Add(new ListItem("Client:", "Choix du client", "ID_PlayerSelect", _playerlist, 0, true));
@@ -179,9 +179,9 @@ namespace ResurrectionRP_Server.Business
         private async Task TattooChoiseMenu(List<Tattoo> TattooList, IPlayer tatoueur)
         {
             Menu selectMenu = new Menu("ID_TattooSelect", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Tattoos2);
-            selectMenu.IndexChangeCallback = TattooChoiseIndex; 
-            selectMenu.ItemSelectCallback = TattooMenuCallBack;
-            selectMenu.Finalizer = MenuFinalizer;
+            selectMenu.IndexChangeCallbackAsync = TattooChoiseIndex; 
+            selectMenu.ItemSelectCallbackAsync = TattooMenuCallBack;
+            selectMenu.FinalizerAsync = MenuFinalizer;
 
             foreach (Tattoo Tattoo in TattooList)
             {

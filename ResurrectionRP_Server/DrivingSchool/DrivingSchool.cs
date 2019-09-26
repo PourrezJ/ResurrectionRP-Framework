@@ -146,7 +146,7 @@ namespace ResurrectionRP_Server.DrivingSchool
             if (ph != null) 
             {
                 Menu drivingschoolmenu = new Menu("ID_DrivingShoolMenu", "Auto-école", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
-                drivingschoolmenu.ItemSelectCallback = DrivingMenuCallBack;
+                drivingschoolmenu.ItemSelectCallbackAsync = DrivingMenuCallBack;
 
                 if (ClientIsInExamen(client))
                 {

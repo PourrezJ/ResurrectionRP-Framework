@@ -31,7 +31,7 @@ namespace ResurrectionRP_Server.Entities.Players
             
             Menu menu = new Menu("ID_MainMenu", Identite.Name, "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
             menu.BannerColor = new MenuColor(0, 0, 0, 0);
-            menu.ItemSelectCallback = MainMenuManager;
+            menu.ItemSelectCallbackAsync = MainMenuManager;
             
             menu.Add(new MenuItem("Mes clefs", "", "ID_Clefs", true));
             menu.Add(new MenuItem("Animations", "Réglage des touches des animations", "ID_Animations", true));
@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server.Entities.Players
         private async Task OpenKeysMenu()
         {
             Menu menu = new Menu("ID_KeyMenu", "Mes Clefs", "Clefs que vous possédez", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR);
-            menu.ItemSelectCallback = MainMenuManager;
+            menu.ItemSelectCallbackAsync = MainMenuManager;
 
             if (ListVehicleKey.Count <= 0)
             {
@@ -113,7 +113,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (keygiven == null)
                     return;
 
-                menu.ItemSelectCallback = MainMenuManager;
+                menu.ItemSelectCallbackAsync = MainMenuManager;
                 menu.Add(new MenuItem("Donner", "", "ID_Give", executeCallback: true));
                 menu.Add(new MenuItem("Jeter", "~r~Détruire la clefs", "ID_Delete", executeCallback: true));
 

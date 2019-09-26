@@ -17,7 +17,7 @@ namespace ResurrectionRP_Server.Business
     {
         public virtual async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
         {
-            menu.ItemSelectCallback += MenuCallBack;
+            menu.ItemSelectCallbackAsync += MenuCallBack;
 
             if (Buyable && OnSale && Owner == client.GetSocialClub())
                 menu.Add(new MenuItem("~r~Annuler la mise en vente", "", id: "ID_CancellSell", executeCallback: true));
@@ -114,7 +114,7 @@ namespace ResurrectionRP_Server.Business
             menu.Reset();
             menu.BackCloseMenu = false;
             menu.SubTitle = "Gestion des employés";
-            menu.ItemSelectCallback = GestionEmployeeCallback;
+            menu.ItemSelectCallbackAsync = GestionEmployeeCallback;
 
             MenuItem ajouter = new MenuItem("Ajouter un employé", "", "add_employe", executeCallback: true);
             ajouter.Description = "Mettez le prénom puis le nom de famille pour l'ajouter.";

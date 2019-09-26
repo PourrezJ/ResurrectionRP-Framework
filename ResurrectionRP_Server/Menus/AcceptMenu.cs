@@ -41,7 +41,7 @@ namespace ResurrectionRP_Server
             };
 
             accept.menu = new Menu("ID_AcceptMenu", title, subtitle, noExit: !backCloseMenu, backCloseMenu: backCloseMenu);
-            accept.menu.ItemSelectCallback = accept.MenuCallBack;
+            accept.menu.ItemSelectCallbackAsync = accept.MenuCallBack;
 
             if (banner != null)
                 accept.menu.BannerSprite = banner;

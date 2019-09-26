@@ -275,13 +275,13 @@ namespace ResurrectionRP_Server.Houses
             {
                 await player.SetPositionAsync(HouseTypes.HouseTypeList[Type].Position.Pos);
                 await player.SetRotationAsync(HouseTypes.HouseTypeList[Type].Position.Rot);
-                player.Dimension = (short)(DIMENSION_START + ID);
+                await player.SetDimensionAsync((short)(DIMENSION_START + ID));
             }
         }
 
-        public void RemovePlayer(IPlayer player, bool set_pos = true)
+        public async Task RemovePlayer(IPlayer player, bool set_pos = true)
         {
-            if (!player.Exists)
+            if (!await player.ExistsAsync())
                 return;
 
             if (!RemoveFromHouse(player))
@@ -289,8 +289,8 @@ namespace ResurrectionRP_Server.Houses
 
             if (set_pos)
             {
-                player.Position = Position;
-                player.Dimension = GameMode.GlobalDimension;
+                await player.SetPositionAsync(Position);
+                await player.SetDimensionAsync(GameMode.GlobalDimension);
             }
         }
 

@@ -231,7 +231,7 @@ namespace ResurrectionRP_Server.Factions
                 Menu menu = new Menu("ID_ServiceMenu", FactionName, "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
 
                 MenuItem item = new MenuItem($"{(ServicePlayerList.Contains(client.GetSocialClub()) ? "Quitter" : "Prendre")} son service", "", "ID_PriseService", true);
-                item.OnMenuItemCallback = ServiceMenuCallBack;
+                item.OnMenuItemCallbackAsync = ServiceMenuCallBack;
                 menu.Add(item);
 
                 var staffRank = client.GetPlayerHandler()?.StaffRank;
@@ -240,7 +240,7 @@ namespace ResurrectionRP_Server.Factions
                 if (CanTakeMoney(client) || staffRank >= AdminRank.Moderator)
                 {
                     MenuItem getmoney = new MenuItem($"Gérer les finances", $"Caisse de la faction: ${BankAccount.Balance}", "ID_money", true);
-                    getmoney.OnMenuItemCallback = FinanceMenu;
+                    getmoney.OnMenuItemCallbackAsync = FinanceMenu;
                     menu.Add(getmoney);
                 }
 
@@ -248,23 +248,23 @@ namespace ResurrectionRP_Server.Factions
                 {
                     MenuItem depot = new MenuItem("Déposer de l'argent dans les caisses", "", "ID_Depot", true);
                     depot.SetInput("", 10, InputType.UNumber, true);
-                    depot.OnMenuItemCallback = DepotMoneyMenu;
+                    depot.OnMenuItemCallbackAsync = DepotMoneyMenu;
                     menu.Add(depot);
                 }
 
                 if (IsRecruteur(client) || staffRank >= AdminRank.Moderator)
                 {
                     MenuItem gestion = new MenuItem($"Gestion des membres", "", "ID_gestionMember", true);
-                    gestion.OnMenuItemCallback = GestionMember;
+                    gestion.OnMenuItemCallbackAsync = GestionMember;
                     menu.Add(gestion);
                 }
 
                 var vestiaire = new MenuItem("Ouvrir votre vestiaire", "", "ID_Vestiaire", true);
-                vestiaire.OnMenuItemCallback = OpenVestiaire;
+                vestiaire.OnMenuItemCallbackAsync = OpenVestiaire;
                 menu.Add(vestiaire);
 
                 var demission = new MenuItem("Démissioner", "", "ID_demissioner", executeCallback: true);
-                demission.OnMenuItemCallback = GestionMemberCallback;
+                demission.OnMenuItemCallbackAsync = GestionMemberCallback;
                 demission.SetData("playerId", client.GetSocialClub());
                 menu.Add(demission);
                 await menu.OpenMenu(client);
@@ -352,7 +352,7 @@ namespace ResurrectionRP_Server.Factions
             menu.ClearItems();
             menu.BackCloseMenu = false;
             menu.SubTitle = "Gestion des membres";
-            menu.ItemSelectCallback = GestionMemberCallback;
+            menu.ItemSelectCallbackAsync = GestionMemberCallback;
 
             MenuItem ajouter = new MenuItem("Ajouter un employé", "", "add_employe", executeCallback: true);
             ajouter.Description = "Mettez le prénom puis le nom de famille pour l'ajouter.";
@@ -474,7 +474,7 @@ namespace ResurrectionRP_Server.Factions
             if (HasPlayerIntoFaction(client))
             {
                 Menu menu = new Menu("ID_Shop", FactionName, "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
-                menu.ItemSelectCallback = ShopMenuCallBack;
+                menu.ItemSelectCallbackAsync = ShopMenuCallBack;
                 foreach (var item in ItemShop)
                 {
                     if (item.Rang > GetRangPlayer(client))
@@ -553,7 +553,7 @@ namespace ResurrectionRP_Server.Factions
             Menu menu = new Menu("ID_ParkingMenu", "Parking", subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
             menu.SetData("ConcessType", type);
             menu.SetData("Faction_Location", location); 
-            menu.ItemSelectCallback = ConcessCallBack;
+            menu.ItemSelectCallbackAsync = ConcessCallBack;
 
             if (await client.IsInVehicleAsync())
                 menu.Add(new MenuItem("Ranger le véhicule", "", "ID_StoreVehicle", true));
@@ -609,7 +609,7 @@ namespace ResurrectionRP_Server.Factions
                         menu.Id = "ID_ConcessMenuChoise";
                         menu.Title = "Concessionnaire";
                         menu.SubTitle = "Quel véhicule souhaitez-vous acheter :";
-                        menu.ItemSelectCallback = ConcessCallBack;
+                        menu.ItemSelectCallbackAsync = ConcessCallBack;
 
                         foreach (FactionVehicle veh in VehicleAllowed)
                         {

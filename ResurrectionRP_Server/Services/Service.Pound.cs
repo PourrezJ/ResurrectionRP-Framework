@@ -137,7 +137,7 @@ namespace ResurrectionRP_Server.Services
         public async Task OpenPoundMenu(IPlayer client)
         {
             Menu _menu = new Menu("ID_PoundMenu", "Fourrière", $"Sortir un véhicule pour la somme: ${Price}", backCloseMenu: true);
-            _menu.ItemSelectCallback = PoundMenuCallBack;
+            _menu.ItemSelectCallbackAsync = PoundMenuCallBack;
 
             var _poundList = GetVehicleInPound(client);
             if (_poundList.Count <= 0)

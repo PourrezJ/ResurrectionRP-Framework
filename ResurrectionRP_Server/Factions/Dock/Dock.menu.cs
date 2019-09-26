@@ -19,9 +19,9 @@ namespace ResurrectionRP_Server.Factions
                 return;
 
             Menu menu = new Menu("ID_Importation", "Importation", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
-            menu.ItemSelectCallback = ImportationMenuCallback;
-            menu.IndexChangeCallback = ItemChangeCallback;
-            menu.Finalizer = MenuFinalizer;
+            menu.ItemSelectCallbackAsync = ImportationMenuCallback;
+            menu.IndexChangeCallbackAsync = ItemChangeCallback;
+            menu.FinalizerAsync = MenuFinalizer;
 
             foreach (DockItemData item in importItems)
             {

@@ -23,11 +23,17 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Public delegates
-        public delegate Task MenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex);
-        public delegate Task MenuCheckbox(IPlayer client, Menu menu, IMenuItem menuItem, bool value);
-        public delegate Task MenuListCallback(IPlayer client, Menu menu, IListItem listItem, int listIndex);
-        public delegate Task MenuCurrentIndex(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem);
-        public delegate Task MenuFinalizer(IPlayer client, Menu menu);
+        public delegate Task MenuCallbackAsync(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex);
+        public delegate Task MenuCheckboxAsync(IPlayer client, Menu menu, IMenuItem menuItem, bool value);
+        public delegate Task MenuListCallbackAsync(IPlayer client, Menu menu, IListItem listItem, int listIndex);
+        public delegate Task MenuCurrentIndexAsync(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem);
+        public delegate Task MenuFinalizerAsync(IPlayer client, Menu menu);
+
+        public delegate void MenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex);
+        public delegate void MenuCheckbox(IPlayer client, Menu menu, IMenuItem menuItem, bool value);
+        public delegate void MenuListCallback(IPlayer client, Menu menu, IListItem listItem, int listIndex);
+        public delegate void MenuCurrentIndex(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem);
+        public delegate void MenuFinalizer(IPlayer client, Menu menu);
         #endregion
 
         #region Private fields
@@ -50,7 +56,7 @@ namespace ResurrectionRP_Server
         public bool EnableBanner { get; set; }
         public bool CallbackOnIndexChange
         {
-            get { return IndexChangeCallback != null; }
+            get { return IndexChangeCallbackAsync != null; }
         }
         public MenuItemList Items { get; set; }
 
@@ -83,6 +89,17 @@ namespace ResurrectionRP_Server
                 _selectedIndex = Items.IndexOf(value);
             }
         }
+        [JsonIgnore]
+        public MenuCallbackAsync ItemSelectCallbackAsync { get; set; }
+        [JsonIgnore]
+        public MenuListCallbackAsync ListItemChangeCallbackAsync { get; set; }
+        [JsonIgnore]
+        public MenuCurrentIndexAsync IndexChangeCallbackAsync { get; set; }
+        [JsonIgnore]
+        public MenuCheckboxAsync CallbackCheckBoxAsync { get; set; }
+        [JsonIgnore]
+        public MenuFinalizerAsync FinalizerAsync { get; set; }
+
         [JsonIgnore]
         public MenuCallback ItemSelectCallback { get; set; }
         [JsonIgnore]
@@ -128,8 +145,8 @@ namespace ResurrectionRP_Server
 
             _data = new Dictionary<string, object>();
             Items = new MenuItemList();
-            ItemSelectCallback = null;
-            Finalizer = null;
+            ItemSelectCallbackAsync = null;
+            FinalizerAsync = null;
         }
         #endregion
 

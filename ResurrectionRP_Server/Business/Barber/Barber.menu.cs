@@ -6,6 +6,7 @@ using ResurrectionRP_Server.Utils;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AltV.Net;
+using AltV.Net.Async;
 
 namespace ResurrectionRP_Server.Business.Barber
 {
@@ -47,26 +48,26 @@ namespace ResurrectionRP_Server.Business.Barber
                 if ( IsOwner(client))
                 {
                     MenuItem getmoney = new MenuItem("Gérer les finances", "", "ID_TakeMoney", true, rightLabel: $"${BankAccount.Balance}");
-                    getmoney.OnMenuItemCallback = BankAccountMenu;
+                    getmoney.OnMenuItemCallbackAsync = BankAccountMenu;
                     mainMenu.Add(getmoney);
                 }
 
                 MenuItem depot = new MenuItem("Déposer de l'argent", "", "ID_Depot", true);
                 depot.SetInput("", 10, InputType.UFloat, true);
-                depot.OnMenuItemCallback = DepotMoneyMenu;
+                depot.OnMenuItemCallbackAsync = DepotMoneyMenu;
                 mainMenu.Add(depot);
 
                 MenuItem haircut = new MenuItem("Faire une coupe de cheveux", "", "ID_Hair", true);
-                haircut.OnMenuItemCallback = HairCutChoice;
+                haircut.OnMenuItemCallbackAsync = HairCutChoice;
                 mainMenu.Add(haircut);
 
                 MenuItem beardcut = new MenuItem("Tailler une barbe", "", "ID_Beard", true);
-                beardcut.OnMenuItemCallback = BeardCutChoice;
+                beardcut.OnMenuItemCallbackAsync = BeardCutChoice;
                 mainMenu.Add(beardcut);
 
 
                 MenuItem colorchange = new MenuItem($"Faire une couleur (${ColorPrice})", "", "ID_Color", true);
-                colorchange.OnMenuItemCallback = ColorChoice;
+                colorchange.OnMenuItemCallbackAsync = ColorChoice;
                 mainMenu.Add(colorchange);
 
                 await MenuManager.OpenMenu(client, mainMenu);
@@ -160,9 +161,9 @@ namespace ResurrectionRP_Server.Business.Barber
             }
 
             menu = new Menu("ID_BarberBeard", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Barber);
-            menu.ItemSelectCallback= BarberMenuCallBack;
+            menu.ItemSelectCallbackAsync= BarberMenuCallBack;
             menu.IndexChangeCallback = HairCutPreview;
-            menu.Finalizer = MenuFinalizer;
+            menu.FinalizerAsync = MenuFinalizer;
 
             foreach (var beard in Beards.BeardsList)
             {
@@ -173,14 +174,14 @@ namespace ResurrectionRP_Server.Business.Barber
                 else
                 {
                     item.RightLabel = $"${beard.Price}";
-                    item.OnMenuItemCallback = BeardCutSelected;
+                    item.OnMenuItemCallbackAsync = BeardCutSelected;
                 }
 
                 menu.Add(item);
             }
 
             await MenuManager.OpenMenu(client, menu);
-            await HairCutPreview(client, menu, 0, menu.Items[0]);
+            HairCutPreview(client, menu, 0, menu.Items[0]);
         }
 
         private async Task BeardCutSelected(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -217,9 +218,9 @@ namespace ResurrectionRP_Server.Business.Barber
                 return;
 
             menu = new Menu("ID_BarberHair", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Barber);
-            menu.ItemSelectCallback = BarberMenuCallBack;
+            menu.ItemSelectCallbackAsync = BarberMenuCallBack;
             menu.IndexChangeCallback = HairCutPreview;
-            menu.Finalizer = MenuFinalizer;
+            menu.FinalizerAsync = MenuFinalizer;
 
             List<Hairs> _hairsList = (ClientSelected.Character.Gender == 0) ? Hairs.HairsMenList : Hairs.HairsGirlList;
 
@@ -232,14 +233,14 @@ namespace ResurrectionRP_Server.Business.Barber
                 else
                 {
                     item.RightLabel = $"${hairs.Price}";
-                    item.OnMenuItemCallback = HairCutSelected;
+                    item.OnMenuItemCallbackAsync = HairCutSelected;
                 }
 
                 menu.Add(item);
             }
 
             await MenuManager.OpenMenu(client, menu);
-            await HairCutPreview(client, menu, 0, menu.Items[0]);
+            HairCutPreview(client, menu, 0, menu.Items[0]);
         }
 
         private async Task HairCutSelected(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -260,21 +261,24 @@ namespace ResurrectionRP_Server.Business.Barber
             await OpenMenu(client);
         }
 
-        private Task HairCutPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        private void HairCutPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
+            if (ClientSelected == null)
+                return;
+
+            if (ClientSelected.Client == null)
+                return;
+
             if (menuItem.Id == "ID_Hair")
             {
                 List<Hairs> _hairsList = (ClientSelected.Character.Gender == 0) ? Hairs.HairsMenList : Hairs.HairsGirlList;
-                ClientSelected?.Client?.SetCloth(ClothSlot.Hair, _hairsList[itemIndex].ID, 0, 0);
+                ClientSelected.Client.SetCloth(ClothSlot.Hair, _hairsList[itemIndex].ID, 0, 0);
             }
             else if (menuItem.Id == "ID_Beard")
             {
                 var hair = ClientSelected.Character.Hair;
-
-                if (ClientSelected.Client != null)
-                ClientSelected?.Client?.SetHeadOverlay(1, new HeadOverlayData((byte)itemIndex, 255, (uint)hair.Color, (uint)hair.HighlightColor));
+                ClientSelected.Client.SetHeadOverlay(1, new HeadOverlayData((byte)itemIndex, 255, (uint)hair.Color, (uint)hair.HighlightColor));
             }
-            return Task.CompletedTask;
         }
         #endregion
 
@@ -296,9 +300,9 @@ namespace ResurrectionRP_Server.Business.Barber
             _beardSecondColor = ClientSelected.Character.Appearance[1].SecondaryColor;
 
             menu = new Menu("ID_BarberColor", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Barber);
-            menu.ItemSelectCallback = BarberMenuCallBack;
-            menu.ListItemChangeCallback = ColorPreview;
-            menu.Finalizer = MenuFinalizer;
+            menu.ItemSelectCallbackAsync = BarberMenuCallBack;
+            menu.ListItemChangeCallbackAsync = ColorPreview;
+            menu.FinalizerAsync = MenuFinalizer;
 
             List<object> _colorlist = new List<object>();
 
@@ -311,7 +315,7 @@ namespace ResurrectionRP_Server.Business.Barber
             menu.Add(new ListItem("Couleur barbe secondaire", "Changer la couleur de la barbe secondaire.", "ID_BeardSecondColor", _colorlist, ClientSelected.Character.Hair.HighlightColor, true, true));
 
             MenuItem valid = new MenuItem("~g~Valider les choix", executeCallback: true);
-            valid.OnMenuItemCallback = ColorValidChoice;
+            valid.OnMenuItemCallbackAsync = ColorValidChoice;
             menu.Add(valid);
 
             await menu.OpenMenu(client);
@@ -361,8 +365,8 @@ namespace ResurrectionRP_Server.Business.Barber
                 _beardSecondColor = listindex;
 
             if (listItem.Id == "ID_HairFirstColor" || listItem.Id == "ID_HairSecondColor" && ClientSelected.Client.Exists)
-                await ClientSelected.Client.SetHairColorAsync((uint)_hairFirstColor, (uint)_hairSecondColor);
-            else if (ClientSelected.Client.Exists)
+                ClientSelected.Client.SetHairColor((uint)_hairFirstColor, (uint)_hairSecondColor);
+            else if (await ClientSelected.Client.ExistsAsync())
             {
                 HeadOverlayData head = new HeadOverlayData()
                 {
@@ -372,7 +376,7 @@ namespace ResurrectionRP_Server.Business.Barber
                     Opacity = 255
                 };
 
-                await ClientSelected.Client.SetHeadOverlayAsync(1, head);
+                ClientSelected.Client.SetHeadOverlay(1, head);
             }
         }
         #endregion

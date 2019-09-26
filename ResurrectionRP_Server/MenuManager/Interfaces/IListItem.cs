@@ -7,6 +7,6 @@ namespace ResurrectionRP_Server
         List<object> Items { get; set; }
         int SelectedItem { get; set; }
         bool ExecuteCallbackListChange { get; set; }
-        Menu.MenuListCallback ListItemChangeCallback { get; set; }
+        Menu.MenuListCallbackAsync ListItemChangeCallback { get; set; }
     }
 }

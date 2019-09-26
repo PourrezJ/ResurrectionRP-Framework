@@ -30,7 +30,7 @@ namespace ResurrectionRP_Server.Houses
 
             houseMenu._menu = new Menu("houseMenu", "House Menu", "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
             houseMenu._menu.BannerColor = new MenuColor(0, 255, 255, 0);
-            houseMenu._menu.ItemSelectCallback = houseMenu.HouseCallBackMenu;
+            houseMenu._menu.ItemSelectCallbackAsync = houseMenu.HouseCallBackMenu;
 
             houseMenu._menu.Add(new MenuItem("Ouvrir le coffre", "", "openInventory", executeCallback: true));
 

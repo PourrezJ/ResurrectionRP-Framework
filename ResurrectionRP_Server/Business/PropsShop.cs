@@ -181,8 +181,8 @@ namespace ResurrectionRP_Server.Business
         public async Task OpenPropsStoreMenu(IPlayer client)
         {
             Menu menu = new Menu("ClothingMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, BannerStyle);
-            menu.ItemSelectCallback = MenuCallBack;
-            menu.Finalizer = MenuClose;
+            menu.ItemSelectCallbackAsync = MenuCallBack;
+            menu.FinalizerAsync = MenuClose;
 
             if (client.Model == (uint)PedModel.FreemodeMale01)
             {
@@ -262,8 +262,8 @@ namespace ResurrectionRP_Server.Business
             menu.ClearItems();
             menu.SubTitle = null;
             menu.BackCloseMenu = false;
-            menu.ItemSelectCallback = CategorieCallBack;
-            menu.IndexChangeCallback = null;
+            menu.ItemSelectCallbackAsync = CategorieCallBack;
+            menu.IndexChangeCallbackAsync = null;
 
             int[] compoList = null;
 
@@ -329,8 +329,8 @@ namespace ResurrectionRP_Server.Business
             int[] compoList = menu.GetData("Categorie");
             menu.SubTitle = menuItem.Text.ToUpper();
             menu.BackCloseMenu = false;
-            menu.ItemSelectCallback = OnCallBackWithCat;
-            menu.IndexChangeCallback = OnCurrentItem;
+            menu.ItemSelectCallbackAsync = OnCallBackWithCat;
+            menu.IndexChangeCallbackAsync = OnCurrentItem;
 
             byte componentID = menu.GetData("componentID");
 
@@ -415,8 +415,8 @@ namespace ResurrectionRP_Server.Business
             menu.ClearItems();
             menu.SubTitle = null;
             menu.BackCloseMenu = false;
-            menu.ItemSelectCallback = OnCallBackWithoutCat;
-            menu.IndexChangeCallback = OnCurrentItem;
+            menu.ItemSelectCallbackAsync = OnCallBackWithoutCat;
+            menu.IndexChangeCallbackAsync = OnCurrentItem;
 
             int[] compoList = null;
 

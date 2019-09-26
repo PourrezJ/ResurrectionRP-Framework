@@ -303,12 +303,6 @@ namespace ResurrectionRP_Server
         public static async Task<bool> IsInvinsibleAsync(this IPlayer client)
             => await client.GetSyncedMetaDataAsync<bool>("SetInvincible");
 
-        public static Task SetHeadOverlayAsync(this IPlayer client, int overlayId, Business.Barber.HeadOverlayData overlayData)
-        {
-            client.EmitLocked("HeadOverlayVariation", overlayData.Index, overlayData.Opacity, overlayData.ColorId, overlayData.SecondaryColorId, overlayId);
-            return Task.CompletedTask;
-        }
-
         public static void SetHeadOverlay(this IPlayer client, int overlayId, Business.Barber.HeadOverlayData overlayData)
         {
             client.EmitLocked("HeadOverlayVariation", overlayData.Index, overlayData.Opacity, overlayData.ColorId, overlayData.SecondaryColorId, overlayId);
@@ -319,19 +313,13 @@ namespace ResurrectionRP_Server
             client.EmitLocked("HairVariation", color, hightlightColor);
         }
 
-        public static Task SetHairColorAsync(this IPlayer client,  uint color, uint hightlightColor)
-        {
-            client.EmitLocked("HairVariation", color, hightlightColor);
-            return Task.CompletedTask;
-        }
-
         public static void Freeze(this IPlayer client, bool state)
         {
             // TODO
         }
 
         public static void CreateBlip(this IPlayer client, uint sprite, Vector3 position, string name = "", float scale = 1, int color = 0, int alpha = 255, bool shortRange = false) 
-            => client.Emit("CreateBlip", sprite, position.ConvertToVector3Serialized(), name, scale, color, alpha, shortRange);
+            => client.EmitLocked("CreateBlip", sprite, position.ConvertToVector3Serialized(), name, scale, color, alpha, shortRange);
 
         public static void PlayAnimation(this IPlayer client, string animDict, string animName, float blendInSpeed = 8f, float blendOutSpeed = -8f, int duration = -1, Utils.Enums.AnimationFlags flags = 0, float playbackRate = 0f)
         {

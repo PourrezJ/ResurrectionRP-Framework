@@ -124,7 +124,7 @@ namespace ResurrectionRP_Server.Business
         {
             if (client.GetPlayerHandler().StaffRank >= Utils.Enums.AdminRank.Moderator)
             {
-                menu.ItemSelectCallback += AdminMenuCallback;
+                menu.ItemSelectCallbackAsync += AdminMenuCallback;
                 menu.Add(new MenuItem("~r~Gérer les catégories en vente", "", "ID_Components", true));
             }
 
@@ -377,8 +377,8 @@ namespace ResurrectionRP_Server.Business
         public async Task OpenClothingMenu(IPlayer client)
         {
             Menu menu = new Menu("ClothingMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, BannerStyle);
-            menu.ItemSelectCallback = MenuCallBack;
-            menu.Finalizer = MenuClose;
+            menu.ItemSelectCallbackAsync = MenuCallBack;
+            menu.FinalizerAsync = MenuClose;
 
             if (Mask != null && Mask.Count > 0)
             {
@@ -464,8 +464,8 @@ namespace ResurrectionRP_Server.Business
             if (data == null)
                 return;
 
-            menu.ItemSelectCallback = OnTopsCategorieCallBack;
-            menu.IndexChangeCallback = null;
+            menu.ItemSelectCallbackAsync = OnTopsCategorieCallBack;
+            menu.IndexChangeCallbackAsync = null;
 
             var compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenTops : GirlTops;
 
@@ -503,8 +503,8 @@ namespace ResurrectionRP_Server.Business
             menu.ClearItems();
             var compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenTops : GirlTops;
             menu.SubTitle = menuItem.Text.ToUpper();
-            menu.ItemSelectCallback = OnTopsCallBack;
-            menu.IndexChangeCallback = PreviewTopsItem;
+            menu.ItemSelectCallbackAsync = OnTopsCallBack;
+            menu.IndexChangeCallbackAsync = PreviewTopsItem;
 
             ClothManifest? clothdata = ClothingLoader.FindTops(client);
 
@@ -580,8 +580,8 @@ namespace ResurrectionRP_Server.Business
             menu.ClearItems();
             menu.SubTitle = null;
             menu.BackCloseMenu = false;
-            menu.ItemSelectCallback = CategorieCallBack;
-            menu.IndexChangeCallback = null;
+            menu.ItemSelectCallbackAsync = CategorieCallBack;
+            menu.IndexChangeCallbackAsync = null;
 
             List<int> compoList = null;
 
@@ -650,8 +650,8 @@ namespace ResurrectionRP_Server.Business
             List<int> compoList = menu.GetData("Categorie");
             menu.SubTitle = menuItem.Text.ToUpper();
             menu.BackCloseMenu = false;
-            menu.ItemSelectCallback = OnCallBackWithCat;
-            menu.IndexChangeCallback = OnCurrentItem;
+            menu.ItemSelectCallbackAsync = OnCallBackWithCat;
+            menu.IndexChangeCallbackAsync = OnCurrentItem;
 
             byte componentID = menu.GetData("componentID");
 
@@ -734,8 +734,8 @@ namespace ResurrectionRP_Server.Business
             menu.ClearItems();
             menu.SubTitle = null;
             menu.BackCloseMenu = backCloseMenu;
-            menu.ItemSelectCallback = OnCallBackWithoutCat;
-            menu.IndexChangeCallback = OnCurrentItem;
+            menu.ItemSelectCallbackAsync = OnCallBackWithoutCat;
+            menu.IndexChangeCallbackAsync = OnCurrentItem;
 
             List<int> compoList = null;
 

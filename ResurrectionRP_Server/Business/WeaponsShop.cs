@@ -34,7 +34,7 @@ namespace ResurrectionRP_Server.Business
 
             if (!Inventory.IsEmpty())
             {
-                _menu.ItemSelectCallback = StoreMenuManager;
+                _menu.ItemSelectCallbackAsync = StoreMenuManager;
                 for (int a = 0; a < Inventory.InventoryList.Length; a++)
                 {
                     var inv = Inventory.InventoryList[a];
@@ -60,7 +60,7 @@ namespace ResurrectionRP_Server.Business
             if ( IsOwner(client) ||  IsEmployee(client))
             {
                 Inactivity = DateTime.Now;
-                menu.ItemSelectCallback += StoreOwnerMenuManager;
+                menu.ItemSelectCallbackAsync += StoreOwnerMenuManager;
 
                 menu.Add(new MenuItem("Ajouter des produits", "", "ID_Add", true));
 

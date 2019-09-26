@@ -23,12 +23,13 @@ namespace ResurrectionRP_Server
             AltAsync.OnClient("MenuManager_ListChanged", MenuManager_ListChangedAsync);
             AltAsync.OnClient("MenuManager_BackKey", MenuManager_BackKeyAsync);
             AltAsync.OnClient("MenuManager_ClosedMenu", MenuManager_ClosedMenuAsync);
-
+            /*
             Alt.OnClient("MenuManager_ExecuteCallback", MenuManager_ExecuteCallbacks);
             Alt.OnClient("MenuManager_IndexChanged", MenuManager_IndexChanged);
             Alt.OnClient("MenuManager_ListChanged", MenuManager_ListChanged);
             Alt.OnClient("MenuManager_BackKey", MenuManager_BackKey);
             Alt.OnClient("MenuManager_ClosedMenu", MenuManager_ClosedMenu);
+            */
         }
 
         #endregion

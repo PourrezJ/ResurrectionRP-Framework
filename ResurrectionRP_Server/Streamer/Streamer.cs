@@ -20,7 +20,7 @@ namespace ResurrectionRP_Server.Streamer
     public partial class Streamer
     {
         public int EntityNumber = 0;
-        public ConcurrentDictionary<int,INetworkingEntity> ListEntities = new ConcurrentDictionary<int, INetworkingEntity>();
+        public ConcurrentDictionary<int, INetworkingEntity> ListEntities = new ConcurrentDictionary<int, INetworkingEntity>();
 
         public int StaticEntityNumber = 0;
         public ConcurrentDictionary<int, dynamic> ListStaticEntities = new ConcurrentDictionary<int, dynamic>();
@@ -97,7 +97,7 @@ namespace ResurrectionRP_Server.Streamer
         public int DestroyEntity(int entityid)
         {
             AltNetworking.RemoveEntity(ListEntities[entityid]);
-            ListEntities[entityid] = null;
+            ListEntities.TryRemove(entityid, out _);
             return 0;
         }
 

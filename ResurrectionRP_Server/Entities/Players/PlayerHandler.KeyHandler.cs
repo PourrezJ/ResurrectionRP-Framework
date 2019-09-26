@@ -34,7 +34,6 @@ namespace ResurrectionRP_Server.Entities.Players
             if (!client.Exists)
                 return;
 
- 
             PlayerHandler ph = client.GetPlayerHandler();
             IVehicle vehicle = vehicleDistant ?? await client.GetVehicleAsync();
             VehicleHandler vh = vehicle?.GetVehicleHandler();
@@ -176,6 +175,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
 
                     Objects.WorldObject pickup = Objects.WorldObject.ListObject.FirstOrDefault(o => o.Value.Position.Distance(playerPos) <= 1).Value;
+
                     if (pickup != null)
                     {
                         var resupickup = ResuPickupManager.GetResuPickup(pickup.ID);

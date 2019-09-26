@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Numerics;
 using System.Text;
 using Newtonsoft.Json;
-using Object = ResurrectionRP_Server.Entities.Objects.Object;
+using WorldObject = ResurrectionRP_Server.Entities.Objects.WorldObject;
 using TextLabel = ResurrectionRP_Server.Streamer.Data.TextLabel;
 using Blips = ResurrectionRP_Server.Entities.Blips.Blips;
 using AltV.Net.Data;
@@ -58,26 +58,26 @@ namespace ResurrectionRP_Server.Streamer
             return EntityNumber;
         }
 
-        public Object AddEntityObject(Object data)
+        public WorldObject AddEntityObject(WorldObject data)
         {
-            INetworkingEntity item = AltNetworking.CreateEntity(data.position.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());
-            ListEntities.TryAdd(data.id, item);
+            INetworkingEntity item = AltNetworking.CreateEntity(data.Position.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());
+            ListEntities.TryAdd(data.ID, item);
             return data;
         }
 
-        public Object UpdateEntityObject(Object obj)
+        public WorldObject UpdateEntityObject(WorldObject obj)
         {
-            INetworkingEntity oitem = this.ListEntities[obj.id];
-            oitem.SetData("attach",JsonConvert.SerializeObject( obj.attach ) );
+            INetworkingEntity oitem = this.ListEntities[obj.ID];
+            oitem.SetData("attach",JsonConvert.SerializeObject( obj.Attachment ) );
 
             return obj;
         }
 
-        public void DeleteEntityObject(Object data)
+        public void DeleteEntityObject(WorldObject data)
         {
-            Alt.EmitAllClients("deleteObject", data.id);
-            AltNetworking.RemoveEntity(ListEntities[data.id]);
-            ListEntities[data.id] = null;
+            Alt.EmitAllClients("deleteObject", data.ID);
+            AltNetworking.RemoveEntity(ListEntities[data.ID]);
+            ListEntities[data.ID] = null;
         }
 
         public TextLabel AddEntityTextLabel(string label, Vector3 pos, int font = 1, int r = 255, int g = 255, int b = 255, int a = 255, int drawDistance = 20, int dimension = GameMode.GlobalDimension)

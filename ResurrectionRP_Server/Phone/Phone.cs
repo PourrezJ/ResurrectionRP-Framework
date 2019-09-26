@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Phone
         }
 
         [JsonIgnore, BsonIgnore]
-        public Entities.Objects.Object props;
+        public Entities.Objects.WorldObject props;
 
         public Phone()
         {

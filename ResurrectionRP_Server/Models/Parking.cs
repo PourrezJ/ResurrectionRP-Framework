@@ -351,8 +351,7 @@ namespace ResurrectionRP_Server.Models
                 else
                     vehicleListParked = ListVehicleStored.FindAll(p => (VehiclesManager.GetVehicleHandler(p.Plate).OwnerID == social || ph.ListVehicleKey.Exists(v => v.Plate == p.Plate) && VehiclesManager.GetVehicleHandler(p.Plate).VehicleManifest.VehicleClass == vehicleType));
 
-                FilterDefinition<VehicleHandler> filter = Builders<VehicleHandler>.Filter.AnyIn("_id", vehicleListParked.Select(v => v.Plate).ToArray());
-                List<VehicleHandler> vehicleList = await Database.MongoDB.GetCollectionSafe<VehicleHandler>("vehicles").Find(filter).ToListAsync();
+                List<VehicleHandler> vehicleList = VehiclesManager.GetAllVehicles().Where(v => vehicleListParked.Select(p => p.Plate).Contains(v.Plate)).ToList();
 
                 if (vehicleList.Count > 0)
                 {

@@ -116,26 +116,28 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
 
                     Farm farm = FarmManager.PlayerInFarmZone(client);
+
                     if (farm != null)
                     {
                         await farm.StartFarming(client);
                         return;
                     }
                     
-                    var Ph = PlayerManager.GetPlayersList().Find(p => p.Location.Pos.DistanceTo(raycastData.pos) < 1);
-                    if (playerDistant != null || Ph != null && Ph != this)
+                    PlayerHandler distantPh = PlayerManager.GetPlayersList().Find(p => p.Location.Pos.DistanceTo(raycastData.pos) < Globals.MAX_INTERACTION_DISTANCE);
+
+                    if (playerDistant != null || distantPh != null && distantPh != this)
                     {
-                        await ph.OpenXtremPlayer(playerDistant ?? Ph.Client);
+                        await ph.OpenXtremPlayer(playerDistant ?? distantPh.Client);
                         return;
                     }
 
-                    Door door = GameMode.Instance.DoorManager.DoorList.Find(p => p.Position.DistanceTo2D(raycastData.pos) <= 1 && p.Hash == raycastData.entityHash && raycastData.isHit);
+                    Door door = GameMode.Instance.DoorManager.DoorList.Find(p => p.Position.DistanceTo2D(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE && p.Hash == raycastData.entityHash && raycastData.isHit);
                     if (door != null)
                         await door.Interact?.Invoke(client, door);
 
                     if (raycastData.entityType == 1)
                     {
-                        var ped = Peds.PedsManager.NPCList.Find(p => p.Position.DistanceTo(raycastData.pos) <= 1.5 && p.Model == (AltV.Net.Enums.PedModel)raycastData.entityHash);
+                        var ped = Peds.PedsManager.NPCList.Find(p => p.Position.DistanceTo(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE && p.Model == (AltV.Net.Enums.PedModel)raycastData.entityHash);
                         if (ped != null)
                         {
                             if (ped.Position.DistanceTo(client.Position) > 3)

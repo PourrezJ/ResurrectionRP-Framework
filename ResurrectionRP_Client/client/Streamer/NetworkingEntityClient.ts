@@ -121,7 +121,7 @@ export class NetworkingEntityClient {
 
     onDataChange = async (entity: any, data: any) => {
         let count = 0;
-        //alt.log(`entity: ${JSON.stringify(entity)} | data ${JSON.stringify(data)}`);
+        alt.log(`entity: ${JSON.stringify(entity)} | data ${JSON.stringify(data)}`);
         // Creating an entity can take some time so wait until it is created before updating it
         const interval = alt.setInterval(() => {
             if (NetworkingEntityClient.EntityList[entity.id] == undefined || NetworkingEntityClient.EntityList[entity.id] == null) {
@@ -158,6 +158,15 @@ export class NetworkingEntityClient {
                     break;
             }
         }, 10);
+
+
+        if (entity.data.entityType == 1) {
+            if (entity.data.attach != undefined && game.isEntityAttached(NetworkingEntityClient.EntityList[entity.id]))
+                game.detachEntity(NetworkingEntityClient.EntityList[entity.id], true, true);
+
+            //game.setEntityCoordsNoOffset(entity.id, entity.position.x, entity.position.y, entity.position.z, false, false, false);
+
+        }
     }
 
     onStreamOut = async (entity: any) => {
@@ -192,7 +201,7 @@ export class NetworkingEntityClient {
                 break;
             case 1:
                 await utils.loadModelAsync(game.getHashKey(entity.data.model.stringValue));
-                await this.streamObject(
+                let object = await this.streamObject(
                     entity.id,
                     entity.data.model.intValue,
                     entity.position.x,
@@ -202,7 +211,7 @@ export class NetworkingEntityClient {
                 );
 
                 if (JSON.parse(entity.data.attach.stringValue) != null)
-                    this.objectAttach(entity.id, JSON.parse(entity.data.attach.stringValue)) 
+                    this.objectAttach(entity.id, JSON.parse(entity.data.attach.stringValue));
                 break;
             case 2:
                 await this.streamTextLabel(
@@ -283,8 +292,8 @@ export class NetworkingEntityClient {
         NetworkingEntityClient.EntityList[id] = entityId;
     }
 
-    private streamObject = async (id: number, model: any, x: number, y: number, z: number, freeze: boolean) => {
-        var entityId = null;
+    private streamObject = (id: number, model: any, x: number, y: number, z: number, freeze: boolean) : number  => {
+        let entityId : number = null;
 
         if (NetworkingEntityClient.EntityList[id] == undefined)
             entityId = game.createObject(model, x, y, z, false, true, false);
@@ -294,6 +303,7 @@ export class NetworkingEntityClient {
 
         game.freezeEntityPosition(entityId, freeze);
         NetworkingEntityClient.EntityList[id] = entityId;
+        return entityId;
     }
 
     private objectAttach = (entityId: number, attach: any) => {

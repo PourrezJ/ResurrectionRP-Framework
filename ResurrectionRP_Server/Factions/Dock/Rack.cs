@@ -89,7 +89,7 @@ namespace ResurrectionRP_Server.Factions
                 else if (boxOnForks == null && InventoryBox != null)
                     menu.Add(new MenuItem("Prendre le box", $"Prendre le box du rack {RackName}", "ID_TakeRack", true));
 
-                if (client.GetPlayerHandler()?.StaffRank > 0 && InventoryBox != null)
+                if (client.GetPlayerHandler()?.StaffRank > 0 && InventoryBox != null && boxOnForks == null)
                     menu.Add(new MenuItem("~r~Retirer le box", $"Retirer le box {RackName}", "ID_Destroy", true));
 
                 await MenuManager.OpenMenu(client, menu);
@@ -121,7 +121,7 @@ namespace ResurrectionRP_Server.Factions
                         inventoryBox.Obj.Destroy();
                         inventoryBox.ID = RackName;
                         InventoryBox = inventoryBox;
-                        inventoryBox.Location = new Location(new Vector3(this.BoxLocation.Pos.X, this.BoxLocation.Pos.Y, this.BoxLocation.Pos.Z - 1), this.BoxLocation.Rot);                       
+                        InventoryBox.Location = new Location(new Vector3(this.BoxLocation.Pos.X, this.BoxLocation.Pos.Y, this.BoxLocation.Pos.Z - 1), this.BoxLocation.Rot);                       
                         
                         InventoryBox.Spawn();
                         vehicle.ResetData("BoxForks");

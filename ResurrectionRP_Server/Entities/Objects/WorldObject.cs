@@ -23,20 +23,21 @@ namespace ResurrectionRP_Server.Entities.Objects
             get => _position;
             set
             {
+                _position = value;
                 if (Exists)
                     GameMode.Instance.Streamer.UpdateEntityObject(this);
-                _position = value;
+               
             }
         }
 
         private Rotation _rotation;
         public Rotation Rotation
-        {
+        {         
             set
             {
+                _rotation = value;
                 if (Exists)
                     GameMode.Instance.Streamer.UpdateEntityObject(this);
-                _rotation = value;
             }
             get => _rotation;
         }
@@ -66,7 +67,8 @@ namespace ResurrectionRP_Server.Entities.Objects
 
         public bool DetachAttach()
         {
-            this.Attachment = null;
+            Attachment = null;
+            GameMode.Instance.Streamer.UpdateEntityObject(this);
             return true;
         }
 
@@ -154,10 +156,10 @@ namespace ResurrectionRP_Server.Entities.Objects
             GameMode.Instance.Streamer.UpdateEntityObject(target);
 
         }
-        public static void DetachFromEntity(IEntity ent1, WorldObject target)
+        public static void DetachFromEntity(WorldObject entity)
         {
-            target.Attachment = null;
-            GameMode.Instance.Streamer.UpdateEntityObject(target);
+            entity.Attachment = null;
+            GameMode.Instance.Streamer.UpdateEntityObject(entity);
         }
 
         public static void DestroyObject(int oid)

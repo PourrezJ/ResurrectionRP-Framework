@@ -58,7 +58,7 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
 
             if (manifest != null)
             {
-                place.VehicleHandler = await VehiclesManager.SpawnVehicle("", place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot.ConvertRotationToRadian(), color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
+                place.VehicleHandler = await VehiclesManager.SpawnVehicleAsync("", place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot.ConvertRotationToRadian(), color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
                 place.VehicleHandler.Vehicle.SetData("RentShop", place);
                 await place.VehicleHandler.Vehicle.FreezeAsync(true);
                 await place.VehicleHandler.Vehicle.InvincibleAsync(true);

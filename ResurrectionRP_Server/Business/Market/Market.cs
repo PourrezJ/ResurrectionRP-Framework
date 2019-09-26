@@ -1,7 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using ResurrectionRP_Server.Utils;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using AltV.Net.Elements.Entities;
@@ -48,7 +45,7 @@ namespace ResurrectionRP_Server.Business
 
         private async Task Events_PlayerExitColshape(IColShape colShape, IPlayer client)
         {
-            if (!client.Exists)
+            if (!await client.ExistsAsync())
                 return;
 
             await MenuManager.CloseMenu(client);

@@ -129,15 +129,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
             else
             {
-                foreach (VehicleHandler vehicle in vehicles)
+                await AltAsync.Do(() =>
                 {
-                    _vehicleHandlers.TryAdd(vehicle.Plate, vehicle);
+                    foreach (VehicleHandler vehicle in vehicles)
+                    {
+                        _vehicleHandlers.TryAdd(vehicle.Plate, vehicle);
 
-                    if (vehicle.IsParked || vehicle.IsInPound)
-                        continue;
+                        if (vehicle.IsParked || vehicle.IsInPound)
+                            continue;
 
-                    await vehicle.SpawnVehicle();
-                }
+                        vehicle.SpawnVehicle();
+                    }
+                });
             }
 
             Alt.Server.LogInfo($"--- Finish loading all vehicles in database: {_vehicleHandlers.Count} ---");
@@ -145,16 +148,30 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Methods
-        public static async Task<VehicleHandler> SpawnVehicle(string socialClubName, uint model, Vector3 position, Vector3 rotation, int primaryColor = 0, int secondaryColor = 0,
-float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
-IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, uint dimension = (uint)short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
+
+        public static async Task<VehicleHandler> SpawnVehicleAsync(string socialClubName, uint model, Vector3 position, Vector3 rotation, int primaryColor = 0, int secondaryColor = 0,
+        float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
+        IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, uint dimension = (uint)short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
         {
             if (model == 0)
                 return null;
 
             VehicleHandler veh = new VehicleHandler(socialClubName, model, position, rotation, (byte)primaryColor, (byte)secondaryColor, fuel, fuelMax, plate, engineStatus, locked, client, mods, neon, spawnVeh, (short)dimension, inventory, freeze, dirt, health);
             _vehicleHandlers.TryAdd(veh.Plate, veh);
-            await veh.SpawnVehicle(new Models.Location(position, rotation));
+            await veh.SpawnVehicleAsync(new Models.Location(position, rotation));
+            return veh;
+        }
+
+        public static VehicleHandler SpawnVehicle(string socialClubName, uint model, Vector3 position, Vector3 rotation, int primaryColor = 0, int secondaryColor = 0,
+        float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
+        IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, uint dimension = (uint)short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
+        {
+            if (model == 0)
+                return null;
+
+            VehicleHandler veh = new VehicleHandler(socialClubName, model, position, rotation, (byte)primaryColor, (byte)secondaryColor, fuel, fuelMax, plate, engineStatus, locked, client, mods, neon, spawnVeh, (short)dimension, inventory, freeze, dirt, health);
+            _vehicleHandlers.TryAdd(veh.Plate, veh);
+            veh.SpawnVehicle(new Models.Location(position, rotation));
             return veh;
         }
 

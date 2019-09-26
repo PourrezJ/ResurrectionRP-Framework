@@ -59,7 +59,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
 
             if (manifest != null)
             {
-                place.VehicleHandler = await VehiclesManager.SpawnVehicle("", (uint)place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot, color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
+                place.VehicleHandler = await VehiclesManager.SpawnVehicleAsync("", (uint)place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot, color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
 
                 if (place.VehicleHandler == null)
                     return;

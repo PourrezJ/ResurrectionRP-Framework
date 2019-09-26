@@ -231,7 +231,7 @@ namespace ResurrectionRP_Server
             await FactionManager.InitAllFactions();
             await Loader.ClothingLoader.LoadAllCloth();
             await Loader.BusinessesLoader.LoadAllBusinesses();
-            await WeatherManager.InitWeather();
+            WeatherManager.InitWeather();
             await Society.SocietyManager.LoadAllSociety();
             //await JobsManager.Init();
             await PoundManager.LoadPound();

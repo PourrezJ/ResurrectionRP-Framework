@@ -27,7 +27,7 @@ namespace ResurrectionRP_Server.Teleport
 
         private async Task OnTeleportColshape(IColShape colshape, IPlayer client)
         {
-            if (!client.Exists)
+            if (!await client.ExistsAsync())
                 return;
 
             colshape.GetData("Teleport", out string datad);

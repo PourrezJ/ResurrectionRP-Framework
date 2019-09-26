@@ -82,51 +82,54 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         private async Task VehicleSpawn(IPlayer player, string[] args)
         {
-            if (player == null || !player.Exists)
-                return;
-
-            PlayerHandler ph = player.GetPlayerHandler();
-
-            if (ph == null || player.GetPlayerHandler().StaffRank <= AdminRank.Player)
-                return;
-
-            if (args == null || args.Length == 0)
+            await AltAsync.Do(() =>
             {
-                player.SendNotificationError("Vous devez indiquer la plaque d'immatriculation du véhicule");
-                return;
-            }
+                if (player == null || !player.Exists)
+                    return;
 
-            string plate = args[0].ToUpper();
-            VehicleHandler vehicle = VehiclesManager.GetVehicleHandler(plate);
+                PlayerHandler ph = player.GetPlayerHandler();
 
-            if (vehicle == null)
-            {
-                player.SendNotificationError("Véhicule inconnu");
-                return;
-            }
-            else if (!vehicle.IsInPound && !vehicle.IsParked)
-            {
-                player.SendNotificationError("Véhicule déjà dans le monde");
-                return;
-            }
+                if (ph == null || player.GetPlayerHandler().StaffRank <= AdminRank.Player)
+                    return;
 
-            foreach (Parking parking in Parking.ParkingList)
-            {
-                if (parking.ListVehicleStored.Find(c => c.Plate == vehicle.Plate) != null)
+                if (args == null || args.Length == 0)
                 {
-                    player.SendNotificationError("Véhicule dans un parking");
+                    player.SendNotificationError("Vous devez indiquer la plaque d'immatriculation du véhicule");
                     return;
                 }
-            }
 
-            if (GameMode.Instance.PoundManager.PoundVehicleList.Find(c => c.Plate == vehicle.Plate) != null)
-            {
-                player.SendNotificationError("Véhicule à fourrière");
-                return;
-            }
+                string plate = args[0].ToUpper();
+                VehicleHandler vehicle = VehiclesManager.GetVehicleHandler(plate);
 
-            await vehicle.SpawnVehicle();
-            player.SendNotificationSuccess("Véhicule spawn");
+                if (vehicle == null)
+                {
+                    player.SendNotificationError("Véhicule inconnu");
+                    return;
+                }
+                else if (!vehicle.IsInPound && !vehicle.IsParked)
+                {
+                    player.SendNotificationError("Véhicule déjà dans le monde");
+                    return;
+                }
+
+                foreach (Parking parking in Parking.ParkingList)
+                {
+                    if (parking.ListVehicleStored.Find(c => c.Plate == vehicle.Plate) != null)
+                    {
+                        player.SendNotificationError("Véhicule dans un parking");
+                        return;
+                    }
+                }
+
+                if (GameMode.Instance.PoundManager.PoundVehicleList.Find(c => c.Plate == vehicle.Plate) != null)
+                {
+                    player.SendNotificationError("Véhicule à fourrière");
+                    return;
+                }
+
+                vehicle.SpawnVehicle();
+                player.SendNotificationSuccess("Véhicule spawn");
+            });
         }
     }
 }

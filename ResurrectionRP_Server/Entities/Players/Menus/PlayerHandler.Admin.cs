@@ -370,7 +370,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    VehicleHandler vehicle = await VehiclesManager.SpawnVehicle(_playerSelected.Client.GetSocialClub(), hash, _playerSelected.Client.Position, _playerSelected.Client.Rotation, fuel: 100, fuelMax: 100, spawnVeh: true);
+                    VehicleHandler vehicle = VehiclesManager.SpawnVehicle(_playerSelected.Client.GetSocialClub(), hash, _playerSelected.Client.Position, _playerSelected.Client.Rotation, fuel: 100, fuelMax: 100, spawnVeh: true);
 
                     if (vehicle != null)
                     {
@@ -411,7 +411,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    VehicleHandler vehicle = await VehiclesManager.SpawnVehicle(_playerSelected.Client.GetSocialClub(), hash, _playerSelected.Client.Position, _playerSelected.Client.Rotation, fuel: 100, fuelMax: 100, spawnVeh: false);
+                    VehicleHandler vehicle = VehiclesManager.SpawnVehicle(_playerSelected.Client.GetSocialClub(), hash, _playerSelected.Client.Position, _playerSelected.Client.Rotation, fuel: 100, fuelMax: 100, spawnVeh: false);
 
                     if (vehicle != null)
                     {

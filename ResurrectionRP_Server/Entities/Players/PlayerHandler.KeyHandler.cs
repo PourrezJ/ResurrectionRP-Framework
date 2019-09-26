@@ -90,7 +90,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    if (vehicle != null && vehicle.Exists)
+                    if (vehicle != null && await vehicle.ExistsAsync())
                         await vh.OpenXtremMenu(client);
                     else if (HouseManager.IsInHouse(Client))
                     {

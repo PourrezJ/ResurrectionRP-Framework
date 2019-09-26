@@ -110,124 +110,130 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return (LockState == VehicleLockState.Locked) ? true : false;
         }
 
-        public async Task<IVehicle> SpawnVehicle(Location location = null, bool setLastUse = true)
+        public async Task<IVehicle> SpawnVehicleAsync(Location location = null, bool setLastUse = true)
+        {
+            IVehicle vehicle = null;
+
+            await AltAsync.Do(() => { vehicle = SpawnVehicle(); });
+
+            return vehicle;
+        }
+
+        public IVehicle SpawnVehicle(Location location = null, bool setLastUse = true)
         {
             if (Dimension.ToString() == "-1")
                 Dimension = short.MaxValue;
 
-            await AltAsync.Do(() =>
+            try
             {
-                try
-                {
-                    if (location != null)
-                        Location = location;
-
-                    Vehicle = Alt.CreateVehicle(Model, Location.Pos, Location.GetRotation());
-                }
-                catch (Exception ex)
-                {
-                    Alt.Server.LogError("SpawnVehicle: " + ex);
-                }
-
-                if (Vehicle == null)
-                    return;
-
-                Vehicle.ModKit = 1;
-                Vehicle.SetData("VehicleHandler", this);
-                Vehicle.NumberplateText = Plate;
-                Vehicle.PrimaryColor = PrimaryColor;
-                Vehicle.SecondaryColor = SecondaryColor;
-                Vehicle.PearlColor = PearlColor;
-
-                if (Mods.Count > 0)
-                {
-                    foreach (KeyValuePair<byte, byte> mod in Mods)
-                    {
-                        Vehicle.SetMod(mod.Key, mod.Value);
-
-                        if (mod.Key == 69)
-                            Vehicle.WindowTint = mod.Value;
-                    }
-                }
-
-                // BUG v792 : NeonState and NeonColor not working properly
-                // if (NeonColor != null && NeonColor != Color.Empty)
-                //     vehicle.NeonColor = NeonColor;
-                // vehicle.SetNeonActive(NeonState.Item1, NeonState.Item2, NeonState.Item3, NeonState.Item4);
-                Vehicle.SetSyncedMetaData("NeonColor", NeonColor.ToArgb());
-                Vehicle.SetSyncedMetaData("NeonState", NeonState.Item1);
-
-                Vehicle.DirtLevel = DirtLevel;
-                Vehicle.LockState = LockState;
-                Vehicle.EngineOn = EngineOn;
-                Vehicle.EngineHealth = EngineHealth;
-                Vehicle.BodyHealth = BodyHealth;
-                Vehicle.RadioStation = RadioStation;
-                IsInPound = false;
-                IsParked = false;
-
-                if (Wheels == null)
-                {
-                    Wheel[] wheels = new Wheel[Vehicle.WheelsCount];
-
-                    for (int i = 0; i < wheels.Length; i++)
-                        wheels[i] = new Wheel();
-
-                    Wheels = wheels;
-                }
-
-                for (byte i = 0; i < Vehicle.WheelsCount; i++)
-                {
-                    Vehicle.SetWheelBurst(i, Wheels[i].Burst);
-                    Vehicle.SetWheelHealth(i, Wheels[i].Health);
-                    Vehicle.SetWheelHasTire(i, Wheels[i].HasTire);
-                }
-                
-                for(byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
-                    Vehicle.SetDoorState(i, (byte)Doors[i]);
-
-                for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
-                {
-                    if (Windows[i] == WindowState.WindowBroken)
-                        Vehicle.SetWindowDamaged(i, true);
-                    else if (Windows[i] == WindowState.WindowDown)
-                        Vehicle.SetWindowOpened(i, true);
-                }
-
-                Vehicle.SetBumperDamageLevel(VehicleBumper.Front, FrontBumperDamage);
-                Vehicle.SetBumperDamageLevel(VehicleBumper.Rear, RearBumperDamage);
-
-                Vehicle.SetWindowTint(WindowTint);
-                /*
-                if (!string.IsNullOrEmpty(DamageData))
-                    vehicle.DamageData = DamageData;
-
-                if (!string.IsNullOrEmpty(AppearanceData))
-                    vehicle.AppearanceData = AppearanceData;*/
-
-                if (setLastUse)
-                    LastUse = DateTime.Now;
-
                 if (location != null)
                     Location = location;
 
-                _previousPosition = Location.Pos;
-                Vehicle.Dimension = Dimension;
+                Vehicle = Alt.CreateVehicle(Model, Location.Pos, Location.GetRotation());
+            }
+            catch (Exception ex)
+            {
+                Alt.Server.LogError("SpawnVehicle: " + ex);
+            }
 
-                VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
-                VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
-                
-                // Needed as vehicles in database don't have this value
-                if (FuelConsumption == 0)
-                    FuelConsumption = 5.5f;
-            });
+            if (Vehicle == null)
+                return null;
+
+            Vehicle.ModKit = 1;
+            Vehicle.SetData("VehicleHandler", this);
+            Vehicle.NumberplateText = Plate;
+            Vehicle.PrimaryColor = PrimaryColor;
+            Vehicle.SecondaryColor = SecondaryColor;
+            Vehicle.PearlColor = PearlColor;
+
+            if (Mods.Count > 0)
+            {
+                foreach (KeyValuePair<byte, byte> mod in Mods)
+                {
+                    Vehicle.SetMod(mod.Key, mod.Value);
+
+                    if (mod.Key == 69)
+                        Vehicle.WindowTint = mod.Value;
+                }
+            }
+
+            // BUG v792 : NeonState and NeonColor not working properly
+            // if (NeonColor != null && NeonColor != Color.Empty)
+            //     vehicle.NeonColor = NeonColor;
+            // vehicle.SetNeonActive(NeonState.Item1, NeonState.Item2, NeonState.Item3, NeonState.Item4);
+            Vehicle.SetSyncedMetaData("NeonColor", NeonColor.ToArgb());
+            Vehicle.SetSyncedMetaData("NeonState", NeonState.Item1);
+
+            Vehicle.DirtLevel = DirtLevel;
+            Vehicle.LockState = LockState;
+            Vehicle.EngineOn = EngineOn;
+            Vehicle.EngineHealth = EngineHealth;
+            Vehicle.BodyHealth = BodyHealth;
+            Vehicle.RadioStation = RadioStation;
+            IsInPound = false;
+            IsParked = false;
+
+            if (Wheels == null)
+            {
+                Wheel[] wheels = new Wheel[Vehicle.WheelsCount];
+
+                for (int i = 0; i < wheels.Length; i++)
+                    wheels[i] = new Wheel();
+
+                Wheels = wheels;
+            }
+
+            for (byte i = 0; i < Vehicle.WheelsCount; i++)
+            {
+                Vehicle.SetWheelBurst(i, Wheels[i].Burst);
+                Vehicle.SetWheelHealth(i, Wheels[i].Health);
+                Vehicle.SetWheelHasTire(i, Wheels[i].HasTire);
+            }
+
+            for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
+                Vehicle.SetDoorState(i, (byte)Doors[i]);
+
+            for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
+            {
+                if (Windows[i] == WindowState.WindowBroken)
+                    Vehicle.SetWindowDamaged(i, true);
+                else if (Windows[i] == WindowState.WindowDown)
+                    Vehicle.SetWindowOpened(i, true);
+            }
+
+            Vehicle.SetBumperDamageLevel(VehicleBumper.Front, FrontBumperDamage);
+            Vehicle.SetBumperDamageLevel(VehicleBumper.Rear, RearBumperDamage);
+
+            Vehicle.SetWindowTint(WindowTint);
+            /*
+            if (!string.IsNullOrEmpty(DamageData))
+                vehicle.DamageData = DamageData;
+
+            if (!string.IsNullOrEmpty(AppearanceData))
+                vehicle.AppearanceData = AppearanceData;*/
+
+            if (setLastUse)
+                LastUse = DateTime.Now;
+
+            if (location != null)
+                Location = location;
+
+            _previousPosition = Location.Pos;
+            Vehicle.Dimension = Dimension;
+
+            VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
+            VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
+
+            // Needed as vehicles in database don't have this value
+            if (FuelConsumption == 0)
+                FuelConsumption = 5.5f;
 
             if (HaveTowVehicle())
             {
                 IVehicle _vehtowed = VehiclesManager.GetVehicleWithPlate(TowTruck.VehPlate);
 
                 if (_vehtowed != null)
-                    await TowVehicle(_vehtowed);
+                    Task.Run(async() => { await TowVehicle(_vehtowed); }); 
             }
 
             return Vehicle;
@@ -235,7 +241,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public async Task<bool> Delete(bool perm = false)
         {
-            if (Vehicle.Exists)
+            if (await Vehicle.ExistsAsync())
                 await Vehicle.RemoveAsync();
 
             if (VehiclesManager.VehicleHandlerList.TryRemove(Vehicle, out VehicleHandler _))

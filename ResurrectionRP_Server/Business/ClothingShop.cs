@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Utils;
 using System.Drawing;
+using AltV.Net.Async;
 
 namespace ResurrectionRP_Server.Business
 {
@@ -109,7 +110,7 @@ namespace ResurrectionRP_Server.Business
 
         private async Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
         {
-            if (!client.Exists)
+            if (!await client.ExistsAsync())
                 return;
 
             await OpenClothingMenu(client);

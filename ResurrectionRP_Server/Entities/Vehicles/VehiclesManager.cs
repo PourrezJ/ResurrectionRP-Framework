@@ -107,10 +107,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 vh.UpdateFull();
 
             if (ph != null)
-            {
                 ph.UpdateFull();
-                player.EmitLocked("OnPlayerLeaveVehicle", vehicle, (int)seat);
-            }
 
             return Task.CompletedTask;
         }

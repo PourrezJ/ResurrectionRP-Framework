@@ -1,6 +1,5 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
-import * as chat from '../chat/chat'
 
 let player = alt.Player.local;
 let vehicle: alt.Vehicle = null;
@@ -15,7 +14,6 @@ export function initialize() {
             }
 
             if (playerVehicleStatus == 0 && game.isPedInAnyVehicle(player.scriptID, true)) {
-                chat.pushMessage('seat enter: ' + game.getSeatPedIsTryingToEnter(player.scriptID));
                 alt.emit('onPlayerEnterVehicle', player.vehicle, game.getSeatPedIsTryingToEnter(player.scriptID));
                 playerVehicleStatus = 1;
             }

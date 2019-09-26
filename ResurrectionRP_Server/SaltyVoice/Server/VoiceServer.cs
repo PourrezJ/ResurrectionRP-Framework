@@ -42,25 +42,6 @@ namespace SaltyServer
             Alt.OnClient(SaltyShared.Event.Voice_IsTalking, OnPlayerTalking);
         }
 
-        public Task OnPlayerConnected(IPlayer client, string name)
-        {
-            if (!client.Exists)
-                return Task.CompletedTask;
-
-            try
-            {
-                client.SetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, Voice.CreateTeamSpeakName());
-                client.SetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, "Parler");
-
-                client.EmitLocked(SaltyShared.Event.Voice_Initialize, Voice.ServerUniqueIdentifier, Voice.RequiredUpdateBranch, Voice.MinimumPluginVersion, Voice.SoundPack, Voice.IngameChannel, Voice.IngameChannelPassword);        
-            }
-            catch (Exception ex)
-            {
-                Alt.Server.LogError(ex.ToString());
-            }
-            return Task.CompletedTask;
-        }
-
         public void OnPlayerDisconnected(IPlayer client)
         {
             Voice.RemovePlayerRadioChannel(client);

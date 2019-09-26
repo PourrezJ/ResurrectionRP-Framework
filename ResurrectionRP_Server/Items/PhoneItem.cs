@@ -44,9 +44,9 @@ namespace ResurrectionRP_Server.Items
             return Task.CompletedTask;
         }
 
-        public override async Task Use(IPlayer c, string inventoryType, int slot)
+        public override void Use(IPlayer c, string inventoryType, int slot)
         {
-            await Phone.PhoneManager.OpenPhone(c, PhoneHandler);
+            Phone.PhoneManager.OpenPhone(c, PhoneHandler);
             // await base.Use(c);
         }
     }

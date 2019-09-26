@@ -74,7 +74,7 @@ namespace ResurrectionRP_Server.Utils
 
         public void OnPlayerConnected(IPlayer client)
         {
-            client.EmitLocked("SetAllDoorStatut", JsonConvert.SerializeObject(DoorList));
+            client.Emit("SetAllDoorStatut", JsonConvert.SerializeObject(DoorList));
         }
     }
 }

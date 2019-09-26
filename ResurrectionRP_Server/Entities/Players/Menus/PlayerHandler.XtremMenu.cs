@@ -133,7 +133,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 case "ID_Handcuff":
                     bool cuffed = TargetHandler.IsCuff();
-                    await TargetHandler?.SetCuff(!cuffed);
+                    TargetHandler?.SetCuff(!cuffed);
                     break;
 
                 case "ID_Admin":

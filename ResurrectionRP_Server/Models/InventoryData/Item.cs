@@ -64,7 +64,13 @@ namespace ResurrectionRP_Server.Models
             this.itemPrice = itemPrice;
         }
 
-        public virtual Task Use(IPlayer Client, string inventoryType, int slot)
+        public virtual void Use(IPlayer Client, string inventoryType, int slot)
+        {
+            if (!isUsable)
+                return;
+        }
+
+        public virtual Task UseAsync(IPlayer Client, string inventoryType, int slot)
         {
             if (!isUsable) return Task.CompletedTask;
             return Task.CompletedTask;

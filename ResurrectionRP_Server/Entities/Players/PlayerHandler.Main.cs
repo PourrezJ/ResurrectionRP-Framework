@@ -12,6 +12,7 @@ using System.Collections.Concurrent;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using SaltyServer;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -226,26 +227,27 @@ namespace ResurrectionRP_Server.Entities.Players
                     Client.ApplyCharacter();
                     Client.Dimension = GameMode.GlobalDimension;
                     Client.Health = Health;
+
+                    Client.SetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, Voice.CreateTeamSpeakName());
+                    Client.SetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, "Parler");
+                    Client.Emit(SaltyShared.Event.Voice_Initialize, Voice.ServerUniqueIdentifier, Voice.RequiredUpdateBranch, Voice.MinimumPluginVersion, Voice.SoundPack, Voice.IngameChannel, Voice.IngameChannelPassword);
                     Client.Emit("FadeIn", 3000);
+
+                    UpdateClothing();
+
+                    if (PlayerSync.IsCuff)
+                        SetCuff(true);
+
+                    if (Health <= 100)
+                    {
+                        Health = 0;
+                        Client.Emit("ONU_PlayerDeath", WeaponHash.AdvancedRifle);
+                    }
+                    GameMode.Instance.Streamer.LoadStreamPlayer(client);
+                    GameMode.Instance.DoorManager.OnPlayerConnected(client);
+                    Houses.HouseManager.OnPlayerConnected(client);
                 });
-
-               UpdateClothing();
-
-                if (PlayerSync.IsCuff)
-                    await SetCuff(true);
-
-                if (Health <= 100)
-                {
-                    Health = 0;
-                    Client.EmitLocked("ONU_PlayerDeath", WeaponHash.AdvancedRifle);
-                }
-
                 
-                await Task.Delay(500);
-                GameMode.Instance.Streamer.LoadStreamPlayer(client);
-                GameMode.Instance.DoorManager.OnPlayerConnected(client);
-                Houses.HouseManager.OnPlayerConnected(client);
-                await GameMode.Instance.VoiceController.OnPlayerConnected(client, Identite.Name);
                 //await GameMode.Instance.IllegalManager.OnPlayerConnected(client);
 
                 await Task.Delay(500);
@@ -496,7 +498,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     var rpg = RPGInventoryManager.GetRPGInventory(this.Client);
                     if (rpg != null)
-                        await RPGInventoryManager.Refresh(this.Client, rpg);
+                       RPGInventoryManager.Refresh(this.Client, rpg);
                 }
                 await item.OnPlayerGetItem(this.Client);
 
@@ -508,7 +510,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     var rpg = RPGInventoryManager.GetRPGInventory(this.Client);
                     if (rpg != null)
-                        await RPGInventoryManager.Refresh(this.Client, rpg);
+                        RPGInventoryManager.Refresh(this.Client, rpg);
                 }
                 await item.OnPlayerGetItem(this.Client);
                 return true;

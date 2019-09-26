@@ -7,14 +7,14 @@ namespace ResurrectionRP_Server.Entities.Players
 {
     public partial class PlayerHandler
     {
-        public async Task SetCuff(bool cuff)
+        public void SetCuff(bool cuff)
         {
             PlayerSync.IsCuff = cuff;
 
             if (cuff)
             {
                 Client.SetCloth(Models.ClothSlot.Bags, 0, 0, 0);
-                await Client.RemoveAllWeaponsAsync();
+                Client.RemoveAllWeapons();
                 Client.CurrentWeapon = (uint)WeaponHash.Unarmed;
             }
             else if (BagInventory != null)

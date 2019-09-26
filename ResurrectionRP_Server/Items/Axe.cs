@@ -16,17 +16,17 @@ namespace ResurrectionRP_Server.Items
             return base.Give(sender, recever, quantite);
         }
 
-        public override async Task Use(IPlayer client, string inventoryType, int slot)
+        public override void Use(IPlayer client, string inventoryType, int slot)
         {
             uint Weapon = client.Weapon;
 
                 if (Weapon == (uint)Utils.Enums.WeaponHash.Hatchet)
                 {
-                    await client.RemoveWeaponAsync((uint)Utils.Enums.WeaponHash.Hatchet);
+                    client.RemoveWeapon((uint)Utils.Enums.WeaponHash.Hatchet);
                 }
                 else
                 {
-                    await client.GiveWeaponAsync((uint)Utils.Enums.WeaponHash.Hatchet, 200, true);
+                    client.GiveWeapon((uint)Utils.Enums.WeaponHash.Hatchet, 200, true);
                 }
         }
     }

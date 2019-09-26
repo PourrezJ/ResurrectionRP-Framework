@@ -123,9 +123,12 @@ namespace ResurrectionRP_Server.Inventory
                 }
 
                 if (itemStack != null && itemStack.Item != null)
-                    await itemStack.Item.Use(client, targetInventory, itemSlot);
+                {
+                    itemStack.Item.Use(client, targetInventory, itemSlot);
+                    await itemStack.Item.UseAsync(client, targetInventory, itemSlot);
+                }
 
-                await Refresh(client, menu);
+                Refresh(client, menu);
             }
         }
         #endregion
@@ -310,7 +313,7 @@ namespace ResurrectionRP_Server.Inventory
 
                     // Temporary solution to save inventory after object drop. Doesn't update inventory when dropping from distant inventory.
                     ph.UpdateFull();
-                    await Refresh(client, menu);
+                    Refresh(client, menu);
                 }
             }
             catch (Exception ex)
@@ -499,7 +502,7 @@ namespace ResurrectionRP_Server.Inventory
                     // Temporary solution to save inventory after object drop
                     ph.UpdateFull();
                     phDistant.UpdateFull();
-                    await Refresh(client, menu);
+                    Refresh(client, menu);
                 }
             }
             catch (Exception ex)
@@ -932,7 +935,7 @@ namespace ResurrectionRP_Server.Inventory
                         await menu.OnMove.Invoke(client, menu);
 
                     player.UpdateFull();
-                    await Refresh(client, menu);
+                    Refresh(client, menu);
                 }
             }
             catch (Exception ex)
@@ -1037,7 +1040,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Refresh
-        public static async Task Refresh(IPlayer sender, RPGInventoryMenu menu)
+        public static void Refresh(IPlayer sender, RPGInventoryMenu menu)
         {
             menu.PocketsItems.RPGInventoryItems = new List<RPGInventoryItem>();
 
@@ -1105,7 +1108,7 @@ namespace ResurrectionRP_Server.Inventory
                 }
             }
 
-            await sender.EmitAsync("InventoryManager_RefreshMenu",
+            sender.EmitLocked("InventoryManager_RefreshMenu",
                     JsonConvert.SerializeObject(menu.PocketsItems),
                     JsonConvert.SerializeObject(menu.BagItems),
                     JsonConvert.SerializeObject(menu.DistantItems),

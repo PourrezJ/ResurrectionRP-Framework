@@ -24,10 +24,5 @@ namespace ResurrectionRP_Server.Items
         {
             return base.OnPlayerGetItem(player);
         }
-
-        public override Task Use(IPlayer Client, string inventoryType, int slot)
-        {
-            return base.Use(Client, inventoryType, slot);
-        }
     }
 }

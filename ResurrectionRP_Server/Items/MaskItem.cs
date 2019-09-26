@@ -14,7 +14,7 @@ namespace ResurrectionRP_Server.Items
             Mask = mask;
         }
 
-        public override Task Use(IPlayer client, string inventoryType, int slot)
+        public override void Use(IPlayer client, string inventoryType, int slot)
         {
             if (!used)
             {
@@ -26,8 +26,6 @@ namespace ResurrectionRP_Server.Items
                 client.SetCloth(ClothSlot.Mask, 0, 0, 0);
                 used = false;
             }
-
-            return Task.CompletedTask;
         }
 
         public override Task Give(IPlayer sender, IPlayer recever, int quantite)

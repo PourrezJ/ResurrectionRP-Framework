@@ -104,14 +104,14 @@ namespace ResurrectionRP_Server.Phone
             }
         }
 
-        public void NewSMS(string phoneNumber)
+        public async Task NewSMS(string phoneNumber)
         {
             IPlayer _client = GetClientWithPhoneNumber(this.PhoneNumber);
 
             if (_client == null)
                 return;
 
-            if (!_client.Exists)
+            if (! await _client.ExistsAsync())
                 return;
 
             string contactName = GetNameForNumber(phoneNumber);
@@ -125,15 +125,18 @@ namespace ResurrectionRP_Server.Phone
             if (Settings.silenceMode)
                 return;
 
-
-            foreach (IPlayer recever in receverList)
+            await AltAsync.Do(() =>
             {
-                if (!recever.Exists)
-                    continue;
+                foreach (IPlayer recever in receverList)
+                {
+                    if (!recever.Exists)
+                        continue;
 
-                if (recever != null && recever.Exists)
-                    recever?.PlaySoundFromEntity(_client, -1, "MP_5_SECOND_TIMER", "HUD_FRONTEND_DEFAULT_SOUNDSET");
-            }
+                    if (recever != null && recever.Exists)
+                        recever.PlaySoundFromEntity(_client, -1, "MP_5_SECOND_TIMER", "HUD_FRONTEND_DEFAULT_SOUNDSET");
+                }
+            });
+
         }
 
         public async Task GetMessages(IPlayer client, string phoneNumber)
@@ -147,12 +150,15 @@ namespace ResurrectionRP_Server.Phone
         #endregion
 
         #region Gestion des appels
-        public async Task InitiateCall(IPlayer client, string phoneNumber)
+        public void InitiateCall(IPlayer client, string phoneNumber)
         {
             IPlayer _client = GetClientWithPhoneNumber(phoneNumber);
             if (_client != null)
             {
-                if (!_client.HasData("InToPhoneCommunication"))
+                bool incommunication = false;
+                _client.GetData<bool>("InToPhoneCommunication", out incommunication);
+
+                if (!incommunication)
                 {
                     string contactName = this.GetNameForNumber(phoneNumber);
                     client.EmitLocked("initiatedCall", phoneNumber, contactName);
@@ -162,7 +168,7 @@ namespace ResurrectionRP_Server.Phone
 
                     if (PhoneManager.HasOpenPhone(client, out Phone phone))
                     {
-                        await PhoneManager.OpenPhone(_client, phoneDistant, true, PhoneNumber, callerName);
+                        PhoneManager.OpenPhone(_client, phoneDistant, true, PhoneNumber, callerName);
                     }
                 }
                 else

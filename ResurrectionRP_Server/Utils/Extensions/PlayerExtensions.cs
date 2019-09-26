@@ -141,18 +141,22 @@ namespace ResurrectionRP_Server
 
         public static List<PlayerHandler> GetPlayersHandlerInRange(this IPlayer client, float Range)
         {
-            var vehs = Alt.GetAllPlayers();
-            List<Entities.Players.PlayerHandler> endup = new List<PlayerHandler>();
+            var players = Alt.GetAllPlayers();
+            List<PlayerHandler> endup = new List<PlayerHandler>();
             var position = client.GetPosition();
             Vector3 osition = new Vector3(position.X, position.Y, position.Z);
-            foreach (IPlayer veh in vehs)
+            foreach (IPlayer player in players)
             {
-                if (!veh.Exists)
+                if (!player.Exists)
                     continue;
-                var vehpos = veh.GetPosition();
-                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= Range)
+
+                var playerPos = player.GetPosition();
+                if (osition.DistanceTo2D(new Vector3(playerPos.X, playerPos.Y, playerPos.Z)) <= Range)
                 {
-                    endup.Add(veh.GetPlayerHandler());
+                    var ph = player.GetPlayerHandler();
+                   
+                    if (endup.Contains(ph)) 
+                        endup.Add(ph);
                 }
             }
             return endup;
@@ -244,7 +248,8 @@ namespace ResurrectionRP_Server
             await Task.CompletedTask;
         }
 
-        public async static Task PlaySoundFromEntity(this IPlayer client, IPlayer initiator, int id, string dict, string anim)
+
+        public async static Task PlaySoundFromEntityAsync(this IPlayer client, IPlayer initiator, int id, string dict, string anim)
         {
             await Task.CompletedTask;
         }
@@ -254,9 +259,8 @@ namespace ResurrectionRP_Server
             await Task.CompletedTask;
         }
 
-        public async static Task PlaySoundFromEntity(this IPlayer client, IEntity initiator, int id, string dict, string anim)
+        public static void PlaySoundFromEntity(this IPlayer client, IEntity initiator, int id, string dict, string anim)
         {
-            await Task.CompletedTask;
         }
 
         public static Task SetDecorationAsync(this IPlayer client, uint collection, uint overlay)
@@ -327,7 +331,7 @@ namespace ResurrectionRP_Server
         }
 
         public static void CreateBlip(this IPlayer client, uint sprite, Vector3 position, string name = "", float scale = 1, int color = 0, int alpha = 255, bool shortRange = false) 
-            => client.EmitLocked("CreateBlip", sprite, position.ConvertToVector3Serialized(), name, scale, color, alpha, shortRange);
+            => client.Emit("CreateBlip", sprite, position.ConvertToVector3Serialized(), name, scale, color, alpha, shortRange);
 
         public static void PlayAnimation(this IPlayer client, string animDict, string animName, float blendInSpeed = 8f, float blendOutSpeed = -8f, int duration = -1, Utils.Enums.AnimationFlags flags = 0, float playbackRate = 0f)
         {
@@ -342,7 +346,23 @@ namespace ResurrectionRP_Server
                 PlaybackRate = playbackRate
             };
 
-            client.EmitLocked("PlayAnimation", JsonConvert.SerializeObject(animsync));
+            client.Emit("PlayAnimation", JsonConvert.SerializeObject(animsync));
+        }
+
+        public static async Task PlayAnimationAsync(this IPlayer client, string animDict, string animName, float blendInSpeed = 8f, float blendOutSpeed = -8f, int duration = -1, Utils.Enums.AnimationFlags flags = 0, float playbackRate = 0f)
+        {
+            var animsync = new AnimationsSync()
+            {
+                AnimName = animName,
+                AnimDict = animDict,
+                BlendInSpeed = blendInSpeed,
+                BlendOutSpeed = blendOutSpeed,
+                Duraction = duration,
+                Flag = (int)flags,
+                PlaybackRate = playbackRate
+            };
+
+            await client.EmitAsync("PlayAnimation", JsonConvert.SerializeObject(animsync));
         }
 
         public static void StopAnimation(this IPlayer client)

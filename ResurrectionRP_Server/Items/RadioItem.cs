@@ -22,7 +22,7 @@ namespace ResurrectionRP_Server.Items
         {
         }
 
-        public override async Task Use(IPlayer c, string inventoryType, int slot)
+        public override async Task UseAsync(IPlayer c, string inventoryType, int slot)
         {
             RadLib.RadioManager.OpenRadio(c, Radio);
             await MenuManager.CloseMenu(c);

@@ -17,7 +17,7 @@ namespace ResurrectionRP_Server.Items
             Drink = drink;
         }
 
-        public override async Task Use(IPlayer client, string inventoryType, int slot)
+        public override void Use(IPlayer client, string inventoryType, int slot)
         {
             Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
             if (ph != null)
@@ -34,38 +34,38 @@ namespace ResurrectionRP_Server.Items
                 switch (id)
                 {
                     case Models.InventoryData.ItemID.Cafe:
-                        await AnimateEatDrink(client, ph, "prop_food_coffee", new Vector3(), new Vector3());
+                        AnimateEatDrink(client, ph, "prop_food_coffee", new Vector3(), new Vector3());
                         break;
 
                     case Models.InventoryData.ItemID.JambonBeurre:
-                        await AnimateEatDrink(client, ph, "prop_sandwich_01", new Vector3(), new Vector3());
+                        AnimateEatDrink(client, ph, "prop_sandwich_01", new Vector3(), new Vector3());
                         break;
 
                     case Models.InventoryData.ItemID.Donuts:
-                        await AnimateEatDrink(client, ph, "prop_donut_01", new Vector3(), new Vector3());
+                        AnimateEatDrink(client, ph, "prop_donut_01", new Vector3(), new Vector3());
                         break;
 
                     case Models.InventoryData.ItemID.Eau:
-                        await AnimateEatDrink(client, ph, "prop_ld_flow_bottle", new Vector3(), new Vector3());
+                        AnimateEatDrink(client, ph, "prop_ld_flow_bottle", new Vector3(), new Vector3());
                         break;
 
                     case Models.InventoryData.ItemID.Vin:
-                        await AnimateEatDrink(client, ph, "prop_wine_bot_01", new Vector3(), new Vector3());
+                        AnimateEatDrink(client, ph, "prop_wine_bot_01", new Vector3(), new Vector3());
                         break;
                 }
             }
         }
 
-        public Task AnimateEatDrink(IPlayer client, Entities.Players.PlayerHandler ph, string props, Vector3 position, Vector3 rotation)
+        public void AnimateEatDrink(IPlayer client, Entities.Players.PlayerHandler ph, string props, Vector3 position, Vector3 rotation)
         {
             client.PlayAnimation("mp_player_intdrink", "loop_bottle", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
 
-            Utils.Utils.Delay(4000, true, () =>
+            Utils.Utils.Delay(4000, true, async () =>
             {
                 if (!client.Exists)
                     return;
 
-                client.PlayAnimation("mp_player_intdrink", "outro_bottle", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
+                await client.PlayAnimationAsync("mp_player_intdrink", "outro_bottle", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
                 /*
                 if (obj != null)
                 {
@@ -73,8 +73,6 @@ namespace ResurrectionRP_Server.Items
                     await obj.Destroy();
                 }*/  
             });
-
-            return Task.CompletedTask;
         }
     }
 }

@@ -295,14 +295,14 @@ namespace ResurrectionRP_Server.Houses
 
         public async Task RemoveAllPlayers(bool exit = false)
         {
-            for (int i = PlayersInside.Count - 1; i >= 0; i--)
+            foreach (IPlayer player in PlayersInside)
             {
-                IPlayer player = PlayersInside[i];
-                if (player != null && RemoveFromHouse(player))
+                if (!RemoveFromHouse(player))
+                    Alt.Server.LogWarning($"Exiting unregistered player {player.GetPlayerHandler().Identite.Name} from house {ID}");
+                else
                 {
                     await player.SetPositionAsync(Position);
                     await player.SetDimensionAsync(GameMode.GlobalDimension);
-                    PlayersInside.RemoveAt(i);
                 }         
             }
         }

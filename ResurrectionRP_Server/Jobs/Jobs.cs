@@ -109,7 +109,7 @@ namespace ResurrectionRP_Server.Jobs
         #endregion
 
         #region Methods
-        public virtual async Task<bool> PriseService(IPlayer client)
+        public virtual Task<bool> PriseService(IPlayer client)
         {
             /*
             PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
@@ -130,9 +130,8 @@ namespace ResurrectionRP_Server.Jobs
             if (VehicleSpawnLocation != null && VehicleManager.IsVehicleInSpawn(VehicleSpawnLocation.Pos))
             {
                 client.SendNotificationError($"Un véhicule gêne la sortie de votre véhicule de fonction");
-                return false;
+                return Task.FromResult(false);
             }
-
 
             var social = client.GetSocialClub();
 
@@ -147,9 +146,11 @@ namespace ResurrectionRP_Server.Jobs
                     client.GetPlayerHandler()?.AddKey(_veh, "JOB DustMan");
                     _vehicleList.TryAdd(social, _veh);
                 }
-                return true;
+
+                return Task.FromResult(true);
             }
-            return false;
+
+            return Task.FromResult(false);
         }
 
         public virtual async Task QuitterService(IPlayer client)

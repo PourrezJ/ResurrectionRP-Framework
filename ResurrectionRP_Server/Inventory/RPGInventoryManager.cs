@@ -70,7 +70,7 @@ namespace ResurrectionRP_Server.Inventory
         }
 
 
-        public static async Task<bool> OpenMenu(IPlayer client, RPGInventoryMenu menu)
+        public static Task<bool> OpenMenu(IPlayer client, RPGInventoryMenu menu)
         {
             RPGInventoryMenu oldMenu = null;
             _clientMenus.TryRemove(client, out oldMenu);
@@ -84,9 +84,10 @@ namespace ResurrectionRP_Server.Inventory
                     JsonConvert.SerializeObject(menu.OutfitItems),
                     (menu.DistantPlayer == null) ? false : true);
 
-                return true;
+                return Task.FromResult(true);
             }
-            return false;
+
+            return Task.FromResult(false);
         }
         #endregion
 

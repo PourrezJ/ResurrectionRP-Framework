@@ -355,19 +355,22 @@ namespace ResurrectionRP_Server.Entities.Players
             #region Spawn Provisoire
             var spawn = new MenuItem("Spawn voiture temporaire", "Spawn une voiture avec le nom rentré, jusqu'au reboot.", "ID_SpawnVeh", true);
             spawn.SetInput("", 30, InputType.Text);
-            spawn.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            spawn.OnMenuItemCallbackAsync = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 try
                 {
                     string name = menuItem.InputValue;
-                    if (string.IsNullOrEmpty(name)) return;
+
+                    if (string.IsNullOrEmpty(name))
+                        return Task.CompletedTask;
+
                     uint hash = Alt.Hash(name);
                     VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get((uint)hash);
 
                     if (manifest == null)
                     {
                         client.SendNotificationError($"véhicule inconnu : {name}");
-                        return;
+                        return Task.CompletedTask;
                     }
 
                     VehicleHandler vehicle = VehiclesManager.SpawnVehicle(_playerSelected.Client.GetSocialClub(), hash, _playerSelected.Client.Position, _playerSelected.Client.Rotation, fuel: 100, fuelMax: 100, spawnVeh: true);
@@ -386,6 +389,8 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     Alt.Server.LogError($"ADMIN SPAWN VEHICLE PROVISOIRE: {ex}");
                 }
+
+                return Task.CompletedTask;
             };
             mainMenu.Add(spawn);
             #endregion

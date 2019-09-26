@@ -93,9 +93,10 @@ namespace ResurrectionRP_Server.Phone
                 }
 
                 Phone _phone = GetPhoneWithPhoneNumber(receiver);
+
                 if (_phone != null)
                 {
-                    _phone.NewSMS(this.PhoneNumber);
+                    await _phone.NewSMS(this.PhoneNumber);
                 }
             }
             catch (Exception ex)

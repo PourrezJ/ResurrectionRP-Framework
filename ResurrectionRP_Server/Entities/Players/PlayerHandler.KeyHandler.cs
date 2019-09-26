@@ -129,8 +129,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    // TODO : Revoir pourquoi l'entityHash == 0
-                    Door door = GameMode.Instance.DoorManager.DoorList.Find(p => p.Position.DistanceTo2D(raycastData.pos) <= 1 && raycastData.isHit);
+                    Door door = GameMode.Instance.DoorManager.DoorList.Find(p => p.Position.DistanceTo2D(raycastData.pos) <= 1 && p.Hash == raycastData.entityHash && raycastData.isHit);
                     if (door != null)
                         await door.Interact?.Invoke(client, door);
 

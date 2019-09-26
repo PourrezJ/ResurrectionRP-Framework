@@ -85,6 +85,14 @@ export class Interaction {
                     let player: alt.Player = null;
                     let objNetId = -1;
 
+                    if (raycastResult.isHit) {
+                        Streamer.NetworkingEntityClient.EntityList.forEach((item, index) => {
+                            if (item == raycastResult.hitEntity) {
+                                objNetId = index;
+                            }
+                        });
+                    }
+
                     if (raycastResult.isHit && raycastResult.entityType == 1 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
                         player = alt.Player.all.find(p => p.scriptID == raycastResult.hitEntity);
                         alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, player, objNetId);
@@ -94,12 +102,7 @@ export class Interaction {
                         alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), vehicle, null, objNetId);
                     }
                     else if (raycastResult.isHit && raycastResult.entityType == 3 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
-                        Streamer.NetworkingEntityClient.EntityList.forEach((item, index) => {
-                            if (item == raycastResult.hitEntity) {
-                                objNetId = index;
-                                alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId);
-                            }          
-                        });
+                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId);
                     }
                     else {
                         alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId);

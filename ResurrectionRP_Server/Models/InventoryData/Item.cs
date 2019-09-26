@@ -72,7 +72,9 @@ namespace ResurrectionRP_Server.Models
 
         public virtual Task UseAsync(IPlayer Client, string inventoryType, int slot)
         {
-            if (!isUsable) return Task.CompletedTask;
+            if (!isUsable)
+                return Task.CompletedTask;
+
             return Task.CompletedTask;
         }
 
@@ -90,11 +92,12 @@ namespace ResurrectionRP_Server.Models
             {
                 var position = c.GetPosition();
                 var dimension = c.Dimension;
-                ResuPickup resu = ResuPickup.CreatePickup("prop_money_bag_01", this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension); 
-                resu.OnTakePickup += OnPickup;
+                ResuPickup pickup = ResuPickup.CreatePickup("prop_money_bag_01", this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension); 
+                pickup.OnTakePickup += OnPickup;
 
                 return Task.FromResult(true);
             }
+
             return Task.FromResult(false);
         }
 
@@ -112,12 +115,14 @@ namespace ResurrectionRP_Server.Models
 
                 return Task.FromResult(true);
             }
+
             return Task.FromResult(false);
         }
 
         public virtual async Task OnPickup(IPlayer client, ResuPickup pickup)
         {
             Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
+
             if (ph != null)
             {
                 if (!ph.InventoryIsFull(pickup.Quantite * pickup.Item.weight))
@@ -128,14 +133,10 @@ namespace ResurrectionRP_Server.Models
                         pickup.Delete();
                     }
                     else
-                    {
                         client.SendNotificationError("Action impossible.");
-                    }
                 }
                 else
-                {
                     client.SendNotificationError("Vous n'avez pas la place.");
-                }
             }
         }
         

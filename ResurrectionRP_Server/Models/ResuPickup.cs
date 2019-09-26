@@ -1,40 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AltV.Net;
+using AltV.Net.Async;
+using AltV.Net.Elements.Entities;
 using Newtonsoft.Json;
-using System.Drawing;
+using System;
+using System.Collections.Concurrent;
 using System.Numerics;
 using System.Threading.Tasks;
-using AltV.Net;
-using AltV.Net.Async;
-using AltV.Net.Data;
-using AltV.Net.Elements.Entities;
 
 namespace ResurrectionRP_Server.Models
 {
     public class ResuPickupManager
     {
         #region Private static properties
-        public static List<ResuPickup> ResuPickupList = new List<ResuPickup>();
+        public static ConcurrentDictionary<int, ResuPickup> ResuPickupList = new ConcurrentDictionary<int, ResuPickup>();
         #endregion
 
+        #region Constructor
         public ResuPickupManager()
         {
             AltAsync.OnClient("ObjectManager_InteractPickup", ObjectManager_InteractPickup);
         }
+        #endregion
 
-        private Task ResuPickup_Take(IPlayer client, object[] args)
-        {
-            if (!client.Exists)
-                return Task.CompletedTask;
-
-            if (int.TryParse(args[0].ToString(), out int netID))
-            {
-                /*var resupickup = GetResuPickup(netID);
-                if (resupickup != null)
-                    await resupickup.Take(client);*/
-            }
-            return Task.CompletedTask;
-        }
+        #region Methods
         public async Task ObjectManager_InteractPickup(IPlayer client, object[] args)
         {
             if (!client.Exists)
@@ -42,17 +30,26 @@ namespace ResurrectionRP_Server.Models
             
             int oid = int.Parse(args[0].ToString());
             var resupickup = GetResuPickup(oid);
+
             if (resupickup != null)
                 await resupickup.Take(client);
         }
+
         public static ResuPickup GetResuPickup(int netID)
         {
-            return ResuPickupList.Find(r => r.Object.ID == netID) ?? null;
+            ResuPickupList.TryGetValue(netID, out ResuPickup pickup);
+            return pickup;
         }
+        #endregion
     }
 
     public class ResuPickup
     {
+        #region Delegates
+        public delegate Task TakeDelegate(IPlayer client, ResuPickup pickup);
+        #endregion
+
+        #region Fields
         [JsonIgnore]
         public Entities.Objects.WorldObject Object;
         [JsonIgnore]
@@ -63,55 +60,51 @@ namespace ResurrectionRP_Server.Models
         public int Quantite;
         public Vector3 Position;
         public bool Hide;
+        #endregion
 
-        public delegate Task TakeDelegate(IPlayer client, ResuPickup pickup);
-        [JsonIgnore]
-        public TakeDelegate OnTakePickup { get; set; }
+        #region Events
+        public event TakeDelegate OnTakePickup;
+        #endregion
 
+        #region Constructor
         public ResuPickup()
         {
         }
+        #endregion
 
+        #region Static methods
         public static ResuPickup CreatePickup(string model, Item item, int quantite, Vector3 position, bool hide, TimeSpan endlife, uint dimension = ushort.MaxValue)
         {
-            Entities.Objects.WorldObject obje = Entities.Objects.WorldObject.CreateObject(model, position, new Vector3(), true, true, dimension);
-            var obj = new ResuPickup()
+            Entities.Objects.WorldObject worldObject = Entities.Objects.WorldObject.CreateObject(model, position, new Vector3(), true, true, dimension);
+
+            ResuPickup pickup = new ResuPickup()
             {
                 Hash = Alt.Hash(model),
                 Item = item,
                 Quantite = quantite,
                 Position = position,
                 Hide = hide,
-                Object = obje
+                Object = worldObject
             };
 
-            string str = $"{item.name} x{quantite}";
-            if (!hide) obj.Label =
-                    GameMode.Instance.Streamer.AddEntityTextLabel(str, obj.Position + new Vector3(0, 0, 0.5f), 0, 255, 255, 255, 120, 3);
+            if (!hide)
+            {
+                string str = $"{item.name} x{quantite}";
+                pickup.Label = GameMode.Instance.Streamer.AddEntityTextLabel(str, pickup.Position + new Vector3(0, 0, 0.5f), 0, 255, 255, 255, 120, 3);
+            }
 
-            ResuPickupManager.ResuPickupList.Add(obj);
+            ResuPickupManager.ResuPickupList.TryAdd(worldObject.ID, pickup);
 
             Utils.Utils.Delay((int)endlife.TotalMilliseconds, true, () =>
             {
-                obj?.Delete();
+                pickup?.Delete();
             });
 
-            return obj;
+            return pickup;
         }
-        public static string GenerateRandomID()
-        {
-            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            char[] stringChars = new char[4];
-            Random random = new Random();
-            string generatedPlate = "";
+        #endregion
 
-            
-            for (int i = 0; i < stringChars.Length; i++)
-            {
-                stringChars[i] = chars[random.Next(chars.Length)];
-            }
-            return generatedPlate = new string(stringChars);
-        }
+        #region Methods
         public async Task<bool> Take(IPlayer client)
         {
             try
@@ -125,19 +118,19 @@ namespace ResurrectionRP_Server.Models
                 return true;
             }
         }
+
         public void Delete()
         {
             if (Object != null)
             {
                 Object.Destroy();
-                Object = null;
 
-                Label.Destroy();
-                Label = null;
+                if (Label != null)
+                    Label.Destroy();
 
-                if (ResuPickupManager.ResuPickupList.Contains(this))
-                    ResuPickupManager.ResuPickupList.Remove(this);
+                ResuPickupManager.ResuPickupList.TryRemove(Object.ID, out _);
             }
         }
+        #endregion
     }
 }

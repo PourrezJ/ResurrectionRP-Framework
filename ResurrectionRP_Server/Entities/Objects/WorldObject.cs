@@ -41,6 +41,7 @@ namespace ResurrectionRP_Server.Entities.Objects
             }
             get => _rotation;
         }
+
         public uint Dimension;
         public bool Freeze;
         public Models.Attachment Attachment = null;
@@ -107,11 +108,13 @@ namespace ResurrectionRP_Server.Entities.Objects
                 freeze,
                 dimension
             );
-            ListObject[resuobject.ID] = resuobject;
+
+            ListObject.TryAdd(resuobject.ID, resuobject);
             GameMode.Instance.Streamer.AddEntityObject(resuobject);
             resuobject.Exists = true;
             return resuobject;
         }
+
         public static WorldObject CreateObject(string model, Vector3 position, Vector3 rotation, bool freeze = false, bool dynamic = false, uint dimension = ushort.MaxValue)
         {
             var resuobject = new WorldObject
@@ -123,7 +126,8 @@ namespace ResurrectionRP_Server.Entities.Objects
                 freeze,
                 dimension
             );
-            ListObject[resuobject.ID] = resuobject;
+
+            ListObject.TryAdd(resuobject.ID, resuobject);
             GameMode.Instance.Streamer.AddEntityObject(resuobject);
             resuobject.Exists = true;
             return resuobject;
@@ -139,9 +143,11 @@ namespace ResurrectionRP_Server.Entities.Objects
                 RemoteID = (uint)target.ID,
                 Type = EntityType.Object
             };
+
             target.Attachment = attach;
             GameMode.Instance.Streamer.UpdateEntityObject(target);
         }
+
         public static void AttachToEntity(IVehicle vehicle, WorldObject target, string bone, Vector3 positionOffset, Vector3 rotationOffset)
         {
             var attach = new Models.Attachment()
@@ -149,13 +155,14 @@ namespace ResurrectionRP_Server.Entities.Objects
                 Bone = bone,
                 PositionOffset = positionOffset,
                 RotationOffset = rotationOffset,
-                RemoteID = (uint)vehicle.Id,
+                RemoteID = vehicle.Id,
                 Type = EntityType.Vehicle
             };
+
             target.Attachment = attach;
             GameMode.Instance.Streamer.UpdateEntityObject(target);
-
         }
+
         public static void DetachFromEntity(WorldObject entity)
         {
             entity.Attachment = null;

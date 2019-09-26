@@ -77,7 +77,7 @@ namespace ResurrectionRP_Server.Streamer
         {
             Alt.EmitAllClients("deleteObject", data.ID);
             AltNetworking.RemoveEntity(ListEntities[data.ID]);
-            ListEntities[data.ID] = null;
+            ListEntities.TryRemove(data.ID, out _);
         }
 
         public TextLabel AddEntityTextLabel(string label, Vector3 pos, int font = 1, int r = 255, int g = 255, int b = 255, int a = 255, int drawDistance = 20, int dimension = GameMode.GlobalDimension)

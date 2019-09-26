@@ -174,13 +174,15 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    Objects.WorldObject pickup = Objects.WorldObject.ListObject.FirstOrDefault(o => o.Value.Position.Distance(playerPos) <= 1).Value;
+                    Objects.WorldObject pickup = Objects.WorldObject.ListObject.FirstOrDefault(o => o.Value.Position.Distance(playerPos) <= Globals.MAX_INTERACTION_DISTANCE).Value;
 
                     if (pickup != null)
                     {
-                        var resupickup = ResuPickupManager.GetResuPickup(pickup.ID);
+                        ResuPickup resupickup = ResuPickupManager.GetResuPickup(pickup.ID);
+
                         if (resupickup != null)
                             await resupickup.Take(client);
+
                         return;
                     }
 

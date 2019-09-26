@@ -13,6 +13,7 @@ import { Notify } from './Notify/Notify';
 import menuManager from './MenuManager/MenuManager';
 import { Admin } from './Utils/Admin';
 import { LSPDManager } from './LSPDCall';
+import * as CustomEvents from './Utils/CustomEvents';
 
 var GameClass: Game;
 
@@ -76,6 +77,7 @@ const init = async () => {
         new NetworkingEntityClient();
         new Admin();
         menuManager();
+        CustomEvents.initialize();
         //alt.discordRequestOAuth2();
         //while (!alt.isDiscordInfoReady()) { }
 

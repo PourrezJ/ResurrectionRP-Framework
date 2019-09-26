@@ -56,7 +56,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public bool PlateHide { get; set; } = false;
 
-        public string ParkingName { get; set; }
+        public string ParkingName { get; set; } = string.Empty;
 
         [BsonIgnoreIfNull]
         public OilTank OilTank = null;

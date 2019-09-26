@@ -89,7 +89,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 PlayerHandler ph = player.GetPlayerHandler();
 
-            if (ph == null || player.GetPlayerHandler().StaffRank <= AdminRank.Player)
+                if (ph == null || player.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
 
                 if (args == null || args.Length == 0)

@@ -20,7 +20,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Menus
         public async Task OpenPlayerMenu()
         {
-            if (PlayerSync.IsDead)
+            if (await Client.IsDeadAsync())
                 return;
 
             if (PlayerSync.IsCuff)

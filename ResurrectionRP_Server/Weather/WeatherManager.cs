@@ -19,7 +19,7 @@ namespace ResurrectionRP_Server.Weather
         public float WeatherTransition { get; set; }
         public bool Forced { get; set; }
 
-        public Task InitWeather()
+        public void InitWeather()
         {
             try
             {
@@ -46,12 +46,14 @@ namespace ResurrectionRP_Server.Weather
             {
                 Alt.Server.LogError("InitWeather" + ex.ToString());
             }
-            return Task.CompletedTask;
         }
 
         public void UpdatePlayersWeather()
         {
-            Alt.EmitAllClients("WeatherChange", this.Actual_weather.ToString(), this.Wind, this.WindDirection, this.WeatherTransition);
+            AltAsync.Do(() =>
+            {
+                Alt.EmitAllClients("WeatherChange", this.Actual_weather.ToString(), this.Wind, this.WindDirection, this.WeatherTransition);
+            });
         }
 
         private Timer timer = null;

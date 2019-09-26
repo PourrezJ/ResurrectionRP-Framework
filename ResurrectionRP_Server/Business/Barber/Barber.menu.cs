@@ -78,7 +78,7 @@ namespace ResurrectionRP_Server.Business.Barber
 
         private async Task BarberMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            if (ClientSelected == null || ClientSelected.Client == null || !ClientSelected.Client.Exists)
+            if (ClientSelected == null || ClientSelected.Client == null || !await ClientSelected.Client.ExistsAsync())
             {
                 await OpenMenu(client);
                 return;
@@ -364,7 +364,7 @@ namespace ResurrectionRP_Server.Business.Barber
             else if (listItem.Id == "ID_BeardSecondColor")
                 _beardSecondColor = listindex;
 
-            if (listItem.Id == "ID_HairFirstColor" || listItem.Id == "ID_HairSecondColor" && ClientSelected.Client.Exists)
+            if (listItem.Id == "ID_HairFirstColor" || listItem.Id == "ID_HairSecondColor" && await ClientSelected.Client.ExistsAsync())
                 ClientSelected.Client.SetHairColor((uint)_hairFirstColor, (uint)_hairSecondColor);
             else if (await ClientSelected.Client.ExistsAsync())
             {

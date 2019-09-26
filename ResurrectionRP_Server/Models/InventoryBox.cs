@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using AltV.Net.Async;
 using AltV.Net;
+using ResurrectionRP_Server.Entities.Objects;
 
 namespace ResurrectionRP_Server.Models
 {
@@ -14,7 +15,7 @@ namespace ResurrectionRP_Server.Models
         public uint Model;
 
         [BsonIgnore, JsonIgnore]
-        public Entities.Objects.Object Obj { get; private set; }
+        public Entities.Objects.WorldObject Obj { get; private set; }
 
         private Location _location;
         public Location Location
@@ -23,14 +24,11 @@ namespace ResurrectionRP_Server.Models
             set
             {
                 _location = value;
-/*                AltAsync.Do(() =>
+                if (Obj != null)
                 {
-                    if (Obj != null && Obj.IObject.Exists)
-                    {
-                        Obj.IObject.SetPosition(value.Pos);
-                        Obj.IObject.SetRotation(value.Rot);
-                    }
-                });*/
+                    Obj.Position = value.Pos;
+                    Obj.Rotation = value.Rot;
+                }
             }
         }
 
@@ -51,7 +49,7 @@ namespace ResurrectionRP_Server.Models
         }
 
         public void Spawn() =>
-            Obj = Entities.Objects.ObjectManager.CreateObject((int)Model, new Vector3(Location.Pos.X, Location.Pos.Y, Location.Pos.Z ), Location.Rot);
+            Obj = WorldObject.CreateObject((int)Model, new Vector3(Location.Pos.X, Location.Pos.Y, Location.Pos.Z ), Location.Rot, true);
 
         public void Destruct() =>
             Obj?.Destroy();

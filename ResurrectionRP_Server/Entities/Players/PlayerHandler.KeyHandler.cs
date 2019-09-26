@@ -90,7 +90,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    if (vehicle != null && vehicle.Exists)
+                    if (vehicle != null && await vehicle.ExistsAsync())
                         await vh.OpenXtremMenu(client);
                     else if (HouseManager.IsInHouse(Client))
                     {
@@ -153,7 +153,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     {
                         if (raycastData.entityHash == 307713837)
                         {
-                            var rack = GameMode.Instance.FactionManager.Dock.Racks.Find(p => p.InventoryBox.Obj.id == streamedID);
+                            var rack = GameMode.Instance.FactionManager.Dock.Racks.Find(p => p.InventoryBox.Obj.ID == streamedID);
                             if (rack == null)
                                 return;
 
@@ -175,10 +175,10 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    Objects.Object pickup = GameMode.Instance.ObjectManager.ListObject.FirstOrDefault(o => o.Value.position.Distance(playerPos) <= 1).Value;
+                    Objects.WorldObject pickup = Objects.WorldObject.ListObject.FirstOrDefault(o => o.Value.Position.Distance(playerPos) <= 1).Value;
                     if (pickup != null)
                     {
-                        var resupickup = ResuPickupManager.GetResuPickup(pickup.id);
+                        var resupickup = ResuPickupManager.GetResuPickup(pickup.ID);
                         if (resupickup != null)
                             await resupickup.Take(client);
                         return;

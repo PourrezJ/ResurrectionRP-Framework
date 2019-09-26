@@ -72,7 +72,7 @@ namespace ResurrectionRP_Server.Houses
                     return;
 
                 if (RemoveClientHouse(player))
-                    house.RemovePlayer(player, false);                
+                    Task.Run(async () => { await house.RemovePlayer(player, false); });                
             }
         }
         #endregion

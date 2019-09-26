@@ -48,7 +48,7 @@ namespace ResurrectionRP_Server.DrivingSchool
         #region Private methods
         private async Task BeginDrivingExamen(IPlayer client)
         {
-            var veh = await VehiclesManager.SpawnVehicle(client.GetSocialClub(), (uint)_vehicleModel, _spawnVeh.Pos, _spawnVeh.Rot, plate: "School", spawnVeh: true, locked: false);
+            var veh = await VehiclesManager.SpawnVehicleAsync(client.GetSocialClub(), (uint)_vehicleModel, _spawnVeh.Pos, _spawnVeh.Rot, plate: "School", spawnVeh: true, locked: false);
             Exam Examitem = new Exam(client, veh, _circuit, this.Id);
             //Examitem.endExam = End();
             _clientsInExamen.GetOrAdd(client.GetSocialClub(), Examitem);
@@ -181,7 +181,7 @@ namespace ResurrectionRP_Server.DrivingSchool
                 if (ClientIsInExamen(client))
                 {
                     await Cancel(client);
-                    await client.EmitAsync("EndDrivingExamen");
+                    client.EmitLocked("EndDrivingExamen");
 
                     if (ph != null)
                         ph.AddMoney(_price);

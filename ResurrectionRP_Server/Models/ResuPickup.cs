@@ -47,14 +47,14 @@ namespace ResurrectionRP_Server.Models
         }
         public static ResuPickup GetResuPickup(int netID)
         {
-            return ResuPickupList.Find(r => r.Object.id == netID) ?? null;
+            return ResuPickupList.Find(r => r.Object.ID == netID) ?? null;
         }
     }
 
     public class ResuPickup
     {
         [JsonIgnore]
-        public Entities.Objects.Object Object;
+        public Entities.Objects.WorldObject Object;
         [JsonIgnore]
         public Streamer.Data.TextLabel Label;
 
@@ -74,7 +74,7 @@ namespace ResurrectionRP_Server.Models
 
         public static ResuPickup CreatePickup(string model, Item item, int quantite, Vector3 position, bool hide, TimeSpan endlife, uint dimension = ushort.MaxValue)
         {
-            Entities.Objects.Object obje = Entities.Objects.ObjectManager.CreateObject(model, position, new Vector3(), true, true, dimension);
+            Entities.Objects.WorldObject obje = Entities.Objects.WorldObject.CreateObject(model, position, new Vector3(), true, true, dimension);
             var obj = new ResuPickup()
             {
                 Hash = Alt.Hash(model),

@@ -176,7 +176,7 @@ namespace ResurrectionRP_Server.Services
                 if (client.GetPlayerHandler().HasMoney(Price))
                 {
                     VehicleHandler veh = menuItem.GetData("Vehicle");
-                    await veh.SpawnVehicle(PoundSpawn);
+                    await veh.SpawnVehicleAsync(PoundSpawn);
                     veh.UpdateFull();
                     PoundVehicleList.Remove(PoundVehicleList.Find(v => v.Plate == veh.Plate));
                     await GameMode.Instance.Save();
@@ -200,7 +200,6 @@ namespace ResurrectionRP_Server.Services
 
             return endup;
         }
-
         public async Task AddVehicleInPound(VehicleHandler veh)
         {
             Alt.Server.LogInfo ($"Mise en fourrière véhicule {veh.Plate}");

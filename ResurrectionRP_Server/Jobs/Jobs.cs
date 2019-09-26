@@ -140,7 +140,7 @@ namespace ResurrectionRP_Server.Jobs
             {
                 if (VehicleSpawnLocation != null)
                 {
-                    var _veh = await VehicleManager.SpawnVehicle(social, (uint)VehicleSpawnHash, VehicleSpawnLocation.Pos, VehicleSpawnLocation.Rot, spawnVeh: true);
+                    var _veh = VehicleManager.SpawnVehicle(social, (uint)VehicleSpawnHash, VehicleSpawnLocation.Pos, VehicleSpawnLocation.Rot, spawnVeh: true);
                     _veh.SpawnVeh = true;
                     //_veh.OnPlayerEnterVehicle = OnPlayerEnterVehicleJob;
                     AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicleJob;

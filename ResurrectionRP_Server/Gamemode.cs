@@ -88,9 +88,6 @@ namespace ResurrectionRP_Server
         public Entities.Blips.BlipsManager BlipsManager { get; private set; }
 
         [BsonIgnore]
-        public Entities.Objects.ObjectManager ObjectManager { get; private set; }
-
-        [BsonIgnore]
         public ResuPickupManager ResuPickupManager { get; private set; }
 
         [BsonIgnore]
@@ -195,7 +192,6 @@ namespace ResurrectionRP_Server
             VehicleManager = new VehiclesManager();
             PedManager = new Entities.Peds.PedsManager();
             BlipsManager = new Entities.Blips.BlipsManager();
-            ObjectManager = new Entities.Objects.ObjectManager();
             PhoneManager = new Phone.PhoneManager();
             FactionManager = new Factions.FactionManager();
             RPGInventory = new Inventory.RPGInventoryManager();
@@ -231,7 +227,7 @@ namespace ResurrectionRP_Server
             await FactionManager.InitAllFactions();
             await Loader.ClothingLoader.LoadAllCloth();
             await Loader.BusinessesLoader.LoadAllBusinesses();
-            await WeatherManager.InitWeather();
+            WeatherManager.InitWeather();
             await Society.SocietyManager.LoadAllSociety();
             //await JobsManager.Init();
             await PoundManager.LoadPound();

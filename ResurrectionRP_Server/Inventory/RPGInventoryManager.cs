@@ -77,7 +77,7 @@ namespace ResurrectionRP_Server.Inventory
 
             if (_clientMenus.TryAdd(client, menu))
             {
-                await client.EmitAsync("InventoryManager_OpenMenu",
+                client.EmitLocked("InventoryManager_OpenMenu",
                     JsonConvert.SerializeObject(menu.PocketsItems),
                     JsonConvert.SerializeObject(menu.BagItems),
                     JsonConvert.SerializeObject(menu.DistantItems),

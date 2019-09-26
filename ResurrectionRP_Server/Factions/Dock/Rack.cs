@@ -10,6 +10,7 @@ using ResurrectionRP_Server.Utils;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
+using System;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -65,6 +66,7 @@ namespace ResurrectionRP_Server.Factions
 
             RefreshLabel();
             Colshape = Alt.CreateColShapeCylinder(RackPos, 3, 6);
+            Colshape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
         }
 
         public async Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)
@@ -116,14 +118,12 @@ namespace ResurrectionRP_Server.Factions
                         if (inventoryBox == null)
                             return;
 
-                        //await ObjectHandlerManager.Detach(inventoryBox.Obj.IObject); TODO ajouter object handler
-
                         inventoryBox.Obj.Destroy();
-                        inventoryBox.Location = new Location(new Vector3(this.BoxLocation.Pos.X, this.BoxLocation.Pos.Y, this.BoxLocation.Pos.Z - 1), this.BoxLocation.Rot);
-                        inventoryBox.Spawn();
+                        inventoryBox.ID = RackName;
                         InventoryBox = inventoryBox;
-                        inventoryBox.ID = this.RackName;
-                        //InventoryBox.Obj.IObject.SetSharedData("ID", RackName);
+                        inventoryBox.Location = new Location(new Vector3(this.BoxLocation.Pos.X, this.BoxLocation.Pos.Y, this.BoxLocation.Pos.Z - 1), this.BoxLocation.Rot);                       
+                        
+                        InventoryBox.Spawn();
                         vehicle.ResetData("BoxForks");
                     }
                 }

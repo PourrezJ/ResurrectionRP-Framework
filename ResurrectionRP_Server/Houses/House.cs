@@ -174,10 +174,9 @@ namespace ResurrectionRP_Server.Houses
                 await MenuManager.CloseMenu(client);
         }
 
-        private Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
+        private async Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
         {
-            RemovePlayer(client, true);
-            return Task.CompletedTask;
+            await RemovePlayer(client, true);
         }
 
         private async Task OnParkingSaveNeeded()

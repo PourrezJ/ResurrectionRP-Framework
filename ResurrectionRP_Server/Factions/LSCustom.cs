@@ -529,7 +529,7 @@ namespace ResurrectionRP_Server.Factions
         {
             xmenu.SetData("Vehicle", target);
 
-            xmenu.Callback += MenuCallback;
+            xmenu.CallbackAsync += MenuCallback;
             var nearest = (await client.GetPositionAsync()).GetTowTruckInZone(10f)?.GetVehicleHandler();
 
             if (await target.GetModelAsync() != (int)VehicleModel.Flatbed && await LSCustom.IsWhitelistClassTow(target) == true)

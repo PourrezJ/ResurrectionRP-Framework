@@ -134,10 +134,10 @@ namespace ResurrectionRP_Server.Factions
             VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodm4gts, 119000, 30));
 
             // Autres
-            VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.charge4, 0, 90));
-            VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rolls, 0, 25));
-            VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodx6, 0, 50));
-            VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodlp770, 0, 15));
+            //VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.charge4, 0, 90));
+            //VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rolls, 0, 25));
+            //VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodx6, 0, 50));
+            //VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.rmodlp770, 0, 15));
 
             // Wolf Motor Shop
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Avarus, 46550, 5));
@@ -256,18 +256,6 @@ namespace ResurrectionRP_Server.Factions
 
             await OpenImportationMenu(client, listItem);
             /// await client.CallAsync("OpenImportMenu", JsonConvert.SerializeObject(listItem));
-        }
-
-        public override async Task OnPlayerEnterColShape(IColShape colShape, IPlayer player)
-        {
-            if (Importation.Colshape == colShape)
-            {
-                await Importation.OnPlayerEnterColShape(colShape, player);
-            }
-            else if (Quai.Colshape == colShape)
-            {
-                await Quai.OnPlayerEnterColShape(colShape, player);
-            }
         }
 
         public async Task OnVehicleEnterColShape(IColShape colShape, IVehicle vehicle)

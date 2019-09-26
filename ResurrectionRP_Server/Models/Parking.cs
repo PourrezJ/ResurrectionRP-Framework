@@ -218,7 +218,7 @@ namespace ResurrectionRP_Server.Models
                     if (!VehiclesManager.IsVehicleInSpawn(menu.GetData("Location")))
                     {
                         Spawn = menu.GetData("Location");
-                        await veh.SpawnVehicle(Spawn);
+                        await veh.SpawnVehicleAsync(Spawn);
                     }
                 }
                 else
@@ -227,12 +227,12 @@ namespace ResurrectionRP_Server.Models
                     if (!VehiclesManager.IsVehicleInSpawn(Spawn1.Pos))
                     {
                         Spawn = Spawn1;
-                        await veh.SpawnVehicle(Spawn1);
+                        await veh.SpawnVehicleAsync(Spawn1);
                     }
                     else if (Spawn2 != null && !VehiclesManager.IsVehicleInSpawn(Spawn2.Pos))
                     {
                         Spawn = Spawn2;
-                        await veh.SpawnVehicle(Spawn2);
+                        await veh.SpawnVehicleAsync(Spawn2);
                     }
                     else
                     {

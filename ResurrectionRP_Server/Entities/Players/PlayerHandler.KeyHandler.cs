@@ -174,11 +174,11 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    Objects.WorldObject pickup = Objects.WorldObject.ListObject.FirstOrDefault(o => o.Value.Position.Distance(playerPos) <= Globals.MAX_INTERACTION_DISTANCE).Value;
+                    Objects.WorldObject pickup = Objects.WorldObject.ListObject.FirstOrDefault(o => o.Value.Position.Distance(playerPos) <= Globals.MAX_INTERACTION_DISTANCE && o.Value.Model == AltV.Net.Alt.Hash("prop_money_bag_01")).Value;
 
                     if (pickup != null)
                     {
-                        ResuPickup resupickup = ResuPickupManager.GetResuPickup(pickup.ID);
+                        ResuPickup resupickup = ResuPickup.GetResuPickup(pickup.ID);
 
                         if (resupickup != null)
                             await resupickup.Take(client);

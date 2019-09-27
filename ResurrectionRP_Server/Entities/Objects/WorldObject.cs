@@ -172,7 +172,6 @@ namespace ResurrectionRP_Server.Entities.Objects
         public static void DestroyObject(int oid)
         {
             GameMode.Instance.Streamer.DeleteEntityObject(ListObject[oid]);
-            ListObject.TryRemove(oid, out _);
         }
     }
 }

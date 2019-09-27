@@ -10,6 +10,6 @@ namespace ResurrectionRP_Server.Utils
         public const int MENU_POSY = 120;
         public const byte NB_VEHICLE_DOORS = 8;
         public const int NB_VEHICLE_WINDOWS = 4;
-        public const double MAX_INTERACTION_DISTANCE = 2.0f;
+        public const double MAX_INTERACTION_DISTANCE = 1.5f;
     }
 }

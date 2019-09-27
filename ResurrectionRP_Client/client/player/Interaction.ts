@@ -34,6 +34,10 @@ export class Interaction {
             this.inColShape = state;
         });
 
+        alt.on('canClose', (close) => {
+            canClose = close;
+        });
+
         alt.on('keyup', (key) => {
             if (game.isPauseMenuActive() || chat.isOpened() || MenuManager.hasMenuOpen())
                 return;

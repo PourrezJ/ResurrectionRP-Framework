@@ -19,6 +19,7 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script>
+        alt.emit("CanClose", false);
         function submit(e) {
             var keycode;
             if (window.event)
@@ -29,6 +30,7 @@
             if (keycode == 13) {
                 alt.emit('Input_Submit', document.getElementById('text_input').value);
             }
+            alt.emit("CanClose", true);
         }
 
         alt.on('Input_Data', (length, msg) => {

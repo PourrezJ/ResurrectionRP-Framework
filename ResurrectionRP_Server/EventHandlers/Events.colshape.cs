@@ -39,7 +39,7 @@ namespace ResurrectionRP_Server.EventHandlers
                         if (OnVehicleEnterColShape != null)
                             await OnVehicleEnterColShape.Invoke(colShape, (IVehicle)targetEntity);
 
-                        if (colShape.GetData("OnVehicleEnterColShape", out ColShapeVehicleEventHandler onVehicleEnterColShape))
+                        if (colShape.GetData("OnVehicleEnterColShape", out ColShapeVehicleEventHandler onVehicleEnterColShape) && onVehicleEnterColShape != null)
                             await onVehicleEnterColShape.Invoke(colShape, (IVehicle)targetEntity);
                     }
                     else if (targetEntity.Type == BaseObjectType.Player)
@@ -47,7 +47,7 @@ namespace ResurrectionRP_Server.EventHandlers
                         if (OnPlayerEnterColShape != null)
                             await OnPlayerEnterColShape.Invoke(colShape, (IPlayer)targetEntity);
 
-                        if (colShape.GetData("OnPlayerEnterColShape", out ColShapePlayerEventHandler onPlayerEnterColShape))
+                        if (colShape.GetData("OnPlayerEnterColShape", out ColShapePlayerEventHandler onPlayerEnterColShape) && onPlayerEnterColShape != null)
                             await onPlayerEnterColShape.Invoke(colShape, (IPlayer)targetEntity);
                     }
                 }
@@ -62,7 +62,7 @@ namespace ResurrectionRP_Server.EventHandlers
                         if (OnVehicleLeaveColShape != null)
                             await OnVehicleLeaveColShape.Invoke(colShape, (IVehicle)targetEntity);
 
-                        if (colShape.GetData("OnVehicleLeaveColShape", out ColShapeVehicleEventHandler onVehicleLeaveColShape))
+                        if (colShape.GetData("OnVehicleLeaveColShape", out ColShapeVehicleEventHandler onVehicleLeaveColShape) && onVehicleLeaveColShape != null)
                             await onVehicleLeaveColShape.Invoke(colShape, (IVehicle)targetEntity);
                     }
                     else if (targetEntity.Type == BaseObjectType.Player)
@@ -70,8 +70,8 @@ namespace ResurrectionRP_Server.EventHandlers
                         if (OnPlayerLeaveColShape != null)
                             await OnPlayerLeaveColShape.Invoke(colShape, (IPlayer)targetEntity);
 
-                        if (colShape.GetData("OnPlayerLeaveColShape", out ColShapePlayerEventHandler onPlayerLeaveColShape))
-                            await onPlayerLeaveColShape?.Invoke(colShape, (IPlayer)targetEntity);
+                        if (colShape.GetData("OnPlayerLeaveColShape", out ColShapePlayerEventHandler onPlayerLeaveColShape) && onPlayerLeaveColShape != null)
+                            await onPlayerLeaveColShape.Invoke(colShape, (IPlayer)targetEntity);
                     }
                 }
 
@@ -100,7 +100,7 @@ namespace ResurrectionRP_Server.EventHandlers
                     if (OnPlayerInteractInColShape != null)
                         await OnPlayerInteractInColShape.Invoke(colshape, client);
 
-                    if (colshape.GetData("OnPlayerInteractInColShape", out ColShapePlayerEventHandler onPlayerInteractInColShape))
+                    if (colshape.GetData("OnPlayerInteractInColShape", out ColShapePlayerEventHandler onPlayerInteractInColShape) && onPlayerInteractInColShape != null)
                         await onPlayerInteractInColShape.Invoke(colshape, client);
 
                     break;

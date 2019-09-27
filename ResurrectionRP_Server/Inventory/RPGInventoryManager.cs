@@ -61,14 +61,15 @@ namespace ResurrectionRP_Server.Inventory
         }
 
         public static bool HasInventoryOpen(Inventory inventory) => _clientMenus.Values.Any(i => i.Inventory == inventory || i.Bag == inventory || i.Distant == inventory);
+
         public static bool HasInventoryOpen(IPlayer client) => _clientMenus.ContainsKey(client);
+
         public static RPGInventoryMenu GetRPGInventory(IPlayer client)
         {
             if (_clientMenus.TryGetValue(client, out RPGInventoryMenu menu))
                 return menu;
             return null;
         }
-
 
         public static Task<bool> OpenMenu(IPlayer client, RPGInventoryMenu menu)
         {
@@ -368,7 +369,7 @@ namespace ResurrectionRP_Server.Inventory
                             if (invItem == null)
                                 return;
 
-                            if (await phDistant.AddItem(invItem.stack.Item, quantity))
+                            if (phDistant.AddItem(invItem.stack.Item, quantity))
                             {
                                 phDistant.Client.SendNotification($"On vous à donner {quantity} {invItem.stack.Item.name}");
                                 ph.DeleteItem(slot, inventoryType, quantity);
@@ -379,7 +380,7 @@ namespace ResurrectionRP_Server.Inventory
                             invItem = menu.BagItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
                             if (invItem == null)
                                 return;
-                            if (await phDistant.AddItem(invItem.stack.Item, quantity))
+                            if (phDistant.AddItem(invItem.stack.Item, quantity))
                             {
                                 phDistant.Client.SendNotification($"On vous à donner {quantity} {invItem.stack.Item.name}");
                                 ph.DeleteItem(slot, inventoryType, quantity);
@@ -390,7 +391,7 @@ namespace ResurrectionRP_Server.Inventory
                             invItem = menu.DistantItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
                             if (invItem == null)
                                 return;
-                            if (await phDistant.AddItem(invItem.stack.Item, quantity))
+                            if (phDistant.AddItem(invItem.stack.Item, quantity))
                             {
                                 phDistant.Client.SendNotification($"On vous à donner {quantity} {invItem.stack.Item.name}");
                                 ph.DeleteItem(slot, inventoryType, quantity);
@@ -400,7 +401,7 @@ namespace ResurrectionRP_Server.Inventory
                             invItem = menu.OutfitItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
                             if (invItem == null)
                                 return;
-                            if (await phDistant.AddItem(invItem.stack.Item, quantity))
+                            if (phDistant.AddItem(invItem.stack.Item, quantity))
                             {
                                 phDistant.Client.SendNotification($"On vous a donné {quantity} {invItem.stack.Item.name}");
                                 ph.DeleteItem(slot, inventoryType, quantity);

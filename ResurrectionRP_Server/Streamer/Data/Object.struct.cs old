@@ -10,7 +10,7 @@ namespace ResurrectionRP_Server.Streamer.Data
     {
         public int id;
         public uint model;
-        public new ConcurrentDictionary<string, object> datas;
+        public ConcurrentDictionary<string, object> datas;
 
         public Object(string model, int entityId)
         {

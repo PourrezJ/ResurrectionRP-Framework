@@ -149,16 +149,16 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             });
         }
 
-        private async Task OpenChangePlateMenu(IPlayer client)
+        private Task OpenChangePlateMenu(IPlayer client)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
-                return;
+                return Task.CompletedTask;
 
             PlayerHandler ph = client.GetPlayerHandler();
 
             if (ph != null)
             {
-                AcceptMenu accept = await AcceptMenu.OpenMenu(client, "", "Retirer plaque du registre :", "~r~ATTENTION CETTE MODIFICATION EST ILLEGALE\nVous devez avoir l'argent sur vous", "", $"${PriceChangePlate}", Banner.Garage, false, false);
+                AcceptMenu accept = AcceptMenu.OpenMenu(client, "", "Retirer plaque du registre :", "~r~ATTENTION CETTE MODIFICATION EST ILLEGALE\nVous devez avoir l'argent sur vous", "", $"${PriceChangePlate}", Banner.Garage, false, false);
                 accept.AcceptMenuCallBack = (async (IPlayer c, bool response) =>
                 {
                     if (response)
@@ -182,6 +182,8 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                     await OpenMainMenu(client, _vehicleBench);
                 });
             }
+
+            return Task.CompletedTask;
         }
         #endregion
 

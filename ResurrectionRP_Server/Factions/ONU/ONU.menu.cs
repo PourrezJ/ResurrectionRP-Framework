@@ -14,29 +14,28 @@ namespace ResurrectionRP_Server.Factions
     public partial class ONU
     {
         #region Infirmiere
-        private async Task OnNPCInteract(IPlayer client, Ped npc)
+        private Task OnNPCInteract(IPlayer client, Ped npc)
         {
-            AcceptMenu healmenu = await AcceptMenu.OpenMenu(client, "Infirmière", "Voulez-vous être soigné?", rightlabel: $"${healprice}");
-            healmenu.AcceptMenuCallBack = (async (IPlayer c, bool reponse) =>
+            AcceptMenu healmenu = AcceptMenu.OpenMenu(client, "Infirmière", "Voulez-vous être soigné?", rightlabel: $"${healprice}");
+
+            healmenu.AcceptMenuCallBack = async (IPlayer player, bool reponse) =>
             {
                 if (reponse)
                 {
-                    if (await c.GetPlayerHandler().HasBankMoney(healprice, "Soin Hospital"))
+                    if (await player.GetPlayerHandler().HasBankMoney(healprice, "Soin Hospital"))
                     {
-                        c.Health = 200;
-                        c.GetPlayerHandler().PlayerSync.Injured = false;
-                        c.SendNotificationSuccess("Voilà qui est fait!");
+                        player.Health = 200;
+                        player.GetPlayerHandler().PlayerSync.Injured = false;
+                        player.SendNotificationSuccess("Voilà qui est fait!");
                     }
                     else
-                    {
-                        c.SendNotificationError("Désolé Mr mais la banque refuse le paiement de vos soins.");
-                    }
+                        player.SendNotificationError("Désolé Mr mais la banque refuse le paiement de vos soins.");
                 }
                 else
-                {
-                    c.SendNotification("Ne me faites pas perdre mon temps alors!");
-                }
-            });
+                    player.SendNotification("Ne me faites pas perdre mon temps alors!");
+            };
+
+            return Task.CompletedTask;
         }
         #endregion
 

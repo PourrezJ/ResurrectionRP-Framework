@@ -327,7 +327,10 @@ namespace ResurrectionRP_Server.Entities.Players
                 case (ConsoleKey)20:
                     if (ph.HasOpenMenu())
                         return;
-                    await ph.RadioSelected?.UseRadio(client);
+
+                    if (ph.RadioSelected != null)
+                        await ph.RadioSelected.UseRadio(client);
+
                     break;
 
                 case ConsoleKey.D1:

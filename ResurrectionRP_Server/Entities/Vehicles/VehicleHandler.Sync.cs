@@ -423,6 +423,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public Attachment Attachment { get; set; }
         #endregion
 
+        #region Methods
         public VehicleDoorState GetDoorState(VehicleDoor door) => Doors[(byte)door];
 
         public void SetDoorState(IPlayer player, VehicleDoor door, VehicleDoorState state)
@@ -487,6 +488,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public void UpdateMilageAndFuel()
         {
+            if (WasTeleported)
+            {
+                _previousPosition = Vehicle.Position;
+                WasTeleported = false;
+                return;
+            }
+
             DateTime updateTime = DateTime.Now;
             Vector3 oldPos = _previousPosition;
             Vector3 newPos = Vehicle.Position;
@@ -523,5 +531,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             _previousUpdate = updateTime;
         }
+        #endregion
     }
 }

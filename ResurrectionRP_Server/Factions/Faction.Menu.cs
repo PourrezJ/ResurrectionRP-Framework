@@ -135,14 +135,17 @@ namespace ResurrectionRP_Server.Factions
             await menu.OpenXMenu(client);
         }
 
-        private async Task InviteFaction(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private Task InviteFaction(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             IPlayer _target = menu.GetData("Player");
-            if (_target == null) return;
+
+            if (_target == null)
+                return Task.CompletedTask;
+
             FactionRang rang = menuItem.GetData("Rang");
 
-            AcceptMenu accept = await AcceptMenu.OpenMenu(_target, $"{FactionName}", $"Rejoindre la faction {FactionName} rang {rang.RangName}?");
-            accept.AcceptMenuCallBack = (async (IPlayer c, bool reponse) =>
+            AcceptMenu accept = AcceptMenu.OpenMenu(_target, $"{FactionName}", $"Rejoindre la faction {FactionName} rang {rang.RangName}?");
+            accept.AcceptMenuCallBack = async (IPlayer c, bool reponse) =>
             {
                 if (reponse)
                 {
@@ -154,7 +157,9 @@ namespace ResurrectionRP_Server.Factions
                 }
                 else
                     client.SendNotificationError($"La personne ne souhaite pas rejoindre {FactionName}.");
-            });
+            };
+
+            return Task.CompletedTask;
         }
 
         private async Task RankChange(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
@@ -224,7 +229,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Service
-        public virtual async Task<Menu> PriseServiceMenu(IPlayer client)
+        public virtual Menu PriseServiceMenu(IPlayer client)
         {
             if (HasPlayerIntoFaction(client))
             {
@@ -267,8 +272,7 @@ namespace ResurrectionRP_Server.Factions
                 demission.OnMenuItemCallbackAsync = GestionMemberCallback;
                 demission.SetData("playerId", client.GetSocialClub());
                 menu.Add(demission);
-                await menu.OpenMenu(client);
-
+                Task.Run(async () => { await menu.OpenMenu(client); }).Wait();
 
                 return menu;
             }
@@ -282,7 +286,7 @@ namespace ResurrectionRP_Server.Factions
         {
             if (menuItem == null)
             {
-                await PriseServiceMenu(client);
+                PriseServiceMenu(client);
                 return;
             }
 
@@ -336,7 +340,7 @@ namespace ResurrectionRP_Server.Factions
                     client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
             }
 
-            await PriseServiceMenu(client);
+            PriseServiceMenu(client);
         }
 
         // Récupérer l'argent dans la caisse.
@@ -377,7 +381,7 @@ namespace ResurrectionRP_Server.Factions
         {
             if (menuItem == null)
             {
-                await PriseServiceMenu(client);
+                PriseServiceMenu(client);
                 return;
             }
 
@@ -411,7 +415,8 @@ namespace ResurrectionRP_Server.Factions
                 {
                     client.SendNotificationError("Aucun nom de rentré.");
                 }
-                await PriseServiceMenu(client);
+
+                PriseServiceMenu(client);
             }
             else if (menuItem.Id == "delete_employe")
             {
@@ -427,7 +432,7 @@ namespace ResurrectionRP_Server.Factions
                         if (FactionPlayerList.TryRemove(playerID.Key, out FactionPlayer value))
                         {
                             client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
-                            await PriseServiceMenu(client);
+                            PriseServiceMenu(client);
                             await UpdateDatabase();
                         }
                         return;
@@ -437,7 +442,7 @@ namespace ResurrectionRP_Server.Factions
                         if (FactionPlayerList.TryRemove(playerID.Key, out FactionPlayer value))
                         {
                             client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
-                            await PriseServiceMenu(client);
+                            PriseServiceMenu(client);
                             await UpdateDatabase();
                         }
                         return;
@@ -469,31 +474,30 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Shop
-        public virtual async Task<Menu> OpenShopMenu(IPlayer client)
+        public virtual void OpenShopMenu(IPlayer client)
         {
-            if (HasPlayerIntoFaction(client))
+            if (!HasPlayerIntoFaction(client))
+                return;
+
+            Menu menu = new Menu("ID_Shop", FactionName, "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
+            menu.ItemSelectCallbackAsync = ShopMenuCallBack;
+
+            foreach (FactionShopItem item in ItemShop)
             {
-                Menu menu = new Menu("ID_Shop", FactionName, "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
-                menu.ItemSelectCallbackAsync = ShopMenuCallBack;
-                foreach (var item in ItemShop)
-                {
-                    if (item.Rang > GetRangPlayer(client))
-                        continue;
+                if (item.Rang > GetRangPlayer(client))
+                    continue;
 
-                    MenuItem menuitem = new MenuItem(item.Item.name, item.Item.description, "ID_BuyItem", true, rightLabel: (item.Price > 0) ? $"${item.Price.ToString()}" : "");
-                    menuitem.SetData("Item", item);
-                    menu.Add(menuitem);
-                }
-
-                await menu.OpenMenu(client);
-                return menu;
+                MenuItem menuitem = new MenuItem(item.Item.name, item.Item.description, "ID_BuyItem", true, rightLabel: (item.Price > 0) ? $"${item.Price.ToString()}" : "");
+                menuitem.SetData("Item", item);
+                menu.Add(menuitem);
             }
-            return null;
+
+            Task.Run(async () => { await menu.OpenMenu(client); }).Wait();
         }
 
         private async Task ShopMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            FactionShop item = menuItem.GetData("Item");
+            FactionShopItem item = menuItem.GetData("Item");
             PlayerHandler ph = client.GetPlayerHandler();
 
             if (item == null || ph == null)
@@ -506,7 +510,7 @@ namespace ResurrectionRP_Server.Factions
                     if (item.Item.type == "weapons")
                         item.Item.isStackable = false;
 
-                    if (await ph.AddItem(item.Item, 1))
+                    if (ph.AddItem(item.Item, 1))
                     {
                         client.SendNotificationSuccess($"Vous avez pris un(e) {item.Item.name}");
                     }
@@ -527,19 +531,19 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Parking
-        public virtual async Task<Menu> OpenConcessMenu(IPlayer client, ConcessType type, Location location, string factionName)
+        public virtual void OpenConcessMenu(IPlayer client, ConcessType type, Location location, string factionName)
         {
             if (client == null || !client.Exists)
-                return null;
+                return;
             else if (!HasPlayerIntoFaction(client))
             {
                 client.SendNotificationError("Vous n'êtes pas autorisé à utiliser ce parking!");
-                return null;
+                return;
             }
             else if (GetVehicleAllowed(GetRangPlayer(client)) == null)
             {
                 client.SendNotificationError("Aucun véhicule d'autorisé");
-                return null;
+                return;
             }
 
             _factionName = factionName;
@@ -555,7 +559,7 @@ namespace ResurrectionRP_Server.Factions
             menu.SetData("Faction_Location", location); 
             menu.ItemSelectCallbackAsync = ConcessCallBack;
 
-            if (await client.IsInVehicleAsync())
+            if (client.IsInVehicle)
                 menu.Add(new MenuItem("Ranger le véhicule", "", "ID_StoreVehicle", true));
             else
             {
@@ -563,9 +567,7 @@ namespace ResurrectionRP_Server.Factions
                 menu.Add(new MenuItem("Sortir un véhicule", "", "ID_OutVehicleMenu", true));
             }
 
-            await menu.OpenMenu(client);
-
-            return menu;
+            Task.Run(async () => { await menu.OpenMenu(client); }).Wait();
         }
 
         private async Task ConcessCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -651,7 +653,7 @@ namespace ResurrectionRP_Server.Factions
                 if (menuItem == null)
                 {
                     ConcessType type = (ConcessType)menu.GetData("ConcessType");
-                    await OpenConcessMenu(client, type, location, _factionName);
+                    OpenConcessMenu(client, type, location, _factionName);
                     return;
                 }
 

@@ -122,20 +122,20 @@ namespace ResurrectionRP_Server.DrivingSchool
         #endregion
 
         #region Menu
-        public async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
+        public void OnPlayerEnterColshape(IColShape colShape, IPlayer client)
         {
             if (colShape != _colshape)
                 return;
 
-            await OpenMenuDrivingSchool(client);
+            Task.Run(async () => { await OpenMenuDrivingSchool(client); }).Wait();
         }
 
-        public async Task OnPlayerLeaveColshape(IColShape colShape, IPlayer client)
+        public void OnPlayerLeaveColshape(IColShape colShape, IPlayer client)
         {
             if (colShape != _colshape)
                 return;
 
-            await MenuManager.CloseMenu(client);
+            Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
         }
 
         public async Task OpenMenuDrivingSchool(IPlayer client)

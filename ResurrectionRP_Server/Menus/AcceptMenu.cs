@@ -31,7 +31,7 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Menu
-        public static async Task<AcceptMenu> OpenMenu(IPlayer client, string title = "", string subtitle = "", string acceptDesc = "", string refuseDesc = "", string rightlabel = "", Banner banner = null, bool backCloseMenu = true, bool closeAtEnd = true)
+        public static AcceptMenu OpenMenu(IPlayer client, string title = "", string subtitle = "", string acceptDesc = "", string refuseDesc = "", string rightlabel = "", Banner banner = null, bool backCloseMenu = true, bool closeAtEnd = true)
         {
             AcceptMenu accept = new AcceptMenu()
             {
@@ -51,7 +51,7 @@ namespace ResurrectionRP_Server
                 new MenuItem("Refuser", refuseDesc, "ID_Refuser", true)
             });
 
-            await accept.menu.OpenMenu(client);
+            Task.Run(async () => { await accept.menu.OpenMenu(client); }).Wait();
             return accept;
         }
         #endregion

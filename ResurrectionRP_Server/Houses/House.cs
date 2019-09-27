@@ -1,6 +1,5 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
-using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
@@ -9,7 +8,6 @@ using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Blips;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
-using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils.Enums;
 using System;
@@ -134,36 +132,36 @@ namespace ResurrectionRP_Server.Houses
         #endregion
 
         #region Event handlers
-        private async Task OnPlayerEnterParking(PlayerHandler player, Parking parking)
+        private void OnPlayerEnterParking(PlayerHandler player, Parking parking)
         {
-            await OpenParkingMenu(player?.Client);
+            OpenParkingMenu(player?.Client);
         }
 
-        private async Task OnVehicleEnterParking(VehicleHandler vehicle, Parking parking)
+        private void OnVehicleEnterParking(VehicleHandler vehicle, Parking parking)
         {
-            await OpenParkingMenu(vehicle?.Vehicle?.Driver);
+            OpenParkingMenu(vehicle?.Vehicle?.Driver);
         }
 
-        private async Task OnPlayerEnterColshape(IColShape colShape, IPlayer client)
+        private void OnPlayerEnterColshape(IColShape colShape, IPlayer client)
         {
             if (colShape == ColShapeEnter)
-                await HouseManager.OpenHouseMenu(client, this);
+                Task.Run(async () => { await HouseManager.OpenHouseMenu(client, this); }).Wait();
             else if (colShape == ColShapeOut)
                 client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
         }
 
-        private async Task OpenParkingMenu(IPlayer player)
+        private void OpenParkingMenu(IPlayer player)
         {
             if (player == null || !player.Exists)
                 return;
 
             if (Owner == player.GetSocialClub())
-                await Parking.OpenParkingMenu(player, "", (player.GetPlayerHandler()?.StaffRank > AdminRank.Player) ? $"Logement {ID.ToString()}" : "Choisissez une option :", true);
+                Parking.OpenParkingMenu(player, "", (player.GetPlayerHandler()?.StaffRank > AdminRank.Player) ? $"Logement {ID.ToString()}" : "Choisissez une option :", true);
             else
                 player.SendNotificationError("Vous n'êtes pas autorisé à utiliser ce parking.");
         }
 
-        private async Task OnPlayerLeaveColshape(IColShape colShape, IPlayer client)
+        private void OnPlayerLeaveColshape(IColShape colShape, IPlayer client)
         {
             PlayerHandler ph = client.GetPlayerHandler();
 
@@ -171,7 +169,7 @@ namespace ResurrectionRP_Server.Houses
                 return;
 
             if (ph.HasOpenMenu())
-                await MenuManager.CloseMenu(client);
+                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
         }
 
         private async Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)

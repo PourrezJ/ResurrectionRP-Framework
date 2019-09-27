@@ -17,14 +17,19 @@ namespace ResurrectionRP_Server.Teleport
 
     public class TeleportManager
     {
+        #region Fields
         public List<Teleport> Teleports = new List<Teleport>();
+        #endregion
 
+        #region Constructor
         public TeleportManager()
         {
             Events.OnPlayerInteractInColShape += OnTeleportColshape;
             Events.OnPlayerLeaveColShape += OnPlayerLeaveColShape;
         }
+        #endregion
 
+        #region Event handlers
         private async Task OnTeleportColshape(IColShape colshape, IPlayer client)
         {
             if (!await client.ExistsAsync())
@@ -115,7 +120,7 @@ namespace ResurrectionRP_Server.Teleport
             }
         }
 
-        private async Task OnPlayerLeaveColShape(IColShape colshape, IPlayer client)
+        private void OnPlayerLeaveColShape(IColShape colshape, IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -131,9 +136,11 @@ namespace ResurrectionRP_Server.Teleport
                 return;
 
             if (ph.HasOpenMenu())
-                await MenuManager.CloseMenu(client);
+                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
         }
+        #endregion
 
+        #region Methods
         private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (!menuItem.HasData("Location"))
@@ -147,5 +154,6 @@ namespace ResurrectionRP_Server.Teleport
         }
 
         public Teleport GetTeleport(int id) => Teleports.Find(t => t.ID == id);
+        #endregion
     }
 }

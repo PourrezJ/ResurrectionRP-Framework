@@ -58,6 +58,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public string ParkingName { get; set; } = string.Empty;
 
+        [BsonIgnore]
+        public bool WasTeleported { get; set; } = false;
+
         [BsonIgnoreIfNull]
         public OilTank OilTank = null;
 
@@ -104,7 +107,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         }
         #endregion
 
-        #region Method
+        #region Methods
         public bool IsLocked()
         {
             return (LockState == VehicleLockState.Locked) ? true : false;

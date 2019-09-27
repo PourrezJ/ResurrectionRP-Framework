@@ -25,17 +25,13 @@ var canClose: boolean = true;
 
 export class Interaction {
 
-    nbColshapes: number = 0;
+    private inColShape: boolean = false;
     private tick: number = 0;
 
     constructor()
     {
         alt.onServer("SetStateInColShape", (state: boolean) => {
-            if (state) {
-                this.nbColshapes++;
-            } else {
-                this.nbColshapes--;
-            }
+            this.inColShape = state;
         });
 
         alt.on('keyup', (key) => {
@@ -108,7 +104,7 @@ export class Interaction {
                         alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId);
                     }
 
-                    if (key == 69 && this.isInColshape()) {
+                    if (key == 69 && this.inColShape) {
                         alt.emitServer('InteractionInColshape', key, JSON.stringify(raycastResult));
                     }
                     
@@ -152,10 +148,6 @@ export class Interaction {
                 }
             }
         });
-    }
-
-    private isInColshape() {
-        return this.nbColshapes > 0;
     }
 
     private static displayHelp(text: string) {

@@ -230,6 +230,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     if (Fuel > 0)
                     {
                         EngineOn = !Vehicle.EngineOn;
+                        client.EmitLocked("keepEngineState", Vehicle.EngineOn);
                         await XMenuManager.XMenuManager.CloseMenu(client);
                     }
                     break;

@@ -136,7 +136,7 @@ namespace ResurrectionRP_Server
                 int index = Convert.ToInt32(args[0]);
                 menu.IndexChangeCallback?.Invoke(player, menu, index, menu.Items[index]);
 
-                if (menu.IndexChangeCallback != null)
+                if (menu.IndexChangeCallbackAsync != null)
                     Task.Run(async () => { await menu.IndexChangeCallbackAsync.Invoke(player, menu, index, menu.Items[index]); }).Wait();
             }
         }

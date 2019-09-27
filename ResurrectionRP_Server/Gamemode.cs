@@ -88,9 +88,6 @@ namespace ResurrectionRP_Server
         public Entities.Blips.BlipsManager BlipsManager { get; private set; }
 
         [BsonIgnore]
-        public ResuPickupManager ResuPickupManager { get; private set; }
-
-        [BsonIgnore]
         public Loader.BusinessesLoader BusinessesManager { get; private set; }
 
         [BsonIgnore]
@@ -197,7 +194,6 @@ namespace ResurrectionRP_Server
             RPGInventory = new Inventory.RPGInventoryManager();
             SocietyManager = new Society.SocietyManager();
             MenuManager = new MenuManager();
-            ResuPickupManager = new ResuPickupManager();
             TeleportManager = new Teleport.TeleportManager();
             BusinessesManager = new Loader.BusinessesLoader();
             XMenuManager = new XMenuManager.XMenuManager();

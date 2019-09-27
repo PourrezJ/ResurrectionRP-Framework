@@ -9,40 +9,6 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Models
 {
-    public class ResuPickupManager
-    {
-        #region Private static properties
-        public static ConcurrentDictionary<int, ResuPickup> ResuPickupList = new ConcurrentDictionary<int, ResuPickup>();
-        #endregion
-
-        #region Constructor
-        public ResuPickupManager()
-        {
-            AltAsync.OnClient("ObjectManager_InteractPickup", ObjectManager_InteractPickup);
-        }
-        #endregion
-
-        #region Methods
-        public async Task ObjectManager_InteractPickup(IPlayer client, object[] args)
-        {
-            if (!client.Exists)
-                return;
-            
-            int oid = int.Parse(args[0].ToString());
-            var resupickup = GetResuPickup(oid);
-
-            if (resupickup != null)
-                await resupickup.Take(client);
-        }
-
-        public static ResuPickup GetResuPickup(int netID)
-        {
-            ResuPickupList.TryGetValue(netID, out ResuPickup pickup);
-            return pickup;
-        }
-        #endregion
-    }
-
     public class ResuPickup
     {
         #region Delegates
@@ -50,6 +16,9 @@ namespace ResurrectionRP_Server.Models
         #endregion
 
         #region Fields
+        public static ConcurrentDictionary<int, ResuPickup> ResuPickupList = new ConcurrentDictionary<int, ResuPickup>();
+
+
         [JsonIgnore]
         public Entities.Objects.WorldObject Object;
         [JsonIgnore]
@@ -93,7 +62,7 @@ namespace ResurrectionRP_Server.Models
                 pickup.Label = GameMode.Instance.Streamer.AddEntityTextLabel(str, pickup.Position + new Vector3(0, 0, 0.5f), 0, 255, 255, 255, 120, 3);
             }
 
-            ResuPickupManager.ResuPickupList.TryAdd(worldObject.ID, pickup);
+            ResuPickupList.TryAdd(worldObject.ID, pickup);
 
             Utils.Utils.Delay((int)endlife.TotalMilliseconds, true, () =>
             {
@@ -128,8 +97,14 @@ namespace ResurrectionRP_Server.Models
                 if (Label != null)
                     Label.Destroy();
 
-                ResuPickupManager.ResuPickupList.TryRemove(Object.ID, out _);
+                ResuPickupList.TryRemove(Object.ID, out _);
             }
+        }
+
+        public static ResuPickup GetResuPickup(int netID)
+        {
+            ResuPickupList.TryGetValue(netID, out ResuPickup pickup);
+            return pickup;
         }
         #endregion
     }

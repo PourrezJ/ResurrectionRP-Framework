@@ -61,23 +61,30 @@ namespace ResurrectionRP_Server.Streamer
         public WorldObject AddEntityObject(WorldObject data)
         {
             INetworkingEntity item = AltNetworking.CreateEntity(data.Position.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());
+            
             ListEntities.TryAdd(data.ID, item);
             return data;
         }
 
         public WorldObject UpdateEntityObject(WorldObject obj)
         {
-            INetworkingEntity oitem = this.ListEntities[obj.ID];
-            oitem.SetData("attach",JsonConvert.SerializeObject( obj.Attachment ) );
+            if (ListEntities.ContainsKey(obj.ID))
+            {
+                INetworkingEntity oitem = this.ListEntities[obj.ID];
+                oitem.SetData("attach", JsonConvert.SerializeObject(obj.Attachment));
+            }
 
             return obj;
         }
 
         public void DeleteEntityObject(WorldObject data)
         {
-            Alt.EmitAllClients("deleteObject", data.ID);
-            AltNetworking.RemoveEntity(ListEntities[data.ID]);
-            ListEntities.TryRemove(data.ID, out _);
+            if (ListEntities.ContainsKey(data.ID))
+            {
+                Alt.EmitAllClients("deleteObject", data.ID);
+                AltNetworking.RemoveEntity(ListEntities[data.ID]);
+                ListEntities.TryRemove(data.ID, out _);
+            }      
         }
 
         public TextLabel AddEntityTextLabel(string label, Vector3 pos, int font = 1, int r = 255, int g = 255, int b = 255, int a = 255, int drawDistance = 20, int dimension = GameMode.GlobalDimension)
@@ -96,8 +103,13 @@ namespace ResurrectionRP_Server.Streamer
 
         public int DestroyEntity(int entityid)
         {
-            AltNetworking.RemoveEntity(ListEntities[entityid]);
-            ListEntities.TryRemove(entityid, out _);
+            if (ListEntities.ContainsKey(entityid))
+            {
+                INetworkingEntity entity;
+                if (ListEntities.TryRemove(entityid, out entity))
+                    AltNetworking.RemoveEntity(entity);
+            }
+  
             return 0;
         }
 

@@ -132,7 +132,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    Door door = GameMode.Instance.DoorManager.DoorList.Find(p => p.Position.DistanceTo2D(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE && p.Hash == raycastData.entityHash && raycastData.isHit);
+                    Door door = GameMode.Instance.DoorManager.DoorList.Find(p => p.Position.DistanceTo2D(raycastData.pos) <= 1 && p.Hash == raycastData.entityHash && raycastData.isHit);
                     if (door != null)
                         await door.Interact?.Invoke(client, door);
 

@@ -384,7 +384,7 @@ namespace ResurrectionRP_Server.Business
             double price = menuItem.GetData("price");
             string clothName = menuItem.Text;
 
-            BuyProp(client, componentID, drawable, variation, price, clothName);
+            await BuyProp(client, componentID, drawable, variation, price, clothName);
         }
 
         private Task OnCurrentItem(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
@@ -490,7 +490,7 @@ namespace ResurrectionRP_Server.Business
             double price = menuItem.GetData("price");
             string clothName = menuItem.Text;
 
-            BuyProp(client, componentID, drawable, variation, price, clothName);
+            await BuyProp(client, componentID, drawable, variation, price, clothName);
         }
         #endregion
     }

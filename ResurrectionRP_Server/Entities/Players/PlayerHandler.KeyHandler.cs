@@ -121,8 +121,10 @@ namespace ResurrectionRP_Server.Entities.Players
                         await farm.StartFarming(client);
                         return;
                     }
-                    
-                    PlayerHandler distantPh = PlayerManager.GetPlayersList().Find(p => p.Location.Pos.DistanceTo(raycastData.pos) < Globals.MAX_INTERACTION_DISTANCE);
+
+                    PlayerHandler distantPh = null;
+                    if (playerDistant == null)
+                         distantPh = PlayerManager.GetPlayersList().Find(p => p.Location.Pos.DistanceTo(raycastData.pos) < Globals.MAX_INTERACTION_DISTANCE);
 
                     if (playerDistant != null || distantPh != null && distantPh != this)
                     {

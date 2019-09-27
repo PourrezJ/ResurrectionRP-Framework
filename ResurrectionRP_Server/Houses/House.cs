@@ -272,9 +272,9 @@ namespace ResurrectionRP_Server.Houses
                 Alt.Server.LogWarning($"Player {player.GetPlayerHandler().Identite.Name} trying to enter house {ID} but already registered in another house");
             else
             {
+                await player.SetDimensionAsync((short)(DIMENSION_START + ID));
                 await player.SetPositionAsync(HouseTypes.HouseTypeList[Type].Position.Pos);
                 await player.SetRotationAsync(HouseTypes.HouseTypeList[Type].Position.Rot);
-                await player.SetDimensionAsync((short)(DIMENSION_START + ID));
             }
         }
 
@@ -293,7 +293,7 @@ namespace ResurrectionRP_Server.Houses
             }
         }
 
-        public async Task RemoveAllPlayers(bool exit = false)
+        public async Task RemoveAllPlayers()
         {
             foreach (IPlayer player in PlayersInside)
             {
@@ -313,11 +313,11 @@ namespace ResurrectionRP_Server.Houses
 
         public async Task RemoveInDatabase() => await Database.MongoDB.Delete<House>("houses", ID);
 
-        public async Task Destroy(bool exit = false)
+        public async Task Destroy()
         {
             if (Marker != null || ColShapeEnter != null)
             {
-                await RemoveAllPlayers(exit);
+                await RemoveAllPlayers();
                 Marker.Destroy();
                 ColShapeEnter.Remove();
             }

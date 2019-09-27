@@ -252,7 +252,7 @@ namespace ResurrectionRP_Server
 
             Chat.RegisterCmd("coords", (IPlayer player, string[] args) =>
             {
-                if (player.Vehicle != null)
+                if (player.IsInVehicle)
                 {
                     Chat.SendChatMessage(player, "X: " + player.Vehicle.Position.X + " Y: " + player.Vehicle.Position.Y + " Z: " + player.Vehicle.Position.Z);
                     Chat.SendChatMessage(player, "RX: " + player.Vehicle.Rotation.Roll + " RY: " + player.Vehicle.Rotation.Pitch + " RZ: " + player.Vehicle.Rotation.Yaw);

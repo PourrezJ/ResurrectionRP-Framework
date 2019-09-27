@@ -423,6 +423,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public Attachment Attachment { get; set; }
         #endregion
 
+        #region Methods
         public VehicleDoorState GetDoorState(VehicleDoor door) => Doors[(byte)door];
 
         public void SetDoorState(IPlayer player, VehicleDoor door, VehicleDoorState state)
@@ -530,5 +531,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             _previousUpdate = updateTime;
         }
+        #endregion
     }
 }

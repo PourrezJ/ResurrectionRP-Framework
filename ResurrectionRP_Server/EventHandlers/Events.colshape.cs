@@ -23,7 +23,9 @@ namespace ResurrectionRP_Server.EventHandlers
         public static event ColShapePlayerEventHandlerAsync OnPlayerInteractInColShape;
         #endregion
 
+        #region Private fields
         private static ConcurrentDictionary<IEntity, IColShape> _playerColshape = new ConcurrentDictionary<IEntity, IColShape>();
+        #endregion
 
         #region Private methods
         private static void OnEntityColshape(IColShape colShape, IEntity targetEntity, bool state)

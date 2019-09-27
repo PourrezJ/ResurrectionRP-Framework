@@ -50,7 +50,7 @@ namespace ResurrectionRP_Server.Phone
                          return false;
      */
 
-                    client.PlayAnimation((client.Vehicle != null) ? "cellphone@in_car@ds" : (client.Model == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_read_base", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.Loop | AnimationFlags.SecondaryTask));
+                    client.PlayAnimation((client.IsInVehicle) ? "cellphone@in_car@ds" : (client.Model == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_read_base", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.Loop | AnimationFlags.SecondaryTask));
                     long newMessagesCount = GetNewMessagesOnConversationsCount(phone.PhoneNumber);
                     client.Emit("OpenPhone", newMessagesCount, JsonConvert.SerializeObject(phone.Settings), incomingCall, contactNumber, contactName);
                     //client.EmitLocked("ShowCursor", true);
@@ -249,6 +249,5 @@ namespace ResurrectionRP_Server.Phone
             return 0;
         }
         #endregion
-
     }
 }

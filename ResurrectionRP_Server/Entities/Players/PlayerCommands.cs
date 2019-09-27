@@ -189,7 +189,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public Task Refuel(IPlayer player, string[] args)
         {
-            if (player.Vehicle == null)
+            if (!player.IsInVehicle)
             {
                 player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
                 return Task.CompletedTask;
@@ -204,7 +204,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public Task Repair(IPlayer player, string[] args)
         {
-            if (player.Vehicle == null)
+            if (!player.IsInVehicle)
             {
                 player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
                 return Task.CompletedTask;
@@ -223,7 +223,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public async Task Wheel(IPlayer player, string[] args)
         {
-            if (player.Vehicle == null)
+            if (!player.IsInVehicle)
             {
                 player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
                 return;
@@ -237,7 +237,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public async Task DoorState(IPlayer player, string[] args)
         {
-            if (player.Vehicle == null)
+            if (!player.IsInVehicle)
             {
                 player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
                 return;
@@ -248,7 +248,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public Task NeonState(IPlayer player, string[] args)
         {
-            if (player.Vehicle == null)
+            if (!player.IsInVehicle)
             {
                 player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
                 return Task.CompletedTask;

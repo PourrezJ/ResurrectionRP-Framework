@@ -10,7 +10,6 @@ using ResurrectionRP_Server.Utils;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
-using System;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -69,12 +68,12 @@ namespace ResurrectionRP_Server.Factions
             Colshape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
         }
 
-        public async Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        public void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
-            if (await client.IsInVehicleAsync())
+            if (client.IsInVehicle)
             {
-                var vehicle = await client.GetVehicleAsync();
-                var model = await vehicle.GetModelAsync();
+                IVehicle vehicle = client.Vehicle;
+                uint model = vehicle.Model;
 
                 if (model != (uint)VehicleModel.Forklift)
                     return;
@@ -92,7 +91,7 @@ namespace ResurrectionRP_Server.Factions
                 if (client.GetPlayerHandler()?.StaffRank > 0 && InventoryBox != null && boxOnForks == null)
                     menu.Add(new MenuItem("~r~Retirer le box", $"Retirer le box {RackName}", "ID_Destroy", true));
 
-                await MenuManager.OpenMenu(client, menu);
+                Task.Run(async () => { await MenuManager.OpenMenu(client, menu); }).Wait();
             }
         }
 
@@ -118,12 +117,11 @@ namespace ResurrectionRP_Server.Factions
                         if (inventoryBox == null)
                             return;
 
-                        inventoryBox.Obj.Destroy();
                         inventoryBox.ID = RackName;
                         InventoryBox = inventoryBox;
-                        InventoryBox.Location = new Location(new Vector3(this.BoxLocation.Pos.X, this.BoxLocation.Pos.Y, this.BoxLocation.Pos.Z - 1), this.BoxLocation.Rot);                       
+                        InventoryBox.Obj.DetachAttach();
+                        InventoryBox.Location = new Location(new Vector3(BoxLocation.Pos.X, BoxLocation.Pos.Y, BoxLocation.Pos.Z - 1), BoxLocation.Rot);                       
                         
-                        InventoryBox.Spawn();
                         vehicle.ResetData("BoxForks");
                     }
                 }

@@ -19,9 +19,9 @@ namespace ResurrectionRP_Server.Society.Societies
             //await Blip?.SetScaleAsync(1.2f);
         }
 
-        public override Task OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
+        public override void OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
         {
-            return base.OnPlayerEnterServiceColshape(colShape, client);
+            base.OnPlayerEnterServiceColshape(colShape, client);
         }
     }
 }

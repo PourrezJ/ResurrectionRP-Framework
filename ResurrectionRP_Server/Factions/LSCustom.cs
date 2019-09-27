@@ -16,6 +16,7 @@ using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.Utils.Enums;
 using ResurrectionRP_Server.XMenuManager;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 
@@ -91,31 +92,32 @@ namespace ResurrectionRP_Server.Factions
             ShopLocation = new Vector3(-344.9704f, -123.2633f, 38.00966f);
 
             // Items SHOP
-            ItemShop.Add(new FactionShop(new LockPick(ItemID.LockPick, "Kit De Crochetage", "", 0.2, true, false, true, true), 5000, 1));
-            ItemShop.Add(new FactionShop(new CrateTools(ItemID.CrateTool, "Caisse a outil", "De marque Facom", 1, true, false, true, true), 15000, 1));
+            ItemShop.Add(new FactionShopItem(new LockPick(ItemID.LockPick, "Kit De Crochetage", "", 0.2, true, false, true, true), 5000, 1));
+            ItemShop.Add(new FactionShopItem(new CrateTools(ItemID.CrateTool, "Caisse a outil", "De marque Facom", 1, true, false, true, true), 15000, 1));
 
             return base.Init();
         }
         #endregion
 
         #region Event handlers
-        private async Task OnEnterPaintZoneVL(IColShape colShape, IPlayer client)
+        private Task OnEnterPaintZoneVL(IColShape colShape, IPlayer client)
         {
             if (VehicleInColorCabin == null)
             {
                 client.SendNotificationError("Le véhicule doit être dans la cabine de peinture pour être repeint.");
-                return;
+                return Task.CompletedTask;
             }
-            var employees = GetAllSocialClubName();
-            var social = client.GetSocialClub();
+
+            ICollection<string> employees = GetAllSocialClubName();
+            string social = client.GetSocialClub();
 
             if (employees.Contains(social))
-            {
-                await OpenPeintureMenu(client);
-            }    
+                Task.Run(async () => { await OpenPeintureMenu(client); }).Wait();
+
+            return Task.CompletedTask;
         }
 
-        private async Task OnVehicleLeaveColshape(IColShape colShape, IVehicle vehicle)
+        private void OnVehicleLeaveColshape(IColShape colShape, IVehicle vehicle)
         {
             if (colShape == ReparationVLColshape)
             {
@@ -127,23 +129,20 @@ namespace ResurrectionRP_Server.Factions
             }
 
             if (vehicle.Driver != null)
-                await MenuManager.CloseMenu(vehicle.Driver);
+                Task.Run(async () => { await MenuManager.CloseMenu(vehicle.Driver); }).Wait();
         }
 
-        private Task OnVehicleEnterColshape(IColShape colShape, IVehicle vehicle)
+        private void OnVehicleEnterColshape(IColShape colShape, IVehicle vehicle)
         {
             if (colShape == ReparationVLColshape)
                 VehicleInWorkbench = vehicle;
             else if (colShape == PeintureColshape)
                 VehicleInColorCabin = vehicle;
-
-            return Task.CompletedTask;
         }
 
-        private Task OnEnterColshapeInteract(IColShape colShape, IPlayer client)
+        private void OnEnterColshapeInteract(IColShape colShape, IPlayer client)
         {
             client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
-            return Task.CompletedTask;
         }
 
         private async Task OnPeintureSelect(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)

@@ -90,7 +90,7 @@ namespace ResurrectionRP_Server.Entities.Objects
             data["model"] = Model;
             data["entityType"] = (int)EntityType.Object;
             data["id"] = ID;
-            data["position"] = JsonConvert.SerializeObject(ID);
+            data["rotation"] = JsonConvert.SerializeObject(Rotation);
             data["freeze"] = Freeze;
             data["attach"] = JsonConvert.SerializeObject(Attachment);
             data["dimension"] = Dimension;

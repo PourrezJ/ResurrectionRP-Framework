@@ -121,16 +121,16 @@ namespace ResurrectionRP_Server.Factions
             VehicleAllowed.Add(new FactionVehicle(3, VehicleModel.Kuruma2, 1500000, 60));
             //VehicleAllowed.Add(new FactionVehicle(3, (VehicleModel)VehicleHash2.rmodx6, 1500000, 60)); Véhicule moddé ?
 
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Flashlight, "Lampe de poche", "Une lampe leds 500watts.", hash: WeaponHash.Flashlight), 0, 0));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Matraque, "Matraque", "Une matraque de marque Théo.", hash: WeaponHash.Nightstick), 0, 0));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Pistol, "Pistol MK2", "", hash: WeaponHash.PistolMk2), 0, 1));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Pistol, "Revolver MK2", "", hash: WeaponHash.RevolverMk2), 0, 2));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Pump, "Fusil à canon scié", "", hash: WeaponHash.SawnOffShotgun), 0, 2));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Carabine, "Special Carbine MK2", "", hash: WeaponHash.SpecialCarbineMk2), 0, 3));
-            ItemShop.Add(new FactionShop(new RadioItem(ItemID.Radio, "Talky", "", 1, true, true, false, true, true, 2000, icon: "talky"), 500, 0));
-            ItemShop.Add(new FactionShop(new BagItem(ItemID.Bag, "Backpack", "", new ClothData(45, 0, 0), 40, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"), 500, 0));
-            ItemShop.Add(new FactionShop(new HandCuff(ItemID.Handcuff, "Menottes", "Une paire de menottes", 0.1, true, false), 500, 0));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Combat MG MK2", "", 26, hash: WeaponHash.CombatMgMk2), 40000, 2));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Flashlight, "Lampe de poche", "Une lampe leds 500watts.", hash: WeaponHash.Flashlight), 0, 0));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Matraque, "Matraque", "Une matraque de marque Théo.", hash: WeaponHash.Nightstick), 0, 0));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pistol, "Pistol MK2", "", hash: WeaponHash.PistolMk2), 0, 1));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pistol, "Revolver MK2", "", hash: WeaponHash.RevolverMk2), 0, 2));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pump, "Fusil à canon scié", "", hash: WeaponHash.SawnOffShotgun), 0, 2));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Carabine, "Special Carbine MK2", "", hash: WeaponHash.SpecialCarbineMk2), 0, 3));
+            ItemShop.Add(new FactionShopItem(new RadioItem(ItemID.Radio, "Talky", "", 1, true, true, false, true, true, 2000, icon: "talky"), 500, 0));
+            ItemShop.Add(new FactionShopItem(new BagItem(ItemID.Bag, "Backpack", "", new ClothData(45, 0, 0), 40, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"), 500, 0));
+            ItemShop.Add(new FactionShopItem(new HandCuff(ItemID.Handcuff, "Menottes", "Une paire de menottes", 0.1, true, false), 500, 0));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Combat MG MK2", "", 26, hash: WeaponHash.CombatMgMk2), 40000, 2));
 
             _boatColShape = Alt.CreateColShapeCylinder(new Vector3(-2095.39f, -1014.713f, 8.980465f), 4f, 4f);
 
@@ -149,12 +149,12 @@ namespace ResurrectionRP_Server.Factions
             return base.InteractPlayerMenu(client, target, xmenu);
         }
 
-        private async Task OnNPCInteract(IPlayer client, Ped npc)
+        private Task OnNPCInteract(IPlayer client, Ped npc)
         {
             if (npc == _secretaire)
-            {
-                await OpenSecretaryMenu(client);
-            }
+                OpenSecretaryMenu(client);
+
+            return Task.CompletedTask;
         }
 
         public override Task OnVehicleOut(IPlayer client, VehicleHandler vehicleHandler, Location location = null)
@@ -168,7 +168,7 @@ namespace ResurrectionRP_Server.Factions
             return base.OnVehicleOut(client, vehicleHandler, location);
         }
 
-        public override async Task OnPlayerEnterColShape(IColShape ColShapePointer, IPlayer player)
+        public override void OnPlayerEnterColShape(IColShape ColShapePointer, IPlayer player)
         {
             if (_boatColShape == ColShapePointer)
             {
@@ -176,10 +176,10 @@ namespace ResurrectionRP_Server.Factions
                 menu.ItemSelectCallbackAsync = MenuCallback;
                 menu.Add(new MenuItem("Inventaire", "", "ID_Inventaire", true));
 
-                await menu.OpenMenu(player);
+                Task.Run(async () => { await menu.OpenMenu(player); }).Wait();
             }
 
-            await base.OnPlayerEnterColShape(ColShapePointer, player);
+            base.OnPlayerEnterColShape(ColShapePointer, player);
         }
 
         public override async Task OnPlayerPromote(IPlayer client, int rang)

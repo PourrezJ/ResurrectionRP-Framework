@@ -160,11 +160,11 @@ namespace ResurrectionRP_Server
             }
         }
 
-        public static void SetOnPlayerInteractInColShape(this IColShape colshape, Events.ColShapePlayerEventHandler method)
+        public static void SetOnPlayerInteractInColShape(this IColShape colshape, Events.ColShapePlayerEventHandlerAsync method)
         {
             lock (colshape)
             {
-                colshape.GetData("OnPlayerInteractInColShape", out Events.ColShapePlayerEventHandler eventHandler);
+                colshape.GetData("OnPlayerInteractInColShape", out Events.ColShapePlayerEventHandlerAsync eventHandler);
 
                 if (eventHandler != null)
                     eventHandler = method;

@@ -16,12 +16,12 @@ namespace ResurrectionRP_Server.Factions
 {
     public partial class Gouv : Faction
     {
-        public virtual async Task OpenSecretaryMenu(IPlayer client)
+        public virtual void OpenSecretaryMenu(IPlayer client)
         {
             if (client == null || !client.Exists)
                 return;
 
-            if ( HasPlayerIntoFaction(client) &&  this.GetRangPlayer(client) >= 5)
+            if (HasPlayerIntoFaction(client) &&  GetRangPlayer(client) >= 5)
             {
                 Menu menu = new Menu("ID_Accueil", FactionName, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
                 menu.ItemSelectCallbackAsync = SecretaireMenuCallback;
@@ -29,12 +29,10 @@ namespace ResurrectionRP_Server.Factions
                 MenuItem fisc = new MenuItem("Récupérer un dossier fiscal", "Vérifier la comptabilité d'une entreprise", "ID_ListBusiness", executeCallback: true);
                 menu.Add(fisc);
 
-                await menu.OpenMenu(client);
+                Task.Run(async () => { await menu.OpenMenu(client); }).Wait();
             }
             else
-            {
                 client.DisplayHelp("La secrétaire vous ignore, elle ne vous connait pas !", 10000);
-            }
 
         }
 
@@ -42,7 +40,7 @@ namespace ResurrectionRP_Server.Factions
         {
             if (menuItem == null)
             {
-                await OpenSecretaryMenu(client);
+                OpenSecretaryMenu(client);
                 return;
             }
 

@@ -37,18 +37,18 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                 client.SendNotificationError("Aucun véhicule devant l'établi.");
         }
 
-        public override async Task OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
+        public override void OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
         {
             if (!client.Exists)
                 return;
 
             if (colShape == _workZone)
             {
-                if (await client.IsInVehicleAsync())
-                    _vehicleBench = await client.GetVehicleAsync();
+                if (client.IsInVehicle)
+                    _vehicleBench = client.Vehicle;
             }
 
-            await base.OnPlayerEnterServiceColshape(colShape, client);
+            base.OnPlayerEnterServiceColshape(colShape, client);
         }
         #endregion
 

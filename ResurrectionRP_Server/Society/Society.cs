@@ -118,16 +118,16 @@ namespace ResurrectionRP_Server.Society
         }
         #endregion
 
-        #region Events
-        public virtual async Task OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
+        #region Event handlers
+        public virtual void OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
         {
             if (client == null || !client.Exists)
                 return;
 
-            await OpenSocietyMainMenu(client);
+            Task.Run(async () => { await OpenSocietyMainMenu(client); }).Wait();
         }
 
-        public virtual async Task OnPlayerLeaveServiceColshape(IColShape colShape, IPlayer client)
+        public virtual void OnPlayerLeaveServiceColshape(IColShape colShape, IPlayer client)
         {
             if (client == null || !client.Exists)
                 return;
@@ -135,17 +135,17 @@ namespace ResurrectionRP_Server.Society
             PlayerHandler player = client.GetPlayerHandler();
 
             if (player != null && player.HasOpenMenu())
-                await MenuManager.CloseMenu(client);
+                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
         }
 
-        public async Task OnPlayerEnterParking(PlayerHandler player, Parking parking)
+        public void OnPlayerEnterParking(PlayerHandler player, Parking parking)
         {
-            await OpenParkingMenu(player?.Client);
+            OpenParkingMenu(player?.Client);
         }
 
-        public async Task OnVehicleEnterParking(VehicleHandler vehicle, Parking parking)
+        public void OnVehicleEnterParking(VehicleHandler vehicle, Parking parking)
         {
-            await OpenParkingMenu(vehicle?.Vehicle?.Driver);
+            OpenParkingMenu(vehicle?.Vehicle?.Driver);
         }
 
         public virtual async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)

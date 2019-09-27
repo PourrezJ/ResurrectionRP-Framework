@@ -2,6 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using System;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.EventHandlers
@@ -9,8 +10,9 @@ namespace ResurrectionRP_Server.EventHandlers
     public static partial class Events
     {
         #region Delegates
-        public delegate Task ColShapePlayerEventHandler(IColShape colShape, IPlayer client);
-        public delegate Task ColShapeVehicleEventHandler(IColShape colShape, IVehicle vehicle);
+        public delegate void ColShapePlayerEventHandler(IColShape colShape, IPlayer client);
+        public delegate Task ColShapePlayerEventHandlerAsync(IColShape colShape, IPlayer client);
+        public delegate void ColShapeVehicleEventHandler(IColShape colShape, IVehicle vehicle);
         #endregion
 
         #region Public events
@@ -18,65 +20,70 @@ namespace ResurrectionRP_Server.EventHandlers
         public static event ColShapePlayerEventHandler OnPlayerLeaveColShape;
         public static event ColShapeVehicleEventHandler OnVehicleEnterColShape;
         public static event ColShapeVehicleEventHandler OnVehicleLeaveColShape;
-        public static event ColShapePlayerEventHandler OnPlayerInteractInColShape;
+        public static event ColShapePlayerEventHandlerAsync OnPlayerInteractInColShape;
         #endregion
 
-        #region Private methods
-        private static async Task OnEntityColshape(IColShape colShape, IEntity targetEntity, bool state)
-        {
-            // Alt.Server.LogInfo("Event AltAsync.OnColShape");
+        private static ConcurrentDictionary<IEntity, IColShape> _playerColshape = new ConcurrentDictionary<IEntity, IColShape>();
 
+        #region Private methods
+        private static void OnEntityColshape(IColShape colShape, IEntity targetEntity, bool state)
+        {
             try
             {
                 if (state)
                 {
+                    // BUG v792 : Teleport to colshape faraway doesn't always fire OnColShape() event
+                    IColShape oldColShape = _playerColshape.GetOrAdd(targetEntity, colShape);
+
+                    if (oldColShape != colShape)
+                        OnEntityColshape(_playerColshape[targetEntity], targetEntity, false);
+
+                    // Alt.Server.LogInfo($"Entity {targetEntity.Id} enter colshape {colShape.NativePointer.ToString()}");
                     // BUG V784 : Bug ColShape.IsEntityIn() returns always false
                     colShape.AddEntity(targetEntity);
-                    // Alt.Server.LogInfo($"Entity {targetEntity.Id} enter colshape {colShape.NativePointer.ToString()}");
 
                     if (targetEntity.Type == BaseObjectType.Vehicle)
                     {
-                        if (OnVehicleEnterColShape != null)
-                            await OnVehicleEnterColShape.Invoke(colShape, (IVehicle)targetEntity);
+                        OnVehicleEnterColShape?.Invoke(colShape, (IVehicle)targetEntity);
 
-                        if (colShape.GetData("OnVehicleEnterColShape", out ColShapeVehicleEventHandler onVehicleEnterColShape) && onVehicleEnterColShape != null)
-                            await onVehicleEnterColShape.Invoke(colShape, (IVehicle)targetEntity);
+                        if (colShape.GetData("OnVehicleEnterColShape", out ColShapeVehicleEventHandler onVehicleEnterColShape))
+                            onVehicleEnterColShape?.Invoke(colShape, (IVehicle)targetEntity);
                     }
                     else if (targetEntity.Type == BaseObjectType.Player)
                     {
-                        if (OnPlayerEnterColShape != null)
-                            await OnPlayerEnterColShape.Invoke(colShape, (IPlayer)targetEntity);
+                        OnPlayerEnterColShape?.Invoke(colShape, (IPlayer)targetEntity);
 
-                        if (colShape.GetData("OnPlayerEnterColShape", out ColShapePlayerEventHandler onPlayerEnterColShape) && onPlayerEnterColShape != null)
-                            await onPlayerEnterColShape.Invoke(colShape, (IPlayer)targetEntity);
+                        if (colShape.GetData("OnPlayerEnterColShape", out ColShapePlayerEventHandler onPlayerEnterColShape))
+                            onPlayerEnterColShape?.Invoke(colShape, (IPlayer)targetEntity);
                     }
                 }
                 else
                 {
+                    // BUG v792 : Teleport to colshape faraway doesn't always fire OnColShape() event
+                    _playerColshape.TryRemove(targetEntity, out _);
+
+                    // Alt.Server.LogInfo($"Entity {targetEntity.Id} leave colshape {colShape.NativePointer.ToString()}");
                     // BUG V784 : Bug ColShape.IsEntityIn() returns always false
                     colShape.RemoveEntity(targetEntity as IPlayer);
-                    // Alt.Server.LogInfo($"Entity {targetEntity.Id} leave colshape {colShape.NativePointer.ToString()}");
 
                     if (targetEntity.Type == BaseObjectType.Vehicle)
                     {
-                        if (OnVehicleLeaveColShape != null)
-                            await OnVehicleLeaveColShape.Invoke(colShape, (IVehicle)targetEntity);
+                        OnVehicleLeaveColShape?.Invoke(colShape, (IVehicle)targetEntity);
 
-                        if (colShape.GetData("OnVehicleLeaveColShape", out ColShapeVehicleEventHandler onVehicleLeaveColShape) && onVehicleLeaveColShape != null)
-                            await onVehicleLeaveColShape.Invoke(colShape, (IVehicle)targetEntity);
+                        if (colShape.GetData("OnVehicleLeaveColShape", out ColShapeVehicleEventHandler onVehicleLeaveColShape))
+                            onVehicleLeaveColShape?.Invoke(colShape, (IVehicle)targetEntity);
                     }
                     else if (targetEntity.Type == BaseObjectType.Player)
                     {
-                        if (OnPlayerLeaveColShape != null)
-                            await OnPlayerLeaveColShape.Invoke(colShape, (IPlayer)targetEntity);
+                        OnPlayerLeaveColShape?.Invoke(colShape, (IPlayer)targetEntity);
 
-                        if (colShape.GetData("OnPlayerLeaveColShape", out ColShapePlayerEventHandler onPlayerLeaveColShape) && onPlayerLeaveColShape != null)
-                            await onPlayerLeaveColShape.Invoke(colShape, (IPlayer)targetEntity);
+                        if (colShape.GetData("OnPlayerLeaveColShape", out ColShapePlayerEventHandler onPlayerLeaveColShape))
+                            onPlayerLeaveColShape?.Invoke(colShape, (IPlayer)targetEntity);
                     }
                 }
 
                 if (targetEntity.Type == BaseObjectType.Player && targetEntity.Exists)
-                    await ((IPlayer)targetEntity).EmitAsync("SetStateInColShape", state);
+                    ((IPlayer)targetEntity).EmitLocked("SetStateInColShape", state);
             }
             catch (Exception ex)
             {
@@ -100,7 +107,7 @@ namespace ResurrectionRP_Server.EventHandlers
                     if (OnPlayerInteractInColShape != null)
                         await OnPlayerInteractInColShape.Invoke(colshape, client);
 
-                    if (colshape.GetData("OnPlayerInteractInColShape", out ColShapePlayerEventHandler onPlayerInteractInColShape) && onPlayerInteractInColShape != null)
+                    if (colshape.GetData("OnPlayerInteractInColShape", out ColShapePlayerEventHandlerAsync onPlayerInteractInColShape) && onPlayerInteractInColShape != null)
                         await onPlayerInteractInColShape.Invoke(colshape, client);
 
                     break;

@@ -108,7 +108,7 @@ namespace ResurrectionRP_Server.Business
                         return;
                     }
 
-                    AcceptMenu accept = await AcceptMenu.OpenMenu(ClientSelected.Client, "", "Voulez-vous vous faire tatouer?", banner: Banner.Tattoos2);
+                    AcceptMenu accept = AcceptMenu.OpenMenu(ClientSelected.Client, "", "Voulez-vous vous faire tatouer?", banner: Banner.Tattoos2);
                     accept.AcceptMenuCallBack = (async (IPlayer tatouer, bool responce) =>
                     {
                         if (responce)

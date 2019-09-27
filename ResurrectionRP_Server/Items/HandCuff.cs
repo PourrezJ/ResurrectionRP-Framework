@@ -20,9 +20,9 @@ namespace ResurrectionRP_Server.Items
             return base.OnPickup(client, pickup);
         }
 
-        public override Task OnPlayerGetItem(IPlayer player)
+        public override void OnPlayerGetItem(IPlayer player)
         {
-            return base.OnPlayerGetItem(player);
+            base.OnPlayerGetItem(player);
         }
     }
 }

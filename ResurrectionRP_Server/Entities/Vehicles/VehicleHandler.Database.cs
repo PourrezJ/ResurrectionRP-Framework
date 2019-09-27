@@ -44,14 +44,17 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             LastUse = DateTime.Now;
 
-            if (Vehicle != null && Vehicle.Exists)
+            AltAsync.Do(() =>
             {
-                if (location != null)
-                    Location = location;
+                if (Vehicle != null && Vehicle.Exists)
+                {
+                    if (location != null)
+                        Location = location;
 
-                UpdateProperties();
-                UpdateInBackground();
-            }
+                    UpdateProperties();
+                    UpdateInBackground();
+                }
+            }).Wait();
         }
 
         public void UpdateInBackground()

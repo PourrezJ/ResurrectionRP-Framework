@@ -27,7 +27,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
         #endregion
 
         #region MainMenu
-        private async Task OpenMainMenu(IPlayer client, IVehicle vehicle)
+        private void OpenMainMenu(IPlayer client, IVehicle vehicle)
         {
             if (!(IsEmployee(client) || Owner == client.GetSocialClub()))
             {
@@ -43,7 +43,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
 
             try
             {
-                var info = VehicleInfoLoader.VehicleInfoLoader.Get(await vehicle.GetModelAsync());
+                VehicleManifest info = VehicleInfoLoader.VehicleInfoLoader.Get(vehicle.Model);
 
                 if (info == null)
                 {
@@ -91,7 +91,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             MenuItem historique = new MenuItem("Historique", "", "Histo", true);
             mainMenu.Add(historique);
 
-            await mainMenu.OpenMenu(client);
+            Task.Run(async () => { await mainMenu.OpenMenu(client); }).Wait();
             ClientInMenu = client;
         }
 
@@ -149,7 +149,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             if (_vehicleBench == null || !_vehicleBench.Exists)
                 await menu.CloseMenu(client);
             else if (menuItem == null)
-                await OpenMainMenu(client, _vehicleBench);
+                OpenMainMenu(client, _vehicleBench);
         }
 
         private async Task PerformanceItemMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -311,7 +311,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             }
             else if (menuItem == null)
             {
-                await OpenMainMenu(client, _vehicleBench);
+                OpenMainMenu(client, _vehicleBench);
                 return;
             }
 
@@ -578,10 +578,12 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             }
         }
 
-        private async Task HistoricMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private Task HistoricMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
-                await OpenMainMenu(client, _vehicleBench);
+                OpenMainMenu(client, _vehicleBench);
+
+            return Task.CompletedTask;
         }
         #endregion
 

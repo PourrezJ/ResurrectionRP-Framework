@@ -160,7 +160,7 @@ namespace ResurrectionRP_Server.Factions
             BlipColor = BlipColor.Yellow;
             BlipSprite = 356;
 
-            ItemShop.Add(new FactionShop(Inventory.Inventory.ItemByID(ItemID.Cafe), 0, 0));
+            ItemShop.Add(new FactionShopItem(Inventory.Inventory.ItemByID(ItemID.Cafe), 0, 0));
 
             base.Init();
 
@@ -195,7 +195,7 @@ namespace ResurrectionRP_Server.Factions
                     Quai = Rack.CreateRack("Quai", new Vector3(1180.685f, -3168.366f, 4.1175f), new Location(new Vector3(1183.685f, -3168.366f, 7.1175f), new Vector3(0, 0, 83.16074f)), true);
                 
                 if (Importation == null)
-                    Importation = Rack.CreateRack("Importation", new Vector3(1216.311f, -3038.197f, 4.868594f), new Location(new Vector3(1216.311f, -3041.197f, 5.868594f), new Vector3()), true);
+                    Importation = Rack.CreateRack("Importation", new Vector3(1216.311f, -3038.197f, 3.868594f), new Location(new Vector3(1216.311f, -3041.197f, 5.868594f), new Vector3()), true);
 
 
                 Quai.RackPos = new Vector3(1180.685f, -3168.366f, 4.1175f);
@@ -258,7 +258,7 @@ namespace ResurrectionRP_Server.Factions
             /// await client.CallAsync("OpenImportMenu", JsonConvert.SerializeObject(listItem));
         }
 
-        public async Task OnVehicleEnterColShape(IColShape colShape, IVehicle vehicle)
+        public void OnVehicleEnterColShape(IColShape colShape, IVehicle vehicle)
         {
             if (vehicle.Driver == null)
                 return;
@@ -268,7 +268,7 @@ namespace ResurrectionRP_Server.Factions
             {
                 if (Racks[i].Colshape.IsEntityInColShape(player))
                 {
-                    await Racks[i].OnPlayerEnterColShape(colShape, player);
+                    Racks[i].OnPlayerEnterColShape(colShape, player);
                     break;
                 }
             }
@@ -430,7 +430,7 @@ namespace ResurrectionRP_Server.Factions
         {
             Racks = new List<Rack>();
             Quai = Rack.CreateRack("Quai", new Vector3(1180.685f, -3168.366f, 4.1175f), new Location(new Vector3(1183.685f, -3168.366f, 7.1175f), new Vector3(0, 0, 83.16074f)), true);
-            Importation = Rack.CreateRack("Importation", new Vector3(1216.311f, -3038.197f, 4.868594f), new Location(new Vector3(1216.311f, -3041.197f, 5.868594f), new Vector3()), true);
+            Importation = Rack.CreateRack("Importation", new Vector3(1216.311f, -3038.197f, 3.868594f), new Location(new Vector3(1216.311f, -3041.197f, 5.868594f), new Vector3()), true);
 
             Vector3 a = new Vector3(1003.698f, -3111.308f, -38.99989f);
             Vector3 b = new Vector3(1018.397f, -3094.57f, -38.99988f);

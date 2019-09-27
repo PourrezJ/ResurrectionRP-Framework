@@ -78,9 +78,8 @@ namespace ResurrectionRP_Server.Models
             return Task.CompletedTask;
         }
 
-        public virtual Task OnPlayerGetItem(IPlayer player)
+        public virtual void OnPlayerGetItem(IPlayer player)
         {
-            return Task.CompletedTask;
         }
         
         public virtual Task<bool> Drop(IPlayer c, int quantite, int slot, OutfitInventory inventory)
@@ -119,7 +118,7 @@ namespace ResurrectionRP_Server.Models
             return Task.FromResult(false);
         }
 
-        public virtual async Task OnPickup(IPlayer client, ResuPickup pickup)
+        public virtual Task OnPickup(IPlayer client, ResuPickup pickup)
         {
             Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
 
@@ -127,7 +126,7 @@ namespace ResurrectionRP_Server.Models
             {
                 if (!ph.InventoryIsFull(pickup.Quantite * pickup.Item.weight))
                 {
-                    if (await ph.AddItem(pickup.Item, pickup.Quantite))
+                    if (ph.AddItem(pickup.Item, pickup.Quantite))
                     {
                         //client.PlayAnimation("putdown_low", "pickup_object", 49);
                         pickup.Delete();
@@ -138,8 +137,10 @@ namespace ResurrectionRP_Server.Models
                 else
                     client.SendNotificationError("Vous n'avez pas la place.");
             }
+
+            return Task.CompletedTask;
         }
-        
+
         public virtual Task Give(IPlayer sender, IPlayer recever, int quantite)
         {
             return Task.CompletedTask;

@@ -29,16 +29,18 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
         }
         #endregion
 
-        #region Events
-        private async Task OnInteractWithPnj(IPlayer client, Entities.Peds. Ped npc)
+        #region Event handlers
+        private Task OnInteractWithPnj(IPlayer client, Entities.Peds. Ped npc)
         {
             if (_vehicleBench != null)
-                await OpenMainMenu(client, _vehicleBench);
+                OpenMainMenu(client, _vehicleBench);
             else
                 client.SendNotificationError("Aucun véhicule devant l'établi.");
+
+            return Task.CompletedTask;
         }
 
-        public override async Task OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
+        public override async void OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -49,7 +51,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                     _vehicleBench = await client.GetVehicleAsync();
             }
 
-            await base.OnPlayerEnterServiceColshape(colShape, client);
+            base.OnPlayerEnterServiceColshape(colShape, client);
         }
         #endregion
 

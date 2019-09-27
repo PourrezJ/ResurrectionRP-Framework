@@ -61,6 +61,7 @@ namespace ResurrectionRP_Server.Streamer
         public WorldObject AddEntityObject(WorldObject data)
         {
             INetworkingEntity item = AltNetworking.CreateEntity(data.Position.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());
+            
             ListEntities.TryAdd(data.ID, item);
             return data;
         }

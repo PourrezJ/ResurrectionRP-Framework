@@ -248,30 +248,30 @@ namespace ResurrectionRP_Server.Inventory
             return false;
         }
 
-        public int CountItem(Models.Item item)
+        public int CountItem(Item item)
         {
-            int a = 0;
+            int count = 0;
 
             foreach (Models.ItemStack invItem in InventoryList)
             {
                 if (invItem != null && invItem.Item.id == item.id)
-                    a += invItem.Quantity;
+                    count += invItem.Quantity;
             }
 
-            return a;
+            return count;
         }
 
         public int CountItem(ItemID itemID)
         {
-            int a = 0;
+            int count = 0;
 
-            foreach (Models.ItemStack invItem in InventoryList)
+            foreach (ItemStack invItem in InventoryList)
             {
                 if (invItem != null && invItem.Item.id == itemID)
-                    a += invItem.Quantity;
+                    count += invItem.Quantity;
             }
 
-            return a;
+            return count;
         }
 
         public int GetSlotIndexUseStack(Models.ItemStack stack)

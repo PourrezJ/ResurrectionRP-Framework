@@ -61,7 +61,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Menu Interaction NPC accueil
-        public virtual async Task OpenAccueilMenu(IPlayer client)
+        public virtual void OpenAccueilMenu(IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -96,8 +96,7 @@ namespace ResurrectionRP_Server.Factions
                 menu.Add(menuItem);
             }
 
-            await menu.OpenMenu(client);
-
+            Task.Run(async () => { await menu.OpenMenu(client); }).Wait();
         }
 
         private async Task AccueilMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -127,7 +126,7 @@ namespace ResurrectionRP_Server.Factions
                     }
 
                     if (InvoiceList.FindAll(b => (b.SocialClub == client.GetSocialClub() && b.paid == false)).Count > 0)
-                        await OpenAccueilMenu(client);
+                        OpenAccueilMenu(client);
 
                     break;
             }

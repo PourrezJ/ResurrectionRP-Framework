@@ -59,18 +59,18 @@ namespace ResurrectionRP_Server.Factions
             BlipColor = (BlipColor)5;
             BlipSprite = 487;
 
-            ItemShop.Add(new FactionShop(new HandCuff(ItemID.Handcuff, "Menottes", "Une paire de menottes", 0.1, true, false), 500, 0));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.LampeTorche, "Lampe Torche", "Une lampe leds 500watts.", 2, hash: WeaponHash.Flashlight), 2500, 0));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Matraque, "Matraque", "Une matraque de marque Théo.", 5, hash: WeaponHash.Nightstick), 3500, 0));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Pistolet MK2", "", 3, hash: WeaponHash.PistolMk2), 40000, 1));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Taser, "Taser", "", 3, hash: WeaponHash.StunGun), 30000, 0));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Flare Gun", "", 5, hash: WeaponHash.FlareGun), 20000, 1));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Revolver MK2", "", 4, hash: WeaponHash.RevolverMk2), 50000, 2));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Assault SMG", "", 10, hash: WeaponHash.AssaultSmg), 125000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Combat MG", "", 26, hash: WeaponHash.CombatMg), 350000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Combat MG MK2", "", 26, hash: WeaponHash.CombatMgMk2), 400000, 3));
-            ItemShop.Add(new FactionShop(new RadioItem(ItemID.Radio, "Talky", "", 1, true, true, false, true, true, 2000, icon: "talky"), 500, 0));
-            ItemShop.Add(new FactionShop(new BagItem(ItemID.Bag, "Backpack", "", new ClothData(45, 0, 0), 40, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"), 500, 0));
+            ItemShop.Add(new FactionShopItem(new HandCuff(ItemID.Handcuff, "Menottes", "Une paire de menottes", 0.1, true, false), 500, 0));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.LampeTorche, "Lampe Torche", "Une lampe leds 500watts.", 2, hash: WeaponHash.Flashlight), 2500, 0));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Matraque, "Matraque", "Une matraque de marque Théo.", 5, hash: WeaponHash.Nightstick), 3500, 0));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Pistolet MK2", "", 3, hash: WeaponHash.PistolMk2), 40000, 1));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Taser, "Taser", "", 3, hash: WeaponHash.StunGun), 30000, 0));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Flare Gun", "", 5, hash: WeaponHash.FlareGun), 20000, 1));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Revolver MK2", "", 4, hash: WeaponHash.RevolverMk2), 50000, 2));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Assault SMG", "", 10, hash: WeaponHash.AssaultSmg), 125000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Combat MG", "", 26, hash: WeaponHash.CombatMg), 350000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Combat MG MK2", "", 26, hash: WeaponHash.CombatMgMk2), 400000, 3));
+            ItemShop.Add(new FactionShopItem(new RadioItem(ItemID.Radio, "Talky", "", 1, true, true, false, true, true, 2000, icon: "talky"), 500, 0));
+            ItemShop.Add(new FactionShopItem(new BagItem(ItemID.Bag, "Backpack", "", new ClothData(45, 0, 0), 40, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"), 500, 0));
 
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Sheriff, 150000, 40, 20, 132, 0));
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Policeb, 150000, 15, 10, 132, 0));
@@ -120,13 +120,9 @@ namespace ResurrectionRP_Server.Factions
         private async Task OnNPCInteract(IPlayer client, Ped npc)
         {
             if (npc == _pedArmurerie)
-            {
-                await OpenShopMenu(client);
-            }
+                OpenShopMenu(client);
             else if (npc == _pedAccueil)
-            {
                 await OpenAccueilMenu(client);
-            }
         }
 
         public override async Task OnPlayerPromote(IPlayer client, int rang)

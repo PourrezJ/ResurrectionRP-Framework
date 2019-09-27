@@ -121,7 +121,7 @@ export class NetworkingEntityClient {
 
     onDataChange = async (entity: any, data: any) => {
         let count = 0;
-        alt.log(`entity: ${JSON.stringify(entity)} | data ${JSON.stringify(data)}`);
+
         // Creating an entity can take some time so wait until it is created before updating it
         const interval = alt.setInterval(() => {
             if (NetworkingEntityClient.EntityList[entity.id] == undefined || NetworkingEntityClient.EntityList[entity.id] == null) {
@@ -160,12 +160,18 @@ export class NetworkingEntityClient {
         }, 10);
 
 
-        if (entity.data.entityType == 1) {
-            if (entity.data.attach != undefined && game.isEntityAttached(NetworkingEntityClient.EntityList[entity.id]))
-                game.detachEntity(NetworkingEntityClient.EntityList[entity.id], true, true);
+        if (entity.data.entityType.intValue == 1) {
+            alt.log(`entity: ${JSON.stringify(entity)}`);
 
-            //game.setEntityCoordsNoOffset(entity.id, entity.position.x, entity.position.y, entity.position.z, false, false, false);
+            let obj = NetworkingEntityClient.EntityList[entity.id];
 
+            if (entity.data.attach.stringValue != null && game.isEntityAttached(obj)) {
+                game.detachEntity(obj, false, false);
+            }
+
+            game.setEntityCoordsNoOffset(obj, entity.position.x, entity.position.y, entity.position.z, false, false, false);
+            game.setEntityRotation(obj, entity.data.rotation.x, entity.data.rotation.y, entity.data.rotation.z, 0, false);
+            game.placeObjectOnGroundProperly(obj);
         }
     }
 

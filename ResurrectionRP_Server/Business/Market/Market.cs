@@ -102,8 +102,6 @@ namespace ResurrectionRP_Server.Business
             if (!client.Exists)
                 return;
 
-            if (!colshape.IsEntityInColShape(client))
-                return;
 
             if (_utilisateurRavi == client && _ravitaillement )
             {

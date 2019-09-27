@@ -16,6 +16,8 @@ namespace ResurrectionRP_Server.Business
         private bool _ravitaillement = false;
         private IPlayer _utilisateurRavi;
 
+        private System.Timers.Timer timer = null;
+
         public static async Task OpenGasPumpMenu(IPlayer client)
         {
             var fuelpump = Market.MarketsList.Find(x => x.Station.Colshape.IsEntityInColShape(client));
@@ -114,13 +116,14 @@ namespace ResurrectionRP_Server.Business
 
                     var EssenceTransfert = 0;
                     //API.Shared.OnProgressBar(client, true, 0, currentmax, 750);
-                    client.DisplaySubtitle("Début du transfert ...", 30000);
-                    while (_ravitaillement)
+                    client.DisplaySubtitle("Début du transfert ...", 1000);
+                    
+                    timer = Utils.Utils.Delay(1250, false, async () =>
                     {
-                        await Task.Delay(1000); // prod : 750
-                        client.DisplayHelp("Station service \n Litres en station: " + Station.Litrage + "\nLitres dans le camion: " + hfuel.OilTank.Traite, 1000);
+                        Alt.Server.LogError(_ravitaillement.ToString());
+                        client.DisplayHelp("Station service \n Litres en station: " + Station.Litrage + "\nLitres dans le camion: " + hfuel.OilTank.Traite, 1250);
                         //API.OnProgressBar(client, true, i, currentmax);
-                        if(Station.Litrage == Station.LitrageMax)
+                        if (Station.Litrage == Station.LitrageMax)
                         {
                             client.DisplaySubtitle("~g~Le réservoir de la station est plein ! Fin du transfert!", 30000);
                             //API.Shared.OnProgressBar(client, false);
@@ -128,11 +131,11 @@ namespace ResurrectionRP_Server.Business
                             _utilisateurRavi = null;
                             client.GetPlayerHandler()?.HasBankMoney(EssenceTransfert * this.Station.buyEssencePrice, "Vente essence à la station " + this.BusinnessName);
                             await BankAccount.AddMoney(EssenceTransfert * this.Station.buyEssencePrice, "Achat essence au vendeur " + client.GetPlayerHandler()?.Identite.FirstName + " " + client.GetPlayerHandler()?.Identite.LastName, true);
-
+                            Utils.Utils.StopTimer(timer);
                             return;
 
                         }
-                        if(hfuel.OilTank.Traite == 0)
+                        if (hfuel.OilTank.Traite == 0)
                         {
                             client.DisplaySubtitle("~g~Votre citerne est vide, fin du transfert! ", 30000);
                             //API.Shared.OnProgressBar(client, false);
@@ -140,15 +143,17 @@ namespace ResurrectionRP_Server.Business
                             _utilisateurRavi = null;
                             client.GetPlayerHandler()?.HasBankMoney(EssenceTransfert * this.Station.buyEssencePrice, "Vente essence à la station " + this.BusinnessName);
                             await BankAccount.AddMoney(EssenceTransfert * this.Station.buyEssencePrice, "Achat essence au vendeur " + client.GetPlayerHandler()?.Identite.FirstName + " " + client.GetPlayerHandler()?.Identite.LastName, true);
+                            Utils.Utils.StopTimer(timer);
                             return;
                         }
 
-                        if(_ravitaillement = false && _utilisateurRavi == null)
+                        if (_ravitaillement = false || _utilisateurRavi == null)
                         {
                             _ravitaillement = false;
                             _utilisateurRavi = null;
                             client.GetPlayerHandler()?.HasBankMoney(EssenceTransfert * this.Station.buyEssencePrice, "Vente essence à la station " + this.BusinnessName);
                             await BankAccount.AddMoney(EssenceTransfert * this.Station.buyEssencePrice, "Achat essence au vendeur " + client.GetPlayerHandler()?.Identite.FirstName + " " + client.GetPlayerHandler()?.Identite.LastName, true);
+                            Utils.Utils.StopTimer(timer);
                             return;
                         }
 
@@ -156,8 +161,9 @@ namespace ResurrectionRP_Server.Business
                         hfuel.OilTank.Traite--;
                         EssenceTransfert++;
                         _ravitaillement = true;
-                        _utilisateurRavi = client;
-                    }
+
+                    });
+
                 }
                 else
                 {

@@ -195,6 +195,9 @@ namespace ResurrectionRP_Server.Entities.Players
             var waypoint = new MenuItem("Téléporter sur le Waypoint", "", "", true);
             waypoint.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
+                if (_playerSelected.Vehicle != null)
+                    _playerSelected.Vehicle.WasTeleported = true;
+
                 await _playerSelected.Client.EmitAsync(Events.SetToWayPoint);
             };
             mainMenu.Add(waypoint);

@@ -58,6 +58,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public string ParkingName { get; set; } = string.Empty;
 
+        [BsonIgnore]
+        public bool WasTeleported { get; set; } = false;
+
         [BsonIgnoreIfNull]
         public OilTank OilTank = null;
 

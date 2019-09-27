@@ -1,7 +1,8 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
-using AltV.Net.Enums;
+using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using AltV.Net.Enums;
 using ResurrectionRP_Server;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Models;
@@ -368,7 +369,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return Task.CompletedTask;
 
                     uint hash = Alt.Hash(name);
-                    VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get((uint)hash);
+                    VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get(hash);
 
                     if (manifest == null)
                     {
@@ -376,7 +377,8 @@ namespace ResurrectionRP_Server.Entities.Players
                         return Task.CompletedTask;
                     }
 
-                    VehicleHandler vehicle = VehiclesManager.SpawnVehicle(_playerSelected.Client.GetSocialClub(), hash, _playerSelected.Client.Position, _playerSelected.Client.Rotation, fuel: 100, fuelMax: 100, spawnVeh: true);
+                    Rotation rot = _playerSelected.Client.Rotation;
+                    VehicleHandler vehicle = VehiclesManager.SpawnVehicle(_playerSelected.Client.GetSocialClub(), hash, _playerSelected.Client.Position, new Rotation(rot.Pitch, rot.Roll, -rot.Yaw), fuel: 100, fuelMax: 100, spawnVeh: true);
 
                     if (vehicle != null)
                     {
@@ -419,7 +421,8 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    VehicleHandler vehicle = VehiclesManager.SpawnVehicle(_playerSelected.Client.GetSocialClub(), hash, _playerSelected.Client.Position, _playerSelected.Client.Rotation, fuel: 100, fuelMax: 100, spawnVeh: false);
+                    Rotation rot = _playerSelected.Client.Rotation;
+                    VehicleHandler vehicle = VehiclesManager.SpawnVehicle(_playerSelected.Client.GetSocialClub(), hash, _playerSelected.Client.Position, new Rotation(rot.Pitch, rot.Roll, -rot.Yaw), fuel: 100, fuelMax: 100, spawnVeh: false);
 
                     if (vehicle != null)
                     {

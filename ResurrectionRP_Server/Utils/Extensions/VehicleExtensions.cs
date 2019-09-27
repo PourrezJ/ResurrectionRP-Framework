@@ -105,26 +105,6 @@ namespace ResurrectionRP_Server
             await target.EmitAsync("TrySetPlayerIntoVehicle", client);
         }
 
-        public static VehicleHandler GetHandlerByVehicle(IVehicle vehicle)
-        {
-            try
-            {
-                if (vehicle != null && vehicle.Exists)
-                {
-                    if (vehicle.GetData("VehicleHandler", out object data))
-                        return data as VehicleHandler;
-
-                    if (VehiclesManager.VehicleHandlerList.TryGetValue(vehicle, out VehicleHandler value))
-                        return value;
-                }
-            }
-            catch (Exception ex)
-            {
-                Alt.Server.LogInfo($"GetVehicleByVehicle with plate {vehicle.GetNumberplateTextAsync()}: " + ex);
-            }
-
-            return null;
-        }
         public static bool HasData( this IVehicle vehicle, string dataName)
         {
             if (vehicle.GetData(dataName, out string test))

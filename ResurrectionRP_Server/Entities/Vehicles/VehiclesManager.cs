@@ -43,6 +43,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (seat == 1)
                     vh.LastDriver = ph.Identite.Name;
 
+                ph.Vehicle = vh;
                 ph.UpdateFull();
                 player.EmitLocked("OnPlayerEnterVehicle", vehicle, Convert.ToInt32(seat), vh.Fuel, vh.FuelMax, vh.Milage, vh.FuelConsumption);
             }
@@ -103,11 +104,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             VehicleHandler vh = vehicle.GetVehicleHandler();
             PlayerHandler ph = player.GetPlayerHandler();
 
+            if (ph != null)
+            {
+                ph.Vehicle = null;
+                ph.UpdateFull();
+            }
+
             if (vh != null)
                 vh.UpdateFull();
-
-            if (ph != null)
-                ph.UpdateFull();
 
             return Task.CompletedTask;
         }

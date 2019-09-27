@@ -2,6 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using AltV.Net.Enums;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Bank;
@@ -111,7 +112,6 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region ServerEvents
-
         public async Task OnPlayerDisconnected(ReadOnlyPlayer player, IPlayer origin, string reason)
         {
             PlayerHandler.PlayerHandlerList.TryGetValue(origin, out PlayerHandler ph);
@@ -149,10 +149,21 @@ namespace ResurrectionRP_Server.Entities.Players
                 ph.TimeSpent += (DateTime.Now - ph.LastUpdate).Minutes;
                 ph.LastUpdate = DateTime.Now;
             }
-           
-            ph.UpdateInBackground();
 
+            ph.UpdateInBackground();
             PlayerHandler.PlayerHandlerList.Remove(origin, out _);
+
+            if (ph.Vehicle != null)
+            {
+                VehicleHandler vh = ph.Vehicle;
+
+                if (vh.LastDriver == ph.Identite.Name)
+                {
+                    vh.LockState = VehicleLockState.Locked;
+                    vh.UpdateFull();
+                }
+            }
+
             Alt.Server.LogInfo($"Joueur social: {ph.PID} || Nom: {ph.Identite.Name} est déconnecté raison: {reason}.");
         }
 

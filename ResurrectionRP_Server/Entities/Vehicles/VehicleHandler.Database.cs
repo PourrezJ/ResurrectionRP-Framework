@@ -44,11 +44,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             LastUse = DateTime.Now;
 
-            if (Vehicle != null)
+            if (Vehicle != null && Vehicle.Exists)
             {
-                if (!Vehicle.Exists)
-                    return;
-
                 if (location != null)
                     Location = location;
 

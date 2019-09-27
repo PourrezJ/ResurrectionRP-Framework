@@ -23,7 +23,7 @@ namespace ResurrectionRP_Server.Entities.Players
         public static ConcurrentDictionary<IPlayer, PlayerHandler> PlayerHandlerList = new ConcurrentDictionary<IPlayer, PlayerHandler>();
         #endregion
 
-        #region Variables
+        #region Fields and properties
         [BsonId]
         public string PID { get; set; }
 
@@ -36,7 +36,11 @@ namespace ResurrectionRP_Server.Entities.Players
         [BsonIgnore]
         public DateTime LastUpdate { get; set; }
 
+        [BsonIgnore]
+        public VehicleHandler Vehicle { get; set; }
+
         private AdminRank _adminrank;
+
         public AdminRank StaffRank
         {
             get => _adminrank;

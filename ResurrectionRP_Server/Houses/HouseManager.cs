@@ -29,7 +29,7 @@ namespace ResurrectionRP_Server.Houses
         #region Constructor
         public HouseManager()
         {
-            Alt.OnPlayerDead += Alt_OnPlayerDead;
+            AltAsync.OnPlayerDead += Alt_OnPlayerDead;
 
             for(int i = 0; i < HouseTypes.HouseTypeList.Count; i++)
                 Marker.CreateMarker(MarkerType.VerticalCylinder, HouseTypes.HouseTypeList[i].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), null, null);
@@ -62,7 +62,7 @@ namespace ResurrectionRP_Server.Houses
 
         public static bool RemoveClientHouse(IPlayer client) => ClientHouse.TryRemove(client, out _);
 
-        public void RemovePlayerFromHouseList(IPlayer player)
+        public async Task RemovePlayerFromHouseList(IPlayer player)
         {
             if (IsInHouse(player))
             {
@@ -72,7 +72,7 @@ namespace ResurrectionRP_Server.Houses
                     return;
 
                 if (RemoveClientHouse(player))
-                    Task.Run(async () => { await house.RemovePlayer(player, false); });                
+                    await house.RemovePlayer(player, false);                
             }
         }
         #endregion
@@ -207,7 +207,7 @@ namespace ResurrectionRP_Server.Houses
                         client.SendNotificationError("Un parking est déjà disponible pour cette maison.");
                     break;
                 case "ID_Delete":
-                    await house.Destroy(true);
+                    await house.Destroy();
                     await house.RemoveInDatabase();
                     client.SendNotificationSuccess("Vous avez supprimé le logement.");
                     break;
@@ -244,18 +244,18 @@ namespace ResurrectionRP_Server.Houses
                 house.SetOwnerHandle(player);
         }
 
-        private void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
+        private async Task Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
         {
             player.Dimension = GameMode.GlobalDimension;
-            RemovePlayerFromHouseList(player);
+            await RemovePlayerFromHouseList(player);
         }
 
         public async Task House_Exit()
         {
-            for(int i = 0; i < Houses.Count; i++)
+            foreach(House house in Houses)
             {
-                await Houses[i].Save();
-                await Houses[i].Destroy(true);
+                await house.Save();
+                await house.Destroy();
             }
 
             Houses.Clear();

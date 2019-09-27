@@ -76,7 +76,7 @@ namespace ResurrectionRP_Server.EventHandlers
                 }
 
                 if (targetEntity.Type == BaseObjectType.Player && targetEntity.Exists)
-                    (targetEntity as IPlayer).EmitLocked("SetStateInColShape", state);
+                    await ((IPlayer)targetEntity).EmitAsync("SetStateInColShape", state);
             }
             catch (Exception ex)
             {

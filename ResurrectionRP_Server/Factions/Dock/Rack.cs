@@ -118,12 +118,11 @@ namespace ResurrectionRP_Server.Factions
                         if (inventoryBox == null)
                             return;
 
-                        inventoryBox.Obj.Destroy();
                         inventoryBox.ID = RackName;
                         InventoryBox = inventoryBox;
-                        InventoryBox.Location = new Location(new Vector3(this.BoxLocation.Pos.X, this.BoxLocation.Pos.Y, this.BoxLocation.Pos.Z - 1), this.BoxLocation.Rot);                       
+                        InventoryBox.Obj.DetachAttach();
+                        InventoryBox.Location = new Location(new Vector3(BoxLocation.Pos.X, BoxLocation.Pos.Y, BoxLocation.Pos.Z - 1), BoxLocation.Rot);                       
                         
-                        InventoryBox.Spawn();
                         vehicle.ResetData("BoxForks");
                     }
                 }

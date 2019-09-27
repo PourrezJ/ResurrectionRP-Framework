@@ -18,18 +18,11 @@ namespace ResurrectionRP_Server
         #region Constructor
         public MenuManager()
         {
-            AltAsync.OnClient("MenuManager_ExecuteCallback", MenuManager_ExecuteCallbacksAsync);
-            AltAsync.OnClient("MenuManager_IndexChanged", MenuManager_IndexChangedAsync);
-            AltAsync.OnClient("MenuManager_ListChanged", MenuManager_ListChangedAsync);
-            AltAsync.OnClient("MenuManager_BackKey", MenuManager_BackKeyAsync);
-            AltAsync.OnClient("MenuManager_ClosedMenu", MenuManager_ClosedMenuAsync);
-            /*
-            Alt.OnClient("MenuManager_ExecuteCallback", MenuManager_ExecuteCallbacks);
-            Alt.OnClient("MenuManager_IndexChanged", MenuManager_IndexChanged);
-            Alt.OnClient("MenuManager_ListChanged", MenuManager_ListChanged);
-            Alt.OnClient("MenuManager_BackKey", MenuManager_BackKey);
-            Alt.OnClient("MenuManager_ClosedMenu", MenuManager_ClosedMenu);
-            */
+            AltAsync.OnClient("MenuManager_ExecuteCallback", MenuManager_ExecuteCallbacks);
+            AltAsync.OnClient("MenuManager_IndexChanged", MenuManager_IndexChanged);
+            AltAsync.OnClient("MenuManager_ListChanged", MenuManager_ListChanged);
+            AltAsync.OnClient("MenuManager_BackKey", MenuManager_BackKey);
+            AltAsync.OnClient("MenuManager_ClosedMenu", MenuManager_ClosedMenu);
         }
 
         #endregion
@@ -42,35 +35,25 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Private API triggers
-        #region Callback Async
-        private async Task MenuManager_ExecuteCallbacksAsync(IPlayer player, object[] args)
+        public async Task MenuManager_BackKey(IPlayer player, object[] args)
         {
-            await Task.Run(() => { MenuManager_ExecuteCallbacks(player, args); });
+            if (!player.Exists)
+                return;
+
+            _clientMenus.TryGetValue(player, out Menu menu);
+
+            if (menu != null && !menu.BackCloseMenu && menu.ItemSelectCallbackAsync != null)
+                await menu.ItemSelectCallbackAsync(player, menu, null, -1);
+            else if (menu != null)
+            {
+                if (menu.FinalizerAsync != null)
+                    await menu.FinalizerAsync(player, menu);
+
+                _clientMenus.TryRemove(player, out _);
+            }
         }
 
-        public async Task MenuManager_IndexChangedAsync(IPlayer player, object[] args)
-        {
-            await Task.Run(() => { MenuManager_IndexChanged(player, args); });
-        }
-
-        public async Task MenuManager_ListChangedAsync(IPlayer player, object[] args)
-        {
-            await Task.Run(() => { MenuManager_ListChanged(player, args); });
-        }
-
-        public async Task MenuManager_BackKeyAsync(IPlayer player, object[] args)
-        {
-            await Task.Run(() => { MenuManager_BackKey(player, args); });
-        }
-
-        public async Task MenuManager_ClosedMenuAsync(IPlayer player, object[] args)
-        {
-            await Task.Run(() => { MenuManager_ClosedMenu(player, args); });
-        }
-        #endregion
-
-        #region Callback Sync
-        private void MenuManager_ExecuteCallbacks(IPlayer player, object[] args)
+        private async Task MenuManager_ExecuteCallbacks(IPlayer player, object[] args)
         {
             if (!player.Exists)
                 return;
@@ -108,14 +91,11 @@ namespace ResurrectionRP_Server
                     if (menuItem == null)
                         return;
 
-                    menu.ItemSelectCallback?.Invoke(player, menu, menuItem, itemIndex);
-                    menuItem.OnMenuItemCallback?.Invoke(player, menu, menuItem, itemIndex);
-
                     if (menu.ItemSelectCallbackAsync != null)
-                        Task.Run(async () => { await menu.ItemSelectCallbackAsync.Invoke(player, menu, menuItem, itemIndex); }).Wait();
+                        await menu.ItemSelectCallbackAsync(player, menu, menuItem, itemIndex);
 
                     if (menuItem.OnMenuItemCallbackAsync != null)
-                        Task.Run(async () => { await menuItem.OnMenuItemCallbackAsync.Invoke(player, menu, menuItem, itemIndex); }).Wait();
+                        await menuItem.OnMenuItemCallbackAsync(player, menu, menuItem, itemIndex);
                 }
                 catch (Exception ex)
                 {
@@ -124,24 +104,32 @@ namespace ResurrectionRP_Server
             }
         }
 
-        public void MenuManager_IndexChanged(IPlayer player, object[] args)
+        public async Task MenuManager_IndexChanged(IPlayer player, object[] args)
         {
             if (!player.Exists)
                 return;
 
             _clientMenus.TryGetValue(player, out Menu menu);
 
-            if (menu != null)
+            if (menu != null && menu.IndexChangeCallbackAsync != null)
             {
                 int index = Convert.ToInt32(args[0]);
-                menu.IndexChangeCallback?.Invoke(player, menu, index, menu.Items[index]);
-
-                if (menu.IndexChangeCallback != null)
-                    Task.Run(async () => { await menu.IndexChangeCallbackAsync.Invoke(player, menu, index, menu.Items[index]); }).Wait();
+                await menu.IndexChangeCallbackAsync(player, menu, index, menu.Items[index]);
             }
         }
 
-        public void MenuManager_ListChanged(IPlayer player, object[] args)
+        public async Task MenuManager_ListChanged(IPlayer player, object[] args)
+        {
+            if (!player.Exists)
+                return;
+
+            _clientMenus.TryGetValue(player, out Menu menu);
+
+            if (menu != null && menu.ListItemChangeCallbackAsync != null)
+                await menu.ListItemChangeCallbackAsync(player, menu, (ListItem)menu.Items[Convert.ToInt32(args[0])], Convert.ToInt32(args[1]));
+        }
+
+        public async Task MenuManager_ClosedMenu(IPlayer player, object[] args)
         {
             if (!player.Exists)
                 return;
@@ -150,56 +138,12 @@ namespace ResurrectionRP_Server
 
             if (menu != null)
             {
-                menu.ListItemChangeCallback?.Invoke(player, menu, (ListItem)menu.Items[Convert.ToInt32(args[0])], Convert.ToInt32(args[1]));
-
-                if (menu.ListItemChangeCallbackAsync != null)
-                    Task.Run(async () => { await menu.ListItemChangeCallbackAsync.Invoke(player, menu, (ListItem)menu.Items[Convert.ToInt32(args[0])], Convert.ToInt32(args[1])); }).Wait();
-            }
-        }
-
-        public void MenuManager_ClosedMenu(IPlayer player, object[] args)
-        {
-            if (!player.Exists)
-                return;
-
-            _clientMenus.TryGetValue(player, out Menu menu);
-
-            if (menu != null)
-            {
-                menu.Finalizer?.Invoke(player, menu);
-
                 if (menu.FinalizerAsync != null)
-                    Task.Run(async () => { await menu.FinalizerAsync.Invoke(player, menu); }).Wait();
+                    await menu.FinalizerAsync(player, menu);
 
                 _clientMenus.TryRemove(player, out _);
             }
         }
-
-        public void MenuManager_BackKey(IPlayer player, object[] args)
-        {
-            if (!player.Exists)
-                return;
-
-            _clientMenus.TryGetValue(player, out Menu menu);
-
-            if (menu != null && !menu.BackCloseMenu)
-            {
-                menu.ItemSelectCallback?.Invoke(player, menu, null, -1);
-
-                if (menu.ItemSelectCallbackAsync != null)
-                    Task.Run(async () => { await menu.ItemSelectCallbackAsync.Invoke(player, menu, null, -1); }).Wait();
-            }
-            else if (menu != null)
-            {
-                menu.Finalizer?.Invoke(player, menu);
-
-                if (menu.FinalizerAsync != null)
-                    Task.Run(async () => { await menu.FinalizerAsync.Invoke(player, menu); }).Wait();
-
-                _clientMenus.TryRemove(player, out _);
-            }
-        }
-        #endregion
         #endregion
 
         #region Public static methods
@@ -207,7 +151,7 @@ namespace ResurrectionRP_Server
         {
             if (_clientMenus.TryRemove(client, out Menu menu) && menu != null && menu.FinalizerAsync != null)
                 await menu.FinalizerAsync(client, menu);
-            
+
             client.EmitLocked("MenuManager_CloseMenu");
         }
 

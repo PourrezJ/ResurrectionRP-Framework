@@ -162,7 +162,7 @@ namespace ResurrectionRP_Server.Business.Barber
 
             menu = new Menu("ID_BarberBeard", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Barber);
             menu.ItemSelectCallbackAsync= BarberMenuCallBack;
-            menu.IndexChangeCallback = HairCutPreview;
+            menu.IndexChangeCallbackAsync = HairCutPreview;
             menu.FinalizerAsync = MenuFinalizer;
 
             foreach (var beard in Beards.BeardsList)
@@ -181,7 +181,7 @@ namespace ResurrectionRP_Server.Business.Barber
             }
 
             await MenuManager.OpenMenu(client, menu);
-            HairCutPreview(client, menu, 0, menu.Items[0]);
+            await HairCutPreview(client, menu, 0, menu.Items[0]);
         }
 
         private async Task BeardCutSelected(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -219,7 +219,7 @@ namespace ResurrectionRP_Server.Business.Barber
 
             menu = new Menu("ID_BarberHair", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Barber);
             menu.ItemSelectCallbackAsync = BarberMenuCallBack;
-            menu.IndexChangeCallback = HairCutPreview;
+            menu.IndexChangeCallbackAsync = HairCutPreview;
             menu.FinalizerAsync = MenuFinalizer;
 
             List<Hairs> _hairsList = (ClientSelected.Character.Gender == 0) ? Hairs.HairsMenList : Hairs.HairsGirlList;
@@ -240,7 +240,7 @@ namespace ResurrectionRP_Server.Business.Barber
             }
 
             await MenuManager.OpenMenu(client, menu);
-            HairCutPreview(client, menu, 0, menu.Items[0]);
+            await HairCutPreview(client, menu, 0, menu.Items[0]);
         }
 
         private async Task HairCutSelected(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -261,13 +261,13 @@ namespace ResurrectionRP_Server.Business.Barber
             await OpenMenu(client);
         }
 
-        private void HairCutPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        private Task HairCutPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
             if (ClientSelected == null)
-                return;
+                return Task.CompletedTask;
 
             if (ClientSelected.Client == null)
-                return;
+                return Task.CompletedTask;
 
             if (menuItem.Id == "ID_Hair")
             {
@@ -279,6 +279,8 @@ namespace ResurrectionRP_Server.Business.Barber
                 var hair = ClientSelected.Character.Hair;
                 ClientSelected.Client.SetHeadOverlay(1, new HeadOverlayData((byte)itemIndex, 255, (uint)hair.Color, (uint)hair.HighlightColor));
             }
+
+            return Task.CompletedTask;
         }
         #endregion
 

@@ -210,11 +210,12 @@ export default () => {
                 inputView.focus();
                 alt.showCursor(true);
                 alt.toggleGameControls(false);
-
+                alt.emit("canClose", false);
                 inputView.emit('Input_Data', menuItem.InputMaxLength, menuItem.InputValue);
 
                 inputView.on('Input_Submit', (text) => {
                     saveInput(text);
+                    alt.emit("canClose", true);
                 });
             }
 

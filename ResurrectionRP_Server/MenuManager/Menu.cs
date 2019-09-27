@@ -99,17 +99,6 @@ namespace ResurrectionRP_Server
         public MenuCheckboxAsync CallbackCheckBoxAsync { get; set; }
         [JsonIgnore]
         public MenuFinalizerAsync FinalizerAsync { get; set; }
-
-        [JsonIgnore]
-        public MenuCallback ItemSelectCallback { get; set; }
-        [JsonIgnore]
-        public MenuListCallback ListItemChangeCallback { get; set; }
-        [JsonIgnore]
-        public MenuCurrentIndex IndexChangeCallback { get; set; }
-        [JsonIgnore]
-        public MenuCheckbox CallbackCheckBox { get; set; }
-        [JsonIgnore]
-        public MenuFinalizer Finalizer { get; set; }
         #endregion
 
         #region Constructor

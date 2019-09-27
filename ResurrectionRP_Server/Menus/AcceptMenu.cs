@@ -14,8 +14,6 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Private fields
-        private string _title;
-        private string _subtitle;
         public bool _closeAtEnd;
         private Menu menu;
         #endregion
@@ -35,8 +33,6 @@ namespace ResurrectionRP_Server
         {
             AcceptMenu accept = new AcceptMenu()
             {
-                _title = title,
-                _subtitle = subtitle,
                 _closeAtEnd = closeAtEnd
             };
 

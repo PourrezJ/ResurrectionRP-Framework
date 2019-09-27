@@ -12,13 +12,14 @@ export class Blesse {
     public Traited: boolean;
     public Blip: alt.Blip;
     public Marker: alt.Entity;
+    private EveryTick: number;
 
     constructor(player: alt.Player, id: string, position: alt.Vector3) {
         this.ID = id;
         this.BlessePlayer = player;
         this.Position = position;
 
-        this.Blip = new alt.PointBlip(parseFloat(position.x + ""), parseFloat(position.y + "") , parseFloat(position.z + ""))
+        this.Blip = new alt.PointBlip(parseFloat(position.x + ""), parseFloat(position.y + "")  , parseFloat(position.z + ""))
         this.Blip.sprite = 280;
         this.Blip.color = 1;
         this.Blip.name = id;
@@ -30,6 +31,24 @@ export class Blesse {
         {
             alt.on('keydown', this.KeyHandler);
         }
+
+        this.EveryTick = alt.everyTick(() => {
+
+                var blesse: Blesse = this;
+
+                if (blesse == undefined || blesse == null)
+                    return;
+                if (game.getDistanceBetweenCoords(parseFloat(blesse.Position.x + ""), parseFloat(blesse.Position.y + "") , parseFloat(blesse.Position.z + ""), alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, false) < 15) {
+                    Medical.isInMission = false;
+                    alt.emitServer('ONU_BlesseRemoveBlip', blesse.BlessePlayer.id);
+                    blesse.Destroy();
+                    alt.clearEveryTick(this.EveryTick);
+                    delete Medical.BlesseList[Medical.BlesseList.findIndex(p => p.ID == this.ID)];
+                    return;
+                }
+            
+
+        });
     }
 
     private RemoveBindKey = () =>
@@ -93,6 +112,7 @@ export class Medical {
 
     constructor()
     {
+
         Medical.scaleForm = new Scaleforms("mp_big_message_freemode");
         Medical.RequestedTimeMedic = new Date();
 
@@ -207,19 +227,5 @@ export class Medical {
             Medical.scaleForm.render2D();
         }
 
-        for (var i = 0; i < Medical.BlesseList.length; i++) {
-            var blesse: Blesse = Medical.BlesseList[i];
-
-            if (blesse == undefined || blesse ==  null)
-                continue;
-
-            if (game.getDistanceBetweenCoords(parseFloat(blesse.Position.x + ""), parseFloat(blesse.Position.y + ""), parseFloat(blesse.Position.z + ""), alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, false)) {
-                Medical.isInMission = false;
-                alt.emitServer('ONU_BlesseRemoveBlip', blesse.BlessePlayer.id);
-                blesse.Destroy();
-                delete Medical.BlesseList[i];
-                return;
-            }
-        }
     }
 }

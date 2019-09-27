@@ -152,7 +152,6 @@ namespace ResurrectionRP_Server.Factions
 
         private Task ONU_IAccept(IPlayer client, object[] args)
         {
-            Alt.Server.LogInfo("ONU_IAccept " + args[0] + " emitter : " + client.Id);
             IPlayer victim = GameMode.Instance.PlayerList.Find(p => p.Id == ushort.Parse(args[0].ToString()));
 
             if (victim == null)

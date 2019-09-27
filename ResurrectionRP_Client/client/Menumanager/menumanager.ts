@@ -2,7 +2,6 @@
 import * as NativeUI from '../NativeUIMenu/NativeUI.js';
 import * as chat from '../chat/chat';
 import * as game from 'natives';
-import { InputBox } from '../InputBox';
 
 enum InputType {
     Text,
@@ -206,7 +205,7 @@ export default () => {
 
                 inputIndex = index;
                 inputItem = item;
-                
+
                 inputView = new alt.WebView("http://resource/client/cef/userinput/input.html");
                 inputView.focus();
                 alt.showCursor(true);
@@ -217,14 +216,6 @@ export default () => {
                 inputView.on('Input_Submit', (text) => {
                     saveInput(text);
                 });
-                /*
-                alt.log("Demande d'ouverture d'un InputBox");
-                alt.toggleGameControls(false);
-                let input = new InputBox(menuItem.InputMaxLength, menuItem.InputValue);
-                input.Callback = ((text) => {
-                    saveInput(text);
-                    alt.log(text);
-                });*/
             }
 
             if (inputView == null && menuData.OnItemSelect != undefined) {

@@ -17,25 +17,26 @@ namespace ResurrectionRP_Server.Services
 {
     public class Pound
     {
-        public List<ParkedCar> PoundVehicleList = null;
-
-        private Location PoundSpawn = new Location(new Vector3(408.7641f, -1638.905f, 28.26795f), new Vector3(0.07774173f, 0.05821822f, 137.2628f));
-
-        public int Price = 0;
-
+        #region Fields
+        private Location _poundSpawn = new Location(new Vector3(408.7641f, -1638.905f, 28.26795f), new Vector3(0.07774173f, 0.05821822f, 137.2628f));
         [BsonIgnore]
         private IColShape _colshape = null;
 
-        public Task LoadPound()
+        public List<ParkedCar> PoundVehicleList = null;
+        public int Price = 0;
+        #endregion
+
+        #region Init
+        public Task Init()
         {
             if (PoundVehicleList == null)
                 PoundVehicleList = new List<ParkedCar>();
 
             Alt.Server.LogInfo("--- [POUND] Starting pound ---");
 
-            Entities.Blips.BlipsManager.CreateBlip("Fourrière", PoundSpawn.Pos, 0, 88,1,true);
-            _colshape = Alt.CreateColShapeCylinder(PoundSpawn.Pos, 3f, 3f);
-            Marker.CreateMarker(MarkerType.VerticalCylinder, PoundSpawn.Pos, new Vector3(1, 1, 1));
+            Entities.Blips.BlipsManager.CreateBlip("Fourrière", _poundSpawn.Pos, 0, 88,1,true);
+            _colshape = Alt.CreateColShapeCylinder(_poundSpawn.Pos, 3f, 3f);
+            Marker.CreateMarker(MarkerType.VerticalCylinder, _poundSpawn.Pos, new Vector3(1, 1, 1));
 
             //_colshape.OnEntityEnterColShape += _colshape_OnEntityEnterColShape;
             //_colshape.OnEntityExitColShape += _colshape_OnEntityExitColShape;
@@ -80,8 +81,10 @@ namespace ResurrectionRP_Server.Services
             Alt.Server.LogInfo($"--- [POUND] Finish loading all pounds in database: {PoundVehicleList.Count} ---");
             return Task.CompletedTask;
         }
+        #endregion
 
-        public async Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        #region Event handlers
+        public void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
             if (colShape != this._colshape)
                 return;
@@ -93,12 +96,14 @@ namespace ResurrectionRP_Server.Services
 
                 if (_vh.TowTruck != null)
                 {
-                    AcceptMenu _accept = await AcceptMenu.OpenMenu(client, "Fourrière", "Voulez-vous mettre en fourrière le véhicule?");
+                    AcceptMenu _accept = AcceptMenu.OpenMenu(client, "Fourrière", "Voulez-vous mettre en fourrière le véhicule?");
                     _accept.AcceptMenuCallBack = AcceptMenuCallBack;
                 }
             }
         }
+        #endregion
 
+        #region Methods
         private async Task AcceptMenuCallBack(IPlayer client, bool reponse)
         {
             if (reponse)
@@ -176,7 +181,7 @@ namespace ResurrectionRP_Server.Services
                 if (client.GetPlayerHandler().HasMoney(Price))
                 {
                     VehicleHandler veh = menuItem.GetData("Vehicle");
-                    await veh.SpawnVehicleAsync(PoundSpawn);
+                    await veh.SpawnVehicleAsync(_poundSpawn);
                     veh.UpdateFull();
                     PoundVehicleList.Remove(PoundVehicleList.Find(v => v.Plate == veh.Plate));
                     await GameMode.Instance.Save();
@@ -200,6 +205,7 @@ namespace ResurrectionRP_Server.Services
 
             return endup;
         }
+
         public async Task AddVehicleInPound(VehicleHandler veh)
         {
             Alt.Server.LogInfo ($"Mise en fourrière véhicule {veh.Plate}");
@@ -211,5 +217,6 @@ namespace ResurrectionRP_Server.Services
             veh.ParkingName = "Fourrière";
             await veh.Delete();
         }
+        #endregion
     }
 }

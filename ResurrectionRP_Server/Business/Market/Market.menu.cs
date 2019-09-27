@@ -160,7 +160,7 @@ namespace ResurrectionRP_Server.Business
                 {
                     if (itemStack.Quantity >= quantity)
                     {
-                        if (await _player.AddItem(itemStack.Item, quantity))
+                        if (_player.AddItem(itemStack.Item, quantity))
                         {
                             if (_player.HasMoney(price))
                             {

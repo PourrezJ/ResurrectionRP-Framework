@@ -160,7 +160,7 @@ namespace ResurrectionRP_Server.Factions
             BlipColor = BlipColor.Yellow;
             BlipSprite = 356;
 
-            ItemShop.Add(new FactionShop(Inventory.Inventory.ItemByID(ItemID.Cafe), 0, 0));
+            ItemShop.Add(new FactionShopItem(Inventory.Inventory.ItemByID(ItemID.Cafe), 0, 0));
 
             base.Init();
 
@@ -258,7 +258,7 @@ namespace ResurrectionRP_Server.Factions
             /// await client.CallAsync("OpenImportMenu", JsonConvert.SerializeObject(listItem));
         }
 
-        public async Task OnVehicleEnterColShape(IColShape colShape, IVehicle vehicle)
+        public void OnVehicleEnterColShape(IColShape colShape, IVehicle vehicle)
         {
             if (vehicle.Driver == null)
                 return;
@@ -268,7 +268,7 @@ namespace ResurrectionRP_Server.Factions
             {
                 if (Racks[i].Colshape.IsEntityInColShape(player))
                 {
-                    await Racks[i].OnPlayerEnterColShape(colShape, player);
+                    Racks[i].OnPlayerEnterColShape(colShape, player);
                     break;
                 }
             }

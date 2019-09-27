@@ -28,10 +28,10 @@ namespace ResurrectionRP_Server.Items
             await MenuManager.CloseMenu(c);
         }
 
-        public override Task OnPlayerGetItem(IPlayer player)
+        public override void OnPlayerGetItem(IPlayer player)
         {
             Radio.Owner = player;
-            return base.OnPlayerGetItem(player);
+            base.OnPlayerGetItem(player);
         }
     }
 }

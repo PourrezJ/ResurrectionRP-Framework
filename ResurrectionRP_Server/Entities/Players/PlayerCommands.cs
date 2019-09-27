@@ -127,49 +127,43 @@ namespace ResurrectionRP_Server.Entities.Players
                 player.SendChatMessage($"Wipe de {phWipe.Identite.Name} terminé!");
         }
 
-        public async Task AddItem(IPlayer player, string[] arguments = null)
+        public Task AddItem(IPlayer player, string[] arguments = null)
         {
             try
             {
                 PlayerHandler ph = player.GetPlayerHandler();
-                if (ph?.StaffRank < AdminRank.Moderator) 
-                    return;
+
+                if (ph?.StaffRank < AdminRank.Moderator)
+                    return Task.CompletedTask;
 
                 string command = "";
 
                 for (int i = 0; i < arguments.Length; i++)
-                {
                     command += $" {arguments[i]}";
-                }
+
                 command = command.ToLower();
 
                 string[] infos = command.Split(new[] { " x" }, StringSplitOptions.RemoveEmptyEntries);
                 int number = (Convert.ToInt32(infos[1]) != 0) ? Convert.ToInt32(infos[1]) : 1;
-
                 string itemName = infos[0].Remove(0, 1);
-
-                Models.Item item = LoadItem.ItemsList.Find(x => x.name.ToLower() == itemName);
+                Item item = LoadItem.ItemsList.Find(x => x.name.ToLower() == itemName);
 
                 if (item != null && ph != null)
                 {
-                    if (await ph.AddItem(item, number))
-                    {
+                    if (ph.AddItem(item, number))
                         player.SendNotificationSuccess($"Vous avez ajouté {number} {item.name}");
-                    }
                     else
-                    {
                         player.SendNotificationError($"Vous n'avez pas la place dans votre inventaire pour {item.name}");
-                    }
                 }
                 else
-                {
                     player.SendNotificationError("Item inconnu.");
-                }
             }
             catch (Exception ex)
             {
                 player.SendNotification(ex.ToString());
             }
+
+            return Task.CompletedTask;
         }
 
         private async Task TpCoord(IPlayer player, string[] args)

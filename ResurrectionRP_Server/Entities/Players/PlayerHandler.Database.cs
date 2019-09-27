@@ -27,43 +27,46 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Methods
         public void UpdateFull()
         {
-            if (Client == null || !Client.Exists)
-                return;
-
-            try
+            AltAsync.Do(() =>
             {
-                VehicleHandler veh = null;
+                if (Client == null || !Client.Exists)
+                    return;
 
-                Health = Client.Health;
-                IVehicle vehicle = Client.Vehicle;
-
-                if (vehicle != null && vehicle.Exists)
+                try
                 {
-                    if (vehicle.Driver == Client)
-                        veh = vehicle.GetVehicleHandler();
+                    VehicleHandler veh = null;
 
-                    Location = new Location(vehicle.Position, vehicle.Rotation);
+                    Health = Client.Health;
+                    IVehicle vehicle = Client.Vehicle;
+
+                    if (vehicle != null && vehicle.Exists)
+                    {
+                        if (vehicle.Driver == Client)
+                            veh = vehicle.GetVehicleHandler();
+
+                        Location = new Location(vehicle.Position, vehicle.Rotation);
+                    }
+                    else if (HouseManager.IsInHouse(Client))
+                        Location = new Location(HouseManager.GetHouse(Client).Position, new Vector3());
+                    else
+                        Location = new Location(Client.Position, Client.Rotation);
+
+                    if (veh != null)
+                        veh.UpdateFull();
+
+                    if ((DateTime.Now - LastUpdate).Minutes >= 1)
+                    {
+                        TimeSpent += (DateTime.Now - LastUpdate).Minutes;
+                        LastUpdate = DateTime.Now;
+                    }
+
+                    UpdateInBackground();
                 }
-                else if (HouseManager.IsInHouse(Client))
-                    Location = new Location(HouseManager.GetHouse(Client).Position, new Vector3());
-                else
-                    Location = new Location(Client.Position, Client.Rotation);
-
-                if (veh != null)
-                    veh.UpdateFull();
-
-                if ((DateTime.Now - LastUpdate).Minutes >= 1)
+                catch (Exception ex)
                 {
-                    TimeSpent += (DateTime.Now - LastUpdate).Minutes;
-                    LastUpdate = DateTime.Now;
+                    Alt.Server.LogError($"PlayerHandler.Update() - {Client.GetSocialClub()}, {Identite.Name} - {ex}");
                 }
-
-                UpdateInBackground();
-            }
-            catch (Exception ex)
-            {
-                Alt.Server.LogError($"PlayerHandler.Update() - {Client.GetSocialClub()}, {Identite.Name} - {ex}");
-            }
+            }).Wait();
         }
 
         public void UpdateInBackground()

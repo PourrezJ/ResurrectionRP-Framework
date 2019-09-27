@@ -1,11 +1,7 @@
-﻿using AltV.Net;
-using AltV.Net.Elements.Entities;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Vehicles;
-using ResurrectionRP_Server.Utils;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Business
@@ -59,12 +55,15 @@ namespace ResurrectionRP_Server.Business
             await menu.OpenMenu(client);
         }
 
-        private async Task FuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private Task FuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             VehicleHandler vh = menuItem.GetData("Vehicle");
-            if (vh == null) return;
+
+            if (vh == null)
+                return Task.CompletedTask;
+
             int price = CalculEssencePriceNeeded(vh, this.Station.EssencePrice);
-            AcceptMenu accept = await AcceptMenu.OpenMenu(client, menu.Title, $"Prix du litre: ${Station.EssencePrice} || Taxe Etat: ${GameMode.Instance?.Economy.Taxe_Essence}", $"Mettre le plein dans {vh.Plate} pour la somme de ~r~${price}~w~.", rightlabel: $"${price}");
+            AcceptMenu accept = AcceptMenu.OpenMenu(client, menu.Title, $"Prix du litre: ${Station.EssencePrice} || Taxe Etat: ${GameMode.Instance?.Economy.Taxe_Essence}", $"Mettre le plein dans {vh.Plate} pour la somme de ~r~${price}~w~.", rightlabel: $"${price}");
 
             accept.AcceptMenuCallBack += (async (IPlayer _client, bool reponse) => {
                 if (reponse)
@@ -87,6 +86,8 @@ namespace ResurrectionRP_Server.Business
                     await MenuManager.CloseMenu(client);
                 }
             });
+
+            return Task.CompletedTask;
         }
         
         private async Task RefuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)

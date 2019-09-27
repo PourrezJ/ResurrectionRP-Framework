@@ -104,7 +104,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         }
         #endregion
 
-        #region Method
+        #region Methods
         public bool IsLocked()
         {
             return (LockState == VehicleLockState.Locked) ? true : false;

@@ -74,12 +74,6 @@ namespace ResurrectionRP_Server.Factions
             Dock?.OnPlayerDisconnected(client);
             Nordiste?.OnPlayerConnected(client);
         }
-
-        public static async Task OnExitColShape(IPlayer player, IColShape colshapePointer)
-        {
-            for (int i = 0; i < GameMode.Instance.FactionManager.FactionList?.Count; i++)
-                await GameMode.Instance.FactionManager.FactionList[i].OnPlayerExitColShape(colshapePointer, player);
-        }
         #endregion
 
         #region Methods

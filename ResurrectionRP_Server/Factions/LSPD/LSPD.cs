@@ -72,37 +72,37 @@ namespace ResurrectionRP_Server.Factions
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Policeb, 110000));
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Bf400, 110000));
 
-            ItemShop.Add(new FactionShop(new HandCuff(ItemID.Handcuff, "Menottes", "Une paire de menottes", 0.1, true, false), 500, 0));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.LampeTorche, "Lampe Torche", "Une lampe leds 500watts.", 2, hash: WeaponHash.Flashlight), 2500, 0));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Matraque, "Matraque", "Une matraque de marque Théo.", 5, hash: WeaponHash.Nightstick), 3500, 0));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Pistolet MK2", "", 3, hash: WeaponHash.PistolMk2), 40000, 1));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Taser, "Taser", "", 3, hash: WeaponHash.StunGun), 30000, 0));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Flare Gun", "", 5, hash: WeaponHash.FlareGun), 20000, 1));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Revolver MK2", "", 4, hash: WeaponHash.RevolverMk2), 50000, 2));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Assault SMG", "", 10, hash: WeaponHash.AssaultSmg), 125000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "SMG", "", 10, hash: WeaponHash.AssaultSmg), 100000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Pump, "Fusil à pompe MK2", "", 10, hash: WeaponHash.PumpShotgun), 75000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Pump, "Assault Pompe", "", 16, hash: WeaponHash.AssaultShotgun), 125000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Pump, "Bull-Pup Shotgun", "", 17, hash: WeaponHash.BullpupShotgun), 110000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Carabine, "Carabine", "", 15, hash: WeaponHash.CarbineRifle), 120000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Carabine, "Special Carabine", "", 15, hash: WeaponHash.SpecialCarbine), 160000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Carabine, "Sniper Rifle", "", 15, hash: WeaponHash.SniperRifle), 300000, 3));
+            ItemShop.Add(new FactionShopItem(new HandCuff(ItemID.Handcuff, "Menottes", "Une paire de menottes", 0.1, true, false), 500, 0));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.LampeTorche, "Lampe Torche", "Une lampe leds 500watts.", 2, hash: WeaponHash.Flashlight), 2500, 0));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Matraque, "Matraque", "Une matraque de marque Théo.", 5, hash: WeaponHash.Nightstick), 3500, 0));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Pistolet MK2", "", 3, hash: WeaponHash.PistolMk2), 40000, 1));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Taser, "Taser", "", 3, hash: WeaponHash.StunGun), 30000, 0));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Flare Gun", "", 5, hash: WeaponHash.FlareGun), 20000, 1));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Revolver MK2", "", 4, hash: WeaponHash.RevolverMk2), 50000, 2));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Assault SMG", "", 10, hash: WeaponHash.AssaultSmg), 125000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "SMG", "", 10, hash: WeaponHash.AssaultSmg), 100000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pump, "Fusil à pompe MK2", "", 10, hash: WeaponHash.PumpShotgun), 75000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pump, "Assault Pompe", "", 16, hash: WeaponHash.AssaultShotgun), 125000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pump, "Bull-Pup Shotgun", "", 17, hash: WeaponHash.BullpupShotgun), 110000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Carabine, "Carabine", "", 15, hash: WeaponHash.CarbineRifle), 120000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Carabine, "Special Carabine", "", 15, hash: WeaponHash.SpecialCarbine), 160000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Carabine, "Sniper Rifle", "", 15, hash: WeaponHash.SniperRifle), 300000, 3));
 
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Combat MG", "", 26, hash: WeaponHash.CombatMg), 350000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Combat MG MK2", "", 26, hash: WeaponHash.CombatMgMk2), 400000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Micro SMG", "", 26, hash: WeaponHash.MicroSmg), 150000, 3));
-            ItemShop.Add(new FactionShop(new ClothItem(ItemID.Hats, "Béret Homme", "", new ClothData(106, 3, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 500, 0));
-            ItemShop.Add(new FactionShop(new ClothItem(ItemID.Hats, "Béret Femme", "", new ClothData(105, 3, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 500, 0));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Combat MG", "", 26, hash: WeaponHash.CombatMg), 350000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Combat MG MK2", "", 26, hash: WeaponHash.CombatMgMk2), 400000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Micro SMG", "", 26, hash: WeaponHash.MicroSmg), 150000, 3));
+            ItemShop.Add(new FactionShopItem(new ClothItem(ItemID.Hats, "Béret Homme", "", new ClothData(106, 3, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 500, 0));
+            ItemShop.Add(new FactionShopItem(new ClothItem(ItemID.Hats, "Béret Femme", "", new ClothData(105, 3, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 500, 0));
 
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "MarksMan Sniper MK2", "", 26, hash: WeaponHash.MarksmanRifleMk2), 250000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Rocket Launcher", "", 26, hash: WeaponHash.HomingLauncher), 400000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "RPG", "", 26, hash: WeaponHash.HomingLauncher), 400000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Grenade Launcher", "", 20, hash: WeaponHash.GrenadeLauncher), 350000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Grenade Launcher Smoke", "", 20, hash: WeaponHash.GrenadeLauncherSmoke), 250000, 3));
-            ItemShop.Add(new FactionShop(new Weapons(ItemID.Weapon, "Grenade", "", 20, hash: WeaponHash.Grenade), 100000, 3));
-            ItemShop.Add(new FactionShop(new RadioItem(ItemID.Radio, "Talky", "", 1, true, true, false, true, true, 2000, icon: "talky"), 500, 0));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "MarksMan Sniper MK2", "", 26, hash: WeaponHash.MarksmanRifleMk2), 250000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Rocket Launcher", "", 26, hash: WeaponHash.HomingLauncher), 400000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "RPG", "", 26, hash: WeaponHash.HomingLauncher), 400000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Grenade Launcher", "", 20, hash: WeaponHash.GrenadeLauncher), 350000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Grenade Launcher Smoke", "", 20, hash: WeaponHash.GrenadeLauncherSmoke), 250000, 3));
+            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Grenade", "", 20, hash: WeaponHash.Grenade), 100000, 3));
+            ItemShop.Add(new FactionShopItem(new RadioItem(ItemID.Radio, "Talky", "", 1, true, true, false, true, true, 2000, icon: "talky"), 500, 0));
 
-            ItemShop.Add(new FactionShop(new BagItem(ItemID.Bag, "Backpack", "", new ClothData(45, 0, 0), 40, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"), 500, 0));
+            ItemShop.Add(new FactionShopItem(new BagItem(ItemID.Bag, "Backpack", "", new ClothData(45, 0, 0), 40, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"), 500, 0));
 
             #region Portique
 
@@ -162,16 +162,14 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Event handlers
-        private async Task OnNPCInteract(IPlayer client, Ped npc)
+        private Task OnNPCInteract(IPlayer client, Ped npc)
         {
             if (npc == _armurerie)
-            {
-                await this.OpenShopMenu(client);
-            }
+                OpenShopMenu(client);
             else if (npc == _accueil)
-            {
-                await this.OpenAccueilMenu(client);
-            }
+                OpenAccueilMenu(client);
+
+            return Task.CompletedTask;
         }
 
         public override Task OnPlayerServiceEnter(IPlayer client, int rang)
@@ -208,9 +206,8 @@ namespace ResurrectionRP_Server.Factions
             return Task.CompletedTask;
         }
 
-        public override Task OnPlayerEnterColShape(IColShape colshape,IPlayer client)
+        public override void OnPlayerEnterColShape(IColShape colshape,IPlayer client)
         {
-            return Task.CompletedTask;
             /*
             try
             {

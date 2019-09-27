@@ -71,7 +71,7 @@ namespace ResurrectionRP_Server.Business
         }
         #endregion
 
-        #region Events
+        #region Init
         public override async Task Init()
         {
             MaxEmployee = 5;
@@ -84,7 +84,9 @@ namespace ResurrectionRP_Server.Business
             _clothingColShape.SetOnPlayerLeaveColShape(OnPlayerLeaveColShape);
             _clothingColShape.SetOnPlayerInteractInColShape(OnPlayerInteractInColShape);
         }
+        #endregion
 
+        #region Event handlers
         private async Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
         {
             if (!client.Exists)
@@ -93,13 +95,12 @@ namespace ResurrectionRP_Server.Business
             await OpenPropsStoreMenu(client);
         }
 
-        public Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        public void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
             client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
-            return Task.CompletedTask;
         }
 
-        public virtual async Task OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
+        public virtual void OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
         {
             PlayerHandler player = client.GetPlayerHandler();
 
@@ -107,9 +108,11 @@ namespace ResurrectionRP_Server.Business
                 return;
 
             if (player.HasOpenMenu())
-                await MenuManager.CloseMenu(client);
+                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
         }
+        #endregion
 
+        #region Private methods
         private Task MenuClose(IPlayer client, Menu menu)
         {
             var ph = client.GetPlayerHandler();
@@ -120,10 +123,8 @@ namespace ResurrectionRP_Server.Business
             ph.Clothing.UpdatePlayerClothing();
             return Task.CompletedTask;
         }
-        #endregion
 
-        #region Private methods
-        private async void BuyProp(IPlayer client, byte componentID, int drawable, int variation, double price, string clothName)
+        private async Task BuyProp(IPlayer client, byte componentID, int drawable, int variation, double price, string clothName)
         {
             Item item = null;
             ClothManifest? propData = ClothingLoader.FindProps(client, componentID) ?? null;
@@ -161,7 +162,7 @@ namespace ResurrectionRP_Server.Business
 
             if (ph.BankAccount.Balance >= price)
             {
-                if (await ph.AddItem(item, 1))
+                if (ph.AddItem(item, 1))
                 {
                     if (await ph.HasBankMoney(price, $"Achat {clothName}"))
                     {

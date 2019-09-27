@@ -1,4 +1,5 @@
-﻿using AltV.Net.Async;
+﻿using AltV.Net;
+using AltV.Net.Async;
 
 namespace ResurrectionRP_Server.EventHandlers
 {
@@ -6,7 +7,7 @@ namespace ResurrectionRP_Server.EventHandlers
     {
         public static void Initialize()
         {
-            AltAsync.OnColShape += OnEntityColshape;
+            Alt.OnColShape += OnEntityColshape;
             AltAsync.OnClient("InteractionInColshape", OnEntityInteractInColShape);
         }
     }

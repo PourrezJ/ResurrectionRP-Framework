@@ -1,28 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Numerics;
-using System.Linq;
-using System.Drawing;
+﻿using AltV.Net;
 using AltV.Net.Async;
-using AltV.Net.Elements.Entities;
-using ResurrectionRP_Server.Models.InventoryData;
-using ResurrectionRP_Server.Entities.Peds;
-using ResurrectionRP_Server.Models;
-using AltV.Net.Enums;
-using ResurrectionRP_Server.Entities.Blips;
-using AltV.Net;
-using ResurrectionRP_Server.Entities.Players;
-using ResurrectionRP_Server.Entities;
 using AltV.Net.Data;
+using AltV.Net.Elements.Entities;
+using AltV.Net.Enums;
+using Newtonsoft.Json;
+using ResurrectionRP_Server.Entities;
+using ResurrectionRP_Server.Entities.Blips;
+using ResurrectionRP_Server.Entities.Peds;
+using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Models.InventoryData;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Farms
 {
     public class FarmManager
     {
+        #region Static fields
         public static List<Farm> FarmList = new List<Farm>();
+        #endregion
 
+        #region Init
         public static async Task<FarmManager> InitAll()
         {
             var farmManager = new FarmManager();
@@ -51,7 +53,9 @@ namespace ResurrectionRP_Server.Farms
             }
             return farmManager;
         }
+        #endregion
 
+        #region Methods
         public static Farm PlayerInFarmZone(IPlayer client)
         {
             Position pos = Position.Zero;
@@ -80,11 +84,12 @@ namespace ResurrectionRP_Server.Farms
             Farm farm = FarmList.Find(f => f.Harvest_Name == (string)args[0]);
             await farm?.StartFarming(player);
         }
+        #endregion
     }
 
     public abstract class Farm
     {
-        #region Variable
+        #region Properties
         public bool Debug { get; set; }
 
         /*                  Harvest                     */
@@ -146,8 +151,7 @@ namespace ResurrectionRP_Server.Farms
 
         #endregion
 
-        #region Method
-
+        #region Init
         public virtual Task Init()
         {
             #region Harvest          
@@ -159,7 +163,7 @@ namespace ResurrectionRP_Server.Farms
 
                     if (Debug)
                     {
-                        Marker.CreateMarker(MarkerType.VerticalCylinder, position - new Vector3(0.0f, 0.0f, Harvest_Range), new Vector3(0,0, Harvest_Range));
+                        Marker.CreateMarker(MarkerType.VerticalCylinder, position - new Vector3(0.0f, 0.0f, Harvest_Range), new Vector3(0, 0, Harvest_Range));
                     }
                 }
             }
@@ -176,7 +180,7 @@ namespace ResurrectionRP_Server.Farms
                 Process_Blip = BlipsManager.CreateBlip(Process_Name, Process_PosRot.Pos, (byte)BlipColor, Process_BlipSprite);
 
                 Process_Ped = Ped.CreateNPC(Process_PedHash, Process_PosRot.Pos, (int)Process_PosRot.Rot.Z);
-                Process_Ped.NpcInteractCallBack += (async (IPlayer client, Ped npc) => { await StartProcessing(client); });
+                Process_Ped.NpcInteractCallBack += (IPlayer client, Ped npc) => { StartProcessing(client); return Task.CompletedTask; };
             }
 
             if (DoubleProcess_PosRot != null)
@@ -195,37 +199,50 @@ namespace ResurrectionRP_Server.Farms
                 Selling_Blip = BlipsManager.CreateBlip(Selling_Name, Selling_PosRot.Pos, (int)BlipColor, Selling_BlipSprite);
 
                 Selling_Ped = Ped.CreateNPC(Selling_PedHash, Selling_PosRot.Pos, (int)Selling_PosRot.Rot.Z);
-                Selling_Ped.NpcInteractCallBack += (async (IPlayer client, Ped npc) => { await StartSelling(client); });
+                Selling_Ped.NpcInteractCallBack += (IPlayer client, Ped npc) => { StartSelling(client); return Task.CompletedTask; };
             }
             #endregion
 
             return Task.CompletedTask;
         }
+        #endregion
 
+        #region Event handlers
+        public virtual void OnPlayerEnterColshape(IColShape colShape, IPlayer client)
+        {
+            return;
+        }
+
+        public virtual void OnPlayerExitColshape(IColShape colShape, IPlayer player)
+        {
+            PlayerHandler ph = player.GetPlayerHandler();
+
+            if (ph != null)
+                ph.IsOnProgress = false;
+        }
+        #endregion
+
+        #region Methods
         public virtual async Task StartFarming(IPlayer client)
         {
-            if (!client.Exists)
+            if (client == null || !client.Exists || await client.IsInVehicleAsync())
                 return;
+
             PlayerHandler player = client.GetPlayerHandler();
 
-            if (player == null)
+            if (player == null || player.IsOnProgress)
                 return;
-
-            if (player.IsOnProgress || await client.IsInVehicleAsync())
-                return;
-
 
             Item item = Inventory.Inventory.ItemByID(ItemIDBrute);
+
             if (item == null)
                 return;
-
-            if (await client.IsInVehicleAsync())
+            else if (await client.IsInVehicleAsync())
             {
                 client.DisplaySubtitle($"~s~Vous ne pouvez pas récolter depuis le véhicule.", 5000);
                 return;
             }
-
-            if (player.InventoryIsFull(item.weight))
+            else if (player.InventoryIsFull(item.weight))
             {
                 client.SendNotificationError("Votre inventaire est déjà plein.");
                 return;
@@ -233,28 +250,30 @@ namespace ResurrectionRP_Server.Farms
 
             client.DisplaySubtitle("Vous commencez à ramasser de(s) ~r~" + item.name, 5000);
             player.IsOnProgress = true;
-            bool _exit = false;
+            bool exit = false;
             int i = 0;
-            while (!_exit)
+
+            while (!exit)
             {
                 if (!client.Exists)
                     return;
 
                 await Task.Delay(Harvest_Time);
+
                 if (await client.IsInVehicleAsync())
                 {
                     client.DisplaySubtitle($"~r~Récolte interrompu: ~s~Vous ne pouvez pas récolter depuis le véhicule.", 5000);
-                    _exit = true;
+                    exit = true;
                 }
                 else if (!await IsInFarmingZone(client))
                 {
                     client.DisplaySubtitle($"~r~Récolte interrompu: ~s~Vous devez rester dans la zone.", 5000);
-                    _exit = true;
+                    exit = true;
                 }
 
-                if (!await player.AddItem(item, 1) || _exit)
+                if (!player.AddItem(item, 1) || exit)
                 {
-                    _exit = true;
+                    exit = true;
                     client.DisplaySubtitle($"Récolte terminée: Vous avez ramassé ~r~ {i} {item.name}", 30000);
                     player.IsOnProgress = false;
                 }
@@ -269,10 +288,15 @@ namespace ResurrectionRP_Server.Farms
             player.UpdateFull();
         }
 
-        public virtual async Task StartProcessing(IPlayer sender)
+        public virtual void StartProcessing(IPlayer sender)
         {
+            if (sender == null || !sender.Exists || sender.IsInVehicle)
+                return;
+
             PlayerHandler player = sender.GetPlayerHandler();
-            if (player.IsOnProgress || await sender.IsInVehicleAsync()) return;
+
+            if (player == null || player.IsOnProgress)
+                return;
 
             Item _itemNoTraite = Inventory.Inventory.ItemByID(ItemIDBrute);
             Item _itemTraite = Inventory.Inventory.ItemByID(ItemIDProcess);
@@ -283,33 +307,33 @@ namespace ResurrectionRP_Server.Farms
                 return;
             }
 
-            await MenuManager.CloseMenu(sender);
+            Task.Run(async () => { await MenuManager.CloseMenu(sender); }).Wait();
 
             player.IsOnProgress = true;
             sender.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s)", 5000);
-            bool _exit = false;
+            bool exit = false;
             var i = 0;
-            while (!_exit)
+
+            while (!exit)
             {
                 if (!sender.Exists)
                     return;
 
                 if (player.CountItem(ItemIDBrute) >= Process_QuantityNeeded)
-                    await Task.Delay(Process_Time);
+                    Task.Delay(Process_Time).Wait();
 
-
-                if (await sender.IsInVehicleAsync())
+                if (sender.IsInVehicle)
                 {
                     sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous ne pouvez pas traiter depuis le véhicule.", 5000);
-                    _exit = true;
+                    exit = true;
                 }
-                else if ((await sender.GetPositionAsync()).Distance(Process_Ped.Position) > 10f)
+                else if (sender.Position.Distance(Process_Ped.Position) > 10f)
                 {
                     sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous devez rester dans la zone.", 5000);
-                    _exit = true;
+                    exit = true;
                 }
 
-                if (_exit)
+                if (exit)
                 {
                     player.IsOnProgress = false;
                     return;
@@ -318,7 +342,7 @@ namespace ResurrectionRP_Server.Farms
                 if (player.DeleteAllItem(ItemIDBrute, Process_QuantityNeeded))
                 {
                     sender.DisplaySubtitle($"~r~Traitement en cours: ~s~+1 {_itemTraite.name}", 5000);
-                    await player.AddItem(_itemTraite, 1);
+                    player.AddItem(_itemTraite, 1);
                     i++;
                 }
                 else
@@ -331,10 +355,16 @@ namespace ResurrectionRP_Server.Farms
             }
         }
 
-        public virtual async Task StartSelling(IPlayer sender)
+        public virtual void StartSelling(IPlayer sender)
         {
+            if (sender == null || !sender.Exists || sender.IsInVehicle)
+                return;
+
             PlayerHandler player = sender.GetPlayerHandler();
-            if (player.IsOnProgress || await sender.IsInVehicleAsync()) return;
+
+            if (player == null || player.IsOnProgress)
+                return;
+
             Item _itemBuy = Inventory.Inventory.ItemByID(ItemIDProcess);
 
             if (!player.HasItemID(ItemIDProcess))
@@ -342,36 +372,44 @@ namespace ResurrectionRP_Server.Farms
                 sender.DisplaySubtitle("~r~ERREUR ~s~Vous n'avez rien à vendre", 5000);
                 return;
             }
+
             player.IsOnProgress = true;
             sender.DisplaySubtitle($"Vous commencez à vendre vos ~r~{_itemBuy.name}(s)", 5000);
 
-            await MenuManager.CloseMenu(sender);
+            Task.Run(async () => { await MenuManager.CloseMenu(sender); }).Wait();
             int itemcount = player.CountItem(_itemBuy);
 
-            await sender.EmitAsync("LaunchProgressBar", Selling_Time * itemcount);
-            await Task.Delay(Selling_Time * itemcount);
+            sender.EmitLocked("LaunchProgressBar", Selling_Time * itemcount);
 
-            if (!sender.Exists)
-                return;
-
-            if (player.DeleteAllItem(ItemIDProcess, itemcount))
+            Utils.Utils.Delay(Selling_Time * itemcount, true, () =>
             {
-                double gettaxe = Economy.Economy.CalculPriceTaxe((ItemPrice * itemcount), GameMode.Instance.Economy.Taxe_Exportation);
-                player.AddMoney((ItemPrice * itemcount) - gettaxe);
-                GameMode.Instance.Economy.CaissePublique += gettaxe;
-                sender.DisplaySubtitle($"~r~{itemcount} ~w~{_itemBuy.name}(s) $~r~{(ItemPrice * itemcount) - gettaxe} ~w~taxe:$~r~{gettaxe}.", 15000);
-            }
-            else
-                sender.SendNotificationError("Inconnu.");
+                if (!sender.Exists)
+                    return;
 
-            player.IsOnProgress = false;
-            player.UpdateFull();
+                if (player.DeleteAllItem(ItemIDProcess, itemcount))
+                {
+                    double gettaxe = Economy.Economy.CalculPriceTaxe((ItemPrice * itemcount), GameMode.Instance.Economy.Taxe_Exportation);
+                    player.AddMoney((ItemPrice * itemcount) - gettaxe);
+                    GameMode.Instance.Economy.CaissePublique += gettaxe;
+                    sender.DisplaySubtitle($"~r~{itemcount} ~w~{_itemBuy.name}(s) $~r~{(ItemPrice * itemcount) - gettaxe} ~w~taxe:$~r~{gettaxe}.", 15000);
+                }
+                else
+                    sender.SendNotificationError("Inconnu.");
+
+                player.IsOnProgress = false;
+                player.UpdateFull();
+            });
         }
 
         public virtual async Task StartDoubleProcessing(IPlayer sender)
         {
+            if (sender == null || !await sender.ExistsAsync() || await sender.IsInVehicleAsync())
+                return;
+
             PlayerHandler player = sender.GetPlayerHandler();
-            if (player.IsOnProgress || await sender.IsInVehicleAsync()) return;
+
+            if (player == null || player.IsOnProgress)
+                return;
 
             Item _itemNoTraite = Inventory.Inventory.ItemByID(ItemIDBrute);
             Item _itemNoTraite2 = Inventory.Inventory.ItemByID(ItemIDBrute2);
@@ -382,8 +420,7 @@ namespace ResurrectionRP_Server.Farms
                 player.Client.SendNotificationError($"Vous n'avez pas de {_itemNoTraite.name}");
                 return;
             }
-
-            if (!player.HasItemID(ItemIDBrute2))
+            else if (!player.HasItemID(ItemIDBrute2))
             {
                 player.Client.SendNotificationError($"Vous n'avez pas de {_itemNoTraite2.name}");
                 return;
@@ -393,9 +430,10 @@ namespace ResurrectionRP_Server.Farms
 
             player.IsOnProgress = true;
             sender.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s) ~w~& ~r~{_itemNoTraite2.name}(s)", 5000);
-            bool _exit = false;
+            bool exit = false;
             var i = 0;
-            while (!_exit)
+
+            while (!exit)
             {
                 if (!sender.Exists)
                     return;
@@ -403,22 +441,21 @@ namespace ResurrectionRP_Server.Farms
                 if (player.CountItem(ItemIDBrute) >= 1 && player.CountItem(ItemIDBrute2) >= 1)
                     await Task.Delay(DoubleProcess_Time);
 
-
                 if (!sender.Exists)
                     return;
 
                 if (await sender.IsInVehicleAsync())
                 {
                     sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous ne pouvez pas traiter depuis le véhicule.", 5000);
-                    _exit = true;
+                    exit = true;
                 }
                 else if ((await sender.GetPositionAsync()).Distance(DoubleProcess_Ped.Position) > 15f)
                 {
                     sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous devez rester dans la zone.", 5000);
-                    _exit = true;
+                    exit = true;
                 }
 
-                if (_exit)
+                if (exit)
                 {
                     player.IsOnProgress = false;
                     return;
@@ -429,7 +466,7 @@ namespace ResurrectionRP_Server.Farms
                 if (player.DeleteAllItem(ItemIDBrute, 1) && player.DeleteAllItem(ItemIDBrute2, 1))
                 {
                     sender.DisplaySubtitle($"~r~Traitement en cours: ~s~+1 {_itemTraite.name}", 5000);
-                    await player.AddItem(_itemTraite, 1);
+                    player.AddItem(_itemTraite, 1);
                     i++;
                 }
                 else
@@ -449,20 +486,6 @@ namespace ResurrectionRP_Server.Farms
                 if ((await (player.GetPositionAsync())).Distance(pos) < Harvest_Range) return true;
             }
             return false;
-        }
-
-        public virtual Task OnPlayerColshape(IColShape colShape, IPlayer client)
-        {
-            return Task.CompletedTask;
-        }
-
-        public virtual Task OnExitColshape(IColShape colShape, IPlayer player)
-        {
-            var ph = player.GetPlayerHandler();
-            if (ph != null)
-                ph.IsOnProgress = false;
-
-            return Task.CompletedTask;
         }
         #endregion
     }

@@ -13,12 +13,12 @@ namespace ResurrectionRP_Server.Society
     public partial class Society
     {
         #region Parking menu
-        public virtual async Task OpenParkingMenu(IPlayer client)
+        public virtual void OpenParkingMenu(IPlayer client)
         {
             if (Parking != null && client != null)
             {
                 if (IsEmployee(client) || Owner == client.GetSocialClub())
-                    await Parking.OpenParkingMenu(client);
+                    Parking.OpenParkingMenu(client);
                 else
                     client.SendNotificationError("Vous ne faites pas partie des employés de cette entreprise.");
             }

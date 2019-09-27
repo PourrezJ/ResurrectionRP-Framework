@@ -1,6 +1,4 @@
 ﻿using AltV.Net;
-using AltV.Net.Data;
-using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Bank;
@@ -11,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using ResurrectionRP_Server.Factions.Model;
@@ -62,13 +59,13 @@ namespace ResurrectionRP_Server.Factions
 
         public double PayCheckMinutes { get; set; } = 30;
 
-        private List<FactionShop> _itemShop = new List<FactionShop>();
+        private List<FactionShopItem> _itemShop = new List<FactionShopItem>();
         [BsonIgnore]
-        public List<FactionShop> ItemShop
+        public List<FactionShopItem> ItemShop
         {
             get
             {
-                if (_itemShop == null) _itemShop = new List<FactionShop>();
+                if (_itemShop == null) _itemShop = new List<FactionShopItem>();
                 return _itemShop;
             }
             set => _itemShop = value;
@@ -182,12 +179,12 @@ namespace ResurrectionRP_Server.Factions
             await UpdateDatabase();
         }
 
-        public async Task OnPlayerEnterVestiaire(IColShape colShape, IPlayer client)
+        public void OnPlayerEnterVestiaire(IColShape colShape, IPlayer client)
         {
-            await PriseServiceMenu(client);
+            PriseServiceMenu(client);
         }
 
-        public async Task OnPlayerLeaveVestiaire(IColShape colShape, IPlayer client)
+        public void OnPlayerLeaveVestiaire(IColShape colShape, IPlayer client)
         {
             PlayerHandler player = client.GetPlayerHandler();
 
@@ -195,41 +192,15 @@ namespace ResurrectionRP_Server.Factions
                 return;
 
             if (player.HasOpenMenu())
-                await MenuManager.CloseMenu(client);
+                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
         }
 
-        public async Task OnPlayerEnterShop(IColShape colShape, IPlayer client)
+        public void OnPlayerEnterShop(IColShape colShape, IPlayer client)
         {
-            await OpenShopMenu(client);
+            OpenShopMenu(client);
         }
 
-        public async Task OnPlayerLeaveShop(IColShape colShape, IPlayer client)
-        {
-            PlayerHandler player = client.GetPlayerHandler();
-
-            if (player == null)
-                return;
-
-            if (player.HasOpenMenu())
-                await MenuManager.CloseMenu(client);
-        }
-
-        public async Task OnPlayerEnterParking(PlayerHandler player, Parking parking)
-        {
-            await OpenConcessMenu(player?.Client, ConcessType.Vehicle, ParkingLocation, FactionName);
-        }
-
-        public async Task OnVehicleEnterParking(VehicleHandler vehicle, Parking parking)
-        {
-            await OpenConcessMenu(vehicle?.Vehicle?.Driver, ConcessType.Vehicle, ParkingLocation, FactionName);
-        }
-
-        public async Task OnPlayerEnterHeliport(IColShape colShape, IPlayer client)
-        {
-            await OpenConcessMenu(client, ConcessType.Helico, HeliportLocation, FactionName);
-        }
-
-        public async Task OnPlayerLeaveHeliport(IColShape colShape, IPlayer client)
+        public void OnPlayerLeaveShop(IColShape colShape, IPlayer client)
         {
             PlayerHandler player = client.GetPlayerHandler();
 
@@ -237,7 +208,33 @@ namespace ResurrectionRP_Server.Factions
                 return;
 
             if (player.HasOpenMenu())
-                await MenuManager.CloseMenu(client);
+                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
+        }
+
+        public void OnPlayerEnterParking(PlayerHandler player, Parking parking)
+        {
+            OpenConcessMenu(player?.Client, ConcessType.Vehicle, ParkingLocation, FactionName);
+        }
+
+        public void OnVehicleEnterParking(VehicleHandler vehicle, Parking parking)
+        {
+            OpenConcessMenu(vehicle?.Vehicle?.Driver, ConcessType.Vehicle, ParkingLocation, FactionName);
+        }
+
+        public void OnPlayerEnterHeliport(IColShape colShape, IPlayer client)
+        {
+            OpenConcessMenu(client, ConcessType.Helico, HeliportLocation, FactionName);
+        }
+
+        public void OnPlayerLeaveHeliport(IColShape colShape, IPlayer client)
+        {
+            PlayerHandler player = client.GetPlayerHandler();
+
+            if (player == null)
+                return;
+
+            if (player.HasOpenMenu())
+                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
         }
 
         public virtual Task OnPlayerPromote(IPlayer client, int rang)
@@ -274,14 +271,12 @@ namespace ResurrectionRP_Server.Factions
             });
         }
 
-        public virtual Task OnPlayerEnterColShape(IColShape colShape, IPlayer player)
+        public virtual void OnPlayerEnterColShape(IColShape colShape, IPlayer player)
         {
-            return Task.CompletedTask;
         }
 
-        public virtual Task OnPlayerExitColShape(IColShape colShape, IPlayer player)
+        public virtual void OnPlayerExitColShape(IColShape colShape, IPlayer player)
         {
-            return Task.CompletedTask;
         }
         #endregion
 

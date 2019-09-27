@@ -278,7 +278,10 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
 
             Money += somme;
-            Client?.EmitLocked(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money));
+
+            if (Client != null && Client.Exists)
+                Client.EmitLocked(Events.UpdateMoneyHUD, Convert.ToSingle(Money));
+
             UpdateFull();
         }
 
@@ -290,7 +293,10 @@ namespace ResurrectionRP_Server.Entities.Players
             if (Money >= somme)
             {
                 Money -= somme;
-                Client?.EmitLocked(Utils.Enums.Events.UpdateMoneyHUD, Convert.ToSingle(Money)) ;
+
+                if (Client != null && Client.Exists)
+                    Client.EmitLocked(Events.UpdateMoneyHUD, Convert.ToSingle(Money));
+
                 UpdateFull();
                 return true;
             }
@@ -493,9 +499,8 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        public async Task<bool> AddItem(Item item, int quantity = 1)
+        public bool AddItem(Item item, int quantity = 1)
         {
-
             if (PocketInventory.AddItem(item, quantity))
             {
                 if (RPGInventoryManager.HasInventoryOpen(this.Client))
@@ -504,8 +509,8 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (rpg != null)
                        RPGInventoryManager.Refresh(this.Client, rpg);
                 }
-                await item.OnPlayerGetItem(this.Client);
 
+                item.OnPlayerGetItem(this.Client);
                 return true;
             }
             else if (BagInventory != null && BagInventory.AddItem(item, quantity))
@@ -516,10 +521,12 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (rpg != null)
                         RPGInventoryManager.Refresh(this.Client, rpg);
                 }
-                await item.OnPlayerGetItem(this.Client);
+
+                item.OnPlayerGetItem(this.Client);
                 return true;
             }
-            else return false;
+            else
+                return false;
         }
 
         public bool HasItemID(Models.InventoryData.ItemID id)
@@ -583,10 +590,10 @@ namespace ResurrectionRP_Server.Entities.Players
         public bool DeleteAllItem(Models.InventoryData.ItemID itemID, int quantite = 1)
         {
             int pocketCount = PocketInventory.CountItem(itemID);
-            var bagCount = 0;
+            int bagCount = 0;
+
             if (BagInventory != null)
                 bagCount = BagInventory.CountItem(itemID);
-
 
             if (pocketCount + bagCount >= quantite)
             {
@@ -595,12 +602,14 @@ namespace ResurrectionRP_Server.Entities.Players
                 else
                 {
                     PocketInventory.DeleteAll(itemID, pocketCount);
+
                     if (BagInventory != null)
                         BagInventory.DeleteAll(itemID, quantite - pocketCount);
                 }
 
                 return true;
             }
+
             return false;
         }
 

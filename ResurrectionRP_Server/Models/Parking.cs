@@ -55,8 +55,8 @@ namespace ResurrectionRP_Server.Models
         public delegate Task OnVehicleStoredEvent(IPlayer client, VehicleHandler vehicle);
         public delegate Task OnVehicleOutEvent(IPlayer client, VehicleHandler vehicle, Location Spawn);
         public delegate Task OnSaveNeededDelegate();
-        public delegate Task OnPlayerParkingEvent(PlayerHandler player, Parking parking);
-        public delegate Task OnVehicleParkingEvent(VehicleHandler vehicle, Parking parking);
+        public delegate void OnPlayerParkingEvent(PlayerHandler player, Parking parking);
+        public delegate void OnVehicleParkingEvent(VehicleHandler vehicle, Parking parking);
         #endregion
 
         #region Fields and properties
@@ -138,53 +138,53 @@ namespace ResurrectionRP_Server.Models
         #endregion
 
         #region Event handlers
-        private async Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        private void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
             if (!client.Exists)
                 return;
 
             if (OnPlayerEnterParking != null)
-                await OnPlayerEnterParking.Invoke(client.GetPlayerHandler(), this);
+                OnPlayerEnterParking.Invoke(client.GetPlayerHandler(), this);
             else
-                await OpenParkingMenu(client);
+                OpenParkingMenu(client);
         }
 
-        private async Task OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
+        private void OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
         {
             if (!client.Exists)
                 return;
 
             if (OnPlayerLeaveParking != null)
-                await OnPlayerEnterParking.Invoke(client.GetPlayerHandler(), this);
+                OnPlayerEnterParking.Invoke(client.GetPlayerHandler(), this);
             else
             {
                 PlayerHandler player = client.GetPlayerHandler();
 
                 if (player != null && player.HasOpenMenu())
-                    await MenuManager.CloseMenu(client);
+                    Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
             }
         }
 
-        private async Task OnVehicleEnterColShape(IColShape colShape, IVehicle vehicle)
+        private void OnVehicleEnterColShape(IColShape colShape, IVehicle vehicle)
         {
             if (!vehicle.Exists || vehicle.Driver == null)
                 return;
 
             if (OnVehicleEnterParking != null)
-                await OnVehicleEnterParking.Invoke(vehicle.GetVehicleHandler(), this);
+                OnVehicleEnterParking.Invoke(vehicle.GetVehicleHandler(), this);
             else
-                await OnPlayerEnterColShape(colShape, vehicle.Driver);
+                OnPlayerEnterColShape(colShape, vehicle.Driver);
         }
 
-        private async Task OnVehicleLeaveColShape(IColShape colShape, IVehicle vehicle)
+        private void OnVehicleLeaveColShape(IColShape colShape, IVehicle vehicle)
         {
             if (!vehicle.Exists || vehicle.Driver == null)
                 return;
 
             if (OnVehicleLeaveParking != null)
-                await OnVehicleEnterParking.Invoke(vehicle.GetVehicleHandler(), this);
+                OnVehicleEnterParking.Invoke(vehicle.GetVehicleHandler(), this);
             else
-                await OnPlayerLeaveColShape(colShape, vehicle.Driver);
+                OnPlayerLeaveColShape(colShape, vehicle.Driver);
         }
         #endregion
 
@@ -280,7 +280,7 @@ namespace ResurrectionRP_Server.Models
             ParkingList.Add(this);
         }
 
-        public async Task OpenParkingMenu(IPlayer client, string title = "", string description = "", bool canGetAllVehicle = false, Location location = null, int vehicleType = -1, Menu menu = null, Menu.MenuCallbackAsync menuCallback = null)
+        public void OpenParkingMenu(IPlayer client, string title = "", string description = "", bool canGetAllVehicle = false, Location location = null, int vehicleType = -1, Menu menu = null, Menu.MenuCallbackAsync menuCallback = null)
         {
             if (!client.Exists)
                 return;
@@ -305,7 +305,7 @@ namespace ResurrectionRP_Server.Models
                 menu.ItemSelectCallbackAsync = menuCallback;
             }
 
-            if (client.IsInVehicle && await client.GetSeatAsync() == 1) // I store my vehicle
+            if (client.IsInVehicle && client.Seat == 1) // I store my vehicle
             {
                 IVehicle vehplayer = client.Vehicle;
 
@@ -386,7 +386,7 @@ namespace ResurrectionRP_Server.Models
             } 
 
             menu.SetData("Location", location);
-            await menu.OpenMenu(client);
+            Task.Run(async () => { await menu.OpenMenu(client); }).Wait();
         }
 
         public async Task StoreVehicle(IPlayer client, IVehicle vh)

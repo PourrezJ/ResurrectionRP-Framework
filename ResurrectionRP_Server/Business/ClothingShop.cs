@@ -91,13 +91,12 @@ namespace ResurrectionRP_Server.Business
             _clothingColShape.SetOnPlayerInteractInColShape(OnPlayerInteractInColShape);
         }
 
-        public Task OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        public void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
             client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
-            return Task.CompletedTask;
         }
 
-        public virtual async Task OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
+        public virtual void OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
         {
             PlayerHandler player = client.GetPlayerHandler();
 
@@ -105,7 +104,7 @@ namespace ResurrectionRP_Server.Business
                 return;
 
             if (player.HasOpenMenu())
-                await MenuManager.CloseMenu(client);
+                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
         }
 
         private async Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
@@ -358,7 +357,7 @@ namespace ResurrectionRP_Server.Business
 
             if (ph.BankAccount.Balance >= price)
             {
-                if (await ph.AddItem(item, 1))
+                if (ph.AddItem(item, 1))
                 {
                     if (await ph.HasBankMoney(price, $"Achat vêtement {clothName}"))
                     {

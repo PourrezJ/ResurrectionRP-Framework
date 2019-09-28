@@ -125,8 +125,6 @@ export class Game {
             alt.log('Chargement des pools done');
 
             alt.log("Chargement des stats");
-            game.setPedConfigFlag(playerId, 35, false);
-            game.setPedConfigFlag(playerId, 429, true);
 
             game.startAudioScene("FBI_HEIST_H5_MUTE_AMBIENCE_SCENE");
             game.setPedConfigFlag(alt.Player.local.scriptID, 35, false);

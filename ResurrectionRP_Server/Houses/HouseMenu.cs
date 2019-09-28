@@ -107,7 +107,7 @@ namespace ResurrectionRP_Server.Houses
                         var player = PlayerManager.GetPlayerByName(name.ToString());
 
                         if (player == null) return;
-                        await _house.SetOwner(player.Client);
+                        await _house.SetOwner(player.PID);
                         client.SendNotification($"Vous avez vendu la maison à {player.Identite.Name}");
                         client.SendNotification("Vous êtes désormais propriétaire de ce logement");
                         MenuManager.CloseMenu(client);

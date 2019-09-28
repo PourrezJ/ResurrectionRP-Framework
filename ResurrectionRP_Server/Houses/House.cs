@@ -33,9 +33,13 @@ namespace ResurrectionRP_Server.Houses
             get => _owner;
             private set {
                 if (string.IsNullOrEmpty(value))
+                {
                     if (Marker != null) Marker.SetColor(Color.FromArgb(80, 255, 0, 0));
+                }
                 else
+                {
                     if (Marker != null) Marker.SetColor(Color.FromArgb(80, 255, 255, 255));
+                }
 
                 _owner = value;
             }
@@ -103,18 +107,7 @@ namespace ResurrectionRP_Server.Houses
             ColShapeOut.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
             ColShapeOut.SetOnPlayerInteractInColShape(OnPlayerInteractInColShape);
 
-            if (Parking != null)
-            {
-                Parking.Location = Parking.Spawn1.Pos;
-                Parking.Init();
-                Parking.Owner = Owner;
-                Parking.ParkingType = ParkingType.House;
-                Parking.OnSaveNeeded = OnParkingSaveNeeded;
-                Parking.OnPlayerEnterParking += OnPlayerEnterParking;
-                Parking.OnVehicleEnterParking += OnVehicleEnterParking;
-                Parking.OnVehicleStored += OnVehicleStored;
-                Parking.OnVehicleOut += OnVehicleOutParking;
-            }
+            InitParking();
 
             if (!string.IsNullOrEmpty(Owner))
                 Marker.SetColor(Color.FromArgb(80, 255, 255, 255));
@@ -196,6 +189,21 @@ namespace ResurrectionRP_Server.Houses
         #endregion
 
         #region Methods
+        public void InitParking()
+        {
+            if (Parking != null)
+            {
+                Parking.Location = Parking.Spawn1.Pos;
+                Parking.Init();
+                Parking.Owner = Owner;
+                Parking.ParkingType = ParkingType.House;
+                Parking.OnSaveNeeded = OnParkingSaveNeeded;
+                Parking.OnPlayerEnterParking += OnPlayerEnterParking;
+                Parking.OnVehicleEnterParking += OnVehicleEnterParking;
+                Parking.OnVehicleStored += OnVehicleStored;
+                Parking.OnVehicleOut += OnVehicleOutParking;
+            }
+        }
         public async Task SetOwner(string owner)
         {
             if (OwnerHandle != null) OwnerHandle.EmitLocked("ResetHouseBlip", ID);
@@ -214,13 +222,6 @@ namespace ResurrectionRP_Server.Houses
                 Owner = null;
             }
 
-            await Save();
-        }
-
-        public async Task SetOwner(IPlayer player)
-        {
-            Owner = (player == null) ? string.Empty : player.GetSocialClub();
-            SetOwnerHandle(player);
             await Save();
         }
 

@@ -181,8 +181,8 @@ namespace ResurrectionRP_Server.Houses
 
                     if (await player.HasBankMoney(house.Price, "Achat immobilier."))
                     {
-                        //GameMode.Instance.Economy.CaissePublique += house.Price;
-                        await house.SetOwner(client);
+                        GameMode.Instance.Economy.CaissePublique += house.Price;
+                        await house.SetOwner(client.GetPlayerHandler().PID);
                         await house.SendPlayer(client);
                         MenuManager.CloseMenu(client);
                         client.SendNotificationSuccess("Vous avez acheté ce logement.");
@@ -223,6 +223,7 @@ namespace ResurrectionRP_Server.Houses
                     client.SendNotificationSuccess("Vous avez changé le type du logement par " + type);
                     break;
                 case "ID_RemoveParking":
+                    house.Parking.Destroy();
                     house.Parking = null;
                     await house.Save();
                     client.SendNotificationSuccess("Vous avez supprimé le parking");

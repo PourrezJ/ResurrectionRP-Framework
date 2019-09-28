@@ -29,6 +29,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             AltAsync.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
 
             AltAsync.OnClient("LockUnlockVehicle", LockUnlockVehicle);
+            AltAsync.OnClient("UpdateTrailer", UpdateTrailerState);
         }
         #endregion
 
@@ -63,6 +64,32 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
 
             return Task.CompletedTask;
+        }
+
+        public static async Task UpdateTrailerState(IPlayer player, object[] args)
+        {
+            if (!player.Exists)
+                return;
+
+            if (args[0] == null || args[1] == null)
+                return;
+
+            if (GameMode.Instance.IsDebug)
+                Alt.Server.LogInfo("VehicleManager | Update trailer state for " + player.GetPlayerHandler().PID + " to " + args[1] + " for " + ((IVehicle)(args[0])).NumberplateText );
+
+            VehicleHandler veh = ((IVehicle)args[0]).GetVehicleHandler();
+           
+            veh.hasTrailer = (bool)(args[1]);
+            if (args[2] != null)
+            {
+                veh.Trailer = (IEntity)args[2];
+                ((IVehicle)(veh.Trailer)).GetVehicleHandler().UpdateFull();
+            }
+            else
+            {
+                ((IVehicle)(veh.Trailer)).GetVehicleHandler().UpdateFull();
+                veh.Trailer = null;
+            }
         }
 
         private static async Task LockUnlockVehicle(IPlayer player, object[] args)

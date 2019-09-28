@@ -121,7 +121,7 @@ namespace ResurrectionRP_Server.Business
                     
                     timer = Utils.Utils.Delay(1250, false, async () =>
                     {
-                        client.DisplayHelp("Station service \n Litres en station: " + Station.Litrage + "\nLitres dans le camion: " + hfuel.OilTank.Traite, 1250);
+                        client.DisplayHelp("Station service \n Litres en station: " + Station.Litrage + "\nLitres dans le camion: " + hfuel.OilTank.Traite, 30000);
                         //API.OnProgressBar(client, true, i, currentmax);
                         if (Station.Litrage == Station.LitrageMax)
                         {

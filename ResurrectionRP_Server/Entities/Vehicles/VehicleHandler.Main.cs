@@ -61,8 +61,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         [BsonIgnore]
         public bool WasTeleported { get; set; } = false;
 
-        [BsonIgnoreIfNull]
-        public OilTank OilTank = null;
 
         #endregion
 
@@ -117,7 +115,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             IVehicle vehicle = null;
 
-            await AltAsync.Do(() => { vehicle = SpawnVehicle(); });
+            await AltAsync.Do(() => { vehicle = SpawnVehicle(location, setLastUse); });
 
             return vehicle;
         }
@@ -173,8 +171,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             Vehicle.EngineHealth = EngineHealth;
             Vehicle.BodyHealth = BodyHealth;
             Vehicle.RadioStation = RadioStation;
-            IsInPound = false;
-            IsParked = false;
 
             if (Wheels == null)
             {
@@ -221,18 +217,28 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (setLastUse)
                 LastUse = DateTime.Now;
 
-            if (location != null)
-                Location = location;
-
             _previousPosition = Location.Pos;
             Vehicle.Dimension = Dimension;
 
             VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
-            VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
 
             // Needed as vehicles in database don't have this value
-            if (FuelConsumption == 0)
+            if((VehicleManifest.fuelConsum <= 0 || VehicleManifest.fuelReservoir <= 0) && VehicleManifest.VehicleClass != 13)
+            {
+                Alt.Server.LogError("Erreur sur le chargement d'un véhicule, le fuel réservoir ou la consommation existe pas : " + Vehicle.Model);
                 FuelConsumption = 5.5f;
+                FuelMax = 70;
+            }
+            if(FuelMax == 100 )
+            {
+                FuelConsumption = VehicleManifest.fuelConsum;
+                FuelMax = VehicleManifest.fuelReservoir;
+            }
+
+            if (Fuel > FuelMax)
+                Fuel = FuelMax;
+
+            VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
 
             if (HaveTowVehicle())
             {
@@ -241,6 +247,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (_vehtowed != null)
                     Task.Run(async() => { await TowVehicle(_vehtowed); }); 
             }
+
+            ParkingName = string.Empty;
+            IsInPound = false;
+            IsParked = false;
 
             return Vehicle;
         }
@@ -264,9 +274,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return false;
         }
 
-        public async Task ApplyDamageAsync()
+        public void ApplyDamage()
         {
             if (Vehicle != null && Vehicle.Exists)
+            {
+                Vehicle.Dimension = -1;
+                Vehicle.Dimension = GameMode.GlobalDimension;
+            }
+        }
+
+        public async Task ApplyDamageAsync()
+        {
+            if (Vehicle != null && await Vehicle.ExistsAsync())
             {
                 await Vehicle.SetDimensionAsync(-1);
                 await Vehicle.SetDimensionAsync(GameMode.GlobalDimension);

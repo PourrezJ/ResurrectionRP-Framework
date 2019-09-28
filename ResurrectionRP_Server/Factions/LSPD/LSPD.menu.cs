@@ -318,12 +318,12 @@ namespace ResurrectionRP_Server.Factions
             IVehicle target = menu.GetData("Vehicle");
             if (target != null && target.Exists)
             {
-/*                if ((await GameMode.Instance.FactionManager.LSCustom?.GetEmployeeOnline()).Count > 0) TODO
+                if (( GameMode.Instance.FactionManager.LSCustom?.GetEmployeeOnline()).Count > 0) 
                 {
                     // appel vers la fourrière
-                    await client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande de mise en fourrière.", "Fourrière indisponible, contacter un dépanneur.");
+                    client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande de mise en fourrière.", "Fourrière indisponible, contacter un dépanneur.");
                     return;
-                }*/
+                }
 
                 client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande de mise en fourrière.", $"Besoin de retrait du véhicule {target.NumberplateText}" );
 

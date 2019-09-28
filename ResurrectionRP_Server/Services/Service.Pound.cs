@@ -12,6 +12,7 @@ using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Entities;
+using ResurrectionRP_Server.Factions;
 
 namespace ResurrectionRP_Server.Services
 {
@@ -90,7 +91,7 @@ namespace ResurrectionRP_Server.Services
                 return;
             IVehicle vehicle = client.Vehicle;
 
-            if (vehicle != null && vehicle.Model == (int)VehicleModel.Flatbed )// && await FactionManager.IsLSCustom(client)) TODO
+            if (vehicle != null && vehicle.Model == (int)VehicleModel.Flatbed && FactionManager.IsLSCustom(client))
             {
                 VehicleHandler _vh = vehicle.GetVehicleHandler();
 
@@ -122,7 +123,7 @@ namespace ResurrectionRP_Server.Services
                         {
                             if (VehiclesManager.VehicleHandlerList.Remove(vehicle, out _))
                             {
-                                //GameMode.Instance.FactionManager.LSCustom.BankAccount.AddMoney(750, $"Mise en fourrière {_towedvehicle.Plate} par {ph.Identite.Name}"); TODO
+                                await GameMode.Instance.FactionManager.LSCustom.BankAccount.AddMoney(750, $"Mise en fourrière {_towedvehicle.Plate} par {ph.Identite.Name}");
                                 ph.AddMoney(250);
 
                                 _vh.TowTruck = null;
@@ -181,6 +182,7 @@ namespace ResurrectionRP_Server.Services
                 if (client.GetPlayerHandler().HasMoney(Price))
                 {
                     VehicleHandler veh = menuItem.GetData("Vehicle");
+                    veh.IsInPound = false;
                     await veh.SpawnVehicleAsync(_poundSpawn);
                     veh.UpdateFull();
                     PoundVehicleList.Remove(PoundVehicleList.Find(v => v.Plate == veh.Plate));

@@ -482,7 +482,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
 
                     client.SendNotification($"Véhicule ~r~{vehfourriere.Plate} ~w~ mis en fourrière...");
-                    // await GameMode.Instance.PoundManager.AddVehicleInPound(vehfourriere);
+                    Task.Run( async () =>  await GameMode.Instance.PoundManager.AddVehicleInPound(vehfourriere) ) ;
                 }
             };
 

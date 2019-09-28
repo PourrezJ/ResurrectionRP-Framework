@@ -115,7 +115,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             IVehicle vehicle = null;
 
-            await AltAsync.Do(() => { vehicle = SpawnVehicle(); });
+            await AltAsync.Do(() => { vehicle = SpawnVehicle(location, setLastUse); });
 
             return vehicle;
         }
@@ -226,7 +226,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             Vehicle.Dimension = Dimension;
 
             VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
-            VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
 
             // Needed as vehicles in database don't have this value
             if((VehicleManifest.fuelConsum <= 0 || VehicleManifest.fuelReservoir <= 0) && VehicleManifest.VehicleClass != 13)
@@ -243,6 +242,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             if (Fuel > FuelMax)
                 Fuel = FuelMax;
+
+            VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
 
             if (HaveTowVehicle())
             {

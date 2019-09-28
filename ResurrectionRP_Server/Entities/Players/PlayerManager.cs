@@ -344,6 +344,8 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public static async Task ConnectPlayer(IPlayer client)
         {
+            if (client.SocialClubId == 0)
+                await client.KickAsync("Vous n'êtes pas connecté correctement, redémarrez.");
             if (await client.PlayerHandlerExist())
             {
                 await client.EmitAsync("FadeOut",0);

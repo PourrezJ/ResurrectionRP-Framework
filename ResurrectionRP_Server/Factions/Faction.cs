@@ -122,6 +122,7 @@ namespace ResurrectionRP_Server.Factions
                 if (Parking == null)
                     Parking = new Parking(ParkingLocation.Pos, ParkingLocation);
 
+                Parking.Location = ParkingLocation.Pos;
                 Parking.Spawn1 = ParkingLocation;
                 Parking.Spawn1.Rot = Parking.Spawn1.Rot.ConvertRotationToRadian();
                 Parking.Init();

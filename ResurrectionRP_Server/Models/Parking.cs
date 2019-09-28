@@ -250,7 +250,6 @@ namespace ResurrectionRP_Server.Models
                 }
 
                 RemoveVehicle(veh); // retrait du véhicule dans la liste
-                veh.ParkingName = string.Empty;
 
                 if (OnVehicleOut != null)
                     await OnVehicleOut.Invoke(client, veh, Spawn); // callback (ex carpark)

@@ -155,6 +155,9 @@ export class Game {
 
             alt.on('gameEntityCreate', async (entity: alt.Entity) => {
 
+                if (game.isPedDeadOrDying(entity.scriptID, true))
+                    alt.log("entity is dead");
+
                 if (!game.isEntityAPed(entity.scriptID))
                     return;
 

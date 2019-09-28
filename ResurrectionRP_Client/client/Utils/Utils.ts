@@ -533,6 +533,20 @@ export function loadModelAsync(model) {
     });
 }
 
+export async function loadMovement(dict) {
+    return new Promise(resolve => {
+        game.requestAnimSet(dict);
+
+        let inter = alt.setInterval(() => {
+            if (game.hasAnimSetLoaded(dict)) {
+                resolve(true);
+                alt.clearInterval(inter);
+                return;
+            }
+        }, 5);
+    });
+}
+
 export function createBlip(pos: alt.Vector3, sprite: number, color: number, name: string, alpha: number, scale: number, shortRange: boolean): alt.PointBlip {
 
     let x: number = pos.x as number;

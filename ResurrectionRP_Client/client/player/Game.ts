@@ -150,7 +150,8 @@ export class Game {
                     this.DebugInfo = !this.DebugInfo
             });
 
-            alt.on('gameEntityCreate', (entity: alt.Entity) => {
+            alt.on('gameEntityCreate', async (entity: alt.Entity) => {
+
                 if (!game.isEntityAPed(entity.scriptID))
                     return;
 
@@ -162,23 +163,17 @@ export class Game {
 
                 game.setEntityAlpha(entity.scriptID, invisible ? 0 : 255, false);
                 game.setEntityInvincible(entity.scriptID, invincible);
-
+                
                 if (crounch) {
-                    if (!game.hasClipSetLoaded("move_ped_crouched")) {
-                        game.requestClipSet("move_ped_crouched");
-                        while (!game.hasClipSetLoaded("move_ped_crouched"))
-                            utils.Wait(5);
-                    }
+                    await utils.loadMovement("move_ped_crouched");
+
                     game.setPedMovementClipset(entity.scriptID, "move_ped_crouched", 0.2);
                     game.setPedStrafeClipset(entity.scriptID, "move_ped_crouched_strafing");
                 }
 
                 if (walkingStyle != null) {
 
-                    if (!game.hasClipSetLoaded(walkingStyle)) {
-                        game.requestClipSet(walkingStyle);
-                        utils.Wait(5);
-                    }
+                    await utils.loadMovement(walkingStyle);
                     game.setPedMovementClipset(entity.scriptID, walkingStyle, 0.2);
                 }
 
@@ -191,6 +186,7 @@ export class Game {
                 if (!game.isEntityAPed(entity.scriptID))
                     return;
 
+                
                 switch (key) {
                     case 'SetInvisible':
                         alt.log("SetInvisible");
@@ -204,12 +200,7 @@ export class Game {
 
                     case 'WalkingStyle':
                         if (value != null) {
-
-                            if (!game.hasClipSetLoaded(value)) {
-                                game.requestClipSet(value);
-                                while (!game.hasClipSetLoaded(value))
-                                    utils.Wait(5);
-                            }
+                            await utils.loadMovement(value);
                             game.setPedMovementClipset(entity.scriptID, value, 0.2);
                         }
                         else
@@ -221,17 +212,23 @@ export class Game {
                         break;
 
                     case 'Crounch':
+                        
                         if (value) {
-                            if (!game.hasClipSetLoaded("move_ped_crouched")) {
-                                game.requestClipSet("move_ped_crouched");
-                                while (!game.hasClipSetLoaded("move_ped_crouched"))
-                                    utils.Wait(5);
-                            }
+                            await utils.loadMovement("move_ped_crouched");
                             game.setPedMovementClipset(entity.scriptID, "move_ped_crouched", 0.2);
                             game.setPedStrafeClipset(entity.scriptID, "move_ped_crouched_strafing");
                         }
-                        else
-                            game.resetPedMovementClipset(entity.scriptID, 0.1);
+                        else {
+                            let walkingStyle: string = entity.getSyncedMeta("WalkingStyle");
+                            if (walkingStyle != null) {
+
+                                await utils.loadMovement(walkingStyle);
+                                game.setPedMovementClipset(entity.scriptID, walkingStyle, 0.2);
+                            }
+                            else
+                                game.resetPedMovementClipset(entity.scriptID, 0.1);
+
+                        }
                         break;
                 }
             });

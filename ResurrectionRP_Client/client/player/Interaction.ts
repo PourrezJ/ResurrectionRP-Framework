@@ -50,6 +50,7 @@ export class Interaction {
                 return;
 
             switch (key) {
+                case 88:    // X
                 case 69:    // E
                 case 85:    // U
                 case 87:    // W

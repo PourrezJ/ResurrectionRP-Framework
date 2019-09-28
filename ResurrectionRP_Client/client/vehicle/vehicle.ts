@@ -26,10 +26,6 @@ export function initialize() {
         CurrentMilage = milage;
     });
 
-    alt.onServer('keepEngineState', (state: boolean) => {
-        keepEngineOn = state;
-    })
-
     alt.onServer('vehicleFix', (vehicle: alt.Vehicle) => {
         game.setVehicleFixed(vehicle.scriptID);
     })

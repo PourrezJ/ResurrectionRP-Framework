@@ -217,6 +217,7 @@ namespace ResurrectionRP_Server.Services
 
             veh.IsInPound = true;
             veh.ParkingName = "Fourrière";
+            veh.UpdateFull();
             await veh.Delete();
         }
         #endregion

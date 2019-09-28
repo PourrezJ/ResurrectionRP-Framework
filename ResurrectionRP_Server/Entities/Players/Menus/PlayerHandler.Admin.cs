@@ -476,7 +476,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
                 else
                 {
-                    VehicleHandler vehfourriere = (VehiclesManager.GetNearestVehicle(client)).GetVehicleHandler();
+                    VehicleHandler vehfourriere = VehiclesManager.GetNearestVehicle(client).GetVehicleHandler();
 
                     if (vehfourriere.SpawnVeh)
                         return;

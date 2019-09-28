@@ -273,7 +273,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #region Kick
             var kickitem = new MenuItem("Kick le joueur", "", "", true);
             kickitem.SetInput("", 99, InputType.Text);
-            kickitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            kickitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 client.SendNotificationSuccess($"Vous venez de kick {_playerSelected.Identite.Name}.");
                 _playerSelected.Client.Kick(menuItem.InputValue);

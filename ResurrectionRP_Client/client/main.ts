@@ -14,6 +14,7 @@ import menuManager from './MenuManager/MenuManager';
 import { Admin } from './Utils/Admin';
 import { LSPDManager } from './LSPDCall';
 import * as CustomEvents from './Utils/CustomEvents';
+import Ragdoll from './ragdoll';
 
 var GameClass: Game;
 

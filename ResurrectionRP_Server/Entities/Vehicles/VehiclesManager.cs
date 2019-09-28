@@ -66,20 +66,21 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return Task.CompletedTask;
         }
 
-        public static async Task UpdateTrailerState(IPlayer player, object[] args)
+        public static Task UpdateTrailerState(IPlayer player, object[] args)
         {
             if (!player.Exists)
-                return;
+                return Task.CompletedTask;
 
             if (args[0] == null || args[1] == null)
-                return;
+                return Task.CompletedTask;
 
             if (GameMode.Instance.IsDebug)
                 Alt.Server.LogInfo("VehicleManager | Update trailer state for " + player.GetPlayerHandler().PID + " to " + args[1] + " for " + ((IVehicle)(args[0])).NumberplateText );
 
             VehicleHandler veh = ((IVehicle)args[0]).GetVehicleHandler();
            
-            veh.hasTrailer = (bool)(args[1]);
+            veh.hasTrailer = (bool)args[1];
+
             if (args[2] != null)
             {
                 veh.Trailer = (IEntity)args[2];
@@ -90,6 +91,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 ((IVehicle)(veh.Trailer)).GetVehicleHandler().UpdateFull();
                 veh.Trailer = null;
             }
+
+            return Task.CompletedTask;
         }
 
         private static async Task LockUnlockVehicle(IPlayer player, object[] args)

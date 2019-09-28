@@ -162,14 +162,12 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Event handlers
-        private Task OnNPCInteract(IPlayer client, Ped npc)
+        private void OnNPCInteract(IPlayer client, Ped npc)
         {
             if (npc == _armurerie)
                 OpenShopMenu(client);
             else if (npc == _accueil)
                 OpenAccueilMenu(client);
-
-            return Task.CompletedTask;
         }
 
         public override Task OnPlayerServiceEnter(IPlayer client, int rang)

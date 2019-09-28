@@ -76,7 +76,6 @@ namespace ResurrectionRP_Server.Services
             _npc.NpcInteractCallBack += (IPlayer client, Entities.Peds.Ped ped) =>
             {
                 OpenPoundMenu(client);
-                return Task.CompletedTask;
             };
 
             Alt.Server.LogInfo($"--- [POUND] Finish loading all pounds in database: {PoundVehicleList.Count} ---");

@@ -224,7 +224,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Event handlers
-        private async Task OnPedInteract(IPlayer client, Ped npc)
+        private void OnPedInteract(IPlayer client, Ped npc)
         {
             if (!HasPlayerIntoFaction(client))
             {
@@ -254,8 +254,7 @@ namespace ResurrectionRP_Server.Factions
                 listItem.Add(new DockItemData() { MaxQuantity = 100, Name = item.name, Price = item.itemPrice, ItemID = item.id });
             }
 
-            await OpenImportationMenu(client, listItem);
-            /// await client.CallAsync("OpenImportMenu", JsonConvert.SerializeObject(listItem));
+            OpenImportationMenu(client, listItem);
         }
 
         public void OnVehicleEnterColShape(IColShape colShape, IVehicle vehicle)

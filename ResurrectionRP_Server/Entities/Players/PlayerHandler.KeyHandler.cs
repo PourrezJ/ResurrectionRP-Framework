@@ -21,8 +21,16 @@ namespace ResurrectionRP_Server.Entities.Players
 {
     public partial class PlayerHandler
     {
-        public delegate Task KeyPressedDelegate(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicle, IPlayer playerDistant, int streamedID);
-        public delegate Task KeyReleasedDelegate(IPlayer client, ConsoleKey Keycode);
+        public delegate Task KeyPressedDelegateAsync(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicle, IPlayer playerDistant, int streamedID);
+        public delegate Task KeyReleasedDelegateAsync(IPlayer client, ConsoleKey Keycode);
+
+        public delegate void KeyPressedDelegate(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicle, IPlayer playerDistant, int streamedID);
+        public delegate void KeyReleasedDelegate(IPlayer client, ConsoleKey Keycode);
+
+        [BsonIgnore]
+        public KeyPressedDelegateAsync OnKeyPressedAsync { get; set; }
+        [BsonIgnore]
+        public KeyReleasedDelegateAsync OnKeyReleasedAsync { get; set; }
 
         [BsonIgnore]
         public KeyPressedDelegate OnKeyPressed { get; set; }
@@ -136,21 +144,8 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (door != null)
                         door.Interact?.Invoke(client, door);
 
-                    if (raycastData.entityType == 1)
-                    {
-                        var ped = Peds.PedsManager.NPCList.Find(p => p.Position.DistanceTo(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE && p.Model == (AltV.Net.Enums.PedModel)raycastData.entityHash);
-                        if (ped != null)
-                        {
-                            if (ped.Position.DistanceTo(client.Position) > 3)
-                                return;
 
-                            if (ped.NpcInteractCallBack != null)
-                                await ped.NpcInteractCallBack.Invoke(client, ped);
-                        }
-                        
-                        return;
-                    }
-                    else if (raycastData.entityType == 3)
+                    if (raycastData.entityType == 3)
                     {
                         if (raycastData.entityHash == 307713837)
                         {
@@ -366,23 +361,6 @@ namespace ResurrectionRP_Server.Entities.Players
                 case ConsoleKey.NumPad8:
                 case ConsoleKey.NumPad9:
                    OnAnimationKeyPressed(Keycode);
-                    break;
-
-                case ConsoleKey.W:
-                    if (raycastData.entityType == 1)
-                    {
-                        var ped = Peds.PedsManager.NPCList.Find(p => p.Position.DistanceTo(raycastData.pos) <= 1.5 && p.Model == (AltV.Net.Enums.PedModel)raycastData.entityHash);
-                        if (ped != null)
-                        {
-                            if (ped.Position.DistanceTo(client.Position) > 3)
-                                return;
-
-                            if (ped.NpcSecInteractCallBack != null)
-                                await ped.NpcSecInteractCallBack.Invoke(client, ped);
-                        }
-
-                        return;
-                    }
                     break;
             }
         }

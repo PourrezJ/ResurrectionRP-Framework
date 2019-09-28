@@ -149,12 +149,10 @@ namespace ResurrectionRP_Server.Factions
             return base.InteractPlayerMenu(client, target, xmenu);
         }
 
-        private Task OnNPCInteract(IPlayer client, Ped npc)
+        private void OnNPCInteract(IPlayer client, Ped npc)
         {
             if (npc == _secretaire)
                 OpenSecretaryMenu(client);
-
-            return Task.CompletedTask;
         }
 
         public override Task OnVehicleOut(IPlayer client, VehicleHandler vehicleHandler, Location location = null)

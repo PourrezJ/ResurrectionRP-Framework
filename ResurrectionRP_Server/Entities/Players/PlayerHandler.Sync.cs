@@ -1,7 +1,4 @@
-﻿using AltV.Net.Async;
-using Newtonsoft.Json;
-using ResurrectionRP_Server.Utils.Enums;
-using System.Threading.Tasks;
+﻿using ResurrectionRP_Server.Utils.Enums;
 
 namespace ResurrectionRP_Server.Entities.Players
 {

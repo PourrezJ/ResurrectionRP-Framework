@@ -14,7 +14,7 @@ namespace ResurrectionRP_Server.Factions
     public partial class ONU
     {
         #region Infirmiere
-        private Task OnNPCInteract(IPlayer client, Ped npc)
+        private void OnNPCInteract(IPlayer client, Ped npc)
         {
             AcceptMenu healmenu = AcceptMenu.OpenMenu(client, "Infirmière", "Voulez-vous être soigné?", rightlabel: $"${healprice}");
 
@@ -34,8 +34,6 @@ namespace ResurrectionRP_Server.Factions
                 else
                     player.SendNotification("Ne me faites pas perdre mon temps alors!");
             };
-
-            return Task.CompletedTask;
         }
         #endregion
 

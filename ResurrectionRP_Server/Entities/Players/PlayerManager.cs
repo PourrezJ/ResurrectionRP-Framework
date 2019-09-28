@@ -46,8 +46,9 @@ namespace ResurrectionRP_Server.Entities.Players
             AltAsync.OnClient("MakePlayer", MakePlayer);
             AltAsync.OnClient("SendLogin", SendLogin );         
             AltAsync.OnClient("Events_PlayerJoin", Events_PlayerJoin);   
-            AltAsync.OnClient("OnKeyPress", OnKeyPress);
-            AltAsync.OnClient("OnKeyUp", OnKeyReleased);
+
+            Alt.OnClient("OnKeyPress", OnKeyPress);
+            Alt.OnClient("OnKeyUp", OnKeyReleased);
 
             Alt.OnClient("UpdateHungerThirst", UpdateHungerThirst);
             Alt.OnClient("IWantToDie", IWantToDie);
@@ -355,26 +356,38 @@ namespace ResurrectionRP_Server.Entities.Players
                 await client.EmitAsync("OpenCreator");
         }
 
-        private async Task OnKeyPress(IPlayer client, object[] args)
+        private void OnKeyPress(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
 
             var ph = client.GetPlayerHandler();
 
-            if (ph != null && ph.OnKeyPressed != null)
-                await ph.OnKeyPressed.Invoke(client, (ConsoleKey)(Int64)args[0], JsonConvert.DeserializeObject<RaycastData>(args[1].ToString()), (IVehicle)args[2] ?? null, (IPlayer)args[3] ?? null, Convert.ToInt32(args[4]));
+            if (ph == null)
+                return;
+
+            if (ph.OnKeyPressedAsync != null)
+                Task.Run(async ()=> await ph.OnKeyPressedAsync.Invoke(client, (ConsoleKey)(Int64)args[0], JsonConvert.DeserializeObject<RaycastData>(args[1].ToString()), (IVehicle)args[2] ?? null, (IPlayer)args[3] ?? null, Convert.ToInt32(args[4])));
+            else if (ph.OnKeyPressed != null)
+                ph.OnKeyPressed(client, (ConsoleKey)(Int64)args[0], JsonConvert.DeserializeObject<RaycastData>(args[1].ToString()), (IVehicle)args[2] ?? null, (IPlayer)args[3] ?? null, Convert.ToInt32(args[4]));
+
         }
 
-        private async Task OnKeyReleased(IPlayer client, object[] args)
+        private void OnKeyReleased(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
 
             var ph = client.GetPlayerHandler();
 
-            if (ph != null && ph.OnKeyPressed != null)
-                await ph.OnKeyReleased.Invoke(client, (ConsoleKey)(Int64)args[0]);
+            if (ph == null)
+                return;
+
+            if (ph.OnKeyReleasedAsync != null)
+                Task.Run(async () => await ph.OnKeyReleasedAsync.Invoke(client, (ConsoleKey)(Int64)args[0]));
+            else if (ph.OnKeyReleased != null)
+                ph.OnKeyReleased(client, (ConsoleKey)(Int64)args[0]);
+
         }
         #endregion
 

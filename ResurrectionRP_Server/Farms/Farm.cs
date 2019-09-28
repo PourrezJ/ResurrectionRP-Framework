@@ -180,7 +180,7 @@ namespace ResurrectionRP_Server.Farms
                 Process_Blip = BlipsManager.CreateBlip(Process_Name, Process_PosRot.Pos, (byte)BlipColor, Process_BlipSprite);
 
                 Process_Ped = Ped.CreateNPC(Process_PedHash, Process_PosRot.Pos, (int)Process_PosRot.Rot.Z);
-                Process_Ped.NpcInteractCallBack += (IPlayer client, Ped npc) => { StartProcessing(client); return Task.CompletedTask; };
+                Process_Ped.NpcInteractCallBack += (IPlayer client, Ped npc) => { StartProcessing(client); return; };
             }
 
             if (DoubleProcess_PosRot != null)
@@ -199,7 +199,7 @@ namespace ResurrectionRP_Server.Farms
                 Selling_Blip = BlipsManager.CreateBlip(Selling_Name, Selling_PosRot.Pos, (int)BlipColor, Selling_BlipSprite);
 
                 Selling_Ped = Ped.CreateNPC(Selling_PedHash, Selling_PosRot.Pos, (int)Selling_PosRot.Rot.Z);
-                Selling_Ped.NpcInteractCallBack += (IPlayer client, Ped npc) => { StartSelling(client); return Task.CompletedTask; };
+                Selling_Ped.NpcInteractCallBack += (IPlayer client, Ped npc) => { StartSelling(client); return; };
             }
             #endregion
 

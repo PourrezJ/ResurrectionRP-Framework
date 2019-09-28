@@ -82,7 +82,7 @@ namespace ResurrectionRP_Server.Business
             {
                 Ped ped = Ped.CreateNPC(PedHash, Location.Pos, Location.Rot.Z);
                 ped.NpcInteractCallBack = OnNpcFirstInteract; // E
-                ped.NpcSecInteractCallBack = OnNpcSecondaryInteract; // W
+                ped.NpcSecInteractCallBackAsync = OnNpcSecondaryInteract; // W
                 Ped = ped;
             }
 
@@ -116,10 +116,10 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Events
-        public async Task OnNpcFirstInteract(IPlayer client, Ped npc = null)
+        public void OnNpcFirstInteract(IPlayer client, Ped npc = null)
         {
             OpenMenu(client, npc);
-            await OpenMenuAsync(client, npc);
+            Task.Run(async ()=> await OpenMenuAsync(client, npc));
         }
 
         public async Task OnNpcSecondaryInteract(IPlayer client, Ped npc = null)

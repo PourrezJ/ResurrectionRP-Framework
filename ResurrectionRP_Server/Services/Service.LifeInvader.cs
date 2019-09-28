@@ -38,7 +38,6 @@ namespace ResurrectionRP_Server.Services
             vendor.NpcInteractCallBack = ((IPlayer client, Ped npc) =>
             {
                 OpenMenuLifeInvader(client);
-                return Task.CompletedTask;
             });
         }
 

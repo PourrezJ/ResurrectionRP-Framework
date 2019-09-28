@@ -234,6 +234,9 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     Client.SetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, Voice.CreateTeamSpeakName());
                     Client.SetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, "Parler");
+
+                    Client.SetSyncedMetaData("WalkingStyle", PlayerSync.WalkingAnim);
+
                     Client.Emit(SaltyShared.Event.Voice_Initialize, Voice.ServerUniqueIdentifier, Voice.RequiredUpdateBranch, Voice.MinimumPluginVersion, Voice.SoundPack, Voice.IngameChannel, Voice.IngameChannelPassword);
                     Client.Emit("FadeIn", 3000);
 

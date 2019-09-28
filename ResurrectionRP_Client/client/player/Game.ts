@@ -18,6 +18,7 @@ import { VoiceChat } from '../Voice/VoiceChat';
 import { Medical } from '../Medical';
 import * as veh from '../vehicle/vehicle';
 import * as interaction from '../player/Interaction';
+import * as utils from '../Utils/Utils';
 
 export class Game {
     //region Static Var   
@@ -157,12 +158,24 @@ export class Game {
 
                 let invincible: boolean = entity.getSyncedMeta("SetInvincible");
                 let invisible: boolean = entity.getSyncedMeta("SetInvisible");
+                let walkingStyle: string = entity.getSyncedMeta("WalkingStyle");
 
                 game.setEntityAlpha(entity.scriptID, invisible ? 0 : 255, false);
-                game.setEntityInvincible(entity.scriptID, invisible);
+                game.setEntityInvincible(entity.scriptID, invincible);
+
+                if (walkingStyle != null) {
+
+                    if (!game.hasClipSetLoaded(walkingStyle)) {
+                        game.requestClipSet(walkingStyle);
+                        utils.Wait(5);
+                    }
+                    game.setPedMovementClipset(entity.scriptID, walkingStyle, 0.2);
+                }
+                else
+                    game.resetPedMovementClipset(entity.scriptID, 0.1);
             });
 
-            alt.on('syncedMetaChange', (entity: alt.Entity, key: string, value: any) => {
+            alt.on('syncedMetaChange', async (entity: alt.Entity, key: string, value: any) => {
                 if (!game.isEntityAPed(entity.scriptID))
                     return;
 
@@ -171,9 +184,23 @@ export class Game {
                         alt.log("SetInvisible");
                         game.setEntityAlpha(entity.scriptID, value ? 0 : 255, false);
                         break;
+
                     case 'SetInvincible':
                         alt.log("SetInvincible");
                         game.setEntityInvincible(entity.scriptID, value);
+                        break;
+
+                    case 'WalkingStyle':
+                        if (value != null) {
+
+                            if (!game.hasClipSetLoaded(value)) {
+                                game.requestClipSet(value);
+                                utils.Wait(5);
+                            }
+                            game.setPedMovementClipset(entity.scriptID, value, 0.2);
+                        }
+                        else
+                            game.resetPedMovementClipset(entity.scriptID, 0.1);
                         break;
                 }
             });

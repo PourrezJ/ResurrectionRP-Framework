@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Players.Data;
 using ResurrectionRP_Server.Utils;
 using System.Collections.Generic;
@@ -58,19 +59,24 @@ namespace ResurrectionRP_Server.Models
         #region Callback
         private async Task WalkingStyleMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
+            var ph = client.GetPlayerHandler();
+
+            if (ph == null)
+                return;
+
             if (menuItem == null)
             {
-                await client.GetPlayerHandler()?.OpenPlayerMenu();
+                await ph.OpenPlayerMenu();
                 return;
             }
 
             string anim = WalkingStyles.Find(x => x.Name == menuItem.Text).AnimName ?? "";
-            /*
+            
             if (string.IsNullOrEmpty(anim))
-                await PlayerManager.GetPlayerByClient(client)?.ResetWalkingStyle();
+                await ph.ResetWalkingStyleAsync();
             else
-                await PlayerManager.GetPlayerByClient(client)?.SetWalkingStyle(anim);
-            */
+                await ph.SetWalkingStyleAsync(anim);
+            
         }
         #endregion
     }

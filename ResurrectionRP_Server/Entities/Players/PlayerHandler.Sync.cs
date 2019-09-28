@@ -1,4 +1,6 @@
-﻿using ResurrectionRP_Server.Utils.Enums;
+﻿using AltV.Net.Async;
+using ResurrectionRP_Server.Utils.Enums;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -19,5 +21,17 @@ namespace ResurrectionRP_Server.Entities.Players
         }
 
         public bool IsCuff() => PlayerSync.IsCuff;
+
+        public async Task SetWalkingStyleAsync(string walkingAnim)
+        {
+            PlayerSync.WalkingAnim = walkingAnim;
+            await Client?.SetSyncedMetaDataAsync("WalkingStyle", walkingAnim);
+        }
+
+        public async Task ResetWalkingStyleAsync()
+        {
+            PlayerSync.WalkingAnim = null;
+            await Client?.SetSyncedMetaDataAsync("WalkingStyle", null);
+        }
     }
 }

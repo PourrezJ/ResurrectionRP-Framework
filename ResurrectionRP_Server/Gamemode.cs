@@ -311,9 +311,61 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Methods
+        private bool advert;
         public async Task Save()
         {
-            await Database.MongoDB.Update(this, "gamemode", _id);
+            if (DateTime.Now.Hour == 7 && DateTime.Now.Minute == 0 && DateTime.Now.Second == 0)
+            {
+                await Database.MongoDB.Update(this, "gamemode", _id);
+                Environment.Exit(0);
+            }
+
+            if (DateTime.Now.Hour == 13 && DateTime.Now.Minute == 0 && DateTime.Now.Second == 0)
+            {
+                await Database.MongoDB.Update(this, "gamemode", _id);
+                Environment.Exit(0);
+            }
+
+            if (DateTime.Now.Hour == 20 && DateTime.Now.Minute == 0 && DateTime.Now.Second == 0)
+            {
+                await Database.MongoDB.Update(this, "gamemode", _id);
+                Environment.Exit(0);
+            }
+
+            if (DateTime.Now.Hour == 1 && DateTime.Now.Minute == 0 && DateTime.Now.Second == 0)
+            {
+                await Database.MongoDB.Update(this, "gamemode", _id);
+                Environment.Exit(0);
+            }
+
+            if (advert)
+                return;
+
+            if (DateTime.Now.Hour == 6 && DateTime.Now.Minute == 55)
+            {
+                Alt.EmitAllClients(Utils.Enums.Events.AnnonceGlobal, "COUVRE FEU DANS 5MINUTES!", "AVIS A LA POPULATION!", "COUVRE FEU DANS 5MINUTES!");
+                advert = true;
+            }
+
+            if (DateTime.Now.Hour == 12 && DateTime.Now.Minute == 55)
+            {
+                Alt.EmitAllClients(Utils.Enums.Events.AnnonceGlobal, "COUVRE FEU DANS 5MINUTES!", "AVIS A LA POPULATION!", "COUVRE FEU DANS 5MINUTES!");
+                advert = true;
+            }
+
+            if (DateTime.Now.Hour == 19 && DateTime.Now.Minute == 55)
+            {
+                Alt.EmitAllClients(Utils.Enums.Events.AnnonceGlobal, "COUVRE FEU DANS 5MINUTES!", "AVIS A LA POPULATION!", "COUVRE FEU DANS 5MINUTES!");
+                advert = true;
+            }
+
+            if (DateTime.Now.Hour == 0 && DateTime.Now.Minute == 55)
+            {
+                Alt.EmitAllClients(Utils.Enums.Events.AnnonceGlobal, "COUVRE FEU DANS 5MINUTES!", "AVIS A LA POPULATION!", "COUVRE FEU DANS 5MINUTES!");
+                advert = true;
+            }
+
+            
         }
         #endregion
     }

@@ -16,6 +16,7 @@ using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Utils.Enums;
 using ResurrectionRP_Server.Items;
+using ResurrectionRP_Server.Entities.Peds;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -37,7 +38,7 @@ namespace ResurrectionRP_Server.Entities.Players
         [BsonIgnore]
         public KeyReleasedDelegate OnKeyReleased { get; set; }
 
-        private async Task OnKeyPressedCallback(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicleDistant, IPlayer playerDistant, int streamedID)
+        private async Task OnKeyPressedCallbackAsync(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicleDistant, IPlayer playerDistant, int streamedID)
         {
             if (!client.Exists)
                 return;
@@ -401,7 +402,7 @@ namespace ResurrectionRP_Server.Entities.Players
         }
         #endregion
 
-        private Task OnKeyReleasedCallback(IPlayer client, ConsoleKey Keycode)
+        private Task OnKeyReleasedCallbackAsync(IPlayer client, ConsoleKey Keycode)
         {
             if (!client.Exists)
                 return Task.CompletedTask;
@@ -423,6 +424,38 @@ namespace ResurrectionRP_Server.Entities.Players
             }
 
             return Task.CompletedTask;
+        }
+
+        private void OnKeyPressedCallback(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicle, IPlayer playerDistant, int streamedID)
+        {
+            if (!client.Exists)
+                return;
+
+            if (raycastData.entityType != 1)
+                return;
+
+            Ped ped = Ped.NPCList.Find(p => p.Position.DistanceTo(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE && p.Model == (AltV.Net.Enums.PedModel)raycastData.entityHash);
+
+            if (ped == null)
+                return;
+
+            if (ped.Position.DistanceTo(client.Position) > 3)
+                return;
+
+            if (Keycode == ConsoleKey.E)
+            {
+                if (ped.NpcInteractCallBackAsync != null)
+                    Task.Run(async () => await ped.NpcInteractCallBackAsync.Invoke(client, ped));
+                else if (ped.NpcInteractCallBack != null)
+                    ped.NpcInteractCallBack.Invoke(client, ped);
+            }
+            else if (Keycode == ConsoleKey.W)
+            {
+                if (ped.NpcSecInteractCallBackAsync != null)
+                    Task.Run(async () => await ped.NpcSecInteractCallBackAsync.Invoke(client, ped));
+                else if (ped.NpcSecInteractCallBack != null)
+                    ped.NpcSecInteractCallBack.Invoke(client, ped);
+            }
         }
 
         public void OnAnimationKeyPressed(ConsoleKey key)

@@ -13,6 +13,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using SaltyServer;
+using ResurrectionRP_Server.Entities.Players.Data;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -264,8 +265,10 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (firstspawn)
                     UpdateFull();
 
-                OnKeyPressedAsync += OnKeyPressedCallback;
-                OnKeyReleasedAsync += OnKeyReleasedCallback;
+                OnKeyPressedAsync += OnKeyPressedCallbackAsync;
+                OnKeyReleasedAsync += OnKeyReleasedCallbackAsync;
+
+                OnKeyPressed += OnKeyPressedCallback;
             }
             else
             {
@@ -274,6 +277,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 await client.KickAsync("Une erreur s'est produite");
             }
         }
+
         #endregion
 
         #region Money

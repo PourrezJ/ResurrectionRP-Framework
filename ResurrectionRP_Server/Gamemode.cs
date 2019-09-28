@@ -82,9 +82,6 @@ namespace ResurrectionRP_Server
         public XMenuManager.XMenuManager XMenuManager { get; private set; }
 
         [BsonIgnore]
-        public Entities.Peds.PedsManager PedManager { get; private set; }
-
-        [BsonIgnore]
         public Entities.Blips.BlipsManager BlipsManager { get; private set; }
 
         [BsonIgnore]
@@ -187,7 +184,6 @@ namespace ResurrectionRP_Server
             PlayerManager = new PlayerManager();
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();
-            PedManager = new Entities.Peds.PedsManager();
             BlipsManager = new Entities.Blips.BlipsManager();
             PhoneManager = new Phone.PhoneManager();
             FactionManager = new Factions.FactionManager();

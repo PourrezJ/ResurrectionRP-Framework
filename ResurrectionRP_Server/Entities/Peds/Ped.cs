@@ -11,6 +11,8 @@ namespace ResurrectionRP_Server.Entities.Peds
 {
     public class Ped
     {
+        public static List<Ped> NPCList = new List<Ped>();
+
         public delegate Task NpcPrimaryCallBackAsync(IPlayer client, Ped npc);
         public delegate Task NpcSecondaryCallBackAsync(IPlayer client, Ped npc);
 
@@ -50,7 +52,7 @@ namespace ResurrectionRP_Server.Entities.Peds
 
             GameMode.Instance.Streamer.AddEntityPed(ped);
 
-            PedsManager.NPCList.Add(ped);
+            NPCList.Add(ped);
             return ped;
         }
 
@@ -62,6 +64,11 @@ namespace ResurrectionRP_Server.Entities.Peds
             data["entityType"] = (int)Streamer.Data.EntityType.Ped;
             data["id"] = this.ID;
             return data;
+        }
+
+        public static Ped GetNPCbyID(int id)
+        {
+            return NPCList.Find(x => x.ID == id) ?? null;
         }
     }
 }

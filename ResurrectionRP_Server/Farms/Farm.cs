@@ -253,41 +253,44 @@ namespace ResurrectionRP_Server.Farms
 
             Task.Run(async () =>
             {
-                if (!client.Exists)
-                    return;
-
-                await Task.Delay(Harvest_Time);
-
-                if (await client.IsInVehicleAsync())
+                while (!exit)
                 {
-                    client.DisplaySubtitle($"~r~Récolte interrompu: ~s~Vous ne pouvez pas récolter depuis le véhicule.", 5000);
+                    if (!await client.ExistsAsync())
+                        return;
 
-                    player.IsOnProgress = false;
-                    player.UpdateFull();
-                    exit = true;
-                }
-                else if (!await IsInFarmingZone(client))
-                {
-                    client.DisplaySubtitle($"~r~Récolte interrompu: ~s~Vous devez rester dans la zone.", 5000);
+                    await Task.Delay(Harvest_Time);
 
-                    player.IsOnProgress = false;
-                    player.UpdateFull();
-                    exit = true;
-                }
+                    if (await client.IsInVehicleAsync())
+                    {
+                        client.DisplaySubtitle($"~r~Récolte interrompu: ~s~Vous ne pouvez pas récolter depuis le véhicule.", 5000);
 
-                if (!player.AddItem(item, 1) || exit)
-                {
-                    exit = true;
-                    client.DisplaySubtitle($"Récolte terminée: Vous avez ramassé ~r~ {i} {item.name}", 30000);
-                    player.IsOnProgress = false;
+                        player.IsOnProgress = false;
+                        player.UpdateFull();
+                        exit = true;
+                    }
+                    else if (!await IsInFarmingZone(client))
+                    {
+                        client.DisplaySubtitle($"~r~Récolte interrompu: ~s~Vous devez rester dans la zone.", 5000);
 
-                    player.IsOnProgress = false;
-                    player.UpdateFull();
-                }
-                else
-                {
-                    i++;
-                    client.DisplaySubtitle($"~r~Récolte en cours: ~s~Vous venez de ramasser 1 {item.name}(s)", 5000);
+                        player.IsOnProgress = false;
+                        player.UpdateFull();
+                        exit = true;
+                    }
+
+                    if (!player.AddItem(item, 1) || exit)
+                    {
+                        exit = true;
+                        client.DisplaySubtitle($"Récolte terminée: Vous avez ramassé ~r~ {i} {item.name}", 30000);
+                        player.IsOnProgress = false;
+
+                        player.IsOnProgress = false;
+                        player.UpdateFull();
+                    }
+                    else
+                    {
+                        i++;
+                        client.DisplaySubtitle($"~r~Récolte en cours: ~s~Vous venez de ramasser 1 {item.name}(s)", 5000);
+                    }
                 }
             });
         }

@@ -175,6 +175,7 @@ namespace ResurrectionRP_Server
 
             AltAsync.OnPlayerConnect += OnPlayerConnected;
             AltAsync.OnPlayerDisconnect += OnPlayerDisconnected;
+            Alt.OnPlayerDead += Alt_OnPlayerDead;
  
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
@@ -281,6 +282,7 @@ namespace ResurrectionRP_Server
                 player.Vehicle?.GetVehicleHandler()?.UpdateFull();
                 return Task.CompletedTask;
             });
+
             Chat.RegisterCmd("tpto", async (IPlayer player, string[] args) =>
             {
                 if (player.GetPlayerHandler()?.StaffRank <= 0)
@@ -290,6 +292,11 @@ namespace ResurrectionRP_Server
 
 
             ServerLoaded = true;
+        }
+
+        private void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
+        {
+
         }
 
         private Task OnPlayerConnected(IPlayer player, string reason)

@@ -1,4 +1,5 @@
-﻿using AltV.Net.NetworkingEntity;
+﻿using AltV.Net;
+using AltV.Net.NetworkingEntity;
 using AltV.Net.NetworkingEntity.Elements.Entities;
 using ResurrectionRP_Server.Streamer.Data;
 using System.Collections.Generic;
@@ -56,6 +57,12 @@ namespace ResurrectionRP_Server.Entities
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, GameMode.Instance.StreamDistance, marker.Export());
             GameMode.Instance.Streamer.ListEntities.TryAdd(marker.id, item);
             return marker;
+        }
+
+        public static void DestroyMarker(Marker marker)
+        {
+            GameMode.Instance.Streamer.ListEntities[marker.id].Remove();
+            GameMode.Instance.Streamer.ListEntities[marker.id] = null;
         }
 
         public Dictionary<string, object> Export()

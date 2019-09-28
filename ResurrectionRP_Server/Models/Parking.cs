@@ -15,6 +15,8 @@ using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Utils;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Streamer.Data;
+using ResurrectionRP_Server.Entities.Blips;
 
 namespace ResurrectionRP_Server.Models
 {
@@ -67,6 +69,12 @@ namespace ResurrectionRP_Server.Models
         public int Price;
         public bool Hidden;
         public string Owner; // Social Club
+        [BsonIgnore]
+        public TextLabel EntityLabel = null;
+        [BsonIgnore]
+        public Blips EntityBlip = null;
+        [BsonIgnore]
+        public Marker EntityMarker = null;
 
 
         private Vector3 _location = new Vector3();
@@ -260,7 +268,7 @@ namespace ResurrectionRP_Server.Models
         #region Public methods
         public void Init(float markerscale = 3f, int opacite = 128, bool blip = false, uint sprite = 50, float scale = 1f, byte color = 0, uint alpha = 255, string name = "", short dimension = GameMode.GlobalDimension)
         {
-            Marker.CreateMarker(MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale - 1), new Vector3(3, 3, 3));
+            EntityMarker = Marker.CreateMarker(MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale - 1), new Vector3(3, 3, 3));
             ParkingColshape = Alt.CreateColShapeCylinder(new Position(Location.X, Location.Y, Location.Z -1), markerscale, 4);
             ParkingColshape.Dimension = dimension;
             ParkingColshape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
@@ -269,12 +277,12 @@ namespace ResurrectionRP_Server.Models
             ParkingColshape.SetOnVehicleLeaveColShape(OnVehicleLeaveColShape);
 
             if (!string.IsNullOrEmpty(Name))
-                GameMode.Instance.Streamer.AddEntityTextLabel($"{Name}\n~o~Approchez pour intéragir", Location, 4);
+                EntityLabel = GameMode.Instance.Streamer.AddEntityTextLabel($"{Name}\n~o~Approchez pour intéragir", Location, 4);
             else
-                GameMode.Instance.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", Location, 4);
+                EntityLabel = GameMode.Instance.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", Location, 4);
 
             if (blip)
-                Entities.Blips.BlipsManager.CreateBlip(name, Location,color,(int) sprite);
+                EntityBlip=  Entities.Blips.BlipsManager.CreateBlip(name, Location,color,(int) sprite);
 
             ParkingList.Add(this);
         }
@@ -462,6 +470,17 @@ namespace ResurrectionRP_Server.Models
                 Alt.Server.LogError($"Parking '{Name}': Error removing vehicle {veh.Plate}");
 
             return success;
+        }
+
+        public void Destroy()
+        {
+            Alt.RemoveColShape(this.ParkingColshape);
+            if (this.EntityMarker != null)
+                Marker.DestroyMarker(this.EntityMarker);
+            if (this.EntityLabel != null)
+                GameMode.Instance.Streamer.ListEntities[this.EntityLabel.id].Remove();
+            if (this.EntityBlip != null)
+                BlipsManager.Destroy(this.EntityBlip);
         }
         #endregion
     }

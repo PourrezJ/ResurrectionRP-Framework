@@ -355,12 +355,12 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             await OpenDesignChoiceMenu(client);
         }
 
-        private async Task OpenDesignChoiceMenu(IPlayer client, int selectedItem = 0)
+        private Task OpenDesignChoiceMenu(IPlayer client, int selectedItem = 0)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
             {
                 MenuManager.CloseMenu(client);
-                return;
+                return Task.CompletedTask;
             }
 
             VehicleHandler vh = _vehicleBench.GetVehicleHandler();
@@ -416,6 +416,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             menu.OpenMenu(client);
             ClientInMenu = client;
             ModPreview(client, menu, selectedItem, menu.Items[selectedItem]);
+            return Task.CompletedTask;
         }
 
         private void DesignChoiceCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)

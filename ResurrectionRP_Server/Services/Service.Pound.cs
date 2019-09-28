@@ -183,7 +183,7 @@ namespace ResurrectionRP_Server.Services
                 {
                     VehicleHandler veh = menuItem.GetData("Vehicle");
                     veh.IsInPound = false;
-                    await veh.SpawnVehicleAsync(_poundSpawn);
+                    await veh.SpawnVehicleAsync(new Location(_poundSpawn.Pos, _poundSpawn.Rot.ConvertRotationToRadian()));
                     veh.UpdateFull();
                     PoundVehicleList.Remove(PoundVehicleList.Find(v => v.Plate == veh.Plate));
                     await GameMode.Instance.Save();

@@ -14,6 +14,7 @@ import menuManager from './MenuManager/MenuManager';
 import { Admin } from './Utils/Admin';
 import { LSPDManager } from './LSPDCall';
 import * as CustomEvents from './Utils/CustomEvents';
+import Ragdoll from './ragdoll';
 
 var GameClass: Game;
 
@@ -27,16 +28,15 @@ const init = async () => {
             Money: number,
             Thirst: number,
             Hunger: number,
-            AnimSettings: string,
             Time: string,
             Weather: string,
             WeatherWind: number,
             WeatherWindDirection: number,
             isDebug: boolean,
-            Location: string
+            Position: Vector3
         ) => {
             PlayerCustomization.init();
-            GameClass = new Game(StaffRank, IdentiteName, Money, Thirst, Hunger, AnimSettings, Time, Weather, WeatherWind, WeatherWindDirection, isDebug, Location);
+            GameClass = new Game(StaffRank, IdentiteName, Money, Thirst, Hunger, Time, Weather, WeatherWind, WeatherWindDirection, isDebug, Position);
             game.freezeEntityPosition(alt.Player.local.scriptID, false);
         });
 

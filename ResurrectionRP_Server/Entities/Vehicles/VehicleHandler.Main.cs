@@ -206,6 +206,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             Vehicle.SetBumperDamageLevel(VehicleBumper.Rear, RearBumperDamage);
 
             Vehicle.SetWindowTint(WindowTint);
+
+            Vehicle.SetSyncedMetaData("torqueMultiplicator", TorqueMultiplicator);
+            Vehicle.SetSyncedMetaData("powerMultiplicator", PowerMultiplicator);
             /*
             if (!string.IsNullOrEmpty(DamageData))
                 vehicle.DamageData = DamageData;

@@ -102,6 +102,14 @@ export function initialize() {
                     const r = (value & 0xFF0000) >>> 16;
                     game.setVehicleNeonLightsColour(entity.scriptID, r, g, b);
                     break;
+
+                case 'torqueMultiplicator':
+                    game.setVehicleEngineTorqueMultiplier(entity.scriptID, value);
+                    break;
+
+                case 'powerMultiplicator':
+                    game.setVehicleEnginePowerMultiplier(entity.scriptID, value);
+                    break;
             }
         }
     });

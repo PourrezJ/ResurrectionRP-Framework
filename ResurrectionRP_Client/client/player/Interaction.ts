@@ -6,6 +6,7 @@ import * as MenuManager from '../MenuManager/MenuManager';
 import * as Utils from '../Utils/Utils';
 import * as Globals from '../Utils/Globals';
 import * as Streamer from '../Streamer/NetworkingEntityClient';
+import Ragdoll from '../Ragdoll';
 
 /*
  * POUR LE RAY CAST LES FLAGS
@@ -20,6 +21,8 @@ import * as Streamer from '../Streamer/NetworkingEntityClient';
     256: Intersect with vegetation (plants, coral. trees not included)
 
  * */
+const ragdoll = new Ragdoll();
+
 var raycastResult = null;
 var canClose: boolean = true;
 
@@ -43,6 +46,10 @@ export class Interaction {
                 return;
 
             alt.emitServer('OnKeyUp', key);
+
+            if (key === 82) {
+                ragdoll.stop();
+            }
         });
 
         alt.on("keydown", (key) => {
@@ -114,6 +121,14 @@ export class Interaction {
                     }
                     
                     break;
+
+                case 82: // R
+                    if (alt.Player.local.getMeta("CanClose") == false)
+                        return;
+
+                    ragdoll.start();
+                    break;
+
             }
         });
 

@@ -110,6 +110,9 @@ namespace ResurrectionRP_Server.Factions
                 door.Interact = OpenCelluleDoor;
             #endregion
 
+            if (InvoiceList == null)
+                InvoiceList = new List<Invoice>();
+
             Alt.OnClient("CallUrgenceLSPD", CallUrgenceLSPD);
 
             return base.Init();

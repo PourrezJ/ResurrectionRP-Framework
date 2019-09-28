@@ -195,7 +195,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
             Menu menu = new Menu("ID_Perfs", "", _subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.SuperMod);
             menu.ItemSelectCallback = PerformanceChoiceMenuCallback;
-            menu.IndexChangeCallback = ModPreview;
+            menu.IndexChangeCallbackAsync = ModPreview;
             menu.FinalizerAsync = Finalizer;
 
             var mods = manifest.Mods(_modType);
@@ -373,7 +373,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             }
 
             Menu menu = new Menu("ID_DesignChoice", "", _subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.SuperMod);
-            menu.IndexChangeCallback = ModPreview;
+            menu.IndexChangeCallbackAsync = ModPreview;
             menu.ItemSelectCallback = DesignChoiceCallback;
             menu.FinalizerAsync = Finalizer;
 
@@ -612,12 +612,12 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
         #region Private methods
 
-        private void ModPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        private Task ModPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
             {
                 MenuManager.CloseMenu(client);
-                return;
+                return Task.CompletedTask;
             }
 
             byte selected = (byte)itemIndex;
@@ -630,6 +630,8 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
                 _vehicleBench.SetWindowTint(Utils.Utils.GetWindowTint(selected));
             else
                 _vehicleBench.SetMod(_modType, selected);
+
+            return Task.CompletedTask;
         }
 
         private async Task InstallNeon(IPlayer client, double price)

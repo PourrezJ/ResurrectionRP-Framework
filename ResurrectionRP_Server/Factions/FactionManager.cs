@@ -49,7 +49,7 @@ namespace ResurrectionRP_Server.Factions
                 }
             });
 
-            FactionList.AddRange(new List<Faction>() { Onu, Lspd });
+            FactionList.AddRange(new List<Faction>() { Onu, Lspd, LSCustom, Gouvernement, Dock, Nordiste });
         }
         #endregion
 
@@ -158,7 +158,7 @@ namespace ResurrectionRP_Server.Factions
         
         public static bool IsNordiste(IPlayer client)
         {
-            if (GameMode.Instance.FactionManager.Gouvernement != null)
+            if (GameMode.Instance.FactionManager.Nordiste != null)
                 return GameMode.Instance.FactionManager.Nordiste.HasPlayerIntoFaction(client);
             return false;
         }

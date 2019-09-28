@@ -415,7 +415,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             menu.SelectedIndex = selectedItem;
             menu.OpenMenu(client);
             ClientInMenu = client;
-            await ModPreview(client, menu, selectedItem, menu.Items[selectedItem]);
+            ModPreview(client, menu, selectedItem, menu.Items[selectedItem]);
         }
 
         private void DesignChoiceCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)

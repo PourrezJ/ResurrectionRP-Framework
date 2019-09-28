@@ -16,7 +16,7 @@ namespace ResurrectionRP_Server.Factions
     public partial class Nordiste : Faction
     {
         #region Cellule
-        private async Task OpenCelluleDoor(IPlayer client, Door door)
+        private void OpenCelluleDoor(IPlayer client, Door door)
         {
             if (FactionManager.IsNordiste(client))
             {
@@ -27,11 +27,11 @@ namespace ResurrectionRP_Server.Factions
                 item.OnMenuItemCallback = OnDoorCall;
                 xmenu.Add(item);
 
-                await xmenu.OpenXMenu(client);
+                xmenu.OpenXMenu(client);
             }
         }
 
-        private static async Task OnDoorCall(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private static void OnDoorCall(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             if (!FactionManager.IsNordiste(client))
                 return;
@@ -42,7 +42,7 @@ namespace ResurrectionRP_Server.Factions
                 door.SetDoorLockState(!door.Locked);
             }
 
-            await XMenuManager.XMenuManager.CloseMenu(client);
+            XMenuManager.XMenuManager.CloseMenu(client);
         }
         #endregion
 
@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.Factions
             xmenu.SetData("Player", target);
 
             var search = new XMenuItem("Fouiller", "", "", XMenuItemIcons.HAND_PAPER_SOLID, true);
-            search.OnMenuItemCallback = SearchPlayer;
+            search.OnMenuItemCallbackAsync = SearchPlayer;
             xmenu.Add(search);
 
             var penalty = new XMenuItem("Amende", "Mettre une amende", "ID_Invoice", XMenuItemIcons.FILE_INVOICE_SOLID, true);
@@ -64,7 +64,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Menu Interaction NPC accueil
-        public virtual async Task OpenAccueilMenu(IPlayer client)
+        public virtual void OpenAccueilMenu(IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -99,8 +99,7 @@ namespace ResurrectionRP_Server.Factions
                 menu.Add(menuItem);
             }
 
-            await menu.OpenMenu(client);
-
+            menu.OpenMenu(client);
         }
 
         private async Task AccueilMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -118,7 +117,7 @@ namespace ResurrectionRP_Server.Factions
                         {
                             client.DisplayHelp("Vous n'avez pas assez d'argent en banque pour payer l'amende.", 5000);
                             await client.PlaySoundFrontEndFix(-1, "ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
-                            await menu.CloseMenu(client);
+                            menu.CloseMenu(client);
                             break;
                         }
 
@@ -126,11 +125,11 @@ namespace ResurrectionRP_Server.Factions
                         invoice.paid = true;
                         await UpdateDatabase();
                         client.DisplayHelp($"Vous venez de payer ~r~${menuItem.GetData("price")}~w~ pour régler votre amende.", 5000);
-                        await menu.CloseMenu(client);
+                        menu.CloseMenu(client);
                     }
 
                     if (InvoiceList.FindAll(b => (b.SocialClub == client.GetSocialClub() && b.paid == false)).Count > 0)
-                        await OpenAccueilMenu(client);
+                        OpenAccueilMenu(client);
 
                     break;
             }
@@ -138,7 +137,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Invoice
-        private async Task InvoicePlayer(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void InvoicePlayer(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             IPlayer _target = menu.GetData("Player");
 
@@ -214,7 +213,7 @@ namespace ResurrectionRP_Server.Factions
             }
 
 
-            await motifMenu.OpenMenu(client);
+            motifMenu.OpenMenu(client);
 
             //var motif = new MenuItem("Motif", "Sélectionner le motif", "ID_Motif", executeCallback: true);
             //motif.SetInput("Rentrer le motif de l'amende", 99, InputType.Text);
@@ -249,7 +248,7 @@ namespace ResurrectionRP_Server.Factions
             {
                 case "ID_MotifCustom":
                     invoice.Desc = menuItem.InputValue;
-                    await menu.OpenMenu(client);
+                    menu.OpenMenu(client);
                     break;
                 case "ID_PrixCustom":
                     try
@@ -260,7 +259,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         client.SendNotificationError("Le prix ne doit être exclusivement numérique.");
                     }
-                    await menu.OpenMenu(client);
+                    menu.OpenMenu(client);
                     break;
                 case "ID_Motif":
                     invoice.Desc = menuItem.GetData("name");
@@ -276,7 +275,7 @@ namespace ResurrectionRP_Server.Factions
                     PlayerHandler clientHandler = invoice.Player.GetPlayerHandler();
                     client.DisplayHelp($"L'amende est enregistrée et a été envoyée à {clientHandler.Identite.Name}.", 10000);
                     invoice.Player.DisplayHelp($"Vous venez de recevoir une amende.\nVous avez 7 jours pour vous rendre au poste.", 10000);
-                    await menu.CloseMenu(client);
+                    menu.CloseMenu(client);
                     break;
             }
 
@@ -306,11 +305,11 @@ namespace ResurrectionRP_Server.Factions
             xmenu.SetData("Vehicle", target);
 
             var _identVeh = new XMenuItem("Identification du véhicule.", icon: XMenuItemIcons.ID_CARD_SOLID, executeCallback: true);
-            _identVeh.OnMenuItemCallback = IdentVehicle;
+            _identVeh.OnMenuItemCallbackAsync = IdentVehicle;
             xmenu.Add(_identVeh);
 
             var _poundVehicle = new XMenuItem("Fourrière", "Mettre en fourrière", "", XMenuItemIcons.INFO, false);
-            _poundVehicle.OnMenuItemCallback = PoundVehicle;
+            _poundVehicle.OnMenuItemCallbackAsync = PoundVehicle;
             xmenu.Add(_poundVehicle);
 
             return await base.InteractVehicleMenu(client, target, xmenu);
@@ -318,7 +317,7 @@ namespace ResurrectionRP_Server.Factions
 
         private async Task PoundVehicle(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
-            await XMenuManager.XMenuManager.CloseMenu(client);
+            XMenuManager.XMenuManager.CloseMenu(client);
             IVehicle target = menu.GetData("Vehicle");
             if (target != null && target.Exists)
             {
@@ -348,7 +347,7 @@ namespace ResurrectionRP_Server.Factions
 
         private async Task IdentVehicle(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
-            await XMenuManager.XMenuManager.CloseMenu(client);
+            XMenuManager.XMenuManager.CloseMenu(client);
             IVehicle target = menu.GetData("Vehicle");
             if (target != null)
             {

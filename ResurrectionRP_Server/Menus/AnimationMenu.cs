@@ -21,19 +21,19 @@ namespace ResurrectionRP_Server.Menus
         #endregion
 
         #region Menus
-        public static async Task OpenAnimationsMenu(IPlayer client)
+        public static void OpenAnimationsMenu(IPlayer client)
         {
             var animationsMenu = new AnimationsMenu();
             animationsMenu._menu = new Menu("Animation", "Réglages", "Choisissez une touche :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR);
-            animationsMenu._menu.ItemSelectCallbackAsync = animationsMenu.AnimationMenuCallBack;
+            animationsMenu._menu.ItemSelectCallback = animationsMenu.AnimationMenuCallBack;
 
             for (int i = 1; i <= 9; i++)
                 animationsMenu._menu.Add(new MenuItem($"Touche {i}", $"Configurer une animation sur la touche {i} du pavé numérique.", "ID_Key", true));
 
-            await MenuManager.OpenMenu(client, animationsMenu._menu);
+            MenuManager.OpenMenu(client, animationsMenu._menu);
         }
 
-        private async Task OpenCategoriesMenu(IPlayer client, Menu menu)
+        private void OpenCategoriesMenu(IPlayer client, Menu menu)
         {
             menu.ClearItems();
             menu.Id = "AnimCategories";
@@ -48,13 +48,13 @@ namespace ResurrectionRP_Server.Menus
                         menu.Add(new MenuItem(animData.CategorieName, "", "ID_Cat", executeCallback: true));
                 }
 
-                await menu.OpenMenu(client);
+                menu.OpenMenu(client);
             }
         }
         #endregion
 
         #region Callback
-        private async Task AnimationMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void AnimationMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null && menu.Id == "Animation")
             {
@@ -63,12 +63,12 @@ namespace ResurrectionRP_Server.Menus
             }
             else if (menuItem == null && menu.Id == "AnimCategories")
             {
-                await OpenAnimationsMenu(client);
+                OpenAnimationsMenu(client);
                 return;
             }
             else if (menuItem == null && menu.Id == "AnimKeyBiding")
             {
-                await OpenCategoriesMenu(client, menu);
+                OpenCategoriesMenu(client, menu);
                 return;
             }
 
@@ -78,7 +78,7 @@ namespace ResurrectionRP_Server.Menus
             if (menuItem.Id == "ID_Key")
             {
                 _keySelected = itemIndex;
-                await OpenCategoriesMenu(client, menu);
+                OpenCategoriesMenu(client, menu);
             }
             else if (menuItem.Id == "ID_Cat")
             {
@@ -94,7 +94,7 @@ namespace ResurrectionRP_Server.Menus
                         item.SetData("Anim", animData.Animation);
                         menu.Add(item);
                     }
-                    await menu.OpenMenu(client);
+                    menu.OpenMenu(client);
                 }
             }
             // Callback du choix de l'animation

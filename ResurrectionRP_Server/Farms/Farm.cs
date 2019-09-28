@@ -307,7 +307,7 @@ namespace ResurrectionRP_Server.Farms
                 return;
             }
 
-            Task.Run(async () => { await MenuManager.CloseMenu(sender); }).Wait();
+            MenuManager.CloseMenu(sender);
 
             player.IsOnProgress = true;
             sender.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s)", 5000);
@@ -376,7 +376,7 @@ namespace ResurrectionRP_Server.Farms
             player.IsOnProgress = true;
             sender.DisplaySubtitle($"Vous commencez à vendre vos ~r~{_itemBuy.name}(s)", 5000);
 
-            Task.Run(async () => { await MenuManager.CloseMenu(sender); }).Wait();
+            MenuManager.CloseMenu(sender);
             int itemcount = player.CountItem(_itemBuy);
 
             sender.EmitLocked("LaunchProgressBar", Selling_Time * itemcount);
@@ -426,7 +426,7 @@ namespace ResurrectionRP_Server.Farms
                 return;
             }
 
-            await MenuManager.CloseMenu(sender);
+            MenuManager.CloseMenu(sender);
 
             player.IsOnProgress = true;
             sender.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s) ~w~& ~r~{_itemNoTraite2.name}(s)", 5000);

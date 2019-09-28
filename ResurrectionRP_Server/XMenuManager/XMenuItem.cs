@@ -25,7 +25,11 @@ namespace ResurrectionRP_Server.XMenuManager
         #endregion
 
         #region Events
-        public delegate Task OnMenuItemCallBackDelegate(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data);
+        public delegate Task OnMenuItemCallBackDelegateAsync(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data);
+        public delegate void OnMenuItemCallBackDelegate(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data);
+
+        [JsonIgnore]
+        public OnMenuItemCallBackDelegateAsync OnMenuItemCallbackAsync { get; set; } = null;
         [JsonIgnore]
         public OnMenuItemCallBackDelegate OnMenuItemCallback { get; set; } = null;
         #endregion

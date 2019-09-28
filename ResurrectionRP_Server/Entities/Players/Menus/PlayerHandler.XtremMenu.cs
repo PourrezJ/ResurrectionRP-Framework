@@ -55,7 +55,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
             
 
-            await xmenu.OpenXMenu(Client);
+            xmenu.OpenXMenu(Client);
         }
 
         private async Task PlayerXMenuCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
@@ -141,7 +141,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case "ID_Admin":
-                    await OpenXtremAdmin();
+                    OpenXtremAdmin();
                     break;
 
                 case "ID_PutIntoCar":
@@ -170,8 +170,8 @@ namespace ResurrectionRP_Server.Entities.Players
                 
                 case "ID_Faction": 
                     menu.ClearItems();
-                    Factions.FactionManager.AddFactionTargetMenu(Client, TargetClient, menu);
-                    await menu.OpenXMenu(client);
+                    FactionManager.AddFactionTargetMenu(Client, TargetClient, menu);
+                    menu.OpenXMenu(client);
                     break;
                 
             }

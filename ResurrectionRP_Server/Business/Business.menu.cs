@@ -51,7 +51,7 @@ namespace ResurrectionRP_Server.Business
                 menu.Add(new MenuItem("~r~Supprimer le commerce", "Supprimer le commerce", "ID_DeleteAdmin", true));
 
             menu.Add(new MenuItem("Fermer", "", "ID_Close", true));
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
             return menu;
         }
 
@@ -78,12 +78,12 @@ namespace ResurrectionRP_Server.Business
                 }
                 else if (menuItem.Id == "ID_CancellSell")
                 {
-                    await CancelSell(client);
+                    CancelSell(client);
                     await OnNpcSecondaryInteract(client, Ped);
                 }
                 else if (menuItem.Id == "ID_Close")
                 {
-                    await MenuManager.CloseMenu(client);
+                    MenuManager.CloseMenu(client);
                 }
                 else if (menuItem.Id == "ID_ClearAdmin")
                 {
@@ -100,16 +100,16 @@ namespace ResurrectionRP_Server.Business
                 {
                     await Delete();
                     client.SendNotificationSuccess("Le magasin a été supprimé");
-                    await MenuManager.CloseMenu(client);
+                    MenuManager.CloseMenu(client);
                 }
                 else if (menuItem.Id == "ID_AddStaff")
                 {
-                    await GestionEmployee(client, menu);
+                    GestionEmployee(client, menu);
                 }
             }
         }
 
-        public virtual async Task GestionEmployee(IPlayer client, Menu menu)
+        public virtual void GestionEmployee(IPlayer client, Menu menu)
         {
             menu.Reset();
             menu.BackCloseMenu = false;
@@ -131,7 +131,7 @@ namespace ResurrectionRP_Server.Business
                 }
             }
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
         }
 
         private async Task GestionEmployeeCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -173,7 +173,7 @@ namespace ResurrectionRP_Server.Business
                 else
                     client.SendNotificationError("Aucun nom de rentré.");
 
-                await GestionEmployee(client, menu);
+                GestionEmployee(client, menu);
             }
             else if (menuItem.Id == "delete_employe")
             {
@@ -184,7 +184,7 @@ namespace ResurrectionRP_Server.Business
                         Employees.Remove(playerID.Key);
                         await Update();
                         client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
-                        await GestionEmployee(client, menu);
+                        GestionEmployee(client, menu);
                         break;
                     }
                 }
@@ -219,12 +219,12 @@ namespace ResurrectionRP_Server.Business
             client.SendNotificationSuccess($"Vous avez mis en vente {BusinnessName} pour la somme de ${BusinessPrice}.");
         }
 
-        public async Task CancelSell(IPlayer client)
+        public void CancelSell(IPlayer client)
         {
             OnSale = false;
             Entities.Blips.BlipsManager.SetColor(Blip, 2);
             client.SendNotificationSuccess($"Vous avez annulé la mise en vente de {BusinnessName}.");
-            await MenuManager.CloseMenu(client);
+            MenuManager.CloseMenu(client);
         }
     }
 }

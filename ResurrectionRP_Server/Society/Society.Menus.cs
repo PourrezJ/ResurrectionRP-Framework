@@ -107,7 +107,7 @@ namespace ResurrectionRP_Server.Society
                 }
             }
 
-            await MenuManager.OpenMenu(client, menu);
+            MenuManager.OpenMenu(client, menu);
             return menu;
         }
 
@@ -122,20 +122,20 @@ namespace ResurrectionRP_Server.Society
             {
                 case "pservice":
                     await PriseService(client);
-                    await MenuManager.CloseMenu(client);
+                    MenuManager.CloseMenu(client);
                     break;
 
                 case "qservice":
                     await QuitterService(client);
-                    await MenuManager.CloseMenu(client);
+                    MenuManager.CloseMenu(client);
                     break;
                 case "gemployee":
-                    await GestionEmployee(client, menu);
+                    GestionEmployee(client, menu);
                     break;
 
                 case "dinventaire":
                     Inventory.Locked = true;
-                    await menu.CloseMenu(client);
+                    menu.CloseMenu(client);
                     var invmenu = new Inventory.RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, Inventory, true);
 
                     invmenu.OnMove += async (p, m) =>
@@ -173,7 +173,7 @@ namespace ResurrectionRP_Server.Society
                 case "ID_CancelResell":
                     Resell = false;
                     client.SendNotificationSuccess($"Vous avez annulé la vente de {SocietyName}");
-                    await MenuManager.CloseMenu(client);
+                    MenuManager.CloseMenu(client);
                     break;
                 case "ID_Resell":
                     if (int.TryParse(menuItem.InputValue, out int _resell))
@@ -181,7 +181,7 @@ namespace ResurrectionRP_Server.Society
                         ResellPrice = _resell;
                         Resell = true;
                         client.SendNotificationSuccess($"Vous avez mis en vente {SocietyName} pour la somme de ${ResellPrice}");
-                        await menu.CloseMenu(client);
+                        menu.CloseMenu(client);
                     }
                     else
                     {
@@ -263,12 +263,12 @@ namespace ResurrectionRP_Server.Society
                 return;
             }
 
-            menu = await BankMenu.OpenBankMenu(client, BankAccount, AtmType.Faction, menu, FinanceMenu);
+            menu = BankMenu.OpenBankMenu(client, BankAccount, AtmType.Faction, menu, FinanceMenu);
         }
         #endregion
 
         #region Employees
-        public virtual async Task GestionEmployee(IPlayer client, Menu menu)
+        public virtual void GestionEmployee(IPlayer client, Menu menu)
         {
             menu.Reset();
             menu.BackCloseMenu = false;
@@ -290,7 +290,7 @@ namespace ResurrectionRP_Server.Society
                 }
             }
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
         }
 
         private async Task GestionEmployeeCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -332,7 +332,7 @@ namespace ResurrectionRP_Server.Society
                 else
                     client.SendNotificationError("Aucun nom de rentré.");
 
-                await GestionEmployee(client, menu);
+                GestionEmployee(client, menu);
             }
             else if (menuItem.Id == "delete_employe")
             {
@@ -348,7 +348,7 @@ namespace ResurrectionRP_Server.Society
                         Employees.TryRemove(ph.PID, out _);
                         await Update();
                         client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
-                        await GestionEmployee(client, menu);
+                        GestionEmployee(client, menu);
                         break;
                     }
                     else if ((await Identite.GetOfflineIdentite(playerID.Key)).Name == menuItem.Text)
@@ -356,7 +356,7 @@ namespace ResurrectionRP_Server.Society
                         Employees.TryRemove(ph.PID, out _);
                         await Update();
                         client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
-                        await GestionEmployee(client, menu);
+                        GestionEmployee(client, menu);
                         break;
                     }
                 }

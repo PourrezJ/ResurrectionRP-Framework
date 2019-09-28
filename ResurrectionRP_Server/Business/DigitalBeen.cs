@@ -29,7 +29,7 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Menus
-        public override async Task OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
+        public override void OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
         {
             if (Inventory.Locked)
             {
@@ -60,7 +60,7 @@ namespace ResurrectionRP_Server.Business
             }
             else
                 client.SendNotification("Il n'y a pas de produits en vente.");
-            await MenuManager.OpenMenu(client, _menu);
+            MenuManager.OpenMenu(client, _menu);
         }
 
         public override async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
@@ -96,10 +96,10 @@ namespace ResurrectionRP_Server.Business
             switch (menuItem.Id)
             {
                 case "ID_TakeMoney":
-                    await BankMenu.OpenBankMenu(client, BankAccount, AtmType.Business, menu, StoreOwnerMenuManager);
+                    BankMenu.OpenBankMenu(client, BankAccount, AtmType.Business, menu, StoreOwnerMenuManager);
                     break;
                 case "ID_Add":
-                    await menu.CloseMenu(client);
+                    menu.CloseMenu(client);
                     Inventory.Locked = true;
                     var invmenu = new Inventory.RPGInventoryMenu(player.PocketInventory, player.OutfitInventory, player.BagInventory, Inventory, true);
                     invmenu.OnMove += async (p, m) =>
@@ -155,7 +155,7 @@ namespace ResurrectionRP_Server.Business
                                 GameMode.Instance.Economy.CaissePublique += tax;
                                 await Update();
                                 client.SendNotification($"Vous avez acheté un/des {itemStack.Item.name}(s) pour la somme de {(itemStack.Price * quantity) + tax} dont {tax} de taxes.");
-                                await OpenMenu(client);
+                                OpenMenu(client);
                             }
                         }
                         else
@@ -189,7 +189,7 @@ namespace ResurrectionRP_Server.Business
 
             await Update();
             if (MenuManager.HasOpenMenu(client))
-                await MenuManager.CloseMenu(client);
+                MenuManager.CloseMenu(client);
         }
         #endregion
     }

@@ -73,9 +73,10 @@ namespace ResurrectionRP_Server.Services
 
             Entities.Peds.Ped _npc = Entities.Peds.Ped.CreateNPC(PedModel.Gardener01SMM, new Vector3(409.1505f, -1622.874f, 29.29193f), 227.5882f);
 
-            _npc.NpcInteractCallBack += async (IPlayer client, Entities.Peds.Ped ped) =>
+            _npc.NpcInteractCallBack += (IPlayer client, Entities.Peds.Ped ped) =>
             {
-                await OpenPoundMenu(client);
+                OpenPoundMenu(client);
+                return Task.CompletedTask;
             };
 
             Alt.Server.LogInfo($"--- [POUND] Finish loading all pounds in database: {PoundVehicleList.Count} ---");
@@ -131,7 +132,7 @@ namespace ResurrectionRP_Server.Services
                                 _vh.UpdateProperties();
                                 _towedvehicle.UpdateFull();
                                 await _towedvehicle.Delete(true);
-                                await MenuManager.CloseMenu(client);
+                                MenuManager.CloseMenu(client);
                             }
                         }
                     }
@@ -139,7 +140,7 @@ namespace ResurrectionRP_Server.Services
             }
         }
 
-        public async Task OpenPoundMenu(IPlayer client)
+        public void OpenPoundMenu(IPlayer client)
         {
             Menu _menu = new Menu("ID_PoundMenu", "Fourrière", $"Sortir un véhicule pour la somme: ${Price}", backCloseMenu: true);
             _menu.ItemSelectCallbackAsync = PoundMenuCallBack;
@@ -171,7 +172,7 @@ namespace ResurrectionRP_Server.Services
                 }
             }
 
-            await _menu.OpenMenu(client);
+            _menu.OpenMenu(client);
         }
 
         private async Task PoundMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -186,7 +187,7 @@ namespace ResurrectionRP_Server.Services
                     PoundVehicleList.Remove(PoundVehicleList.Find(v => v.Plate == veh.Plate));
                     await GameMode.Instance.Save();
                     client.SendNotificationPicture(Utils.Enums.CharPicture.DIA_GARDENER,"Fourrière", "","~g~Votre véhicule vous attend sur le parking." );
-                    await MenuManager.CloseMenu(client);
+                    MenuManager.CloseMenu(client);
                 }
                 else
                 {

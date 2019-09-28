@@ -176,7 +176,7 @@ namespace ResurrectionRP_Server.Factions
                 menu.ItemSelectCallbackAsync = MenuCallback;
                 menu.Add(new MenuItem("Inventaire", "", "ID_Inventaire", true));
 
-                Task.Run(async () => { await menu.OpenMenu(player); }).Wait();
+                menu.OpenMenu(player);
             }
 
             base.OnPlayerEnterColShape(ColShapePointer, player);
@@ -198,7 +198,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Methods
-        private async Task OpenCelluleDoor(IPlayer client, Door door)
+        private void OpenCelluleDoor(IPlayer client, Door door)
         {
             if (HasPlayerIntoFaction(client))
             {
@@ -228,11 +228,11 @@ namespace ResurrectionRP_Server.Factions
                     xmenu.Add(item);
                 }
 
-                await xmenu.OpenXMenu(client);
+                xmenu.OpenXMenu(client);
             }
         }
 
-        private static async Task OnDoorCall(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private static void OnDoorCall(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             Door door = menu.GetData("Door");
             if (door != null)
@@ -240,7 +240,7 @@ namespace ResurrectionRP_Server.Factions
                 door.SetDoorLockState(!door.Locked);
             }
 
-            await XMenuManager.XMenuManager.CloseMenu(client);
+            XMenuManager.XMenuManager.CloseMenu(client);
         }
 
         private async Task MenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)

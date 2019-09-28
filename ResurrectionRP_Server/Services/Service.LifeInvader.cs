@@ -35,13 +35,14 @@ namespace ResurrectionRP_Server.Services
         {
             BlipsManager.CreateBlip("Life Invader", Location.Pos, BlipColor.Red, 77);
             Ped vendor = Ped.CreateNPC(PedModel.Lifeinvad01, Location.Pos, Location.Rot.Z);
-            vendor.NpcInteractCallBack = (async (IPlayer client, Ped npc) =>
+            vendor.NpcInteractCallBack = ((IPlayer client, Ped npc) =>
             {
-                await OpenMenuLifeInvader(client);
+                OpenMenuLifeInvader(client);
+                return Task.CompletedTask;
             });
         }
 
-        public async Task OpenMenuLifeInvader(IPlayer player)
+        public void OpenMenuLifeInvader(IPlayer player)
         {
             Menu menu = new Menu("Id_LifeInvader", "LifeInvader", "Service d'annonce", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
             menu.ItemSelectCallbackAsync = LifeInvaderMenuCallBack;
@@ -52,7 +53,7 @@ namespace ResurrectionRP_Server.Services
 
             menu.Add(new MenuItem("Fermer", "", "ID_Quit", true));
 
-            await menu.OpenMenu(player);
+            menu.OpenMenu(player);
         }
 
         private async Task LifeInvaderMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -81,11 +82,11 @@ namespace ResurrectionRP_Server.Services
                             client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte bancaire");
                         }
 
-                        await menu.CloseMenu(client);
+                        menu.CloseMenu(client);
                     }
                     break;
                 case "ID_Quit":
-                    await menu.CloseMenu(client);
+                    menu.CloseMenu(client);
                     break;
             }
         }

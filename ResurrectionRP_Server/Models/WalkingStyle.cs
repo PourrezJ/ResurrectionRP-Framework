@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Models
         #endregion
 
         #region Menu
-        public static async Task OpenWalkingStyleMenu(IPlayer client)
+        public static void OpenWalkingStyleMenu(IPlayer client)
         {
             var walkmenu = new WalkingStyleMenu()
             {
@@ -51,7 +51,7 @@ namespace ResurrectionRP_Server.Models
                 walkmenu.menu.Add(new MenuItem(walk.Name, "", "ID_Walk", true));
             }
 
-            await walkmenu.menu.OpenMenu(client);
+            walkmenu.menu.OpenMenu(client);
         }
         #endregion
 

@@ -22,7 +22,7 @@ namespace ResurrectionRP_Server.Houses
         #endregion
 
         #region Menu
-        public static async Task OpenHouseMenu(IPlayer client, House house)
+        public static void OpenHouseMenu(IPlayer client, House house)
         {
             var houseMenu = new HouseMenu();
             houseMenu._client = client;
@@ -64,7 +64,7 @@ namespace ResurrectionRP_Server.Houses
                 }
             }
 
-            await MenuManager.OpenMenu(client, houseMenu._menu);
+            MenuManager.OpenMenu(client, houseMenu._menu);
         }
         #endregion
 
@@ -83,7 +83,7 @@ namespace ResurrectionRP_Server.Houses
                             ph.UpdateFull();
                             await _house.Save();
                         };
-                        await menu.CloseMenu(client);
+                        menu.CloseMenu(client);
                         await inv.OpenMenu(client);
                         break;
 
@@ -95,7 +95,7 @@ namespace ResurrectionRP_Server.Houses
                         else
                             client.SendNotification("Vous avez ouvert votre maison.");
 
-                        await OpenHouseMenu(client, _house);
+                        OpenHouseMenu(client, _house);
                         break;
                     case "playerSelected":
 
@@ -110,7 +110,7 @@ namespace ResurrectionRP_Server.Houses
                         await _house.SetOwner(player.Client);
                         client.SendNotification($"Vous avez vendu la maison à {player.Identite.Name}");
                         client.SendNotification("Vous êtes désormais propriétaire de ce logement");
-                        await MenuManager.CloseMenu(client);
+                        MenuManager.CloseMenu(client);
                         break;
                     default:
 

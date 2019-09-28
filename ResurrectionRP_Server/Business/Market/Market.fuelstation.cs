@@ -14,7 +14,7 @@ namespace ResurrectionRP_Server.Business
 
         private System.Timers.Timer timer = null;
 
-        public static async Task OpenGasPumpMenu(IPlayer client)
+        public static void OpenGasPumpMenu(IPlayer client)
         {
             var fuelpump = Market.MarketsList.Find(x => x.Station.Colshape.IsEntityInColShape(client));
             if (fuelpump == null)
@@ -54,7 +54,7 @@ namespace ResurrectionRP_Server.Business
                 menu.Add(item);
             }
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
         }
 
         private Task FuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -81,18 +81,18 @@ namespace ResurrectionRP_Server.Business
                     {
                         client.SendNotificationError("Vous n'avez pas assez d'argent en banque.");
                     }
-                    await MenuManager.CloseMenu(client);
+                    MenuManager.CloseMenu(client);
                 }
                 else
                 {
-                    await MenuManager.CloseMenu(client);
+                    MenuManager.CloseMenu(client);
                 }
             });
 
             return Task.CompletedTask;
         }
         
-        private async Task RefuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void RefuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (!client.Exists)
                 return;
@@ -112,7 +112,7 @@ namespace ResurrectionRP_Server.Business
                     _utilisateurRavi = client;
                     _ravitaillement = true;
 
-                    await MenuManager.CloseMenu(client);
+                    MenuManager.CloseMenu(client);
 
 
                     var EssenceTransfert = 0;

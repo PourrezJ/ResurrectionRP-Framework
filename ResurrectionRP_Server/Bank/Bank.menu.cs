@@ -48,13 +48,13 @@ namespace ResurrectionRP_Server.Bank
         #endregion
 
         #region Menu
-        public static async Task<Menu> OpenBankMenu(PlayerHandler player, BankAccount bankAccount, AtmType atmType = AtmType.ATM)
+        public static Menu OpenBankMenu(PlayerHandler player, BankAccount bankAccount, AtmType atmType = AtmType.ATM)
         {
             BankMenu BM = new BankMenu(player, bankAccount, atmType);
-            return await BM.OpenBankMenu(player.Client);
+            return BM.OpenBankMenu(player.Client);
         }
 
-        public static async Task<Menu> OpenBankMenu(IPlayer client, BankAccount bankAccount, AtmType atmType, Menu businessMenu, Menu.MenuCallbackAsync businessMenuCallback)
+        public static Menu OpenBankMenu(IPlayer client, BankAccount bankAccount, AtmType atmType, Menu businessMenu, Menu.MenuCallbackAsync businessMenuCallback)
         {
             #region Vérification
             PlayerHandler player = client.GetPlayerHandler();
@@ -64,10 +64,10 @@ namespace ResurrectionRP_Server.Bank
             #endregion
             
             BankMenu BM = new BankMenu(player, bankAccount, atmType, businessMenu, businessMenuCallback);
-            return await BM.OpenBankMenu(client);
+            return BM.OpenBankMenu(client);
         }
 
-        private async Task<Menu> OpenBankMenu(IPlayer client)
+        private Menu OpenBankMenu(IPlayer client)
         {
             #region Creation
             if (_atmType == AtmType.ATM || _atmType == AtmType.Bank)
@@ -86,7 +86,7 @@ namespace ResurrectionRP_Server.Bank
 
             #region Account History
             var historyItem = new MenuItem("Historique", executeCallback: true);
-            historyItem.OnMenuItemCallbackAsync += OnHistoryAccount;
+            historyItem.OnMenuItemCallback += OnHistoryAccount;
             _bankMenu.Add(historyItem);
             #endregion
 
@@ -111,7 +111,7 @@ namespace ResurrectionRP_Server.Bank
             #endregion
 
             #region End
-            await _bankMenu.OpenMenu(client);
+            _bankMenu.OpenMenu(client);
             #endregion
 
             return _bankMenu;
@@ -127,16 +127,16 @@ namespace ResurrectionRP_Server.Bank
             await _businessMenuCallback(client, menu, menuItem, itemIndex);
         }
 
-        private async Task HistoryAccountCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void HistoryAccountCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            await OpenBankMenu(client);
+            OpenBankMenu(client);
         }
 
-        private async Task OnHistoryAccount(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void OnHistoryAccount(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             _bankMenu.SubTitle = "Historique:";
             _bankMenu.BackCloseMenu = false;
-            _bankMenu.ItemSelectCallbackAsync = HistoryAccountCallback;
+            _bankMenu.ItemSelectCallback = HistoryAccountCallback;
             _bankMenu.Reset();
             List<BankAccountHistory> history = new List<BankAccountHistory>(_bankAccount.History);
             history = history.OrderByDescending(h => h.Date).ToList();
@@ -155,7 +155,7 @@ namespace ResurrectionRP_Server.Bank
                 _bankMenu.Add(item);
             }
 
-            await _bankMenu.OpenMenu(client);
+            _bankMenu.OpenMenu(client);
         }
 
         private async Task OnWithdrawItem(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -182,7 +182,7 @@ namespace ResurrectionRP_Server.Bank
             }
 
             if (_atmType == AtmType.ATM || _atmType == AtmType.Bank)
-                await menu.CloseMenu(client);
+                menu.CloseMenu(client);
         }
 
         private async Task OnDepositItem(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -206,7 +206,7 @@ namespace ResurrectionRP_Server.Bank
             }
 
             if (_atmType == AtmType.ATM || _atmType == AtmType.Bank)
-                await menu.CloseMenu(client);
+                menu.CloseMenu(client);
         }
 
         private Task OnTransfertItem(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)

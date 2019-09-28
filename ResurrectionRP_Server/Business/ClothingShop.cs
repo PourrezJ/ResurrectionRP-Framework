@@ -104,7 +104,7 @@ namespace ResurrectionRP_Server.Business
                 return;
 
             if (player.HasOpenMenu())
-                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
+                MenuManager.CloseMenu(client);
         }
 
         private async Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
@@ -114,12 +114,6 @@ namespace ResurrectionRP_Server.Business
 
             await OpenClothingMenu(client);
         }
-
-        public override Task OpenMenu(IPlayer client, Entities.Peds.Ped npc)
-        {
-            return base.OpenMenu(client, npc);
-        }
-
         public override async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
         {
             if (client.GetPlayerHandler().StaffRank >= Utils.Enums.AdminRank.Moderator)
@@ -131,7 +125,7 @@ namespace ResurrectionRP_Server.Business
             return await base.OpenSellMenu(client, menu);
         }
 
-        public async Task OpenComponentsMenu(IPlayer client, Menu menu)
+        public void OpenComponentsMenu(IPlayer client, Menu menu)
         {
             menu.ClearItems();
             menu.BackCloseMenu = false;
@@ -194,14 +188,14 @@ namespace ResurrectionRP_Server.Business
             menuItem.SetData("Categories", BackPack);
             menu.Add(menuItem);
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
         }
 
         public async Task AdminMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null && menu.HasData("Categories"))
             {
-                await OpenComponentsMenu(client, menu);
+                OpenComponentsMenu(client, menu);
                 return;
             }
             else if (menuItem == null)
@@ -212,7 +206,7 @@ namespace ResurrectionRP_Server.Business
 
             if (menuItem.Id == "ID_Components")
             {
-                await OpenComponentsMenu(client, menu);
+                OpenComponentsMenu(client, menu);
             }
             else if (menuItem.Id == "ID_Component")
             {
@@ -233,7 +227,7 @@ namespace ResurrectionRP_Server.Business
                 item.InputMaxLength = 3;
                 menu.Add(item);
 
-                await menu.OpenMenu(client);
+                menu.OpenMenu(client);
             }
             else if (menuItem.Id == "ID_ListCategory")
             {
@@ -423,7 +417,7 @@ namespace ResurrectionRP_Server.Business
             else
                 client.SendNotificationError("Vous n'êtes pas autorisé à utiliser la boutique de vêtements avec ce skin.");
 
-            await menu.OpenMenu(client);
+             menu.OpenMenu(client);
         }
 
         private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -431,11 +425,11 @@ namespace ResurrectionRP_Server.Business
             switch (menuItem.Id)
             {
                 case "ID_Haut":
-                    await OpenHautMenu(client, menu);
+                    OpenHautMenu(client, menu);
                     break;
 
                 case "ID_Pantalon":
-                    await OpenComponentMenu(client, menu, 4);
+                    OpenComponentMenu(client, menu, 4);
                     break;
 
                 case "ID_TShirt":
@@ -443,7 +437,7 @@ namespace ResurrectionRP_Server.Business
                     break;
 
                 case "ID_Chaussure":
-                    await OpenComponentMenu(client, menu, 6);
+                    OpenComponentMenu(client, menu, 6);
                     break;
 
                 case "ID_Accessoire":
@@ -454,7 +448,7 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Tops
-        public async Task OpenHautMenu(IPlayer client, Menu menu)
+        public void OpenHautMenu(IPlayer client, Menu menu)
         {
             menu.ClearItems();
             menu.BackCloseMenu = false;
@@ -489,7 +483,7 @@ namespace ResurrectionRP_Server.Business
                 }
             }
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
         }
 
         private async Task OnTopsCategorieCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -537,7 +531,7 @@ namespace ResurrectionRP_Server.Business
                 }
             }
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
             await PreviewTopsItem(client, menu, 0, menu.Items[0]);
         }
 
@@ -556,7 +550,7 @@ namespace ResurrectionRP_Server.Business
         {
             if (menuItem == null)
             {
-                await OpenHautMenu(client, menu);
+                OpenHautMenu(client, menu);
                 return;
             }
 
@@ -570,7 +564,7 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region WithCategorie
-        public async Task OpenComponentMenu(IPlayer client, Menu menu, byte componentID)
+        public void OpenComponentMenu(IPlayer client, Menu menu, byte componentID)
         {
             ClothManifest? data = ClothingLoader.FindCloths(client, componentID) ?? null;
 
@@ -634,7 +628,7 @@ namespace ResurrectionRP_Server.Business
 
             menu.SetData("componentID", componentID);
             menu.SetData("Categorie", compoList);
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
         }
 
         private async Task CategorieCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -684,7 +678,7 @@ namespace ResurrectionRP_Server.Business
                 }
             }
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
             await OnCurrentItem(client, menu, 0, menu.Items[0]);
         }
 
@@ -693,7 +687,7 @@ namespace ResurrectionRP_Server.Business
             if (menuItem == null)
             {
                 byte compID = menu.GetData("componentID");
-                await OpenComponentMenu(client, menu, compID);
+                OpenComponentMenu(client, menu, compID);
                 return;
             }
 
@@ -782,7 +776,7 @@ namespace ResurrectionRP_Server.Business
             }
 
             menu.SetData("componentID", componentID);
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
             await OnCurrentItem(client, menu, 0, menu.Items[0]);
         }
 

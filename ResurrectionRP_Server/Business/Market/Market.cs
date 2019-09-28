@@ -56,7 +56,7 @@ namespace ResurrectionRP_Server.Business
             if (!client.Exists)
                 return;
 
-            Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
+            MenuManager.CloseMenu(client);
         }
 
         private void Events_PlayerEnterColshape(IColShape colShape, IPlayer client)
@@ -75,10 +75,10 @@ namespace ResurrectionRP_Server.Business
                 if (fueltruck.GetVehicleHandler().OilTank.Traite > 0 )
                 {
                     Menu RefuelMenu = new Menu("ID_RefuelMenu", "Station Service", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
-                    RefuelMenu.ItemSelectCallbackAsync = RefuelMenuCallBack;
+                    RefuelMenu.ItemSelectCallback = RefuelMenuCallBack;
                     RefuelMenu.Add(new MenuItem("Remplir la station", "", "", true));
 
-                    Task.Run(async () => { await MenuManager.OpenMenu(client, RefuelMenu); }).Wait();
+                    MenuManager.CloseMenu(client);
                 }
                 else
                     client.DisplayHelp("~r~Votre citerne est vide.", 10000);

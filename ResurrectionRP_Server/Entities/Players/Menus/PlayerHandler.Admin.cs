@@ -58,7 +58,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             #region Choix du joueur
             var pchoise = new MenuItem("Choix du Joueur", "", "", true);
-            pchoise.OnMenuItemCallbackAsync = ChoisePlayer;
+            pchoise.OnMenuItemCallback = ChoisePlayer;
             mainMenu.Add(pchoise);
             #endregion
 
@@ -504,7 +504,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #endregion
 
             #region Fin
-            await mainMenu.OpenMenu(Client);
+            mainMenu.OpenMenu(Client);
             #endregion
         }
 
@@ -519,7 +519,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region CallBacks
-        private async Task ChoisePlayer(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void ChoisePlayer(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             var secondMenu = new Menu("", "Admin Menu", "Choisissez un joueur :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Garage);
             secondMenu.ItemSelectCallbackAsync = ChoisePlayerCallback;
@@ -546,7 +546,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
             }
 
-            await secondMenu.OpenMenu(Client);
+            secondMenu.OpenMenu(Client);
         }
 
         private async Task ChoisePlayerCallback(IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex)

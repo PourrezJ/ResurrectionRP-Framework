@@ -35,7 +35,7 @@ namespace ResurrectionRP_Server.Factions
             return xMenu;
         }
 
-        private async Task AddFactionTargetMenu_Callback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void AddFactionTargetMenu_Callback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace ResurrectionRP_Server.Factions
 
                 menu = new XMenu("ID_Faction");
                 InteractPlayerMenu(client, target, menu);
-                await menu.OpenXMenu(client);
+                menu.OpenXMenu(client);
             }
             catch
             {
@@ -74,7 +74,7 @@ namespace ResurrectionRP_Server.Factions
             return xmenu;
         }
 
-        private async Task RankChangeChoise(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void RankChangeChoise(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             IPlayer _target = menu.GetData("Player");
             if (_target == null) return;
@@ -85,7 +85,7 @@ namespace ResurrectionRP_Server.Factions
             menu.SetData("Player", _target);
 
             var dismiss = new XMenuItem("Renvoyer", executeCallback: true);
-            dismiss.OnMenuItemCallback = DissMissPlayer;
+            dismiss.OnMenuItemCallbackAsync = DissMissPlayer;
             menu.Add(dismiss);
 
             foreach (var rang in FactionRang)
@@ -93,12 +93,12 @@ namespace ResurrectionRP_Server.Factions
                 if (rang.Rang > clientRank) continue;
 
                 var item = new XMenuItem(rang.RangName, "", "", XMenuItemIcons.CHECK);
-                item.OnMenuItemCallback = RankChange;
+                item.OnMenuItemCallbackAsync = RankChange;
                 item.SetData("Rang", rang);
                 menu.Add(item);
             }
 
-            await menu.OpenXMenu(client);
+            menu.OpenXMenu(client);
         }
 
         private async Task DissMissPlayer(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
@@ -111,7 +111,7 @@ namespace ResurrectionRP_Server.Factions
             await UpdateDatabase();
         }
 
-        private async Task InviteFactionChoise(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void InviteFactionChoise(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             IPlayer _target = menu.GetData("Player");
             if (_target == null) return;
@@ -132,15 +132,15 @@ namespace ResurrectionRP_Server.Factions
                 menu.Add(item);
             }
 
-            await menu.OpenXMenu(client);
+            menu.OpenXMenu(client);
         }
 
-        private Task InviteFaction(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void InviteFaction(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             IPlayer _target = menu.GetData("Player");
 
             if (_target == null)
-                return Task.CompletedTask;
+                return;
 
             FactionRang rang = menuItem.GetData("Rang");
 
@@ -158,8 +158,6 @@ namespace ResurrectionRP_Server.Factions
                 else
                     client.SendNotificationError($"La personne ne souhaite pas rejoindre {FactionName}.");
             };
-
-            return Task.CompletedTask;
         }
 
         private async Task RankChange(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
@@ -198,7 +196,7 @@ namespace ResurrectionRP_Server.Factions
             if ( HasPlayerIntoFaction(client))
             {
                 var item = new XMenuItem(FactionName, "", "", icon, true);
-                item.OnMenuItemCallback = AddFactionVehicleMenu_Callback;
+                item.OnMenuItemCallbackAsync = AddFactionVehicleMenu_Callback;
                 xMenu.SetData("Faction_Target", vehicle);
                 xMenu.Add(item);
             }
@@ -214,7 +212,7 @@ namespace ResurrectionRP_Server.Factions
 
                 menu = new XMenu("ID_Faction");
                 await InteractVehicleMenu(client, target, menu);
-                await menu.OpenXMenu(client);
+                menu.OpenXMenu(client);
             }
             catch
             {
@@ -245,7 +243,7 @@ namespace ResurrectionRP_Server.Factions
                 if (CanTakeMoney(client) || staffRank >= AdminRank.Moderator)
                 {
                     MenuItem getmoney = new MenuItem($"Gérer les finances", $"Caisse de la faction: ${BankAccount.Balance}", "ID_money", true);
-                    getmoney.OnMenuItemCallbackAsync = FinanceMenu;
+                    getmoney.OnMenuItemCallback = FinanceMenu;
                     menu.Add(getmoney);
                 }
 
@@ -272,7 +270,7 @@ namespace ResurrectionRP_Server.Factions
                 demission.OnMenuItemCallbackAsync = GestionMemberCallback;
                 demission.SetData("playerId", client.GetSocialClub());
                 menu.Add(demission);
-                Task.Run(async () => { await menu.OpenMenu(client); }).Wait();
+                menu.OpenMenu(client);
 
                 return menu;
             }
@@ -295,7 +293,7 @@ namespace ResurrectionRP_Server.Factions
 
         private async Task OpenVestiaire(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            await menu.CloseMenu(client);
+            menu.CloseMenu(client);
 
             var _player = client.GetPlayerHandler();
 
@@ -344,9 +342,9 @@ namespace ResurrectionRP_Server.Factions
         }
 
         // Récupérer l'argent dans la caisse.
-        private async Task FinanceMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void FinanceMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            await Bank.BankMenu.OpenBankMenu(client, BankAccount, Bank.AtmType.Faction, menu, ServiceMenuCallBack);
+            Bank.BankMenu.OpenBankMenu(client, BankAccount, Bank.AtmType.Faction, menu, ServiceMenuCallBack);
         }
         #endregion
 
@@ -374,7 +372,7 @@ namespace ResurrectionRP_Server.Factions
                 }
             }
 
-            await MenuManager.OpenMenu(client, menu);
+            MenuManager.OpenMenu(client, menu);
         }
 
         private async Task GestionMemberCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -463,7 +461,7 @@ namespace ResurrectionRP_Server.Factions
                         if (FactionPlayerList.TryRemove(playerID.Key, out FactionPlayer value))
                         {
                             client.DisplayHelp($"Vous avez démissionné de la faction {FactionName}", 10000);
-                            await menu.CloseMenu(client);
+                            menu.CloseMenu(client);
                             await UpdateDatabase();
                         }
                         return;
@@ -492,7 +490,7 @@ namespace ResurrectionRP_Server.Factions
                 menu.Add(menuitem);
             }
 
-            Task.Run(async () => { await menu.OpenMenu(client); }).Wait();
+            menu.OpenMenu(client);
         }
 
         private async Task ShopMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -567,7 +565,7 @@ namespace ResurrectionRP_Server.Factions
                 menu.Add(new MenuItem("Sortir un véhicule", "", "ID_OutVehicleMenu", true));
             }
 
-            Task.Run(async () => { await menu.OpenMenu(client); }).Wait();
+            menu.OpenMenu(client);
         }
 
         private async Task ConcessCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -590,7 +588,7 @@ namespace ResurrectionRP_Server.Factions
                             if (Parking != null)
                                 await Parking.StoreVehicle(client, client.Vehicle);
 
-                            await menu.CloseMenu(client);
+                            menu.CloseMenu(client);
                         }
                         break;
 
@@ -642,7 +640,7 @@ namespace ResurrectionRP_Server.Factions
                             }
                         }
 
-                        await menu.OpenMenu(client);
+                        menu.OpenMenu(client);
                         break;
                 }
             }
@@ -669,7 +667,7 @@ namespace ResurrectionRP_Server.Factions
                     await OnVehicleOut(client, vh);
                     ph.ListVehicleKey.Add(new VehicleKey(vhname, vh.Plate));
                     ph.UpdateFull();
-                    await MenuManager.CloseMenu(client);
+                    MenuManager.CloseMenu(client);
                 }
                 else
                     client.SendNotificationError("Votre faction n'a pas assez d'argent.");

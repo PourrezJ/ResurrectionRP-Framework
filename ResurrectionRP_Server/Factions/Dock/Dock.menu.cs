@@ -34,7 +34,7 @@ namespace ResurrectionRP_Server.Factions
 
             menu.Add(new MenuItem("~g~Valider", "", "Validate", true));
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
             await client.EmitAsync("InitDockOrder", ((DockItemData)menu.Items[0].GetData("DockItem")).Price);
         }
 
@@ -58,7 +58,7 @@ namespace ResurrectionRP_Server.Factions
                 bool validation = await Dock_CommandeValidate(client, menu, importItems);
 
                 if (validation)
-                    await menu.CloseMenu(client);
+                    menu.CloseMenu(client);
             }
             else
                 await ItemChangeCallback(client, menu, itemIndex, menuItem);

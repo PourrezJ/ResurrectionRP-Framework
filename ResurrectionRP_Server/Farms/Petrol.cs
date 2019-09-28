@@ -219,7 +219,7 @@ namespace ResurrectionRP_Server.Farms
                 return;
             }
 
-            Task.Run(async () => { await MenuManager.CloseMenu(sender); }).Wait();
+            MenuManager.CloseMenu(sender);
 
             Item _itemNoTraite = Inventory.Inventory.ItemByID(ItemIDBrute);
             Item _itemTraite = Inventory.Inventory.ItemByID(ItemIDBrute);
@@ -308,7 +308,7 @@ namespace ResurrectionRP_Server.Farms
                 return;
             }
 
-            Task.Run(async () => { await MenuManager.CloseMenu(sender); }).Wait();
+            MenuManager.CloseMenu(sender);
 
             Item _itemBuy = Inventory.Inventory.ItemByID(ItemIDProcess);
             player.IsOnProgress = true;

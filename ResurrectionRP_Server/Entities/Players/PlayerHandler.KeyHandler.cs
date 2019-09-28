@@ -90,13 +90,13 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
 
                     if (vehicle != null && await vehicle.ExistsAsync())
-                        await vh.OpenXtremMenu(client);
+                        vh.OpenXtremMenu(client);
                     else if (HouseManager.IsInHouse(Client))
                     {
                         House house = HouseManager.GetHouse(Client);
 
                         if (house != null)
-                            await HouseMenu.OpenHouseMenu(client, house);
+                            HouseMenu.OpenHouseMenu(client, house);
                     }
                     break;
 
@@ -106,7 +106,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.Backspace:
-                    await XMenuManager.XMenuManager.CloseMenu(client);
+                    XMenuManager.XMenuManager.CloseMenu(client);
                     await RPGInventoryManager.CloseMenu(client);
                     break;
 
@@ -134,7 +134,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     Door door = GameMode.Instance.DoorManager.DoorList.Find(p => p.Position.DistanceTo2D(raycastData.pos) <= 1 && p.Hash == raycastData.entityHash && raycastData.isHit);
                     if (door != null)
-                        await door.Interact?.Invoke(client, door);
+                        door.Interact?.Invoke(client, door);
 
                     if (raycastData.entityType == 1)
                     {
@@ -166,13 +166,13 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (IsAtm(raycastData.entityHash) && client.Position.Distance(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE)
                     {
-                        await BankMenu.OpenBankMenu(ph, ph.BankAccount);
+                        BankMenu.OpenBankMenu(ph, ph.BankAccount);
                         return;
                     }
 
                     if (vh != null && !client.IsInVehicle)
                     {
-                        await vh.OpenXtremMenu(client);
+                        vh.OpenXtremMenu(client);
                         return;
                     }
 
@@ -190,7 +190,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (raycastData.isHit && IsPump(raycastData.entityHash) && client.Position.Distance(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE)
                     {
-                        await Business.Market.OpenGasPumpMenu(client);
+                        Business.Market.OpenGasPumpMenu(client);
                         return;
                     }
 
@@ -246,7 +246,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     vh.SirenSound = !vh.SirenSound;
 
-                    vehicle.SetSyncedMetaData("SirenDisabled", vh.SirenSound);
+                    await vehicle.SetSyncedMetaDataAsync("SirenDisabled", vh.SirenSound);
 
                     break;
                     /*

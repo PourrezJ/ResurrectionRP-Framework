@@ -13,6 +13,7 @@ using System.Collections.Concurrent;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
+using ResurrectionRP_Server.Entities.Vehicles.Data;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
@@ -121,6 +122,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Vehicle.Driver.EmitLocked("UpdateMilage", _milage);
             }
         }
+
+        [BsonIgnoreIfNull]
+        public OilTank OilTank = null;
+
+        [BsonIgnore]
+        public bool hasTrailer = false;
+
+        [BsonIgnore]
+        public IEntity Trailer;
 
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         public ConcurrentDictionary<byte, byte> Mods { get; set; } = new ConcurrentDictionary<byte, byte>();

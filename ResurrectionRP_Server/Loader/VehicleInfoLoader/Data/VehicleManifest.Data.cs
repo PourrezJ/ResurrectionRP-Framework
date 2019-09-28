@@ -51,6 +51,12 @@ namespace VehicleInfoLoader.Data
         
         [JsonProperty("trailer")]
         public bool Trailer                  { get; internal set; }
+
+        [JsonProperty("fuelReservoir")]
+        public float fuelReservoir { get; internal set; }
+
+        [JsonProperty("fuelConsum")]
+        public float fuelConsum { get; internal set; }
         
         [JsonProperty("neon")]
         public bool Neon                     { get; internal set; }

@@ -61,8 +61,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         [BsonIgnore]
         public bool WasTeleported { get; set; } = false;
 
-        [BsonIgnoreIfNull]
-        public OilTank OilTank = null;
 
         #endregion
 
@@ -228,8 +226,20 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
 
             // Needed as vehicles in database don't have this value
-            if (FuelConsumption == 0)
+            if((VehicleManifest.fuelConsum <= 0 || VehicleManifest.fuelReservoir <= 0) && VehicleManifest.VehicleClass != 13)
+            {
+                Alt.Server.LogError("Erreur sur le chargement d'un véhicule, le fuel réservoir ou la consommation existe pas : " + Vehicle.Model);
                 FuelConsumption = 5.5f;
+                FuelMax = 70;
+            }
+            if(FuelMax == 100 )
+            {
+                FuelConsumption = VehicleManifest.fuelConsum;
+                FuelMax = VehicleManifest.fuelReservoir;
+            }
+
+            if (Fuel > FuelMax)
+                Fuel = FuelMax;
 
             if (HaveTowVehicle())
             {

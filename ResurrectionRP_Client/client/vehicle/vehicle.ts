@@ -12,6 +12,8 @@ let lastSent = Date.now();
 let keepEngineOn: boolean = true;
 let enginePreviousState: boolean;
 let engineState: boolean;
+let hasTrailer: boolean = false;
+let Trailer: number = null;
 
 export function initialize() {
     alt.onServer('OnPlayerEnterVehicle', onPlayerEnterVehicle);
@@ -116,6 +118,11 @@ export function initialize() {
         if (player.vehicle != null) {
             enginePreviousState = engineState;
             engineState = game.getIsVehicleEngineRunning(player.vehicle.scriptID);
+            if (game.isVehicleAttachedToTrailer(player.vehicle.scriptID) != hasTrailer) {
+                hasTrailer = game.isVehicleAttachedToTrailer(player.vehicle.scriptID)
+                Trailer = game.getVehicleTrailerVehicle(player.vehicle.scriptID, 0)[1];
+                alt.emitServer("UpdateTrailer", player.vehicle, hasTrailer, (Trailer > 0) ? alt.Vehicle.all.find(p => p.scriptID == Trailer) : null );
+            }
         }
 
         if ((Date.now() - lastSent) > 33) {
@@ -151,6 +158,7 @@ export function onPlayerEnterVehicle(vehicle: alt.Vehicle, seat: number, current
     CurrentMilage = milage;
     fuelMax = maxFuel;
     fuelCur = currentFuel;
+    fuelConsum = fuelconsumption;
     showSpeedometer(true);
 }
 

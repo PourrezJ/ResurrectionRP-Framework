@@ -33,8 +33,16 @@ namespace ResurrectionRP_Server.Society
 
             if (Owner != null && (client.GetPlayerHandler().StaffRank >= AdminRank.Moderator || FactionManager.IsGouv(client)))
             {
-                var identite = (await Identite.GetOfflineIdentite(Owner)).Name ?? Owner;
-                menu.SubTitle = $"Propriétaire: {identite}";
+                var identite = await Identite.GetOfflineIdentite(Owner);
+                if (identite != null)
+                {
+                    menu.SubTitle = $"Propriétaire: {identite.Name ?? Owner}";
+                }
+                else
+                {
+                    Owner = null;
+                    await Update();
+                }
             }
 
             if (client.GetPlayerHandler()?.StaffRank > AdminRank.Player)

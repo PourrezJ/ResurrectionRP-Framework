@@ -173,8 +173,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             Vehicle.EngineHealth = EngineHealth;
             Vehicle.BodyHealth = BodyHealth;
             Vehicle.RadioStation = RadioStation;
-            IsInPound = false;
-            IsParked = false;
 
             if (Wheels == null)
             {
@@ -221,9 +219,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (setLastUse)
                 LastUse = DateTime.Now;
 
-            if (location != null)
-                Location = location;
-
             _previousPosition = Location.Pos;
             Vehicle.Dimension = Dimension;
 
@@ -241,6 +236,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (_vehtowed != null)
                     Task.Run(async() => { await TowVehicle(_vehtowed); }); 
             }
+
+            ParkingName = string.Empty;
+            IsInPound = false;
+            IsParked = false;
 
             return Vehicle;
         }
@@ -264,9 +263,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return false;
         }
 
-        public async Task ApplyDamageAsync()
+        public void ApplyDamage()
         {
             if (Vehicle != null && Vehicle.Exists)
+            {
+                Vehicle.Dimension = -1;
+                Vehicle.Dimension = GameMode.GlobalDimension;
+            }
+        }
+
+        public async Task ApplyDamageAsync()
+        {
+            if (Vehicle != null && await Vehicle.ExistsAsync())
             {
                 await Vehicle.SetDimensionAsync(-1);
                 await Vehicle.SetDimensionAsync(GameMode.GlobalDimension);

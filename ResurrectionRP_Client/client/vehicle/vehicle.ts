@@ -63,6 +63,14 @@ export function initialize() {
                     const g = (neonColor & 0xFF00) >>> 8;
                     const r = (neonColor & 0xFF0000) >>> 16;
                     game.setVehicleNeonLightsColour(vehId, r, g, b);
+
+
+                    let torque: number = entity.getSyncedMeta("torqueMultiplicator");
+                    game.setVehicleEngineTorqueMultiplier(entity.scriptID, torque);
+
+                    let power: number = entity.getSyncedMeta("powerMultiplicator");
+                    game.setVehicleEnginePowerMultiplier(entity.scriptID, power);
+
                 }, 500); 
             }
             catch (e) {
@@ -135,7 +143,8 @@ export function initialize() {
             if (player.vehicle == null)
                 return;
 
-            let speed = player.vehicle.speed * 3.6;
+            //let speed = player.vehicle.speed * 3.6;
+            let speed = game.getEntitySpeed(player.vehicle.scriptID) * 3.6;
             let rpm = player.vehicle.rpm * 591;
 
             if (speedoWindow != null) {

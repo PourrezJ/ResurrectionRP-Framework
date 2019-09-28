@@ -257,6 +257,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     Houses.HouseManager.OnPlayerConnected(client);
                 });
                 
+                
                 //await GameMode.Instance.IllegalManager.OnPlayerConnected(client);
 
                 await Task.Delay(500);

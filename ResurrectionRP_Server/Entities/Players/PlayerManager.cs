@@ -414,11 +414,13 @@ namespace ResurrectionRP_Server.Entities.Players
                 ph.UpdateHungerThirst(100, 100);
                 client.Spawn(new Vector3(308.2974f, -567.4647f, 43.29008f));
                 client.Rotation = new Rotation(0, 239.0923f, 0);
-                client.Health = 200;
                 client.Resurrect();
+                client.Health = 200;
+                
                 ph.PlayerSync.Injured = false;
                 ph.UpdateFull();
             }
+            Task.Run(async () =>await client.SetHealthAsync(200));
         }
 
         public static PlayerHandler GetPlayerBySCN(string socialClubName)

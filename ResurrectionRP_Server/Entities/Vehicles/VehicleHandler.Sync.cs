@@ -106,8 +106,26 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }
 
-        public float TorqueMultiplicator { get; set; }
-        public float PowerMultiplicator { get; set; }
+        private float _torqueMultiplicator;
+        public float TorqueMultiplicator 
+        {
+            get => _torqueMultiplicator;
+            set
+            {
+                AltAsync.Do(() => Vehicle?.SetSyncedMetaData("torqueMultiplicator", value));
+                _torqueMultiplicator = value;
+            }
+        }
+        private float _powerMultiplicator;
+        public float PowerMultiplicator
+        {
+            get => _powerMultiplicator;
+            set
+            {
+                AltAsync.Do(() => Vehicle?.SetSyncedMetaData("powerMultiplicator", value));
+                _powerMultiplicator = value;
+            }
+        }
 
         public float Milage
         {

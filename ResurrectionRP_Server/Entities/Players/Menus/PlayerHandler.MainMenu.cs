@@ -3,6 +3,7 @@ using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Menus;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils;
+using System;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Entities.Players
@@ -116,8 +117,8 @@ namespace ResurrectionRP_Server.Entities.Players
                 menu.Add(new MenuItem("Donner", "", "ID_Give", executeCallback: true));
                 menu.Add(new MenuItem("Jeter", "~r~Détruire la clefs", "ID_Delete", executeCallback: true));
 
-                // if (await GameMode.Instance.FactionManager.LSCustom.HasPlayerIntoFaction(this.Client))
-                //     menu.Add(new MenuItem("Dupliquer", "", "ID_Duplicate", executeCallback: true, rightLabel:$"${keyDupliPrice}"));
+               if (GameMode.Instance.FactionManager.LSCustom.HasPlayerIntoFaction(this.Client))
+                     menu.Add(new MenuItem("Dupliquer", "", "ID_Duplicate", executeCallback: true, rightLabel:$"${keyDupliPrice}"));
 
                 menu.OpenMenu(Client);
             }
@@ -131,40 +132,43 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 if (menuItem.Id == "ID_Give")
                 {
-                    /*
                     menu = new Menu("ID_GiveMenu", menuItem.Text, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR);
-                    menu.Callback = MainMenuManager;
-                    var players = await PlayerManager.GetNearestPlayers(client, 2, true, await client.GetDimensionAsync());
+                    menu.ItemSelectCallbackAsync = MainMenuManager;
 
-                    if (players.Count > 0)
+                    await AltAsync.Do(() =>
                     {
-                        try
+                        var players = client.GetNearestPlayers(2, true, client.Dimension);
+
+                        if (players.Count > 0)
                         {
-                            var destinataire = players[0];
-
-                            if (destinataire != null && destinataire.Client.Exists)
+                            try
                             {
-                                destinataire.ListVehicleKey.Add(keygiven);
-                                await destinataire.Update();
-                                await destinataire.Client.SendNotificationSuccess($"Vous avez reçu la clé du véhicule {keygiven.VehicleName}");
+                                var destinataire = players[0].GetPlayerHandler();
 
-                                if (keygiven != null)
-                                    ListVehicleKey.Remove(keygiven);
-                                await this.Update();
-                                await Client.SendNotificationSuccess($"Vous avez donné la clé du véhicule {keygiven.VehicleName}");
+                                if (destinataire != null && destinataire.Client.Exists)
+                                {
+                                    destinataire.ListVehicleKey.Add(keygiven);
+                                    destinataire.UpdateFull();
+                                    destinataire.Client.SendNotificationSuccess($"Vous avez reçu la clé du véhicule {keygiven.VehicleName}");
 
+                                    if (keygiven != null)
+                                        ListVehicleKey.Remove(keygiven);
+                                    this.UpdateFull();
+                                    Client.SendNotificationSuccess($"Vous avez donné la clé du véhicule {keygiven.VehicleName}");
+
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                AltV.Net.Alt.Server.LogDebug($"Give key {PID} destinataire: {players[0].GetSocialClub()} - {ex}");
                             }
                         }
-                        catch (Exception ex)
-                        {
-                            Alt.Server.LogError($"Give key {PID} destinataire: {players[0].PID} - {ex}");
-                        }
-                    }
-                    else
-                        await Client.SendNotificationError("Personne autour de vous!");
-
-                    await menu.CloseMenu(client);
-                    */
+                        else
+                            Client.SendNotificationError("Personne autour de vous!");
+                    });
+                    
+                    menu.CloseMenu(client);
+                    
                 }
                 else if (menuItem.Id == "ID_Delete")
                 {
@@ -177,17 +181,15 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
                 else if (menuItem.Id == "ID_Duplicate")
                 {
-                    /*
                     if (await GameMode.Instance.FactionManager.LSCustom.BankAccount.GetBankMoney(350, "Duplication de la clé: " + menu.Title))
                     {
                         if (keygiven != null)
                             ListVehicleKey.Add(keygiven);
 
-                        await Client.SendNotificationSuccess("Vous avez dupliqué la clé du véhicule " + menu.Title);
+                        Client.SendNotificationSuccess("Vous avez dupliqué la clé du véhicule " + menu.Title);
                     }
                     else
-                        await client.SendNotificationError("Vous n'avez pas l'argent nécessaire pour une copie de cette clé.");
-                    */
+                        client.SendNotificationError("Vous n'avez pas l'argent nécessaire pour une copie de cette clé.");
                 }
             }
         }

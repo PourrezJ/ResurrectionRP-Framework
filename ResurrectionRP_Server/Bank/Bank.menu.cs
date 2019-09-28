@@ -85,9 +85,10 @@ namespace ResurrectionRP_Server.Bank
             #endregion
 
             #region Account History
+            /*
             var historyItem = new MenuItem("Historique", executeCallback: true);
             historyItem.OnMenuItemCallback += OnHistoryAccount;
-            _bankMenu.Add(historyItem);
+            _bankMenu.Add(historyItem);*/
             #endregion
 
             #region Withdraw

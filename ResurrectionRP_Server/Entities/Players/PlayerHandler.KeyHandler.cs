@@ -110,7 +110,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 case ConsoleKey.F5:
                     if (!ph.HasOpenMenu())
-                        await ph.OpenAdminMenu();
+                        ph.OpenAdminMenu();
                     break;
 
                 case ConsoleKey.Backspace:
@@ -126,7 +126,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (farm != null)
                     {
-                        await farm.StartFarming(client);
+                        farm.StartFarming(client);
                         return;
                     }
 

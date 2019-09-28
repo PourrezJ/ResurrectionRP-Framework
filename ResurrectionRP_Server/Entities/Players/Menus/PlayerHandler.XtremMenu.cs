@@ -147,7 +147,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 case "ID_PutIntoCar":
                     if (TargetHandler.IsCuff())
                     {
-                        IVehicle vehicle = await Entities.Vehicles.VehiclesManager.GetNearestVehicle(Client);
+                        IVehicle vehicle = Entities.Vehicles.VehiclesManager.GetNearestVehicle(Client);
 
                         if (vehicle != null)
                         {

@@ -181,7 +181,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 Utils.Utils.Delay(60000 * 1, true, async () =>
                 {
                     if (player.Exists)
-                        await player.Revive(105);
+                        await player.ReviveAsync(105);
                 });
             }
 

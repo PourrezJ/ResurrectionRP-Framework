@@ -73,7 +73,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 case "ID_Revive":
                     client.SendNotificationSuccess($"Vous venez de revive {TargetHandler.Identite.Name}.");
-                    await TargetClient.Revive() ;
+                    await TargetClient.ReviveAsync() ;
                     break;
 
                 case "ID_Heal":

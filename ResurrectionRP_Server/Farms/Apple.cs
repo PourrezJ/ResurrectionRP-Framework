@@ -1,9 +1,7 @@
-﻿using AltV.Net.Elements.Entities;
-using AltV.Net.Enums;
+﻿using AltV.Net.Enums;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
 using System.Numerics;
-using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Farms
 {
@@ -55,11 +53,6 @@ namespace ResurrectionRP_Server.Farms
             ItemPrice = 18;
 
             Debug = true;
-        }
-
-        public override async Task StartFarming(IPlayer client)
-        {
-            await base.StartFarming(client);
         }
     }
 }

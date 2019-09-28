@@ -24,7 +24,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region MainMenu
-        public async Task OpenAdminMenu(PlayerHandler playerSelected = null)
+        public void OpenAdminMenu(PlayerHandler playerSelected = null)
         {
             #region Verification
             if (StaffRank <= AdminRank.Player)
@@ -45,15 +45,15 @@ namespace ResurrectionRP_Server.Entities.Players
             //     _playerSelected.Client.SetSharedData("AC_Immunity", true);
 
 
-            bool isInvincible = await _playerSelected.Client.IsInvinsibleAsync();
-            bool isInvisible = await _playerSelected.Client.IsInvisibleAsync();
+            bool isInvincible = _playerSelected.Client.IsInvinsible();
+            bool isInvisible = _playerSelected.Client.IsInvisible();
 
             #endregion
 
             #region Menu
             Menu mainMenu = new Menu("ID_AdminMenu", "Admin Menu", "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Garage);
             mainMenu.SubTitle = $"Joueur Selectionné: ~r~{_playerSelected.Identite.Name}";
-            mainMenu.FinalizerAsync += OnFinalize;
+           // mainMenu.FinalizerAsync += OnFinalize;
             #endregion
 
             #region Choix du joueur
@@ -73,14 +73,13 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
 
                 var staffrank = new ListItem("Staff Rang:", "Choix du rang à donner", "ID_Rang", _adminlistrang, (int)StaffRank, true);
-                staffrank.OnMenuItemCallbackAsync = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                staffrank.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
                     AdminRank rang = (AdminRank)((ListItem)menu.Items["ID_Rang"]).SelectedItem;
                     _playerSelected.StaffRank = rang;
                     _playerSelected.Client.SendNotification($"Vous êtes désormais {rang}");
                     client.SendNotification($"Vous avez mis au rang: {rang} {_playerSelected.Identite.Name}");
                     _playerSelected.UpdateFull();
-                    return Task.CompletedTask;
                 };
 
                 mainMenu.Add(staffrank);
@@ -90,28 +89,21 @@ namespace ResurrectionRP_Server.Entities.Players
             #region Message Global
             var globalAnnonce = new MenuItem("Message Global", "", "ID_Global", true);
             globalAnnonce.SetInput("Votre message", 99, InputType.Text);
-            globalAnnonce.OnMenuItemCallbackAsync = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            globalAnnonce.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 if (string.IsNullOrEmpty(menuItem.InputValue))
-                    return Task.CompletedTask;
+                    return;
 
-                foreach (var player in Alt.GetAllPlayers())
-                {
-                    if (!player.Exists)
-                        continue;
-                    player.EmitLocked(Events.AnnonceGlobal, menuItem.InputValue, "AVIS A LA POPULATION!", "COMMUNIQUÉ GOUVERNEMENTAL");
-                }
-                return Task.CompletedTask;
+                Alt.EmitAllClients(Events.AnnonceGlobal, menuItem.InputValue, "AVIS A LA POPULATION!", "COMMUNIQUÉ GOUVERNEMENTAL");
             };
             mainMenu.Add(globalAnnonce);
             #endregion
 
             #region Reset Life
             var lifeitem = new MenuItem("Reset life", "", "", true);
-            lifeitem.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            lifeitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 _playerSelected.Health = 200;
-                await client.SetHealthAsync(200);
                 UpdateFull();
             };
             mainMenu.Add(lifeitem);
@@ -119,20 +111,19 @@ namespace ResurrectionRP_Server.Entities.Players
 
             #region Reset Thirst & Hunger
             var hungeritem = new MenuItem("Reset faim et soif", "", "", true);
-            hungeritem.OnMenuItemCallbackAsync = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            hungeritem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 _playerSelected.UpdateHungerThirst(100, 100);
-                return Task.CompletedTask;
             };
             mainMenu.Add(hungeritem);
             #endregion
 
             #region GodMod
             var godMod = new CheckboxItem("God Mode", "", "", isInvincible, true);
-            godMod.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            godMod.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 isInvincible = !isInvincible;
-                await _playerSelected.Client.SetInvincibleAsync(isInvincible);
+                _playerSelected.Client.SetInvincible(isInvincible);
 
                 if (isInvincible)
                 {
@@ -154,10 +145,10 @@ namespace ResurrectionRP_Server.Entities.Players
             
             #region Invisible
             var invisible = new CheckboxItem("Invisible", "", "", isInvisible, true);
-            invisible.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            invisible.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 isInvisible = !isInvisible;
-                await _playerSelected.Client.SetInvisibleAsync(isInvisible);
+                _playerSelected.Client.SetInvisible(isInvisible);
 
                 if (isInvisible)
                 {
@@ -177,14 +168,13 @@ namespace ResurrectionRP_Server.Entities.Players
             
             #region VehicleUnlock
             var vehunlock = new MenuItem("(Un)Lock Véhicule", "", "", true);
-            vehunlock.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            vehunlock.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                var veh = await VehiclesManager.GetNearestVehicle(client);
+                var veh = VehiclesManager.GetNearestVehicle(client);
                 if (veh != null)
                 {    
-                    await veh.SetLockStateAsync(veh.LockState == VehicleLockState.Locked ? VehicleLockState.Unlocked : VehicleLockState.Locked);
+                    veh.LockState = (veh.LockState == VehicleLockState.Locked ? VehicleLockState.Unlocked : VehicleLockState.Locked);
                     client.SendNotificationSuccess($"Vous venez {(veh.LockState == VehicleLockState.Locked ? "de fermer" : "d'ouvrir")} le véhicule {veh.NumberplateText}");
-                    //LogManager.Log($"~r~[ADMIN]~w~ {client.Name} viens d'ouvrir ou fermer " + VehiclesManager.GetNearestVehicle(client).NumberPlate);
                 }
                 else
                     client.SendNotificationError("Aucun véhicule a votre portée.");
@@ -194,24 +184,24 @@ namespace ResurrectionRP_Server.Entities.Players
 
             #region Waypoint
             var waypoint = new MenuItem("Téléporter sur le Waypoint", "", "", true);
-            waypoint.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            waypoint.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 if (_playerSelected.Vehicle != null)
                     _playerSelected.Vehicle.WasTeleported = true;
 
-                await _playerSelected.Client.EmitAsync(Events.SetToWayPoint);
+                _playerSelected.Client.Emit(Events.SetToWayPoint);
             };
             mainMenu.Add(waypoint);
             #endregion
 
             #region TeleportToMe
             var tptome = new MenuItem("Téléporter le joueur à moi", "", "", true);
-            tptome.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            tptome.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                Vector3 playerpos = await Client.GetPositionAsync();
+                Vector3 playerpos = client.Position;
                 playerpos.X = playerpos.X + 1f;
-                await _playerSelected.Client.SetPositionAsync(playerpos);
-                await _playerSelected.Client.SetDimensionAsync(await Client.GetDimensionAsync());
+                _playerSelected.Client.Position = (playerpos);
+                _playerSelected.Client.Dimension = Client.Dimension;
                 Client.SendNotificationSuccess($"{_playerSelected.Identite.Name} viens d'être téléporté sur vous");
             };
             mainMenu.Add(tptome);
@@ -219,10 +209,10 @@ namespace ResurrectionRP_Server.Entities.Players
 
             #region TeleportMe
             var tpme = new MenuItem("Téléporter sur le joueur", "", "", true);
-            tpme.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            tpme.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                await Client.SetPositionAsync(await _playerSelected.Client.GetPositionAsync());
-                await Client.SetDimensionAsync(await _playerSelected.Client.GetDimensionAsync());
+                Client.Position = (_playerSelected.Client.Position);
+                Client.Dimension = (_playerSelected.Client.Dimension);
                 Client.SendNotificationSuccess($"vous venez d'être téléporté sur {_playerSelected.Identite.Name}");
             };
             mainMenu.Add(tpme);
@@ -231,7 +221,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #region Weapon
             var weapon = new MenuItem("Prendre une arme", "", "ID_Weapon", true);
             weapon.SetInput("", 30, InputType.Text);
-            weapon.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            weapon.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 string name = menuItem.InputValue;
 
@@ -244,7 +234,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     return;
                 }
 
-                await _playerSelected.Client.GiveWeaponAsync((uint)hash, 200, true);
+                _playerSelected.Client.GiveWeapon((uint)hash, 200, true);
             };
             mainMenu.Add(weapon);
             #endregion
@@ -252,7 +242,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #region Ped
             var peditem = new MenuItem("Prendre l'apparence d'un ped", "", "ID_Ped", true);
             peditem.SetInput("", 30, InputType.Text);
-            peditem.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            peditem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 string name = menuItem.InputValue;
 
@@ -265,17 +255,17 @@ namespace ResurrectionRP_Server.Entities.Players
                     return;
                 }
 
-                await _playerSelected.Client.SetModelAsync((uint)hash);
+                _playerSelected.Client.Model = ((uint)hash);
             };
             mainMenu.Add(peditem);
             #endregion
 
             #region Kill
             var killitem = new MenuItem("Kill", "", "", true);
-            killitem.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            killitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 client.SendNotificationSuccess($"Vous venez de tuer {_playerSelected.Identite.Name}.");
-                await _playerSelected.Client.SetHealthAsync(0);
+                _playerSelected.Client.Health = 0;
             };
             mainMenu.Add(killitem);
             #endregion
@@ -283,10 +273,10 @@ namespace ResurrectionRP_Server.Entities.Players
             #region Kick
             var kickitem = new MenuItem("Kick le joueur", "", "", true);
             kickitem.SetInput("", 99, InputType.Text);
-            kickitem.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            kickitem.OnMenuItemCallback = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 client.SendNotificationSuccess($"Vous venez de kick {_playerSelected.Identite.Name}.");
-                await _playerSelected.Client.KickAsync(menuItem.InputValue);
+                _playerSelected.Client.Kick(menuItem.InputValue);
             };
             mainMenu.Add(kickitem);
             #endregion
@@ -307,7 +297,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #region Money
             var moneyitem = new MenuItem("Give de l'argent", "", "ID_GiveMoney", true);
             moneyitem.SetInput("", 10, InputType.UFloat, true);
-            moneyitem.OnMenuItemCallbackAsync = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) => 
+            moneyitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) => 
             {
                 double money = 0;
 
@@ -316,7 +306,6 @@ namespace ResurrectionRP_Server.Entities.Players
                     _playerSelected.AddMoney(money);
                     client.SendNotificationSuccess($"Vous venez de donner {money} à {_playerSelected.Identite.Name}");
                 }
-                return Task.CompletedTask;
             };
             mainMenu.Add(moneyitem);
             #endregion
@@ -324,7 +313,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #region Remove Money
             var delmoneyitem = new MenuItem("Retirer de l'argent", "", "ID_RemoveMoney", true);
             delmoneyitem.SetInput("", 10, InputType.UFloat, true);
-            delmoneyitem.OnMenuItemCallbackAsync = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            delmoneyitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 double money = 0;
 
@@ -333,25 +322,24 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (_playerSelected.HasMoney(money))
                         client.SendNotificationSuccess($"Vous venez de retirer ${money} à {_playerSelected.Identite.Name}");
                 }
-                return Task.CompletedTask;
             };
             mainMenu.Add(delmoneyitem);
             #endregion
 
             #region NoClip
             var noclipitem = new MenuItem("NoClip", "", "", true);
-            noclipitem.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            noclipitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                await _playerSelected.Client.EmitAsync("ToggleNoclip");
+                _playerSelected.Client.Emit("ToggleNoclip");
             };
             mainMenu.Add(noclipitem);
             #endregion
 
             #region Revive
             var resuitem = new MenuItem("Réanimer le joueur", "", "", true);
-            resuitem.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            resuitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                await _playerSelected.Client.Revive();
+                _playerSelected.Client.Revive();
             };
             mainMenu.Add(resuitem);
             #endregion
@@ -359,14 +347,14 @@ namespace ResurrectionRP_Server.Entities.Players
             #region Spawn Provisoire
             var spawn = new MenuItem("Spawn voiture temporaire", "Spawn une voiture avec le nom rentré, jusqu'au reboot.", "ID_SpawnVeh", true);
             spawn.SetInput("", 30, InputType.Text);
-            spawn.OnMenuItemCallbackAsync = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            spawn.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
                 try
                 {
                     string name = menuItem.InputValue;
 
                     if (string.IsNullOrEmpty(name))
-                        return Task.CompletedTask;
+                        return;
 
                     uint hash = Alt.Hash(name);
                     VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get(hash);
@@ -374,7 +362,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (manifest == null)
                     {
                         client.SendNotificationError($"véhicule inconnu : {name}");
-                        return Task.CompletedTask;
+                        return;
                     }
 
                     Rotation rot = _playerSelected.Client.Rotation;
@@ -394,8 +382,6 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     Alt.Server.LogError($"ADMIN SPAWN VEHICLE PROVISOIRE: {ex}");
                 }
-
-                return Task.CompletedTask;
             };
             mainMenu.Add(spawn);
             #endregion
@@ -447,7 +433,7 @@ namespace ResurrectionRP_Server.Entities.Players
             var deletepermvehitem = new MenuItem("Supprimer le véhicule (PERM).", "~r~ATTENTION CECI LE RETIRE DE LA BASE DE DONNÉES!", "", true);
             deletepermvehitem.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                VehicleHandler vehicle = (await VehiclesManager.GetNearestVehicle(client)).GetVehicleHandler();
+                VehicleHandler vehicle = (await VehiclesManager.GetNearestVehicleAsync(client)).GetVehicleHandler();
 
                 if (vehicle == null)
                     client.SendNotificationError("Aucun véhicule a proximité");
@@ -464,7 +450,7 @@ namespace ResurrectionRP_Server.Entities.Players
             var deletevehitem = new MenuItem("Supprimer le véhicule.", "", "", true);
             deletevehitem.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                VehicleHandler vehicle = (await VehiclesManager.GetNearestVehicle(client)).GetVehicleHandler();
+                VehicleHandler vehicle = (await VehiclesManager.GetNearestVehicleAsync(client)).GetVehicleHandler();
 
                 if (vehicle == null)
                     client.SendNotificationError("Aucun véhicule a proximité");
@@ -479,9 +465,9 @@ namespace ResurrectionRP_Server.Entities.Players
 
             #region Pound
             var pounditem = new MenuItem("Mettre en fourrière le véhicule", "", "", true);
-            pounditem.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+            pounditem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                IVehicle vehicle = await VehiclesManager.GetNearestVehicle(client);
+                IVehicle vehicle = VehiclesManager.GetNearestVehicle(client);
 
                 if (vehicle == null)
                 {
@@ -490,7 +476,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
                 else
                 {
-                    VehicleHandler vehfourriere = (await VehiclesManager.GetNearestVehicle(client)).GetVehicleHandler();
+                    VehicleHandler vehfourriere = (VehiclesManager.GetNearestVehicle(client)).GetVehicleHandler();
 
                     if (vehfourriere.SpawnVeh)
                         return;
@@ -522,7 +508,7 @@ namespace ResurrectionRP_Server.Entities.Players
         private void ChoisePlayer(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             var secondMenu = new Menu("", "Admin Menu", "Choisissez un joueur :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Garage);
-            secondMenu.ItemSelectCallbackAsync = ChoisePlayerCallback;
+            secondMenu.ItemSelectCallback = ChoisePlayerCallback;
 
             List<PlayerHandler> players = PlayerManager.GetPlayersList();
 
@@ -532,14 +518,14 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     string description = "";
                     var item = new MenuItem(player.Identite.Name, description, executeCallback: true);
-                    item.OnMenuItemCallbackAsync = async (IPlayer cClient, Menu cMenu, IMenuItem cMenuItem, int _itemIndex) =>
+                    item.OnMenuItemCallback =  (IPlayer cClient, Menu cMenu, IMenuItem cMenuItem, int _itemIndex) =>
                     {
                         PlayerHandler playerSelected = players[_itemIndex];
 
                         if (!playerSelected.Client.Exists)
                             return;
 
-                        await OpenAdminMenu(playerSelected);
+                        OpenAdminMenu(playerSelected);
                     };
 
                     secondMenu.Add(item);
@@ -549,10 +535,10 @@ namespace ResurrectionRP_Server.Entities.Players
             secondMenu.OpenMenu(Client);
         }
 
-        private async Task ChoisePlayerCallback(IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex)
+        private void ChoisePlayerCallback(IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex)
         {
             if (menuItem == null)
-                await OpenAdminMenu();
+                OpenAdminMenu();
         }
         #endregion
     }

@@ -20,7 +20,7 @@ namespace ResurrectionRP_Server.EventHandlers
         public static event ColShapePlayerEventHandler OnPlayerLeaveColShape;
         public static event ColShapeVehicleEventHandler OnVehicleEnterColShape;
         public static event ColShapeVehicleEventHandler OnVehicleLeaveColShape;
-        public static event ColShapePlayerEventHandlerAsync OnPlayerInteractInColShape;
+        public static event ColShapePlayerEventHandlerAsync OnPlayerInteractInColShapeAsync;
         #endregion
 
         #region Private fields
@@ -106,8 +106,8 @@ namespace ResurrectionRP_Server.EventHandlers
                 // BUG V784 : Bug ColShape.IsEntityIn() returns always false
                 if (colshape.IsEntityInColShape(client))
                 {
-                    if (OnPlayerInteractInColShape != null)
-                        await OnPlayerInteractInColShape.Invoke(colshape, client);
+                    if (OnPlayerInteractInColShapeAsync != null)
+                        await OnPlayerInteractInColShapeAsync.Invoke(colshape, client);
 
                     if (colshape.GetData("OnPlayerInteractInColShape", out ColShapePlayerEventHandlerAsync onPlayerInteractInColShape) && onPlayerInteractInColShape != null)
                         await onPlayerInteractInColShape.Invoke(colshape, client);

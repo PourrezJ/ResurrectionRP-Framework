@@ -208,8 +208,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             return generatedPlate;
         }
-        public static async Task<IVehicle> GetNearestVehicle(IPlayer client, float distance = 3.0f, short dimension = short.MaxValue) =>
-            GetNearestVehicle(await client.GetPositionAsync(), distance, dimension);
+        public static IVehicle GetNearestVehicle(IPlayer client, float distance = 3.0f, short dimension = short.MaxValue) =>
+            GetNearestVehicle(client.Position, distance, dimension);
+
+        public static async Task<IVehicle> GetNearestVehicleAsync(IPlayer client, float distance = 3.0f, short dimension = short.MaxValue)
+        {
+            return await GetNearestVehicleAsync(client.Position, distance, dimension);
+        }
+    
 
         public static IVehicle GetNearestVehicle(Vector3 position, float distance = 3.0f, short dimension = short.MaxValue)
         {
@@ -221,6 +227,26 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             foreach (IVehicle veh in vehs)
             {
                 if (!veh.Exists || veh.Dimension != dimension || position.DistanceTo2D(veh.Position) > distance)
+                    continue;
+                else if (nearest == null)
+                    nearest = veh;
+                else if (position.DistanceTo2D(veh.Position) < position.DistanceTo(nearest.Position))
+                    nearest = veh;
+            }
+
+            return nearest;
+        }
+
+        public static async Task<IVehicle> GetNearestVehicleAsync(Vector3 position, float distance = 3.0f, short dimension = short.MaxValue)
+        {
+            // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
+            // ICollection<IVehicle> vehs = Alt.GetAllVehicles();
+            ICollection<IVehicle> vehs = GetAllVehiclesInGame();
+            IVehicle nearest = null;
+
+            foreach (IVehicle veh in vehs)
+            {
+                if (!await veh.ExistsAsync() || await veh.GetDimensionAsync() != dimension || position.DistanceTo2D(veh.Position) > distance)
                     continue;
                 else if (nearest == null)
                     nearest = veh;

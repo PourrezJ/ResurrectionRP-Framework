@@ -24,7 +24,7 @@ namespace ResurrectionRP_Server.Teleport
         #region Constructor
         public TeleportManager()
         {
-            Events.OnPlayerInteractInColShape += OnTeleportColshape;
+            Events.OnPlayerInteractInColShapeAsync += OnTeleportColshape;
             Events.OnPlayerLeaveColShape += OnPlayerLeaveColShape;
         }
         #endregion

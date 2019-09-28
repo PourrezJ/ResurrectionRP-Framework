@@ -157,6 +157,7 @@ export class Game {
                 let invincible: boolean = entity.getSyncedMeta("SetInvincible");
                 let invisible: boolean = entity.getSyncedMeta("SetInvisible");
                 let walkingStyle: string = entity.getSyncedMeta("WalkingStyle");
+                let facialAnim: string = entity.getSyncedMeta("FacialAnim");
 
                 game.setEntityAlpha(entity.scriptID, invisible ? 0 : 255, false);
                 game.setEntityInvincible(entity.scriptID, invincible);
@@ -171,6 +172,9 @@ export class Game {
                 }
                 else
                     game.resetPedMovementClipset(entity.scriptID, 0.1);
+
+                if (facialAnim != null)
+                    game.setFacialIdleAnimOverride(entity.scriptID, facialAnim, undefined);
             });
 
             alt.on('syncedMetaChange', async (entity: alt.Entity, key: string, value: any) => {
@@ -199,6 +203,10 @@ export class Game {
                         }
                         else
                             game.resetPedMovementClipset(entity.scriptID, 0.1);
+                        break;
+
+                    case 'FacialAnim':
+                        game.setFacialIdleAnimOverride(entity.scriptID, value, undefined);
                         break;
                 }
             });

@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server.Menus
             FaceMenu faceMenu = new FaceMenu();
 
             faceMenu.facialMenu = new XMenu("ID_Face");
-            faceMenu.facialMenu.Callback = faceMenu.FacialCallback;
+            faceMenu.facialMenu.CallbackAsync = faceMenu.FacialCallback;
 
             faceMenu.facialMenu.Add(new XMenuItem("Normal", "", "ID_Normal", XMenuItemIcons.MEH_BLANK_SOLID));
 
@@ -59,19 +59,21 @@ namespace ResurrectionRP_Server.Menus
             faceMenu.facialMenu.OpenXMenu(client);
         }
 
-        private void FacialCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private async Task FacialCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
-            /*
+            var ph = client.GetPlayerHandler();
+
+
             if (menuItem.Id == "ID_Normal")
-                await client.GetPlayerHandler().ResetFacialAnim();
+                await ph.ResetFacialAnim();
             else
             {
                 Mood mood = menuItem.GetData("Mood");
 
                 if (mood != null)
-                    client.GetPlayerHandler()?.SetFacialAnim(mood.Anim);        
+                    await ph.SetFacialAnim(mood.Anim);        
             }
-            */
+            
             XMenuManager.XMenuManager.CloseMenu(client);
         }
     }

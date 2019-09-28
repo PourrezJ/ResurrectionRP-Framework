@@ -244,21 +244,21 @@ namespace ResurrectionRP_Server.Entities.Players
                     await vehicle.SetSyncedMetaDataAsync("SirenDisabled", vh.SirenSound);
 
                     break;
-                    /*
+                    
                 case ConsoleKey.X:
                     if (ph.HasOpenMenu())
                         return;
 
                     if (ph.IsCuff())
                     {
-                        await client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
+                        client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
                         return;
                     }
 
-                    await ph.Crounch(!ph.PlayerSync.Crounch);
-
+                    ph.PlayerSync.Crounch = !ph.PlayerSync.Crounch;
+                    await Client.SetSyncedMetaDataAsync("Crounch", ph.PlayerSync.Crounch);
                     break;
-                **/
+         
                 case ConsoleKey.I:
                     if (ph.HasOpenMenu())
                         return;

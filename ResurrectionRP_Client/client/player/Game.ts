@@ -158,11 +158,21 @@ export class Game {
                 let invisible: boolean = entity.getSyncedMeta("SetInvisible");
                 let walkingStyle: string = entity.getSyncedMeta("WalkingStyle");
                 let facialAnim: string = entity.getSyncedMeta("FacialAnim");
+                let crounch: boolean = entity.getSyncedMeta("Crounch");
 
                 game.setEntityAlpha(entity.scriptID, invisible ? 0 : 255, false);
                 game.setEntityInvincible(entity.scriptID, invincible);
 
-                if (walkingStyle != null) {
+                if (crounch) {
+                    if (!game.hasClipSetLoaded("move_ped_crouched")) {
+                        game.requestClipSet("move_ped_crouched");
+                        while (!game.hasClipSetLoaded("move_ped_crouched"))
+                            utils.Wait(5);
+                    }
+                    game.setPedMovementClipset(entity.scriptID, "move_ped_crouched", 0.2);
+                    game.setPedStrafeClipset(entity.scriptID, "move_ped_crouched_strafing");
+                }
+                else if (walkingStyle != null) {
 
                     if (!game.hasClipSetLoaded(walkingStyle)) {
                         game.requestClipSet(walkingStyle);
@@ -197,7 +207,8 @@ export class Game {
 
                             if (!game.hasClipSetLoaded(value)) {
                                 game.requestClipSet(value);
-                                utils.Wait(5);
+                                while (!game.hasClipSetLoaded(value))
+                                    utils.Wait(5);
                             }
                             game.setPedMovementClipset(entity.scriptID, value, 0.2);
                         }
@@ -207,6 +218,20 @@ export class Game {
 
                     case 'FacialAnim':
                         game.setFacialIdleAnimOverride(entity.scriptID, value, undefined);
+                        break;
+
+                    case 'Crounch':
+                        if (value) {
+                            if (!game.hasClipSetLoaded("move_ped_crouched")) {
+                                game.requestClipSet("move_ped_crouched");
+                                while (!game.hasClipSetLoaded("move_ped_crouched"))
+                                    utils.Wait(5);
+                            }
+                            game.setPedMovementClipset(entity.scriptID, "move_ped_crouched", 0.2);
+                            game.setPedStrafeClipset(entity.scriptID, "move_ped_crouched_strafing");
+                        }
+                        else
+                            game.resetPedMovementClipset(entity.scriptID, 0.1);
                         break;
                 }
             });

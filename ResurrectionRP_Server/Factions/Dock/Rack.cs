@@ -91,7 +91,7 @@ namespace ResurrectionRP_Server.Factions
                 if (client.GetPlayerHandler()?.StaffRank > 0 && InventoryBox != null && boxOnForks == null)
                     menu.Add(new MenuItem("~r~Retirer le box", $"Retirer le box {RackName}", "ID_Destroy", true));
 
-                Task.Run(async () => { await MenuManager.OpenMenu(client, menu); }).Wait();
+                MenuManager.OpenMenu(client, menu);
             }
         }
 
@@ -133,7 +133,7 @@ namespace ResurrectionRP_Server.Factions
                 }
 
                 await GameMode.Instance.FactionManager.Dock.UpdateDatabase();
-                await MenuManager.CloseMenu(client);
+                MenuManager.CloseMenu(client);
                 RefreshLabel();
             }
         }

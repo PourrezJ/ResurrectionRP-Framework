@@ -29,10 +29,10 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
         #endregion
 
         #region Events
-        private async Task OnInteractWithPnj(IPlayer client, Entities.Peds.Ped npc)
+        private void OnInteractWithPnj(IPlayer client, Entities.Peds.Ped npc)
         {
             if (_vehicleBench != null)
-                await OpenMainMenu(client, _vehicleBench);
+                OpenMainMenu(client, _vehicleBench);
             else
                 client.SendNotificationError("Aucun véhicule devant l'établi.");
         }

@@ -21,12 +21,11 @@ namespace ResurrectionRP_Server.Business.Barber
         #endregion
 
         #region Main
-        public override async Task OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
+        public override void OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
         {
             if (!( IsOwner(client) ||  IsEmployee(client)))
             {
                 client.SendNotification("Men, tu n'es pas coiffeur!");
-                return;
             }
 
             Menu mainMenu = new Menu("ID_BarberMain", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Barber);
@@ -67,10 +66,10 @@ namespace ResurrectionRP_Server.Business.Barber
 
 
                 MenuItem colorchange = new MenuItem($"Faire une couleur (${ColorPrice})", "", "ID_Color", true);
-                colorchange.OnMenuItemCallbackAsync = ColorChoice;
+                colorchange.OnMenuItemCallback = ColorChoice;
                 mainMenu.Add(colorchange);
 
-                await MenuManager.OpenMenu(client, mainMenu);
+                MenuManager.OpenMenu(client, mainMenu);
             }
             else
                 client.SendNotificationError("Aucun client à proximité.");
@@ -80,7 +79,7 @@ namespace ResurrectionRP_Server.Business.Barber
         {
             if (ClientSelected == null || ClientSelected.Client == null || !await ClientSelected.Client.ExistsAsync())
             {
-                await OpenMenu(client);
+                OpenMenu(client);
                 return;
             }
 
@@ -108,19 +107,20 @@ namespace ResurrectionRP_Server.Business.Barber
                     ClientSelected.Client.SetHeadOverlay(1, head);
                 }
 
-                await OpenMenu(client);
+                OpenMenu(client);
             }
         }
 
-        private async Task BankAccountMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private Task BankAccountMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
-                await OpenMenu(client);
-                return;
+                OpenMenu(client);
+                return Task.CompletedTask;
             }
 
-            await BankMenu.OpenBankMenu(client, BankAccount, AtmType.Business, menu, BankAccountMenu);
+            BankMenu.OpenBankMenu(client, BankAccount, AtmType.Business, menu, BankAccountMenu);
+            return Task.CompletedTask;
         }
 
         private async Task DepotMoneyMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -163,7 +163,7 @@ namespace ResurrectionRP_Server.Business.Barber
             menu = new Menu("ID_BarberBeard", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Barber);
             menu.ItemSelectCallbackAsync= BarberMenuCallBack;
             menu.IndexChangeCallbackAsync = HairCutPreview;
-            menu.FinalizerAsync = MenuFinalizer;
+            menu.Finalizer = MenuFinalizer;
 
             foreach (var beard in Beards.BeardsList)
             {
@@ -180,7 +180,7 @@ namespace ResurrectionRP_Server.Business.Barber
                 menu.Add(item);
             }
 
-            await MenuManager.OpenMenu(client, menu);
+            MenuManager.OpenMenu(client, menu);
             await HairCutPreview(client, menu, 0, menu.Items[0]);
         }
 
@@ -202,7 +202,7 @@ namespace ResurrectionRP_Server.Business.Barber
             else
                 client.SendNotificationError("Vous n'avez pas de fond de caisse.");
 
-            await OpenMenu(client);
+            OpenMenu(client);
         }
         #endregion
 
@@ -220,7 +220,7 @@ namespace ResurrectionRP_Server.Business.Barber
             menu = new Menu("ID_BarberHair", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Barber);
             menu.ItemSelectCallbackAsync = BarberMenuCallBack;
             menu.IndexChangeCallbackAsync = HairCutPreview;
-            menu.FinalizerAsync = MenuFinalizer;
+            menu.Finalizer = MenuFinalizer;
 
             List<Hairs> _hairsList = (ClientSelected.Character.Gender == 0) ? Hairs.HairsMenList : Hairs.HairsGirlList;
 
@@ -239,7 +239,7 @@ namespace ResurrectionRP_Server.Business.Barber
                 menu.Add(item);
             }
 
-            await MenuManager.OpenMenu(client, menu);
+            MenuManager.OpenMenu(client, menu);
             await HairCutPreview(client, menu, 0, menu.Items[0]);
         }
 
@@ -258,7 +258,7 @@ namespace ResurrectionRP_Server.Business.Barber
             else
                 client.SendNotificationError("Vous n'avez pas de fond de caisse.");
 
-            await OpenMenu(client);
+            OpenMenu(client);
         }
 
         private Task HairCutPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
@@ -285,7 +285,7 @@ namespace ResurrectionRP_Server.Business.Barber
         #endregion
 
         #region Color
-        private async Task ColorChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void ColorChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             var listItem = menu.Items.Find(m => m.Id == "ID_PlayerSelect") as ListItem;
             
@@ -304,7 +304,7 @@ namespace ResurrectionRP_Server.Business.Barber
             menu = new Menu("ID_BarberColor", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Barber);
             menu.ItemSelectCallbackAsync = BarberMenuCallBack;
             menu.ListItemChangeCallbackAsync = ColorPreview;
-            menu.FinalizerAsync = MenuFinalizer;
+            menu.Finalizer = MenuFinalizer;
 
             List<object> _colorlist = new List<object>();
 
@@ -320,7 +320,7 @@ namespace ResurrectionRP_Server.Business.Barber
             valid.OnMenuItemCallbackAsync = ColorValidChoice;
             menu.Add(valid);
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
         }
 
         private async Task ColorValidChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -349,13 +349,13 @@ namespace ResurrectionRP_Server.Business.Barber
                 ClientSelected.Client.ApplyCharacter();
             }
 
-            await OpenMenu(client);
+            OpenMenu(client);
         }
 
         private async Task ColorPreview(IPlayer client, Menu menu, IListItem listItem, int listindex)
         {
             if (ClientSelected == null)
-                await OpenMenu(client);
+                OpenMenu(client);
 
             if (listItem.Id == "ID_HairFirstColor")
                 _hairFirstColor = listindex;
@@ -384,13 +384,12 @@ namespace ResurrectionRP_Server.Business.Barber
         #endregion
 
         #region Finalizer
-        private Task MenuFinalizer(IPlayer client, Menu menu)
+        private void MenuFinalizer(IPlayer client, Menu menu)
         {
             if (ClientSelected == null)
-                return Task.CompletedTask;
+                return;
 
             ClientSelected.Client.ApplyCharacter();
-            return Task.CompletedTask;
         }
         #endregion
     }

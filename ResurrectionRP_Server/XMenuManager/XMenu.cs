@@ -74,9 +74,9 @@ namespace ResurrectionRP_Server.XMenuManager
 
         #region Public methods
 
-        public async Task OpenXMenu(IPlayer client)
+        public void OpenXMenu(IPlayer client)
         {
-            await XMenuManager.OpenMenu(client, this);
+            XMenuManager.OpenMenu(client, this);
         }
 
 

@@ -136,7 +136,7 @@ namespace ResurrectionRP_Server.Jobs
 
             #endregion
 
-            AltAsync.OnServer("DustMan_Callback", DustMan_Callback);
+            Alt.OnServer("DustMan_Callback", DustMan_Callback);
 
             Utils.Utils.Delay((int)TimeSpan.FromMinutes(2).TotalMilliseconds, false, async () =>
             {
@@ -188,7 +188,7 @@ namespace ResurrectionRP_Server.Jobs
             return Task.CompletedTask;
         }
 
-        private async Task DustMan_Callback(object[] args)
+        private void DustMan_Callback(object[] args)
         {
             IPlayer client = args[0] as IPlayer;
             if (!client.Exists)
@@ -205,7 +205,7 @@ namespace ResurrectionRP_Server.Jobs
                 menu.Add(new MenuItem("~g~Prendre un autre quartier", "", "ID_Quartier", true));
                 menu.Add(new MenuItem("~r~Fin de mission", "", "ID_End", true));
 
-                await menu.OpenMenu(client);
+                menu.OpenMenu(client);
             }
         }
 
@@ -221,7 +221,7 @@ namespace ResurrectionRP_Server.Jobs
                     await QuitterService(client);
                     break;
             }
-            await MenuManager.CloseMenu(client);
+            MenuManager.CloseMenu(client);
         }
 
         public override async Task QuitterService(IPlayer client)

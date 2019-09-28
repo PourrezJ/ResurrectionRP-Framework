@@ -35,7 +35,7 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Menus
-        public override async Task OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
+        public override void OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
         {
             if (Inventory.Locked)
             {
@@ -66,7 +66,7 @@ namespace ResurrectionRP_Server.Business
             }
             else
                 client.SendNotification("Il n'y a pas de produits en vente.");
-            await MenuManager.OpenMenu(client, _menu);
+            MenuManager.OpenMenu(client, _menu);
         }
 
         public override async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
@@ -102,11 +102,11 @@ namespace ResurrectionRP_Server.Business
             switch (menuItem.Id)
             {
                 case "ID_TakeMoney":
-                    await Bank.BankMenu.OpenBankMenu(client, BankAccount, Bank.AtmType.Business, menu, StoreOwnerMenuManager);
+                    Bank.BankMenu.OpenBankMenu(client, BankAccount, Bank.AtmType.Business, menu, StoreOwnerMenuManager);
                     break;
                 case "ID_Add":
                     Inventory.Locked = true;
-                    await menu.CloseMenu(client);
+                    menu.CloseMenu(client);
                     var invmenu = new Inventory.RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, Inventory, true);
 
                     invmenu.OnMove += async (p, m) =>
@@ -165,7 +165,7 @@ namespace ResurrectionRP_Server.Business
                                 GameMode.Instance.Economy.CaissePublique += tax;
                                 await Update();
                                 client.SendNotification($"Vous avez acheté un/des {itemStack.Item.name}(s) pour la somme de {(itemStack.Price * quantity) + tax} dont {tax} de taxes.");
-                                await OpenMenu(client);
+                                OpenMenu(client);
                             }
                         }
                         else

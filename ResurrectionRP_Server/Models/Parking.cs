@@ -161,7 +161,7 @@ namespace ResurrectionRP_Server.Models
                 PlayerHandler player = client.GetPlayerHandler();
 
                 if (player != null && player.HasOpenMenu())
-                    Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
+                    MenuManager.CloseMenu(client);
             }
         }
 
@@ -201,9 +201,8 @@ namespace ResurrectionRP_Server.Models
 
         private async Task StoreVehicle(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            var vehicle = await client.GetVehicleAsync();
-            await StoreVehicle(client, vehicle);
-            await menu.CloseMenu(client);
+            await StoreVehicle(client, client.Vehicle);
+            menu.CloseMenu(client);
         }
 
         private async Task GetVehicle(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -249,7 +248,7 @@ namespace ResurrectionRP_Server.Models
                     await OnVehicleOut.Invoke(client, veh, Spawn); // callback (ex carpark)
 
                 veh.UpdateFull();
-                await MenuManager.CloseMenu(client);
+                MenuManager.CloseMenu(client);
             }
             catch (Exception ex)
             {
@@ -386,7 +385,7 @@ namespace ResurrectionRP_Server.Models
             } 
 
             menu.SetData("Location", location);
-            Task.Run(async () => { await menu.OpenMenu(client); }).Wait();
+            menu.OpenMenu(client);
         }
 
         public async Task StoreVehicle(IPlayer client, IVehicle vh)
@@ -437,7 +436,7 @@ namespace ResurrectionRP_Server.Models
                 {
                     Alt.Server.LogError("GetHandlerByVehicle fuck is null this shit! mother fucker!");
                 }
-                await MenuManager.CloseMenu(client);
+                MenuManager.CloseMenu(client);
             }
             catch (Exception ex)
             {

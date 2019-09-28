@@ -23,11 +23,11 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
         }
         #endregion
 
-        #region Event handlers
-        private async Task OnInteractWithPnj(IPlayer client, Entities.Peds.Ped npc)
+        #region Events
+        private void OnInteractWithPnj(IPlayer client, Entities.Peds.Ped npc)
         {
             if (_vehicleBench != null)
-                await OpenMainMenu(client);
+                OpenMainMenu(client);
             else
                 client.SendNotificationError("Aucun véhicule devant l'établi.");
         }

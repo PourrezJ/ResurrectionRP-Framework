@@ -89,6 +89,8 @@ namespace ResurrectionRP_Server
                 _selectedIndex = Items.IndexOf(value);
             }
         }
+
+        //ASYNC
         [JsonIgnore]
         public MenuCallbackAsync ItemSelectCallbackAsync { get; set; }
         [JsonIgnore]
@@ -99,6 +101,18 @@ namespace ResurrectionRP_Server
         public MenuCheckboxAsync CallbackCheckBoxAsync { get; set; }
         [JsonIgnore]
         public MenuFinalizerAsync FinalizerAsync { get; set; }
+
+        // SYNC
+        [JsonIgnore]
+        public MenuCallback ItemSelectCallback { get; set; }
+        [JsonIgnore]
+        public MenuListCallback ListItemChangeCallback { get; set; }
+        [JsonIgnore]
+        public MenuCurrentIndex IndexChangeCallback { get; set; }
+        [JsonIgnore]
+        public MenuCheckbox CallbackCheckBox { get; set; }
+        [JsonIgnore]
+        public MenuFinalizer Finalizer { get; set; }
         #endregion
 
         #region Constructor
@@ -276,9 +290,9 @@ namespace ResurrectionRP_Server
             _data[key] = value;
         }
 
-        public async Task<bool> OpenMenu(IPlayer client) => await MenuManager.OpenMenu(client, this);
+        public void OpenMenu(IPlayer client) => MenuManager.OpenMenu(client, this);
 
-        public async Task CloseMenu(IPlayer client) => await MenuManager.CloseMenu(client);
+        public void CloseMenu(IPlayer client) => MenuManager.CloseMenu(client);
         #endregion
     }
 }

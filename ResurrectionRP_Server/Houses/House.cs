@@ -145,7 +145,7 @@ namespace ResurrectionRP_Server.Houses
         private void OnPlayerEnterColshape(IColShape colShape, IPlayer client)
         {
             if (colShape == ColShapeEnter)
-                Task.Run(async () => { await HouseManager.OpenHouseMenu(client, this); }).Wait();
+                HouseManager.OpenHouseMenu(client, this);
             else if (colShape == ColShapeOut)
                 client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
         }
@@ -169,7 +169,7 @@ namespace ResurrectionRP_Server.Houses
                 return;
 
             if (ph.HasOpenMenu())
-                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
+                MenuManager.CloseMenu(client);
         }
 
         private async Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)

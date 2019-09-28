@@ -87,12 +87,13 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Event handlers
-        private async Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
+        private Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
         {
             if (!client.Exists)
-                return;
+                return Task.CompletedTask;
 
-            await OpenPropsStoreMenu(client);
+            OpenPropsStoreMenu(client);
+            return Task.CompletedTask;
         }
 
         public void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
@@ -108,7 +109,7 @@ namespace ResurrectionRP_Server.Business
                 return;
 
             if (player.HasOpenMenu())
-                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
+                MenuManager.CloseMenu(client);
         }
         #endregion
 
@@ -179,10 +180,10 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Menu
-        public async Task OpenPropsStoreMenu(IPlayer client)
+        public void OpenPropsStoreMenu(IPlayer client)
         {
             Menu menu = new Menu("ClothingMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, BannerStyle);
-            menu.ItemSelectCallbackAsync = MenuCallBack;
+            menu.ItemSelectCallback = MenuCallBack;
             menu.FinalizerAsync = MenuClose;
 
             if (client.Model == (uint)PedModel.FreemodeMale01)
@@ -222,38 +223,38 @@ namespace ResurrectionRP_Server.Business
             else
                 client.SendNotificationError("Vous n'êtes pas autorisé à utiliser la boutique de vêtements avec ce skin.");
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
         }
 
-        private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             switch (menuItem.Id)
             {
                 case "ID_Hats":
-                    await OpenComponentMenu(client, menu, 0);
+                    OpenComponentMenu(client, menu, 0);
                     break;
 
                 case "ID_Glasses":
-                    await OpenComponentMenu(client, menu, 1);
+                    OpenComponentMenu(client, menu, 1);
                     break;
 
                 case "ID_Ears":
-                    await OpenComponentMenuWithoutCat(client, menu, 2);
+                    OpenComponentMenuWithoutCat(client, menu, 2);
                     break;
 
                 case "ID_Watches":
-                    await OpenComponentMenu(client, menu, 6);
+                    OpenComponentMenu(client, menu, 6);
                     break;
 
                 case "ID_Bracelets":
-                    await OpenComponentMenu(client, menu, 7);
+                    OpenComponentMenu(client, menu, 7);
                     break;
             }
         }
         #endregion
 
         #region WithCategorie
-        public async Task OpenComponentMenu(IPlayer client, Menu menu, byte componentID)
+        public void OpenComponentMenu(IPlayer client, Menu menu, byte componentID)
         {
             ClothManifest? data = ClothingLoader.FindProps(client, componentID) ?? null;
 
@@ -314,14 +315,14 @@ namespace ResurrectionRP_Server.Business
 
             menu.SetData("componentID", componentID);
             menu.SetData("Categorie", compoList);
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
         }
 
         private async Task CategorieCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
-                await OpenPropsStoreMenu(client);
+                OpenPropsStoreMenu(client);
                 return;
             }
 
@@ -365,7 +366,7 @@ namespace ResurrectionRP_Server.Business
                 }
             }
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
             await OnCurrentItem(client, menu, 0, menu.Items[0]);
         }
 
@@ -374,7 +375,7 @@ namespace ResurrectionRP_Server.Business
             if (menuItem == null)
             {
                 byte compID = menu.GetData("componentID");
-                await OpenComponentMenu(client, menu, compID);
+                OpenComponentMenu(client, menu, compID);
                 return;
             }
 
@@ -406,7 +407,7 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region WithoutCategorie
-        private async Task OpenComponentMenuWithoutCat(IPlayer client, Menu menu, byte componentID)
+        private void OpenComponentMenuWithoutCat(IPlayer client, Menu menu, byte componentID)
         {
             ClothManifest? data = ClothingLoader.FindProps(client, componentID) ?? null;
 
@@ -472,15 +473,15 @@ namespace ResurrectionRP_Server.Business
             }
 
             menu.SetData("componentID", componentID);
-            await menu.OpenMenu(client);
-            await OnCurrentItem(client, menu, 0, menu.Items[0]);
+            menu.OpenMenu(client);
+            OnCurrentItem(client, menu, 0, menu.Items[0]);
         }
 
         private async Task OnCallBackWithoutCat(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
-                await OpenPropsStoreMenu(client);
+                OpenPropsStoreMenu(client);
                 return;
             }
 

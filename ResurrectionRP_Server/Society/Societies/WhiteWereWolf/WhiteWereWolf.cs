@@ -30,14 +30,12 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
         #endregion
 
         #region Event handlers
-        private Task OnInteractWithPnj(IPlayer client, Entities.Peds. Ped npc)
+        private void OnInteractWithPnj(IPlayer client, Entities.Peds. Ped npc)
         {
             if (_vehicleBench != null)
                 OpenMainMenu(client, _vehicleBench);
             else
                 client.SendNotificationError("Aucun véhicule devant l'établi.");
-
-            return Task.CompletedTask;
         }
 
         public override async void OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
@@ -83,7 +81,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             _garageType = GarageType.Bike;
         }
 
-        private async Task OpenCelluleDoor(IPlayer client, Door door)
+        private void OpenCelluleDoor(IPlayer client, Door door)
         {
             if (IsEmployee(client))
             {
@@ -94,11 +92,11 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                 item.OnMenuItemCallback = OnDoorCall;
                 xmenu.Add(item);
 
-                await xmenu.OpenXMenu(client);
+                xmenu.OpenXMenu(client);
             }
         }
 
-        private static async Task OnDoorCall(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private static void OnDoorCall(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             Door door = menu.GetData("Door");
             if (door != null)
@@ -106,7 +104,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                  door.SetDoorLockState(!door.Locked);
             }
 
-            await XMenuManager.XMenuManager.CloseMenu(client);
+            XMenuManager.XMenuManager.CloseMenu(client);
         }
 
         private void HornPreview(IVehicle vehicle, byte horn)

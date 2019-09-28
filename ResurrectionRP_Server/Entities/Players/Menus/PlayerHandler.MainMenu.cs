@@ -38,11 +38,10 @@ namespace ResurrectionRP_Server.Entities.Players
             menu.Add(new MenuItem("Styles de Marche", "", "ID_WalkingStyles", true));
             menu.Add(new MenuItem("Expression Visage", "", "ID_Face", true));
             menu.Add(new MenuItem("Déconnecter", "", "ID_Disconnect", true));
-
-            await MenuManager.OpenMenu(Client, menu);
+            MenuManager.OpenMenu(Client, menu);
         }
 
-        private async Task OpenKeysMenu()
+        private void OpenKeysMenu()
         {
             Menu menu = new Menu("ID_KeyMenu", "Mes Clefs", "Clefs que vous possédez", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR);
             menu.ItemSelectCallbackAsync = MainMenuManager;
@@ -60,7 +59,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
             }
 
-            await menu.OpenMenu(Client);
+            menu.OpenMenu(Client);
         }
         #endregion
 
@@ -72,7 +71,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 switch (menuItem.Id)
                 {
                     case "ID_Animations":
-                        await AnimationsMenu.OpenAnimationsMenu(Client);
+                        AnimationsMenu.OpenAnimationsMenu(Client);
                         break;
                     case "ID_WalkingStyles":
                         if ( client.GetPlayerHandler().PlayerSync.Injured)
@@ -81,7 +80,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             return;
                         }
 
-                        await WalkingStyleMenu.OpenWalkingStyleMenu(Client);
+                        WalkingStyleMenu.OpenWalkingStyleMenu(Client);
                         break;
                     case "ID_Disconnect":
                         await client.EmitAsync("PlayerDisconnect");
@@ -89,11 +88,11 @@ namespace ResurrectionRP_Server.Entities.Players
                         await Client.KickAsync("Disconnected");
                         break;
                     case "ID_Clefs":
-                        await OpenKeysMenu();
+                        OpenKeysMenu();
                         break;
                     case "ID_Face":
-                        await MenuManager.CloseMenu(client);
-                        await FaceMenu.OpenFaceMenu(client);
+                        MenuManager.CloseMenu(client);
+                        FaceMenu.OpenFaceMenu(client);
                         break;
                     default:
                         break;
@@ -120,13 +119,13 @@ namespace ResurrectionRP_Server.Entities.Players
                 // if (await GameMode.Instance.FactionManager.LSCustom.HasPlayerIntoFaction(this.Client))
                 //     menu.Add(new MenuItem("Dupliquer", "", "ID_Duplicate", executeCallback: true, rightLabel:$"${keyDupliPrice}"));
 
-                await menu.OpenMenu(Client);
+                menu.OpenMenu(Client);
             }
             else if (menu.Id == "ID_KeyOption")
             {
                 if (menuItem == null)
                 {
-                    await OpenKeysMenu();
+                    OpenKeysMenu();
                     return;
                 }
 
@@ -174,7 +173,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     Client.SendNotificationSuccess("Vous avez jeté la clé du véhicule " + menu.Title);
                     UpdateFull();
-                    await MenuManager.CloseMenu(Client);
+                    MenuManager.CloseMenu(client);
                 }
                 else if (menuItem.Id == "ID_Duplicate")
                 {

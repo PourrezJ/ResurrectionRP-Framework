@@ -104,7 +104,7 @@ namespace ResurrectionRP_Server.Houses
             Alt.Server.LogInfo($"Loaded {Houses.Count} houses.");
         }
 
-        public static async Task OpenHouseMenu(IPlayer player, House house)
+        public static void OpenHouseMenu(IPlayer player, House house)
         {
             if (!player.Exists)
                 return;
@@ -161,7 +161,7 @@ namespace ResurrectionRP_Server.Houses
                 }
                 menu.Add(new MenuItem("Sonner à la porte", "", "ID_Sonner", executeCallback: true));
             }
-            await MenuManager.OpenMenu(player, menu);
+            MenuManager.OpenMenu(player, menu);
         }
 
         private static async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -184,7 +184,7 @@ namespace ResurrectionRP_Server.Houses
                         //GameMode.Instance.Economy.CaissePublique += house.Price;
                         await house.SetOwner(client);
                         await house.SendPlayer(client);
-                        await MenuManager.CloseMenu(client);
+                        MenuManager.CloseMenu(client);
                         client.SendNotificationSuccess("Vous avez acheté ce logement.");
                     }
                     else
@@ -193,7 +193,7 @@ namespace ResurrectionRP_Server.Houses
 
                 case "ID_Enter":
                     await house.SendPlayer(client);
-                    await menu.CloseMenu(client);
+                    menu.CloseMenu(client);
                     break;
 
                 case "ID_Sonner":

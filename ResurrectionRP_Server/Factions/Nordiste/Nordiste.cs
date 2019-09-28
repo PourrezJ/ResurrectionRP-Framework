@@ -117,12 +117,12 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Event handlers
-        private async Task OnNPCInteract(IPlayer client, Ped npc)
+        private void OnNPCInteract(IPlayer client, Ped npc)
         {
             if (npc == _pedArmurerie)
                 OpenShopMenu(client);
             else if (npc == _pedAccueil)
-                await OpenAccueilMenu(client);
+                OpenAccueilMenu(client);
         }
 
         public override async Task OnPlayerPromote(IPlayer client, int rang)

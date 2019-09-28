@@ -24,19 +24,19 @@ namespace ResurrectionRP_Server.Factions
             if (HasPlayerIntoFaction(client) &&  GetRangPlayer(client) >= 5)
             {
                 Menu menu = new Menu("ID_Accueil", FactionName, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
-                menu.ItemSelectCallbackAsync = SecretaireMenuCallback;
+                menu.ItemSelectCallback = SecretaireMenuCallback;
 
                 MenuItem fisc = new MenuItem("Récupérer un dossier fiscal", "Vérifier la comptabilité d'une entreprise", "ID_ListBusiness", executeCallback: true);
                 menu.Add(fisc);
 
-                Task.Run(async () => { await menu.OpenMenu(client); }).Wait();
+                menu.OpenMenu(client);
             }
             else
                 client.DisplayHelp("La secrétaire vous ignore, elle ne vous connait pas !", 10000);
 
         }
 
-        private async Task SecretaireMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void SecretaireMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
@@ -47,7 +47,7 @@ namespace ResurrectionRP_Server.Factions
             if (menuItem.Id == "ID_ListBusiness")
             {
                 menu = new Menu("ID_Businesses", "Comptabilité", "Consulter la comptabilité d'une entreprise", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR);
-                menu.ItemSelectCallbackAsync = SecretaireMenuCallback;
+                menu.ItemSelectCallback = SecretaireMenuCallback;
 
                 foreach (Society.Society market in GameMode.Instance.SocietyManager.SocietyList)
                 {
@@ -56,7 +56,7 @@ namespace ResurrectionRP_Server.Factions
                     menu.Add(item);
                 }
 
-                await menu.OpenMenu(client);
+                menu.OpenMenu(client);
             }
             else if (menuItem.Id == "ID_BusinessSelect")
             {
@@ -72,7 +72,7 @@ namespace ResurrectionRP_Server.Factions
                     return;
 
                 client.DisplayHelp("Votre relevé sera disponible dans quelques instants sur votre tablette!", 5000);
-                await menu.CloseMenu(client);
+                menu.CloseMenu(client);
 
                 String contentData = "HISTORIQUE BANCAIRE DU " + DateTime.Now.AddYears(20) + " POUR LA SOCIETE " + Society.SocietyName;
 

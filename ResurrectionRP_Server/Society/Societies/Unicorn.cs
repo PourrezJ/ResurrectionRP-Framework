@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server.Society.Societies
         }
 
         #region Doors
-        private async Task OpenDoor(IPlayer client, Door door)
+        private void OpenDoor(IPlayer client, Door door)
         {
             if (this.IsEmployee(client) || Owner == client.GetSocialClub())
             {
@@ -56,11 +56,11 @@ namespace ResurrectionRP_Server.Society.Societies
                 item.OnMenuItemCallback = OnDoorCall;
                 xmenu.Add(item);
 
-                await xmenu.OpenXMenu(client);
+                xmenu.OpenXMenu(client);
             }
         }
 
-        private static async Task OnDoorCall(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private static void OnDoorCall(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             Door door = menu.GetData("Door");
             if (door != null)
@@ -68,7 +68,7 @@ namespace ResurrectionRP_Server.Society.Societies
                  door.SetDoorLockState(!door.Locked);
             }
 
-            await XMenuManager.XMenuManager.CloseMenu(client);
+            XMenuManager.XMenuManager.CloseMenu(client);
         }
         #endregion
     }

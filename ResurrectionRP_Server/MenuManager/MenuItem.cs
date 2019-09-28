@@ -17,6 +17,7 @@ namespace ResurrectionRP_Server
 
         [JsonIgnore]
         public OnMenuItemCallBackDelegateAsync OnMenuItemCallbackAsync { get; set; } = null;
+        [JsonIgnore]
         public OnMenuItemCallBackDelegate OnMenuItemCallback { get; set; } = null;
         #endregion
 

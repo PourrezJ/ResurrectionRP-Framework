@@ -28,7 +28,7 @@ namespace ResurrectionRP_Server.Business
             await base.Init();
         }
 
-        public override async Task OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
+        public override void OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
         {
             if (!( IsOwner(client) ||  this.IsEmployee(client)))
             {
@@ -40,7 +40,7 @@ namespace ResurrectionRP_Server.Business
             {
                 BannerSprite = Banner.Tattoos2,
                 ItemSelectCallbackAsync = TattooMenuCallBack,
-                FinalizerAsync = MenuFinalizer
+                Finalizer = MenuFinalizer
             };
 
             List<object> _playerlist = new List<object>();
@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.Business
                 mainmenu.Add(new MenuItem("Bras Droit", "", "ID_RightArm", true));
                 mainmenu.Add(new MenuItem("Jambes Gauche", "", "ID_LeftLeg", true));
                 mainmenu.Add(new MenuItem("Jambes Droite", "", "ID_RightLeg", true));
-                await MenuManager.OpenMenu(client, mainmenu);
+                MenuManager.OpenMenu(client, mainmenu);
             }
             else
                 client.SendNotificationError("Aucun client autour.");
@@ -79,13 +79,13 @@ namespace ResurrectionRP_Server.Business
             {
                 if (menuItem == null)
                 {
-                    await OpenMenu(client);
+                    OpenMenu(client);
                     return;
                 }
 
                 if (menuItem.Id == "ID_TakeMoney")
                 {
-                    await Bank.BankMenu.OpenBankMenu(client, BankAccount, Bank.AtmType.Business, menu, TattooMenuCallBack);
+                    Bank.BankMenu.OpenBankMenu(client, BankAccount, Bank.AtmType.Business, menu, TattooMenuCallBack);
                     return;
                 }
 
@@ -98,7 +98,7 @@ namespace ResurrectionRP_Server.Business
                 if (ClientSelected == null)
                 {
                     client.SendNotificationError("Joueur inconnu");
-                    await menu.CloseMenu(client);
+                    menu.CloseMenu(client);
                 }
                 else
                 {
@@ -115,7 +115,7 @@ namespace ResurrectionRP_Server.Business
                             await ChoiseBones(client, menuItem.Id);
                         else
                         {
-                            await menu.CloseMenu(client);
+                            menu.CloseMenu(client);
                             client.SendNotificationError("Le client ne veut pas être tatoué.");
                         }
                     });
@@ -126,7 +126,7 @@ namespace ResurrectionRP_Server.Business
                 if (menuItem == null)
                 {
                     ResetTattoos();
-                    await OpenMenu(client);
+                    OpenMenu(client);
                     return;
                 }
 
@@ -170,7 +170,7 @@ namespace ResurrectionRP_Server.Business
                         client.SendNotificationError("Vous n'avez pas assez dans la caisse enregistreuse.");
                 }
 
-                await OpenMenu(client);
+                OpenMenu(client);
             }
         }
         #endregion
@@ -181,7 +181,7 @@ namespace ResurrectionRP_Server.Business
             Menu selectMenu = new Menu("ID_TattooSelect", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Tattoos2);
             selectMenu.IndexChangeCallbackAsync = TattooChoiseIndex; 
             selectMenu.ItemSelectCallbackAsync = TattooMenuCallBack;
-            selectMenu.FinalizerAsync = MenuFinalizer;
+            selectMenu.Finalizer = MenuFinalizer;
 
             foreach (Tattoo Tattoo in TattooList)
             {
@@ -201,7 +201,7 @@ namespace ResurrectionRP_Server.Business
                 selectMenu.Add(item);
             }
 
-            await MenuManager.OpenMenu(tatoueur, selectMenu);
+            MenuManager.OpenMenu(tatoueur, selectMenu);
             await TattooChoiseIndex(tatoueur, selectMenu, 0, selectMenu.Items[0]);
         }
 
@@ -236,10 +236,9 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Menu Finalizer
-        private Task MenuFinalizer(IPlayer client, Menu menu)
+        private void MenuFinalizer(IPlayer client, Menu menu)
         {
             ResetTattoos();
-            return Task.CompletedTask;
         }
         #endregion
 
@@ -263,7 +262,7 @@ namespace ResurrectionRP_Server.Business
                     client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
             }
 
-            await OpenMenu(client);
+            OpenMenu(client);
         }
 
         private async Task ChoiseBones(IPlayer client, string bone)

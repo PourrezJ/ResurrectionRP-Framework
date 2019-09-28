@@ -135,7 +135,7 @@ namespace ResurrectionRP_Server.Society
             PlayerHandler player = client.GetPlayerHandler();
 
             if (player != null && player.HasOpenMenu())
-                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
+                MenuManager.CloseMenu(client);
         }
 
         public void OnPlayerEnterParking(PlayerHandler player, Parking parking)

@@ -22,10 +22,10 @@ namespace ResurrectionRP_Server.Items
         {
         }
 
-        public override async Task UseAsync(IPlayer c, string inventoryType, int slot)
+        public override void Use(IPlayer c, string inventoryType, int slot)
         {
             RadLib.RadioManager.OpenRadio(c, Radio);
-            await MenuManager.CloseMenu(c);
+            MenuManager.CloseMenu(c);
         }
 
         public override void OnPlayerGetItem(IPlayer player)

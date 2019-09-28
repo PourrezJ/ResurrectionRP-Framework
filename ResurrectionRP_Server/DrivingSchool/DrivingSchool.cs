@@ -127,7 +127,7 @@ namespace ResurrectionRP_Server.DrivingSchool
             if (colShape != _colshape)
                 return;
 
-            Task.Run(async () => { await OpenMenuDrivingSchool(client); }).Wait();
+            OpenMenuDrivingSchool(client);
         }
 
         public void OnPlayerLeaveColshape(IColShape colShape, IPlayer client)
@@ -135,10 +135,10 @@ namespace ResurrectionRP_Server.DrivingSchool
             if (colShape != _colshape)
                 return;
 
-            Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
+            MenuManager.CloseMenu(client);
         }
 
-        public async Task OpenMenuDrivingSchool(IPlayer client)
+        public void OpenMenuDrivingSchool(IPlayer client)
         {
 
             Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
@@ -164,13 +164,13 @@ namespace ResurrectionRP_Server.DrivingSchool
                     }
                 }
 
-                await drivingschoolmenu.OpenMenu(client);
+                drivingschoolmenu.OpenMenu(client);
             }
         }
 
         private async Task DrivingMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            await MenuManager.CloseMenu(client);
+            MenuManager.CloseMenu(client);
             Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
 
             if (ph == null)

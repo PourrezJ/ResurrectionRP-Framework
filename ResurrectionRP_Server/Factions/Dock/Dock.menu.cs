@@ -13,7 +13,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Importation menu
-        public virtual async Task OpenImportationMenu(IPlayer client, List<DockItemData> importItems)
+        public virtual void OpenImportationMenu(IPlayer client, List<DockItemData> importItems)
         {
             if (client == null || !client.Exists)
                 return;
@@ -34,8 +34,8 @@ namespace ResurrectionRP_Server.Factions
 
             menu.Add(new MenuItem("~g~Valider", "", "Validate", true));
 
-            await menu.OpenMenu(client);
-            await client.EmitAsync("InitDockOrder", ((DockItemData)menu.Items[0].GetData("DockItem")).Price);
+            menu.OpenMenu(client);
+            client.Emit("InitDockOrder", ((DockItemData)menu.Items[0].GetData("DockItem")).Price);
         }
 
         private async Task ImportationMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -58,7 +58,7 @@ namespace ResurrectionRP_Server.Factions
                 bool validation = await Dock_CommandeValidate(client, menu, importItems);
 
                 if (validation)
-                    await menu.CloseMenu(client);
+                    menu.CloseMenu(client);
             }
             else
                 await ItemChangeCallback(client, menu, itemIndex, menuItem);

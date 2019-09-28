@@ -192,7 +192,7 @@ namespace ResurrectionRP_Server.Factions
                 return;
 
             if (player.HasOpenMenu())
-                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
+                MenuManager.CloseMenu(client);
         }
 
         public void OnPlayerEnterShop(IColShape colShape, IPlayer client)
@@ -208,7 +208,7 @@ namespace ResurrectionRP_Server.Factions
                 return;
 
             if (player.HasOpenMenu())
-                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
+                MenuManager.CloseMenu(client);
         }
 
         public void OnPlayerEnterParking(PlayerHandler player, Parking parking)
@@ -234,7 +234,7 @@ namespace ResurrectionRP_Server.Factions
                 return;
 
             if (player.HasOpenMenu())
-                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
+                MenuManager.CloseMenu(client);
         }
 
         public virtual Task OnPlayerPromote(IPlayer client, int rang)
@@ -349,7 +349,7 @@ namespace ResurrectionRP_Server.Factions
                 await OnPlayerServiceEnter(client, GetRangPlayer(client));
             }
 
-            await MenuManager.CloseMenu(client);
+            MenuManager.CloseMenu(client);
         }
 
         public bool IsOnService(IPlayer client)

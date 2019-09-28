@@ -13,7 +13,7 @@ namespace ResurrectionRP_Server.Entities.Players
 {
     public partial class PlayerHandler
     {
-        public async Task OpenXtremAdmin()
+        public void OpenXtremAdmin()
         {
             var menu = new XMenu("ID_Admin");
             menu.CallbackAsync += XtreamCallBack;
@@ -39,7 +39,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             }
 
-            await menu.OpenXMenu(Client);
+            menu.OpenXMenu(Client);
         }
 
         private async Task XtreamCallBack(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
@@ -73,7 +73,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 case "ID_Revive":
                     client.SendNotificationSuccess($"Vous venez de revive {TargetHandler.Identite.Name}.");
-                    await TargetClient.Revive() ;
+                    await TargetClient.ReviveAsync() ;
                     break;
 
                 case "ID_Heal":

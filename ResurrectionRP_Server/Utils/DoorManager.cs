@@ -18,7 +18,8 @@ namespace ResurrectionRP_Server.Utils
         public bool Hide;
         private TextLabel TextLabel;
 
-        public delegate Task InteractDelegate(IPlayer client, Door door);
+        public delegate void InteractDelegate(IPlayer client, Door door);
+
         [JsonIgnore]
         public InteractDelegate Interact { get; set; }
 

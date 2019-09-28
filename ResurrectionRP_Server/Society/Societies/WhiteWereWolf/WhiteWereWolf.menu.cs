@@ -79,7 +79,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             }
 
             Menu mainMenu = new Menu("ID_Main", "", SocietyName, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.ClubHouseMod);
-            mainMenu.ItemSelectCallbackAsync = MainMenuCallback;
+            mainMenu.ItemSelectCallback = MainMenuCallback;
             mainMenu.FinalizerAsync = Finalizer;
 
             MenuItem design = new MenuItem("Esthétique", "", "Design", true);
@@ -91,29 +91,29 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             MenuItem historique = new MenuItem("Historique", "", "Histo", true);
             mainMenu.Add(historique);
 
-            Task.Run(async () => { await mainMenu.OpenMenu(client); }).Wait();
+            mainMenu.OpenMenu(client);
             ClientInMenu = client;
         }
 
-        private async Task MainMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void MainMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
             {
-                await menu.CloseMenu(client);
+                menu.CloseMenu(client);
                 return;
             }
 
             if (menuItem.Id == "Design")
-                await OpenDesignMenu(client);
+                OpenDesignMenu(client);
             else if (menuItem.Id == "Perf")
-                await OpenPerformanceMenu(client);
+                OpenPerformanceMenu(client);
             else if (menuItem.Id == "Histo")
-                await OpenHistoricMenu(client);
+                OpenHistoricMenu(client);
         }
         #endregion
 
         #region Performance
-        private async Task OpenPerformanceMenu(IPlayer client)
+        private void OpenPerformanceMenu(IPlayer client)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
                 return;
@@ -127,7 +127,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             }
 
             Menu menu = new Menu("ID_Perf", "", "Choisissez l'élément à installer :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.ClubHouseMod);
-            menu.ItemSelectCallbackAsync = PerformanceMenuCallback;
+            menu.ItemSelectCallback = PerformanceMenuCallback;
 
             foreach (var mod in WhiteWereWolfData.PerformanceModList)
             {
@@ -135,43 +135,43 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                 {
                     MenuItem item = new MenuItem(mod.ModName, executeCallback: true);
                     item.SetData("mod", mod.ModID);
-                    item.OnMenuItemCallbackAsync = PerformanceItemMenuCallback;
+                    item.OnMenuItemCallback = PerformanceItemMenuCallback;
                     menu.Add(item);
                 }
             }
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
             ClientInMenu = client;
         }
 
-        private async Task PerformanceMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void PerformanceMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
-                await menu.CloseMenu(client);
+                menu.CloseMenu(client);
             else if (menuItem == null)
                 OpenMainMenu(client, _vehicleBench);
         }
 
-        private async Task PerformanceItemMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void PerformanceItemMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
             {
-                await menu.CloseMenu(client);
+                menu.CloseMenu(client);
                 return;
             }
             else if (!menuItem.HasData("mod"))
             {
                 client.SendNotificationError("problème avec le véhicule.");
-                await OpenPerformanceMenu(client);
+                OpenPerformanceMenu(client);
                 return;
             }
 
             _modType = menuItem.GetData("mod");
             _subtitle = $"{menuItem.Text} :";
-            await OpenPerformanceChoiceMenu(client);
+            OpenPerformanceChoiceMenu(client);
         }
 
-        private async Task OpenPerformanceChoiceMenu(IPlayer client)
+        private void OpenPerformanceChoiceMenu(IPlayer client)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
                 return;
@@ -182,12 +182,12 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             if (vh == null || !manifest.HasModType(_modType) && _modType != 666) // 666 = neons
             {
                 client.SendNotificationError("Je ne peux pas sur ce véhicule.");
-                await OpenPerformanceMenu(client);
+                OpenPerformanceMenu(client);
             }
 
             Menu menu = new Menu("ID_Perfs", "", _subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.ClubHouseMod);
-            menu.ItemSelectCallbackAsync = PerformanceChoiceMenuCallback;
-            menu.IndexChangeCallbackAsync = ModPreview;
+            menu.ItemSelectCallback = PerformanceChoiceMenuCallback;
+            menu.IndexChangeCallback = ModPreview;
             menu.FinalizerAsync = Finalizer;
 
             var mods = manifest.Mods(_modType);
@@ -237,15 +237,15 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                 menu.Add(item);
             }
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
             ClientInMenu = client;
         }
 
-        private async Task PerformanceChoiceMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void PerformanceChoiceMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
             {
-                await menu.CloseMenu(client);
+                menu.CloseMenu(client);
                 return;
             }
 
@@ -258,19 +258,19 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                 else
                     _vehicleBench.SetMod(_modType, 0);
 
-                await OpenPerformanceMenu(client);
+                OpenPerformanceMenu(client);
             }
         }
         #endregion
 
         #region Design
-        private async Task OpenDesignMenu(IPlayer client)
+        private void OpenDesignMenu(IPlayer client)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
                 return;
 
             Menu menu = new Menu("ID_Design", "", "Choisissez l'élément à installer :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.ClubHouseMod);
-            menu.ItemSelectCallbackAsync = DesignMenuCallback;
+            menu.ItemSelectCallback = DesignMenuCallback;
             menu.FinalizerAsync = Finalizer;
 
             VehicleHandler vh = _vehicleBench.GetVehicleHandler();
@@ -285,7 +285,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                     MenuItem item = new MenuItem(mod.ModName, rightLabel: $"${price}", executeCallback: true);
                     item.SetData("mod", mod.ModID);
                     item.SetData("price", price);
-                    item.OnMenuItemCallbackAsync = DesignMenuItemCallback;
+                    item.OnMenuItemCallback = DesignMenuItemCallback;
                     menu.Add(item);
                 }
             }
@@ -298,15 +298,15 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                 menu.Add(item);
             }
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
             ClientInMenu = client;
         }
 
-        private async Task DesignMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void DesignMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
             {
-                await menu.CloseMenu(client);
+                menu.CloseMenu(client);
                 return;
             }
             else if (menuItem == null)
@@ -318,31 +318,31 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             if (menuItem.Id == "Neons")
             {
                 _price = menuItem.GetData("price");
-                await OpenNeonsMenu(client);
+                OpenNeonsMenu(client);
             }
         }
 
-        private async Task DesignMenuItemCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void DesignMenuItemCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
             {
-                await menu.CloseMenu(client);
+                menu.CloseMenu(client);
                 return;
             }
             else if (!menuItem.HasData("mod"))
             {
                 client.SendNotificationError("problème avec le véhicule.");
-                await OpenDesignMenu(client);
+                OpenDesignMenu(client);
                 return;
             }
 
             _modType = menuItem.GetData("mod");
             _price = menuItem.GetData("price");
             _subtitle = $"{menuItem.Text} :";
-            await OpenDesignChoiceMenu(client);
+            OpenDesignChoiceMenu(client);
         }
 
-        private async Task OpenDesignChoiceMenu(IPlayer client)
+        private void OpenDesignChoiceMenu(IPlayer client)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
                 return;
@@ -353,12 +353,12 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             if (!manifest.HasModType(_modType)) // 666 = neons
             {
                 client.SendNotificationError("Je ne peux pas sur ce véhicule.");
-                await OpenDesignMenu(client);
+                OpenDesignMenu(client);
             }
 
             Menu menu = new Menu("ID_DesignChoice", "", _subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.ClubHouseMod);
-            menu.IndexChangeCallbackAsync = ModPreview;
-            menu.ItemSelectCallbackAsync = DesignChoiceCallback;
+            menu.IndexChangeCallback = ModPreview;
+            menu.ItemSelectCallback = DesignChoiceCallback;
             menu.FinalizerAsync = Finalizer;
 
             var mods = manifest.Mods(_modType);
@@ -396,16 +396,16 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                 menu.Add(item);
             }
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
             ClientInMenu = client;
-            await ModPreview(client, menu, 0, menu.Items[0]);
+            ModPreview(client, menu, 0, menu.Items[0]);
         }
 
-        private async Task DesignChoiceCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void DesignChoiceCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
             {
-                await menu.CloseMenu(client);
+                menu.CloseMenu(client);
                 return;
             }
 
@@ -422,11 +422,11 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                 else
                     _vehicleBench.SetMod(_modType, 0);
 
-                await OpenDesignMenu(client);
+                OpenDesignMenu(client);
             }
         }
 
-        private async Task OpenNeonsMenu(IPlayer client)
+        private void OpenNeonsMenu(IPlayer client)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
                 return;
@@ -435,7 +435,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
 
             Menu menu = new Menu("ID_Neons", "", "Néons :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.ClubHouseMod);
             menu.ItemSelectCallbackAsync = NeonsMenuCallback;
-            menu.ListItemChangeCallbackAsync = NeonListItemChangeCallback;
+            menu.ListItemChangeCallback = NeonListItemChangeCallback;
             menu.FinalizerAsync = Finalizer;
 
             _red = vh.NeonColor.R / 17;
@@ -451,7 +451,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             menu.Add(menuItem);
 
             vh.NeonState = new Tuple<bool, bool, bool, bool>(true,true,true,true);
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
             ClientInMenu = client;
         }
 
@@ -459,7 +459,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
             {
-                await menu.CloseMenu(client);
+                menu.CloseMenu(client);
                 return;
             }
 
@@ -472,7 +472,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                 int blue = vh.NeonColor.B;
                 _vehicleBench.NeonColor = (Color.FromArgb(red, green, blue));
 
-                await OpenDesignMenu(client);
+                OpenDesignMenu(client);
                 return;
             }
 
@@ -483,11 +483,11 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             }
         }
 
-        private async Task NeonListItemChangeCallback(IPlayer client, Menu menu, IListItem listItem, int listIndex)
+        private void NeonListItemChangeCallback(IPlayer client, Menu menu, IListItem listItem, int listIndex)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
             {
-                await menu.CloseMenu(client);
+                menu.CloseMenu(client);
                 return;
             }
 
@@ -502,10 +502,10 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
              _vehicleBench.NeonColor = (color);
         }
 
-        private Task ModPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        private void ModPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
-                return Task.CompletedTask;
+                return;
 
             byte selected = (byte)itemIndex;
 
@@ -513,13 +513,11 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                 HornPreview(_vehicleBench, selected);
             else
                 _vehicleBench.SetMod(_modType, selected);
-
-            return Task.CompletedTask;
         }
         #endregion
 
         #region Historique Vehicle
-        private async Task OpenHistoricMenu(IPlayer client)
+        private void OpenHistoricMenu(IPlayer client)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
                 return;
@@ -573,7 +571,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                     menu.Add(new MenuItem($"Néons : Rouge {color.R / 17} - Vert {color.G / 17} - Bleu {color.B / 17}"));
                 }
 
-                await menu.OpenMenu(client);
+                menu.OpenMenu(client);
                 ClientInMenu = client;
             }
         }
@@ -601,7 +599,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                 vh.UpdateFull();
 
                 client.SendNotificationSuccess($"Vous avez installé des Néons pour la somme de ${price}");
-                await OpenNeonsMenu(client);
+                OpenNeonsMenu(client);
             }
         }
 
@@ -650,9 +648,9 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
                 client.SendNotificationError("Vous n'avez pas assez sur le compte de l'entreprise.");
 
             if (menu.Id == "ID_DesignChoice")
-                await OpenDesignChoiceMenu(client);
+                OpenDesignChoiceMenu(client);
             else if (menu.Id == "ID_Perfs")
-                await OpenPerformanceChoiceMenu(client);
+                OpenPerformanceChoiceMenu(client);
         }
 
         private async Task Finalizer(IPlayer client, Menu menu)

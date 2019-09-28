@@ -40,12 +40,12 @@ namespace ResurrectionRP_Server.Menus
         {
         }
 
-        public static async Task OpenFaceMenu(IPlayer client)
+        public static void OpenFaceMenu(IPlayer client)
         {
             FaceMenu faceMenu = new FaceMenu();
 
             faceMenu.facialMenu = new XMenu("ID_Face");
-            faceMenu.facialMenu.CallbackAsync = faceMenu.FacialCallback;
+            faceMenu.facialMenu.Callback = faceMenu.FacialCallback;
 
             faceMenu.facialMenu.Add(new XMenuItem("Normal", "", "ID_Normal", XMenuItemIcons.MEH_BLANK_SOLID));
 
@@ -56,10 +56,10 @@ namespace ResurrectionRP_Server.Menus
                 faceMenu.facialMenu.Add(item);
             }
 
-            await faceMenu.facialMenu.OpenXMenu(client);
+            faceMenu.facialMenu.OpenXMenu(client);
         }
 
-        private async Task FacialCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void FacialCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             /*
             if (menuItem.Id == "ID_Normal")
@@ -72,7 +72,7 @@ namespace ResurrectionRP_Server.Menus
                     client.GetPlayerHandler()?.SetFacialAnim(mood.Anim);        
             }
             */
-            await XMenuManager.XMenuManager.CloseMenu(client);
+            XMenuManager.XMenuManager.CloseMenu(client);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace ResurrectionRP_Server.Teleport
         #region Constructor
         public TeleportManager()
         {
-            Events.OnPlayerInteractInColShape += OnTeleportColshape;
+            Events.OnPlayerInteractInColShapeAsync += OnTeleportColshape;
             Events.OnPlayerLeaveColShape += OnPlayerLeaveColShape;
         }
         #endregion
@@ -74,7 +74,7 @@ namespace ResurrectionRP_Server.Teleport
                         _menu.Add(item);
                     }
 
-                    await _menu.OpenMenu(client);
+                    _menu.OpenMenu(client);
                 }
                 else
                 {
@@ -136,7 +136,7 @@ namespace ResurrectionRP_Server.Teleport
                 return;
 
             if (ph.HasOpenMenu())
-                Task.Run(async () => { await MenuManager.CloseMenu(client); }).Wait();
+                MenuManager.CloseMenu(client);
         }
         #endregion
 

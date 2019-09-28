@@ -293,6 +293,26 @@ namespace ResurrectionRP_Server
         public static async Task<bool> IsInvinsibleAsync(this IPlayer client)
             => await client.GetSyncedMetaDataAsync<bool>("SetInvincible");
 
+
+        public static void SetInvisible(this IPlayer client, bool invisible)
+            => client.SetSyncedMetaData("SetInvisible", invisible);
+
+        public static bool IsInvisible(this IPlayer client)
+        {
+            client.GetSyncedMetaData<bool>("SetInvisible", out bool result);
+            return result;
+        }
+
+        public static void SetInvincible(this IPlayer client, bool value)
+            =>  client.SetSyncedMetaData("SetInvincible", value);
+
+        public static bool IsInvinsible(this IPlayer client)
+        {
+            client.GetSyncedMetaData<bool>("SetInvincible", out bool result);
+            return result;
+        }
+
+
         public static void SetHeadOverlay(this IPlayer client, int overlayId, Business.Barber.HeadOverlayData overlayData)
         {
             client.EmitLocked("HeadOverlayVariation", overlayData.Index, overlayData.Opacity, overlayData.ColorId, overlayData.SecondaryColorId, overlayId);
@@ -373,7 +393,7 @@ namespace ResurrectionRP_Server
             return false;
         }
 
-        public static async Task Revive(this IPlayer client, ushort health = 200, Vector3? position = null)
+        public static async Task ReviveAsync(this IPlayer client, ushort health = 200, Vector3? position = null)
         {
             Vector3 pos = position ?? await client.GetPositionAsync();
             await client.SpawnAsync(new Position(pos.X, pos.Y, pos.Z));
@@ -385,6 +405,22 @@ namespace ResurrectionRP_Server
                 foreach (var medecin in GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
                 {
                     medecin.EmitLocked("ONU_BlesseEnd", client.Id);
+                }
+            }
+        }
+
+        public static void Revive(this IPlayer client, ushort health = 200, Vector3? position = null)
+        {
+            Vector3 pos = position ?? client.Position;
+            client.Spawn(new Position(pos.X, pos.Y, pos.Z));
+            client.Health = (health);
+            client.Resurrect();
+
+            if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
+            {
+                foreach (var medecin in GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
+                {
+                    medecin.Emit("ONU_BlesseEnd", client.Id);
                 }
             }
         }

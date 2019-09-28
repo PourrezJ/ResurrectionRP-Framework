@@ -47,7 +47,7 @@ namespace ResurrectionRP_Server
                 new MenuItem("Refuser", refuseDesc, "ID_Refuser", true)
             });
 
-            Task.Run(async () => { await accept.menu.OpenMenu(client); }).Wait();
+            accept.menu.OpenMenu(client);
             return accept;
         }
         #endregion
@@ -66,7 +66,7 @@ namespace ResurrectionRP_Server
             }
 
             if (_closeAtEnd)
-                await menu.CloseMenu(client);
+                menu.CloseMenu(client);
         }
         #endregion
     }

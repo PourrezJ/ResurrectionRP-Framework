@@ -227,7 +227,7 @@ namespace ResurrectionRP_Server
             await Society.SocietyManager.LoadAllSociety();
             //await JobsManager.Init();
             await PoundManager.Init();
-            await FarmManager.InitAll();        
+            FarmManager.InitAll();        
             await HouseManager.LoadAllHouses();
 
            // DrivingSchoolManager.InitAll();

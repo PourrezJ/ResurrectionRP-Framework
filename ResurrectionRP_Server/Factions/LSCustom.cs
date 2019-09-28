@@ -112,7 +112,7 @@ namespace ResurrectionRP_Server.Factions
             string social = client.GetSocialClub();
 
             if (employees.Contains(social))
-                Task.Run(async () => { await OpenPeintureMenu(client); }).Wait();
+                OpenPeintureMenu(client);
 
             return Task.CompletedTask;
         }
@@ -129,7 +129,7 @@ namespace ResurrectionRP_Server.Factions
             }
 
             if (vehicle.Driver != null)
-                Task.Run(async () => { await MenuManager.CloseMenu(vehicle.Driver); }).Wait();
+                MenuManager.CloseMenu(vehicle.Driver);
         }
 
         private void OnVehicleEnterColshape(IColShape colShape, IVehicle vehicle)
@@ -154,7 +154,7 @@ namespace ResurrectionRP_Server.Factions
             }
 
             menu = new Menu(menuItem.Id, "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.CarMod);
-            menu.ItemSelectCallbackAsync = PeintureSelectCallback;
+            menu.ItemSelectCallback = PeintureSelectCallback;
             menu.IndexChangeCallbackAsync = PeinturePreview;
 
             foreach (VehicleColor color in Enum.GetValues(typeof(VehicleColor)))
@@ -166,18 +166,18 @@ namespace ResurrectionRP_Server.Factions
                 menu.Add(item);
             }
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
             await PeinturePreview(client, menu, 0, menu.Items[0]);
         }
 
-        private async Task PeintureSelectCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void PeintureSelectCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem != null && VehicleInColorCabin != null) 
             {
                 VehicleHandler vh = VehicleInColorCabin.GetVehicleHandler();
                 VehicleInColorCabin.PrimaryColor = vh.PrimaryColor;
                 VehicleInColorCabin.SecondaryColor = vh.SecondaryColor;
-                await OpenPeintureMenu(client);
+                OpenPeintureMenu(client);
             }
         }
 
@@ -222,10 +222,11 @@ namespace ResurrectionRP_Server.Factions
             }
         }
 
-        private async Task OnEnterRepairZoneVL(IColShape colShape, IPlayer client)
+        private Task OnEnterRepairZoneVL(IColShape colShape, IPlayer client)
         {
             if (VehicleInWorkbench != null)
-                await OpenMenu(client, VehicleInWorkbench);
+                OpenMenu(client, VehicleInWorkbench);
+            return Task.CompletedTask;
         }
 
         public override async Task OnPlayerServiceEnter(IPlayer client, int rang)
@@ -254,7 +255,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Methods
-        public async Task OpenPeintureMenu(IPlayer client)
+        public void OpenPeintureMenu(IPlayer client)
         {
             if (VehicleInColorCabin == null)
             {
@@ -275,7 +276,7 @@ namespace ResurrectionRP_Server.Factions
             pearl.OnMenuItemCallbackAsync = OnPeintureSelect;
             menu.Add(pearl);
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
         }
 
         private Task PeinturePreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
@@ -326,7 +327,7 @@ namespace ResurrectionRP_Server.Factions
             }
         }
 
-        public async Task OpenMenu(IPlayer client, IVehicle vehicle)
+        public void OpenMenu(IPlayer client, IVehicle vehicle)
         {
             Menu menu = new Menu("ID_MainReparMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.CarMod);
             menu.SetData("Vehicle", vehicle);
@@ -344,7 +345,7 @@ namespace ResurrectionRP_Server.Factions
             else
                 menu.Add(new MenuItem("Bricoler le moteur", "Faites une réparation à 50% des dégâts moteur.", "ID_BricoEngine", true, rightLabel: $"${ReparFortune}"));
 
-            await menu.OpenMenu(client);
+            menu.OpenMenu(client);
         }
 
 
@@ -554,7 +555,7 @@ namespace ResurrectionRP_Server.Factions
             if (playerHandler.GetStacksItems(ItemID.CrateTool).Count > 0)
             {
                 var _crateToolItem = new XMenuItem("Réparer", "Réparer avec la caisse a outils", "", XMenuItemIcons.TOOLBOX_SOLID, false);
-                _crateToolItem.OnMenuItemCallback = UseCrateTool;
+                _crateToolItem.OnMenuItemCallbackAsync = UseCrateTool;
                 xmenu.Add(_crateToolItem);
             }
 
@@ -586,20 +587,20 @@ namespace ResurrectionRP_Server.Factions
                         {
                             client.SendNotificationError("Aucune dépanneuse dans les environs");
                         }
-                        await XMenuManager.XMenuManager.CloseMenu(client);
+                        XMenuManager.XMenuManager.CloseMenu(client);
                     }
                     break;
                 case "ID_detach":
                     var rot = await veh.GetRotationAsync();
                     await vh.UnTowVehicle(new Location((new Vector3(client.Position.X, client.Position.Y, client.Position.Z)).Forward(rot.Yaw, -10), rot));
                     vh.UpdateFull();
-                    await XMenuManager.XMenuManager.CloseMenu(client);
+                    XMenuManager.XMenuManager.CloseMenu(client);
                     break;
                 case "ID_atelier":
                     await vh.UnTowVehicle(LSCustom.ReparZoneVL);
                     vh.UpdateFull();
 
-                    await XMenuManager.XMenuManager.CloseMenu(client);
+                    XMenuManager.XMenuManager.CloseMenu(client);
                     break;
             }
         }

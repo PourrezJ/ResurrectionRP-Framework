@@ -27,7 +27,7 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Menus
-        public override async Task OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
+        public override void OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
         {
             Menu _menu = new Menu("Armurerie", "", "Emplacements: " + Inventory.CurrentSize() + "/" + Inventory.MaxSize, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
             _menu.BannerSprite = Banner.Guns;
@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.Business
             }
             else
                 client.SendNotification("Il n'y a pas de produits en vente.");
-            await MenuManager.OpenMenu(client, _menu);
+            MenuManager.OpenMenu(client, _menu);
         }
 
         public override async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
@@ -88,10 +88,10 @@ namespace ResurrectionRP_Server.Business
             switch (menuItem.Id)
             {
                 case "ID_TakeMoney":
-                    await Bank.BankMenu.OpenBankMenu(client, BankAccount, Bank.AtmType.Business, menu, StoreOwnerMenuManager);
+                    Bank.BankMenu.OpenBankMenu(client, BankAccount, Bank.AtmType.Business, menu, StoreOwnerMenuManager);
                     break;
                 case "ID_Add":
-                    await menu.CloseMenu(client);
+                    menu.CloseMenu(client);
                     var invmenu = new Inventory.RPGInventoryMenu(player.PocketInventory, player.OutfitInventory, player.BagInventory, Inventory, true);
                     Inventory.Locked = true;
                     invmenu.OnMove += async (p, m) =>
@@ -147,7 +147,7 @@ namespace ResurrectionRP_Server.Business
                                 GameMode.Instance.Economy.CaissePublique += tax;
                                 await Update();
                                 client.SendNotification($"Vous avez acheté un/des {itemStack.Item.name}(s) pour la somme de {(itemStack.Price * quantity) + tax} dont {tax} de taxes.");
-                                await OpenMenu(client);
+                                OpenMenu(client);
                             }
                         }
                         else

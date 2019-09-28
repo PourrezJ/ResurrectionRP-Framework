@@ -132,7 +132,8 @@ export function initialize() {
             if (player.vehicle == null)
                 return;
 
-            let speed = player.vehicle.speed * 3.6;
+            //let speed = player.vehicle.speed * 3.6;
+            let speed = game.getEntitySpeed(player.vehicle.scriptID) * 3.6;
             let rpm = player.vehicle.rpm * 591;
 
             if (speedoWindow != null) {

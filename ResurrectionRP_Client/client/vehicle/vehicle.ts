@@ -113,7 +113,7 @@ export function initialize() {
     alt.on('onPlayerLeaveVehicle', (vehicle: alt.Vehicle, seat: number) => {
         showSpeedometer(false);
 
-        if (seat == -1 && enginePreviousState) {
+        if (vehicle != null && seat == -1 && enginePreviousState) {
             game.setVehicleEngineOn(vehicle.scriptID, keepEngineOn, true, true);
         }
     });

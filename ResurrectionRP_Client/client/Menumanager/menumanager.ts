@@ -216,6 +216,7 @@ export default () => {
                 inputView.on('Input_Submit', (text) => {
                     saveInput(text);
                     alt.emit("canClose", true);
+                    alt.showCursor(false);
                 });
             }
 

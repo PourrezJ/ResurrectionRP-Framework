@@ -155,7 +155,7 @@ namespace ResurrectionRP_Server.Farms
         public virtual void Init()
         {
             #region Harvest          
-            if (Harvest_Position.Count > 0)
+          if (Harvest_Position.Count > 0)
             {
                 foreach (Vector3 position in Harvest_Position)
                 {

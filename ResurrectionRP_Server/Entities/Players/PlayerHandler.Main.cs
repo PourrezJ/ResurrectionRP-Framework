@@ -219,13 +219,12 @@ namespace ResurrectionRP_Server.Entities.Players
                         Convert.ToSingle(Money),
                         Thirst,
                         Hunger,
-                        JsonConvert.SerializeObject(AnimSettings),
                         JsonConvert.SerializeObject(GameMode.Instance.Time),
                         GameMode.Instance.WeatherManager.Actual_weather.ToString(),
                         GameMode.Instance.WeatherManager.Wind,
                         GameMode.Instance.WeatherManager.WindDirection,
                         GameMode.Instance.IsDebug,
-                        JsonConvert.SerializeObject(Location)
+                        Location.Pos.ConvertToVector3Serialized()
                     );
 
                     Client.Spawn(Location.Pos, 0);

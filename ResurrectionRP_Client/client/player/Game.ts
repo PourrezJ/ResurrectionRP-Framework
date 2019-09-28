@@ -78,16 +78,18 @@ export class Game {
         Money: number,
         Thirst: number,
         Hunger: number,
-        AnimSettings: string,
         Time: string,
         Weather: string,
         WeatherWind: number,
         WeatherWindDirection: number,
         isDebug: boolean,
-        Location: string
+        Position: Vector3
     ) {
         try {
             alt.Player.local.setMeta("IsConnected", false);
+
+            game.requestCollisionAtCoord(Position.x, Position.y, Position.z);
+
             alt.log("Chargement de vos données");
             var playerId = alt.Player.local.scriptID;
 

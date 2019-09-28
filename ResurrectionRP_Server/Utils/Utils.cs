@@ -1,4 +1,5 @@
-﻿using AltV.Net.Elements.Entities;
+﻿using AltV.Net;
+using AltV.Net.Enums;
 using System;
 using System.Threading.Tasks;
 
@@ -37,6 +38,22 @@ namespace ResurrectionRP_Server.Utils
         public static void StopTimer(System.Timers.Timer timer) => timer.Stop();
 
         public static void SendNotificationPicture(Enums.CharPicture img, string sender, string subject, string message) =>
-            AltV.Net.Alt.EmitAllClients("SetNotificationMessage", img.ToString(), sender, subject, message);
+            Alt.EmitAllClients("SetNotificationMessage", img.ToString(), sender, subject, message);
+
+        public static WindowTint GetWindowTint(byte modValue)
+        {
+            if (modValue == 0)
+                return WindowTint.None;
+            else if (modValue == 1)
+                return WindowTint.Green;
+            else if (modValue == 2)
+                return WindowTint.PureBlack;
+            else if (modValue == 3)
+                return WindowTint.DarkSmoke;
+            else if (modValue == 4)
+                return WindowTint.LightSmoke;
+
+            return WindowTint.Stock;
+        }
     }
 }

@@ -14,6 +14,13 @@ namespace VehicleInfoLoader.Data
         [JsonProperty("flags")]
         public string[] Flags          { get; internal set; }
 
+        public VehicleMod(string name, string localizedName, string[] flags)
+        {
+            Name = name;
+            LocalizedName = localizedName;
+            Flags = flags;
+        }
+
         public bool HasFlag(string flag)
         {
             return Flags != null && Flags.Contains(flag);

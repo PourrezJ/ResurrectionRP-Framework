@@ -1,7 +1,7 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
-using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using AltV.Net.Enums;
 using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Utils;
@@ -29,7 +29,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
         #endregion
 
         #region MainMenu
-        private void OpenMainMenu(IPlayer client, IVehicle vehicle)
+        private void OpenMainMenu(IPlayer client)
         {
             if (!(IsEmployee(client) || Owner == client.GetSocialClub()))
             {
@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
                 return;
             }
 
-            if (vehicle == null || !vehicle.Exists)
+            if (_vehicleBench == null || !_vehicleBench.Exists)
             {
                 client.SendNotificationError("Aucun véhicule devant l'établi.");
                 return;
@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
             try
             {
-                var info = VehicleInfoLoader.VehicleInfoLoader.Get(vehicle.Model);
+                var info = VehicleInfoLoader.VehicleInfoLoader.Get(_vehicleBench.Model);
 
                 if (info == null)
                 {
@@ -118,7 +118,10 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
         private void OpenPerformanceMenu(IPlayer client)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
+            {
+                MenuManager.CloseMenu(client);
                 return;
+            }
 
             var manifest = _vehicleBench.GetVehicleHandler()?.VehicleManifest;
 
@@ -151,7 +154,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             if (_vehicleBench == null || !_vehicleBench.Exists)
                 menu.CloseMenu(client);
             else if (menuItem == null)
-                OpenMainMenu(client, _vehicleBench);
+                OpenMainMenu(client);
         }
 
         private void PerformanceItemMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -173,10 +176,13 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             OpenPerformanceChoiceMenu(client);
         }
 
-        private void OpenPerformanceChoiceMenu(IPlayer client)
+        private void OpenPerformanceChoiceMenu(IPlayer client, int selectedItem = 0)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
+            {
+                MenuManager.CloseMenu(client);
                 return;
+            }
 
             var vh = _vehicleBench.GetVehicleHandler();
             var manifest = vh.VehicleManifest;
@@ -239,8 +245,10 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
                 menu.Add(item);
             }
 
+            menu.SelectedIndex = selectedItem;
             menu.OpenMenu(client);
             ClientInMenu = client;
+            ModPreview(client, menu, selectedItem, menu.Items[selectedItem]);
         }
 
         private void PerformanceChoiceMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -269,7 +277,10 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
         private void OpenDesignMenu(IPlayer client)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
+            {
+                MenuManager.CloseMenu(client);
                 return;
+            }
 
             Menu menu = new Menu("ID_Design", "", "Choisissez l'élément à installer :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.SuperMod);
             menu.ItemSelectCallback = DesignMenuCallback;
@@ -313,7 +324,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             }
             else if (menuItem == null)
             {
-                OpenMainMenu(client, _vehicleBench);
+                OpenMainMenu(client);
                 return;
             }
 
@@ -344,10 +355,13 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             await OpenDesignChoiceMenu(client);
         }
 
-        private async Task OpenDesignChoiceMenu(IPlayer client)
+        private async Task OpenDesignChoiceMenu(IPlayer client, int selectedItem = 0)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
+            {
+                MenuManager.CloseMenu(client);
                 return;
+            }
 
             VehicleHandler vh = _vehicleBench.GetVehicleHandler();
             var manifest = vh.VehicleManifest;
@@ -363,7 +377,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             menu.ItemSelectCallback = DesignChoiceCallback;
             menu.FinalizerAsync = Finalizer;
 
-            var mods = manifest.Mods(_modType);
+            IEnumerable<VehicleMod> mods = manifest.Mods(_modType);
             vh.Mods.TryGetValue(_modType, out byte valueInstalled);
 
             for (int i = 0; i < mods.Count(); i++)
@@ -398,9 +412,10 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
                 menu.Add(item);
             }
 
+            menu.SelectedIndex = selectedItem;
             menu.OpenMenu(client);
             ClientInMenu = client;
-            await ModPreview(client, menu, 0, menu.Items[0]);
+            await ModPreview(client, menu, selectedItem, menu.Items[selectedItem]);
         }
 
         private void DesignChoiceCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -413,12 +428,22 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
             VehicleHandler vh = _vehicleBench.GetVehicleHandler();
 
+            if (vh == null)
+            {
+                menu.CloseMenu(client);
+                return;
+            }
+
             if (menuItem == null)
             {
                 if (_modType == 14 && vh.Mods.ContainsKey(_modType))
                     HornStop(_vehicleBench, vh.Mods[_modType]);
                 else if (_modType == 14)
                     HornStop(_vehicleBench, 0);
+                else if (_modType == 69 && vh.Mods.ContainsKey(_modType))
+                    _vehicleBench.SetWindowTint(Utils.Utils.GetWindowTint(vh.Mods[_modType]));
+                else if (_modType == 69)
+                    _vehicleBench.SetWindowTint(WindowTint.None);
                 else if (vh.Mods.ContainsKey(_modType))
                     _vehicleBench.SetMod(_modType, vh.Mods[_modType]);
                 else
@@ -431,7 +456,10 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
         private void OpenNeonsMenu(IPlayer client)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
+            {
+                MenuManager.CloseMenu(client);
                 return;
+            }
 
             VehicleHandler vh = _vehicleBench.GetVehicleHandler();
 
@@ -503,28 +531,16 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
             vh.NeonColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
         }
-
-        private Task ModPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-                return Task.CompletedTask;
-
-            byte selected = (byte)itemIndex;
-
-            if (_modType == 14)
-                HornPreview(_vehicleBench, selected);
-            else
-                _vehicleBench.SetMod(_modType, selected);
-
-            return Task.CompletedTask;
-        }
         #endregion
 
         #region Historique Vehicle
         private void OpenHistoricMenu(IPlayer client)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
+            {
+                MenuManager.CloseMenu(client);
                 return;
+            }
 
             VehicleHandler vh = _vehicleBench.GetVehicleHandler();
 
@@ -582,16 +598,46 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
 
         private void HistoricMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
+            if (_vehicleBench == null || !_vehicleBench.Exists)
+            {
+                MenuManager.CloseMenu(client);
+                return;
+            }
+
             if (menuItem == null)
-                OpenMainMenu(client, _vehicleBench);
+                OpenMainMenu(client);
         }
         #endregion
 
-        #region END
+        #region Private methods
+
+        private async Task ModPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        {
+            if (_vehicleBench == null || !_vehicleBench.Exists)
+            {
+                MenuManager.CloseMenu(client);
+                return;
+            }
+
+            byte selected = (byte)itemIndex;
+
+            if (_modType == 14)
+                HornPreview(_vehicleBench, selected);
+            else if (_modType == 23)
+                _vehicleBench.SetWheels(2, 10);
+            else if (_modType == 69)
+                _vehicleBench.SetWindowTint(Utils.Utils.GetWindowTint(selected));
+            else
+                _vehicleBench.SetMod(_modType, selected);
+        }
+
         private async Task InstallNeon(IPlayer client, double price)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
+            {
+                MenuManager.CloseMenu(client);
                 return;
+            }
 
             VehicleHandler vh = _vehicleBench.GetVehicleHandler();
 
@@ -609,7 +655,10 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
         private async Task ModChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (_vehicleBench == null || !_vehicleBench.Exists)
+            {
+                MenuManager.CloseMenu(client);
                 return;
+            }
 
             byte selected = (byte)itemIndex;
 
@@ -635,10 +684,18 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             if (hasMoney)
             {
                 if (vh == null)
+                {
+                    MenuManager.CloseMenu(client);
                     return;
+                }
 
                 vh.Mods.AddOrUpdate(_modType, selected, (key, oldvalue) => selected);
-                _vehicleBench.SetMod(_modType, selected);
+
+                if (_modType != 69)
+                    vh.WindowTint = Utils.Utils.GetWindowTint(selected);
+                else
+                    _vehicleBench.SetMod(_modType, selected);
+
                 vh.UpdateFull();
                 string str = $"Vous avez installé {modName}";
 
@@ -651,9 +708,9 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
                 client.SendNotificationError("Vous n'avez pas assez sur le compte de l'entreprise.");
 
             if (menu.Id == "ID_DesignChoice")
-                await OpenDesignChoiceMenu(client);
+                await OpenDesignChoiceMenu(client, itemIndex);
             else if (menu.Id == "ID_Perfs")
-                OpenPerformanceChoiceMenu(client);
+                OpenPerformanceChoiceMenu(client, itemIndex);
         }
 
         private async Task Finalizer(IPlayer client, Menu menu)
@@ -661,9 +718,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             ClientInMenu = null;
             await Task.CompletedTask;
         }
-        #endregion
 
-        #region Private methods
         private List<object> GetColorListItems()
         {
             List<object> items = new List<object>();

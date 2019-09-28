@@ -172,7 +172,8 @@ export class Game {
                     game.setPedMovementClipset(entity.scriptID, "move_ped_crouched", 0.2);
                     game.setPedStrafeClipset(entity.scriptID, "move_ped_crouched_strafing");
                 }
-                else if (walkingStyle != null) {
+
+                if (walkingStyle != null) {
 
                     if (!game.hasClipSetLoaded(walkingStyle)) {
                         game.requestClipSet(walkingStyle);
@@ -180,8 +181,7 @@ export class Game {
                     }
                     game.setPedMovementClipset(entity.scriptID, walkingStyle, 0.2);
                 }
-                else
-                    game.resetPedMovementClipset(entity.scriptID, 0.1);
+
 
                 if (facialAnim != null)
                     game.setFacialIdleAnimOverride(entity.scriptID, facialAnim, undefined);

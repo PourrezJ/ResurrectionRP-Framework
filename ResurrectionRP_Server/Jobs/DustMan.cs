@@ -143,7 +143,7 @@ namespace ResurrectionRP_Server.Jobs
                 if (VehicleSpawnLocation != null && VehiclesManager.IsVehicleInSpawn(VehicleSpawnLocation.Pos))
                 {
                     //var vehs = await MP.Vehicles.GetInRangeAsync(VehicleSpawnLocation.Pos, 4, MP.GlobalDimension);
-                    var vehs = await VehicleSpawnLocation.Pos.GetVehiclesInRangeAsync(4);
+                    var vehs = VehicleSpawnLocation.Pos.GetVehiclesInRange(4);
 
                     if (vehs.Count > 0)
                     {

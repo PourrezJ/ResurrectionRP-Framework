@@ -22,6 +22,8 @@ namespace ResurrectionRP_Server.Business
         public Entities.Blips.Blips StationBlip;
         [BsonIgnore]
         public IColShape Colshape { get; set; }
+        [BsonIgnore]
+        public static uint[] allowedTrailers = new uint[3] { 0xB8081009, 0xD46F4737, 0x74998082 };
 
         public StationService(int id, float Range, Vector3 location)
         {

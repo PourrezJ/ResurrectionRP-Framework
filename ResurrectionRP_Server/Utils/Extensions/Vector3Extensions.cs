@@ -85,7 +85,7 @@ namespace ResurrectionRP_Server
             List<IVehicle> end = new List<IVehicle>();
             foreach (IVehicle veh in vehicles)
             {
-                if (pos.DistanceTo2D(await veh.GetPositionAsync()) <= range && await veh.GetDimensionAsync() == dimension)
+                if (pos.DistanceTo2D(veh.Position) <= range && veh.Dimension == dimension)
                     end.Add(veh);
             }
             Console.WriteLine(stopwatch.ElapsedMilliseconds);

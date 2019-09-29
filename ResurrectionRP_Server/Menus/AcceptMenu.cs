@@ -1,7 +1,6 @@
-﻿using AltV.Net;
-using AltV.Net.Async;
-using AltV.Net.Elements.Entities;
+﻿using AltV.Net.Elements.Entities;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Utils;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -36,7 +35,7 @@ namespace ResurrectionRP_Server
                 _closeAtEnd = closeAtEnd
             };
 
-            accept.menu = new Menu("ID_AcceptMenu", title, subtitle, noExit: !backCloseMenu, backCloseMenu: backCloseMenu);
+            accept.menu = new Menu("ID_AcceptMenu", title, subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, !backCloseMenu, false, backCloseMenu);
             accept.menu.ItemSelectCallbackAsync = accept.MenuCallBack;
 
             if (banner != null)

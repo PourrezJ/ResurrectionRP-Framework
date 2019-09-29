@@ -77,6 +77,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 xmenu.Add(new XMenuItem("Inventaire", "Ouvre l'inventaire du véhicule", "ID_OpenInventory", XMenuItemIcons.SUITCASE_SOLID, false));
             }
+            
+            if(Vehicle.GetVehicleHandler().hasTrailer)
+            {
+                xmenu.Add(new XMenuItem("Remorque", "Détacher la remorque", "ID_DetachTrailer", XMenuItemIcons.TRAIN_SOLID, false));
+            }
 
             if (OwnerID == client.GetSocialClub() && !SpawnVeh)
             {
@@ -180,8 +185,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         });
                         await inv.OpenMenu(client);
                         break;
-                            
-     
+                case "ID_DetachTrailer":
+                    client.Emit("DetachTrailer");
+                    break;
+
+
                 case "ID_Doors":
                     OpenDoorsMenu(client);
                     break;

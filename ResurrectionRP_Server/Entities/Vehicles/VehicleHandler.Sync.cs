@@ -66,7 +66,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 if (_fuel == 0 && Vehicle != null && Vehicle.Exists)
                 {
-                    Vehicle.SetEngineOnAsync(false);
                     EngineOn = false;
                     UpdateFull();
                 }
@@ -255,10 +254,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             set
             {
-                _engineOn = value;
+                if (!value || Fuel > 0)
+                {
+                    _engineOn = value;
 
-                if (Vehicle != null && Vehicle.Exists && Vehicle.EngineOn != value)
-                    AltAsync.Do(() => { Vehicle.EngineOn = value; });
+                    if (Vehicle != null && Vehicle.Exists && Vehicle.EngineOn != value)
+                        AltAsync.Do(() => { Vehicle.EngineOn = value; });
+                }
             }
         }
 

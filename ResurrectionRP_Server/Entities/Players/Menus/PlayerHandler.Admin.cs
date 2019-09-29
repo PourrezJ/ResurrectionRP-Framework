@@ -341,7 +341,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #endregion
 
             #region Spawn Provisoire
-            var spawn = new MenuItem("Spawn voiture temporaire", "Spawn une voiture avec le nom rentré, jusqu'au reboot.", "ID_SpawnVeh", true);
+            var spawn = new MenuItem("Spawn véhicule temporaire", "Spawn un véhicule avec le nom rentré, jusqu'au reboot.", "ID_SpawnVeh", true);
             spawn.SetInput("", 30, InputType.Text);
             spawn.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
@@ -383,7 +383,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #endregion
 
             #region Spawn Perm
-            var spawnPerm = new MenuItem("Spawn voiture", "Spawn une voiture avec le nom rentré.", "ID_SpawnVehPerm", true);
+            var spawnPerm = new MenuItem("Spawn véhicule", "Spawn un véhicule avec le nom rentré.", "ID_SpawnVehPerm", true);
             spawnPerm.SetInput("", 30, InputType.Text);
             spawnPerm.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
@@ -446,7 +446,7 @@ namespace ResurrectionRP_Server.Entities.Players
             var deletevehitem = new MenuItem("Supprimer le véhicule.", "", "", true);
             deletevehitem.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                VehicleHandler vehicle = (await client.GetNearestVehicleAsync(5)).GetVehicleHandler();
+                VehicleHandler vehicle = (await client.GetNearestVehicleAsync(5))?.GetVehicleHandler();
 
                 if (vehicle == null)
                     client.SendNotificationError("Aucun véhicule a proximité");

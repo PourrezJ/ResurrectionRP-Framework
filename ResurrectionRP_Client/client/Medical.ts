@@ -188,7 +188,7 @@ export class Medical {
             alt.clearEveryTick(Medical.everyTick);
             alt.off('keydown', this.KeyHandler);
             game.setPlayerHealthRechargeMultiplier(alt.Player.local.scriptID, 0);
-
+            game.setEntityHealth(alt.Player.local.scriptID, health, 0);
             //game.animpostfxStop("DeathFailMPIn")
             //game.setCamEffect(0);
 

@@ -153,6 +153,10 @@ namespace ResurrectionRP_Server.Entities.Players
                 ph.LastUpdate = DateTime.Now;
             }
 
+            var dead = DeadPlayers.FindLast(p => p.Victime == origin);
+            if (dead != null)
+                dead.Remove();
+
             ph.UpdateInBackground();
             PlayerHandler.PlayerHandlerList.Remove(origin, out _);
 

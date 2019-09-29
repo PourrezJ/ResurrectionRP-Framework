@@ -373,8 +373,11 @@ namespace ResurrectionRP_Server
             client.EmitLocked("RequestCollisionAtCoords", pos.X, pos.Y, pos.Z);
         }
 
-        public static void Resurrect(this IPlayer client)
-            => client.EmitLocked("ResurrectPlayer");
+        public static async Task ResurrectAsync(this IPlayer client, int health = 200)
+            => await client.EmitAsync("ResurrectPlayer", health);
+
+        public static void Resurrect(this IPlayer client, int health = 200)
+            => client.Emit("ResurrectPlayer", health);
 
         public static async Task<bool> PlayerHandlerExist(this IPlayer player)
         {
@@ -398,7 +401,7 @@ namespace ResurrectionRP_Server
             Vector3 pos = position ?? await client.GetPositionAsync();
             await client.SpawnAsync(new Position(pos.X, pos.Y, pos.Z));
             await client.SetHealthAsync(health);
-            client.Resurrect();
+            await client.ResurrectAsync(health);
 
             if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
             {
@@ -414,7 +417,7 @@ namespace ResurrectionRP_Server
             Vector3 pos = position ?? client.Position;
             client.Spawn(new Position(pos.X, pos.Y, pos.Z));
             client.Health = (health);
-            client.Resurrect();
+            client.Resurrect(health);
 
             if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
             {

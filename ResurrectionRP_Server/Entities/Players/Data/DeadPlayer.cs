@@ -5,6 +5,7 @@ using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Models.InventoryData;
 using ResurrectionRP_Server.Utils.Enums;
 using ResurrectionRP_Server.XMenuManager;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Entities.Players.Data
@@ -27,7 +28,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
             Weapon = weapon;
 
             marker = Marker.CreateMarker(MarkerType.UpsideDownCone, player.Position);
-            colshape = Alt.CreateColShapeCylinder(player.Position - new Position(0, 0, 1), 1f, 1f);
+            colshape = Alt.CreateColShapeCylinder(player.Position - new Position(0, 0, 1), 2f, 2f);
             colshape.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
             colshape.SetOnPlayerLeaveColShape(OnPlayerExitColshape);
         }
@@ -42,7 +43,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
             if (Factions.FactionManager.IsMedic(client))
                 menu.Add(new XMenuItem("RPC", "Réanimer la victime", "ID_Reanimate", XMenuItemIcons.HEART_SOLID, false));
 
-            menu.Add(new XMenuItem("Fouiller les poches", "", "ID_Poche", XMenuItemIcons.GET_POCKET_BRAND));
+            menu.Add(new XMenuItem("Fouiller les poches", "", "ID_Poche", XMenuItemIcons.HANDS_SOLID));
             menu.Add(new XMenuItem("Prendre l'argent", "", "ID_GetMoney", XMenuItemIcons.MONEY_BILL_SOLID));
             menu.Add(new XMenuItem("Regarder la carte d'identité", "", "ID_Identite", XMenuItemIcons.ID_CARD_ALT_SOLID));
             menu.Add(new XMenuItem("Envoyer en soin intensif", "", "ID_Intensif", XMenuItemIcons.SKULL_SOLID));
@@ -52,6 +53,9 @@ namespace ResurrectionRP_Server.Entities.Players.Data
 
         private void CallBack(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
+            if (client == Victime)
+                return;
+
             var ph = client.GetPlayerHandler(); // Personne dans le colshape
 
             if (!Victime.Exists)
@@ -85,7 +89,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                                     ph.BagInventory.Delete(defibrilators[InventoryTypes.Bag][0], 1);
                                 }
                             }
-                            Victime.Revive(125);
+                            Victime.Revive(125, new Vector3(308.2974f, -567.4647f, 43.29008f));
                             marker.Destroy();
                             colshape.Remove();
                             client.SendNotificationSuccess("Vous avez réanimé le patient.");
@@ -94,7 +98,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                     break;
 
                 case "ID_Poche":      
-                    var invmenu = new Inventory.RPGInventoryMenu(vh.PocketInventory, vh.OutfitInventory, vh.BagInventory);
+                    var invmenu = new Inventory.RPGInventoryMenu(vh.PocketInventory, vh.OutfitInventory, vh.BagInventory, ph.BagInventory != null ? ph.BagInventory : ph.PocketInventory);
                     invmenu.OnMove += (p, m) =>
                     {
                         ph.UpdateFull();
@@ -118,6 +122,9 @@ namespace ResurrectionRP_Server.Entities.Players.Data
 
                     ph.UpdateFull();
                     vh.UpdateFull();
+
+                    Victime.SendNotification("On vient de vous dérober l'argent que vous aviez sur vous.");
+                    client.SendNotification($"Vous venez de dérober ${rob}");
                     break;
 
                 case "ID_Identite":
@@ -127,7 +134,8 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                 case "ID_Intensif":
                     marker.Destroy();
                     colshape.Remove();
-                    PlayerManager.Resurrect(Victime);
+                    Victime.Revive(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
+                    vh.UpdateFull();
                     break;
             }
         }
@@ -146,6 +154,13 @@ namespace ResurrectionRP_Server.Entities.Players.Data
         {
             marker.Destroy();
             colshape.Remove();
+        }
+
+        public void Remove()
+        {
+            marker.Destroy();
+            colshape.Remove();
+            Victime.Revive(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
         }
     }
 }

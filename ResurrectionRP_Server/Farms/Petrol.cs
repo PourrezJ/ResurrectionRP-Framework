@@ -105,7 +105,7 @@ namespace ResurrectionRP_Server.Farms
             }
 
             IVehicle fuelVeh = null;
-            List<IVehicle> vehs = await client.Position.ConvertToVector3().GetVehiclesInRange(20);
+            List<IVehicle> vehs = await client.Position.ConvertToVector3().GetVehiclesInRangeAsync(20);
 
             foreach(IVehicle veh in vehs)
             {
@@ -234,7 +234,7 @@ namespace ResurrectionRP_Server.Farms
                 client.DisplayHelp("Vous êtes libre de sortir du véhicule le temps du traitement!", 15000);
 
             IVehicle vehicle = null;
-            List<IVehicle> vehs = await Process_PosRot.Pos.GetVehiclesInRange(20);
+            List<IVehicle> vehs = await Process_PosRot.Pos.GetVehiclesInRangeAsync(20);
 
             foreach (IVehicle veh in vehs)
             {
@@ -339,7 +339,7 @@ namespace ResurrectionRP_Server.Farms
                 client.DisplayHelp("Vous êtes libre de sortir du véhicule le temps de la vente!", 15000);
 
             IVehicle vehicle = null;
-            List<IVehicle> vehs = await Selling_PosRot.Pos.GetVehiclesInRange(20);
+            List<IVehicle> vehs = await Selling_PosRot.Pos.GetVehiclesInRangeAsync(20);
 
             foreach (IVehicle veh in vehs)
             {

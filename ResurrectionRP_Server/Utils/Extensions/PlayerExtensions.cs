@@ -4,6 +4,7 @@ using AltV.Net.Async;
 using AltV.Net.Data;
 using MongoDB.Driver;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Models;
 using System;
 using System.Threading.Tasks;
@@ -78,21 +79,22 @@ namespace ResurrectionRP_Server
         {
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
             // var vehs = Alt.GetAllVehicles();
-            var vehs = Entities.Vehicles.VehiclesManager.GetAllVehiclesInGame();
+            var vehs = VehiclesManager.GetAllVehiclesInGame();
 
             List<IVehicle> endup = new List<IVehicle>();
             var position = client.GetPosition();
             Vector3 osition = new Vector3(position.X, position.Y, position.Z);
+
             foreach (IVehicle veh in vehs)
             {
                 if (!veh.Exists)
                     continue;
                 var vehpos = veh.GetPosition();
+
                 if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= Range)
-                {
                     endup.Add(veh);
-                }
             }
+
             return endup;
         }
 
@@ -107,18 +109,17 @@ namespace ResurrectionRP_Server
                 client.GetPositionLocked(ref playerPos);
 
                 Vector3 osition = new Vector3(playerPos.X, playerPos.Y, playerPos.Z);
+
                 foreach (PlayerHandler player in players)
                 {
                     if (!player.Client.Exists)
                         continue;
 
                     Position pos = Position.Zero;
-
                     player.Client.GetPositionLocked(ref pos);
+
                     if (osition.DistanceTo2D(new Vector3(pos.X, pos.Y, pos.Z)) <= Range)
-                    {
                         endup.Add(player.Client);
-                    }
                 }
             }
             catch(Exception ex)
@@ -193,29 +194,36 @@ namespace ResurrectionRP_Server
         {
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
             // var vehs = Alt.GetAllVehicles();
-            var vehs = Entities.Vehicles.VehiclesManager.GetAllVehiclesInGame();
+            var vehs = VehiclesManager.GetAllVehiclesInGame();
 
             IVehicle endup = null;
             var position = client.GetPosition();
-            Vector3 osition = new Vector3(position.X, position.Y, position.Z);
+            Vector3 pos = new Vector3(position.X, position.Y, position.Z);
+
             foreach (IVehicle veh in vehs)
             {
                 if (!veh.Exists)
                     continue;
                 if (endup == null && veh != client.Vehicle)
                     endup = veh;
+
                 var vehpos = veh.GetPosition();
                 var enduppos = endup.GetPosition();
-                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= osition.DistanceTo2D(new Vector3(enduppos.X, enduppos.Y, enduppos.Z)) && veh != client.Vehicle)
-                {
+
+                if (pos.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= pos.DistanceTo2D(new Vector3(enduppos.X, enduppos.Y, enduppos.Z)) && veh != client.Vehicle)
                     endup = veh;
-                }
             }
+
             return endup;
         }
 
-        public static Entities.Vehicles.VehicleHandler GetNearestVehicleHandler(this IPlayer client) =>
-            client.GetNearestVehicle()?.GetVehicleHandler();
+        public static IVehicle GetNearestVehicle(this IPlayer client, float distance, short dimension = short.MaxValue) =>
+            VehiclesManager.GetNearestVehicle(client.Position, distance, dimension);
+
+        public static async Task<IVehicle> GetNearestVehicleAsync(this IPlayer client, float distance = 3.0f, short dimension = short.MaxValue)
+        {
+            return await VehiclesManager.GetNearestVehicleAsync(client.Position, distance, dimension);
+        }
 
         public static void SetRotation(this IPlayer client, Vector3 rotate)
         {

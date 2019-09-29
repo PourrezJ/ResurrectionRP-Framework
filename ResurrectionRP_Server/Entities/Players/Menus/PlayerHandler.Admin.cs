@@ -170,7 +170,8 @@ namespace ResurrectionRP_Server.Entities.Players
             var vehunlock = new MenuItem("(Un)Lock Véhicule", "", "", true);
             vehunlock.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                var veh = VehiclesManager.GetNearestVehicle(client);
+                IVehicle veh = client.GetNearestVehicle(5);
+
                 if (veh != null)
                 {    
                     veh.LockState = (veh.LockState == VehicleLockState.Locked ? VehicleLockState.Unlocked : VehicleLockState.Locked);
@@ -433,7 +434,7 @@ namespace ResurrectionRP_Server.Entities.Players
             var deletepermvehitem = new MenuItem("Supprimer le véhicule (PERM).", "~r~ATTENTION CECI LE RETIRE DE LA BASE DE DONNÉES!", "", true);
             deletepermvehitem.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                VehicleHandler vehicle = (await VehiclesManager.GetNearestVehicleAsync(client)).GetVehicleHandler();
+                VehicleHandler vehicle = (await client.GetNearestVehicleAsync(5)).GetVehicleHandler();
 
                 if (vehicle == null)
                     client.SendNotificationError("Aucun véhicule a proximité");
@@ -450,7 +451,7 @@ namespace ResurrectionRP_Server.Entities.Players
             var deletevehitem = new MenuItem("Supprimer le véhicule.", "", "", true);
             deletevehitem.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                VehicleHandler vehicle = (await VehiclesManager.GetNearestVehicleAsync(client)).GetVehicleHandler();
+                VehicleHandler vehicle = (await client.GetNearestVehicleAsync(5)).GetVehicleHandler();
 
                 if (vehicle == null)
                     client.SendNotificationError("Aucun véhicule a proximité");
@@ -467,7 +468,7 @@ namespace ResurrectionRP_Server.Entities.Players
             var pounditem = new MenuItem("Mettre en fourrière le véhicule", "", "", true);
             pounditem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
             {
-                IVehicle vehicle = VehiclesManager.GetNearestVehicle(client);
+                IVehicle vehicle = client.GetNearestVehicle(5);
 
                 if (vehicle == null)
                 {
@@ -476,13 +477,18 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
                 else
                 {
-                    VehicleHandler vehfourriere = VehiclesManager.GetNearestVehicle(client).GetVehicleHandler();
+                    VehicleHandler vehFourriere = vehicle.GetVehicleHandler();
 
-                    if (vehfourriere.SpawnVeh)
+                    if (vehFourriere == null)
                         return;
+                    else if (vehFourriere.SpawnVeh)
+                    {
+                        client.SendNotificationError($"Véhicule admin, mise en fourrière impossible");
+                        return;
+                    }
 
-                    client.SendNotification($"Véhicule ~r~{vehfourriere.Plate} ~w~ mis en fourrière...");
-                    Task.Run( async () =>  await GameMode.Instance.PoundManager.AddVehicleInPound(vehfourriere) ) ;
+                    client.SendNotification($"Véhicule ~r~{vehFourriere.Plate} ~w~ mis en fourrière...");
+                    Task.Run( async () =>  await GameMode.Instance.PoundManager.AddVehicleInPound(vehFourriere) ) ;
                 }
             };
 

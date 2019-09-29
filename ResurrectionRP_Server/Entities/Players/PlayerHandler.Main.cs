@@ -210,7 +210,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     IP = Client.Ip;
                     IsOnline = true;
-                    
+
                     Client.Emit
                     (
                         Events.PlayerInitialised,
@@ -230,6 +230,10 @@ namespace ResurrectionRP_Server.Entities.Players
                     Client.Spawn(Location.Pos, 0);
                     Client.ApplyCharacter();
                     Client.Dimension = GameMode.GlobalDimension;
+
+                    if (Health <= 100)
+                        Health = 100;
+
                     Client.Health = Health;
 
                     Client.SetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, Voice.CreateTeamSpeakName());
@@ -247,11 +251,11 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (PlayerSync.IsCuff)
                         SetCuff(true);
 
-                    if (Health <= 100)
-                    {
-                        Health = 0;
-                        Client.Emit("ONU_PlayerDeath", WeaponHash.AdvancedRifle);
-                    }
+                    //if (Health <= 100)
+                    //{
+                    //    Health = 0;
+                    //    Client.Emit("ONU_PlayerDeath", WeaponHash.AdvancedRifle);
+                    //}
                     GameMode.Instance.Streamer.LoadStreamPlayer(client);
                     GameMode.Instance.DoorManager.OnPlayerConnected(client);
                     Houses.HouseManager.OnPlayerConnected(client);

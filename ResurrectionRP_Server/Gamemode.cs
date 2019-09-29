@@ -21,6 +21,8 @@ using AltV.Net.Data;
 using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Services;
 using ResurrectionRP_Server.Utils;
+using System.Drawing;
+using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server
 {
@@ -175,7 +177,6 @@ namespace ResurrectionRP_Server
 
             AltAsync.OnPlayerConnect += OnPlayerConnected;
             AltAsync.OnPlayerDisconnect += OnPlayerDisconnected;
-            Alt.OnPlayerDead += Alt_OnPlayerDead;
  
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
@@ -292,11 +293,6 @@ namespace ResurrectionRP_Server
 
 
             ServerLoaded = true;
-        }
-
-        private void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
-        {
-
         }
 
         private Task OnPlayerConnected(IPlayer player, string reason)

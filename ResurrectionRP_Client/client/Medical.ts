@@ -1,5 +1,6 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
+import * as utils from './Utils/Utils'
 import Scaleforms from './Helpers/Scaleform';
 
 const MEDIC_CALL_WAIT_TIME: number = 3 * 60000;
@@ -40,7 +41,7 @@ export class Blesse {
                     return;
                 if (game.getDistanceBetweenCoords(parseFloat(blesse.Position.x + ""), parseFloat(blesse.Position.y + "") , parseFloat(blesse.Position.z + ""), alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, false) < 15) {
                     Medical.isInMission = false;
-                    alt.emitServer('ONU_BlesseRemoveBlip', blesse.BlessePlayer.id);
+                    alt.emitServer('ONU_BlesseRemoveBlip', blesse.BlessePlayer);
                     blesse.Destroy();
                     alt.clearEveryTick(this.EveryTick);
                     delete Medical.BlesseList[Medical.BlesseList.findIndex(p => p.ID == this.ID)];
@@ -172,13 +173,14 @@ export class Medical {
         });
 
         alt.onServer("ONU_BlesseEnd", (player: alt.Player) => {
-            let blesse = Medical.BlesseList.find(p => p.BlessePlayer.id == player.id);
+            let blesse = Medical.BlesseList.find(p => p.BlessePlayer == player);
             if (blesse != null)
                 blesse.Destroy();
         });
 
         alt.onServer("ONU_PlayerDeath", (weapon: number) => {
             alt.on('keydown', this.KeyHandler);
+            game.setPedCanRagdoll(alt.Player.local.scriptID, false);
             Medical.everyTick = alt.everyTick(this.OnTick.bind(this));
         });
 
@@ -207,9 +209,17 @@ export class Medical {
         //game.setCamEffect(1);
     }
 
+    private _lastcheck = 0;
     private OnTick() {
         if (game.isPlayerDead(0))
         {
+            this._lastcheck++;
+
+            if (this._lastcheck > 5000) {
+                utils.playAnimation("mini@cpr@char_b@cpr_str", "cpr_kol_idle", 8.0, -1, 0);
+                this._lastcheck = 0;
+            }
+
             if (Date.now() >= Medical.RequestedTimeMedic.getTime())
                 Medical.deathMessage = "Appuyer sur ~g~Y~w~ pour utiliser l'appel d'urgence ou ~r~R~w~ pour en finir :(";
             else

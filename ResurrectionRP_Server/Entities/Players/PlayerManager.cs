@@ -27,6 +27,8 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Variables 
         private readonly static Location charpos = new Location(new Vector3(402.8664f, -996.4108f, -99.00027f), new Vector3(0,0,60));
 
+        public static List<DeadPlayer> DeadPlayers = new List<DeadPlayer>();
+
         private static short Dimension = short.MinValue;
         public static int StartMoney = 0;
         public static int StartBankMoney = 0;
@@ -174,7 +176,11 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
 
             if (weapon != 2725352035)
+            {
                 player.EmitLocked("ONU_PlayerDeath", weapon);
+
+                PlayerManager.DeadPlayers.Add(new DeadPlayer(player, killer, weapon));
+            }
             else
             {
                 player.SendNotification($"Ne va pas vers la lumière, tu vas te relever.");
@@ -397,30 +403,42 @@ namespace ResurrectionRP_Server.Entities.Players
         public static async Task<PlayerHandler> GetPlayerHandlerDatabase(string socialClub) =>
             await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == socialClub.ToLower()).FirstOrDefaultAsync();
 
+        public static void Resurrect(IPlayer client)
+        {
+            GameMode.Instance.PlayerManager.IWantToDie(client, null);
+        }
+
         private void IWantToDie(IPlayer client, object[] args)
         {
-            if (!client.Exists)
-                return;
-
-            PlayerHandler ph = client.GetPlayerHandler();
-            if (ph != null)
+            try
             {
-                if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList.Count > 0)
-                {
-                    ph.PocketInventory.Clear();
-                    ph.HasMoney(ph.Money);
-                }
+                if (!client.Exists)
+                    return;
 
-                ph.UpdateHungerThirst(100, 100);
-                client.Spawn(new Vector3(308.2974f, -567.4647f, 43.29008f));
-                client.Rotation = new Rotation(0, 239.0923f, 0);
-                client.Resurrect();
-                client.Health = 200;
-                
-                ph.PlayerSync.Injured = false;
-                ph.UpdateFull();
+                PlayerHandler ph = client.GetPlayerHandler();
+                if (ph != null)
+                {
+                    if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList.Count > 0)
+                    {
+                        ph.PocketInventory.Clear();
+                        ph.HasMoney(ph.Money);
+                    }
+
+                    ph.UpdateHungerThirst(100, 100);
+                    client.Spawn(new Vector3(308.2974f, -567.4647f, 43.29008f), 30000);
+                    client.Rotation = new Rotation(0, 239.0923f, 0);
+                    client.Resurrect();
+                    client.MaxHealth = 200;
+                    client.Health = 200;
+
+                    ph.PlayerSync.Injured = false;
+                    ph.UpdateFull();
+                }
             }
-            Task.Run(async () =>await client.SetHealthAsync(200));
+            catch(Exception ex)
+            {
+                Alt.Server.LogError(ex.ToString());
+            }
         }
 
         public static PlayerHandler GetPlayerBySCN(string socialClubName)

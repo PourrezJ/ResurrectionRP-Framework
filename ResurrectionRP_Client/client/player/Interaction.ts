@@ -93,6 +93,9 @@ export class Interaction {
                     let player: alt.Player = null;
                     let objNetId = -1;
 
+                    if (raycastResult == null)
+                        return;
+
                     if (raycastResult.isHit) {
                         Streamer.NetworkingEntityClient.EntityList.forEach((item, index) => {
                             if (item == raycastResult.hitEntity) {

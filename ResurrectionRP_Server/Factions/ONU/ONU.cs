@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using ResurrectionRP_Server.Factions.Model;
@@ -7,7 +6,6 @@ using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Entities.Vehicles;
 using AltV.Net;
 using AltV.Net.Enums;
-using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Blips;
 using ResurrectionRP_Server.Models.InventoryData;
@@ -19,28 +17,9 @@ namespace ResurrectionRP_Server.Factions
 {
     public partial class ONU : Faction
     {
-        #region Private classes
-        private class EmergencyCall
-        {
-            public IPlayer player;
-            public bool Taken;
-
-            public EmergencyCall(IPlayer player)
-            {
-                this.player = player;
-                this.Taken = false;
-            }
-
-            public void TakeCall()
-            {
-                this.Taken = true;
-            }
-        }
-        #endregion
-
         #region Static fields
         private static readonly double healprice = 1000;
-        private static List<EmergencyCall> EmergencyCalls = new List<EmergencyCall>();
+       
         #endregion
 
         #region Constructor
@@ -91,9 +70,9 @@ namespace ResurrectionRP_Server.Factions
 
             ServicePlayerList = new List<string>();
 
-            AltAsync.OnClient("ONU_CallUrgenceMedic", ONU_CallUrgenceMedic);
-            AltAsync.OnClient("ONU_ImAccept", ONU_IAccept);
-            AltAsync.OnClient("ONU_BlesseRemoveBlip", ONU_BlesseRemoveBlip);
+            Alt.OnClient("ONU_CallUrgenceMedic", ONU_CallUrgenceMedic);
+            Alt.OnClient("ONU_ImAccept", ONU_IAccept);
+            Alt.OnClient("ONU_BlesseRemoveBlip", ONU_BlesseRemoveBlip);
 
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pistol, "Pistol MK2", "", hash: WeaponHash.PistolMk2), 0, 1));
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Carabine, "Special Carbine MK2", "", hash: WeaponHash.SpecialCarbineMk2), 0, 3));
@@ -120,86 +99,6 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Event handlers
-        private Task ONU_CallUrgenceMedic(IPlayer client, object[] args)
-        {
-            if (!client.Exists)
-                return Task.CompletedTask;
-
-            EmergencyCall result = EmergencyCalls.Find(
-            delegate (EmergencyCall ec)
-            {
-                return ec.player.Id == client.Id;
-            });
-
-            if (result != null)
-                EmergencyCalls.Remove(result);
-
-            EmergencyCalls.Add(new EmergencyCall(client));
-
-            var players = GetEmployeeOnline();
-
-            if (players.Count > 0)
-            {
-                foreach (IPlayer player in players)
-                {
-                    if (player.Exists && player != client)
-                        player.EmitLocked("ONU_BlesseCalled", client, "INCONNU", JsonConvert.SerializeObject(client.Position.ConvertToEntityPosition())); ;
-                }
-            }
-            client.EmitLocked("ONU_Callback", ServicePlayerList.Count);
-            return Task.CompletedTask;
-        }
-
-        private Task ONU_IAccept(IPlayer client, object[] args)
-        {
-            IPlayer victim = GameMode.Instance.PlayerList.Find(p => p.Id == ushort.Parse(args[0].ToString()));
-
-            if (victim == null)
-                return Task.CompletedTask;
-
-            if (!victim.Exists)
-                return Task.CompletedTask;
-
-
-            EmergencyCall result = EmergencyCalls.FindLast(b => (b.player.Id == victim.Id));
-            if (result != null && result.Taken == true)
-            {
-                client.EmitLocked("ONU_BlesseCallTaken", victim);
-                return Task.CompletedTask;
-            }
-
-            EmergencyCalls.FindLast(b => (b.player.Id == victim.Id))?.TakeCall();
-            client.EmitLocked("ONU_IAccept", victim);
-
-            var players =  GetEmployeeOnline();
-
-            if (players.Count > 0)
-            {
-                foreach (IPlayer medic in players)
-                {
-                    if (medic.Exists && medic != client)
-                        medic.EmitLocked("ONU_BlesseCalled_Accepted", victim, client.GetPlayerHandler()?.Identite.Name);
-                }
-            }
-            victim.EmitLocked("ONU_CallbackAccept");
-            return Task.CompletedTask;
-        }
-
-        private async Task ONU_BlesseRemoveBlip(IPlayer client, object[] args)
-        {
-            var blesseID = args[0].ToString();
-            var players =  GetEmployeeOnline();
-
-            if (players.Count > 0)
-            {
-                foreach (IPlayer medic in players)
-                {
-                    if (medic.Exists)
-                         await medic.EmitAsync("ONU_BlesseEnd", blesseID);
-                }
-            }
-        }
-
         public override async Task OnPlayerPromote(IPlayer client, int rang)
         {
             if (!client.Exists)

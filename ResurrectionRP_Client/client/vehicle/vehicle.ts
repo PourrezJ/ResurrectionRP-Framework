@@ -19,6 +19,10 @@ export function initialize() {
     alt.onServer('OnPlayerEnterVehicle', onPlayerEnterVehicle);
     alt.onServer('SetDoorState', setDoorState);
     alt.onServer('HornPreview', hornPreview);
+    alt.onServer("DetachTrailer", () => {
+        if (hasTrailer)
+            game.detachVehicleFromTrailer(player.vehicle.scriptID);
+    });
 
     alt.onServer('UpdateFuel', (fuel: number) => {
         fuelCur = fuel;
@@ -134,6 +138,13 @@ export function initialize() {
                 hasTrailer = game.isVehicleAttachedToTrailer(player.vehicle.scriptID)
                 Trailer = game.getVehicleTrailerVehicle(player.vehicle.scriptID, 0)[1];
                 alt.emitServer("UpdateTrailer", player.vehicle, hasTrailer, (Trailer > 0) ? alt.Vehicle.all.find(p => p.scriptID == Trailer) : null );
+            }
+        }
+        if (player.vehicle != null) {
+            if (fuelCur <= 0) {
+                enginePreviousState = false;
+                engineState = false;
+                game.setVehicleEngineOn(player.vehicle.scriptID, false, true, true);
             }
         }
 

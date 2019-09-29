@@ -88,7 +88,7 @@ namespace ResurrectionRP_Server.Farms
         }
 
         #region Start Farming
-        public override async void StartFarming(IPlayer client)
+        public override void StartFarming(IPlayer client)
         {
             if (client == null || ! client.Exists)
                 return;
@@ -105,7 +105,7 @@ namespace ResurrectionRP_Server.Farms
             }
 
             IVehicle fuelVeh = null;
-            List<IVehicle> vehs = await client.Position.ConvertToVector3().GetVehiclesInRangeAsync(20);
+            List<IVehicle> vehs = client.GetVehiclesInRange(20);
 
             foreach(IVehicle veh in vehs)
             {
@@ -220,7 +220,7 @@ namespace ResurrectionRP_Server.Farms
         #endregion
 
         #region Start Traitement
-        public override async void StartProcessing(IPlayer client)
+        public override void StartProcessing(IPlayer client)
         {
             if (client == null || !client.Exists)
                 return;
@@ -234,7 +234,7 @@ namespace ResurrectionRP_Server.Farms
                 client.DisplayHelp("Vous êtes libre de sortir du véhicule le temps du traitement!", 15000);
 
             IVehicle vehicle = null;
-            List<IVehicle> vehs = await Process_PosRot.Pos.GetVehiclesInRangeAsync(20);
+            List<IVehicle> vehs = Process_PosRot.Pos.GetVehiclesInRange(20);
 
             foreach (IVehicle veh in vehs)
             {
@@ -285,7 +285,7 @@ namespace ResurrectionRP_Server.Farms
             player.IsOnProgress = true;
             client.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s)", 5000);
             client.EmitLocked("LaunchProgressBar", Process_Time * (vehHandler.OilTank.Brute / 10));
-            Timers[client] = Utils.Utils.Delay((Process_Time * 1000) / (Process_Time), false, async () =>
+            Timers[client] = Utils.Utils.Delay((Process_Time * 1000) / (Process_Time), false, () =>
             {
                 System.Timers.Timer ProcessTimer = Timers[client];
                 if (!client.Exists || !vehicle.Exists)
@@ -325,7 +325,7 @@ namespace ResurrectionRP_Server.Farms
         }
         #endregion
 
-        public override async void StartSelling(IPlayer client)
+        public override void StartSelling(IPlayer client)
         {
             if (client == null || !client.Exists)
                 return;
@@ -339,7 +339,7 @@ namespace ResurrectionRP_Server.Farms
                 client.DisplayHelp("Vous êtes libre de sortir du véhicule le temps de la vente!", 15000);
 
             IVehicle vehicle = null;
-            List<IVehicle> vehs = await Selling_PosRot.Pos.GetVehiclesInRangeAsync(20);
+            List<IVehicle> vehs = Selling_PosRot.Pos.GetVehiclesInRange(20);
 
             foreach (IVehicle veh in vehs)
             {
@@ -396,9 +396,9 @@ namespace ResurrectionRP_Server.Farms
             int itemcount = vehHandler.OilTank.Traite;
             client.EmitLocked("LaunchProgressBar", Selling_Time * itemcount);
 
-            var count = 0;
+            int count = 0;
 
-            Timers[client] =  Utils.Utils.Delay((Selling_Time * 1000)/( TrailerMaxContent ), false,async () =>
+            Timers[client] = Utils.Utils.Delay(Selling_Time * 1000 / TrailerMaxContent, false, () =>
             {
                 if (!client.Exists)
                     return;
@@ -420,7 +420,6 @@ namespace ResurrectionRP_Server.Farms
                     SellingTimer = null;
                     return;
                 }
-
 
                 if (SellingTimer == null)
                 {

@@ -78,7 +78,7 @@ namespace ResurrectionRP_Server
 
         public static Rotation ConvertToEntityRotation(this Vector3 pos) => new Rotation(pos.X, pos.Y, pos.Z );
 
-        public static Task<List<IVehicle>> GetVehiclesInRangeAsync(this Vector3 pos, float range, short dimension = GameMode.GlobalDimension)
+        public static List<IVehicle> GetVehiclesInRange(this Vector3 pos, float range, short dimension = GameMode.GlobalDimension)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
             List<IVehicle> vehicles = Alt.GetAllVehicles().ToList();
@@ -91,7 +91,7 @@ namespace ResurrectionRP_Server
             }
 
             Console.WriteLine(stopwatch.ElapsedMilliseconds);
-            return Task.FromResult(end);
+            return end;
         }
 
         public static List<IPlayer> GetPlayersInRange(this Vector3 pos, float range)

@@ -391,7 +391,7 @@ namespace ResurrectionRP_Server.Society.Societies
             var vh = VehicleBench.GetVehicleHandler();
             var manifest = vh.VehicleManifest;
 
-            if (vh == null || !manifest.HasModType(_modType) && _modType != 666) // 666 = neons
+            if (vh == null || !manifest.HasModType(_modType))
             {
                 client.SendNotificationError("Je ne peux pas sur ce véhicule.");
                 OpenPerformanceMenu(client);

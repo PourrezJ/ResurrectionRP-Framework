@@ -26,7 +26,6 @@ enum MenuAnchor {
 var menu = null;
 var menuItems = null;
 var menuData = null;
-var backPressed = false;
 var exitEscapeMenu = false;
 var newMenu = true;
 
@@ -230,12 +229,7 @@ export default () => {
             }
         });
 
-        menu.MenuClose.on(() => {
-            if (backPressed == false) {
-                return;
-            }
-
-            backPressed = false;
+        menu.MenuBack.on(() => {
             if (menuData.NoExit) {
                 menu.Visible = true;
             } else if (menuData.BackCloseMenu) {
@@ -422,10 +416,7 @@ function hexToRgb(hex) {
 }
 
 alt.on('keydown', (e) => {
-    if (menu != null && e == 8) {
-        backPressed = true;
-    }
-    else if (menu != null && e == 27) {
+    if (menu != null && e == 27) {
         exitEscapeMenu = true;
     }
 });

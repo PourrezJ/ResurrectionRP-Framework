@@ -273,7 +273,10 @@ namespace ResurrectionRP_Server.Houses
             {
                 await player.SetDimensionAsync((short)(DIMENSION_START + ID));
                 await player.SetPositionAsync(HouseTypes.HouseTypeList[Type].Position.Pos);
-                await player.SetRotationAsync(HouseTypes.HouseTypeList[Type].Position.Rot);
+
+                // BUG v801: Set rotation when player in game not working
+                await player.EmitAsync("setEntityHeading", player, HouseTypes.HouseTypeList[Type].Position.Rot.Z);
+                // await player.SetRotationAsync(HouseTypes.HouseTypeList[Type].Position.Rot);
             }
         }
 

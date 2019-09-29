@@ -112,6 +112,11 @@ export function initialize() {
         createBlip(position, sprite, color, name, alpha, scale, shortRange);
     });
 
+    alt.onServer('setEntityHeading', (entity: alt.Entity, angle: number) =>
+    {
+        game.setEntityHeading(entity.scriptID, angle);
+    });
+
     alt.onServer('ShowNotification', (text) => {
         game.setNotificationTextEntry("STRING");
         game.addTextComponentSubstringPlayerName(text);
@@ -151,8 +156,6 @@ export function initialize() {
     alt.onServer('VehicleSetSirenSound', (vehicle: alt.Vehicle, status: boolean) => {
         game.setDisableVehicleSirenSound(vehicle.scriptID, status);
     });
-
-
 
     function SetNotificationPicture(message: string, dict: string, img: string, flash: boolean, iconType: number, sender: string, subject: string) {
         game.setNotificationTextEntry("STRING");

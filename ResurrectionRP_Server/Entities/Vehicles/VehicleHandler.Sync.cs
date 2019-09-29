@@ -64,7 +64,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 else
                     _fuel = value;
 
-                if (_fuel == 0 && Vehicle != null && Vehicle.Exists)
+                if (_fuel == 0)
                 {
                     EngineOn = false;
                     UpdateFull();

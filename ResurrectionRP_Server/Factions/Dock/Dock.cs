@@ -154,6 +154,19 @@ namespace ResurrectionRP_Server.Factions
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Diablous2, 73500, 5));
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Nightblade, 122500, 5));
 
+            // Tankers
+            VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Tanker, 140000, 500));
+            VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Tanker2, 140000, 500));
+            VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.ArmyTanker, 140000, 500));
+
+            // Trailers
+            VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.TrFlat, 140000, 0));
+            VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Trailers, 133000, 500));
+            VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Trailers2, 154000, 500));
+            VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Trailers3, 154000, 500));
+            VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.TrailerLogs, 140000, 500));
+            VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.DockTrailer, 140000, 500));
+
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Microlight, 150000, 15));
 
             BlipPosition = new Vector3(1181.065f, -3113.788f, 6.028026f);

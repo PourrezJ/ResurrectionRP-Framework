@@ -134,17 +134,11 @@ export function initialize() {
         if (player.vehicle != null) {
             enginePreviousState = engineState;
             engineState = game.getIsVehicleEngineRunning(player.vehicle.scriptID);
+
             if (game.isVehicleAttachedToTrailer(player.vehicle.scriptID) != hasTrailer) {
                 hasTrailer = game.isVehicleAttachedToTrailer(player.vehicle.scriptID)
                 Trailer = game.getVehicleTrailerVehicle(player.vehicle.scriptID, 0)[1];
-                alt.emitServer("UpdateTrailer", player.vehicle, hasTrailer, (Trailer > 0) ? alt.Vehicle.all.find(p => p.scriptID == Trailer) : null );
-            }
-        }
-        if (player.vehicle != null) {
-            if (fuelCur <= 0) {
-                enginePreviousState = false;
-                engineState = false;
-                game.setVehicleEngineOn(player.vehicle.scriptID, false, true, true);
+                alt.emitServer("UpdateTrailer", player.vehicle, hasTrailer, (Trailer > 0) ? alt.Vehicle.all.find(p => p.scriptID == Trailer) : null);
             }
         }
 
@@ -154,7 +148,6 @@ export function initialize() {
             if (player.vehicle == null)
                 return;
 
-            //let speed = player.vehicle.speed * 3.6;
             let speed = game.getEntitySpeed(player.vehicle.scriptID) * 3.6;
             let rpm = player.vehicle.rpm * 591;
 

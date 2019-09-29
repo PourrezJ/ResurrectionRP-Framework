@@ -120,13 +120,9 @@ namespace ResurrectionRP_Server.Factions
         private void OnVehicleLeaveColshape(IColShape colShape, IVehicle vehicle)
         {
             if (colShape == ReparationVLColshape)
-            {
                 VehicleInWorkbench = null;
-            }
             else if (colShape == PeintureColshape)
-            {
                 VehicleInColorCabin = null;
-            }
 
             if (vehicle.Driver != null)
                 MenuManager.CloseMenu(vehicle.Driver);
@@ -160,9 +156,17 @@ namespace ResurrectionRP_Server.Factions
             foreach (VehicleColor color in Enum.GetValues(typeof(VehicleColor)))
             {
                 MenuItem item = new MenuItem(color.ToString(), executeCallback: true, executeCallbackIndexChange: true);
-                item.RightLabel = $"${PeinturePrice}";
-                item.SetData("Color", Convert.ToInt32(color));
-                item.OnMenuItemCallbackAsync += OnColorChoice;
+
+                if (menuItem.Id == "ID_First" && (byte)color == VehicleInColorCabin.PrimaryColor || menuItem.Id == "ID_Second" && (byte)color == VehicleInColorCabin.SecondaryColor || menuItem.Id == "ID_Pearl" && (byte)color == VehicleInColorCabin.PearlColor)
+                    item.RightBadge = BadgeStyle.Makeup;
+                else
+                {
+                    item.RightLabel = $"${PeinturePrice}";
+
+                    item.SetData("Color", Convert.ToInt32(color));
+                    item.OnMenuItemCallbackAsync += OnColorChoice;
+                }
+
                 menu.Add(item);
             }
 
@@ -172,11 +176,12 @@ namespace ResurrectionRP_Server.Factions
 
         private void PeintureSelectCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            if (menuItem != null && VehicleInColorCabin != null) 
+            if (menuItem == null && VehicleInColorCabin != null)
             {
                 VehicleHandler vh = VehicleInColorCabin.GetVehicleHandler();
                 VehicleInColorCabin.PrimaryColor = vh.PrimaryColor;
                 VehicleInColorCabin.SecondaryColor = vh.SecondaryColor;
+                VehicleInColorCabin.PearlColor = vh.PearlColor;
                 OpenPeintureMenu(client);
             }
         }
@@ -215,17 +220,17 @@ namespace ResurrectionRP_Server.Factions
 
                 vh.UpdateFull();
                 client.SendNotificationSuccess("Peinture effectuée!");
+                OpenPeintureMenu(client);
             }
             else
-            {
                 client.SendNotificationError("Le fond de commerce est vide.");
-            }
         }
 
         private Task OnEnterRepairZoneVL(IColShape colShape, IPlayer client)
         {
             if (VehicleInWorkbench != null)
                 OpenMenu(client, VehicleInWorkbench);
+
             return Task.CompletedTask;
         }
 
@@ -262,6 +267,7 @@ namespace ResurrectionRP_Server.Factions
                 client.SendNotificationError("Le véhicule doit être dans la cabine de peinture pour être repeint.");
                 return;
             }
+
             Menu menu = new Menu("ID_MainReparMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.CarMod);
 
             MenuItem primary = new MenuItem("Peinture Principal", "", "ID_First", executeCallback: true, executeCallbackIndexChange: true);
@@ -292,6 +298,7 @@ namespace ResurrectionRP_Server.Factions
                 VehicleInColorCabin.SecondaryColor = (byte)color;
             else if (menu.Id == "ID_Pearl")
                 VehicleInColorCabin.PearlColor = (byte)color;
+
             return Task.CompletedTask;
         }
         #endregion
@@ -348,14 +355,11 @@ namespace ResurrectionRP_Server.Factions
             menu.OpenMenu(client);
         }
 
-
         private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             IVehicle veh = menu.GetData("Vehicle");
-            if (veh == null)
-                return;
 
-            if (!veh.Exists)
+            if (veh == null|| !veh.Exists)
                 return;
 
             PlayerHandler ph = client.GetPlayerHandler();
@@ -565,6 +569,7 @@ namespace ResurrectionRP_Server.Factions
         private async Task MenuCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             IVehicle veh = menu.GetData("Vehicle");
+
             if (veh == null)
                 return;
 
@@ -578,15 +583,13 @@ namespace ResurrectionRP_Server.Factions
                 case "ID_attach":
                     if (vh.TowTruck == null)
                     {
-                        VehicleHandler _vh = (new Position(client.Position.X, client.Position.Y, client.Position.Z).GetTowTruckInZone(5)?.GetVehicleHandler());
+                        VehicleHandler _vh = new Position(client.Position.X, client.Position.Y, client.Position.Z).GetTowTruckInZone(5)?.GetVehicleHandler();
+
                         if (_vh != null)
-                        {
                             await _vh.TowVehicle(veh);
-                        }
                         else
-                        {
                             client.SendNotificationError("Aucune dépanneuse dans les environs");
-                        }
+
                         XMenuManager.XMenuManager.CloseMenu(client);
                     }
                     break;

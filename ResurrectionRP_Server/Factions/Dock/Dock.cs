@@ -160,7 +160,7 @@ namespace ResurrectionRP_Server.Factions
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.ArmyTanker, 140000, 500));
 
             // Trailers
-            VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.TrFlat, 140000, 0));
+            VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.TrFlat, 126000, 0));
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Trailers, 133000, 500));
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Trailers2, 154000, 500));
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Trailers3, 154000, 500));

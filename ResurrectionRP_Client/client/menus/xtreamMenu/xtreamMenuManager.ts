@@ -5,6 +5,7 @@ let inputMenu = null;
 let browser = null;
 let inputselected = "";
 let callbackTime = Date.now();
+let inputView = null;
 
 export function init()
 {
@@ -37,7 +38,10 @@ export function init()
                     menuItem.InputValue = "";
                 }
 
-                let inputView = new alt.WebView("http://resource/client/cef/userinput/input.html");
+                if (inputView != null)
+                    return;
+
+                inputView = new alt.WebView("http://resource/client/cef/userinput/input.html");
                 inputView.focus();
                 alt.showCursor(true);
                 alt.toggleGameControls(false);
@@ -45,14 +49,18 @@ export function init()
                 inputView.emit('Input_Data', menuItem.InputMaxLength, menuItem.InputValue);
 
                 inputView.on('Input_Submit', (text) => {
-                    xmenuData.Items[index].InputValue = text;
-                    alt.emitServer("XMenuManager_ExecuteCallback", index, JSON.stringify(xmenuData));
-                    xmenuData = null;
-                    inputView.destroy();
-                    browser.destroy();
-                    browser = null;
-                    alt.showCursor(false);
-                    alt.toggleGameControls(true);
+                    try {
+                        xmenuData.Items[index].InputValue = text;
+                        alt.emitServer("XMenuManager_ExecuteCallback", index, JSON.stringify(xmenuData));
+                        xmenuData = null;
+                        inputView.destroy();
+                        browser.destroy();
+                        browser = null;
+                        alt.showCursor(false);
+                        alt.toggleGameControls(true);
+                    } catch (ex) {
+                        alt.log(ex);
+                    }
                 });   
             }
             else {

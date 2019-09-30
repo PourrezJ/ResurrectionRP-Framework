@@ -299,7 +299,13 @@ namespace ResurrectionRP_Server
         private void Alt_OnConsoleCommand(string name, string[] args)
         {
             if (name == "/say")
-                Alt.EmitAllClients("AnnonceGlobal", args[0], "AVIS A LA POPULATION!", "ANNONCE SERVEUR");
+            {
+                string text = "";
+
+                foreach(string a in args)
+                    text += " " + a;
+                Alt.EmitAllClients("AnnonceGlobal", text, "AVIS A LA POPULATION!", "ANNONCE SERVEUR");
+            }
         }
 
         private Task OnPlayerConnected(IPlayer player, string reason)

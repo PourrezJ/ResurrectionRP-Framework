@@ -129,7 +129,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (farm != null)
                     {
-                        farm.StartFarming(client);
+                        await AltAsync.Do(()=> farm.StartFarming(client));
                         return;
                     }
 

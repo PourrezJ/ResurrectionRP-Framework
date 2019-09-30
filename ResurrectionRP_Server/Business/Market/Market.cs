@@ -38,6 +38,8 @@ namespace ResurrectionRP_Server.Business
             Station.StationBlip = Entities.Blips.BlipsManager.CreateBlip("Station essence", StationPos, 128, 361, 0.5f);
             Station.Colshape = Alt.CreateColShapeCylinder(StationPos - new Vector3(0,0,2), 14f, 6f);
 
+            Station.LitrageMax = 3000; // temp
+
             Station.Colshape.SetOnPlayerEnterColShape(Events_PlayerEnterColshape);
             Station.Colshape.SetOnPlayerLeaveColShape(Events_PlayerExitColshape);
             Station.Colshape.SetOnVehicleEnterColShape(Events_VehicleEnterColshape);

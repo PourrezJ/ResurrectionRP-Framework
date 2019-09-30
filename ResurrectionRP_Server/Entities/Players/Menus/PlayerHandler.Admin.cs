@@ -512,11 +512,10 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             var secondMenu = new Menu("", "Admin Menu", "Choisissez un joueur :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Garage);
             secondMenu.ItemSelectCallback = ChoisePlayerCallback;
-
+            
             List<PlayerHandler> players = PlayerManager.GetPlayersList();
 
             var test = players.OrderBy(pa => pa.Identite.Name);
-
             foreach (PlayerHandler player in test)
             {
                 if (player != null && player.Client.Exists)
@@ -525,7 +524,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     var item = new MenuItem(player.Identite.Name, description, executeCallback: true);
                     item.OnMenuItemCallback =  (IPlayer cClient, Menu cMenu, IMenuItem cMenuItem, int _itemIndex) =>
                     {
-                        PlayerHandler playerSelected = players[_itemIndex];
+                        PlayerHandler playerSelected = test[_itemIndex];
 
                         if (!playerSelected.Client.Exists)
                             return;

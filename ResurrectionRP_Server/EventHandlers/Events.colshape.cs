@@ -66,7 +66,7 @@ namespace ResurrectionRP_Server.EventHandlers
 
                     // Alt.Server.LogInfo($"Entity {targetEntity.Id} leave colshape {colShape.NativePointer.ToString()}");
                     // BUG V784 : Bug ColShape.IsEntityIn() returns always false
-                    colShape.RemoveEntity(targetEntity as IPlayer);
+                    colShape.RemoveEntity(targetEntity);
 
                     if (targetEntity.Type == BaseObjectType.Vehicle)
                     {

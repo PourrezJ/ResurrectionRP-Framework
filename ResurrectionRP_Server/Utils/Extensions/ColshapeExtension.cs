@@ -28,7 +28,7 @@ namespace ResurrectionRP_Server
             }
         }
 
-        public static void RemoveEntity(this IColShape colshape, IPlayer entity)
+        public static void RemoveEntity(this IColShape colshape, IEntity entity)
         {
             lock (colshape)
             {

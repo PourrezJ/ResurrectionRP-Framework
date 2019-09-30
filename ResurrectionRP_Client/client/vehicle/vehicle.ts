@@ -176,11 +176,14 @@ export function onPlayerEnterVehicle(vehicle: alt.Vehicle, seat: number, current
     fuelMax = maxFuel;
     fuelCur = currentFuel;
     fuelConsum = fuelconsumption;
-    showSpeedometer(true);
+
+    if (seat == 1) {
+        showSpeedometer(true);
+    }
 }
 
 export function showSpeedometer(show: boolean) {
-    if (show && speedoWindow !== null && player.vehicle != null && game.getPedInVehicleSeat(player.vehicle.scriptID, -1, player.scriptID) == player.scriptID) {
+    if (show && speedoWindow !== null) {
         speedoWindow.emit('showSpeedometer');
     } else if (!show && speedoWindow !== null) {
         speedoWindow.emit('hideSpeedometer');

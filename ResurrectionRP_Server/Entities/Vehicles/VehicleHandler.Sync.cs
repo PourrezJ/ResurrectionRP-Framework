@@ -576,9 +576,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public void UpdateMilageAndFuel()
         {
-            if (WasTeleported)
+            if (WasTeleported && _previousPosition != Vehicle.Position.ConvertToVector3())
             {
-                _previousPosition = Vehicle.Position;
+                _previousPosition = Vehicle.Position.ConvertToVector3();
                 WasTeleported = false;
                 return;
             }

@@ -97,23 +97,33 @@ namespace ResurrectionRP_Server.Models
                 { ClothSlot.Torso, new ClothData(Torso.Drawable, Torso.Texture, Torso.Palette) }
             };
 
-                foreach (KeyValuePair<ClothSlot, ClothData> entry in cloths)
-                    Player.SetCloth(entry.Key, entry.Value.Drawable, entry.Value.Texture, entry.Value.Palette);
+            foreach (KeyValuePair<ClothSlot, ClothData> entry in cloths)
+                Player.SetCloth(entry.Key, entry.Value.Drawable, entry.Value.Texture, entry.Value.Palette);
 
-                if (Bracelets != null)
-                    Player.SetProp(PropSlot.Bracelets, Bracelets.Value);
+            if (Bracelets != null)
+                Player.SetProp(PropSlot.Bracelets, Bracelets.Value);
+            else
+                Player.ClearProp(PropSlot.Bracelets);
 
-                if (Ears != null)
-                    Player.SetProp(PropSlot.Ears, Ears.Value);
+            if (Ears != null)
+                Player.SetProp(PropSlot.Ears, Ears.Value);
+            else
+                Player.ClearProp(PropSlot.Ears);
 
-                if (Glasses != null)
-                    Player.SetProp(PropSlot.Glasses, Glasses.Value);
+            if (Glasses != null)
+                Player.SetProp(PropSlot.Glasses, Glasses.Value);
+            else
+                Player.ClearProp(PropSlot.Glasses);
 
-                if (Watches != null)
-                    Player.SetProp(PropSlot.Watches, Watches.Value);
+            if (Watches != null)
+                Player.SetProp(PropSlot.Watches, Watches.Value);
+            else
+                Player.ClearProp(PropSlot.Watches);
 
-                if (Hats != null)
-                    Player.SetProp(PropSlot.Hats, Hats.Value);
+            if (Hats != null)
+                Player.SetProp(PropSlot.Hats, Hats.Value);
+            else
+                Player.ClearProp(PropSlot.Hats);
         }
     }
 }

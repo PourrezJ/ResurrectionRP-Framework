@@ -570,6 +570,12 @@ namespace ResurrectionRP_Server.Factions
 
         private async Task ConcessCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
+            if (menuItem == null)
+            {
+                OpenConcessMenu(client, (ConcessType)menu.GetData("ConcessType"), menu.GetData("Faction_Location"), _factionName);
+                return;
+            }
+
             if (menu.Id == "ID_ParkingMenu")
             {
                 ConcessType type = (ConcessType)menu.GetData("ConcessType");

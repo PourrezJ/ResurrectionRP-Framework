@@ -99,6 +99,7 @@
     <TypeScriptCompile Include="client\Models\Camera.ts" />
     <TypeScriptCompile Include="client\notify\notify.ts" />
     <TypeScriptCompile Include="client\phone\PhoneManager.ts" />
+    <TypeScriptCompile Include="client\player\Effects.ts" />
     <TypeScriptCompile Include="client\Ragdoll.ts" />
     <TypeScriptCompile Include="client\Utils\CustomEvents.ts" />
     <TypeScriptCompile Include="client\player\Game.ts" />

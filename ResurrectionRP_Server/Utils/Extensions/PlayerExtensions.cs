@@ -381,8 +381,11 @@ namespace ResurrectionRP_Server
             client.EmitLocked("RequestCollisionAtCoords", pos.X, pos.Y, pos.Z);
         }
 
-        public static void Resurrect(this IPlayer client)
-            => client.EmitLocked("ResurrectPlayer");
+        public static async Task ResurrectAsync(this IPlayer client, int health = 200)
+            => await client.EmitAsync("ResurrectPlayer", health);
+
+        public static void Resurrect(this IPlayer client, int health = 200)
+            => client.Emit("ResurrectPlayer", health);
 
         public static async Task<bool> PlayerHandlerExist(this IPlayer player)
         {
@@ -404,34 +407,37 @@ namespace ResurrectionRP_Server
         public static async Task ReviveAsync(this IPlayer client, ushort health = 200, Vector3? position = null)
         {
             Vector3 pos = position ?? await client.GetPositionAsync();
+
+            await client.DespawnAsync();
             await client.SpawnAsync(new Position(pos.X, pos.Y, pos.Z));
             await client.SetHealthAsync(health);
-            client.Resurrect();
+            await client.ResurrectAsync(health);
 
             if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
             {
                 foreach (var medecin in GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
                 {
-                    medecin.EmitLocked("ONU_BlesseEnd", client.Id);
+                    if (await medecin.ExistsAsync())
+                        medecin.EmitLocked("ONU_BlesseEnd", client.Id);
                 }
             }
         }
 
-        public static void Revive(this IPlayer client, ushort health = 200, Vector3? position = null)
-        {
-            Vector3 pos = position ?? client.Position;
-            client.Spawn(new Position(pos.X, pos.Y, pos.Z));
-            client.Health = (health);
-            client.Resurrect();
+        //public static async Task ReviveAsync(this IPlayer client, ushort health = 200, Vector3? position = null)
+        //{
+        //    Vector3 pos = position ?? await client.GetPositionAsync();
+        //    await client.SpawnAsync(new Position(pos.X, pos.Y, pos.Z));
+        //    //client.Resurrect(health);
+        //    await client.SetHealthAsync(200);
 
-            if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
-            {
-                foreach (var medecin in GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
-                {
-                    medecin.Emit("ONU_BlesseEnd", client.Id);
-                }
-            }
-        }
+        //    if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
+        //    {
+        //        foreach (var medecin in GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
+        //        {
+        //            medecin.EmitLocked("ONU_BlesseEnd", client.Id);
+        //        }
+        //    }
+        //}
 
         public static bool HasVehicleKey(this IPlayer client, string plate)
             => client.GetPlayerHandler().ListVehicleKey.Exists(x => x.Plate == plate);

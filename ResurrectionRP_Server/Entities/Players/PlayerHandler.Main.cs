@@ -89,6 +89,8 @@ namespace ResurrectionRP_Server.Entities.Players
         public int Thirst { get; set; } = 100;
         public bool Jailed { get; private set; } = false;
 
+        public ushort Health;
+        /*
         private ushort _health = 200;
         public ushort Health
         {
@@ -101,6 +103,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 _health = value;
             }
         }
+        */
         private Data.PlayerSync playerSync = null;
         public Data.PlayerSync PlayerSync
         {
@@ -210,7 +213,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     IP = Client.Ip;
                     IsOnline = true;
-                    
+
                     Client.Emit
                     (
                         Events.PlayerInitialised,
@@ -230,7 +233,14 @@ namespace ResurrectionRP_Server.Entities.Players
                     Client.Spawn(Location.Pos, 0);
                     Client.ApplyCharacter();
                     Client.Dimension = GameMode.GlobalDimension;
-                    Client.Health = Health;
+
+                    if (Health <= 100)
+                    {
+                        Client.Health = 0;
+                        Client.Emit("ONU_PlayerDeath", WeaponHash.AdvancedRifle);
+
+                        PlayerManager.DeadPlayers.Add(new DeadPlayer(Client, null, (uint)WeaponHash.AdvancedRifle));
+                    }
 
                     Client.SetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, Voice.CreateTeamSpeakName());
                     Client.SetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, "Parler");
@@ -247,11 +257,6 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (PlayerSync.IsCuff)
                         SetCuff(true);
 
-                    if (Health <= 100)
-                    {
-                        Health = 0;
-                        Client.Emit("ONU_PlayerDeath", WeaponHash.AdvancedRifle);
-                    }
                     GameMode.Instance.Streamer.LoadStreamPlayer(client);
                     GameMode.Instance.DoorManager.OnPlayerConnected(client);
                     Houses.HouseManager.OnPlayerConnected(client);

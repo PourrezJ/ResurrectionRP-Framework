@@ -28,6 +28,7 @@ namespace ResurrectionRP_Server
             AppDomain.CurrentDomain.UnhandledException += OnException;
 
             AltAsync.OnPlayerConnect += AltAsync_OnPlayerConnect;
+            Alt.OnPlayerDead += Alt_OnPlayerDead;
 
             Database.MongoDB.Init();
 
@@ -75,6 +76,12 @@ namespace ResurrectionRP_Server
             while (gamemode.PlayerManager == null)
                 await Task.Delay(50);
 
+        }
+
+        private void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
+        {
+            if (gamemode != null)
+                gamemode.PlayerManager.Alt_OnPlayerDead(player, killer, weapon);
         }
 
         public override void OnStop()

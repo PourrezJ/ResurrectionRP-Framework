@@ -114,7 +114,7 @@ namespace ResurrectionRP_Server.Items
                     new Weapons(ItemID.Weapon, "Marteau", "", 3, hash: WeaponHash.Hammer, isDockable: true, itemPrice: 3150),
                     new Weapons(ItemID.Weapon, "Hachette", "", 3, hash: WeaponHash.Hatchet, isDockable: true, itemPrice: 3780),
                     new Weapons(ItemID.Weapon, "Poing américain", "", 3, hash: WeaponHash.KnuckleDuster, isDockable: true, itemPrice: 1785),
-                    new Weapons(ItemID.Weapon, "Couteau", "", 2, hash: WeaponHash.Knife, isDockable: true, itemPrice: 2940),
+                    new Weapons(ItemID.Knife, "Couteau", "", 2, hash: WeaponHash.Knife, isDockable: true, itemPrice: 2940),
                     //new Weapons(ItemID.Weapon, "Machette", "", 3, hash: WeaponHash.Knife, isDockable: true, itemPrice: 3360),
                     new Weapons(ItemID.Weapon, "Cran d'arret", "", 3, hash: WeaponHash.SwitchBlade, isDockable: true, itemPrice: 3360),
                     new Weapons(ItemID.Weapon, "Cle anglaise", "", 3, hash: WeaponHash.Wrench, isDockable: true, itemPrice: 3150),

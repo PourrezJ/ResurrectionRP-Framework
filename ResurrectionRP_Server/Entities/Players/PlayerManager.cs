@@ -27,6 +27,8 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Variables 
         private readonly static Location charpos = new Location(new Vector3(402.8664f, -996.4108f, -99.00027f), new Vector3(0,0,60));
 
+        public static List<DeadPlayer> DeadPlayers = new List<DeadPlayer>();
+
         private static short Dimension = short.MinValue;
         public static int StartMoney = 0;
         public static int StartBankMoney = 0;
@@ -50,10 +52,11 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.OnClient("OnKeyPress", OnKeyPress);
             Alt.OnClient("OnKeyUp", OnKeyReleased);
 
-            Alt.OnClient("UpdateHungerThirst", UpdateHungerThirst);
-            Alt.OnClient("IWantToDie", IWantToDie);
+            //Alt.OnClient("UpdateHungerThirst", UpdateHungerThirst);
 
-            Alt.OnPlayerDead += Alt_OnPlayerDead;
+            AltAsync.OnClient("IWantToDie", IWantToDie);
+
+            
             /*
             Utils.Utils.Delay(300000, false, async () =>
             {
@@ -151,6 +154,10 @@ namespace ResurrectionRP_Server.Entities.Players
                 ph.LastUpdate = DateTime.Now;
             }
 
+            var dead = DeadPlayers.FindLast(p => p.Victime == origin);
+            if (dead != null)
+                dead.Remove();
+
             ph.UpdateInBackground();
             PlayerHandler.PlayerHandlerList.Remove(origin, out _);
 
@@ -168,24 +175,28 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.Server.LogInfo($"Joueur social: {ph.PID} || Nom: {ph.Identite.Name} est déconnecté raison: {reason}.");
         }
 
-        private void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
+        public void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
         {
-            if (!player.Exists)
-                return;
-
-            if (weapon != 2725352035)
-                player.EmitLocked("ONU_PlayerDeath", weapon);
-            else
+            if (player.Exists)
             {
-                player.SendNotification($"Ne va pas vers la lumière, tu vas te relever.");
-                Utils.Utils.Delay(60000 * 1, true, async () =>
+                if (weapon != 2725352035)
                 {
-                    if (player.Exists)
-                        await player.ReviveAsync(105);
-                });
-            }
+                    player.Emit("ONU_PlayerDeath", weapon);
 
-            player.GetPlayerHandler()?.UpdateFull();
+                    PlayerManager.DeadPlayers.Add(new DeadPlayer(player, killer, weapon));
+                }
+                else
+                {
+                    player.SendNotification($"Ne va pas vers la lumière, tu vas te relever.");
+                    Utils.Utils.Delay(60000 * 1, true, async () =>
+                    {
+                        if (player.Exists)
+                            await player.ReviveAsync(105);
+                    });
+                }
+
+                player.GetPlayerHandler()?.UpdateFull();
+            }
         }
 
         public async Task Events_PlayerJoin(IPlayer player, object[] args)
@@ -397,30 +408,10 @@ namespace ResurrectionRP_Server.Entities.Players
         public static async Task<PlayerHandler> GetPlayerHandlerDatabase(string socialClub) =>
             await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == socialClub.ToLower()).FirstOrDefaultAsync();
 
-        private void IWantToDie(IPlayer client, object[] args)
+        private async Task IWantToDie(IPlayer client, object[] args)
         {
-            if (!client.Exists)
-                return;
-
-            PlayerHandler ph = client.GetPlayerHandler();
-            if (ph != null)
-            {
-                if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList.Count > 0)
-                {
-                    ph.PocketInventory.Clear();
-                    ph.HasMoney(ph.Money);
-                }
-
-                ph.UpdateHungerThirst(100, 100);
-                client.Spawn(new Vector3(308.2974f, -567.4647f, 43.29008f));
-                client.Rotation = new Rotation(0, 239.0923f, 0);
-                client.Resurrect();
-                client.Health = 200;
-                
-                ph.PlayerSync.Injured = false;
-                ph.UpdateFull();
-            }
-            Task.Run(async () =>await client.SetHealthAsync(200));
+            await client.ReviveAsync(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
+            client.GetPlayerHandler()?.UpdateFull();
         }
 
         public static PlayerHandler GetPlayerBySCN(string socialClubName)

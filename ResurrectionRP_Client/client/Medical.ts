@@ -1,5 +1,6 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
+import * as utils from './Utils/Utils'
 import Scaleforms from './Helpers/Scaleform';
 
 const MEDIC_CALL_WAIT_TIME: number = 3 * 60000;
@@ -40,7 +41,7 @@ export class Blesse {
                     return;
                 if (game.getDistanceBetweenCoords(parseFloat(blesse.Position.x + ""), parseFloat(blesse.Position.y + "") , parseFloat(blesse.Position.z + ""), alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, false) < 15) {
                     Medical.isInMission = false;
-                    alt.emitServer('ONU_BlesseRemoveBlip', blesse.BlessePlayer.id);
+                    alt.emitServer('ONU_BlesseRemoveBlip', blesse.BlessePlayer);
                     blesse.Destroy();
                     alt.clearEveryTick(this.EveryTick);
                     delete Medical.BlesseList[Medical.BlesseList.findIndex(p => p.ID == this.ID)];
@@ -112,6 +113,8 @@ export class Medical {
 
     constructor()
     {
+        alt.on('keydown', this.KeyHandler);
+        Medical.everyTick = alt.everyTick(this.OnTick);
 
         Medical.scaleForm = new Scaleforms("mp_big_message_freemode");
         Medical.RequestedTimeMedic = new Date();
@@ -172,21 +175,14 @@ export class Medical {
         });
 
         alt.onServer("ONU_BlesseEnd", (player: alt.Player) => {
-            let blesse = Medical.BlesseList.find(p => p.BlessePlayer.id == player.id);
+            let blesse = Medical.BlesseList.find(p => p.BlessePlayer == player);
             if (blesse != null)
                 blesse.Destroy();
         });
 
-        alt.onServer("ONU_PlayerDeath", (weapon: number) => {
-            alt.on('keydown', this.KeyHandler);
-            Medical.everyTick = alt.everyTick(this.OnTick.bind(this));
-        });
-
         alt.onServer("ResurrectPlayer", (health: number) => {
-            alt.clearEveryTick(Medical.everyTick);
-            alt.off('keydown', this.KeyHandler);
             game.setPlayerHealthRechargeMultiplier(alt.Player.local.scriptID, 0);
-
+            game.setEntityHealth(alt.Player.local.scriptID, health, 0);
             //game.animpostfxStop("DeathFailMPIn")
             //game.setCamEffect(0);
 
@@ -196,11 +192,14 @@ export class Medical {
 
     private KeyHandler(key)
     {
-        if (key == 'Y'.charCodeAt(0) && Date.now() >= Medical.RequestedTimeMedic.getTime()) {
-            Medical.RequestedTimeMedic = new Date(Date.now() + MEDIC_CALL_WAIT_TIME);
-            alt.emitServer("ONU_CallUrgenceMedic");
-        } else if (key == 'R'.charCodeAt(0)) {
-            alt.emitServer("IWantToDie");
+        if (game.isPlayerDead(0)) {
+            if (key == 'Y'.charCodeAt(0) && Date.now() >= Medical.RequestedTimeMedic.getTime()) {
+                Medical.RequestedTimeMedic = new Date(Date.now() + MEDIC_CALL_WAIT_TIME);
+                alt.emitServer("ONU_CallUrgenceMedic");
+            } else if (key == 'R'.charCodeAt(0)) {
+                alt.log("i want a die");
+                alt.emitServer("IWantToDie");
+            }
         }
 
         //game.animpostfxPlay("DeathFailMPIn", 0, true);

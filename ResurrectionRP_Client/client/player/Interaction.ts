@@ -93,6 +93,9 @@ export class Interaction {
                     let player: alt.Player = null;
                     let objNetId = -1;
 
+                    if (raycastResult == null)
+                        return;
+
                     if (raycastResult.isHit) {
                         Streamer.NetworkingEntityClient.EntityList.forEach((item, index) => {
                             if (item == raycastResult.hitEntity) {
@@ -125,7 +128,6 @@ export class Interaction {
                 case 82: // R
                     if (alt.Player.local.getMeta("CanClose") == false)
                         return;
-
                     ragdoll.start();
                     break;
 

@@ -275,6 +275,15 @@ namespace ResurrectionRP_Server.Entities.Players
                     await menu.OpenMenu(client);
                     break;
 
+                case ConsoleKey.R:
+
+                    if (!await Client.IsDeadAsync())
+                        return;
+
+                    await Client.ReviveAsync();
+
+                    break;
+
                 case ConsoleKey.PageUp:
                     if (ph.HasOpenMenu())
                         return;

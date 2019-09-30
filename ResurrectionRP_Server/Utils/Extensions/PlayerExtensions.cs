@@ -407,26 +407,27 @@ namespace ResurrectionRP_Server
             {
                 foreach (var medecin in GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
                 {
-                    medecin.EmitLocked("ONU_BlesseEnd", client.Id);
+                    if (await medecin.ExistsAsync())
+                        medecin.EmitLocked("ONU_BlesseEnd", client.Id);
                 }
             }
         }
 
-        public static void Revive(this IPlayer client, ushort health = 200, Vector3? position = null)
-        {
-            Vector3 pos = position ?? client.Position;
-            client.Spawn(new Position(pos.X, pos.Y, pos.Z));
-            client.Health = (health);
-            client.Resurrect(health);
+        //public static async Task ReviveAsync(this IPlayer client, ushort health = 200, Vector3? position = null)
+        //{
+        //    Vector3 pos = position ?? await client.GetPositionAsync();
+        //    await client.SpawnAsync(new Position(pos.X, pos.Y, pos.Z));
+        //    //client.Resurrect(health);
+        //    await client.SetHealthAsync(200);
 
-            if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
-            {
-                foreach (var medecin in GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
-                {
-                    medecin.Emit("ONU_BlesseEnd", client.Id);
-                }
-            }
-        }
+        //    if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
+        //    {
+        //        foreach (var medecin in GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
+        //        {
+        //            medecin.EmitLocked("ONU_BlesseEnd", client.Id);
+        //        }
+        //    }
+        //}
 
         public static bool HasVehicleKey(this IPlayer client, string plate)
             => client.GetPlayerHandler().ListVehicleKey.Exists(x => x.Plate == plate);

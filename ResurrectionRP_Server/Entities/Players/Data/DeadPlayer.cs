@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Items;
@@ -35,12 +36,15 @@ namespace ResurrectionRP_Server.Entities.Players.Data
 
         private void OnPlayerEnterColshape(IColShape colShape, IPlayer client)
         {
+            if (client == Victime)
+                return;
+
             PlayerHandler ph = client.GetPlayerHandler();
 
             XMenu menu = new XMenu("");
-            menu.Callback = CallBack;
+            menu.CallbackAsync = CallBack;
 
-            if (Factions.FactionManager.IsMedic(client))
+            if (Factions.FactionManager.IsMedic(client) && ph.HasItemID(ItemID.Defibrilateur))
                 menu.Add(new XMenuItem("RPC", "Réanimer la victime", "ID_Reanimate", XMenuItemIcons.HEART_SOLID, false));
 
             menu.Add(new XMenuItem("Fouiller les poches", "", "ID_Poche", XMenuItemIcons.HANDS_SOLID));
@@ -51,7 +55,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
             menu.OpenXMenu(client);
         }
 
-        private void CallBack(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private async Task CallBack(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             if (client == Victime)
                 return;
@@ -66,7 +70,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
             switch (menuItem.Id)
             {
                 case "ID_Reanimate":
-                    if (Victime.IsDead && ph.HasItemID(ItemID.Defibrilateur))
+                    if (await Victime.IsDeadAsync() && ph.HasItemID(ItemID.Defibrilateur))
                     {
                         var defibrilators = ph.GetStacksItems(ItemID.Defibrilateur);
                         if (defibrilators.Count > 0)
@@ -89,9 +93,10 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                                     ph.BagInventory.Delete(defibrilators[InventoryTypes.Bag][0], 1);
                                 }
                             }
-                            Victime.Revive(125, new Vector3(308.2974f, -567.4647f, 43.29008f));
                             marker.Destroy();
                             colshape.Remove();
+                            await Victime.ReviveAsync(125);
+                            vh.UpdateFull();
                             client.SendNotificationSuccess("Vous avez réanimé le patient.");
                         }
                     }
@@ -112,7 +117,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                         vh.UpdateFull();
                         return Task.CompletedTask;
                     };
-                    Task.Run(async ()=> await invmenu.OpenMenu(client));
+                    await invmenu.OpenMenu(client);
                     break;
 
                 case "ID_GetMoney":
@@ -132,9 +137,15 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                     break;
 
                 case "ID_Intensif":
+                    if (!ph.HasItemID(ItemID.Knife))
+                    {
+                        client.SendNotificationError("Il vous faut un couteau pour faire cette action.");
+                        return;
+                    }
+
+                    await Victime.ReviveAsync(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
                     marker.Destroy();
                     colshape.Remove();
-                    Victime.Revive(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
                     vh.UpdateFull();
                     break;
             }
@@ -150,17 +161,12 @@ namespace ResurrectionRP_Server.Entities.Players.Data
             Taken = true;
         }
 
-        public void Revive()
-        {
-            marker.Destroy();
-            colshape.Remove();
-        }
-
         public void Remove()
         {
             marker.Destroy();
             colshape.Remove();
-            Victime.Revive(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
+            PlayerManager.DeadPlayers.Remove(this);
+            
         }
     }
 }

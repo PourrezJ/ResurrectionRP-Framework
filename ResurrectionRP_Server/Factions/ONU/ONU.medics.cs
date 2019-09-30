@@ -68,8 +68,7 @@ namespace ResurrectionRP_Server.Factions
 
             if (result != null)
             {
-                result.Revive();
-                PlayerManager.DeadPlayers.Remove(result);
+                result.Remove();
             }
             if (players.Count > 0)
             {

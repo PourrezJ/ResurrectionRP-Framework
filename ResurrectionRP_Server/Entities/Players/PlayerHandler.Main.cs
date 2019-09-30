@@ -232,9 +232,12 @@ namespace ResurrectionRP_Server.Entities.Players
                     Client.Dimension = GameMode.GlobalDimension;
 
                     if (Health <= 100)
-                        Health = 100;
+                    {
+                        Client.Health = 0;
+                        Client.Emit("ONU_PlayerDeath", WeaponHash.AdvancedRifle);
 
-                    Client.Health = Health;
+                        PlayerManager.DeadPlayers.Add(new DeadPlayer(Client, null, (uint)WeaponHash.AdvancedRifle));
+                    }
 
                     Client.SetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, Voice.CreateTeamSpeakName());
                     Client.SetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, "Parler");
@@ -251,11 +254,6 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (PlayerSync.IsCuff)
                         SetCuff(true);
 
-                    //if (Health <= 100)
-                    //{
-                    //    Health = 0;
-                    //    Client.Emit("ONU_PlayerDeath", WeaponHash.AdvancedRifle);
-                    //}
                     GameMode.Instance.Streamer.LoadStreamPlayer(client);
                     GameMode.Instance.DoorManager.OnPlayerConnected(client);
                     Houses.HouseManager.OnPlayerConnected(client);

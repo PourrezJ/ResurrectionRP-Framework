@@ -29,6 +29,11 @@ namespace ResurrectionRP_Server
             client.EmitLocked("ComponentVariation", (int)level, drawable, texture, palette);
         }
 
+        public static void ClearProp(this IPlayer client, PropSlot slot)
+        {
+            client.EmitLocked("ClearProp", (int)slot);
+        }
+
         public static void SetProp(this IPlayer client, PropSlot slot, PropData item)
         {
             client.EmitLocked("PropVariation", (int)slot, item.Drawable, item.Texture);

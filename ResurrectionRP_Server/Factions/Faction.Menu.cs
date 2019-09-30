@@ -586,7 +586,12 @@ namespace ResurrectionRP_Server.Factions
                         if (client.IsInVehicle)
                         {
                             if (Parking != null)
-                                await Parking.StoreVehicle(client, client.Vehicle);
+                            {
+                                if (type == ConcessType.Helico)
+                                    await Parking.StoreVehicle(client, client.Vehicle, HeliportLocation);
+                                else
+                                    await Parking.StoreVehicle(client, client.Vehicle);
+                            }
 
                             menu.CloseMenu(client);
                         }

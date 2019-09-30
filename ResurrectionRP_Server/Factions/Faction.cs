@@ -129,7 +129,7 @@ namespace ResurrectionRP_Server.Factions
                 Parking.ParkingType = ParkingType.Faction;
                 Parking.OnPlayerEnterParking += OnPlayerEnterParking;
                 Parking.OnVehicleEnterParking += OnVehicleEnterParking;
-                Parking.OnVehicleStored += OnVehicleStore;
+                Parking.OnVehicleStored += OnVehicleStored;
                 Parking.OnVehicleOut += OnVehicleOut;
             }
 
@@ -175,7 +175,7 @@ namespace ResurrectionRP_Server.Factions
             await UpdateDatabase();
         }
 
-        private async Task OnVehicleStore(IPlayer client, VehicleHandler vehicle)
+        private async Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
         {
             vehicle.ParkingName = FactionName;
             await UpdateDatabase();

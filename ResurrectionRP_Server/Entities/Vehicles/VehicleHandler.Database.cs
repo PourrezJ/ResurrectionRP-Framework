@@ -13,7 +13,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
     {
         #region Fields
         [BsonIgnore]
-        private static readonly double _updateWaitTime = 1000.0;
+        private static readonly double _updateWaitTime = 2000.0;
         [BsonIgnore]
         private DateTime _lastUpdateRequest;
         [BsonIgnore]
@@ -38,31 +38,20 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }
 
-        public void UpdateFull(Location location = null)
+        public void UpdateInBackground(bool updateLastUse = true, bool immediatePropertiesUpdate = false)
         {
+            if (Trailer != null)
+                ((IVehicle)Trailer).GetVehicleHandler().UpdateInBackground(updateLastUse, immediatePropertiesUpdate);
+
             if (SpawnVeh)
                 return;
 
-            LastUse = DateTime.Now;
+            if (updateLastUse)
+                LastUse = DateTime.Now;
 
-            AltAsync.Do(() =>
-            {
-                if (Vehicle != null && Vehicle.Exists)
-                {
-                    if (location != null)
-                        Location = location;
+            if (immediatePropertiesUpdate)
+                UpdateProperties();
 
-                    UpdateProperties();
-                    UpdateInBackground();
-                }
-
-                if (Trailer != null)
-                    ((IVehicle)(Trailer)).GetVehicleHandler().UpdateFull();
-            }).Wait();
-        }
-
-        public void UpdateInBackground()
-        {
             _lastUpdateRequest = DateTime.Now;
 
             if (_updateWaiting)
@@ -91,7 +80,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 try
                 {
+                    UpdateProperties();
                     var result = await Database.MongoDB.Update(this, "vehicles", Plate);
+
                     if (result.ModifiedCount == 0)
                         Alt.Server.LogError($"Vehicule Update error for vehicle: {Plate} - Owner: {OwnerID}");
 

@@ -325,71 +325,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             else
                 Fuel += fuel;
 
-            UpdateFull();
-        }
-
-        public void UpdateProperties()
-        {
-            _radioStation = Vehicle.RadioStation;
-            _lockState = Vehicle.LockState;
-            _bodyhealth = Vehicle.BodyHealth;
-            _engineHealth = Vehicle.EngineHealth;
-            _petrolTankHealth = Vehicle.PetrolTankHealth;
-
-            // BUG v792 : NeonColor and NeonState nor working properly 
-            // bool neonActive = Vehicle.IsNeonActive;
-            // NeonState = new Tuple<bool, bool, bool, bool>(neonActive, neonActive, neonActive, neonActive);
-            // NeonColor = Vehicle.NeonColor;
-            
-            _dirtLevel = Vehicle.DirtLevel;
-
-            // Needed as when fuel gets to 0 there is a vehicle save and engine stop information hasn't been set back from client
-            if (Fuel > 0)
-                _engineOn = Vehicle.EngineOn;
-
-            _primaryColor = Vehicle.PrimaryColor;
-            _secondaryColor = Vehicle.SecondaryColor;
-            _pearlColor = Vehicle.PearlColor;
-            _windowTint = Vehicle.GetWindowTint();
-            _frontBumperDamage = Vehicle.GetBumperDamageLevel(VehicleBumper.Front);
-            _rearBumperDamage = Vehicle.GetBumperDamageLevel(VehicleBumper.Rear);
-            _damageData = Vehicle.DamageData;
-
-            for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
-                _doors[i] = (VehicleDoorState)Vehicle.GetDoorState(i);
-
-            for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
-            {
-                if (Vehicle.IsWindowDamaged(i))
-                    _windows[i] = WindowState.WindowBroken;
-                else if (Vehicle.IsWindowOpened(i))
-                    _windows[i] = WindowState.WindowDown;
-                else
-                    _windows[i] = WindowState.WindowFixed;
-            }
-
-            for (byte i = 0; i < Vehicle.WheelsCount; i++)
-            {
-                _wheels[i] = new Wheel();
-                _wheels[i].Health = Vehicle.GetWheelHealth(i);
-                _wheels[i].Burst = Vehicle.IsWheelBurst(i);
-            }
-            /*
-            for (byte i = 0; i < 100; i++)
-            {
-                if (Enum.IsDefined(typeof(AltV.Net.Enums.VehicleModType), i) && Vehicle.GetMod(i) > 0)
-                    Mods[i] = Vehicle.GetMod(i);
-            }
-            */
-            AltV.Net.Enums.VehicleModType[] values = (AltV.Net.Enums.VehicleModType[])Enum.GetValues(typeof(AltV.Net.Enums.VehicleModType));
-            
-            foreach (AltV.Net.Enums.VehicleModType vehicleModType in values)
-            {
-                if (Vehicle.GetMod(vehicleModType) > 0)
-                    Mods[(byte)vehicleModType] = Vehicle.GetMod(vehicleModType);
-            }
-
-            LastKnowLocation = new Location(Vehicle.Position, Vehicle.Rotation);
+            UpdateInBackground();
         }
 
         public void Repair(IPlayer player)

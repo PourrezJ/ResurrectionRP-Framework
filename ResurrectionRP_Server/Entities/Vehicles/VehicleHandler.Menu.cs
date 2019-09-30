@@ -152,11 +152,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     inv.OnMove = (IPlayer c, RPGInventoryMenu m) =>
                     {
                         if (PlayerHandler != null)
-                        {
                             PlayerHandler.UpdateFull();
-                        }
 
-                        UpdateFull();
+                        UpdateInBackground();
                         return Task.CompletedTask;
                     };
 
@@ -244,7 +242,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                                 _client.SendNotificationSuccess("Vous avez donné votre " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " à " + destinataire.Identite.Name);
                                 destinataire.Client.SendNotificationSuccess("Vous avez reçu un(e) " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " par " + _client.GetPlayerHandler()?.Identite.Name);
 
-                                this.UpdateFull();
+                                UpdateInBackground();
                                 MenuManager.CloseMenu(_client);
                             }
                         };

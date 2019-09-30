@@ -851,7 +851,7 @@ namespace ResurrectionRP_Server.Society.Societies
             {
                 _neonColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
                 vh.NeonColor = _neonColor;
-                vh.UpdateFull();
+                vh.UpdateInBackground(false);
 
                 client.SendNotificationSuccess($"Vous avez installé des Néons pour la somme de ${price}");
                 OpenNeonsMenu(client);
@@ -902,7 +902,7 @@ namespace ResurrectionRP_Server.Society.Societies
                 else
                     VehicleBench.SetMod(_modType, selected);
 
-                vh.UpdateFull();
+                vh.UpdateInBackground(false);
                 string str = $"Vous avez installé {modName}";
 
                 if (price != 0)

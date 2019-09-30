@@ -132,7 +132,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                     return;
 
                 vh.DirtLevel = 0;
-                vh.UpdateFull();
+                vh.UpdateInBackground(false);
             });
         }
         #endregion
@@ -163,7 +163,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                             {
                                 vh.PlateHide = true;
                                 client.SendNotificationSuccess("La plaque du véhicule a été retirée du registre");
-                                vh.UpdateFull();
+                                vh.UpdateInBackground(false);
                             }
                         }
                         else

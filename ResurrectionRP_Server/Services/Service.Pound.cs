@@ -130,7 +130,7 @@ namespace ResurrectionRP_Server.Services
                                 PoundVehicleList.Add(new ParkedCar(_towedvehicle.Plate, DateTime.Now));
                                 _towedvehicle.IsInPound = true;
                                 _vh.UpdateProperties();
-                                _towedvehicle.UpdateFull();
+                                _towedvehicle.UpdateInBackground(false);
                                 await _towedvehicle.Delete(true);
                                 MenuManager.CloseMenu(client);
                             }
@@ -184,7 +184,7 @@ namespace ResurrectionRP_Server.Services
                     VehicleHandler veh = menuItem.GetData("Vehicle");
                     veh.IsInPound = false;
                     await veh.SpawnVehicleAsync(new Location(_poundSpawn.Pos, _poundSpawn.Rot.ConvertRotationToRadian()));
-                    veh.UpdateFull();
+                    veh.UpdateInBackground();
                     PoundVehicleList.Remove(PoundVehicleList.Find(v => v.Plate == veh.Plate));
                     await GameMode.Instance.Save();
                     client.SendNotificationPicture(Utils.Enums.CharPicture.DIA_GARDENER,"Fourrière", "","~g~Votre véhicule vous attend sur le parking." );
@@ -217,7 +217,7 @@ namespace ResurrectionRP_Server.Services
 
             veh.IsInPound = true;
             veh.ParkingName = "Fourrière";
-            veh.UpdateFull();
+            veh.UpdateInBackground(false, true);
             await veh.Delete();
         }
         #endregion

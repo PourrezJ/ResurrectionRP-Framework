@@ -255,7 +255,7 @@ namespace ResurrectionRP_Server.Models
                 if (OnVehicleOut != null)
                     await OnVehicleOut.Invoke(client, veh, Spawn); // callback (ex carpark)
 
-                veh.UpdateFull();
+                veh.UpdateInBackground();
                 MenuManager.CloseMenu(client);
             }
             catch (Exception ex)
@@ -437,7 +437,7 @@ namespace ResurrectionRP_Server.Models
                     if (OnVehicleStored != null)
                         await OnVehicleStored.Invoke(client, veh); // call event for success storage
 
-                    veh.UpdateFull();
+                    veh.UpdateInBackground(true, true);
                     await veh.Delete(false);
                 }
                 else

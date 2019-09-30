@@ -12,6 +12,10 @@ export function init() {
         game.setPedPropIndex(alt.Player.local.scriptID, arg, arg1, arg2, true);
     });
 
+    alt.onServer('ClearProp', (componentId: number) => {
+        game.clearPedProp(alt.Player.local.scriptID, componentId);
+    });
+
     alt.onServer('HairVariation', (arg0: number, arg1: number) => {
         game.setPedHairColor(alt.Player.local.scriptID, arg0, arg1);
     });

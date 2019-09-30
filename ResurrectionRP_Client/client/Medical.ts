@@ -113,6 +113,8 @@ export class Medical {
 
     constructor()
     {
+        alt.on('keydown', this.KeyHandler);
+        Medical.everyTick = alt.everyTick(this.OnTick);
 
         Medical.scaleForm = new Scaleforms("mp_big_message_freemode");
         Medical.RequestedTimeMedic = new Date();
@@ -178,15 +180,7 @@ export class Medical {
                 blesse.Destroy();
         });
 
-        alt.onServer("ONU_PlayerDeath", (weapon: number) => {
-            alt.on('keydown', this.KeyHandler);
-            game.setPedCanRagdoll(alt.Player.local.scriptID, false);
-            Medical.everyTick = alt.everyTick(this.OnTick.bind(this));
-        });
-
         alt.onServer("ResurrectPlayer", (health: number) => {
-            alt.clearEveryTick(Medical.everyTick);
-            alt.off('keydown', this.KeyHandler);
             game.setPlayerHealthRechargeMultiplier(alt.Player.local.scriptID, 0);
             game.setEntityHealth(alt.Player.local.scriptID, health, 0);
             //game.animpostfxStop("DeathFailMPIn")
@@ -198,28 +192,23 @@ export class Medical {
 
     private KeyHandler(key)
     {
-        if (key == 'Y'.charCodeAt(0) && Date.now() >= Medical.RequestedTimeMedic.getTime()) {
-            Medical.RequestedTimeMedic = new Date(Date.now() + MEDIC_CALL_WAIT_TIME);
-            alt.emitServer("ONU_CallUrgenceMedic");
-        } else if (key == 'R'.charCodeAt(0)) {
-            alt.emitServer("IWantToDie");
+        if (game.isPlayerDead(0)) {
+            if (key == 'Y'.charCodeAt(0) && Date.now() >= Medical.RequestedTimeMedic.getTime()) {
+                Medical.RequestedTimeMedic = new Date(Date.now() + MEDIC_CALL_WAIT_TIME);
+                alt.emitServer("ONU_CallUrgenceMedic");
+            } else if (key == 'R'.charCodeAt(0)) {
+                alt.log("i want a die");
+                alt.emitServer("IWantToDie");
+            }
         }
 
         //game.animpostfxPlay("DeathFailMPIn", 0, true);
         //game.setCamEffect(1);
     }
 
-    private _lastcheck = 0;
     private OnTick() {
         if (game.isPlayerDead(0))
         {
-            this._lastcheck++;
-
-            if (this._lastcheck > 5000) {
-                utils.playAnimation("mini@cpr@char_b@cpr_str", "cpr_kol_idle", 8.0, -1, 0);
-                this._lastcheck = 0;
-            }
-
             if (Date.now() >= Medical.RequestedTimeMedic.getTime())
                 Medical.deathMessage = "Appuyer sur ~g~Y~w~ pour utiliser l'appel d'urgence ou ~r~R~w~ pour en finir :(";
             else

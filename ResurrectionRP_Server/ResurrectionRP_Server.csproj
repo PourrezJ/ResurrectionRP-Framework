@@ -18,8 +18,6 @@
 
 
   <ItemGroup>
-    <PackageReference Include="AltV.Net" Version="1.16.2-beta" />
-    <PackageReference Include="AltV.Net.Async" Version="1.16.0-beta" />
     <PackageReference Include="AltV.Net.NetworkingEntity" Version="1.4.3-dev-preview" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.0.0" />
@@ -31,9 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="AltV.Net.Async">
-      <HintPath>..\Other\AltV.Net.Async.dll</HintPath>
-    </Reference>
     <Reference Include="AltV.Net.NetworkingEntity">
       <HintPath>..\Other\AltV.Net.NetworkingEntity.dll</HintPath>
     </Reference>
@@ -50,6 +45,11 @@
 
   <ItemGroup>
     <Folder Include="DrivingSchool\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\coreclr-module\api\AltV.Net.Async\AltV.Net.Async.csproj" />
+    <ProjectReference Include="..\coreclr-module\api\AltV.Net\AltV.Net.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

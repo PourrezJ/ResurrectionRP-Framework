@@ -399,6 +399,8 @@ namespace ResurrectionRP_Server
         public static async Task ReviveAsync(this IPlayer client, ushort health = 200, Vector3? position = null)
         {
             Vector3 pos = position ?? await client.GetPositionAsync();
+
+            await client.DespawnAsync();
             await client.SpawnAsync(new Position(pos.X, pos.Y, pos.Z));
             await client.SetHealthAsync(health);
             await client.ResurrectAsync(health);

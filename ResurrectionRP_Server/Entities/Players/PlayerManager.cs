@@ -52,10 +52,11 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.OnClient("OnKeyPress", OnKeyPress);
             Alt.OnClient("OnKeyUp", OnKeyReleased);
 
-            Alt.OnClient("UpdateHungerThirst", UpdateHungerThirst);
-            Alt.OnClient("IWantToDie", IWantToDie);
+            //Alt.OnClient("UpdateHungerThirst", UpdateHungerThirst);
 
-            Alt.OnPlayerDead += Alt_OnPlayerDead;
+            AltAsync.OnClient("IWantToDie", IWantToDie);
+
+            
             /*
             Utils.Utils.Delay(300000, false, async () =>
             {
@@ -174,28 +175,28 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.Server.LogInfo($"Joueur social: {ph.PID} || Nom: {ph.Identite.Name} est déconnecté raison: {reason}.");
         }
 
-        private void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
+        public void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
         {
-            if (!player.Exists)
-                return;
-
-            if (weapon != 2725352035)
+            if (player.Exists)
             {
-                player.EmitLocked("ONU_PlayerDeath", weapon);
-
-                PlayerManager.DeadPlayers.Add(new DeadPlayer(player, killer, weapon));
-            }
-            else
-            {
-                player.SendNotification($"Ne va pas vers la lumière, tu vas te relever.");
-                Utils.Utils.Delay(60000 * 1, true, async () =>
+                if (weapon != 2725352035)
                 {
-                    if (player.Exists)
-                        await player.ReviveAsync(105);
-                });
-            }
+                    player.Emit("ONU_PlayerDeath", weapon);
 
-            player.GetPlayerHandler()?.UpdateFull();
+                    PlayerManager.DeadPlayers.Add(new DeadPlayer(player, killer, weapon));
+                }
+                else
+                {
+                    player.SendNotification($"Ne va pas vers la lumière, tu vas te relever.");
+                    Utils.Utils.Delay(60000 * 1, true, async () =>
+                    {
+                        if (player.Exists)
+                            await player.ReviveAsync(105);
+                    });
+                }
+
+                player.GetPlayerHandler()?.UpdateFull();
+            }
         }
 
         public async Task Events_PlayerJoin(IPlayer player, object[] args)
@@ -407,42 +408,10 @@ namespace ResurrectionRP_Server.Entities.Players
         public static async Task<PlayerHandler> GetPlayerHandlerDatabase(string socialClub) =>
             await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == socialClub.ToLower()).FirstOrDefaultAsync();
 
-        public static void Resurrect(IPlayer client)
+        private async Task IWantToDie(IPlayer client, object[] args)
         {
-            GameMode.Instance.PlayerManager.IWantToDie(client, null);
-        }
-
-        private void IWantToDie(IPlayer client, object[] args)
-        {
-            try
-            {
-                if (!client.Exists)
-                    return;
-
-                PlayerHandler ph = client.GetPlayerHandler();
-                if (ph != null)
-                {
-                    if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList.Count > 0)
-                    {
-                        ph.PocketInventory.Clear();
-                        ph.HasMoney(ph.Money);
-                    }
-
-                    ph.UpdateHungerThirst(100, 100);
-                    client.Spawn(new Vector3(308.2974f, -567.4647f, 43.29008f), 30000);
-                    client.Rotation = new Rotation(0, 239.0923f, 0);
-                    client.Resurrect();
-                    client.MaxHealth = 200;
-                    client.Health = 200;
-
-                    ph.PlayerSync.Injured = false;
-                    ph.UpdateFull();
-                }
-            }
-            catch(Exception ex)
-            {
-                Alt.Server.LogError(ex.ToString());
-            }
+            await client.ReviveAsync(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
+            client.GetPlayerHandler()?.UpdateFull();
         }
 
         public static PlayerHandler GetPlayerBySCN(string socialClubName)

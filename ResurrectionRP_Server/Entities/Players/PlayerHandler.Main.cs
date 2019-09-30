@@ -89,6 +89,8 @@ namespace ResurrectionRP_Server.Entities.Players
         public int Thirst { get; set; } = 100;
         public bool Jailed { get; private set; } = false;
 
+        public ushort Health;
+        /*
         private ushort _health = 200;
         public ushort Health
         {
@@ -101,6 +103,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 _health = value;
             }
         }
+        */
         private Data.PlayerSync playerSync = null;
         public Data.PlayerSync PlayerSync
         {

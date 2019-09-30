@@ -128,7 +128,6 @@ export class Interaction {
                 case 82: // R
                     if (alt.Player.local.getMeta("CanClose") == false)
                         return;
-
                     ragdoll.start();
                     break;
 

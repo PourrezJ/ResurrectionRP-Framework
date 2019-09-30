@@ -528,10 +528,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 _engineHealth = Vehicle.EngineHealth;
                 _petrolTankHealth = Vehicle.PetrolTankHealth;
 
-                // BUG v792 : NeonColor and NeonState not working properly 
-                // bool neonActive = Vehicle.IsNeonActive;
-                // NeonState = new Tuple<bool, bool, bool, bool>(neonActive, neonActive, neonActive, neonActive);
-                // NeonColor = Vehicle.NeonColor;
+                bool neonActive = Vehicle.IsNeonActive;
+                NeonState = new Tuple<bool, bool, bool, bool>(neonActive, neonActive, neonActive, neonActive);
+                NeonColor = Vehicle.NeonColor;
 
                 _dirtLevel = Vehicle.DirtLevel;
                 _engineOn = Vehicle.EngineOn;

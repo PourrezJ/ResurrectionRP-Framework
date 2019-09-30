@@ -214,8 +214,10 @@ namespace ResurrectionRP_Server.Entities.Players
                     IP = Client.Ip;
                     IsOnline = true;
 
+                    if (Client.Model != ((Character.Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01))
+                        Client.Model = (Character.Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01;
+
                     Client.Spawn(Location.Pos, 0);
-                    Client.ApplyCharacter();
 
                     Client.Emit
                     (
@@ -232,6 +234,21 @@ namespace ResurrectionRP_Server.Entities.Players
                         GameMode.Instance.IsDebug,
                         Location.Pos.ConvertToVector3Serialized()
                     );
+
+                    Client.Emit("HeadVariation", Character.Parents.ShapeFirst, Character.Parents.ShapeSecond, Character.Parents.ShapeThird, Character.Parents.SkinFirst, Character.Parents.SkinSecond, Character.Parents.SkinThird, Character.Parents.ShapeMix, Character.Parents.SkinMix, Character.Parents.ThirdMix);
+
+                    for (int i = 0; i < Character.Features.Length; i++)
+                        Client.Emit("FaceFeatureVariation", i, Character.Features[i]);
+
+                    for (int i = 0; i < Character.Appearance.Length; i++)
+                        Client.Emit("HeadOverlayVariation", Character.Appearance[i].Index, Character.Appearance[i].Opacity, Character.Appearance[i].Color, Character.Appearance[i].SecondaryColor, i);
+
+                    foreach (Decoration decoration in Character.Decorations)
+                        Client.Emit("DecorationVariation", decoration.Collection, decoration.Overlay);
+
+                    Client.Emit("EyeColorVariation", (uint)Character.EyeColor);
+                    Client.Emit("ComponentVariation", 2, Character.Hair.Hair, 0, 0);
+                    Client.Emit("HairVariation", Character.Hair.Color, Character.Hair.HighlightColor);
 
                     Client.Dimension = GameMode.GlobalDimension;
 

@@ -81,6 +81,48 @@ namespace ResurrectionRP_Server.Business
         {
             await base.Init();
 
+            if (Mask == null)
+                Mask = new List<int>();
+
+            if (BackPack == null)
+                BackPack = new List<int>();
+
+            if (MenLegs == null)
+                MenLegs = new List<int>();
+
+            if (MenFeet == null)
+                MenFeet = new List<int>();
+
+            if (MenGlove == null)
+                MenGlove = new List<int>();
+
+            if (MenUnderShirt == null)
+                MenUnderShirt = new List<int>();
+
+            if (MenTops == null)
+                MenTops = new List<int>();
+
+            if (MenAccessories == null)
+                MenAccessories = new List<int>();
+
+            if (GirlLegs == null)
+                GirlLegs = new List<int>();
+
+            if (GirlFeet == null)
+                GirlFeet = new List<int>();
+
+            if (GirlGlove == null)
+                GirlGlove = new List<int>();
+
+            if (GirlUnderShirt == null)
+                GirlUnderShirt = new List<int>();
+
+            if (GirlTops == null)
+                GirlTops = new List<int>();
+
+            if (GirlAccessories == null)
+                GirlAccessories = new List<int>();
+
             _clothingColShape = Alt.CreateColShapeCylinder(ClothingPos - new Vector3(0, 0, 1), 4f, 3f);
             Marker.CreateMarker(MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 1), new Vector3(3, 3, 0.3f), Color.FromArgb(80, 255, 255, 255));
             Entities.Blips.BlipsManager.SetColor(Blip, 25);
@@ -340,14 +382,11 @@ namespace ResurrectionRP_Server.Business
 
                 List<int> categories = menu.GetData("Categories");
 
-                if (categories != null && categories.Contains(category))
+                if (categories.Contains(category))
                 {
                     client.SendNotificationError($"Catégorie {category} déjà présente");
                     return;
                 }
-
-                if (categories == null)
-                    categories = new List<int>();
 
                 categories.Add(category);
                 categories.Sort();
@@ -450,7 +489,7 @@ namespace ResurrectionRP_Server.Business
                     break;
 
                 case "ID_Accessoire":
-                    await OpenComponentMenuWithoutCat(client, menu, 7, false);
+                    OpenComponentMenu(client, menu, 7);
                     break;
             }
         }
@@ -610,6 +649,10 @@ namespace ResurrectionRP_Server.Business
                     compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenFeet : GirlFeet;
                     break;
 
+                case 7:
+                    compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenAccessories : GirlAccessories;
+                    break;
+
                 case 11:
                     compoList = MenTops;
                     break;
@@ -746,10 +789,6 @@ namespace ResurrectionRP_Server.Business
             {
                 case 1:
                     compoList = Mask;
-                    break;
-
-                case 7:
-                    compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenAccessories : GirlAccessories;
                     break;
 
                 case 8:

@@ -182,7 +182,6 @@ export class Game {
                     game.setPedMovementClipset(entity.scriptID, walkingStyle, 0.2);
                 }
 
-
                 if (facialAnim != null)
                     game.setFacialIdleAnimOverride(entity.scriptID, facialAnim, undefined);
             });

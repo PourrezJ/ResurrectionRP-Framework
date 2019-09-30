@@ -17,6 +17,8 @@ using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Utils.Enums;
 using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Entities.Peds;
+using System.Collections.Generic;
+using ResurrectionRP_Server.Factions;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -150,7 +152,12 @@ namespace ResurrectionRP_Server.Entities.Players
                     {
                         if (raycastData.entityHash == 307713837)
                         {
-                            var rack = GameMode.Instance.FactionManager.Dock.Racks.Find(p => p.InventoryBox.Obj.ID == streamedID);
+                            List<Rack> rackList = new List<Rack>();
+                            rackList.AddRange(GameMode.Instance.FactionManager.Dock.Racks);
+                            rackList.Add(GameMode.Instance.FactionManager.Dock.Importation);
+                            rackList.Add(GameMode.Instance.FactionManager.Dock.Quai);
+
+                            var rack = rackList.Find(p => p.InventoryBox.Obj.ID == streamedID);
                             if (rack == null)
                                 return;
 

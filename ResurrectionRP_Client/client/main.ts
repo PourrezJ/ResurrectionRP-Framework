@@ -81,6 +81,8 @@ const init = async () => {
         //alt.discordRequestOAuth2();
         //while (!alt.isDiscordInfoReady()) { }
 
+        alt.log("Connection avec le social club: " + game.scGetNickname());
+
         alt.emitServer("Events_PlayerJoin", game.scGetNickname(), JSON.stringify(alt.discordInfo()));
     }
     catch (Exception) {

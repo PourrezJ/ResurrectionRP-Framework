@@ -206,24 +206,32 @@ namespace ResurrectionRP_Server.Entities.Players
 
             string socialclub = args[0].ToString();
             DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(args[1].ToString());
+            Alt.Server.LogInfo($" {socialclub} : ({player.Ip}) en attente de connexion.");
+
+            if (socialclub == "UNKNOWN")
+            {
+                Alt.Server.LogInfo($"({player.Ip}) kick pour problème de social club.");
+                await player.KickAsync("Vous avez un problème avec votre social club.");
+                return;
+            }
+
 
             if (IsBan(socialclub))
             {
+                Alt.Server.LogInfo($"({player.Ip}) est banni.");
                 await player.KickAsync("Vous êtes banni!");
                 return;
             }
 
             player.SetData("SocialClub", socialclub);
             await player.SetModelAsync((uint)AltV.Net.Enums.PedModel.FreemodeMale01);
-            await player.SpawnAsync(new Position(-1072.886f, -2729.607f, 0.8148939f));
+            //await player.SpawnAsync(new Position(-1072.886f, -2729.607f, 0.8148939f));
 
             if (GameMode.ServerLock)
             {
                 await player.EmitAsync("FadeIn", 0);
                 await player.KickAsync("Serveur Lock!");
             }
-
-            Alt.Server.LogInfo($" {player.SocialClubId} ({player.Ip}) en attente de connexion.");
 
             while (!GameMode.Instance.ServerLoaded)
                 await Task.Delay(100);
@@ -261,6 +269,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                     else
                     {
+                        Alt.Server.LogInfo($"({player.Ip}) ({socialclub}) n'est pas whitelist sur le serveur.");
                         player.EmitLocked("FadeIn", 0);
                         string _kickMessage = "Vous n'êtes pas whitelist sur le serveur";
                         await player.KickAsync(_kickMessage);

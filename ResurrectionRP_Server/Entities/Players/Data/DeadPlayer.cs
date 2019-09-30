@@ -122,8 +122,8 @@ namespace ResurrectionRP_Server.Entities.Players.Data
 
                 case "ID_GetMoney":
                     var rob = ph.Money;
-                    if (ph.HasMoney(ph.Money))
-                        vh.AddMoney(rob);
+                    if (vh.HasMoney(ph.Money))
+                        ph.AddMoney(rob);
 
                     ph.UpdateFull();
                     vh.UpdateFull();

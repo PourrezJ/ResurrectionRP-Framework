@@ -11,6 +11,8 @@ namespace ResurrectionRP_Server.Utils
 {
     public class Door
     {
+        public static List<Door> DoorList = new List<Door>();
+
         public int ID;
         public int Hash;
         public Vector3 Position;
@@ -34,7 +36,7 @@ namespace ResurrectionRP_Server.Utils
                 Hide = hide
             };
             door.TextLabel = GameMode.Instance.Streamer.AddEntityTextLabel($"Porte: {((door.Locked) ? "Verrouillée" : "Deverrouillée")}", door.Position, 1, drawDistance:2);
-            GameMode.Instance.DoorManager?.DoorList.Add(door);
+            DoorList.Add(door);
             door.SetDoorLockState(locked);
             return door;
         }
@@ -50,7 +52,7 @@ namespace ResurrectionRP_Server.Utils
                 Hide = hide
             };
             door.TextLabel = GameMode.Instance.Streamer.AddEntityTextLabel($"Porte: {((door.Locked) ? "Verrouillée" : "Deverrouillée")}", door.Position, 1, drawDistance: 2);
-            GameMode.Instance.DoorManager?.DoorList.Add(door);
+            DoorList.Add(door);
             door.SetDoorLockState(locked);
             return door;
         }
@@ -68,12 +70,8 @@ namespace ResurrectionRP_Server.Utils
         {
             Alt.EmitAllClients("SetDoorLockState", ID, angle);
         }
-    }
-    public class DoorManager
-    {
-        public List<Door> DoorList = new List<Door>();
 
-        public void OnPlayerConnected(IPlayer client)
+        public static void OnPlayerConnected(IPlayer client)
         {
             client.Emit("SetAllDoorStatut", JsonConvert.SerializeObject(DoorList));
         }

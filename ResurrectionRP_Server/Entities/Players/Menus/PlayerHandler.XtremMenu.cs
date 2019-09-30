@@ -53,7 +53,6 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 xmenu.Add(new XMenuItem("Faction", "", "ID_Faction", XMenuItemIcons.ID_BADGE_SOLID, false));
             }
-            
 
             xmenu.OpenXMenu(Client);
         }

@@ -226,7 +226,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             player.SetData("SocialClub", socialclub);
             await player.SetModelAsync((uint)AltV.Net.Enums.PedModel.FreemodeMale01);
-            //await player.SpawnAsync(new Position(-1072.886f, -2729.607f, 0.8148939f));
+            await player.SpawnAsync(new Position(-1072.886f, -2729.607f, 0.8148939f));
 
             if (GameMode.ServerLock)
             {

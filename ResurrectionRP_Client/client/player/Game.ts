@@ -189,7 +189,7 @@ export class Game {
             alt.on('syncedMetaChange', async (entity: alt.Entity, key: string, value: any) => {
                 if (!game.isEntityAPed(entity.scriptID))
                     return;
-
+                game.clearPedBloodDamage(entity.scriptID);
                 
                 switch (key) {
                     case 'SetInvisible':
@@ -256,9 +256,27 @@ export class Game {
                     ui.DrawText2d("Essence: " + Math.round(100 * veh.getFuel()) / 100 + "/" + veh.getMaxFuel() + " Consommation: " + Math.round(1000 * veh.getFuelConsumption()) / 1000, 0.5, 0.10, 0.3, 4, 255, 255, 255, 180, true, true, 99);
                 }
             }
-
+            this.disableSeatShuffle();
             this._Time.OnTick();
         });
+    }
+
+    public disableSeatShuffle() {
+        if (!game.isPedInAnyVehicle(alt.Player.local.scriptID, undefined)) return;
+        let vehicle = game.getVehiclePedIsIn(
+            alt.Player.local.scriptID,
+            undefined
+        );
+
+        let passenger = game.getPedInVehicleSeat(vehicle, 0, 0);
+
+        if (!game.getIsTaskActive(passenger, 165)) return;
+
+        if (game.isVehicleSeatFree(vehicle, -1, false)) {
+            if (passenger === alt.Player.local.scriptID) {
+                game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle, 0);
+            }
+        }
     }
 
     public static closeAllMenus() {

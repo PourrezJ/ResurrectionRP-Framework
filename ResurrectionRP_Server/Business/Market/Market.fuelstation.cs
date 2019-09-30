@@ -1,4 +1,5 @@
-﻿using AltV.Net.Elements.Entities;
+﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Vehicles;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace ResurrectionRP_Server.Business
     {
         private bool _ravitaillement = false;
         private IPlayer _utilisateurRavi;
+        public static uint[] allowedTrailers = new uint[3] { 0xB8081009, 0xD46F4737, 0x74998082 };
 
         private System.Timers.Timer timer = null;
 
@@ -96,13 +98,23 @@ namespace ResurrectionRP_Server.Business
         {
             if (!client.Exists)
                 return;
-
-            if (client.IsInVehicle &&  client.Vehicle.Model== 4097861161)
+            if(client.Vehicle.Model == 4097861161)
             {
-                IVehicle fueltruck = client.Vehicle;
-                VehicleHandler hfuel = client.Vehicle.GetVehicleHandler();
-                var data = hfuel.OilTank.Traite;
-                if (data > 0)
+                client.DisplayHelp("Ce véhicule n'est plus homologué pour la livraison d'essence.", 10000);
+            }
+            if (client.IsInVehicle)
+            {
+                if (!client.Vehicle.GetVehicleHandler().hasTrailer)
+                    return;
+                if (Array.IndexOf(allowedTrailers, client.Vehicle.GetVehicleHandler().Trailer.Model) == -1)
+                {
+                    client.DisplayHelp("La remorque n'est pas homologuée pour cette action!", 10000);
+                    return;
+                }
+                IVehicle fueltruck = (IVehicle)client.Vehicle.GetVehicleHandler().Trailer;
+                VehicleHandler hfuel = ((IVehicle)(client.Vehicle.GetVehicleHandler().Trailer)).GetVehicleHandler();
+                var data = Convert.ToInt32(menuItem.InputValue);
+                if (data > 0 && hfuel.OilTank.Traite >= data)
                 {
                     if (_ravitaillement || _utilisateurRavi != null)
                     {
@@ -121,7 +133,6 @@ namespace ResurrectionRP_Server.Business
                     
                     timer = Utils.Utils.Delay(1250, false, async () =>
                     {
-                        client.DisplayHelp("Station service \n Litres en station: " + Station.Litrage + "\nLitres dans le camion: " + hfuel.OilTank.Traite, 30000);
                         //API.OnProgressBar(client, true, i, currentmax);
                         if (Station.Litrage == Station.LitrageMax)
                         {
@@ -129,20 +140,16 @@ namespace ResurrectionRP_Server.Business
                             //API.Shared.OnProgressBar(client, false);
                             _ravitaillement = false;
                             _utilisateurRavi = null;
-                            client.GetPlayerHandler()?.HasBankMoney(EssenceTransfert * this.Station.buyEssencePrice, "Vente essence à la station " + this.BusinnessName);
-                            await BankAccount.AddMoney(EssenceTransfert * this.Station.buyEssencePrice, "Achat essence au vendeur " + client.GetPlayerHandler()?.Identite.FirstName + " " + client.GetPlayerHandler()?.Identite.LastName, true);
                             Utils.Utils.StopTimer(timer);
                             return;
 
                         }
-                        if (hfuel.OilTank.Traite == 0)
+                        if (EssenceTransfert >= data)
                         {
-                            client.DisplaySubtitle("~g~Votre citerne est vide, fin du transfert! ", 30000);
+                            client.DisplaySubtitle("~g~Transfert terminé! ", 30000);
                             //API.Shared.OnProgressBar(client, false);
                             _ravitaillement = false;
                             _utilisateurRavi = null;
-                            client.GetPlayerHandler()?.HasBankMoney(EssenceTransfert * this.Station.buyEssencePrice, "Vente essence à la station " + this.BusinnessName);
-                            await BankAccount.AddMoney(EssenceTransfert * this.Station.buyEssencePrice, "Achat essence au vendeur " + client.GetPlayerHandler()?.Identite.FirstName + " " + client.GetPlayerHandler()?.Identite.LastName, true);
                             Utils.Utils.StopTimer(timer);
                             return;
                         }
@@ -151,8 +158,10 @@ namespace ResurrectionRP_Server.Business
                         {
                             _ravitaillement = false;
                             _utilisateurRavi = null;
-                            client.GetPlayerHandler()?.HasBankMoney(EssenceTransfert * this.Station.buyEssencePrice, "Vente essence à la station " + this.BusinnessName);
-                            await BankAccount.AddMoney(EssenceTransfert * this.Station.buyEssencePrice, "Achat essence au vendeur " + client.GetPlayerHandler()?.Identite.FirstName + " " + client.GetPlayerHandler()?.Identite.LastName, true);
+                            if (await BankAccount.GetBankMoney(EssenceTransfert * this.Station.buyEssencePrice, "Achat essence au vendeur " + client.GetPlayerHandler()?.Identite.FirstName + " " + client.GetPlayerHandler()?.Identite.LastName, "", true))
+                            {
+                                client.GetPlayerHandler()?.BankAccount.AddMoney(EssenceTransfert * this.Station.buyEssencePrice, "Vente essence à la station " + this.BusinnessName);
+                            }
                             Utils.Utils.StopTimer(timer);
                             return;
                         }
@@ -162,12 +171,13 @@ namespace ResurrectionRP_Server.Business
                         EssenceTransfert++;
                         _ravitaillement = true;
 
+                        client.DisplayHelp("Station service \n Litres en station: " + Station.Litrage + "\nLitres dans le camion: " + hfuel.OilTank.Traite, 30000);
                     });
 
                 }
                 else
                 {
-                    client.DisplaySubtitle("~r~Votre citerne est vide!", 15000);
+                    client.DisplaySubtitle("~r~Vous n'avez pas assez en réserve ! ", 15000);
                     return;
                 }
             }

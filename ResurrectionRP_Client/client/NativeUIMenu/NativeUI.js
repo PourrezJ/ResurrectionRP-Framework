@@ -57,6 +57,7 @@ export default class NativeUI {
         this.CheckboxChange = new LiteEvent();
         this.ItemSelect = new LiteEvent();
         this.MenuOpen = new LiteEvent();
+        this.MenuBack = new LiteEvent();
         this.MenuClose = new LiteEvent();
         this.MenuChange = new LiteEvent();
         this.MouseEdgeEnabled = true;
@@ -565,7 +566,7 @@ export default class NativeUI {
             this.ParentMenu.MenuOpen.emit();
             this.MenuChange.emit(this.ParentMenu, false);
         }
-        this.MenuClose.emit();
+        this.MenuBack.emit();
     }
     BindMenuToItem(menuToBind, itemToBindTo) {
         menuToBind.ParentMenu = this;

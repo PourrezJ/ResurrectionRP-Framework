@@ -249,6 +249,7 @@ namespace ResurrectionRP_Server.Models
                     }
                 }
 
+                veh.EngineOn = false;
                 RemoveVehicle(veh); // retrait du véhicule dans la liste
 
                 if (OnVehicleOut != null)

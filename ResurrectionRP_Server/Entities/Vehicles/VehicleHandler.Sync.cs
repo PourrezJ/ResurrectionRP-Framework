@@ -64,14 +64,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 else
                     _fuel = value;
 
-                if (_fuel == 0 && Vehicle != null && Vehicle.Exists)
+                if (_fuel == 0)
                 {
-                    Vehicle.SetEngineOnAsync(false);
                     EngineOn = false;
                     UpdateFull();
                 }
 
-                if (Math.Floor(oldFuel * 10) != Math.Floor(_fuel * 10) && Vehicle != null && Vehicle.Driver != null && Vehicle.Driver.Exists)
+                if (Math.Ceiling(oldFuel * 10) != Math.Ceiling(_fuel * 10) && Vehicle != null && Vehicle.Driver != null && Vehicle.Driver.Exists)
                     Vehicle.Driver.EmitLocked("UpdateFuel", _fuel);
             }
         }
@@ -255,10 +254,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             set
             {
-                _engineOn = value;
+                if (!value || Fuel > 0)
+                {
+                    _engineOn = value;
 
-                if (Vehicle != null && Vehicle.Exists && Vehicle.EngineOn != value)
-                    AltAsync.Do(() => { Vehicle.EngineOn = value; });
+                    if (Vehicle != null && Vehicle.Exists && Vehicle.EngineOn != value)
+                        AltAsync.Do(() => { Vehicle.EngineOn = value; });
+                }
             }
         }
 
@@ -552,9 +554,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     speedFuel = speed / 80 * FUEL_FACTOR;
 
                 Fuel -= (float)(FuelConsumption * distance * speedFuel / 100);
-
-                if (Vehicle.Driver != null)
-                    Vehicle.Driver.EmitLocked("UpdateFuel", Fuel);
             }
 
             _previousUpdate = updateTime;

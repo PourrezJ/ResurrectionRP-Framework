@@ -5,6 +5,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using AltV.Net;
 using AltV.Net.Async;
+using System;
 
 namespace ResurrectionRP_Server.Business
 {
@@ -66,19 +67,31 @@ namespace ResurrectionRP_Server.Business
 
             if (!colShape.IsEntityInColShape(client)) return;
 
-            // On vérifie que ce soit un camion citerne qui rentre dans la zone
-            if (client.IsInVehicle && client.Vehicle.Model == 4097861161)
+            if (client.Vehicle.Model == 4097861161)
             {
-                IVehicle fueltruck = client.Vehicle;
+                client.DisplayHelp("Ce véhicule n'est plus homologué pour la livraison d'essence.", 10000);
+            }
 
+            if (client.IsInVehicle )
+            {
+                if (!client.Vehicle.GetVehicleHandler().hasTrailer)
+                    return;
+                if (Array.IndexOf(allowedTrailers, client.Vehicle.GetVehicleHandler().Trailer.Model) == -1)
+                {
+                    client.DisplayHelp("La remorque n'est pas homologuée pour remplir la station!", 10000);
+                    return;
+                }
+                IVehicle fueltruck = (IVehicle) client.Vehicle.GetVehicleHandler().Trailer;
                 // Si il posséde du carburant raffiné
                 if (fueltruck.GetVehicleHandler().OilTank.Traite > 0 )
                 {
                     Menu RefuelMenu = new Menu("ID_RefuelMenu", "Station Service", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
                     RefuelMenu.ItemSelectCallback = RefuelMenuCallBack;
-                    RefuelMenu.Add(new MenuItem("Remplir la station", "", "", true));
+                    MenuItem item = (new MenuItem("Remplir la station", "Specifier le montant que votre employeur vous a donné", "ID_RefuelMenu", true ));
+                    item.SetInput("Montant d'essence à mettre", 10, InputType.Number);
+                    RefuelMenu.Add(item);
 
-                    MenuManager.CloseMenu(client);
+                    RefuelMenu.OpenMenu(client);
                 }
                 else
                     client.DisplayHelp("~r~Votre citerne est vide.", 10000);
@@ -90,7 +103,7 @@ namespace ResurrectionRP_Server.Business
             if (!vehicle.Exists)
                 return;
 
-            if (!Station.VehicleInStation.ContainsKey(vehicle.Id))
+            if (!Station.VehicleInStation.ContainsKey(vehicle.Id) && Array.IndexOf(allowedTrailers, vehicle.Model) == -1)
                 Station.VehicleInStation.TryAdd(vehicle.Id, vehicle);
 
             return;
@@ -101,7 +114,7 @@ namespace ResurrectionRP_Server.Business
             if (!vehicle.Exists)
                 return;
 
-            if (this.Station.VehicleInStation.ContainsKey(vehicle.Id))
+            if (this.Station.VehicleInStation.ContainsKey(vehicle.Id) && Array.IndexOf(allowedTrailers, vehicle.Model) == -1)
                 this.Station.VehicleInStation.TryRemove(vehicle.Id, out IVehicle veh);
 
             if (vehicle.Driver == null)

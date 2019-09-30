@@ -9,8 +9,8 @@ export class NetworkingEntityClient {
     defaultWebView: boolean;
     streamedInEntities: {};
     interval: number;
-    StaticEntityList: any[] = [];
     public static EntityList: any[] = [];
+    public static StaticEntityList: any[] = [];
 
     constructor() {
         alt.log("Chargement controleur du streamer ...");
@@ -45,6 +45,7 @@ export class NetworkingEntityClient {
 
         alt.onServer('createStaticEntity', this.createStaticEntity.bind(this));
         alt.onServer("deleteStaticEntity", this.deleteStaticEntity.bind(this));
+        alt.onServer("setStaticEntityBlipRoute", this.setStaticEntityBlipRoute.bind(this));
 
         alt.onServer("deleteObject", this.deleteObject.bind(this));
 
@@ -154,7 +155,7 @@ export class NetworkingEntityClient {
                     this.onStreamIn(entity);
                     break;
                 case 4:
-                    this.StaticEntityList[entity.id].destroy();
+                    NetworkingEntityClient.StaticEntityList[entity.id].destroy();
                     break;
             }
         }, 10);
@@ -367,17 +368,22 @@ export class NetworkingEntityClient {
         test.scale = scale;
         test.shrinked = true;
         test.shortRange = shortRange;
-        this.StaticEntityList[id] = test;
+        NetworkingEntityClient.StaticEntityList[id] = test;
     }
 
     private deleteStaticEntity = (entityid: number, type: number) => {
-        if (this.StaticEntityList[entityid] == undefined)
+        if (NetworkingEntityClient.StaticEntityList[entityid] == undefined)
             return;
         switch (type) {
             case 4:
-                this.StaticEntityList[entityid].destroy();
+                NetworkingEntityClient.StaticEntityList[entityid].destroy();
                 break;
         }
+    }
+    private setStaticEntityBlipRoute = (entityId: number, state: boolean, color: number) => {
+        // BUG V??? seems not to work properly ? RouteColor what is it its referral?
+        NetworkingEntityClient.StaticEntityList[entityId].routeColor = 4;
+        NetworkingEntityClient.StaticEntityList[entityId].route = state;
     }
     
     private createStaticEntity = (data: any[]) => {

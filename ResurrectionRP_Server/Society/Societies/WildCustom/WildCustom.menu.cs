@@ -1,35 +1,22 @@
 ﻿using AltV.Net;
-using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
-using ResurrectionRP_Server.Society.Societies.Bennys;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Utils;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
-using VehicleInfoLoader.Data;
 
 namespace ResurrectionRP_Server.Society.Societies.WildCustom
 {
-    public partial class WildCustom
+    public partial class WildCustom : Garage
     {
-        #region Fields
-        private static double PriceChangePlate = 50000;
-        private static List<int> blackListModel = new List<int> { 5, 6, 7, 10, 13, 14, 15, 16, 17, 18, 19, 20, 21 };
-        private IPlayer ClientInMenu;
-        private byte _modType;
-        private string _subtitle;
-        private double _price;
-        private int _red;
-        private int _green;
-        private int _blue;
+        #region Constants
+        private const double PRICE_CHANGE_PLATE = 50000;
         #endregion
 
         #region MainMenu
-        private void OpenMainMenu(IPlayer client, IVehicle vehicle)
+        protected override void OpenMainMenu(IPlayer client)
         {
             if (!(IsEmployee(client) || Owner == client.GetSocialClub()))
             {
@@ -37,7 +24,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                 return;
             }
 
-            if (vehicle == null || !vehicle.Exists)
+            if (VehicleBench == null || !VehicleBench.Exists)
             {
                 client.SendNotificationError("Aucun véhicule devant l'établi.");
                 return;
@@ -45,24 +32,19 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
 
             try
             {
-                var info = VehicleInfoLoader.VehicleInfoLoader.Get(vehicle.Model);
+                var info = VehicleInfoLoader.VehicleInfoLoader.Get(VehicleBench.Model);
 
                 if (info == null)
                 {
                     client.SendNotificationError("Je ne touche pas à ce véhicule bordel.");
                     return;
                 }
-                else if (info.VehicleClass != 8 && _garageType == GarageType.Bike)
+                else if (info.VehicleClass == 8)
                 {
-                    client.SendNotificationError("Seules les motos sont autorisées mon pote!");
+                    client.SendNotificationError("J'ai une gueule à faire de la moto?!");
                     return;
                 }
-                else if (info.VehicleClass == 8 && _garageType == GarageType.Car)
-                {
-                    client.SendNotificationError("J'ai une geule à faire de la moto?!");
-                    return;
-                }
-                else if (blackListModel.Contains(info.VehicleClass))
+                else if (BlackListCategories.Contains(info.VehicleClass))
                 {
                     client.SendNotificationError("OH! Je touche pas à ça, dégage!");
                     return;
@@ -81,7 +63,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             }
 
             Menu mainMenu = new Menu("ID_Main", "", SocietyName, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Garage);
-            mainMenu.ItemSelectCallbackAsync = MainMenuCallback;
+            mainMenu.ItemSelectCallback = MainMenuCallback;
             mainMenu.FinalizerAsync = Finalizer;
 
             MenuItem cleaning = new MenuItem("Nettoyage", "", "Cleaning", true);
@@ -96,7 +78,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             MenuItem historique = new MenuItem("Historique", "", "Histo", true);
             mainMenu.Add(historique);
 
-            if (Owner == client.GetSocialClub() && !_vehicleBench.GetVehicleHandler().PlateHide)
+            if (Owner == client.GetSocialClub() && !VehicleBench.GetVehicleHandler().PlateHide)
             {
                 MenuItem changePlate = new MenuItem("Retirer le véhicule du registre", "~r~Illégal ~w~Retirer le véhicule du registre de SanAndreas pour être non identifiable lors d'un contrôle.", "PlateChange", true);
                 mainMenu.Add(changePlate);
@@ -106,9 +88,9 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             ClientInMenu = client;
         }
 
-        private async Task MainMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        protected override void MainMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
+            if (VehicleBench == null || !VehicleBench.Exists)
             {
                 menu.CloseMenu(client);
                 return;
@@ -123,23 +105,28 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             else if (menuItem.Id == "Cleaning")
                 CleaningVehicle(client);
             else if (menuItem.Id == "PlateChange")
-                await OpenChangePlateMenu(client);
+                OpenHidePlateMenu(client);
         }
+        #endregion
 
+        #region Cleaning
         private void CleaningVehicle(IPlayer client)
         {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
+            if (VehicleBench == null || !VehicleBench.Exists)
+            {
+                MenuManager.CloseMenu(client);
                 return;
+            }
 
-            client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_LS_CUSTOMS, SocietyName, "Nettoyage: ~r~Démarrage~w~.", "C'est parti!" );
+            client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_LS_CUSTOMS, SocietyName, "Nettoyage: ~r~Démarrage~w~.", "C'est parti!");
 
             Utils.Utils.Delay(20000, true, () =>
             {
-                if (_vehicleBench == null || !_vehicleBench.Exists)
+                if (VehicleBench == null || !VehicleBench.Exists)
                     return;
 
-                client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_LS_CUSTOMS, SocietyName, "Nettoyage: ~g~Terminé~w~.","Elle est niquel!");
-                var vh = _vehicleBench.GetVehicleHandler();
+                client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_LS_CUSTOMS, SocietyName, "Nettoyage: ~g~Terminé~w~.", "Elle est niquel!");
+                VehicleHandler vh = VehicleBench.GetVehicleHandler();
 
                 if (vh == null)
                     return;
@@ -148,30 +135,34 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                 vh.UpdateFull();
             });
         }
+        #endregion
 
-        private Task OpenChangePlateMenu(IPlayer client)
+        #region Hide plate
+        private void OpenHidePlateMenu(IPlayer client)
         {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-                return Task.CompletedTask;
+            if (VehicleBench == null || !VehicleBench.Exists)
+            {
+                MenuManager.CloseMenu(client);
+                return;
+            }
 
             PlayerHandler ph = client.GetPlayerHandler();
 
             if (ph != null)
             {
-                AcceptMenu accept = AcceptMenu.OpenMenu(client, "", "Retirer plaque du registre :", "~r~ATTENTION CETTE MODIFICATION EST ILLEGALE\nVous devez avoir l'argent sur vous", "", $"${PriceChangePlate}", Banner.Garage, false, false);
-                accept.AcceptMenuCallBack = ((IPlayer c, bool response) =>
+                AcceptMenu accept = AcceptMenu.OpenMenu(client, "", "Retirer plaque du registre :", "~r~ATTENTION CETTE MODIFICATION EST ILLEGALE\nVous devez avoir l'argent sur vous", "", $"${PRICE_CHANGE_PLATE}", Banner.Garage, false, false);
+                accept.AcceptMenuCallBack = (IPlayer c, bool response) =>
                 {
                     if (response)
                     {
-                        if (ph.HasMoney(PriceChangePlate) == true)
+                        if (ph.HasMoney(PRICE_CHANGE_PLATE) == true)
                         {
-                            VehicleHandler vh = _vehicleBench.GetVehicleHandler();
+                            VehicleHandler vh = VehicleBench.GetVehicleHandler();
 
                             if (vh != null)
                             {
                                 vh.PlateHide = true;
                                 client.SendNotificationSuccess("La plaque du véhicule a été retirée du registre");
-                                ph.UpdateFull();
                                 vh.UpdateFull();
                             }
                         }
@@ -179,574 +170,11 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                             client.SendNotificationError("Tu n'as pas l'argent sur toi...");
                     }
 
-                    OpenMainMenu(client, _vehicleBench);
+                    OpenMainMenu(client);
                     return Task.CompletedTask;
-                });
+                };
             }
-
-            return Task.CompletedTask;
-        }
-        #endregion
-
-        #region Performance
-        private void OpenPerformanceMenu(IPlayer client)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-                return;
-
-            var manifest = _vehicleBench.GetVehicleHandler()?.VehicleManifest;
-
-            if (manifest == null)
-            {
-                client.SendNotificationError("problème avec le véhicule.");
-                return;
-            }
-
-            Menu menu = new Menu("ID_Perf", "", "Choisissez l'élément à installer :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.Garage);
-            menu.ItemSelectCallback = PerformanceMenuCallback;
-
-            foreach (var mod in BennysData.PerformanceModList)
-            {
-                if (manifest.HasModType(mod.ModID))
-                {
-                    MenuItem item = new MenuItem(mod.ModName, executeCallback: true);
-                    item.SetData("mod", mod.ModID);
-                    item.OnMenuItemCallback = PerformanceItemMenuCallback;
-                    menu.Add(item);
-                }
-            }
-
-            menu.OpenMenu(client);
-            ClientInMenu = client;
-        }
-
-        private void PerformanceMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-                menu.CloseMenu(client);
-            else if (menuItem == null)
-                OpenMainMenu(client, _vehicleBench);
-        }
-
-        private void PerformanceItemMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-            {
-                menu.CloseMenu(client);
-                return;
-            }
-            else if (!menuItem.HasData("mod"))
-            {
-                client.SendNotificationError("problème avec le véhicule.");
-                OpenPerformanceMenu(client);
-                return;
-            }
-
-            _modType = menuItem.GetData("mod");
-            _subtitle = $"{menuItem.Text} :";
-            OpenPerformanceChoiceMenu(client);
-        }
-
-        private void OpenPerformanceChoiceMenu(IPlayer client)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-                return;
-
-            var vh = _vehicleBench.GetVehicleHandler();
-            var manifest = vh.VehicleManifest;
-
-            if (vh == null || !manifest.HasModType(_modType) && _modType != 666) // 666 = neons
-            {
-                client.SendNotificationError("Je ne peux pas sur ce véhicule.");
-                OpenPerformanceMenu(client);
-            }
-
-            Menu menu = new Menu("ID_Perfs", "", _subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.Garage);
-            menu.ItemSelectCallback = PerformanceChoiceMenuCallback;
-            menu.IndexChangeCallbackAsync = ModPreview;
-            menu.FinalizerAsync = Finalizer;
-
-            var mods = manifest.Mods(_modType);
-            var perfdata = BennysData.GetPerformanceData(_modType).Value;
-            vh.Mods.TryGetValue(_modType, out byte valueInstalled);
-
-            for (int i = 0; i < mods.Count(); i++)
-            {
-                var mod = mods.ElementAt(i);
-
-                if (mod == null || mod.Name == string.Empty)
-                    continue;
-
-                string modName = mod.LocalizedName;
-
-                if (modName == string.Empty)
-                    modName = mod.Name;
-
-                if (_modType == 11 && mod.Name == "CMOD_ARM_0")
-                    modName = "Gestion moteur de série";
-                else if (_modType == 11 && mod.Name == "CMOD_ENG_6")
-                    modName = "Reprog moteur Niv. 5";
-
-                MenuItem item = null;
-
-                if (i == valueInstalled)
-                {
-                    item = new MenuItem(modName, executeCallbackIndexChange: true);
-
-                    if (_garageType == GarageType.Bike)
-                        item.RightBadge = BadgeStyle.Bike;
-                    else
-                        item.RightBadge = BadgeStyle.Car;
-                }
-                else
-                {
-                    item = new MenuItem(modName, executeCallback: true, executeCallbackIndexChange: true);
-                    var price = BennysData.CalculPrice(vh, perfdata.ModPrice[i]);
-
-                    if (price != 0)
-                        item.RightLabel = $"${price}";
-
-                    item.SetData("price", price);
-                    item.OnMenuItemCallbackAsync = ModChoice;
-                }
-
-                menu.Add(item);
-            }
-
-            menu.OpenMenu(client);
-            ClientInMenu = client;
-        }
-
-        private void PerformanceChoiceMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-            {
-                menu.CloseMenu(client);
-                return;
-            }
-
-            VehicleHandler vh = _vehicleBench.GetVehicleHandler();
-
-            if (menuItem == null)
-            {
-                if (vh.Mods.ContainsKey(_modType))
-                    _vehicleBench.SetMod(_modType, vh.Mods[_modType]);
-                else
-                    _vehicleBench.SetMod(_modType, 0);
-
-                OpenPerformanceMenu(client);
-            }
-        }
-        #endregion
-
-        #region Design
-        private void OpenDesignMenu(IPlayer client)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-                return;
-
-            Menu menu = new Menu("ID_Design", "", "Choisissez l'élément à installer :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.Garage);
-            menu.ItemSelectCallback = DesignMenuCallback;
-            menu.FinalizerAsync = Finalizer;
-
-            VehicleHandler vh = _vehicleBench.GetVehicleHandler();
-            var manifest = vh.VehicleManifest;
-
-            foreach (var mod in BennysData.EsthetiqueModList)
-            {
-                if (manifest.HasModType(mod.ModID))
-                {
-                    var price = BennysData.CalculPrice(vh, BennysData.GetEsthetiqueData(mod.ModID)?.ModPrice ?? 0);
-
-                    MenuItem item = new MenuItem(mod.ModName, rightLabel: $"${price}", executeCallback: true);
-                    item.SetData("mod", mod.ModID);
-                    item.SetData("price", price);
-                    item.OnMenuItemCallbackAsync = DesignMenuItemCallback;
-                    menu.Add(item);
-                }
-            }
-
-            if (manifest.Neon)
-            {
-                double price = BennysData.CalculPrice(vh, 2500);
-                MenuItem item = new MenuItem("Néons", "", "Neons", rightLabel: $"${price}", executeCallback: true, executeCallbackIndexChange: true);
-                item.SetData("price", price);
-                menu.Add(item);
-            }
-
-            menu.OpenMenu(client);
-            ClientInMenu = client;
-        }
-
-        private void DesignMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-            {
-                menu.CloseMenu(client);
-                return;
-            }
-            else if (menuItem == null)
-            {
-                OpenMainMenu(client, _vehicleBench);
-                return;
-            }
-
-            if (menuItem.Id == "Neons")
-            {
-                _price = menuItem.GetData("price");
-                OpenNeonsMenu(client);
-            }
-        }
-
-        private async Task DesignMenuItemCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-            {
-                menu.CloseMenu(client);
-                return;
-            }
-            else if (!menuItem.HasData("mod"))
-            {
-                client.SendNotificationError("problème avec le véhicule.");
-                OpenDesignMenu(client);
-                return;
-            }
-
-            _modType = menuItem.GetData("mod");
-            _price = menuItem.GetData("price");
-            _subtitle = $"{menuItem.Text} :";
-            await OpenDesignChoiceMenu(client);
-        }
-
-        private async Task OpenDesignChoiceMenu(IPlayer client)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-                return;
-
-            VehicleHandler vh = _vehicleBench.GetVehicleHandler();
-            var manifest = vh.VehicleManifest;
-
-            if (!manifest.HasModType(_modType)) // 666 = neons
-            {
-                client.SendNotificationError("Je ne peux pas sur ce véhicule.");
-                OpenDesignMenu(client);
-            }
-
-            Menu menu = new Menu("ID_DesignChoice", "", _subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.Garage);
-            menu.IndexChangeCallbackAsync = ModPreview;
-            menu.ItemSelectCallback = DesignChoiceCallback;
-            menu.FinalizerAsync = Finalizer;
-
-            var mods = manifest.Mods(_modType);
-            vh.Mods.TryGetValue(_modType, out byte valueInstalled);
-
-            for (int i = 0; i < mods.Count(); i++)
-            {
-                var mod = mods.ElementAt(i);
-
-                if (mod == null || mod.Name == string.Empty)
-                    continue;
-
-                MenuItem item = null;
-                string modName = mod.LocalizedName;
-
-                if (modName == string.Empty)
-                    modName = mod.Name;
-
-                if (i == valueInstalled)
-                {
-                    item = new MenuItem(modName, executeCallbackIndexChange: true);
-
-                    if (_garageType == GarageType.Bike)
-                        item.RightBadge = BadgeStyle.Bike;
-                    else
-                        item.RightBadge = BadgeStyle.Car;
-                }
-                else
-                {
-                    item = new MenuItem(modName, executeCallback: true, executeCallbackIndexChange: true, rightLabel: $"${_price}");
-                    item.SetData("price", _price);
-                }
-
-                item.OnMenuItemCallbackAsync = ModChoice;
-                menu.Add(item);
-            }
-
-            menu.OpenMenu(client);
-            ClientInMenu = client;
-            await ModPreview(client, menu, 0, menu.Items[0]);
-        }
-
-        private void DesignChoiceCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-            {
-                menu.CloseMenu(client);
-                return;
-            }
-
-            VehicleHandler vh = _vehicleBench.GetVehicleHandler();
-
-            if (menuItem == null)
-            {
-                if (_modType == 14 && vh.Mods.ContainsKey(_modType))
-                    HornStop(_vehicleBench, vh.Mods[_modType]);
-                else if (_modType == 14)
-                    HornStop(_vehicleBench, 0);
-                else if (vh.Mods.ContainsKey(_modType))
-                    _vehicleBench.SetMod(_modType, vh.Mods[_modType]);
-                else
-                    _vehicleBench.SetMod(_modType, 0);
-
-                OpenDesignMenu(client);
-            }
-        }
-
-        private void OpenNeonsMenu(IPlayer client)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-                return;
-
-            VehicleHandler vh = _vehicleBench.GetVehicleHandler();
-
-            Menu menu = new Menu("ID_Neons", "", "Néons :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: Banner.Garage);
-            menu.ItemSelectCallbackAsync = NeonsMenuCallback;
-            menu.ListItemChangeCallback = NeonListItemChangeCallback;
-            menu.FinalizerAsync = Finalizer;
-
-            _red = vh.NeonColor.R / 17;
-            _green = vh.NeonColor.G / 17;
-            _blue = vh.NeonColor.B / 17;
-            List<object> colorItems = GetColorListItems();
-            menu.Add(new ListItem("Rouge", "", "Red", colorItems, _red, false, true));
-            menu.Add(new ListItem("Vert", "", "Green", colorItems, _green, false, true));
-            menu.Add(new ListItem("Bleu", "", "Blue", colorItems, _blue, false, true));
-
-            MenuItem menuItem = new MenuItem("Valider", "", "Validate", true, false, $"${_price}");
-            menuItem.SetData("price", _price);
-            menu.Add(menuItem);
-
-            vh.NeonState = new Tuple<bool, bool, bool, bool>(true, true,true, true);
-            menu.OpenMenu(client);
-            ClientInMenu = client;
-        }
-
-        private async Task NeonsMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-            {
-                menu.CloseMenu(client);
-                return;
-            }
-
-            VehicleHandler vh = _vehicleBench.GetVehicleHandler();
-
-            if (menuItem == null)
-            {
-                int red = vh.NeonColor.R;
-                int green = vh.NeonColor.G;
-                int blue = vh.NeonColor.B;
-                 _vehicleBench.NeonColor = (Color.FromArgb(red, green, blue));
-
-                OpenDesignMenu(client);
-                return;
-            }
-
-            if (menuItem.Id == "Validate")
-            {
-                double price = menuItem.GetData("price");
-                await InstallNeon(client, price);
-            }
-        }
-
-        private void NeonListItemChangeCallback(IPlayer client, Menu menu, IListItem listItem, int listIndex)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-            {
-                menu.CloseMenu(client);
-                return;
-            }
-
-            if (listItem.Id == "Red")
-                _red = int.Parse(listItem.Items[listIndex].ToString());
-            else if (listItem.Id == "Green")
-                _green = int.Parse(listItem.Items[listIndex].ToString());
-            else if (listItem.Id == "Blue")
-                _blue = int.Parse(listItem.Items[listIndex].ToString());
-
-            Color color = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
-            _vehicleBench.NeonColor = (color);
-        }
-
-        private Task ModPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-                return Task.CompletedTask;
-
-            byte selected = (byte)itemIndex;
-
-            if (_modType == 14)
-                HornPreview(_vehicleBench, selected);
-            else
-                _vehicleBench.SetMod(_modType, selected);
-
-            return Task.CompletedTask;
-        }
-        #endregion
-
-        #region Historique Vehicle
-        private void OpenHistoricMenu(IPlayer client)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-                return;
-
-            VehicleHandler vh = _vehicleBench.GetVehicleHandler();
-
-            if (vh == null)
-            {
-                client.SendNotificationError("Problème avec le véhicule.");
-                return;
-            }
-
-            if (vh.Mods.Count == 0)
-            {
-                client.SendNotificationError("Aucune amélioration n'est disponible sur le véhicule!");
-                return;
-            }
-            else if (vh.Mods.Count >= 1)
-            {
-                Menu menu = new Menu("ID_Histo", "", "Historique :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Garage);
-                menu.ItemSelectCallback = HistoricMenuCallback;
-                menu.FinalizerAsync = Finalizer;
-
-                foreach (var mod in vh.Mods)
-                {
-                    VehicleMod modData;
-
-                    if (mod.Key == 22)
-                        modData = vh.VehicleManifest.GetMod(mod.Key, mod.Value);
-                    else
-                        modData = vh.VehicleManifest.GetMod(mod.Key, mod.Value - 1);
-
-                    if (modData != null)
-                    {
-                        string modName = modData.LocalizedName;
-
-                        if (modData.Name == "CMOD_ARM_0")
-                            modName = "Gestion moteur de série";
-                        else if (modData.Name == "CMOD_ENG_6")
-                            modName = "Reprog moteur Niv. 5";
-                        else if (modData.LocalizedName == string.Empty)
-                            modName = modData.Name;
-
-                        menu.Add(new MenuItem(modName));
-                    }
-                }
-
-                if (vh.NeonColor != null && !vh.NeonColor.IsEmpty)
-                {
-                    Color color = vh.NeonColor;
-                    menu.Add(new MenuItem($"Néons : Rouge {color.R / 17} - Vert {color.G / 17} - Bleu {color.B / 17}"));
-                }
-
-                menu.OpenMenu(client);
-                ClientInMenu = client;
-            }
-        }
-
-        private void HistoricMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            if (menuItem == null)
-                 OpenMainMenu(client, _vehicleBench);
-        }
-        #endregion
-
-        #region END
-        private async Task InstallNeon(IPlayer client, double price)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-                return;
-
-            VehicleHandler vh = _vehicleBench.GetVehicleHandler();
-
-            if (await BankAccount.GetBankMoney(price, $"{SocietyName}: Néons"))
-            {
-                vh.NeonColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
-                vh.UpdateFull();
-
-                client.SendNotificationSuccess($"Vous avez installé des Néons pour la somme de ${price}");
-                OpenNeonsMenu(client);
-            }
-        }
-
-        private async Task ModChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            if (_vehicleBench == null || !_vehicleBench.Exists)
-                return;
-
-            byte selected = (byte)itemIndex;
-
-            VehicleHandler vh = _vehicleBench?.GetVehicleHandler();
-            double price = menu.HasData("price") ? menu.GetData("price") : menuItem.GetData("price");
-
-            string modName = string.Empty;
-
-            // Bug with xenons
-            if (_modType == 22)
-                modName = vh.VehicleManifest.GetMod(_modType, selected).LocalizedName;
-            else
-                modName = vh.VehicleManifest.GetMod(_modType, selected - 1).LocalizedName;
-
-            if (_modType == 11 && vh.VehicleManifest.GetMod(_modType, selected - 1).Name == "CMOD_ARM_0")
-                modName = "Gestion moteur de série";
-
-            bool hasMoney = true;
-
-            if (price > 0)
-                hasMoney = await BankAccount.GetBankMoney(price, $"{SocietyName}: {modName}");
-
-            if (hasMoney)
-            {
-                if (vh == null)
-                    return;
-
-                vh.Mods.AddOrUpdate(_modType, selected, (key, oldvalue) => selected);
-                _vehicleBench.SetMod(_modType, selected);
-                vh.UpdateFull();
-                string str = $"Vous avez installé {modName}";
-
-                if (price != 0)
-                    str += $" pour la somme de ${price}.";
-
-                client.SendNotificationSuccess(str);
-            }
-            else
-                client.SendNotificationError("Vous n'avez pas assez sur le compte de l'entreprise.");
-
-            if (menu.Id == "ID_DesignChoice")
-                await OpenDesignChoiceMenu(client);
-            else if (menu.Id == "ID_Perfs")
-                OpenPerformanceChoiceMenu(client);
-        }
-
-        private async Task Finalizer(IPlayer client, Menu menu)
-        {
-            ClientInMenu = null;
-            await Task.CompletedTask;
-        }
-        #endregion
-
-        #region Private methods
-        private List<object> GetColorListItems()
-        {
-            List<object> items = new List<object>();
-
-            for (int i = 0; i <= 15; i++)
-                items.Add(i.ToString());
-
-            return items;
         }
         #endregion
     }
 }
-

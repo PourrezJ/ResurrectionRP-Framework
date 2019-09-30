@@ -22,6 +22,7 @@ namespace ResurrectionRP_Server.Entities.Players
             Chat.RegisterCmd("cls", Cls);
             Chat.RegisterCmd("cloth", Cloth);
             Chat.RegisterCmd("refuel", Refuel);
+            Chat.RegisterCmd("setfuel", SetFuel);
             Chat.RegisterCmd("repair", Repair);
             Chat.RegisterCmd("wheel", Wheel);
             Chat.RegisterCmd("doorstate", DoorState);
@@ -199,6 +200,21 @@ namespace ResurrectionRP_Server.Entities.Players
                 player.Vehicle.GetVehicleHandler().Fuel = player.Vehicle.GetVehicleHandler().FuelMax;
 
             player.DisplaySubtitle("Essence restaurée", 5000);
+            return Task.CompletedTask;
+        }
+
+        public Task SetFuel(IPlayer player, string[] args)
+        {
+            if (!player.IsInVehicle)
+            {
+                player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
+                return Task.CompletedTask;
+            }
+
+            if (player.Vehicle.GetVehicleHandler() != null && double.TryParse(args[0], out double fuel))
+                player.Vehicle.GetVehicleHandler().Fuel = (float)Math.Min(fuel, player.Vehicle.GetVehicleHandler().FuelMax);
+
+            player.SendNotificationSuccess("Quantité d'essence mise à jour");
             return Task.CompletedTask;
         }
 

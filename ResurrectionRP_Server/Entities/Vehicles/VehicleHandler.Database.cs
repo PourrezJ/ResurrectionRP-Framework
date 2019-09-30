@@ -57,7 +57,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 }
 
                 if (Trailer != null)
-                    ((IVehicle)(Trailer)).GetVehicleHandler().UpdateInBackground();
+                    ((IVehicle)(Trailer)).GetVehicleHandler().UpdateFull();
             }).Wait();
         }
 

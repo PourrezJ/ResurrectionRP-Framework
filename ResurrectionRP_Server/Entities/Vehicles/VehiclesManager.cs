@@ -238,14 +238,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             return generatedPlate;
         }
-        public static IVehicle GetNearestVehicle(IPlayer client, float distance = 3.0f, short dimension = short.MaxValue) =>
-            GetNearestVehicle(client.Position, distance, dimension);
-
-        public static async Task<IVehicle> GetNearestVehicleAsync(IPlayer client, float distance = 3.0f, short dimension = short.MaxValue)
-        {
-            return await GetNearestVehicleAsync(client.Position, distance, dimension);
-        }
-    
 
         public static IVehicle GetNearestVehicle(Vector3 position, float distance = 3.0f, short dimension = short.MaxValue)
         {
@@ -274,15 +266,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             ICollection<IVehicle> vehs = GetAllVehiclesInGame();
             IVehicle nearest = null;
 
-            foreach (IVehicle veh in vehs)
+            await AltAsync.Do(() =>
             {
-                if (!await veh.ExistsAsync() || await veh.GetDimensionAsync() != dimension || position.DistanceTo2D(veh.Position) > distance)
-                    continue;
-                else if (nearest == null)
-                    nearest = veh;
-                else if (position.DistanceTo2D(veh.Position) < position.DistanceTo(nearest.Position))
-                    nearest = veh;
-            }
+                foreach (IVehicle veh in vehs)
+                {
+                    if (!veh.Exists || veh.Dimension != dimension || position.DistanceTo2D(veh.Position) > distance)
+                        continue;
+                    else if (nearest == null)
+                        nearest = veh;
+                    else if (position.DistanceTo2D(veh.Position) < position.DistanceTo(nearest.Position))
+                        nearest = veh;
+                }
+            });
 
             return nearest;
         }

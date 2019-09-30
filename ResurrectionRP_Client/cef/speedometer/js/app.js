@@ -22,7 +22,7 @@ function setSpeed(speed, rpm, gear, light, engineOn, engineHealth, currentFuel, 
         $(".compteur .on").css("width", `${rpm}px`);
     }
 
-    $('.information .stats .fuel').html(`<img src="img/fuel.png">${Math.ceil(currentFuel * 10) / 10}L/${fuelMax}L`);
+    $('.information .stats .fuel').html(`<img src="img/fuel.png">${Math.ceil(Math.trunc(currentFuel * 100) / 10) / 10}L/${fuelMax}L`);
     $('.information .stats .km').html(`<img src="img/km.png">${(Math.floor(milage * 10) / 10)}km`);
 
     switch (light) {

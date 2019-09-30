@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using AltV.Net;
 using System.Numerics;
+using AltV.Net.Elements.Entities;
 
 namespace ResurrectionRP_Server.Entities.Blips
 {
@@ -52,6 +53,11 @@ namespace ResurrectionRP_Server.Entities.Blips
         public void setColorAsyc(int color)
         {
             BlipsManager.SetColor(this, color);
+        }
+
+        public void setRouteForPlayer(IPlayer client, bool state, int color)
+        {
+            client.Emit("setStaticEntityBlipRoute", this.id,state, color);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ResurrectionRP_Server.Utils
         public static void OnTick()
         {
             if (string.IsNullOrEmpty(title)) title = Console.Title;
-            Console.Title = title + $" Joueurs: {AltV.Net.Alt.GetAllPlayers().Count} Véhicule: {AltV.Net.Alt.GetAllVehicles().Count}";
+            Console.Title = title + $" Joueurs: {AltV.Net.Alt.GetAllPlayers().Count} Véhicules: {AltV.Net.Alt.GetAllVehicles().Count}";
         }
 
         public static int CalculateFrameRate()

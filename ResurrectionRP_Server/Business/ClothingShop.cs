@@ -20,11 +20,10 @@ namespace ResurrectionRP_Server.Business
     public class ClothingStore : Business
     {
         #region Fields
-        public Vector3 ClothingPos;
-
-        [BsonIgnore]
         private IColShape _clothingColShape;
+        private string _componentName;
 
+        public Vector3 ClothingPos;
         public Banner BannerStyle;
 
         #region All
@@ -77,7 +76,7 @@ namespace ResurrectionRP_Server.Business
         }
         #endregion
 
-        #region Events
+        #region Init
         public override async Task Init()
         {
             await base.Init();
@@ -90,7 +89,9 @@ namespace ResurrectionRP_Server.Business
             _clothingColShape.SetOnPlayerLeaveColShape(OnPlayerLeaveColShape);
             _clothingColShape.SetOnPlayerInteractInColShape(OnPlayerInteractInColShape);
         }
+        #endregion
 
+        #region Event handlers
         public void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
             client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
@@ -114,6 +115,90 @@ namespace ResurrectionRP_Server.Business
 
             await OpenClothingMenu(client);
         }
+        #endregion
+
+        #region Private methods
+        private Task MenuClose(IPlayer client, Menu menu)
+        {
+            var ph = client.GetPlayerHandler();
+
+            if (ph == null)
+                return Task.CompletedTask;
+
+            ph.Clothing.UpdatePlayerClothing();
+
+            return Task.CompletedTask;
+        }
+
+        private async Task BuyCloth(IPlayer client, byte componentID, int drawable, int variation, double price, string clothName)
+        {
+            ClothItem item = null;
+            ClothManifest? clothdata = ClothingLoader.FindCloths(client, componentID) ?? null;
+
+            if (clothdata == null)
+                return;
+
+            switch (componentID)
+            {
+                case 1:
+                    item = new ClothItem(ItemID.Mask, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "mask", icon: "mask");
+                    break;
+
+                case 2:
+                    break;
+
+                case 3:
+                    break;
+
+                case 4:
+                    item = new ClothItem(ItemID.Pant, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "pants", icon: "pants");
+                    break;
+
+                case 5:
+                    break;
+
+                case 6:
+                    item = new ClothItem(ItemID.Shoes, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "shoes", icon: "shoes");
+                    break;
+
+                case 7:
+                    // item = new ClothItem(ItemID., clothdata.Value.DrawablesList[drawable].Variations[(byte)variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "", icon: "");
+                    break;
+
+                case 8:
+                    item = new ClothItem(ItemID.TShirt, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "shirt", icon: "shirt");
+                    break;
+            }
+
+            await BuyCloth(client, item, price, clothName);
+        }
+
+        private async Task BuyCloth(IPlayer client, ClothItem item, double price, string clothName)
+        {
+            var ph = client.GetPlayerHandler();
+
+            if (ph == null)
+                return;
+
+            if (ph.BankAccount.Balance >= price)
+            {
+                if (ph.AddItem(item, 1))
+                {
+                    if (await ph.HasBankMoney(price, $"Achat vêtement {clothName}"))
+                    {
+                        client.SendNotificationSuccess($"Vous avez acheté le vêtement {clothName} pour la somme de ${price}");
+                        ph.UpdateFull();
+                    }
+                }
+                else
+                    client.SendNotificationError("Vous n'avez pas la place pour cette élément.");
+            }
+            else
+                client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque.");
+        }
+        #endregion
+
+        #region Admin menu
         public override async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
         {
             if (client.GetPlayerHandler().StaffRank >= Utils.Enums.AdminRank.Moderator)
@@ -284,93 +369,12 @@ namespace ResurrectionRP_Server.Business
                 client.SendNotificationSuccess($"Catégorie {category} retirée");
             }
         }
-
-        private Task MenuClose(IPlayer client, Menu menu)
-        {
-            var ph = client.GetPlayerHandler();
-
-            if (ph == null)
-                return Task.CompletedTask;
-
-            ph.Clothing.UpdatePlayerClothing();
-
-            return Task.CompletedTask;
-        }
         #endregion
 
-        #region Private methods
-        private async Task BuyCloth(IPlayer client, byte componentID, int drawable, int variation, double price, string clothName)
-        {
-            ClothItem item = null;
-            ClothManifest? clothdata = ClothingLoader.FindCloths(client, componentID) ?? null;
-
-            if (clothdata == null)
-                return;
-
-            switch (componentID)
-            {
-                case 1:
-                    item = new ClothItem(ItemID.Mask, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "mask", icon: "mask");
-                    break;
-
-                case 2:
-                    break;
-
-                case 3:
-                    break;
-
-                case 4:
-                    item = new ClothItem(ItemID.Pant, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "pants", icon: "pants");
-                    break;
-
-                case 5:
-                    break;
-
-                case 6:
-                    item = new ClothItem(ItemID.Shoes, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "shoes", icon: "shoes");
-                    break;
-
-                case 7:
-                    // item = new ClothItem(ItemID., clothdata.Value.DrawablesList[drawable].Variations[(byte)variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "", icon: "");
-                    break;
-
-                case 8:
-                    item = new ClothItem(ItemID.TShirt, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "shirt", icon: "shirt");
-                    break;
-            }
-
-            await BuyCloth(client, item, price, clothName);
-        }
-
-        private async Task BuyCloth(IPlayer client, ClothItem item, double price, string clothName)
-        {
-            var ph = client.GetPlayerHandler();
-
-            if (ph == null)
-                return;
-
-            if (ph.BankAccount.Balance >= price)
-            {
-                if (ph.AddItem(item, 1))
-                {
-                    if (await ph.HasBankMoney(price, $"Achat vêtement {clothName}"))
-                    {
-                        client.SendNotificationSuccess($"Vous avez acheté le vêtement {clothName} pour la somme de ${price}");
-                        ph.UpdateFull();
-                    }
-                }
-                else
-                    client.SendNotificationError("Vous n'avez pas la place pour cette élément.");
-            }
-            else
-                client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque.");
-        }
-        #endregion
-
-        #region Menu
+        #region Main Menu
         public async Task OpenClothingMenu(IPlayer client)
         {
-            Menu menu = new Menu("ClothingMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, BannerStyle);
+            Menu menu = new Menu("ClothingMenu", "", "Que souhaitez-vous acheter?", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, BannerStyle);
             menu.ItemSelectCallbackAsync = MenuCallBack;
             menu.FinalizerAsync = MenuClose;
 
@@ -422,6 +426,8 @@ namespace ResurrectionRP_Server.Business
 
         private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
+            _componentName = menuItem.Text.ToUpper();
+
             switch (menuItem.Id)
             {
                 case "ID_Haut":
@@ -452,7 +458,7 @@ namespace ResurrectionRP_Server.Business
         {
             menu.ClearItems();
             menu.BackCloseMenu = false;
-            menu.SubTitle = null;
+            menu.SubTitle = _componentName;
             var data = ClothingLoader.FindTops(client) ?? null;
 
             if (data == null)
@@ -572,7 +578,7 @@ namespace ResurrectionRP_Server.Business
                 return;
 
             menu.ClearItems();
-            menu.SubTitle = null;
+            menu.SubTitle = _componentName;
             menu.BackCloseMenu = false;
             menu.ItemSelectCallbackAsync = CategorieCallBack;
             menu.IndexChangeCallbackAsync = null;
@@ -726,7 +732,7 @@ namespace ResurrectionRP_Server.Business
                 return;
 
             menu.ClearItems();
-            menu.SubTitle = null;
+            menu.SubTitle = _componentName;
             menu.BackCloseMenu = backCloseMenu;
             menu.ItemSelectCallbackAsync = OnCallBackWithoutCat;
             menu.IndexChangeCallbackAsync = OnCurrentItem;

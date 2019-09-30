@@ -381,7 +381,7 @@ namespace ResurrectionRP_Server.Models
                         }
                         catch(Exception ex)
                         {
-                            Alt.Server.LogError($"OpenParkingMenu: {veh.Plate} {this.ID} {this.Name} {client.GetSocialClub()} : " + ex);
+                            Alt.Server.LogError($"OpenParkingMenu: {veh.Plate} {ID} {Name} {client.GetSocialClub()} : " + ex);
                         }
                     }
                 }
@@ -396,7 +396,7 @@ namespace ResurrectionRP_Server.Models
             menu.OpenMenu(client);
         }
 
-        public async Task StoreVehicle(IPlayer client, IVehicle vh)
+        public async Task StoreVehicle(IPlayer client, IVehicle vh, Location location = null)
         {
             if (vh == null)
                 return;
@@ -417,12 +417,15 @@ namespace ResurrectionRP_Server.Models
                         return;
 
                     if (GameMode.Instance.IsDebug)
-                        Alt.Server.LogColored($"~b~Parking ~w~| New vehicle in parking id {this.ID}");
+                        Alt.Server.LogColored($"~b~Parking ~w~| New vehicle in parking id {ID}");
 
-                    await vh.SetEngineOnAsync(false);
+                    veh.EngineOn = false;
                     veh.LockState = VehicleLockState.Locked;
-                    veh.Location = new Location(new Vector3(Location.X, Location.Y, Location.Z), veh.Location.Rot);
-                    veh.LastUse = DateTime.Now; // refresh the last use
+
+                    if (location != null)
+                        veh.Location = location;
+                    else
+                        veh.Location = new Location(Location, veh.Location.Rot);
 
                     lock (ListVehicleStored)
                     {
@@ -441,9 +444,8 @@ namespace ResurrectionRP_Server.Models
                     await veh.Delete(false);
                 }
                 else
-                {
                     Alt.Server.LogError("GetHandlerByVehicle fuck is null this shit! mother fucker!");
-                }
+
                 MenuManager.CloseMenu(client);
             }
             catch (Exception ex)
@@ -474,13 +476,13 @@ namespace ResurrectionRP_Server.Models
 
         public void Destroy()
         {
-            Alt.RemoveColShape(this.ParkingColshape);
-            if (this.EntityMarker != null)
-                Marker.DestroyMarker(this.EntityMarker);
-            if (this.EntityLabel != null)
-                GameMode.Instance.Streamer.ListEntities[this.EntityLabel.id].Remove();
-            if (this.EntityBlip != null)
-                BlipsManager.Destroy(this.EntityBlip);
+            Alt.RemoveColShape(ParkingColshape);
+            if (EntityMarker != null)
+                Marker.DestroyMarker(EntityMarker);
+            if (EntityLabel != null)
+                GameMode.Instance.Streamer.ListEntities[EntityLabel.id].Remove();
+            if (EntityBlip != null)
+                BlipsManager.Destroy(EntityBlip);
         }
         #endregion
     }

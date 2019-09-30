@@ -34,7 +34,7 @@ namespace ResurrectionRP_Server
             {
                 colshape.GetData("Entities", out List<IEntity> entities);
 
-                if (entities.Contains(entity))
+                if (entities != null && entities.Contains(entity))
                     entities.Remove(entity);
             }
         }

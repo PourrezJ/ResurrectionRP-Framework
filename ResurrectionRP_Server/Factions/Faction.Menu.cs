@@ -570,6 +570,12 @@ namespace ResurrectionRP_Server.Factions
 
         private async Task ConcessCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
+            if (menuItem == null)
+            {
+                OpenConcessMenu(client, (ConcessType)menu.GetData("ConcessType"), menu.GetData("Faction_Location"), _factionName);
+                return;
+            }
+
             if (menu.Id == "ID_ParkingMenu")
             {
                 ConcessType type = (ConcessType)menu.GetData("ConcessType");
@@ -586,7 +592,12 @@ namespace ResurrectionRP_Server.Factions
                         if (client.IsInVehicle)
                         {
                             if (Parking != null)
-                                await Parking.StoreVehicle(client, client.Vehicle);
+                            {
+                                if (type == ConcessType.Helico)
+                                    await Parking.StoreVehicle(client, client.Vehicle, HeliportLocation);
+                                else
+                                    await Parking.StoreVehicle(client, client.Vehicle);
+                            }
 
                             menu.CloseMenu(client);
                         }

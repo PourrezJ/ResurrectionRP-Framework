@@ -105,10 +105,24 @@ namespace ResurrectionRP_Server.Farms
             }
 
             IVehicle fuelVeh = null;
-            List<IVehicle> vehs = client.GetVehiclesInRange(20);
+            List<IVehicle> vehs = null;
+
+            try
+            {
+                vehs = client.GetVehiclesInRange(20);
+            }
+            catch(Exception ex)
+            {
+                Alt.Server.LogError(ex.ToString());
+            }
+
+            if (vehs == null)
+                return;
 
             foreach(IVehicle veh in vehs)
             {
+                if (!veh.Exists)
+                    continue;
 
                 if (veh.Model == 4097861161)
                 {
@@ -117,9 +131,7 @@ namespace ResurrectionRP_Server.Farms
 
                 if (veh.GetVehicleHandler().hasTrailer)
                     fuelVeh = (IVehicle)(veh.GetVehicleHandler().Trailer);
-
             }
-
 
             if (fuelVeh == null || !fuelVeh.Exists)
             {
@@ -159,7 +171,7 @@ namespace ResurrectionRP_Server.Farms
                 return;
             }
 
-            client.GetPlayerHandler().IsOnProgress = true;
+            player.IsOnProgress = true;
             Vector3 lastPos = fuelVeh.Position;
             fuelVeh.SetData("Refuelling", true);
             Item item = Inventory.Inventory.ItemByID(ItemIDBrute);
@@ -171,7 +183,7 @@ namespace ResurrectionRP_Server.Farms
             Timers[client] = Utils.Utils.Delay((Harvest_Time * 1000) / TrailerMaxContent  ,false, async () =>
             {
                 System.Timers.Timer HarvestTimer = Timers[client];
-                if (!client.Exists || !fuelVeh.Exists)
+                if (!await client.ExistsAsync() || !await fuelVeh.ExistsAsync())
                 {
                     HarvestTimer.Stop();
                     HarvestTimer = null;
@@ -184,7 +196,7 @@ namespace ResurrectionRP_Server.Farms
                     HarvestTimer = null;
                 }
 
-                if ((fuelVeh.Position).Distance(lastPos) > Harvest_Range)
+                if ((await fuelVeh.GetPositionAsync()).Distance(lastPos) > Harvest_Range)
                 {
                     client.DisplaySubtitle($"~r~Récolte interrompue: ~s~Vous deviez rester dans la zone.", 5000);
                     HarvestTimer.Stop();

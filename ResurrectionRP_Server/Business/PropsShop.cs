@@ -73,8 +73,39 @@ namespace ResurrectionRP_Server.Business
         #region Init
         public override async Task Init()
         {
-            MaxEmployee = 5;
             await base.Init();
+
+            if (MenHats == null)
+                MenHats = new List<int>();
+
+            if (GirlHats == null)
+                GirlHats = new List<int>();
+
+            if (MenGlasses == null)
+                MenGlasses = new List<int>();
+
+            if (GirlGlasses == null)
+                GirlGlasses = new List<int>();
+
+            if (MenEars == null)
+                MenEars = new List<int>();
+
+            if (GirlEars == null)
+                GirlEars = new List<int>();
+
+            if (MenWatches == null)
+                MenWatches = new List<int>();
+
+            if (GirlWatches == null)
+                GirlWatches = new List<int>();
+
+            if (MenBracelets == null)
+                MenBracelets = new List<int>();
+
+            if (GirlBracelets == null)
+                GirlBracelets = new List<int>();
+
+            MaxEmployee = 5;
             _clothingColShape = Alt.CreateColShapeCylinder(ClothingPos - new Vector3(0, 0, 1), 4f, 3f);
             Marker.CreateMarker(MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 1), new Vector3(3, 3, 0.3f), Color.FromArgb(80, 255, 255, 255));
             Entities.Blips.BlipsManager.SetColor(Blip, 25);

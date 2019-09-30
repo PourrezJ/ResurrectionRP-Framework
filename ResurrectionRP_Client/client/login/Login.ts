@@ -4,8 +4,12 @@ import * as chat from '../chat/chat'
 import * as camera from '../Models/Camera';
 
 let inLogin = false;
+let browser: alt.WebView = null;
 
 export function init() {
+
+   
+
     alt.onServer('OpenLogin', (args: any[]) => {
         try {
             alt.emit("FadeIn", 0);
@@ -33,13 +37,15 @@ export function init() {
             var _cam = cameras[getRandomInt(5)];
             _cam.SetActiveCamera(true);
 
-            let browser = new alt.WebView('http://resource/client/cef/login/index.html')
+            browser = new alt.WebView('http://resource/client/cef/login/index.html')
             browser.emit('callEvent', social);
             browser.focus();
 
             browser.on("SendLogin", (arg: string) => alt.emitServer('SendLogin', arg))
+            browser.on("ExitGame", (arg: string) => alt.emitServer('ExitGame'))
 
             alt.onServer("LoginOK", (arg: boolean) => {
+
                 alt.log("Connexion acceptée, en cours.");
                 game.doScreenFadeOut(0);
                 game.setPlayerInvincible(game.playerId(), false);
@@ -58,11 +64,10 @@ export function init() {
                 game.destroyAllCams(true);
 
                 alt.emitServer("LogPlayer");
-                
             });
 
             alt.onServer("LoginError", () => {
-                browser.emit('callEvent', "{ JsonConvert.SerializeObject(new { name = \"\", error = Convert.ToString(args[0]) }) }")
+                browser.emit('error');
             });
 
         } catch(ex) {

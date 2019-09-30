@@ -45,28 +45,8 @@ app.controller("LoginCtrl", function ($scope, $http, $ngConfirm) {
         }
     };
 
-    $scope.registerToServer = () => {
-        $scope.loggingIn = true;
-
-        if ($scope.login != "" && $scope.password != "" && $scope.email != "") {
-
-            let registerObj = {
-                login: $scope.login,
-                password: $scope.password,
-                email: $scope.email,
-                socialClub: $scope.socialClub
-            };
-
-            alt.emitServer("SendRegister", JSON.stringify(registerObj));
-
-        } else {
-            $scope.loggingIn = false;
-            $scope.error("Erreur", "Vérifiez les champs d'inscription avant de continuer");
-        }
-    };
-
     $scope.exitGame = () => {
-        alt.emitServer("ExitGame");
+        alt.emit("ExitGame");
     };
 
     $scope.error = (title, message) => {
@@ -107,36 +87,14 @@ app.controller("LoginCtrl", function ($scope, $http, $ngConfirm) {
 
     window.addEventListener("OnCallEvent", ev => {
         $scope.$apply(() => {
-            if (ev.detail.name == "socialClubNameSet") {
-                $scope.socialClub = ev.detail.socialClub;
-            } else if (ev.detail.name == "loginError") {
-                $scope.loggingIn = false;
-                let errorMessage;
-
-                if (ev.detail.error == "accountNotFound") {
-                    errorMessage = "Identifiant ou mot de passe incorrect";
-                } else if (ev.detail.error == "registerForbidden") {
-                    errorMessage = "Ce compte existe déjà.";
-                } else {
-                    errorMessage = "Une erreur est survenue lors de la tentative de connexion. Merci de réessayer.";
-                }
-
-                $scope.error("Erreur de connexion", errorMessage);
-            } else if (ev.detail.name == "registerOK") {
-                $scope.success("Inscription réussie !", "Connexion en cours...");
-                $scope.currentStep = "login";
-            }
+            $scope.loggingIn = false;
+            $scope.error("Erreur de connexion", "Identifiant ou mot de passe incorrect");
         });
-
-        if (ev.detail.name == "registerOK") {
-            $scope.loginToServer();
-        }
     });
 });
 
-function callEvent(data) {
-    console.log(data);
-    var event = new CustomEvent("OnCallEvent", { "detail": data });
+function callEvent() {
+    var event = new CustomEvent("OnCallEvent");
     window.dispatchEvent(event);
 };
 
@@ -205,14 +163,20 @@ $('select').each(function () {
 
 });
 
-jQuery(document).ready(function($) {
-  $(".identifiant-input").focusin(function() {
-    $(".info").css("display", "block")
-  })
-})
+jQuery(document).ready(function ($) {
+    $(".identifiant-input").focusin(function () {
+        $(".info").css("display", "block");
+    });
+});
 
-jQuery(document).ready(function($) {
-  $(".identifiant-input").focusout(function() {
-    $(".info").css("display", "none")
-  })
-})
+jQuery(document).ready(function ($) {
+    $(".identifiant-input").focusout(function () {
+        $(".info").css("display", "none");
+    });
+});
+
+$(() => {
+    if ('alt' in window) {
+        alt.on('error', callEvent);
+    }
+});

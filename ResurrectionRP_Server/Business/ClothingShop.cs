@@ -340,11 +340,14 @@ namespace ResurrectionRP_Server.Business
 
                 List<int> categories = menu.GetData("Categories");
 
-                if (categories.Contains(category))
+                if (categories != null && categories.Contains(category))
                 {
                     client.SendNotificationError($"Catégorie {category} déjà présente");
                     return;
                 }
+
+                if (categories == null)
+                    categories = new List<int>();
 
                 categories.Add(category);
                 categories.Sort();

@@ -186,6 +186,10 @@ export class Medical {
             //game.animpostfxStop("DeathFailMPIn")
             //game.setCamEffect(0);
 
+            game.setPedConfigFlag(alt.Player.local.scriptID, 35, false);
+            game.setPedConfigFlag(alt.Player.local.scriptID, 184, false);
+            game.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
+
             game.clearPedBloodDamage(alt.Player.local.scriptID);
         });  
     }

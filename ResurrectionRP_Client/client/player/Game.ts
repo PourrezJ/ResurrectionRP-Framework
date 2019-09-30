@@ -130,9 +130,11 @@ export class Game {
             alt.log("Chargement des stats");
 
             game.startAudioScene("FBI_HEIST_H5_MUTE_AMBIENCE_SCENE");
+
             game.setPedConfigFlag(alt.Player.local.scriptID, 35, false);
+            game.setPedConfigFlag(alt.Player.local.scriptID, 184, false);
             game.setPedConfigFlag(alt.Player.local.scriptID, 429, true);
-            
+
             game.setTimeScale(1);
             
             alt.setStat('stamina', 100);

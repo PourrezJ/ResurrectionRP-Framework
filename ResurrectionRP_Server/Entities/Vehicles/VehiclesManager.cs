@@ -60,7 +60,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (newSeat == 1 && vh != null)
             {
                 vh.LastDriver = ph.Identite.Name;
-                vh.UpdateFull();
+                vh.UpdateInBackground();
             }
 
             return Task.CompletedTask;
@@ -84,11 +84,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (args[2] != null)
             {
                 veh.Trailer = (IEntity)args[2];
-                ((IVehicle)(veh.Trailer)).GetVehicleHandler().UpdateFull();
+                ((IVehicle)veh.Trailer).GetVehicleHandler().UpdateInBackground();
             }
             else
             {
-                ((IVehicle)(veh.Trailer)).GetVehicleHandler().UpdateFull();
+                ((IVehicle)veh.Trailer).GetVehicleHandler().UpdateInBackground();
                 veh.Trailer = null;
             }
 
@@ -122,7 +122,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     await recever.PlaySoundFromEntity(veh.Vehicle, 0, "5_SEC_WARNING", "HUD_MINI_GAME_SOUNDSET");
                 }
 
-                veh.UpdateFull();
+                veh.UpdateInBackground();
             }
         }
 
@@ -141,7 +141,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
 
             if (vh != null)
-                vh.UpdateFull();
+                vh.UpdateInBackground();
 
             return Task.CompletedTask;
         }

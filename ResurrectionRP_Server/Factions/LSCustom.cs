@@ -218,7 +218,7 @@ namespace ResurrectionRP_Server.Factions
                     vh.PearlColor = (byte)color;
                 }
 
-                vh.UpdateFull();
+                vh.UpdateInBackground(false);
                 client.SendNotificationSuccess("Peinture effectuée!");
                 OpenPeintureMenu(client);
             }
@@ -401,7 +401,7 @@ namespace ResurrectionRP_Server.Factions
                             _vh.Repair(client);
                             _vh.EngineHealth = engineHealth;
                             _vh.PetrolTankHealth = petrolTankHealth;
-                            _vh.UpdateInBackground();
+                            _vh.UpdateInBackground(false);
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~g~Terminé~w~.", "Elle est niquel!");
                         });
 
@@ -447,7 +447,7 @@ namespace ResurrectionRP_Server.Factions
                                 }
                             });
                                        
-                            _vh.UpdateFull();
+                            _vh.UpdateInBackground(false);
                             _vh.UpdateProperties();
                             await _vh.ApplyDamageAsync();
                         });
@@ -471,7 +471,7 @@ namespace ResurrectionRP_Server.Factions
 
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~g~Terminé~w~.","Elle est niquel!");
                             _vh.DirtLevel = 0;
-                            _vh.UpdateFull();
+                            _vh.UpdateInBackground(false);
                             await veh.SetDirtLevelAsync(0);
                             await _vh.ApplyDamageAsync();
                         });
@@ -495,7 +495,7 @@ namespace ResurrectionRP_Server.Factions
 
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~g~Terminé~w~.","Le moteur démarre, c'est déjà ça!");
                             _vh.EngineHealth = 400;
-                            _vh.UpdateFull();
+                            _vh.UpdateInBackground(false);
                             await _vh.ApplyDamageAsync();
                         });
 
@@ -596,12 +596,12 @@ namespace ResurrectionRP_Server.Factions
                 case "ID_detach":
                     var rot = await veh.GetRotationAsync();
                     await vh.UnTowVehicle(new Location((new Vector3(client.Position.X, client.Position.Y, client.Position.Z)).Forward(rot.Yaw, -10), rot));
-                    vh.UpdateFull();
+                    vh.UpdateInBackground(false);
                     XMenuManager.XMenuManager.CloseMenu(client);
                     break;
                 case "ID_atelier":
-                    await vh.UnTowVehicle(LSCustom.ReparZoneVL);
-                    vh.UpdateFull();
+                    await vh.UnTowVehicle(ReparZoneVL);
+                    vh.UpdateInBackground(false);
 
                     XMenuManager.XMenuManager.CloseMenu(client);
                     break;

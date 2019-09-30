@@ -15,7 +15,7 @@ namespace ResurrectionRP_Server.Entities.Players
     {
         #region Fields
         [BsonIgnore]
-        private static readonly double _updateWaitTime = 1000.0;
+        private static readonly double _updateWaitTime = 2000.0;
         [BsonIgnore]
         private DateTime _lastUpdateRequest;
         [BsonIgnore]
@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         Location = new Location(Client.Position, Client.Rotation);
 
                     if (veh != null)
-                        veh.UpdateFull();
+                        veh.UpdateInBackground();
 
                     if ((DateTime.Now - LastUpdate).Minutes >= 1)
                     {

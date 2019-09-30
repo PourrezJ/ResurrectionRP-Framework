@@ -168,7 +168,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (vh.LastDriver == ph.Identite.Name)
                 {
                     vh.LockState = VehicleLockState.Locked;
-                    vh.UpdateFull();
+                    vh.UpdateInBackground();
                 }
             }
 

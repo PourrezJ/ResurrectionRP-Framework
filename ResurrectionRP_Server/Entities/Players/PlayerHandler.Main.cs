@@ -214,6 +214,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     IP = Client.Ip;
                     IsOnline = true;
 
+                    Client.Spawn(Location.Pos, 0);
+                    Client.ApplyCharacter();
+
                     Client.Emit
                     (
                         Events.PlayerInitialised,
@@ -230,8 +233,6 @@ namespace ResurrectionRP_Server.Entities.Players
                         Location.Pos.ConvertToVector3Serialized()
                     );
 
-                    Client.Spawn(Location.Pos, 0);
-                    Client.ApplyCharacter();
                     Client.Dimension = GameMode.GlobalDimension;
 
                     if (Health <= 100)

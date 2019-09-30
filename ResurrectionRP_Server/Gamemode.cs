@@ -99,9 +99,6 @@ namespace ResurrectionRP_Server
         public Teleport.TeleportManager TeleportManager { get; private set; }
 
         [BsonIgnore]
-        public Utils.DoorManager DoorManager { get; private set; }
-
-        [BsonIgnore]
         public Weather.WeatherManager WeatherManager { get; private set; }
         [BsonIgnore]
         public Inventory.RPGInventoryManager RPGInventory { get; private set; }
@@ -183,7 +180,6 @@ namespace ResurrectionRP_Server
             Alt.Server.LogColored("~g~Création des controlleurs...");
             Streamer = new Streamer.Streamer();
             Economy = new Economy.Economy();
-            DoorManager = new Utils.DoorManager();
             PlayerManager = new PlayerManager();
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();

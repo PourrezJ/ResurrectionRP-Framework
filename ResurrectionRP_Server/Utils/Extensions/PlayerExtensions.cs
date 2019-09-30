@@ -180,17 +180,24 @@ namespace ResurrectionRP_Server
             ICollection<IPlayer> players = Alt.GetAllPlayers();
             List<IPlayer> nearestPlayers = new List<IPlayer>();
 
-            foreach (IPlayer player in players)
+            try
             {
-                if (!player.Exists || player.Dimension != dimension)
-                    continue;
+                foreach (IPlayer player in players)
+                {
+                    if (!player.Exists || player.Dimension != dimension)
+                        continue;
 
-                if (client.Position.Distance(player.Position) <= range)
-                    nearestPlayers.Add(player);
+                    if (client.Position.Distance(player.Position) <= range)
+                        nearestPlayers.Add(player);
+                }
+
+                if (withoutme)
+                    nearestPlayers.Remove(client);
             }
-
-            if (withoutme)
-                nearestPlayers.Remove(client);
+            catch(Exception ex)
+            {
+                Alt.Server.LogError(ex.ToString());
+            }
 
             return nearestPlayers;
         }

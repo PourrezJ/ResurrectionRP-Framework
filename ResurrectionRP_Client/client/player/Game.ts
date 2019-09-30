@@ -189,7 +189,7 @@ export class Game {
             alt.on('syncedMetaChange', async (entity: alt.Entity, key: string, value: any) => {
                 if (!game.isEntityAPed(entity.scriptID))
                     return;
-
+                game.clearPedBloodDamage(entity.scriptID);
                 
                 switch (key) {
                     case 'SetInvisible':

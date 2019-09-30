@@ -515,7 +515,7 @@ namespace ResurrectionRP_Server.Entities.Players
             
             List<PlayerHandler> players = PlayerManager.GetPlayersList();
 
-            var test = players.OrderBy(pa => pa.Identite.Name);
+            var test = players.OrderBy(pa => pa.Identite.Name).ToList();
             foreach (PlayerHandler player in test)
             {
                 if (player != null && player.Client.Exists)

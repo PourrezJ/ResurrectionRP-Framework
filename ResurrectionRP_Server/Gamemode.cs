@@ -177,6 +177,7 @@ namespace ResurrectionRP_Server
 
             AltAsync.OnPlayerConnect += OnPlayerConnected;
             AltAsync.OnPlayerDisconnect += OnPlayerDisconnected;
+            Alt.OnConsoleCommand += Alt_OnConsoleCommand;
  
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
@@ -293,6 +294,12 @@ namespace ResurrectionRP_Server
 
 
             ServerLoaded = true;
+        }
+
+        private void Alt_OnConsoleCommand(string name, string[] args)
+        {
+            if (name == "/say")
+                Alt.EmitAllClients("AnnonceGlobal", args[0], "AVIS A LA POPULATION!", "ANNONCE SERVEUR");
         }
 
         private Task OnPlayerConnected(IPlayer player, string reason)

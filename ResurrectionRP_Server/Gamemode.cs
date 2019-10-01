@@ -58,7 +58,8 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public List<IPlayer> PlayerList = new List<IPlayer>();
 
-        public const short GlobalDimension = short.MaxValue;
+        //public const short GlobalDimension = short.MaxValue;
+        public const short GlobalDimension = 0;
 
         public uint DatabaseVersion { get; set; }
 

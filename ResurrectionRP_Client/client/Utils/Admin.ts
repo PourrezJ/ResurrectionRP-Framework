@@ -25,12 +25,11 @@ export class Admin {
 
         alt.onServer('ToggleNoclip', () => {
             this.noclip = !this.noclip;
-            alt.log(this.noclip)
             let id = alt.Player.local.scriptID;
             game.setEntityInvincible(id, this.noclip);
             game.freezeEntityPosition(id, false);
             game.setEntityCollision(id, !this.noclip, !this.noclip);
-            game.setEntityHasGravity(id, !this.noclip);
+            //game.setEntityHasGravity(id, !this.noclip);
        
             if (!this.noclip)
             {

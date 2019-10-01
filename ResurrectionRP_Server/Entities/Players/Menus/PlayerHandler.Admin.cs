@@ -277,15 +277,17 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     isInvisible = !isInvisible;
                     _playerSelected.Client.SetInvisible(isInvisible);
-
-                    if (isInvisible)
+                    
+;                    if (isInvisible)
                     {
+                        _playerSelected.Client.Dimension = GameMode.GlobalDimension - 1;
                         _playerSelected.Client.SendNotification("~r~[ADMIN]~w~ Vous êtes invisible.");
                         if (_playerSelected != this)
                             Client.SendNotification($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} est invisible.");
                     }
                     else
                     {
+                        _playerSelected.Client.Dimension = GameMode.GlobalDimension;
                         _playerSelected.Client.SendNotification("~r~[ADMIN]~w~ Vous n'êtes plus invisible.");
                         if (_playerSelected != this)
                             Client.SendNotification($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} n'est plus invisible.");

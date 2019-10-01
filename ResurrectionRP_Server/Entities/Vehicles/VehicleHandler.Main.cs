@@ -122,8 +122,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public IVehicle SpawnVehicle(Location location = null, bool setLastUse = true)
         {
-            if (Dimension.ToString() == "-1")
-                Dimension = short.MaxValue;
+            Dimension = GameMode.GlobalDimension;
 
             try
             {

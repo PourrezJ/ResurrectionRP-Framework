@@ -132,6 +132,11 @@ namespace ResurrectionRP_Server
                 int index = Convert.ToInt32(args[0]);
                 Task.Run(async ()=> await menu.IndexChangeCallbackAsync(player, menu, index, menu.Items[index]));
             }
+            else if (menu != null && menu.IndexChangeCallback != null)
+            {
+                int index = Convert.ToInt32(args[0]);
+                menu.IndexChangeCallback(player, menu, index, menu.Items[index]);
+            }
         }
 
         public void MenuManager_ListChanged(IPlayer player, object[] args)
@@ -143,6 +148,8 @@ namespace ResurrectionRP_Server
 
             if (menu != null && menu.ListItemChangeCallbackAsync != null)
                 Task.Run(async ()=> await menu.ListItemChangeCallbackAsync(player, menu, (ListItem)menu.Items[Convert.ToInt32(args[0])], Convert.ToInt32(args[1])));
+            if (menu != null && menu.ListItemChangeCallback != null)
+                menu.ListItemChangeCallback(player, menu, (ListItem)menu.Items[Convert.ToInt32(args[0])], Convert.ToInt32(args[1]));
         }
 
         public void MenuManager_ClosedMenu(IPlayer player, object[] args)
@@ -156,6 +163,8 @@ namespace ResurrectionRP_Server
             {
                 if (menu.FinalizerAsync != null)
                     Task.Run(async ()=> await menu.FinalizerAsync(player, menu));
+                else if (menu.Finalizer != null)
+                    menu.Finalizer(player, menu);
 
                 _clientMenus.TryRemove(player, out _);
             }
@@ -167,6 +176,8 @@ namespace ResurrectionRP_Server
         {
             if (_clientMenus.TryRemove(client, out Menu menu) && menu != null && menu.FinalizerAsync != null)
                 Task.Run(async ()=> await menu.FinalizerAsync(client, menu));
+            else if (_clientMenus.TryRemove(client, out Menu amenu) && amenu != null && amenu.Finalizer != null)
+                menu.Finalizer(client, menu);
 
             client.EmitLocked("MenuManager_CloseMenu");
         }
@@ -199,6 +210,10 @@ namespace ResurrectionRP_Server
 
             if (oldMenu != null && oldMenu.FinalizerAsync != null)
                 Task.Run(async ()=> await oldMenu.FinalizerAsync(client, menu));
+
+
+            if (oldMenu != null && oldMenu.Finalizer != null)
+                oldMenu.Finalizer(client, menu);
 
             if (_clientMenus.TryAdd(client, menu))
             {

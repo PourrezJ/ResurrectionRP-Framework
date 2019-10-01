@@ -112,7 +112,7 @@ namespace ResurrectionRP_Server.Business
 
             _clothingColShape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
             _clothingColShape.SetOnPlayerLeaveColShape(OnPlayerLeaveColShape);
-            _clothingColShape.SetOnPlayerInteractInColShape(OnPlayerInteractInColShape);    
+            _clothingColShape.SetOnPlayerInteractInColShapeAsync(OnPlayerInteractInColShape);    
         }
         #endregion
 

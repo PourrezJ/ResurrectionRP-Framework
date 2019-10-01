@@ -61,7 +61,7 @@ namespace ResurrectionRP_Server.Factions
             Marker.CreateMarker(MarkerType.VerticalCylinder, reparZone, new Vector3(4, 4, 1), System.Drawing.Color.White, GameMode.GlobalDimension);
             ReparationVLColshape = Alt.CreateColShapeCylinder(reparZone, 4, 4);
             ReparationVLColshape.Dimension = GameMode.GlobalDimension;
-            ReparationVLColshape.SetOnPlayerInteractInColShape(OnEnterRepairZoneVL);
+            ReparationVLColshape.SetOnPlayerInteractInColShapeAsync(OnEnterRepairZoneVL);
             ReparationVLColshape.SetOnPlayerEnterColShape(OnEnterColshapeInteract);
             ReparationVLColshape.SetOnVehicleEnterColShape(OnVehicleEnterColshape);
             ReparationVLColshape.SetOnVehicleLeaveColShape(OnVehicleLeaveColshape);
@@ -69,7 +69,7 @@ namespace ResurrectionRP_Server.Factions
             PeintureColshape = Alt.CreateColShapeCylinder(PeintureZone, 4, 4);
             PeintureColshape.Dimension = GameMode.GlobalDimension;
             Marker.CreateMarker(MarkerType.VerticalCylinder, PeintureZone, new Vector3(4, 4, 1), System.Drawing.Color.White, GameMode.GlobalDimension);
-            PeintureColshape.SetOnPlayerInteractInColShape(OnEnterPaintZoneVL);
+            PeintureColshape.SetOnPlayerInteractInColShapeAsync(OnEnterPaintZoneVL);
             PeintureColshape.SetOnPlayerEnterColShape(OnEnterColshapeInteract);
             PeintureColshape.SetOnVehicleEnterColShape(OnVehicleEnterColshape);
             PeintureColshape.SetOnVehicleLeaveColShape(OnVehicleLeaveColshape);

@@ -160,11 +160,11 @@ namespace ResurrectionRP_Server
             }
         }
 
-        public static void SetOnPlayerInteractInColShape(this IColShape colshape, Events.ColShapePlayerEventHandlerAsync method)
+        public static void SetOnPlayerInteractInColShape(this IColShape colshape, Events.ColShapePlayerEventHandler method)
         {
             lock (colshape)
             {
-                colshape.GetData("OnPlayerInteractInColShape", out Events.ColShapePlayerEventHandlerAsync eventHandler);
+                colshape.GetData("OnPlayerInteractInColShape", out Events.ColShapePlayerEventHandler eventHandler);
 
                 if (eventHandler != null)
                     eventHandler = method;
@@ -176,11 +176,27 @@ namespace ResurrectionRP_Server
             }
         }
 
-        public static void UnsetOnPlayerInteractInColShape(this IColShape colshape)
+        public static void SetOnPlayerInteractInColShapeAsync(this IColShape colshape, Events.ColShapePlayerEventHandlerAsync method)
         {
             lock (colshape)
             {
-                colshape.GetData("OnPlayerInteractInColShape", out Events.ColShapePlayerEventHandler eventHandler);
+                colshape.GetData("OnPlayerInteractInColShapeAsync", out Events.ColShapePlayerEventHandlerAsync eventHandler);
+
+                if (eventHandler != null)
+                    eventHandler = method;
+                else
+                {
+                    eventHandler = method;
+                    colshape.SetData("OnPlayerInteractInColShapeAsync", eventHandler);
+                }
+            }
+        }
+
+        public static void UnsetOnPlayerInteractInColShapeAsync(this IColShape colshape)
+        {
+            lock (colshape)
+            {
+                colshape.GetData("OnPlayerInteractInColShapeAsync", out Events.ColShapePlayerEventHandler eventHandler);
 
                 if (eventHandler != null)
                     eventHandler = null;

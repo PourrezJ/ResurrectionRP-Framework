@@ -69,6 +69,9 @@ namespace ResurrectionRP_Server.Business
 
             if (!colShape.IsEntityInColShape(client)) return;
 
+            if (client.Vehicle == null)
+                return;
+
             if (client.Vehicle.Model == 4097861161)
             {
                 client.DisplayHelp("Ce véhicule n'est plus homologué pour la livraison d'essence.", 10000);

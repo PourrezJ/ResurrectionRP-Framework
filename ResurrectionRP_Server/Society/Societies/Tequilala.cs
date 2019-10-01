@@ -17,9 +17,9 @@ namespace ResurrectionRP_Server.Society.Societies
 
         public List<Door> Doors { get; private set; }
 
-        public override async Task Init()
+        public override void Init()
         {
-            await base.Init();
+            
 
             var PortExt = Door.CreateDoor(993120320, new Vector3(-564.3921f, 276.5233f, 83.13618f), true);
             var PortInt = Door.CreateDoor(unchecked((int)3668283177), new Vector3(-560.3441f, 291.9776f, 82.17625f), true);
@@ -34,6 +34,8 @@ namespace ResurrectionRP_Server.Society.Societies
 
             foreach (var door in Doors)
                 door.Interact = OpenCelluleDoor;
+
+            base.Init();
         }
 
         private void OpenCelluleDoor(IPlayer client, Door door)

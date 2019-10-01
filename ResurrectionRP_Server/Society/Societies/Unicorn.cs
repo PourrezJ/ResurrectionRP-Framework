@@ -21,7 +21,7 @@ namespace ResurrectionRP_Server.Society.Societies
         {
         }
 
-        public override async Task Init()
+        public override void Init()
         {
             Principal = Door.CreateDoor(-1116041313, new Vector3(128.7443f, -1298.621f, 29.23274f), true);
             Bureau1 = Door.CreateDoor(668467214, new Vector3(95.84587f, -1285.645f, 29.26877f), true);
@@ -41,7 +41,7 @@ namespace ResurrectionRP_Server.Society.Societies
 
             ServicePos = new Vector3(93.30592f, -1292.083f, 29.26874f);
 
-            await base.Init();
+            base.Init();
         }
 
         #region Doors

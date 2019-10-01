@@ -108,7 +108,7 @@ namespace ResurrectionRP_Server.DrivingSchool
         }
         public async Task End()
         {
-            await VehicleExam.Delete();
+            await VehicleExam.DeleteAsync();
             PlayerExam.GetPlayerHandler()?.RemoveKey(VehicleExam);
             Dispose();
         }

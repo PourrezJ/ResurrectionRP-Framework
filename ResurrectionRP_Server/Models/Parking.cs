@@ -441,7 +441,7 @@ namespace ResurrectionRP_Server.Models
                         await OnVehicleStored.Invoke(client, veh); // call event for success storage
 
                     veh.UpdateInBackground(true, true);
-                    await veh.Delete(false);
+                    await veh.DeleteAsync(false);
                 }
                 else
                     Alt.Server.LogError("GetHandlerByVehicle fuck is null this shit! mother fucker!");

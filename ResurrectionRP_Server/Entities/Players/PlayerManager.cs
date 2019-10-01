@@ -184,16 +184,16 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     player.Emit("ONU_PlayerDeath", weapon);
 
-                    PlayerManager.DeadPlayers.Add(new DeadPlayer(player, killer, weapon));
+                    DeadPlayers.Add(new DeadPlayer(player, killer, weapon));
                 }
                 else
                 {
                     player.SendNotification($"Ne va pas vers la lumière, tu vas te relever.");
-                    Utils.Utils.Delay(60000 * 1, true, async () =>
+                    Utils.Utils.SetInterval(() =>
                     {
                         if (player.Exists)
-                            await player.ReviveAsync(105);
-                    });
+                            player.Revive(105);
+                    }, 60000);
                 }
 
                 player.GetPlayerHandler()?.UpdateFull();

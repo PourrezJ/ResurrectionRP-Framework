@@ -71,6 +71,14 @@ namespace ResurrectionRP_Server
             vehicle.SetData(key, null);
         }
 
+        public static void Freeze(this IVehicle vehicle, bool freeze)
+        {
+            if (!vehicle.Exists)
+                return;
+
+            vehicle.SetSyncedMetaData("IsFreezed", freeze);
+        }
+
         public static async Task FreezeAsync(this IVehicle vehicle, bool freeze)
         {
             if (!vehicle.Exists)
@@ -79,9 +87,17 @@ namespace ResurrectionRP_Server
             await vehicle.SetSyncedMetaDataAsync("IsFreezed", freeze);
         }
 
-        public static async Task InvincibleAsync(this IVehicle vehicle, bool invincible)
+        public static void Invincible(this IVehicle vehicle, bool invincible)
         {
             if (!vehicle.Exists)
+                return;
+
+            vehicle.SetSyncedMetaData("IsInvincible", invincible);
+        }
+
+        public static async Task InvincibleAsync(this IVehicle vehicle, bool invincible)
+        {
+            if (!await vehicle.ExistsAsync())
                 return;
 
             await vehicle.SetSyncedMetaDataAsync("IsInvincible", invincible);

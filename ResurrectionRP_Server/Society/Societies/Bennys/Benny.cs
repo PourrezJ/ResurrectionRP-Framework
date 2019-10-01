@@ -13,7 +13,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
         #endregion
 
         #region Init
-        public override async Task Init()
+        public override void Init()
         {
             MenuBanner = Banner.SuperMod;
             Type = GarageType.Car;
@@ -22,7 +22,7 @@ namespace ResurrectionRP_Server.Society.Societies.Bennys
             PnjLocation = new Location(new Vector3(-227.6015f, -1327.772f, 30.89038f), new Vector3(0, 0, 239.715f));
             WorkZonePosition = new Vector3(-222.3765f, -1329.64f, 30.46614f);
 
-            await base.Init();
+            base.Init();
         }
         #endregion
     }

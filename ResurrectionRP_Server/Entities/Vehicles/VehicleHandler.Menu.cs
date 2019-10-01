@@ -220,6 +220,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     */
                 case "ID_Start":
                     EngineOn = !Vehicle.EngineOn;
+                    UpdateInBackground();
                     XMenuManager.XMenuManager.CloseMenu(client);
                     break;
                         
@@ -313,7 +314,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     break;
                     
                 case "ID_delete":
-                    await this.Delete(true);
+                    await this.DeleteAsync(true);
                     break;
                 /*
                 case "ID_lockpick":

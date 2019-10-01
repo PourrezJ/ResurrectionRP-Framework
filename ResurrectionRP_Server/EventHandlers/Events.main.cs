@@ -8,7 +8,7 @@ namespace ResurrectionRP_Server.EventHandlers
         public static void Initialize()
         {
             Alt.OnColShape += OnEntityColshape;
-            AltAsync.OnClient("InteractionInColshape", OnEntityInteractInColShape);
+            Alt.OnClient("InteractionInColshape", OnEntityInteractInColShape);
         }
     }
 }

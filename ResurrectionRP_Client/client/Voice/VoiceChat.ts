@@ -76,6 +76,7 @@ export class VoiceChat
 
                     if (pluginState.IsTalking != VoiceChat.isTalking) {
                         VoiceChat.isTalking = pluginState.IsTalking;
+                        alt.emitServer("Voice_IsTalking", VoiceChat.isTalking);
                     }
 
                     if (pluginState.IsMicrophoneMuted != VoiceChat.isMicrophoneMuted) {
@@ -86,10 +87,10 @@ export class VoiceChat
                         VoiceChat.isSoundMuted = pluginState.IsSoundMuted;
                     }
 
-                    if (pluginState.IsTalking)
-                        game.playFacialAnim(alt.Player.local.scriptID, "mic_chatter", "mp_facial");
-                    else
-                        game.playFacialAnim(alt.Player.local.scriptID, "mood_normal_1", "facials@gen_male@variations@normal");
+                    //if (pluginState.IsTalking)
+                    //    game.playFacialAnim(alt.Player.local.scriptID, "mic_chatter", "mp_facial");
+                    //else
+                    //    game.playFacialAnim(alt.Player.local.scriptID, "mood_normal_1", "facials@gen_male@variations@normal");
                 }     
             });
 
@@ -106,8 +107,15 @@ export class VoiceChat
         }));
 
         alt.onServer('Voice_IsTalking', (playerName: string, isTalking: boolean) => {
-            /*
-            alt.Player.all.forEach((player: alt.Player) => {
+            let players = alt.Player.all;
+
+            for (let i = 0; i < players.length; i++)
+            {
+                let player = players[i];
+
+                if (player == null)
+                    return;
+
                 if (player.getSyncedMeta("Voice_TeamSpeakName") == playerName) {
                     if (isTalking)
                         game.playFacialAnim(player.scriptID, "mic_chatter", "mp_facial");
@@ -116,7 +124,7 @@ export class VoiceChat
 
                     return;
                 }
-            });*/
+            }
         });
 
         alt.onServer('Voice_EndCall', (playerName: string) => {
@@ -190,14 +198,20 @@ export class VoiceChat
     private PlayerStateUpdate()
     {
         let playerPos = alt.Player.local.pos;
+        let players = alt.Player.all;
 
-        alt.Player.all.forEach((nPlayer: alt.Player) =>
+        for (let i = 0; i < players.length; i++)
         {
+            let nPlayer = players[i];
+
+            if (nPlayer == null)
+                continue;
+
             let nPlayerName = nPlayer.getSyncedMeta("Voice_TeamSpeakName");
             if (nPlayer != alt.Player.local && nPlayerName != null) {
                 let voiceRange = 12;
 
-                if (nPlayer.getSyncedMeta("Voice_VoiceRange") !== undefined) {
+                if (nPlayer.getSyncedMeta("Voice_VoiceRange") != null) {
                     let nPlayerVoiceRange = nPlayer.getSyncedMeta("Voice_VoiceRange");
 
                     switch (nPlayerVoiceRange)
@@ -215,12 +229,32 @@ export class VoiceChat
                             break;
                     }
 
-                    VoiceChat.ExecuteCommand(new PluginCommand(Command.PlayerStateUpdate, VoiceChat.serverUniqueIdentifier, new PlayerState(nPlayerName, TSVector.Convert(nPlayer.pos), voiceRange, null, true, null)));
+                    VoiceChat.ExecuteCommand(
+                        new PluginCommand(
+                            Command.PlayerStateUpdate,
+                            VoiceChat.serverUniqueIdentifier,
+                            new PlayerState(
+                                nPlayerName,
+                                TSVector.Convert(nPlayer.pos),
+                                voiceRange,
+                                null,
+                                true,
+                                null)
+                        ));
                 }
             }
-        });
+        };
 
-        VoiceChat.ExecuteCommand(new PluginCommand(Command.SelfStateUpdate, VoiceChat.serverUniqueIdentifier, new PlayerState(null, TSVector.Convert(playerPos), null, game.getGameplayCamRot(0).z, false, null)));
+        VoiceChat.ExecuteCommand(
+            new PluginCommand(
+                Command.SelfStateUpdate,
+                VoiceChat.serverUniqueIdentifier,
+                new PlayerState(null, TSVector.Convert(playerPos),
+                    null,
+                    game.getGameplayCamRot(0).z,
+                    false,
+                    null
+                )));
     }
 
     public static OnEstablishCall(playerName: string)

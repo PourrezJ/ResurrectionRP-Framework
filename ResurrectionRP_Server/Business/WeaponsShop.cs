@@ -19,10 +19,10 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Overrides
-        public override Task Init()
+        public override void Init()
         {
-            this.MaxEmployee = 5;
-            return base.Init();
+            MaxEmployee = 5;
+            base.Init();
         }
         #endregion
 

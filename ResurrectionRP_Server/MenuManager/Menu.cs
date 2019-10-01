@@ -56,7 +56,14 @@ namespace ResurrectionRP_Server
         public bool EnableBanner { get; set; }
         public bool CallbackOnIndexChange
         {
-            get { return IndexChangeCallbackAsync != null; }
+            get 
+            {
+                if (IndexChangeCallbackAsync != null)
+                    return true;
+                else if (IndexChangeCallback != null)
+                    return true;
+                return false;
+            }
         }
         public MenuItemList Items { get; set; }
 

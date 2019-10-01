@@ -11,17 +11,5 @@ namespace ResurrectionRP_Server.Society.Societies
         public PetrolSociety(string societyName, Vector3 servicePos, uint blipSprite, int blipColor, string owner = null, Inventory.Inventory inventory = null, Models.Parking parking = null) : base(societyName, servicePos, blipSprite, blipColor, owner, inventory, parking)
         {
         }
-
-        public override async Task Init()
-        {
-            await base.Init();
-
-            //await Blip?.SetScaleAsync(1.2f);
-        }
-
-        public override void OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
-        {
-            base.OnPlayerEnterServiceColshape(colShape, client);
-        }
     }
 }

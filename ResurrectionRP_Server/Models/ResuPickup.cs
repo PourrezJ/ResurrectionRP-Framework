@@ -64,10 +64,7 @@ namespace ResurrectionRP_Server.Models
 
             ResuPickupList.TryAdd(worldObject.ID, pickup);
 
-            Utils.Utils.Delay((int)endlife.TotalMilliseconds, true, () =>
-            {
-                pickup?.Delete();
-            });
+            Utils.Utils.Delay((int)endlife.TotalMilliseconds,() => pickup?.Delete());
 
             return pickup;
         }

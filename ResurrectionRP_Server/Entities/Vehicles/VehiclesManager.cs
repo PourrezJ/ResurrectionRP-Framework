@@ -30,6 +30,66 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             AltAsync.OnClient("LockUnlockVehicle", LockUnlockVehicle);
             AltAsync.OnClient("UpdateTrailer", UpdateTrailerState);
+
+            Utils.Utils.SetInterval(VehicleManagerLoop, 250);
+        }
+        #endregion
+
+        #region Loop
+        private void VehicleManagerLoop()
+        {
+            lock (VehicleHandlerList.Keys)
+            {
+                for (int i = 0; i < VehicleHandlerList.Count; i++)
+                {
+                    var vehicle = VehicleHandlerList.Keys.ElementAt(i);
+
+                    if (vehicle == null)
+                        continue;
+
+                    if (!vehicle.Exists)
+                        continue;
+
+                    var vh = vehicle.GetVehicleHandler();
+
+                    if (vh == null)
+                        continue;
+
+                    if (vehicle.Driver != null)
+                    {
+                        var currentRot = vehicle.Rotation;
+
+                        if (vh.VehicleManifest.VehicleClass != 15 && vh.VehicleManifest.VehicleClass != 16 && currentRot.Pitch >= 1.2 )
+                        {
+                            if (vh.EngineOn)
+                            {
+                                vh.EngineOn = false;
+                                vehicle.Driver.SendNotification("Le moteur vient de caler.");
+                            }
+                        }
+                        vh.LastUse = DateTime.Now;
+                    }
+
+                    // Mise en fourrière auto
+                    TimeSpan test = DateTime.Now - vh.LastUse;
+                    TimeSpan expire = TimeSpan.FromDays(3);
+                    if (test > expire)
+                    {
+                        try
+                        {
+                            Task.Run(async () =>
+                            {
+                                if (VehicleHandlerList.TryRemove(vehicle, out VehicleHandler value))
+                                    await GameMode.Instance.PoundManager.AddVehicleInPoundAsync(vh);
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            Alt.Server.LogError("VehicleManager Tick: " + ex.ToString());
+                        }
+                    }
+                }
+            }
         }
         #endregion
 

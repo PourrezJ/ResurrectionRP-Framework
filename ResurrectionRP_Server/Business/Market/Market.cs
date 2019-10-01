@@ -32,7 +32,7 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Init
-        public override async Task Init()
+        public override void Init()
         {
             Station = new StationService(this.ID, this.Range, this.StationPos);
             Station.StationBlip = Entities.Blips.BlipsManager.CreateBlip("Station essence", StationPos, 128, 361, 0.5f);
@@ -48,7 +48,7 @@ namespace ResurrectionRP_Server.Business
             Inventory.MaxSlot = 40;
             Inventory.MaxSize = 750;
             MaxEmployee = 5;
-            await base.Init();
+            base.Init();
             MarketsList.Add(this);
         }
         #endregion
@@ -68,6 +68,9 @@ namespace ResurrectionRP_Server.Business
                 return;
 
             if (!colShape.IsEntityInColShape(client)) return;
+
+            if (client.Vehicle == null)
+                return;
 
             if (client.Vehicle.Model == 4097861161)
             {

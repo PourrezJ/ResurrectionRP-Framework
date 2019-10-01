@@ -120,7 +120,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
 
             client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_LS_CUSTOMS, SocietyName, "Nettoyage: ~r~Démarrage~w~.", "C'est parti!");
 
-            Utils.Utils.Delay(20000, true, () =>
+            Utils.Utils.Delay(20000, () =>
             {
                 if (VehicleBench == null || !VehicleBench.Exists)
                     return;

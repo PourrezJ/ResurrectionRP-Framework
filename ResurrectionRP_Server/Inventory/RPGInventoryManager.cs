@@ -517,7 +517,6 @@ namespace ResurrectionRP_Server.Inventory
         #region Switch
         private async Task RPGInventory_SwitchItemInventory_SRV(IPlayer client, object[] args)
         {
-            Alt.Server.LogColored("RPGInventory_SwitchItemInventory_SRV called!");
             try
             {
                 string targetRPGInv = Convert.ToString(args[0]);

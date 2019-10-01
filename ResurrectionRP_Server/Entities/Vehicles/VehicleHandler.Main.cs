@@ -122,8 +122,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public IVehicle SpawnVehicle(Location location = null, bool setLastUse = true)
         {
-            if (Dimension.ToString() == "-1")
-                Dimension = short.MaxValue;
+            Dimension = GameMode.GlobalDimension;
 
             try
             {
@@ -255,7 +254,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return Vehicle;
         }
 
-        public async Task<bool> Delete(bool perm = false)
+
+
+        public async Task<bool> DeleteAsync(bool perm = false)
         {
             if (await Vehicle.ExistsAsync())
                 await Vehicle.RemoveAsync();
@@ -311,7 +312,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 LockState = (LockState == VehicleLockState.Locked) ? VehicleLockState.Unlocked : VehicleLockState.Locked;
                 client.SendNotification($"Vous avez {(LockState == VehicleLockState.Locked ? " fermé" : "ouvert")} le véhicule");
-
+                UpdateInBackground();
                 return true;
             }
 

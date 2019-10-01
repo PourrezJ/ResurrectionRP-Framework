@@ -105,7 +105,7 @@ namespace ResurrectionRP_Server.Houses
             ColShapeOut.Dimension = (short)(DIMENSION_START + ID);
             ColShapeOut.SetData("House", ID);
             ColShapeOut.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
-            ColShapeOut.SetOnPlayerInteractInColShape(OnPlayerInteractInColShape);
+            ColShapeOut.SetOnPlayerInteractInColShapeAsync(OnPlayerInteractInColShape);
 
             InitParking();
 

@@ -130,50 +130,51 @@ namespace ResurrectionRP_Server.Business
                     var EssenceTransfert = 0;
                     //API.Shared.OnProgressBar(client, true, 0, currentmax, 750);
                     client.DisplaySubtitle("Début du transfert ...", 1000);
-                    
-                    timer = Utils.Utils.Delay(1250, false, async () =>
+                    Task.Run(() =>
                     {
-                        //API.OnProgressBar(client, true, i, currentmax);
-                        if (Station.Litrage == Station.LitrageMax)
+                        timer = Utils.Utils.SetInterval(async () =>
                         {
-                            client.DisplaySubtitle("~g~Le réservoir de la station est plein ! Fin du transfert!", 30000);
-                            //API.Shared.OnProgressBar(client, false);
-                            _ravitaillement = false;
-                            _utilisateurRavi = null;
-                            Utils.Utils.StopTimer(timer);
-                            return;
-
-                        }
-                        if (EssenceTransfert >= data)
-                        {
-                            client.DisplaySubtitle("~g~Transfert terminé! ", 30000);
-                            //API.Shared.OnProgressBar(client, false);
-                            _ravitaillement = false;
-                            _utilisateurRavi = null;
-                            Utils.Utils.StopTimer(timer);
-                            return;
-                        }
-
-                        if (_ravitaillement = false || _utilisateurRavi == null)
-                        {
-                            _ravitaillement = false;
-                            _utilisateurRavi = null;
-                            if (await BankAccount.GetBankMoney(EssenceTransfert * this.Station.buyEssencePrice, "Achat essence au vendeur " + client.GetPlayerHandler()?.Identite.FirstName + " " + client.GetPlayerHandler()?.Identite.LastName, "", true))
+                            //API.OnProgressBar(client, true, i, currentmax);
+                            if (Station.Litrage == Station.LitrageMax)
                             {
-                                client.GetPlayerHandler()?.BankAccount.AddMoney(EssenceTransfert * this.Station.buyEssencePrice, "Vente essence à la station " + this.BusinnessName);
+                                client.DisplaySubtitle("~g~Le réservoir de la station est plein ! Fin du transfert!", 30000);
+                                //API.Shared.OnProgressBar(client, false);
+                                _ravitaillement = false;
+                                _utilisateurRavi = null;
+                                Utils.Utils.StopTimer(timer);
+                                return;
+
                             }
-                            Utils.Utils.StopTimer(timer);
-                            return;
-                        }
+                            if (EssenceTransfert >= data)
+                            {
+                                client.DisplaySubtitle("~g~Transfert terminé! ", 30000);
+                                //API.Shared.OnProgressBar(client, false);
+                                _ravitaillement = false;
+                                _utilisateurRavi = null;
+                                Utils.Utils.StopTimer(timer);
+                                return;
+                            }
 
-                        Station.Litrage++;
-                        hfuel.OilTank.Traite--;
-                        EssenceTransfert++;
-                        _ravitaillement = true;
+                            if (_ravitaillement = false || _utilisateurRavi == null)
+                            {
+                                _ravitaillement = false;
+                                _utilisateurRavi = null;
+                                if (await BankAccount.GetBankMoney(EssenceTransfert * this.Station.buyEssencePrice, "Achat essence au vendeur " + client.GetPlayerHandler()?.Identite.FirstName + " " + client.GetPlayerHandler()?.Identite.LastName, "", true))
+                                {
+                                    await client.GetPlayerHandler()?.BankAccount.AddMoney(EssenceTransfert * this.Station.buyEssencePrice, "Vente essence à la station " + this.BusinnessName);
+                                }
+                                Utils.Utils.StopTimer(timer);
+                                return;
+                            }
 
-                        client.DisplayHelp("Station service \n Litres en station: " + Station.Litrage + "\nLitres dans le camion: " + hfuel.OilTank.Traite, 30000);
+                            Station.Litrage++;
+                            hfuel.OilTank.Traite--;
+                            EssenceTransfert++;
+                            _ravitaillement = true;
+
+                            client.DisplayHelp("Station service \n Litres en station: " + Station.Litrage + "\nLitres dans le camion: " + hfuel.OilTank.Traite, 30000);
+                        }, 1250);
                     });
-
                 }
                 else
                 {

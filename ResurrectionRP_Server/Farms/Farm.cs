@@ -252,48 +252,42 @@ namespace ResurrectionRP_Server.Farms
             bool exit = false;
             int i = 0;
 
-            Task.Run(async () =>
+            Utils.Utils.SetInterval(() =>
             {
-                while (!exit)
+                if (!client.Exists)
+                    return;
+
+                if (client.IsInVehicle)
                 {
-                    if (!await client.ExistsAsync())
-                        return;
+                    client.DisplaySubtitle($"~r~Récolte interrompu: ~s~Vous ne pouvez pas récolter depuis le véhicule.", 5000);
 
-                    await Task.Delay(Harvest_Time);
-
-                    if (await client.IsInVehicleAsync())
-                    {
-                        client.DisplaySubtitle($"~r~Récolte interrompu: ~s~Vous ne pouvez pas récolter depuis le véhicule.", 5000);
-
-                        player.IsOnProgress = false;
-                        player.UpdateFull();
-                        exit = true;
-                    }
-                    else if (!await IsInFarmingZone(client))
-                    {
-                        client.DisplaySubtitle($"~r~Récolte interrompu: ~s~Vous devez rester dans la zone.", 5000);
-
-                        player.IsOnProgress = false;
-                        player.UpdateFull();
-                        exit = true;
-                    }
-
-                    if (!player.AddItem(item, 1) || exit)
-                    {
-                        exit = true;
-                        client.DisplaySubtitle($"Récolte terminée: Vous avez ramassé ~r~ {i} {item.name}", 30000);
-                        player.IsOnProgress = false;
-
-                        player.IsOnProgress = false;
-                        player.UpdateFull();
-                    }
-                    else
-                    {
-                        i++;
-                        client.DisplaySubtitle($"~r~Récolte en cours: ~s~Vous venez de ramasser 1 {item.name}(s)", 5000);
-                    }
+                    player.IsOnProgress = false;
+                    player.UpdateFull();
+                    exit = true;
                 }
-            });
+                else if (!IsInFarmingZone(client))
+                {
+                    client.DisplaySubtitle($"~r~Récolte interrompu: ~s~Vous devez rester dans la zone.", 5000);
+
+                    player.IsOnProgress = false;
+                    player.UpdateFull();
+                    exit = true;
+                }
+
+                if (!player.AddItem(item, 1) || exit)
+                {
+                    exit = true;
+                    client.DisplaySubtitle($"Récolte terminée: Vous avez ramassé ~r~ {i} {item.name}", 30000);
+                    player.IsOnProgress = false;
+
+                    player.UpdateFull();
+                }
+                else
+                {
+                    i++;
+                    client.DisplaySubtitle($"~r~Récolte en cours: ~s~Vous venez de ramasser 1 {item.name}(s)", 5000);
+                }
+            }, Harvest_Time);
         }
 
         public virtual void StartProcessing(IPlayer sender)
@@ -493,9 +487,9 @@ namespace ResurrectionRP_Server.Farms
             });
         }
 
-        public async Task<bool> IsInFarmingZone(IPlayer player)
+        public bool IsInFarmingZone(IPlayer player)
         {
-            var position = await player.GetPositionAsync();
+            var position = player.Position;
 
             foreach (Vector3 pos in Harvest_Position)
             {

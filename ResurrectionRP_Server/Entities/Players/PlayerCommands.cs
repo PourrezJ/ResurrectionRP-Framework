@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.Entities.Players
             foreach (var vehicle in VehiclesManager.VehicleHandlerList.ToList())
             {
                 if (vehicle.Value.OwnerID == phWipe.PID)
-                    await vehicle.Value.Delete(true);
+                    await vehicle.Value.DeleteAsync(true);
             }
 
             List<VehicleHandler> vehicleOwned = new List<VehicleHandler>();

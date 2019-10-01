@@ -138,7 +138,7 @@ namespace ResurrectionRP_Server.Jobs
 
             Alt.OnServer("DustMan_Callback", DustMan_Callback);
 
-            Utils.Utils.Delay((int)TimeSpan.FromMinutes(2).TotalMilliseconds, false, async () =>
+            Utils.Utils.SetTimeout(() =>
             {
                 if (VehicleSpawnLocation != null && VehiclesManager.IsVehicleInSpawn(VehicleSpawnLocation.Pos))
                 {
@@ -149,20 +149,17 @@ namespace ResurrectionRP_Server.Jobs
                     {
                         foreach (var veh in vehs)
                         {
-                            await AltAsync.Do(() =>
-                            {
-                                if (!veh.Exists)
-                                    return;
+                            if (!veh.Exists)
+                                return;
 
-                                if (veh.Driver == null)
-                                {
-                                    veh.Remove();
-                                }
-                            });
+                            if (veh.Driver == null)
+                            {
+                                veh.Remove();
+                            }
                         }
                     }
                 }
-            });
+            }, (int)TimeSpan.FromMinutes(2).TotalMilliseconds);
 
             await base.Load();
         }

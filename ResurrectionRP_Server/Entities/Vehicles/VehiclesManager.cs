@@ -31,7 +31,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             AltAsync.OnClient("LockUnlockVehicle", LockUnlockVehicle);
             AltAsync.OnClient("UpdateTrailer", UpdateTrailerState);
 
-            Utils.Utils.Delay(250, false, VehicleManagerLoop);
+            Utils.Utils.SetTimeout(VehicleManagerLoop, 250);
         }
         #endregion
 
@@ -80,7 +80,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             Task.Run(async () =>
                             {
                                 if (VehicleHandlerList.TryRemove(vehicle, out VehicleHandler value))
-                                    await GameMode.Instance.PoundManager.AddVehicleInPound(vh);
+                                    await GameMode.Instance.PoundManager.AddVehicleInPoundAsync(vh);
                             });
                         }
                         catch (Exception ex)

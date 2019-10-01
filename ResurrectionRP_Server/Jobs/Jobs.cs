@@ -200,7 +200,7 @@ namespace ResurrectionRP_Server.Jobs
             VehicleHandler _veh = GetJobVehiclePlayer(client);
             client.GetPlayerHandler()?.RemoveKey(_veh);
             _vehicleList.Remove(client.GetSocialClub());
-            await _veh.Delete();
+            await _veh.DeleteAsync();
         }
         #endregion
     }

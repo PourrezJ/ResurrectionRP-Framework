@@ -88,13 +88,13 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
             ph.Client.SendNotificationSuccess($"Vous avez loué un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");
             VehicleRentPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;
 
-            Utils.Utils.Delay((int)TimeSpan.FromHours(2).TotalMilliseconds, true, async () =>
+            Utils.Utils.SetTimeout(() =>
             {
                 if (!veh.Vehicle.Exists)
                     return;
 
-                await veh.Delete();
-            });
+                Task.Run(async ()=> await veh.DeleteAsync());
+            }, (int)TimeSpan.FromHours(2).TotalMilliseconds);
         }
     }
 

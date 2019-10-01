@@ -254,7 +254,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return Vehicle;
         }
 
-        public async Task<bool> Delete(bool perm = false)
+
+
+        public async Task<bool> DeleteAsync(bool perm = false)
         {
             if (await Vehicle.ExistsAsync())
                 await Vehicle.RemoveAsync();

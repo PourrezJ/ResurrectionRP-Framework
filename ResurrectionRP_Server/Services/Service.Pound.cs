@@ -132,7 +132,7 @@ namespace ResurrectionRP_Server.Services
                                 _towedvehicle.IsInPound = true;
                                 await _vh.UpdatePropertiesAsync();
                                 _towedvehicle.UpdateInBackground(false);
-                                await _towedvehicle.Delete(true);
+                                await _towedvehicle.DeleteAsync(true);
                                 MenuManager.CloseMenu(client);
                             }
                         }
@@ -219,7 +219,7 @@ namespace ResurrectionRP_Server.Services
             return endup;
         }
 
-        public async Task AddVehicleInPound(VehicleHandler veh)
+        public async Task AddVehicleInPoundAsync(VehicleHandler veh)
         {
             Alt.Server.LogInfo ($"Mise en fourrière véhicule {veh.Plate}");
 
@@ -229,7 +229,7 @@ namespace ResurrectionRP_Server.Services
             veh.IsInPound = true;
             veh.ParkingName = "Fourrière";
             veh.UpdateInBackground(false, true);
-            await veh.Delete();
+            await veh.DeleteAsync();
         }
         #endregion
     }

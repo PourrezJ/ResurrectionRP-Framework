@@ -413,11 +413,32 @@ namespace ResurrectionRP_Server
             return false;
         }
 
+        public static void Revive(this IPlayer client, ushort health = 200, Vector3? position = null)
+        {
+            Vector3 pos = position ?? client.Position;
+
+            client.Spawn(new Position(pos.X, pos.Y, pos.Z));
+            client.Health = (health);
+            client.Resurrect(health);
+
+            var dead = PlayerManager.DeadPlayers.Find(p => p.Victime == client);
+            if (dead != null)
+                dead.Remove();
+
+            if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
+            {
+                foreach (var medecin in GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
+                {
+                    if (medecin.Exists)
+                        medecin.EmitLocked("ONU_BlesseEnd", client.Id);
+                }
+            }
+        }
+
         public static async Task ReviveAsync(this IPlayer client, ushort health = 200, Vector3? position = null)
         {
             Vector3 pos = position ?? await client.GetPositionAsync();
 
-            await client.DespawnAsync();
             await client.SpawnAsync(new Position(pos.X, pos.Y, pos.Z));
             await client.SetHealthAsync(health);
             await client.ResurrectAsync(health);

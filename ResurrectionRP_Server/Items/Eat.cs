@@ -68,25 +68,25 @@ namespace ResurrectionRP_Server.Items
             {
                 client.PlayAnimation("mp_player_inteat@burger", "mp_player_int_eat_burger", 4, -8, -1);
 
-                Utils.Utils.Delay(4000, true, async () =>
+                Utils.Utils.SetTimeout(() =>
                 {
                     if (!client.Exists)
                         return;
 
-                    await client.PlayAnimationAsync("mp_player_inteat@burger", "mp_player_int_eat_exit_burger", 4, -8, -1);
-                });
+                    client.PlayAnimation("mp_player_inteat@burger", "mp_player_int_eat_exit_burger", 4, -8, -1);
+                }, 4000);
             }
             else
             {
                 client.PlayAnimation("mp_player_intdrink", "loop_bottle", 4, -8, -1);
 
-                Utils.Utils.Delay(4000, true, async () =>
+                Utils.Utils.SetTimeout(() =>
                 {
                     if (!client.Exists)
                         return;
 
-                    await client.PlayAnimationAsync("mp_player_intdrink", "outro_bottle", 4, -8, -1);
-                });
+                    client.PlayAnimation("mp_player_intdrink", "outro_bottle", 4, -8, -1);
+                }, 4000);
             }
         }
     }

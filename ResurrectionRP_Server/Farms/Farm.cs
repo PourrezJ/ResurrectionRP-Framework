@@ -395,7 +395,7 @@ namespace ResurrectionRP_Server.Farms
 
             sender.EmitLocked("LaunchProgressBar", Selling_Time * itemcount);
 
-            Utils.Utils.Delay(Selling_Time * itemcount, true, () =>
+            Utils.Utils.SetTimeout(() =>
             {
                 if (!sender.Exists)
                     return;
@@ -412,7 +412,7 @@ namespace ResurrectionRP_Server.Farms
 
                 player.IsOnProgress = false;
                 player.UpdateFull();
-            });
+            }, Selling_Time * itemcount);
         }
 
         public virtual void StartDoubleProcessing(IPlayer sender)

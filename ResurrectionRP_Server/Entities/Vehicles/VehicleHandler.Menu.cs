@@ -314,7 +314,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     break;
                     
                 case "ID_delete":
-                    await this.Delete(true);
+                    await this.DeleteAsync(true);
                     break;
                 /*
                 case "ID_lockpick":

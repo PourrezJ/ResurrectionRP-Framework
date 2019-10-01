@@ -186,7 +186,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         }
 
                         client.SendNotification($"Véhicule ~r~{vehFourriere.Plate} ~w~ mis en fourrière...");
-                        Task.Run(async () => await GameMode.Instance.PoundManager.AddVehicleInPound(vehFourriere));
+                        Task.Run(async () => await GameMode.Instance.PoundManager.AddVehicleInPoundAsync(vehFourriere));
                     }
                 };
 
@@ -467,7 +467,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (vehicle == null)
                         client.SendNotificationError("Aucun véhicule a proximité");
-                    else if (await vehicle.Delete(true))
+                    else if (await vehicle.DeleteAsync(true))
                         client.SendNotificationSuccess($"Véhicule ~r~{vehicle.Plate}~w~ supprimé...");
                     else
                         client.SendNotificationError($"Erreur de suppression du véhicule");
@@ -484,7 +484,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (vehicle == null)
                         client.SendNotificationError("Aucun véhicule a proximité");
-                    else if (await vehicle.Delete(false))
+                    else if (await vehicle.DeleteAsync(false))
                         client.SendNotificationSuccess($"Véhicule ~r~{vehicle.Plate}~w~ supprimé...");
                     else
                         client.SendNotificationError($"Erreur de suppression du véhicule");

@@ -131,6 +131,9 @@ namespace ResurrectionRP_Server.Radio
                 case "SaveFrequence":
                     try
                     {
+                        if (args[2] == null)
+                            return;
+
                         if (double.TryParse(args[2].ToString(),  NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double frequence)){
 
                             radio.SaveFrequeceRadio(Convert.ToInt32(args[1]), frequence);

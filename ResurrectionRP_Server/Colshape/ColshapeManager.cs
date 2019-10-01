@@ -51,9 +51,9 @@ namespace ResurrectionRP_Server.Colshape
         #region Private static methods
         private static void Loop()
         {
-            try
+            while (_running)
             {
-                while (_running)
+                try
                 {
                     DateTime startTime = DateTime.Now;
 
@@ -129,10 +129,10 @@ namespace ResurrectionRP_Server.Colshape
 
                     Thread.Sleep(Math.Max(TIME_INTERVAL - (int)(DateTime.Now - startTime).TotalMilliseconds, 0));
                 }
-            }
-            catch(Exception ex)
-            {
-                Alt.Server.LogError($"Colshape error {ex}");
+                catch (Exception ex)
+                {
+                    Alt.Server.LogError($"Colshape error {ex}");
+                }
             }
         }
         #endregion

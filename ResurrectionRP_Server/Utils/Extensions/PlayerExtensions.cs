@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Numerics;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Entities.Players.Data;
 
 namespace ResurrectionRP_Server
 {
@@ -420,6 +421,10 @@ namespace ResurrectionRP_Server
             await client.SpawnAsync(new Position(pos.X, pos.Y, pos.Z));
             await client.SetHealthAsync(health);
             await client.ResurrectAsync(health);
+
+            var dead = PlayerManager.DeadPlayers.Find(p => p.Victime == client);
+            if (dead != null)
+                dead.Remove();
 
             if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
             {

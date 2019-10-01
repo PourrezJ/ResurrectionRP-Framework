@@ -31,11 +31,11 @@ namespace ResurrectionRP_Server.Weather
                 var results = client.Query(Config.GetSetting<string>("OpenWeatherCity"));
                 WeatherDataReceived(results.Weathers[0], results.Wind);
 
-                Utils.Utils.SetInterval(() =>
+                Utils.Utils.Delay((int)TimeSpan.FromMinutes(5).TotalMilliseconds, () =>
                 {
                     results = client.Query(Config.GetSetting<string>("OpenWeatherCity"));
                     WeatherDataReceived(results?.Weathers[0], results?.Wind);
-                }, (int)TimeSpan.FromMinutes(5).TotalMilliseconds);
+                });
             }
             catch (Exception ex)
             {

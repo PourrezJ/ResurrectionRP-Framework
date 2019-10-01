@@ -370,7 +370,7 @@ namespace ResurrectionRP_Server.Factions
                 case "ID_Diag":
                     client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Diagnostique: ~r~Démarrage~w~.", "En cours ...");
 
-                    Utils.Utils.SetInterval(() =>
+                    Utils.Utils.Delay(20000, () =>
                     {
                         if (!veh.Exists || !client.Exists)
                             return;
@@ -382,7 +382,7 @@ namespace ResurrectionRP_Server.Factions
                         $"Réservoir: {Math.Floor(veh.PetrolTankHealth * 0.1)}%\n";
 
                         client.DisplaySubtitle(str, 5000);
-                    }, 20000);
+                    });
 
                     break;
 
@@ -391,7 +391,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         await _vh.UpdatePropertiesAsync();
 
-                        Utils.Utils.SetInterval(() =>
+                        Utils.Utils.Delay(20000, () =>
                         {
                             if (client == null || !client.Exists)
                                 return;
@@ -403,7 +403,7 @@ namespace ResurrectionRP_Server.Factions
                             _vh.PetrolTankHealth = petrolTankHealth;
                             _vh.UpdateInBackground(false);
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~g~Terminé~w~.", "Elle est niquel!");
-                        }, 20000);
+                        });
 
                         await UpdateDatabase();
                     }
@@ -417,7 +417,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.","C'est parti!");
 
-                        Utils.Utils.SetInterval(() =>
+                        Utils.Utils.Delay(20000, () =>
                         {
                             if (!veh.Exists || !client.Exists)
                                 return;
@@ -446,7 +446,7 @@ namespace ResurrectionRP_Server.Factions
 
                             _vh.UpdateInBackground(false);
                             _vh.ApplyDamage();
-                        }, 20000);
+                        });
 
                         await UpdateDatabase();
                     }
@@ -460,7 +460,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~r~Démarrage~w~.","C'est parti!" );
 
-                        Utils.Utils.SetInterval(() =>
+                        Utils.Utils.Delay(20000, () =>
                         {
                             if (!veh.Exists || !client.Exists)
                                 return;
@@ -470,7 +470,7 @@ namespace ResurrectionRP_Server.Factions
                             veh.DirtLevel = 0;
                             _vh.UpdateInBackground(false);
                             _vh.ApplyDamage();
-                        }, 20000);
+                        });
 
                         await UpdateDatabase();
                     }
@@ -484,7 +484,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         client.SendNotificationPicture( CharPicture.CHAR_LS_CUSTOMS ,"Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.", "Alors ce tuyau va où déjà?");
 
-                        Utils.Utils.SetInterval(() =>
+                        Utils.Utils.Delay(20000, () =>
                         {
                             if (!veh.Exists || !client.Exists)
                                 return;
@@ -493,7 +493,7 @@ namespace ResurrectionRP_Server.Factions
                             _vh.EngineHealth = 400;
                             _vh.UpdateInBackground(false);
                             _vh.ApplyDamage();
-                        }, 20000);
+                        });
                     }
                     else
                         client.SendNotificationError("Vous n'avez pas assez d'argent sur vous!");

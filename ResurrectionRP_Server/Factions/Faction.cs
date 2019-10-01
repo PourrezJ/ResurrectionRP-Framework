@@ -267,11 +267,11 @@ namespace ResurrectionRP_Server.Factions
         {
             string socialClub = client.GetSocialClub();
 
-            Utils.Utils.SetInterval(() =>
+            Utils.Utils.Delay(60000 * 10, () =>
             {
                 if (!GameMode.Instance.PlayerList.Any(p => p.GetSocialClub() == socialClub))
                     ServicePlayerList.Remove(socialClub);
-            }, 60000 * 10);
+            });
         }
 
         public virtual void OnPlayerEnterColShape(IColShape colShape, IPlayer player)

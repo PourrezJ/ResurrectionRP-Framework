@@ -60,19 +60,19 @@ namespace ResurrectionRP_Server.Items
         {
             client.PlayAnimation("mp_player_intdrink", "loop_bottle", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
 
-            Utils.Utils.SetInterval(() =>
+            Utils.Utils.Delay(4000, async () =>
             {
                 if (!client.Exists)
                     return;
 
-                client.PlayAnimation("mp_player_intdrink", "outro_bottle", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
+                await client.PlayAnimationAsync("mp_player_intdrink", "outro_bottle", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
                 /*
                 if (obj != null)
                 {
                     await ph.PlayAnimation("mp_player_intdrink", "outro_bottle", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
                     await obj.Destroy();
                 }*/  
-            }, 4000);
+            });
         }
     }
 }

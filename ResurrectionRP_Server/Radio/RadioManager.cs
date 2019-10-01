@@ -56,7 +56,7 @@ namespace ResurrectionRP_Server.Radio
 
         public RadioManager()
         {
-            AltAsync.OnClient("RadioManager", EventTrigered);
+            Alt.OnClient("RadioManager", EventTrigered);
         }
         public static void Close(IPlayer client)
         {
@@ -78,22 +78,22 @@ namespace ResurrectionRP_Server.Radio
             return false;
         }
 
-        private Task EventTrigered(IPlayer client, object[] args)
+        private void EventTrigered(IPlayer client, object[] args)
         {
             if (!client.Exists)
-                return Task.CompletedTask;
+                return;
 
             var player = client;
 
             var ph = player.GetPlayerHandler();
             if (ph == null)
-                return Task.CompletedTask;
+                return;
 
             Radio radio = null;
             _clientMenus.TryGetValue(player, out radio);
 
             if (radio == null)
-                return Task.CompletedTask;
+                return;
 
             switch (args[0])
             {
@@ -159,7 +159,6 @@ namespace ResurrectionRP_Server.Radio
                     Alt.Server.LogError("RadioManager RadioChange Hm args[0] is not valid... problem in client side ? args 0 mmust be the event name");
                     break;
             }
-            return Task.CompletedTask;
         }
 
         public int FindRadioInItemList(Radio radio, List<Items.RadioItem> itemList)

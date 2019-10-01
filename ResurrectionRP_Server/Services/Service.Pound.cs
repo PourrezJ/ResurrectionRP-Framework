@@ -13,6 +13,7 @@ using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Factions;
+using ResurrectionRP_Server.Entities.Players;
 
 namespace ResurrectionRP_Server.Services
 {
@@ -179,12 +180,22 @@ namespace ResurrectionRP_Server.Services
         {
             if (menu.Id == "ID_PoundMenu" && menuItem.Id == "ID_Get" && menuItem.HasData("Vehicle"))
             {
-                if (client.GetPlayerHandler().HasMoney(Price))
+                PlayerHandler ph = client.GetPlayerHandler();
+
+                if (ph == null)
+                    return;
+
+                if (ph.HasMoney(Price))
                 {
                     VehicleHandler veh = menuItem.GetData("Vehicle");
                     veh.IsInPound = false;
                     await veh.SpawnVehicleAsync(new Location(_poundSpawn.Pos, _poundSpawn.Rot.ConvertRotationToRadian()));
                     veh.UpdateInBackground();
+
+                    var keyfind = ph.ListVehicleKey.FindLast(k => k.Plate == veh.Plate);
+                    if (keyfind == null)
+                        ph.ListVehicleKey.Add(new VehicleKey(veh.VehicleManifest.LocalizedName, veh.Plate));
+
                     PoundVehicleList.Remove(PoundVehicleList.Find(v => v.Plate == veh.Plate));
                     await GameMode.Instance.Save();
                     client.SendNotificationPicture(Utils.Enums.CharPicture.DIA_GARDENER,"Fourrière", "","~g~Votre véhicule vous attend sur le parking." );

@@ -77,9 +77,9 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Init
-        public override async Task Init()
+        public override void Init()
         {
-            await base.Init();
+            base.Init();
 
             if (Mask == null)
                 Mask = new List<int>();

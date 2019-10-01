@@ -68,7 +68,7 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Loader
-        public virtual Task Init()
+        public virtual void Init()
         {
             if (PedHash != 0)
             {
@@ -85,7 +85,6 @@ namespace ResurrectionRP_Server.Business
 
             BankAccount.Owner = this;
             GameMode.Instance.BusinessesManager.BusinessesList.Add(this);
-            return Task.CompletedTask;
         }
         #endregion
 

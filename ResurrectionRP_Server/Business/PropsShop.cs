@@ -71,9 +71,9 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Init
-        public override async Task Init()
+        public override void Init()
         {
-            await base.Init();
+            base.Init();
 
             if (MenHats == null)
                 MenHats = new List<int>();
@@ -112,7 +112,7 @@ namespace ResurrectionRP_Server.Business
 
             _clothingColShape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
             _clothingColShape.SetOnPlayerLeaveColShape(OnPlayerLeaveColShape);
-            _clothingColShape.SetOnPlayerInteractInColShape(OnPlayerInteractInColShape);
+            _clothingColShape.SetOnPlayerInteractInColShape(OnPlayerInteractInColShape);    
         }
         #endregion
 

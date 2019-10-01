@@ -21,13 +21,6 @@ namespace ResurrectionRP_Server.Business
         }
         #endregion
 
-        #region Overrided methods
-        public override Task Init()
-        {
-            return base.Init();
-        }
-        #endregion
-
         #region Menus
         public override void OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
         {

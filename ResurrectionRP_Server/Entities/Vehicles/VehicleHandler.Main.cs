@@ -311,7 +311,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 LockState = (LockState == VehicleLockState.Locked) ? VehicleLockState.Unlocked : VehicleLockState.Locked;
                 client.SendNotification($"Vous avez {(LockState == VehicleLockState.Locked ? " fermé" : "ouvert")} le véhicule");
-
+                UpdateInBackground();
                 return true;
             }
 

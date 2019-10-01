@@ -389,7 +389,7 @@ namespace ResurrectionRP_Server.Factions
                 case "ID_Body":
                     if (await BankAccount.GetBankMoney(ReparBody, $"Réparation carrosserie {_vh.Plate} par {ph.Identite.Name}"))
                     {
-                        _vh.UpdateProperties();
+                        await _vh.UpdatePropertiesAsync();
 
                         Utils.Utils.Delay(20000, true, () =>
                         {
@@ -448,7 +448,7 @@ namespace ResurrectionRP_Server.Factions
                             });
                                        
                             _vh.UpdateInBackground(false);
-                            _vh.UpdateProperties();
+                            await _vh.UpdatePropertiesAsync();
                             await _vh.ApplyDamageAsync();
                         });
 

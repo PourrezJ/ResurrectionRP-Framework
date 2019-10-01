@@ -220,6 +220,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     */
                 case "ID_Start":
                     EngineOn = !Vehicle.EngineOn;
+                    UpdateInBackground();
                     XMenuManager.XMenuManager.CloseMenu(client);
                     break;
                         

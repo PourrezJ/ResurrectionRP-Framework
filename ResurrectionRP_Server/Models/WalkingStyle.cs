@@ -66,7 +66,7 @@ namespace ResurrectionRP_Server.Models
 
             if (menuItem == null)
             {
-                await ph.OpenPlayerMenu();
+                ph.OpenPlayerMenu();
                 return;
             }
 

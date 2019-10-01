@@ -89,7 +89,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
 
                     if (!ph.HasOpenMenu())
-                        await ph.OpenPlayerMenu();
+                        ph.OpenPlayerMenu();
 
                     break;
                     

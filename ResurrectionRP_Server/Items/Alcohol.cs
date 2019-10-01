@@ -60,7 +60,7 @@ namespace ResurrectionRP_Server.Items
         {
             client.PlayAnimation("mp_player_intdrink", "loop_bottle", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
 
-            Utils.Utils.SetTimeout(() =>
+            Utils.Utils.SetInterval(() =>
             {
                 if (!client.Exists)
                     return;

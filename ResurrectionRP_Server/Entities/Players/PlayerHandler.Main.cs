@@ -177,7 +177,7 @@ namespace ResurrectionRP_Server.Entities.Players
             if (PlayerHandlerList.TryAdd(client, this))
             {
                 if (BankAccount == null)
-                    BankAccount = new Bank.BankAccount(Bank.AccountType.Personal, await Bank.BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
+                    BankAccount = new Bank.BankAccount(Bank.AccountType.Personal, Bank.BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
   
                 BankAccount.Owner = this;
 

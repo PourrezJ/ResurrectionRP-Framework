@@ -327,7 +327,7 @@ namespace ResurrectionRP_Server.Factions
 
                 client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande de mise en fourrière.", $"Besoin de retrait du véhicule {target.NumberplateText}" );
 
-                Utils.Utils.SetTimeout(() =>
+                Utils.Utils.SetInterval(() =>
                 {
                     VehicleHandler vh = target.GetVehicleHandler();
                     if (vh == null)
@@ -380,7 +380,7 @@ namespace ResurrectionRP_Server.Factions
                     }
                 }
 
-                Utils.Utils.SetTimeout(() => {
+                Utils.Utils.SetInterval(() => {
                     client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Information trouvées:", infos );
                 }, 20000);
             }

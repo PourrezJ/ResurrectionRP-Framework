@@ -370,7 +370,7 @@ namespace ResurrectionRP_Server.Factions
                 case "ID_Diag":
                     client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Diagnostique: ~r~Démarrage~w~.", "En cours ...");
 
-                    Utils.Utils.SetTimeout(() =>
+                    Utils.Utils.SetInterval(() =>
                     {
                         if (!veh.Exists || !client.Exists)
                             return;
@@ -391,7 +391,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         await _vh.UpdatePropertiesAsync();
 
-                        Utils.Utils.SetTimeout(() =>
+                        Utils.Utils.SetInterval(() =>
                         {
                             if (client == null || !client.Exists)
                                 return;
@@ -417,7 +417,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.","C'est parti!");
 
-                        Utils.Utils.SetTimeout(() =>
+                        Utils.Utils.SetInterval(() =>
                         {
                             if (!veh.Exists || !client.Exists)
                                 return;
@@ -460,7 +460,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~r~Démarrage~w~.","C'est parti!" );
 
-                        Utils.Utils.SetTimeout(() =>
+                        Utils.Utils.SetInterval(() =>
                         {
                             if (!veh.Exists || !client.Exists)
                                 return;
@@ -484,7 +484,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         client.SendNotificationPicture( CharPicture.CHAR_LS_CUSTOMS ,"Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.", "Alors ce tuyau va où déjà?");
 
-                        Utils.Utils.SetTimeout(() =>
+                        Utils.Utils.SetInterval(() =>
                         {
                             if (!veh.Exists || !client.Exists)
                                 return;

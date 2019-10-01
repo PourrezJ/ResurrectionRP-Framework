@@ -62,11 +62,8 @@ namespace ResurrectionRP_Server.Business
             OnSale = onsale;
 
             Inventory = new Inventory.Inventory(inventoryMax, 40);
-            Task.Run(async () =>
-            {
-                BankAccount = new BankAccount(AccountType.Business, await BankAccount.GenerateNewAccountNumber(), 0);
-                BankAccount.Owner = this;
-            });
+            BankAccount = new BankAccount(AccountType.Business, BankAccount.GenerateNewAccountNumber(), 0);
+            BankAccount.Owner = this;
         }
         #endregion
 

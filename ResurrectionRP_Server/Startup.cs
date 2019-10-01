@@ -3,6 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using ResurrectionRP_Server.Utils;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace ResurrectionRP_Server
 
         }
 
-        public async override void OnStart()
+        public override void OnStart()
         {
             var ci = new CultureInfo("fr-FR");
             CultureInfo.DefaultThreadCurrentCulture = ci;
@@ -35,27 +36,29 @@ namespace ResurrectionRP_Server
             var collection = Database.MongoDB.CollectionExist<GameMode>("gamemode");
             if (collection)
             {
-                var database =  Database.MongoDB.GetMongoDatabase();
+                var database = Database.MongoDB.GetMongoDatabase();
 
                 if (database == null)
                     return;
 
+                Task.Run(async () =>
+                {
+                    var collectionData = Database.MongoDB.GetCollectionSafe<GameMode>("gamemode");
+                    var data = await collectionData.FindAsync<GameMode>(new BsonDocument());
+                    if (data == null)
+                        return;
+                    gamemode = await data.FirstOrDefaultAsync();
 
-                var collectionData = Database.MongoDB.GetCollectionSafe<GameMode>("gamemode");
-                var data = await collectionData.FindAsync<GameMode>(new BsonDocument());
-                gamemode = await data.FirstOrDefaultAsync();
-
-                if (data == null)
-                    return;
-                
-                await gamemode.OnStartAsync();
+                    await AltAsync.Do(() => gamemode.OnStart());
+                });
             }
             else
             {
                 // Fresh Server
                 gamemode = new GameMode();
-                await gamemode.OnStartAsync();
-                await gamemode.Save();
+                gamemode.OnStart();
+                Task.Run(async () => await gamemode.Save());
+                
             }
         }
 
@@ -87,6 +90,13 @@ namespace ResurrectionRP_Server
         public override void OnStop()
         {
             Alt.Log("GameMode Stopped");
+        }
+
+        public override void OnTick()
+        {
+            FPSCounter.OnTick();
+
+            base.OnTick();
         }
     }
 }

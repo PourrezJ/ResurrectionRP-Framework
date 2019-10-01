@@ -23,29 +23,29 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
         public List<Models.Location> LocationList = new List<Models.Location>();
         public List<VehicleInfo> VehicleInfoList = new List<VehicleInfo>();
 
-        public async Task Load()
+        public void Load()
         {
             Entities.Blips.BlipsManager.CreateBlip(Name, BlipPosition, 0, (int)BlipSprite);
 
             for (int i = 0; i < LocationList.Count; i++)
             {
                 var place = new CarDealerPlace(i, LocationList[i], this);
-                await Respawn(place);
+                Respawn(place);
                 CarDealerPlaces.Add(place);
             }
 
             // Boucle pour vérifier si la place est vide.
-            Utils.Utils.Delay(30000, false, async () =>
+            Utils.Utils.SetInterval(() =>
             {
                 foreach (var place in CarDealerPlaces)
                 {
                     if (place.VehicleHandler == null && !VehiclesManager.IsVehicleInSpawn(place.Location.Pos, 4))
-                        await Respawn(place);
+                        Respawn(place);
                 }
-            });
+            }, 30000);
         }
 
-        public async Task Respawn(CarDealerPlace place)
+        public void Respawn(CarDealerPlace place)
         {
             place.VehicleInfo = VehicleInfoList[Utils.Utils.RandomNumber(VehicleInfoList.Count)];
 
@@ -59,16 +59,16 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
 
             if (manifest != null)
             {
-                place.VehicleHandler = await VehiclesManager.SpawnVehicleAsync("", (uint)place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot, color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
+                place.VehicleHandler = VehiclesManager.SpawnVehicle("", (uint)place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot, color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
 
                 if (place.VehicleHandler == null)
                     return;
 
-                if (!await place.VehicleHandler.Vehicle.ExistsAsync())
+                if (!place.VehicleHandler.Vehicle.Exists)
                     return;
 
-                await place.VehicleHandler.Vehicle.FreezeAsync(true);
-                await place.VehicleHandler.Vehicle.InvincibleAsync(true);
+                place.VehicleHandler.Vehicle.Freeze(true);
+                place.VehicleHandler.Vehicle.Invincible(true);
 
                 string str = $"{manifest.DisplayName} \n" +
                 $"Prix $ {place.VehicleInfo.Price} \n" +

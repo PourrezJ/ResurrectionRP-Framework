@@ -147,7 +147,7 @@ namespace ResurrectionRP_Server.Farms
             player.IsOnProgress = true;
             client.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s)", 5000);
             client.EmitLocked("LaunchProgressBar", FillingTime * (TrailerMaxContent / 10));
-            Timers[client] = Utils.Utils.Delay((Process_Time * 1000) / (FillingTime), false, async () =>
+            Timers[client] = Utils.Utils.SetInterval(async () =>
             {
                 System.Timers.Timer ProcessTimer = Timers[client];
                 if (!await client.ExistsAsync() || !await trailer.ExistsAsync())
@@ -181,7 +181,7 @@ namespace ResurrectionRP_Server.Farms
 
                 vehHandler.OilTank.Traite += 5;
                 client.DisplaySubtitle("Volume essence raffiné : " + vehHandler.OilTank.Traite + "L", 3000);
-            });
+            }, (Process_Time * 1000) / (FillingTime));
         }
 
         #region Start Farming

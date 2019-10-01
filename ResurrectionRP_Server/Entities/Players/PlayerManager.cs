@@ -189,7 +189,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 else
                 {
                     player.SendNotification($"Ne va pas vers la lumière, tu vas te relever.");
-                    Utils.Utils.SetTimeout(() =>
+                    Utils.Utils.SetInterval(() =>
                     {
                         if (player.Exists)
                             player.Revive(105);

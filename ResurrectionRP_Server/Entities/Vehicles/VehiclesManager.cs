@@ -31,7 +31,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             AltAsync.OnClient("LockUnlockVehicle", LockUnlockVehicle);
             AltAsync.OnClient("UpdateTrailer", UpdateTrailerState);
 
-            Utils.Utils.SetTimeout(VehicleManagerLoop, 250);
+            Utils.Utils.SetInterval(VehicleManagerLoop, 250);
         }
         #endregion
 

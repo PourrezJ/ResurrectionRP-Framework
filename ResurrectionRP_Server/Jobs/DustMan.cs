@@ -138,7 +138,7 @@ namespace ResurrectionRP_Server.Jobs
 
             Alt.OnServer("DustMan_Callback", DustMan_Callback);
 
-            Utils.Utils.SetTimeout(() =>
+            Utils.Utils.SetInterval(() =>
             {
                 if (VehicleSpawnLocation != null && VehiclesManager.IsVehicleInSpawn(VehicleSpawnLocation.Pos))
                 {

@@ -29,7 +29,7 @@ namespace ResurrectionRP_Server.Services
         #endregion
 
         #region Init
-        public Task Init()
+        public void Init()
         {
             if (PoundVehicleList == null)
                 PoundVehicleList = new List<ParkedCar>();
@@ -81,7 +81,6 @@ namespace ResurrectionRP_Server.Services
             };
 
             Alt.Server.LogInfo($"--- [POUND] Finish loading all pounds in database: {PoundVehicleList.Count} ---");
-            return Task.CompletedTask;
         }
         #endregion
 

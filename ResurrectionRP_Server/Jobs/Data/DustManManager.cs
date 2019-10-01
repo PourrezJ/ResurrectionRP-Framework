@@ -64,7 +64,7 @@ namespace ResurrectionRP_Server.Jobs
                 depotInProgress = true;
                 client.SendNotificationSuccess("Génial ! Restez ici pour vider votre camion !");
                 client.DisplayHelp("Déchargement de la remorque en cours, veuillez patenter! ", 30000);
-                timer = Utils.Utils.Delay(30000, false, () =>
+                timer = Utils.Utils.SetInterval(() =>
                 {
                     if (!depotInProgress)
                         timer.Stop();
@@ -89,7 +89,7 @@ namespace ResurrectionRP_Server.Jobs
                             DustManClient.EmitLocked("DustMan_Callback");
                             break;
                     }
-                });
+                }, 30000);
             }
             else if (depotInProgress)
             {

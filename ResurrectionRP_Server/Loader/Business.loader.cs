@@ -18,14 +18,14 @@ namespace ResurrectionRP_Server.Loader
             foreach (var _businesses in _businessesList)
                 await _businesses.Init();
 
-            Utils.Utils.Delay((int)TimeSpan.FromMinutes(5).TotalMilliseconds, false, async () =>
+            Utils.Utils.SetInterval(async () =>
             {
                 foreach (var _businesses in _businessesList)
                 {
                     await _businesses.Update();
                     await Task.Delay(50);
                 }
-            });
+            }, (int)TimeSpan.FromMinutes(5).TotalMilliseconds);
 
             Alt.Server.LogColored($"--- Finish loading all businesses in database: {_businessesList.Count} ---");
         }

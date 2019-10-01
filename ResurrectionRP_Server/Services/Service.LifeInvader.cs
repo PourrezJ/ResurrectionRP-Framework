@@ -71,7 +71,7 @@ namespace ResurrectionRP_Server.Services
                         if (await client.GetPlayerHandler().HasBankMoney((AnnoncePrice + CalcPriceAnnonce(AnnoncePrice)), "Message Life Invader"))
                         {
                             client.SendNotification("Votre annonce va être diffusée.");
-                            Utils.Utils.SetTimeout(() =>
+                            Utils.Utils.SetInterval(() =>
                             {
                                 Utils.Utils.SendNotificationPicture(CharPicture.CHAR_LIFEINVADER, "Life Invander", "Message d'annonce:", message);
                             }, 50000);

@@ -267,7 +267,7 @@ namespace ResurrectionRP_Server.Factions
         {
             string socialClub = client.GetSocialClub();
 
-            Utils.Utils.SetTimeout(() =>
+            Utils.Utils.SetInterval(() =>
             {
                 if (!GameMode.Instance.PlayerList.Any(p => p.GetSocialClub() == socialClub))
                     ServicePlayerList.Remove(socialClub);

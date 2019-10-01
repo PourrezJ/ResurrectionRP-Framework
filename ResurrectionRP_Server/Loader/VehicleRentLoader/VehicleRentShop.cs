@@ -23,7 +23,7 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
         public List<Location> LocationList = new List<Location>();
         public List<VehicleInfo> VehicleInfoList = new List<VehicleInfo>();
 
-        public async Task Load()
+        public void Load()
         {
             //await MP.Blips.NewAsync(BlipSprite, BlipPosition, 1, 0, $"[Location] {Name}", 255, 10, true);
             Entities.Blips.BlipsManager.CreateBlip($"[Location] {Name}", BlipPosition, 0, BlipSprite);
@@ -32,22 +32,22 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
             for (int i = 0; i < LocationList.Count; i++)
             {
                 var _vehrent = new VehicleRentPlace(i, LocationList[i], this);
-                await Respawn(_vehrent);
+                Respawn(_vehrent);
                 VehicleRentPlaces.Add(_vehrent);
             }
 
             // Boucle pour vérifié si place est vide.
-            Utils.Utils.Delay(30000, false, async () =>
+            Utils.Utils.SetInterval(() =>
             {
                 foreach (var place in VehicleRentPlaces)
                 {
                     if (place.VehicleHandler == null && !VehiclesManager.IsVehicleInSpawn(place.Location.Pos, 4))
-                        await Respawn(place);
+                        Respawn(place);
                 }
-            });
+            }, 30000);
         }
 
-        public async Task Respawn(VehicleRentPlace place)
+        public void Respawn(VehicleRentPlace place)
         {
             place.VehicleInfo = VehicleInfoList[Utils.Utils.RandomNumber(VehicleInfoList.Count)];
             place.VehicleInfo.Price = Convert.ToInt32(place.VehicleInfo.Price);
@@ -58,10 +58,10 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
 
             if (manifest != null)
             {
-                place.VehicleHandler = await VehiclesManager.SpawnVehicleAsync("", place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot.ConvertRotationToRadian(), color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
+                place.VehicleHandler = VehiclesManager.SpawnVehicle("", place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot.ConvertRotationToRadian(), color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
                 place.VehicleHandler.Vehicle.SetData("RentShop", place);
-                await place.VehicleHandler.Vehicle.FreezeAsync(true);
-                await place.VehicleHandler.Vehicle.InvincibleAsync(true);
+                place.VehicleHandler.Vehicle.Freeze(true);
+                place.VehicleHandler.Vehicle.Invincible(true);
                 string str = $"{manifest.DisplayName} \n" +
                 $"Prix $ {place.VehicleInfo.Price} \n" +
                 $"Coffre: {place.VehicleInfo.InventoryWeight} \n" +
@@ -88,7 +88,7 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
             ph.Client.SendNotificationSuccess($"Vous avez loué un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");
             VehicleRentPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;
 
-            Utils.Utils.SetTimeout(() =>
+            Utils.Utils.SetInterval(() =>
             {
                 if (!veh.Vehicle.Exists)
                     return;

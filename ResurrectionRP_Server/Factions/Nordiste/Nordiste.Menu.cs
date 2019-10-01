@@ -330,7 +330,7 @@ namespace ResurrectionRP_Server.Factions
 
                 client.SendNotificationPicture(CharPicture.CHAR_CHAT_CALL, "Bureau Shérif", "Demande de mise en fourrière.", $"Besoin de retrait du véhicule {await target.GetNumberplateTextAsync()}");
 
-                Utils.Utils.SetTimeout(() =>
+                Utils.Utils.Delay(30000, async () =>
                 {
                     if (!target.Exists)
                         return;
@@ -340,8 +340,8 @@ namespace ResurrectionRP_Server.Factions
                         return;
 
                     client.SendNotificationPicture(CharPicture.CHAR_CHAT_CALL, "Bureau Shérif", "Demande de mise en fourrière.", "La fourrière est venu récupérer le véhicule.");
-                    Task.Run(async ()=>await GameMode.Instance.PoundManager.AddVehicleInPoundAsync(vh));
-                }, 30000);
+                    await GameMode.Instance.PoundManager.AddVehicleInPoundAsync(vh);
+                });
             }
         }
 
@@ -386,9 +386,9 @@ namespace ResurrectionRP_Server.Factions
                     }
                 }
 
-                Utils.Utils.SetTimeout(() => {
+                Utils.Utils.Delay(20000, () => {
                     client.SendNotificationPicture(CharPicture.CHAR_CHAT_CALL, "Bureau Shérif", "Information trouvées:", infos);
-                }, 20000);
+                });
             }
         }
         #endregion

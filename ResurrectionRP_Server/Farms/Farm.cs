@@ -395,7 +395,7 @@ namespace ResurrectionRP_Server.Farms
 
             sender.EmitLocked("LaunchProgressBar", Selling_Time * itemcount);
 
-            Utils.Utils.SetTimeout(() =>
+            Utils.Utils.SetInterval(() =>
             {
                 if (!sender.Exists)
                     return;

@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Timers;
 using AltV.Net;
-using AltV.Net.Elements.Entities;
-using AltV.Net.Data;
 using OpenWeatherAPI;
-using AltV.Net.Async;
 using WeatherType = ResurrectionRP_Server.Weather.Data.WeatherType;
 
 namespace ResurrectionRP_Server.Weather
@@ -27,7 +22,7 @@ namespace ResurrectionRP_Server.Weather
                 {
                     Actual_weather = WeatherType.Xmas;
                     Forced = true;
-                    this.UpdatePlayersWeather();
+                    UpdatePlayersWeather();
                 }
                 var apikey = Config.GetSetting<string>("OpenWeatherAPIKey");
                 if (string.IsNullOrEmpty(apikey)) throw new ArgumentException("Vous devez renseigner l'api key de OpenWeather");
@@ -36,11 +31,11 @@ namespace ResurrectionRP_Server.Weather
                 var results = client.Query(Config.GetSetting<string>("OpenWeatherCity"));
                 WeatherDataReceived(results.Weathers[0], results.Wind);
 
-                Utils.Utils.Delay((int)TimeSpan.FromMinutes(5).TotalMilliseconds, false, () =>
+                Utils.Utils.SetInterval(() =>
                 {
                     results = client.Query(Config.GetSetting<string>("OpenWeatherCity"));
                     WeatherDataReceived(results?.Weathers[0], results?.Wind);
-                });
+                }, (int)TimeSpan.FromMinutes(5).TotalMilliseconds);
             }
             catch (Exception ex)
             {
@@ -50,10 +45,7 @@ namespace ResurrectionRP_Server.Weather
 
         public void UpdatePlayersWeather()
         {
-            AltAsync.Do(() =>
-            {
-                Alt.EmitAllClients("WeatherChange", this.Actual_weather.ToString(), this.Wind, this.WindDirection, this.WeatherTransition);
-            });
+            Alt.EmitAllClients("WeatherChange", this.Actual_weather.ToString(), this.Wind, this.WindDirection, this.WeatherTransition);
         }
 
         private Timer timer = null;
@@ -62,8 +54,8 @@ namespace ResurrectionRP_Server.Weather
             if (Forced)
                 return;
 
-            this.Wind = wind;
-            this.WindDirection = winddirection;
+            Wind = wind;
+            WindDirection = winddirection;
 
             if (timer != null)
             {
@@ -75,7 +67,7 @@ namespace ResurrectionRP_Server.Weather
             {
                 this.Actual_weather = weather;
                 WeatherTransition = 0.0f;
-                timer = Utils.Utils.Delay(2500, false, async () =>
+                timer = Utils.Utils.SetInterval(() =>
                 {
                     WeatherTransition += 0.02f;
 
@@ -84,15 +76,13 @@ namespace ResurrectionRP_Server.Weather
                         WeatherTransition = 1;
                         timer.Close();
                     }
-                    this.UpdatePlayersWeather();
-
-                    await Task.Delay(2500);
-                });
+                    UpdatePlayersWeather();
+                }, 2500);
                 Alt.Server.LogInfo("[WEATHER] Weather Update to " + weather.ToString());
             }
             else if (WeatherTransition > 1.0)
             {
-                this.UpdatePlayersWeather();
+                UpdatePlayersWeather();
             }
         }
 

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
@@ -178,6 +179,7 @@ namespace ResurrectionRP_Server
  
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
+            ColshapeManager.Init();
             Streamer = new Streamer.Streamer();
             Economy = new Economy.Economy();
             PlayerManager = new PlayerManager();

@@ -3,6 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using ResurrectionRP_Server.Colshape;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -86,6 +87,7 @@ namespace ResurrectionRP_Server
 
         public override void OnStop()
         {
+            ColshapeManager.Shutdown();
             Alt.Log("GameMode Stopped");
         }
     }

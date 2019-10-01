@@ -231,6 +231,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 lifeItem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
                     _playerSelected.Health = 200;
+                    _playerSelected.Client.Health = 200;
                     UpdateFull();
                 };
                 mainMenu.Add(lifeItem);

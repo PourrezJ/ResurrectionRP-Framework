@@ -337,7 +337,10 @@ namespace ResurrectionRP_Server.Phone
 
         public void SendContactListToClient(IPlayer client)
         {
-            List<Address> contacts = AddressBook.GetRange(1, AddressBook.Count - 1).OrderBy(c => c.contactName).ToList();
+            if (AddressBook == null)
+                return;
+
+            List<Address> contacts = AddressBook.GetRange(1, AddressBook.Count - 1).OrderBy(c => c?.contactName).ToList();
             contacts.Insert(0, AddressBook[0]);
             client.EmitLocked("ContactReturned", JsonConvert.SerializeObject(contacts));
         }

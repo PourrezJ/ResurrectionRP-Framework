@@ -57,38 +57,26 @@ namespace ResurrectionRP_Server.Entities.Players
 
             AltAsync.OnClient("IWantToDie", IWantToDie);
 
-            
-            /*
-            Utils.Utils.Delay(300000, false, async () =>
+            Utils.Utils.SetInterval(() =>
             {
                 var players = PlayerHandler.PlayerHandlerList.ToList();
 
                 for (int i = 0; i < players.Count; i++)
                 {
-                    try
+                    var ph = players[i];
+
+                    if (!ph.Key.Exists)
+                        continue;
+
+                    if (GameMode.Instance.PlayerList.Any(v => v.Id == ph.Key.Id))
                     {
-                        var ph = players[i];
-
-                        if (!ph.Key.Exists)
-                            continue;
-
-                        if (GameMode.Instance.PlayerList.Any(v => v.Id == ph.Key.Id))
-                        {
-                            if (ph.Value != null)
-                                await ph.Value.Update();
-                        }
-
-                        await Task.Delay(500);
-                    }
-                    catch (Exception ex)
-                    {
-                        Alt.Server.LogError(ex.ToString());
+                        if (ph.Value != null)
+                            ph.Value.UpdateFull();
                     }
                 }
 
                 players.Clear();
-            });*/
-
+            }, 300000);
         }
 
 

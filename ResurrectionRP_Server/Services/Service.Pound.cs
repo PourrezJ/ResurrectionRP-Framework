@@ -44,11 +44,11 @@ namespace ResurrectionRP_Server.Services
             //_colshape.OnEntityExitColShape += _colshape_OnEntityExitColShape;
             EventHandlers.Events.OnPlayerEnterColShape += OnPlayerEnterColShape;
 
-            /*
+            
             List<string> checkedPlate = new List<string>();
             foreach (var vehicle in PoundVehicleList.ToList())
             {
-                await VehiclesManager.DeleteVehicleFromAllParkings(vehicle.Plate);
+                Task.Run(async()=> await VehiclesManager.DeleteVehicleFromAllParkings(vehicle.Plate));
 
                 if (VehiclesManager.GetVehicleWithPlate(vehicle.Plate) != null)
                 {
@@ -58,20 +58,19 @@ namespace ResurrectionRP_Server.Services
                 if (!checkedPlate.Contains(vehicle.Plate))
                 {
                     checkedPlate.Add(vehicle.Plate);
-                    if (DateTime.Now > vehicle.LastUse.AddMonths(1)) // Vérification si horodatage est dépassé, mise en occasion.
-                    {
-                        vehicle.LastUse = DateTime.Now;
-                        // TODO POUR L'ENTREPRISE D'OCCASION
-                    }
+                    //if (DateTime.Now > vehicle.ParkTime.AddMonths(1)) // Vérification si horodatage est dépassé, mise en occasion.
+                    //{
+                    //    vehicle.ParkTime = DateTime.Now;
+                    //    // TODO POUR L'ENTREPRISE D'OCCASION
+                    //}
                 }
                 else
                 {
-                    await GameMode.Instance.Save();
                     PoundVehicleList.Remove(vehicle);
-                    Alt.Server.LogError($"POUND | Vehicle duplicated plate: {vehicle.Plate} Owner: {vehicle.OwnerID} ");
+                    Alt.Server.LogError($"POUND | Vehicle duplicated plate: {vehicle.Plate}");
                 }
             }
-            */
+            
 
             Entities.Peds.Ped _npc = Entities.Peds.Ped.CreateNPC(PedModel.Gardener01SMM, new Vector3(409.1505f, -1622.874f, 29.29193f), 227.5882f);
 

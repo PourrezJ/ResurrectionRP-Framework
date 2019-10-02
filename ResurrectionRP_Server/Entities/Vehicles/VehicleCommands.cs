@@ -76,7 +76,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 player.SendChatMessage($"Parking : {vehicle.ParkingName}");
 
             Vector3 position = vehicle.Location.Pos;
-            string dim = vehicle.Dimension == short.MaxValue ? "-1" : vehicle.Dimension.ToString();
+            string dim = vehicle.Dimension == GameMode.GlobalDimension ? "-1" : vehicle.Dimension.ToString();
             player.SendChatMessage($"Position : X: {position.X}, Y: {position.Y}, Z: {position.Z}, Dim: {dim}");
         }
 

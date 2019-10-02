@@ -42,13 +42,13 @@ namespace ResurrectionRP_Server.Entities.Objects
             get => _rotation;
         }
 
-        public uint Dimension;
+        public short Dimension;
         public bool Freeze;
         public Models.Attachment Attachment = null;
         public string Pickup = null;
         private ConcurrentDictionary<string, object> Datas;
 
-        public WorldObject(int model, Position position, Rotation rotation, int entityId, bool freeze = false, uint dimension = ushort.MaxValue)
+        public WorldObject(int model, Position position, Rotation rotation, int entityId, bool freeze = false, short dimension = GameMode.GlobalDimension)
         {
             Exists = false;
             Model = model;
@@ -97,7 +97,7 @@ namespace ResurrectionRP_Server.Entities.Objects
             return data;
         }
 
-        public static WorldObject CreateObject(int model, Vector3 position, Vector3 rotation, bool freeze = false, bool dynamic = false, uint dimension = ushort.MaxValue)
+        public static WorldObject CreateObject(int model, Vector3 position, Vector3 rotation, bool freeze = false, bool dynamic = false, short dimension = GameMode.GlobalDimension)
         {
             var resuobject = new WorldObject
             (
@@ -115,7 +115,7 @@ namespace ResurrectionRP_Server.Entities.Objects
             return resuobject;
         }
 
-        public static WorldObject CreateObject(string model, Vector3 position, Vector3 rotation, bool freeze = false, bool dynamic = false, uint dimension = ushort.MaxValue)
+        public static WorldObject CreateObject(string model, Vector3 position, Vector3 rotation, bool freeze = false, bool dynamic = false, short dimension = GameMode.GlobalDimension)
         {
             var resuobject = new WorldObject
             (

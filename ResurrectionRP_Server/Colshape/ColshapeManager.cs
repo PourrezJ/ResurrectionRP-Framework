@@ -138,7 +138,7 @@ namespace ResurrectionRP_Server.Colshape
         #endregion
 
         #region Public static methods
-        public static IColshape CreateCylinderColshape(Vector3 position, float radius, float height, short dimension = short.MaxValue)
+        public static IColshape CreateCylinderColshape(Vector3 position, float radius, float height, short dimension = GameMode.GlobalDimension)
         {
             IColshape colshape = new CylinderColshape(_colshapeId++, position, radius, height, dimension);
 
@@ -150,7 +150,7 @@ namespace ResurrectionRP_Server.Colshape
             return colshape;
         }
 
-        public static IColshape CreateSphereColshape(Vector3 position, float radius, short dimension = short.MaxValue)
+        public static IColshape CreateSphereColshape(Vector3 position, float radius, short dimension = GameMode.GlobalDimension)
         {
             IColshape colshape = new SphereColshape(_colshapeId++, position, radius, dimension);
 

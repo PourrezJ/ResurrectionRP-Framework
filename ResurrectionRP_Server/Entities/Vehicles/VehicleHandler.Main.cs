@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         
         public string OwnerID { get; set; } // SocialClubName
         [BsonRepresentation(BsonType.Int32, AllowOverflow = true)]
-        public short Dimension { get; set; } = short.MaxValue;
+        public short Dimension { get; set; } = GameMode.GlobalDimension;
 
         [BsonIgnore, JsonIgnore]
         public IVehicle Vehicle { get; set; }
@@ -76,7 +76,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Constructor
         public VehicleHandler(string socialClubName, uint model, Vector3 position, Vector3 rotation, byte primaryColor = 0, byte secondaryColor = 0,
             float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
-            IPlayer owner = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, short dimension = short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
+            IPlayer owner = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, short dimension = GameMode.GlobalDimension, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
         {
             if (model == 0)
                 return;

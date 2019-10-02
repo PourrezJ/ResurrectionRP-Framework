@@ -241,7 +241,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Methods
         public static async Task<VehicleHandler> SpawnVehicleAsync(string socialClubName, uint model, Vector3 position, Vector3 rotation, int primaryColor = 0, int secondaryColor = 0,
         float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
-        IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, uint dimension = (uint)short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
+        IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, uint dimension = (uint)GameMode.GlobalDimension, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
         {
             if (model == 0)
                 return null;
@@ -254,7 +254,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public static VehicleHandler SpawnVehicle(string socialClubName, uint model, Vector3 position, Vector3 rotation, int primaryColor = 0, int secondaryColor = 0,
         float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
-        IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, uint dimension = (uint)short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
+        IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, uint dimension = (uint)GameMode.GlobalDimension, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
         {
             if (model == 0)
                 return null;
@@ -265,10 +265,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return veh;
         }
 
-        public static bool IsVehicleInSpawn(Models.Location location, float distance = 4, short dimension = short.MaxValue) =>
+        public static bool IsVehicleInSpawn(Models.Location location, float distance = 4, short dimension = GameMode.GlobalDimension) =>
             IsVehicleInSpawn(location.Pos, distance, dimension);
 
-        public static bool IsVehicleInSpawn(Vector3 location, float distance = 4, short dimension = short.MaxValue)
+        public static bool IsVehicleInSpawn(Vector3 location, float distance = 4, short dimension = GameMode.GlobalDimension)
         {
             var vehHandler = GetNearestVehicle(location, distance, dimension);
 
@@ -299,7 +299,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return generatedPlate;
         }
 
-        public static IVehicle GetNearestVehicle(Vector3 position, float distance = 3.0f, short dimension = short.MaxValue)
+        public static IVehicle GetNearestVehicle(Vector3 position, float distance = 3.0f, short dimension = GameMode.GlobalDimension)
         {
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
             // ICollection<IVehicle> vehs = Alt.GetAllVehicles();
@@ -319,7 +319,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return nearest;
         }
 
-        public static async Task<IVehicle> GetNearestVehicleAsync(Vector3 position, float distance = 3.0f, short dimension = short.MaxValue)
+        public static async Task<IVehicle> GetNearestVehicleAsync(Vector3 position, float distance = 3.0f, short dimension = GameMode.GlobalDimension)
         {
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
             // ICollection<IVehicle> vehs = Alt.GetAllVehicles();

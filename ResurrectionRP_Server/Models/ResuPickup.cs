@@ -42,7 +42,7 @@ namespace ResurrectionRP_Server.Models
         #endregion
 
         #region Static methods
-        public static ResuPickup CreatePickup(string model, Item item, int quantite, Vector3 position, bool hide, TimeSpan endlife, uint dimension = ushort.MaxValue)
+        public static ResuPickup CreatePickup(string model, Item item, int quantite, Vector3 position, bool hide, TimeSpan endlife, short dimension = GameMode.GlobalDimension)
         {
             Entities.Objects.WorldObject worldObject = Entities.Objects.WorldObject.CreateObject(model, position, new Vector3(), true, true, dimension);
 

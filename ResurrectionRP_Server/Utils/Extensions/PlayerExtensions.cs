@@ -236,10 +236,10 @@ namespace ResurrectionRP_Server
             return endup;
         }
 
-        public static IVehicle GetNearestVehicle(this IPlayer client, float distance, short dimension = short.MaxValue) =>
+        public static IVehicle GetNearestVehicle(this IPlayer client, float distance, short dimension = GameMode.GlobalDimension) =>
             VehiclesManager.GetNearestVehicle(client.Position, distance, dimension);
 
-        public static async Task<IVehicle> GetNearestVehicleAsync(this IPlayer client, float distance = 3.0f, short dimension = short.MaxValue)
+        public static async Task<IVehicle> GetNearestVehicleAsync(this IPlayer client, float distance = 3.0f, short dimension = GameMode.GlobalDimension)
         {
             return await VehiclesManager.GetNearestVehicleAsync(client.Position, distance, dimension);
         }

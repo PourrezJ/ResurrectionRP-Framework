@@ -91,7 +91,7 @@ namespace ResurrectionRP_Server.Models
             {
                 var position = c.GetPosition();
                 var dimension = c.Dimension;
-                ResuPickup pickup = ResuPickup.CreatePickup("prop_money_bag_01", this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension); 
+                ResuPickup pickup = ResuPickup.CreatePickup("prop_money_bag_01", this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), dimension); 
                 pickup.OnTakePickup += OnPickup;
 
                 return Task.FromResult(true);
@@ -109,7 +109,7 @@ namespace ResurrectionRP_Server.Models
             {
                 var position = c.GetPosition();
                 var dimension = c.Dimension;
-                ResuPickup resu = ResuPickup.CreatePickup("prop_money_bag_01", this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (uint)dimension); 
+                ResuPickup resu = ResuPickup.CreatePickup("prop_money_bag_01", this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), dimension); 
                 resu.OnTakePickup += OnPickup;
 
                 return Task.FromResult(true);

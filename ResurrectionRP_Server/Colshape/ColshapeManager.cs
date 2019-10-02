@@ -66,7 +66,7 @@ namespace ResurrectionRP_Server.Colshape
                         {
                             colshape.AddEntity(player);
                             OnPlayerEnterColshape?.Invoke(colshape, player);
-                            player.Emit("OnPlayerEnterColshape", colshape.Id);
+                            player.EmitLocked("OnPlayerEnterColshape", colshape.Id);
                             Alt.Log($"[Colshape {colshape.Id}] Player {player.Id} entering, {(DateTime.Now - startTime).TotalMilliseconds}ms");
                         }
                     }
@@ -104,7 +104,7 @@ namespace ResurrectionRP_Server.Colshape
                                 if (entity.Type == BaseObjectType.Player)
                                 {
                                     OnPlayerLeaveColshape?.Invoke(colshape, (IPlayer)entity);
-                                    ((IPlayer)entity).Emit("OnPlayerLeaveColshape", colshape.Id);
+                                    ((IPlayer)entity).EmitLocked("OnPlayerLeaveColshape", colshape.Id);
                                     Alt.Log($"[Colshape {colshape.Id}] Player {entity.Id} leaving, {(DateTime.Now - startTime).TotalMilliseconds}ms");
                                 }
                                 else if (entity.Type == BaseObjectType.Vehicle)

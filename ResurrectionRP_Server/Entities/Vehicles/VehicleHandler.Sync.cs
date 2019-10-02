@@ -555,6 +555,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         _windows[i] = WindowState.WindowFixed;
                 }
 
+                if (Vehicle.WheelsCount > _wheels.Length)
+                    _wheels = new Wheel[Vehicle.WheelsCount];
+
                 for (byte i = 0; i < Vehicle.WheelsCount; i++)
                 {
                     _wheels[i] = new Wheel();

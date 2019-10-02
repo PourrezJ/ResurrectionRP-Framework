@@ -248,18 +248,29 @@ namespace ResurrectionRP_Server.Phone
 
         public bool TryEditContact(IPlayer client, String contactName, String contactNumber, String originalNumber, bool message = true)
         {
-            if (ValidateContact(contactName, contactNumber, true))
+            try
             {
-                Address foundAddress = AddressBook.Find(address => address.phoneNumber == originalNumber);
-                if (foundAddress.phoneNumber != null && foundAddress.phoneNumber != "")
+                if (ValidateContact(contactName, contactNumber, true))
                 {
-                    RemoveContactFromAddressBook(originalNumber);
-                    AddNameToAddressBook(client, contactName, contactNumber);
+                    if (AddressBook == null)
+                        return false;
 
-                    client.EmitLocked("ContactEdited");
-                    return true;
+                    Address foundAddress = AddressBook.Find(address => address?.phoneNumber == originalNumber);
+                    if (foundAddress.phoneNumber != null && foundAddress.phoneNumber != "")
+                    {
+                        RemoveContactFromAddressBook(originalNumber);
+                        AddNameToAddressBook(client, contactName, contactNumber);
+
+                        client.EmitLocked("ContactEdited");
+                        return true;
+                    }
                 }
             }
+            catch(Exception ex)
+            {
+                Alt.Server.LogError(ex.ToString());
+            }
+
             return false;
         }
 

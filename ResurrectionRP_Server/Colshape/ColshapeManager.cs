@@ -42,97 +42,97 @@ namespace ResurrectionRP_Server.Colshape
             if (_thread != null)
                 return;
 
-            _thread = new Thread(Loop);
+            _thread = new Thread(OnTick);
             _thread.IsBackground = true;
             _thread.Start();
         }
         #endregion
 
         #region Private static methods
-        private static void Loop()
+        public static void OnTick()
         {
-            while (_running)
+            if (!_running)
+                return;
+
+            try
             {
-                try
+                DateTime startTime = DateTime.Now;
+
+                foreach (IPlayer player in Alt.GetAllPlayers())
                 {
-                    DateTime startTime = DateTime.Now;
-
-                    foreach (IPlayer player in Alt.GetAllPlayers())
-                    {
-                        lock (_colshapes)
-                        {
-                            foreach (IColshape colshape in _colshapes.Values)
-                            {
-                                if (!colshape.IsEntityIn(player) && colshape.IsEntityInside(player))
-                                {
-                                    colshape.AddEntity(player);
-                                    OnPlayerEnterColshape?.Invoke(colshape, player);
-                                    player.EmitLocked("OnPlayerEnterColshape", colshape.Id);
-                                    Alt.Log($"[Colshape {colshape.Id}] Player {player.Id} entering, {(DateTime.Now - startTime).TotalMilliseconds}ms");
-                                }
-                            }
-                        }
-                    }
-
-                    foreach (IVehicle vehicle in VehiclesManager.GetAllVehiclesInGame())
-                    {
-                        lock (_colshapes)
-                        {
-                            foreach (IColshape colshape in _colshapes.Values)
-                            {
-                                if (!colshape.IsEntityIn(vehicle) && colshape.IsEntityInside(vehicle))
-                                {
-                                    Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} entering");
-                                    colshape.AddEntity(vehicle);
-                                    OnVehicleEnterColshape?.Invoke(colshape, vehicle);
-                                }
-                            }
-                        }
-                    }
-
                     lock (_colshapes)
                     {
                         foreach (IColshape colshape in _colshapes.Values)
                         {
-                            lock (colshape.Entities)
+                            if (!colshape.IsEntityIn(player) && colshape.IsEntityInside(player))
                             {
-                                foreach (IEntity entity in colshape.Entities)
-                                {
-                                    if (!colshape.IsEntityInside(entity))
-                                    {
-                                        _entitiesToRemove.Add(entity);
-
-                                        if (entity.Type == BaseObjectType.Player)
-                                        {
-                                            OnPlayerLeaveColshape?.Invoke(colshape, (IPlayer)entity);
-                                            ((IPlayer)entity).EmitLocked("OnPlayerLeaveColshape", colshape.Id);
-                                            Alt.Log($"[Colshape {colshape.Id}] Player {entity.Id} leaving, {(DateTime.Now - startTime).TotalMilliseconds}ms");
-                                        }
-                                        else if (entity.Type == BaseObjectType.Vehicle)
-                                        {
-                                            OnVehicleLeaveColshape?.Invoke(colshape, (IVehicle)entity);
-                                            Alt.Log($"[Colshape {colshape.Id}] Vehicle {entity.Id} leaving, {(DateTime.Now - startTime).TotalMilliseconds}ms");
-                                        }
-                                    }
-                                }
-
-                                if (_entitiesToRemove.Count > 0)
-                                {
-                                    foreach (IEntity entity in _entitiesToRemove)
-                                        colshape.RemoveEntity(entity);
-
-                                    _entitiesToRemove.Clear();
-                                }
+                                colshape.AddEntity(player);
+                                OnPlayerEnterColshape?.Invoke(colshape, player);
+                                player.EmitLocked("OnPlayerEnterColshape", colshape.Id);
+                                Alt.Log($"[Colshape {colshape.Id}] Player {player.Id} entering, {(DateTime.Now - startTime).TotalMilliseconds}ms");
                             }
                         }
                     }
+                }
 
-                    Thread.Sleep(Math.Max(TIME_INTERVAL - (int)(DateTime.Now - startTime).TotalMilliseconds, 0));
-                }
-                catch (Exception ex)
+                foreach (IVehicle vehicle in VehiclesManager.GetAllVehiclesInGame())
                 {
-                    Alt.Server.LogError($"Colshape error {ex}");
+                    lock (_colshapes)
+                    {
+                        foreach (IColshape colshape in _colshapes.Values)
+                        {
+                            if (!colshape.IsEntityIn(vehicle) && colshape.IsEntityInside(vehicle))
+                            {
+                                Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} entering");
+                                colshape.AddEntity(vehicle);
+                                OnVehicleEnterColshape?.Invoke(colshape, vehicle);
+                            }
+                        }
+                    }
                 }
+
+                lock (_colshapes)
+                {
+                    foreach (IColshape colshape in _colshapes.Values)
+                    {
+                        lock (colshape.Entities)
+                        {
+                            foreach (IEntity entity in colshape.Entities)
+                            {
+                                if (!colshape.IsEntityInside(entity))
+                                {
+                                    _entitiesToRemove.Add(entity);
+
+                                    if (entity.Type == BaseObjectType.Player)
+                                    {
+                                        OnPlayerLeaveColshape?.Invoke(colshape, (IPlayer)entity);
+                                        ((IPlayer)entity).EmitLocked("OnPlayerLeaveColshape", colshape.Id);
+                                        Alt.Log($"[Colshape {colshape.Id}] Player {entity.Id} leaving, {(DateTime.Now - startTime).TotalMilliseconds}ms");
+                                    }
+                                    else if (entity.Type == BaseObjectType.Vehicle)
+                                    {
+                                        OnVehicleLeaveColshape?.Invoke(colshape, (IVehicle)entity);
+                                        Alt.Log($"[Colshape {colshape.Id}] Vehicle {entity.Id} leaving, {(DateTime.Now - startTime).TotalMilliseconds}ms");
+                                    }
+                                }
+                            }
+
+                            if (_entitiesToRemove.Count > 0)
+                            {
+                                foreach (IEntity entity in _entitiesToRemove)
+                                    colshape.RemoveEntity(entity);
+
+                                _entitiesToRemove.Clear();
+                            }
+                        }
+                    }
+                }
+
+                Thread.Sleep(Math.Max(TIME_INTERVAL - (int)(DateTime.Now - startTime).TotalMilliseconds, 0));
+            }
+            catch (Exception ex)
+            {
+                Alt.Server.LogError($"Colshape error {ex}");
             }
         }
         #endregion

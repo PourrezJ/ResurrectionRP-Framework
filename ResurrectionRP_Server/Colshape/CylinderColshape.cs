@@ -20,6 +20,8 @@ namespace ResurrectionRP_Server.Colshape
         #region Public methods
         public override bool IsEntityInside(IEntity entity)
         {
+            if (!entity.Exists)
+                return false;
             if (entity.Dimension != Dimension)
                 return false;
             else if (entity.Position.Z < Position.Z || entity.Position.Z > Position.Z + Height)

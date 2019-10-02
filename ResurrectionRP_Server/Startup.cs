@@ -102,7 +102,7 @@ namespace ResurrectionRP_Server
         public override void OnTick()
         {
             FPSCounter.OnTick();
-
+            ColshapeManager.OnTick();
             base.OnTick();
         }
     }

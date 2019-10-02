@@ -247,16 +247,12 @@ namespace ResurrectionRP_Server
 
             Events.Initialize();
 
-            // ATTENTION DANS LES 3 Ce n'est pas thread safe!
-            Task.Run(() =>
-            {
-                Utils.Utils.Delay(15000, async () => await Save());
-                Utils.Utils.Delay(60000, async () => await FactionManager.Update());
-                Utils.Utils.Delay(1000, async () => await Restart());
-            });
+            Utils.Utils.SetInterval(async () => await Save(), 15000);
+            Utils.Utils.SetInterval(async () => await FactionManager.Update(), 60000);
+            Utils.Utils.SetInterval(async () => await Restart(), 1000);
             
-            Utils.Utils.Delay(1000, () => Time.Update());           
-            Utils.Utils.Delay(1000, () => VehiclesManager.UpdateVehiclesMilageAndFuel());
+            Utils.Utils.SetInterval(() => Time.Update(), 1000);           
+            Utils.Utils.SetInterval(() => VehiclesManager.UpdateVehiclesMilageAndFuel(), 1000);
 
             Chat.Initialize();
 

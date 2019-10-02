@@ -87,7 +87,7 @@ namespace ResurrectionRP_Server
             // var vehs = Alt.GetAllVehicles();
             var vehs = VehiclesManager.GetAllVehiclesInGame();
             List<IVehicle> endup = new List<IVehicle>();
-
+            Utils.Utils.CheckThread("GetVehiclesInRange");
             AltAsync.Do(() =>
             {
                 var position = client.GetPosition();
@@ -110,6 +110,7 @@ namespace ResurrectionRP_Server
 
         public static List<IPlayer> GetPlayersInRange(this IPlayer client, float Range)
         {
+            Utils.Utils.CheckThread("GetPlayersInRange");
             List<IPlayer> endup = new List<IPlayer>();
             try
             {
@@ -182,8 +183,12 @@ namespace ResurrectionRP_Server
 
         public static List<IPlayer> GetNearestPlayers(this IPlayer client, float range, bool withoutme = true, int dimension = GameMode.GlobalDimension)
         {
+            Utils.Utils.CheckThread();
+
             ICollection<IPlayer> players = Alt.GetAllPlayers();
             List<IPlayer> nearestPlayers = new List<IPlayer>();
+
+            Utils.Utils.CheckThread();
 
             AltAsync.Do(() =>
             {
@@ -205,6 +210,7 @@ namespace ResurrectionRP_Server
 
         public static IVehicle GetNearestVehicle(this IPlayer client)
         {
+            Utils.Utils.CheckThread();
             // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
             // var vehs = Alt.GetAllVehicles();
             var vehs = VehiclesManager.GetAllVehiclesInGame();

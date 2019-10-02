@@ -7,6 +7,7 @@ using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Utils;
 using System;
 using System.Globalization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server
@@ -15,6 +16,8 @@ namespace ResurrectionRP_Server
     {
         private GameMode gamemode = null;
 
+        public static int MainThreadId { get; private set; }
+
         static void Main(string[] args)
         {
 
@@ -22,10 +25,12 @@ namespace ResurrectionRP_Server
 
         public override void OnStart()
         {
+            MainThreadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
+
             var ci = new CultureInfo("fr-FR");
             CultureInfo.DefaultThreadCurrentCulture = ci;
-            System.Threading.Thread.CurrentThread.CurrentCulture = ci;
-            System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
+            Thread.CurrentThread.CurrentCulture = ci;
+            Thread.CurrentThread.CurrentUICulture = ci;
 
             AppDomain.CurrentDomain.UnhandledException += OnException;
 

@@ -1,6 +1,7 @@
 ﻿using AltV.Net;
 using AltV.Net.Enums;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Utils
@@ -14,6 +15,15 @@ namespace ResurrectionRP_Server.Utils
         //    action();
         //    await SetInterval(action, timeout);
         //}
+
+        public static void CheckThread(string data = "")
+        {
+            if (Startup.MainThreadId != System.Threading.Thread.CurrentThread.ManagedThreadId)
+            {
+                Alt.Server.LogError(data + " not in the main thread!");
+                throw new Exception("not in the main thread!");
+            }
+        }
 
         public static int RandomNumber(int max) => new Random().Next(max);
         public static int RandomNumber(int min, int max) => new Random().Next(min, max);

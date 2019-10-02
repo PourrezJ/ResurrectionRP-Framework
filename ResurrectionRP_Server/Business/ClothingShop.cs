@@ -509,8 +509,7 @@ namespace ResurrectionRP_Server.Business
                 return;
 
             menu.ItemSelectCallback = OnTopsCategorieCallBack;
-            menu.IndexChangeCallbackAsync = null;
-
+            menu.IndexChangeCallback = null;
             var compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenTops : GirlTops;
 
             foreach (var compo in compoList)
@@ -631,7 +630,7 @@ namespace ResurrectionRP_Server.Business
             menu.SubTitle = _componentName;
             menu.BackCloseMenu = false;
             menu.ItemSelectCallback = CategorieCallBack;
-            menu.IndexChangeCallbackAsync = null;
+            menu.IndexChangeCallback = null;
 
             List<int> compoList = null;
 

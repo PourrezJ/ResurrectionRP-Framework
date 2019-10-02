@@ -111,6 +111,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     player.SendNotificationError("Véhicule déjà dans le monde");
                     return;
                 }
+                //if (GameMode.Instance.PoundManager.PoundVehicleList.Find(c => c.Plate == vehicle.Plate) != null)
+                else if (vehicle.IsInPound)
+                {
+                    player.SendNotificationError("Véhicule à fourrière");
+                    return;
+                }
 
                 foreach (Parking parking in Parking.ParkingList)
                 {
@@ -121,11 +127,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     }
                 }
 
-                if (GameMode.Instance.PoundManager.PoundVehicleList.Find(c => c.Plate == vehicle.Plate) != null)
-                {
-                    player.SendNotificationError("Véhicule à fourrière");
-                    return;
-                }
+
 
                 vehicle.SpawnVehicle();
                 player.SendNotificationSuccess("Véhicule spawn");

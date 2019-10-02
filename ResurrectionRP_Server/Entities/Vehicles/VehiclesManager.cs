@@ -224,12 +224,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 {
                     foreach (VehicleHandler vehicle in vehicles)
                     {
-                        _vehicleHandlers.TryAdd(vehicle.Plate, vehicle);
+                        if (_vehicleHandlers.TryAdd(vehicle.Plate, vehicle))
+                        {
+                            if (vehicle.IsParked || vehicle.IsInPound)
+                                continue;
 
-                        if (vehicle.IsParked || vehicle.IsInPound)
-                            continue;
-
-                        vehicle.SpawnVehicle();
+                            vehicle.SpawnVehicle();
+                        }
                     }
                 });
             }

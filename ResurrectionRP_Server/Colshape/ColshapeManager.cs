@@ -21,7 +21,7 @@ namespace ResurrectionRP_Server.Colshape
         #endregion
 
         #region Private static fields
-        private static Thread _thread = null;
+        //private static Thread _thread = null;
         private static bool _running = true;
         private static volatile uint _colshapeId = 0;
         private static readonly Dictionary<ulong, IColshape> _colshapes = new Dictionary<ulong, IColshape>();
@@ -39,12 +39,12 @@ namespace ResurrectionRP_Server.Colshape
         #region Init
         public static void Init()
         {
-            if (_thread != null)
-                return;
+            //if (_thread != null)
+            //    return;
 
-            _thread = new Thread(OnTick);
-            _thread.IsBackground = true;
-            _thread.Start();
+            //_thread = new Thread(OnTick);
+            //_thread.IsBackground = true;
+            //_thread.Start();
         }
         #endregion
 

@@ -24,16 +24,12 @@ namespace ResurrectionRP_Server.Services
         [BsonIgnore]
         private IColShape _colshape = null;
 
-        public List<ParkedCar> PoundVehicleList = null;
         public int Price = 0;
         #endregion
 
         #region Init
         public void Init()
         {
-            if (PoundVehicleList == null)
-                PoundVehicleList = new List<ParkedCar>();
-
             Alt.Server.LogInfo("--- [POUND] Starting pound ---");
 
             Entities.Blips.BlipsManager.CreateBlip("Fourrière", _poundSpawn.Pos, 0, 88,1,true);
@@ -44,34 +40,6 @@ namespace ResurrectionRP_Server.Services
             //_colshape.OnEntityExitColShape += _colshape_OnEntityExitColShape;
             EventHandlers.Events.OnPlayerEnterColShape += OnPlayerEnterColShape;
 
-            
-            List<string> checkedPlate = new List<string>();
-            foreach (var vehicle in PoundVehicleList.ToList())
-            {
-                Task.Run(async()=> await VehiclesManager.DeleteVehicleFromAllParkings(vehicle.Plate));
-
-                if (VehiclesManager.GetVehicleWithPlate(vehicle.Plate) != null)
-                {
-                    checkedPlate.Add(vehicle.Plate);
-                }
-
-                if (!checkedPlate.Contains(vehicle.Plate))
-                {
-                    checkedPlate.Add(vehicle.Plate);
-                    //if (DateTime.Now > vehicle.ParkTime.AddMonths(1)) // Vérification si horodatage est dépassé, mise en occasion.
-                    //{
-                    //    vehicle.ParkTime = DateTime.Now;
-                    //    // TODO POUR L'ENTREPRISE D'OCCASION
-                    //}
-                }
-                else
-                {
-                    PoundVehicleList.Remove(vehicle);
-                    Alt.Server.LogError($"POUND | Vehicle duplicated plate: {vehicle.Plate}");
-                }
-            }
-            
-
             Entities.Peds.Ped _npc = Entities.Peds.Ped.CreateNPC(PedModel.Gardener01SMM, new Vector3(409.1505f, -1622.874f, 29.29193f), 227.5882f);
 
             _npc.NpcInteractCallBack += (IPlayer client, Entities.Peds.Ped ped) =>
@@ -79,7 +47,7 @@ namespace ResurrectionRP_Server.Services
                 OpenPoundMenu(client);
             };
 
-            Alt.Server.LogInfo($"--- [POUND] Finish loading all pounds in database: {PoundVehicleList.Count} ---");
+            Alt.Server.LogInfo($"--- [POUND] Finish loading Pound ---");
         }
         #endregion
 
@@ -126,7 +94,6 @@ namespace ResurrectionRP_Server.Services
                                 ph.AddMoney(250);
 
                                 _vh.TowTruck = null;
-                                PoundVehicleList.Add(new ParkedCar(_towedvehicle.Plate, DateTime.Now));
                                 _towedvehicle.IsInPound = true;
                                 await _vh.UpdatePropertiesAsync();
                                 _towedvehicle.UpdateInBackground(false);
@@ -145,7 +112,7 @@ namespace ResurrectionRP_Server.Services
             _menu.ItemSelectCallbackAsync = PoundMenuCallBack;
 
             var _poundList = GetVehicleInPound(client);
-            if (_poundList.Count <= 0)
+            if (_poundList.Count() <= 0)
             {
                 client.SendNotificationPicture(Utils.Enums.CharPicture.DIA_GARDENER, "Fourrière", "","~r~Vous n'avez aucun véhicule ici!" );
                 return;
@@ -187,6 +154,7 @@ namespace ResurrectionRP_Server.Services
                 {
                     VehicleHandler veh = menuItem.GetData("Vehicle");
                     veh.IsInPound = false;
+                    veh.LastUse = DateTime.Now;
                     await veh.SpawnVehicleAsync(new Location(_poundSpawn.Pos, _poundSpawn.Rot.ConvertRotationToRadian()));
                     veh.UpdateInBackground();
 
@@ -194,7 +162,6 @@ namespace ResurrectionRP_Server.Services
                     if (keyfind == null)
                         ph.ListVehicleKey.Add(new VehicleKey(veh.VehicleManifest.LocalizedName, veh.Plate));
 
-                    PoundVehicleList.Remove(PoundVehicleList.Find(v => v.Plate == veh.Plate));
                     await GameMode.Instance.Save();
                     client.SendNotificationPicture(Utils.Enums.CharPicture.DIA_GARDENER,"Fourrière", "","~g~Votre véhicule vous attend sur le parking." );
                     MenuManager.CloseMenu(client);
@@ -206,23 +173,14 @@ namespace ResurrectionRP_Server.Services
             }
         }
 
-        public List<VehicleHandler> GetVehicleInPound(IPlayer client)
+        public IEnumerable<VehicleHandler> GetVehicleInPound(IPlayer client)
         {
-            List<ParkedCar> List = PoundVehicleList.FindAll(v => VehiclesManager.GetVehicleHandler(v.Plate)?.OwnerID == client.GetSocialClub() || client.GetPlayerHandler().HasKey(v.Plate)).ToList();
-            List<VehicleHandler> endup = new List<VehicleHandler>();
-
-            foreach(ParkedCar car in List)
-                endup.Add(VehiclesManager.GetVehicleHandler(car.Plate));
-
-            return endup;
+            return VehiclesManager.GetAllVehicles().Where(v => (v.OwnerID == client.GetSocialClub() || client.GetPlayerHandler().HasKey(v.Plate)) && v.IsInPound);
         }
 
         public async Task AddVehicleInPoundAsync(VehicleHandler veh)
         {
             Alt.Server.LogInfo ($"Mise en fourrière véhicule {veh.Plate}");
-
-            if (!PoundVehicleList.Exists(p => p.Plate == veh.Plate))
-                PoundVehicleList.Add(new ParkedCar(veh.Plate, DateTime.Now));
 
             veh.IsInPound = true;
             veh.ParkingName = "Fourrière";

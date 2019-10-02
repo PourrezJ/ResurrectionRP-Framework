@@ -21,6 +21,7 @@ namespace ResurrectionRP_Server.EventHandlers
         public static event ColShapeVehicleEventHandler OnVehicleEnterColShape;
         public static event ColShapeVehicleEventHandler OnVehicleLeaveColShape;
         public static event ColShapePlayerEventHandlerAsync OnPlayerInteractInColShapeAsync;
+        public static event ColShapePlayerEventHandler OnPlayerInteractInColShape;
         #endregion
 
         #region Private fields
@@ -66,7 +67,7 @@ namespace ResurrectionRP_Server.EventHandlers
 
                     // Alt.Server.LogInfo($"Entity {targetEntity.Id} leave colshape {colShape.NativePointer.ToString()}");
                     // BUG V784 : Bug ColShape.IsEntityIn() returns always false
-                    colShape.RemoveEntity(targetEntity as IPlayer);
+                    colShape.RemoveEntity(targetEntity);
 
                     if (targetEntity.Type == BaseObjectType.Vehicle)
                     {
@@ -93,7 +94,7 @@ namespace ResurrectionRP_Server.EventHandlers
             }
         }
 
-        private static async Task OnEntityInteractInColShape(IPlayer client, object[] args)
+        private static void OnEntityInteractInColShape(IPlayer client, object[] args)
         {
             if (!int.TryParse(args[0].ToString(), out int key))
                 return;
@@ -107,11 +108,16 @@ namespace ResurrectionRP_Server.EventHandlers
                 if (colshape.IsEntityInColShape(client))
                 {
                     if (OnPlayerInteractInColShapeAsync != null)
-                        await OnPlayerInteractInColShapeAsync.Invoke(colshape, client);
+                        Task.Run(()=> OnPlayerInteractInColShapeAsync.Invoke(colshape, client));
 
-                    if (colshape.GetData("OnPlayerInteractInColShape", out ColShapePlayerEventHandlerAsync onPlayerInteractInColShape) && onPlayerInteractInColShape != null)
-                        await onPlayerInteractInColShape.Invoke(colshape, client);
+                    if (OnPlayerInteractInColShape != null)
+                        OnPlayerInteractInColShape.Invoke(colshape, client);
 
+                    if (colshape.GetData("OnPlayerInteractInColShapeAsync", out ColShapePlayerEventHandlerAsync onPlayerInteractInColShapeAsync) && onPlayerInteractInColShapeAsync != null)
+                        Task.Run(() => onPlayerInteractInColShapeAsync.Invoke(colshape, client));
+
+                    if (colshape.GetData("OnPlayerInteractInColShape", out ColShapePlayerEventHandler onPlayerInteractInColShape) && onPlayerInteractInColShape != null)
+                        onPlayerInteractInColShape.Invoke(colshape, client);
                     break;
                 }
             }

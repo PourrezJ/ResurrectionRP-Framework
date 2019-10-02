@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Entities;
@@ -127,7 +128,7 @@ namespace ResurrectionRP_Server.Models
         [BsonIgnore]
         public OnSaveNeededDelegate OnSaveNeeded { get; set; }
         [BsonIgnore]
-        public IColShape ParkingColshape { get; private set; }
+        public IColshape ParkingColshape { get; private set; }
         #endregion
 
         #region Constructor
@@ -146,7 +147,7 @@ namespace ResurrectionRP_Server.Models
         #endregion
 
         #region Event handlers
-        private void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        private void OnPlayerEnterColshape(IColshape colshape, IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -157,7 +158,7 @@ namespace ResurrectionRP_Server.Models
                 OpenParkingMenu(client);
         }
 
-        private void OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
+        private void OnPlayerLeaveColshape(IColshape colshape, IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -173,7 +174,7 @@ namespace ResurrectionRP_Server.Models
             }
         }
 
-        private void OnVehicleEnterColShape(IColShape colShape, IVehicle vehicle)
+        private void OnVehicleEnterColshape(IColshape colshape, IVehicle vehicle)
         {
             if (!vehicle.Exists || vehicle.Driver == null)
                 return;
@@ -181,10 +182,10 @@ namespace ResurrectionRP_Server.Models
             if (OnVehicleEnterParking != null)
                 OnVehicleEnterParking.Invoke(vehicle.GetVehicleHandler(), this);
             else
-                OnPlayerEnterColShape(colShape, vehicle.Driver);
+                OnPlayerEnterColshape(colshape, vehicle.Driver);
         }
 
-        private void OnVehicleLeaveColShape(IColShape colShape, IVehicle vehicle)
+        private void OnVehicleLeaveColshape(IColshape colshape, IVehicle vehicle)
         {
             if (!vehicle.Exists || vehicle.Driver == null)
                 return;
@@ -192,7 +193,7 @@ namespace ResurrectionRP_Server.Models
             if (OnVehicleLeaveParking != null)
                 OnVehicleEnterParking.Invoke(vehicle.GetVehicleHandler(), this);
             else
-                OnPlayerLeaveColShape(colShape, vehicle.Driver);
+                OnPlayerLeaveColshape(colshape, vehicle.Driver);
         }
         #endregion
 
@@ -269,12 +270,11 @@ namespace ResurrectionRP_Server.Models
         public void Init(float markerscale = 3f, int opacite = 128, bool blip = false, uint sprite = 50, float scale = 1f, byte color = 0, uint alpha = 255, string name = "", short dimension = GameMode.GlobalDimension)
         {
             EntityMarker = Marker.CreateMarker(MarkerType.VerticalCylinder, Location - new Vector3(0.0f, 0.0f, markerscale - 1), new Vector3(3, 3, 3));
-            ParkingColshape = Alt.CreateColShapeCylinder(new Position(Location.X, Location.Y, Location.Z -1), markerscale, 4);
-            ParkingColshape.Dimension = dimension;
-            ParkingColshape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
-            ParkingColshape.SetOnPlayerLeaveColShape(OnPlayerLeaveColShape);
-            ParkingColshape.SetOnVehicleEnterColShape(OnVehicleEnterColShape);
-            ParkingColshape.SetOnVehicleLeaveColShape(OnVehicleLeaveColShape);
+            ParkingColshape = ColshapeManager.CreateCylinderColshape(new Position(Location.X, Location.Y, Location.Z - 1), markerscale, 4, dimension);
+            ParkingColshape.OnPlayerEnterColshape += OnPlayerEnterColshape;
+            ParkingColshape.OnPlayerLeaveColshape += OnPlayerLeaveColshape;
+            ParkingColshape.OnVehicleEnterColshape += OnVehicleEnterColshape;
+            ParkingColshape.OnVehicleLeaveColshape += OnVehicleLeaveColshape;
 
             if (!string.IsNullOrEmpty(Name))
                 EntityLabel = GameMode.Instance.Streamer.AddEntityTextLabel($"{Name}\n~o~Approchez pour intéragir", Location, 4);
@@ -441,7 +441,7 @@ namespace ResurrectionRP_Server.Models
                         await OnVehicleStored.Invoke(client, veh); // call event for success storage
 
                     veh.UpdateInBackground(true, true);
-                    await veh.Delete(false);
+                    await veh.DeleteAsync(false);
                 }
                 else
                     Alt.Server.LogError("GetHandlerByVehicle fuck is null this shit! mother fucker!");
@@ -476,7 +476,8 @@ namespace ResurrectionRP_Server.Models
 
         public void Destroy()
         {
-            Alt.RemoveColShape(ParkingColshape);
+            ParkingColshape.Delete();
+
             if (EntityMarker != null)
                 Marker.DestroyMarker(EntityMarker);
             if (EntityLabel != null)

@@ -57,38 +57,26 @@ namespace ResurrectionRP_Server.Entities.Players
 
             AltAsync.OnClient("IWantToDie", IWantToDie);
 
-            
-            /*
-            Utils.Utils.Delay(300000, false, async () =>
+            Utils.Utils.SetInterval(() =>
             {
                 var players = PlayerHandler.PlayerHandlerList.ToList();
 
                 for (int i = 0; i < players.Count; i++)
                 {
-                    try
+                    var ph = players[i];
+
+                    if (!ph.Key.Exists)
+                        continue;
+
+                    if (GameMode.Instance.PlayerList.Any(v => v.Id == ph.Key.Id))
                     {
-                        var ph = players[i];
-
-                        if (!ph.Key.Exists)
-                            continue;
-
-                        if (GameMode.Instance.PlayerList.Any(v => v.Id == ph.Key.Id))
-                        {
-                            if (ph.Value != null)
-                                await ph.Value.Update();
-                        }
-
-                        await Task.Delay(500);
-                    }
-                    catch (Exception ex)
-                    {
-                        Alt.Server.LogError(ex.ToString());
+                        if (ph.Value != null)
+                            ph.Value.UpdateFull();
                     }
                 }
 
                 players.Clear();
-            });*/
-
+            }, 300000);
         }
 
 
@@ -184,16 +172,16 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     player.Emit("ONU_PlayerDeath", weapon);
 
-                    PlayerManager.DeadPlayers.Add(new DeadPlayer(player, killer, weapon));
+                    DeadPlayers.Add(new DeadPlayer(player, killer, weapon));
                 }
                 else
                 {
                     player.SendNotification($"Ne va pas vers la lumière, tu vas te relever.");
-                    Utils.Utils.Delay(60000 * 1, true, async () =>
+                    Utils.Utils.SetInterval(() =>
                     {
                         if (player.Exists)
-                            await player.ReviveAsync(105);
-                    });
+                            player.Revive(105);
+                    }, 60000);
                 }
 
                 player.GetPlayerHandler()?.UpdateFull();
@@ -226,7 +214,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             player.SetData("SocialClub", socialclub);
             await player.SetModelAsync((uint)AltV.Net.Enums.PedModel.FreemodeMale01);
-            //await player.SpawnAsync(new Position(-1072.886f, -2729.607f, 0.8148939f));
+            await player.SpawnAsync(new Position(-1072.886f, -2729.607f, 0.8148939f));
 
             if (GameMode.ServerLock)
             {

@@ -89,7 +89,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
 
                     if (!ph.HasOpenMenu())
-                        await ph.OpenPlayerMenu();
+                        ph.OpenPlayerMenu();
 
                     break;
                     
@@ -143,7 +143,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    Door door = GameMode.Instance.DoorManager.DoorList.Find(p => p.Position.DistanceTo2D(raycastData.pos) <= 1 && p.Hash == raycastData.entityHash && raycastData.isHit);
+                    Door door = Door.DoorList.Find(p => p.Position.DistanceTo2D(raycastData.pos) <= 1.2 && p.Hash == (int)raycastData.entityHash && raycastData.isHit);
                     if (door != null)
                         door.Interact?.Invoke(client, door);
 

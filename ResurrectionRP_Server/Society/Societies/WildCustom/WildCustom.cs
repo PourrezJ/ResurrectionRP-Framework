@@ -13,7 +13,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
         #endregion
 
         #region Init
-        public override async Task Init()
+        public override void Init()
         {
             MenuBanner = Banner.Garage;
             Type = GarageType.Car;
@@ -22,7 +22,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             PnjLocation = new Location(new Vector3(106.0419f, 6627.597f, 31.78723f), new Vector3(0, 0, 237.60875f));
             WorkZonePosition = new Vector3(111.3728f, 6625.725f, 31.78725f);
 
-            await base.Init();
+            base.Init();
         }
         #endregion
     }

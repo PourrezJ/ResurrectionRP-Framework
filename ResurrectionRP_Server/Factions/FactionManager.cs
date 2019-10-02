@@ -40,7 +40,7 @@ namespace ResurrectionRP_Server.Factions
             fm.Dock = (Dock)(await LoadFaction<Dock>("Dock") ?? new Dock("Dock", FactionType.Dock)).Init();
             fm.Nordiste = (Nordiste)(await LoadFaction<Nordiste>("Bureau du Shérif") ?? new Nordiste("Bureau du Shérif", FactionType.Nordiste)).Init();
 
-            Utils.Utils.Delay((int)TimeSpan.FromMinutes(10).TotalMilliseconds, false, async () =>
+            Utils.Utils.Delay((int)TimeSpan.FromMinutes(10).TotalMilliseconds, async () =>
             {
                 foreach (var faction in FactionList)
                 {       

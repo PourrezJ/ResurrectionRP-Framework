@@ -77,9 +77,9 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Init
-        public override async Task Init()
+        public override void Init()
         {
-            await base.Init();
+            base.Init();
 
             if (Mask == null)
                 Mask = new List<int>();
@@ -150,29 +150,27 @@ namespace ResurrectionRP_Server.Business
                 MenuManager.CloseMenu(client);
         }
 
-        private async Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
+        private void OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
         {
-            if (!await client.ExistsAsync())
+            if (!client.Exists)
                 return;
 
-            await OpenClothingMenu(client);
+            OpenClothingMenu(client);
         }
         #endregion
 
         #region Private methods
-        private Task MenuClose(IPlayer client, Menu menu)
+        private void MenuClose(IPlayer client, Menu menu)
         {
             var ph = client.GetPlayerHandler();
 
             if (ph == null)
-                return Task.CompletedTask;
+                return;
 
             ph.Clothing.UpdatePlayerClothing();
-
-            return Task.CompletedTask;
         }
 
-        private async Task BuyCloth(IPlayer client, byte componentID, int drawable, int variation, double price, string clothName)
+        private void BuyCloth(IPlayer client, byte componentID, int drawable, int variation, double price, string clothName)
         {
             ClothItem item = null;
             ClothManifest? clothdata = ClothingLoader.FindCloths(client, componentID) ?? null;
@@ -212,10 +210,10 @@ namespace ResurrectionRP_Server.Business
                     break;
             }
 
-            await BuyCloth(client, item, price, clothName);
+            BuyCloth(client, item, price, clothName);
         }
 
-        private async Task BuyCloth(IPlayer client, ClothItem item, double price, string clothName)
+        private void BuyCloth(IPlayer client, ClothItem item, double price, string clothName)
         {
             var ph = client.GetPlayerHandler();
 
@@ -226,11 +224,14 @@ namespace ResurrectionRP_Server.Business
             {
                 if (ph.AddItem(item, 1))
                 {
-                    if (await ph.HasBankMoney(price, $"Achat vêtement {clothName}"))
+                    Task.Run(async () =>
                     {
-                        client.SendNotificationSuccess($"Vous avez acheté le vêtement {clothName} pour la somme de ${price}");
-                        ph.UpdateFull();
-                    }
+                        if (await ph.HasBankMoney(price, $"Achat vêtement {clothName}"))
+                        {
+                            client.SendNotificationSuccess($"Vous avez acheté le vêtement {clothName} pour la somme de ${price}");
+                            ph.UpdateFull();
+                        }
+                    });
                 }
                 else
                     client.SendNotificationError("Vous n'avez pas la place pour cette élément.");
@@ -414,15 +415,15 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Main Menu
-        public async Task OpenClothingMenu(IPlayer client)
+        public void OpenClothingMenu(IPlayer client)
         {
             Menu menu = new Menu("ClothingMenu", "", "Que souhaitez-vous acheter?", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, BannerStyle);
-            menu.ItemSelectCallbackAsync = MenuCallBack;
-            menu.FinalizerAsync = MenuClose;
+            menu.ItemSelectCallback = MenuCallBack;
+            menu.Finalizer = MenuClose;
 
             if (Mask != null && Mask.Count > 0)
             {
-                await OpenComponentMenuWithoutCat(client, menu, 1, true);
+                OpenComponentMenuWithoutCat(client, menu, 1, true);
                 return;
             }
 
@@ -466,7 +467,7 @@ namespace ResurrectionRP_Server.Business
              menu.OpenMenu(client);
         }
 
-        private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             _componentName = menuItem.Text.ToUpper();
 
@@ -481,7 +482,7 @@ namespace ResurrectionRP_Server.Business
                     break;
 
                 case "ID_TShirt":
-                    await OpenComponentMenuWithoutCat(client, menu, 8, false);
+                    OpenComponentMenuWithoutCat(client, menu, 8, false);
                     break;
 
                 case "ID_Chaussure":
@@ -501,12 +502,13 @@ namespace ResurrectionRP_Server.Business
             menu.ClearItems();
             menu.BackCloseMenu = false;
             menu.SubTitle = _componentName;
+            menu.IndexChangeCallback = null;
             var data = ClothingLoader.FindTops(client) ?? null;
 
             if (data == null)
                 return;
 
-            menu.ItemSelectCallbackAsync = OnTopsCategorieCallBack;
+            menu.ItemSelectCallback = OnTopsCategorieCallBack;
             menu.IndexChangeCallbackAsync = null;
 
             var compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenTops : GirlTops;
@@ -534,19 +536,19 @@ namespace ResurrectionRP_Server.Business
             menu.OpenMenu(client);
         }
 
-        private async Task OnTopsCategorieCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void OnTopsCategorieCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
-                await OpenClothingMenu(client);
+                OpenClothingMenu(client);
                 return;
             }
 
             menu.ClearItems();
             var compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenTops : GirlTops;
             menu.SubTitle = menuItem.Text.ToUpper();
-            menu.ItemSelectCallbackAsync = OnTopsCallBack;
-            menu.IndexChangeCallbackAsync = PreviewTopsItem;
+            menu.ItemSelectCallback = OnTopsCallBack;
+            menu.IndexChangeCallback = PreviewTopsItem;
 
             ClothManifest? clothdata = ClothingLoader.FindTops(client);
 
@@ -580,21 +582,27 @@ namespace ResurrectionRP_Server.Business
             }
 
             menu.OpenMenu(client);
-            await PreviewTopsItem(client, menu, 0, menu.Items[0]);
+            PreviewTopsItem(client, menu, 0, menu.Items[0]);
         }
 
-        private Task PreviewTopsItem(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        private void PreviewTopsItem(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
-            int drawable = (int)menuItem.GetData("drawable");
-            int variation = (int)menuItem.GetData("variation");
-            int torso = (int)menuItem.GetData("torso");
+            try
+            {
+                int drawable = (int)menuItem.GetData("drawable");
+                int variation = (int)menuItem.GetData("variation");
+                int torso = (int)menuItem.GetData("torso");
 
-            client.SetCloth(ClothSlot.Tops, drawable, variation, 0);
-            client.SetCloth(ClothSlot.Torso, torso, 0, 0);
-            return Task.CompletedTask;
+                client.SetCloth(ClothSlot.Tops, drawable, variation, 0);
+                client.SetCloth(ClothSlot.Torso, torso, 0, 0);
+            }
+            catch(Exception ex)
+            {
+                Alt.Server.LogError(ex.ToString());
+            }
         }
 
-        private async Task OnTopsCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void OnTopsCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
@@ -607,7 +615,7 @@ namespace ResurrectionRP_Server.Business
             double price = menuItem.GetData("price");
 
             ClothItem item = new ClothItem(ItemID.Jacket, menuItem.Text, "", new ClothData(drawable, variation, 0), 0.2, true, false, false, true, false, classes: "jacket", icon: "jacket");
-            await BuyCloth(client, item, price, menuItem.Text);
+            BuyCloth(client, item, price, menuItem.Text);
         }
         #endregion
 
@@ -622,7 +630,7 @@ namespace ResurrectionRP_Server.Business
             menu.ClearItems();
             menu.SubTitle = _componentName;
             menu.BackCloseMenu = false;
-            menu.ItemSelectCallbackAsync = CategorieCallBack;
+            menu.ItemSelectCallback = CategorieCallBack;
             menu.IndexChangeCallbackAsync = null;
 
             List<int> compoList = null;
@@ -683,11 +691,11 @@ namespace ResurrectionRP_Server.Business
             menu.OpenMenu(client);
         }
 
-        private async Task CategorieCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void CategorieCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
-                await OpenClothingMenu(client);
+                OpenClothingMenu(client);
                 return;
             }
 
@@ -696,8 +704,8 @@ namespace ResurrectionRP_Server.Business
             List<int> compoList = menu.GetData("Categorie");
             menu.SubTitle = menuItem.Text.ToUpper();
             menu.BackCloseMenu = false;
-            menu.ItemSelectCallbackAsync = OnCallBackWithCat;
-            menu.IndexChangeCallbackAsync = OnCurrentItem;
+            menu.ItemSelectCallback = OnCallBackWithCat;
+            menu.IndexChangeCallback = OnCurrentItem;
 
             byte componentID = menu.GetData("componentID");
 
@@ -731,10 +739,10 @@ namespace ResurrectionRP_Server.Business
             }
 
             menu.OpenMenu(client);
-            await OnCurrentItem(client, menu, 0, menu.Items[0]);
+            OnCurrentItem(client, menu, 0, menu.Items[0]);
         }
 
-        private async Task OnCallBackWithCat(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void OnCallBackWithCat(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
@@ -748,10 +756,10 @@ namespace ResurrectionRP_Server.Business
             int variation = menuItem.GetData("variation");
             double price = menuItem.GetData("price");
             string clothName = menuItem.Text;
-            await BuyCloth(client, componentID, drawable, variation, price, clothName);
+            BuyCloth(client, componentID, drawable, variation, price, clothName);
         }
 
-        private Task OnCurrentItem(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        private void OnCurrentItem(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
             try
             {
@@ -764,13 +772,11 @@ namespace ResurrectionRP_Server.Business
             {
                 Alt.Server.LogError("OnCurrentItem" + ex);
             }
-
-            return Task.CompletedTask;
         }
         #endregion
 
         #region WithoutCategorie
-        private async Task OpenComponentMenuWithoutCat(IPlayer client, Menu menu, byte componentID, bool backCloseMenu)
+        private void OpenComponentMenuWithoutCat(IPlayer client, Menu menu, byte componentID, bool backCloseMenu)
         {
             ClothManifest? data = ClothingLoader.FindCloths(client, componentID) ?? null;
 
@@ -780,8 +786,8 @@ namespace ResurrectionRP_Server.Business
             menu.ClearItems();
             menu.SubTitle = _componentName;
             menu.BackCloseMenu = backCloseMenu;
-            menu.ItemSelectCallbackAsync = OnCallBackWithoutCat;
-            menu.IndexChangeCallbackAsync = OnCurrentItem;
+            menu.ItemSelectCallback = OnCallBackWithoutCat;
+            menu.IndexChangeCallback = OnCurrentItem;
 
             List<int> compoList = null;
 
@@ -825,14 +831,14 @@ namespace ResurrectionRP_Server.Business
 
             menu.SetData("componentID", componentID);
             menu.OpenMenu(client);
-            await OnCurrentItem(client, menu, 0, menu.Items[0]);
+            OnCurrentItem(client, menu, 0, menu.Items[0]);
         }
 
-        private async Task OnCallBackWithoutCat(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void OnCallBackWithoutCat(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
-                await OpenClothingMenu(client);
+                OpenClothingMenu(client);
                 return;
             }
 
@@ -842,7 +848,7 @@ namespace ResurrectionRP_Server.Business
             double price = menuItem.GetData("price");
             string clothName = menuItem.Text;
 
-            await BuyCloth(client, componentID, drawable, variation, price, clothName);
+            BuyCloth(client, componentID, drawable, variation, price, clothName);
         }
         #endregion
     }

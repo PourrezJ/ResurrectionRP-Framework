@@ -24,13 +24,13 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Overrides
-        public override async Task Init()
+        public override void Init()
         {
             this.MaxEmployee = 5;
             if (InventoryBox != null) 
                 InventoryBox.Spawn();
 
-            await base.Init();
+            base.Init();
         }
         #endregion
 

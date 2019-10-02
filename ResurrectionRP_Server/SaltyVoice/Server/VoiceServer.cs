@@ -84,11 +84,11 @@ namespace SaltyServer
             if (!client.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName))
                 return;
 
-            foreach (IPlayer cl in PlayerManager.GetPlayersList())
+            foreach (PlayerHandler cl in PlayerManager.GetPlayersList())
             {
-                if (!cl.Exists)
+                if (!cl.Client.Exists)
                     continue;
-                cl.Emit(SaltyShared.Event.Voice_IsTalking, tsName, (bool)args[0]);
+                cl.Client.Emit(SaltyShared.Event.Voice_IsTalking, tsName, (bool)args[0]);
             }
         }
 

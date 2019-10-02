@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using SaltyServer;
 using ResurrectionRP_Server.Entities.Players.Data;
+using ResurrectionRP_Server.Utils;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -176,7 +177,7 @@ namespace ResurrectionRP_Server.Entities.Players
             if (PlayerHandlerList.TryAdd(client, this))
             {
                 if (BankAccount == null)
-                    BankAccount = new Bank.BankAccount(Bank.AccountType.Personal, await Bank.BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
+                    BankAccount = new Bank.BankAccount(Bank.AccountType.Personal, Bank.BankAccount.GenerateNewAccountNumber(), PlayerManager.StartBankMoney);
   
                 BankAccount.Owner = this;
 
@@ -276,7 +277,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         SetCuff(true);
 
                     GameMode.Instance.Streamer.LoadStreamPlayer(client);
-                    GameMode.Instance.DoorManager.OnPlayerConnected(client);
+                    Door.OnPlayerConnected(client);
                     Houses.HouseManager.OnPlayerConnected(client);
                 });
                 

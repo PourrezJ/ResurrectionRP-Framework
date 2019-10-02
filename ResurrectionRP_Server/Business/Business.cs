@@ -62,16 +62,13 @@ namespace ResurrectionRP_Server.Business
             OnSale = onsale;
 
             Inventory = new Inventory.Inventory(inventoryMax, 40);
-            Task.Run(async () =>
-            {
-                BankAccount = new BankAccount(AccountType.Business, await BankAccount.GenerateNewAccountNumber(), 0);
-                BankAccount.Owner = this;
-            });
+            BankAccount = new BankAccount(AccountType.Business, BankAccount.GenerateNewAccountNumber(), 0);
+            BankAccount.Owner = this;
         }
         #endregion
 
         #region Loader
-        public virtual Task Init()
+        public virtual void Init()
         {
             if (PedHash != 0)
             {
@@ -88,7 +85,6 @@ namespace ResurrectionRP_Server.Business
 
             BankAccount.Owner = this;
             GameMode.Instance.BusinessesManager.BusinessesList.Add(this);
-            return Task.CompletedTask;
         }
         #endregion
 

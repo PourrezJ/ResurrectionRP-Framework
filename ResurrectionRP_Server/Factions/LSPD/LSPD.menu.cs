@@ -327,14 +327,14 @@ namespace ResurrectionRP_Server.Factions
 
                 client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande de mise en fourrière.", $"Besoin de retrait du véhicule {target.NumberplateText}" );
 
-                Utils.Utils.Delay(30000 * 1, true, async () =>
+                Utils.Utils.Delay(30000, () =>
                 {
                     VehicleHandler vh = target.GetVehicleHandler();
                     if (vh == null)
                         return;
 
                     client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande de mise en fourrière.", "La fourrière est venu récupérer le véhicule.");
-                    await GameMode.Instance.PoundManager.AddVehicleInPound(vh);
+                    Task.Run(async ()=>await GameMode.Instance.PoundManager.AddVehicleInPoundAsync(vh));
                 });
             }
         }
@@ -380,7 +380,7 @@ namespace ResurrectionRP_Server.Factions
                     }
                 }
 
-                Utils.Utils.Delay(20000, true, () => {
+                Utils.Utils.Delay(20000, () => {
                     client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Information trouvées:", infos );
                 });
             }

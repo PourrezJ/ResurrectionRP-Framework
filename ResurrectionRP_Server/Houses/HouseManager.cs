@@ -34,14 +34,14 @@ namespace ResurrectionRP_Server.Houses
             for(int i = 0; i < HouseTypes.HouseTypeList.Count; i++)
                 Marker.CreateMarker(MarkerType.VerticalCylinder, HouseTypes.HouseTypeList[i].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), null, null);
 
-            Utils.Utils.Delay((int)TimeSpan.FromMinutes(10).TotalMilliseconds, false, async () =>
+            Utils.Utils.SetInterval(async () =>
             {
                 foreach (var house in Houses)
                 {
                     await house.Save();
                     await Task.Delay(100);
                 }
-            });
+            }, (int)TimeSpan.FromMinutes(10).TotalMilliseconds);
         }
         #endregion
 
@@ -83,23 +83,27 @@ namespace ResurrectionRP_Server.Houses
             Alt.Server.LogInfo($"Loading houses ...");
             
             var housesList = await Database.MongoDB.GetCollectionSafe<House>("houses").AsQueryable().ToListAsync();
-            
-            for (int i = 0; i < housesList.Count; i++)
+
+            await AltAsync.Do(() =>
             {
-                try
+                for (int i = 0; i < housesList.Count; i++)
                 {
-                    var house = housesList[i];
-                    if (house != null)
+                    try
                     {
-                        house.Init();
-                        Houses.Add(house);
+                        var house = housesList[i];
+                        if (house != null)
+                        {
+                            house.Init();
+                            Houses.Add(house);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Alt.Server.LogError($"Erreur sur maison id:{i}: " + ex.ToString());
                     }
                 }
-                catch (Exception ex)
-                {
-                    Alt.Server.LogError($"Erreur sur maison id:{i}: " + ex.ToString());
-                }
-            }
+            });
+
 
             Alt.Server.LogInfo($"Loaded {Houses.Count} houses.");
         }

@@ -188,7 +188,7 @@ namespace ResurrectionRP_Server.Society.Societies
         #endregion
 
         #region Init
-        public override async Task Init()
+        public override void Init()
         {
             _npc = Ped.CreateNPC(PedModel.Benny, PnjLocation.Pos, PnjLocation.Rot.Z, GameMode.GlobalDimension);
             _npc.NpcInteractCallBack = OnInteractWithPnj;
@@ -197,7 +197,7 @@ namespace ResurrectionRP_Server.Society.Societies
             _workZone.SetOnVehicleEnterColShape(OnVehicleEnterWorkzone);
             _workZone.SetOnVehicleLeaveColShape(OnVehicleLeaveWorkzone);
 
-            await base.Init();
+            base.Init();
         }
         #endregion
 

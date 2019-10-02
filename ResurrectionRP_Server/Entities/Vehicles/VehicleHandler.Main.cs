@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         
         public string OwnerID { get; set; } // SocialClubName
         [BsonRepresentation(BsonType.Int32, AllowOverflow = true)]
-        public short Dimension { get; set; } = short.MaxValue;
+        public short Dimension { get; set; } = GameMode.GlobalDimension;
 
         [BsonIgnore, JsonIgnore]
         public IVehicle Vehicle { get; set; }
@@ -76,7 +76,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Constructor
         public VehicleHandler(string socialClubName, uint model, Vector3 position, Vector3 rotation, byte primaryColor = 0, byte secondaryColor = 0,
             float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
-            IPlayer owner = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, short dimension = short.MaxValue, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
+            IPlayer owner = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, short dimension = GameMode.GlobalDimension, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
         {
             if (model == 0)
                 return;
@@ -122,8 +122,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public IVehicle SpawnVehicle(Location location = null, bool setLastUse = true)
         {
-            if (Dimension.ToString() == "-1")
-                Dimension = short.MaxValue;
+            Dimension = GameMode.GlobalDimension;
 
             try
             {
@@ -255,7 +254,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return Vehicle;
         }
 
-        public async Task<bool> Delete(bool perm = false)
+
+
+        public async Task<bool> DeleteAsync(bool perm = false)
         {
             if (await Vehicle.ExistsAsync())
                 await Vehicle.RemoveAsync();
@@ -311,7 +312,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 LockState = (LockState == VehicleLockState.Locked) ? VehicleLockState.Unlocked : VehicleLockState.Locked;
                 client.SendNotification($"Vous avez {(LockState == VehicleLockState.Locked ? " fermé" : "ouvert")} le véhicule");
-
+                UpdateInBackground();
                 return true;
             }
 

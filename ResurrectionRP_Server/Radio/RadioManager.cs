@@ -1,7 +1,5 @@
-﻿using System.Threading.Tasks;
-using AltV.Net;
+﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
-using AltV.Net.Async;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -56,7 +54,7 @@ namespace ResurrectionRP_Server.Radio
 
         public RadioManager()
         {
-            AltAsync.OnClient("RadioManager", EventTrigered);
+            Alt.OnClient("RadioManager", EventTrigered);
         }
         public static void Close(IPlayer client)
         {
@@ -78,22 +76,22 @@ namespace ResurrectionRP_Server.Radio
             return false;
         }
 
-        private Task EventTrigered(IPlayer client, object[] args)
+        private void EventTrigered(IPlayer client, object[] args)
         {
             if (!client.Exists)
-                return Task.CompletedTask;
+                return;
 
             var player = client;
 
             var ph = player.GetPlayerHandler();
             if (ph == null)
-                return Task.CompletedTask;
+                return;
 
             Radio radio = null;
             _clientMenus.TryGetValue(player, out radio);
 
             if (radio == null)
-                return Task.CompletedTask;
+                return;
 
             switch (args[0])
             {
@@ -131,6 +129,9 @@ namespace ResurrectionRP_Server.Radio
                 case "SaveFrequence":
                     try
                     {
+                        if (args[2] == null)
+                            return;
+
                         if (double.TryParse(args[2].ToString(),  NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double frequence)){
 
                             radio.SaveFrequeceRadio(Convert.ToInt32(args[1]), frequence);
@@ -156,7 +157,6 @@ namespace ResurrectionRP_Server.Radio
                     Alt.Server.LogError("RadioManager RadioChange Hm args[0] is not valid... problem in client side ? args 0 mmust be the event name");
                     break;
             }
-            return Task.CompletedTask;
         }
 
         public int FindRadioInItemList(Radio radio, List<Items.RadioItem> itemList)

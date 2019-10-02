@@ -81,7 +81,7 @@ namespace ResurrectionRP_Server.Phone
                 await conv1.Update();
                 await conv2.Update();
 
-                await GetMessages(client, receiver);
+                GetMessages(client, receiver);
 
                 IPlayer _client = GetClientWithPhoneNumber(this.PhoneNumber);
 
@@ -140,12 +140,15 @@ namespace ResurrectionRP_Server.Phone
 
         }
 
-        public async Task GetMessages(IPlayer client, string phoneNumber)
+        public void GetMessages(IPlayer client, string phoneNumber)
         {
-            Conversation checkConv = await PhoneManager.FindOrCreateConversation(PhoneNumber, phoneNumber, false);
-            //checkConv.messages.Reverse();
-            if (checkConv != null)
-                await client.EmitAsync("MessagesReturned", JsonConvert.SerializeObject(checkConv));
+            Task.Run(async() =>
+            {
+                Conversation checkConv = await PhoneManager.FindOrCreateConversation(PhoneNumber, phoneNumber, false);
+                //checkConv.messages.Reverse();
+                if (checkConv != null)
+                    await client.EmitAsync("MessagesReturned", JsonConvert.SerializeObject(checkConv));
+            });
         }
 
         #endregion
@@ -331,20 +334,26 @@ namespace ResurrectionRP_Server.Phone
         #endregion
 
         #region Gestion des conversations
-        public async Task LoadConversations(IPlayer client)
+        public void LoadConversations(IPlayer client)
         {
-            var list = await Database.MongoDB.GetCollectionSafe<Conversation>("conversations").Find(p => p.sender == PhoneNumber).ToListAsync();
-            if (list.Count > 0)
+            Task.Run(async () =>
             {
-                list.OrderByDescending(x => x.lastMessageDate);
-                foreach (Conversation conv in list)
+                var list = await Database.MongoDB.GetCollectionSafe<Conversation>("conversations").Find(p => p.sender == PhoneNumber).ToListAsync();
+                await AltAsync.Do(() =>
                 {
-                    Address _adress = this.AddressBook.Find(p => p.phoneNumber == conv.receiver);
+                    if (list.Count > 0)
+                    {
+                        list.OrderByDescending(x => x.lastMessageDate);
+                        foreach (Conversation conv in list)
+                        {
+                            Address _adress = this.AddressBook.Find(p => p.phoneNumber == conv.receiver);
 
-                    conv.receiverName = (_adress != null) ? _adress.contactName : conv.receiver;
-                };
-                client.EmitLocked("ConversationsReturnedV2", JsonConvert.SerializeObject(list));
-            }
+                            conv.receiverName = (_adress != null) ? _adress.contactName : conv.receiver;
+                        };
+                        client.EmitLocked("ConversationsReturnedV2", JsonConvert.SerializeObject(list));
+                    }
+                });
+            });
         }
         #endregion
 

@@ -22,10 +22,10 @@ namespace ResurrectionRP_Server.Business
         {
         }
 
-        public override async Task Init()
+        public override void Init()
         {
             MaxEmployee = 5;
-            await base.Init();
+            base.Init();
         }
 
         public override void OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)

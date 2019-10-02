@@ -19,15 +19,12 @@ namespace ResurrectionRP_Server.Society.Societies
 
         public List<Door> Doors { get; private set; }
 
-        public override async Task Init()
+        public override void Init()
         {
-            await base.Init();
-
-            //await this.Marker.SetAlphaAsync(80);
-
-
             var port = Door.CreateDoor(4007304890, new Vector3(1991.106f, 3053.105f, 47.36529f), true);
             port.Interact = OpenCelluleDoor;
+
+            base.Init();
         }
 
         private void OpenCelluleDoor(IPlayer client, Door door)

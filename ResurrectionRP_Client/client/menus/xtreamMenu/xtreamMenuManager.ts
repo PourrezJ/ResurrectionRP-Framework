@@ -49,18 +49,13 @@ export function init()
                 inputView.emit('Input_Data', menuItem.InputMaxLength, menuItem.InputValue);
 
                 inputView.on('Input_Submit', (text) => {
-                    try {
-                        xmenuData.Items[index].InputValue = text;
-                        alt.emitServer("XMenuManager_ExecuteCallback", index, JSON.stringify(xmenuData));
-                        xmenuData = null;
-                        inputView.destroy();
-                        browser.destroy();
-                        browser = null;
-                        alt.showCursor(false);
-                        alt.toggleGameControls(true);
-                    } catch (ex) {
-                        alt.log(ex);
-                    }
+                    xmenuData.Items[index].InputValue = text;
+                    alt.emitServer("XMenuManager_ExecuteCallback", index, JSON.stringify(xmenuData));
+                    xmenuData = null;
+                    inputView.destroy();
+
+                    alt.showCursor(false);
+                    alt.toggleGameControls(true);
                 });   
             }
             else {

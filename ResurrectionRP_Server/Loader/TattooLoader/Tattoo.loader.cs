@@ -18,7 +18,7 @@ namespace ResurrectionRP_Server.Loader.TattooLoader
         public static List<Tattoo> LeftLegTattooList = new List<Tattoo>();
         public static List<Tattoo> RightLegTattooList = new List<Tattoo>();
 
-        public static Task LoadAllTattoo()
+        public static void LoadAllTattoo()
         {
             Alt.Server.LogInfo("[TattooManager] Loading all Tattoo...");
 
@@ -76,7 +76,6 @@ namespace ResurrectionRP_Server.Loader.TattooLoader
             }
 
             Alt.Server.LogInfo ("[TattooManager] Loading completed!");
-            return Task.CompletedTask;
         }
 
         private static Tattoo[] Get(string filename)

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
@@ -21,8 +22,6 @@ using AltV.Net.Data;
 using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Services;
 using ResurrectionRP_Server.Utils;
-using System.Drawing;
-using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server
 {
@@ -58,7 +57,8 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public List<IPlayer> PlayerList = new List<IPlayer>();
 
-        public const short GlobalDimension = short.MaxValue;
+        //public const short GlobalDimension = short.MaxValue;
+        public const short GlobalDimension = 0;
 
         public uint DatabaseVersion { get; set; }
 
@@ -97,9 +97,6 @@ namespace ResurrectionRP_Server
 
         [BsonIgnore]
         public Teleport.TeleportManager TeleportManager { get; private set; }
-
-        [BsonIgnore]
-        public Utils.DoorManager DoorManager { get; private set; }
 
         [BsonIgnore]
         public Weather.WeatherManager WeatherManager { get; private set; }
@@ -147,7 +144,7 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Events
-        private Task OnServerStop()
+        private void OnServerStop()
         {
             var players = GameMode.Instance.PlayerList;
             for (int i = 0; i < players.Count; i++)
@@ -157,10 +154,9 @@ namespace ResurrectionRP_Server
             }
 
             //await HouseManager.House_Exit();
-            return Task.CompletedTask;
         }
 
-        public async Task OnStartAsync()
+        public void OnStart()
         {
             IsDebug = Config.GetSetting<bool>("Debug");
             PlayerManager.StartBankMoney = Config.GetSetting<int>("BankMoneyStart");
@@ -168,22 +164,25 @@ namespace ResurrectionRP_Server
 
             if (DataMigration.DATABASE_VERSION > Instance.DatabaseVersion)
             {
-                if (!await DataMigration.MigrateDatabase())
+                Task.Run(async () =>
                 {
-                    Alt.Server.LogError("Error migrating database to newer version");
-                    Environment.Exit(1);
-                }
+                    if (!await DataMigration.MigrateDatabase())
+                    {
+                        Alt.Server.LogError("Error migrating database to newer version");
+                        Environment.Exit(1);
+                    }
+                });
             }
 
-            AltAsync.OnPlayerConnect += OnPlayerConnected;
+            Alt.OnPlayerConnect += OnPlayerConnected;
             AltAsync.OnPlayerDisconnect += OnPlayerDisconnected;
             Alt.OnConsoleCommand += Alt_OnConsoleCommand;
  
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
+            ColshapeManager.Init();
             Streamer = new Streamer.Streamer();
             Economy = new Economy.Economy();
-            DoorManager = new Utils.DoorManager();
             PlayerManager = new PlayerManager();
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();
@@ -211,25 +210,32 @@ namespace ResurrectionRP_Server
                 Time = new Time();
 
             if (PoundManager == null)
-                PoundManager = new Services.Pound();
+                PoundManager = new Pound();
 
             Alt.Server.LogColored("~g~Initialisations des controlleurs...");
-            await VehiclesManager.LoadAllVehicles();
-            await Loader.CarParkLoader.LoadAllCarPark();
-            await Loader.CarDealerLoaders.LoadAllCardealer();
-            await Loader.VehicleRentLoaders.LoadAllVehicleRent();
-            await Loader.TattooLoader.TattooLoader.LoadAllTattoo();
-            await FactionManager.InitAllFactions();
-            await Loader.ClothingLoader.LoadAllCloth();
-            await Loader.BusinessesLoader.LoadAllBusinesses();
-            WeatherManager.InitWeather();
-            await Society.SocietyManager.LoadAllSociety();
-            //await JobsManager.Init();
-            await PoundManager.Init();
-            FarmManager.InitAll();        
-            await HouseManager.LoadAllHouses();
+            Task.Run(async () =>
+            {
+                await VehiclesManager.LoadAllVehicles();
+                await Loader.CarParkLoader.LoadAllCarPark();  
+                await FactionManager.InitAllFactions();
+                await Loader.BusinessesLoader.LoadAllBusinesses();         
+                await Society.SocietyManager.LoadAllSociety();
+                //await JobsManager.Init();
+                await HouseManager.LoadAllHouses();
 
-           // DrivingSchoolManager.InitAll();
+                Alt.Server.LogColored("~g~Serveur charger!");
+                ServerLoaded = true;
+            });
+
+
+            PoundManager.Init();
+            Loader.CarDealerLoaders.LoadAllCardealer();
+            // DrivingSchoolManager.InitAll();
+            Loader.ClothingLoader.LoadAllCloth();
+            Loader.TattooLoader.TattooLoader.LoadAllTattoo();
+            Loader.VehicleRentLoaders.LoadAllVehicleRent();
+            FarmManager.InitAll();
+            WeatherManager.InitWeather();
             LifeInvader.Load();
             VoiceController.OnResourceStart();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
@@ -241,12 +247,12 @@ namespace ResurrectionRP_Server
 
             Events.Initialize();
 
-            Utils.Utils.Delay(15000, false, async () => await Save());
-            Utils.Utils.Delay(1000, false, async () => await Restart());
-            Utils.Utils.Delay(1000, false, () => Time.Update());
-            Utils.Utils.Delay(60000, false, async () => await FactionManager.Update());
-            Utils.Utils.Delay(1000, false, () => VehiclesManager.UpdateVehiclesMilageAndFuel());
-            Utils.Utils.Delay(1000, false, () => { FPSCounter.OnTick(); });
+            Utils.Utils.SetInterval(async () => await Save(), 15000);
+            Utils.Utils.SetInterval(async () => await FactionManager.Update(), 60000);
+            Utils.Utils.SetInterval(async () => await Restart(), 1000);
+            
+            Utils.Utils.SetInterval(() => Time.Update(), 1000);           
+            Utils.Utils.SetInterval(() => VehiclesManager.UpdateVehiclesMilageAndFuel(), 1000);
 
             Chat.Initialize();
 
@@ -291,9 +297,6 @@ namespace ResurrectionRP_Server
                     return;
                 await player.SetPositionAsync(new Position(float.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
             });
-
-
-            ServerLoaded = true;
         }
 
         private void Alt_OnConsoleCommand(string name, string[] args)
@@ -308,13 +311,12 @@ namespace ResurrectionRP_Server
             }
         }
 
-        private Task OnPlayerConnected(IPlayer player, string reason)
+        private void OnPlayerConnected(IPlayer player, string reason)
         {
             if (PlayerList.Find(b => b == player) == null)
                 PlayerList.Add(player);
 
             Alt.Log($"==> {player.Name} has connected.");
-            return Task.CompletedTask;
         }
 
         private async Task OnPlayerDisconnected(ReadOnlyPlayer player, IPlayer origin, string reason)
@@ -387,8 +389,6 @@ namespace ResurrectionRP_Server
                 Alt.EmitAllClients(Utils.Enums.Events.AnnonceGlobal, "COUVRE FEU DANS 5MINUTES!", "AVIS A LA POPULATION!", "COUVRE FEU DANS 5MINUTES!");
                 advert = true;
             }
-
-            
         }
         #endregion
     }

@@ -93,8 +93,6 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                                     ph.BagInventory.Delete(defibrilators[InventoryTypes.Bag][0], 1);
                                 }
                             }
-                            marker.Destroy();
-                            colshape.Remove();
                             await Victime.ReviveAsync(125);
                             vh.UpdateFull();
                             client.SendNotificationSuccess("Vous avez réanimé le patient.");
@@ -121,9 +119,9 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                     break;
 
                 case "ID_GetMoney":
-                    var rob = ph.Money;
-                    if (ph.HasMoney(ph.Money))
-                        vh.AddMoney(rob);
+                    var rob = vh.Money;
+                    if (vh.HasMoney(rob))
+                        ph.AddMoney(rob);
 
                     ph.UpdateFull();
                     vh.UpdateFull();
@@ -144,8 +142,6 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                     }
 
                     await Victime.ReviveAsync(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
-                    marker.Destroy();
-                    colshape.Remove();
                     vh.UpdateFull();
                     break;
             }
@@ -163,10 +159,9 @@ namespace ResurrectionRP_Server.Entities.Players.Data
 
         public void Remove()
         {
-            marker.Destroy();
-            colshape.Remove();
+            marker?.Destroy();
+            colshape?.Remove();
             PlayerManager.DeadPlayers.Remove(this);
-            
         }
     }
 }

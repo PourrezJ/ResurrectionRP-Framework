@@ -27,7 +27,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
         #endregion
 
         #region Init
-        public override async Task Init()
+        public override void Init()
         {
             MenuBanner = Banner.ClubHouseMod;
             Type = GarageType.Bike;
@@ -48,7 +48,7 @@ namespace ResurrectionRP_Server.Society.Societies.WhiteWereWolf
             foreach (Door door in _doors)
                 door.Interact = OpenDoor;
 
-            await base.Init();
+            base.Init();
         }
         #endregion
 

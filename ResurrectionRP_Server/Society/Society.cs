@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 namespace ResurrectionRP_Server.Society
 {
     [BsonIgnoreExtraElements]
-    [BsonKnownTypes(typeof(Bennys), typeof(Unicorn), typeof(Sandjob), typeof(Rhumerie), typeof(PetrolSociety), typeof(Tequilala), typeof(WhiteWereWolf), typeof(PawnCar), typeof(WildCustom), typeof(BlackStreetNation), typeof(YellowJack))]
+    [BsonKnownTypes(typeof(Bennys), typeof(Unicorn), typeof(Sandjob), typeof(Rhumerie), typeof(PetrolSociety), typeof(Tequilala), typeof(WhiteWereWolf), typeof(PawnCar), typeof(WildCustom), typeof(BlackStreetNation), typeof(YellowJack), typeof(Amphitheatre))]
     public partial class Society
     {
         #region Static fields
@@ -84,7 +84,7 @@ namespace ResurrectionRP_Server.Society
         #endregion
 
         #region Init
-        public virtual async Task Init()
+        public virtual void Init()
         {
             if (ServicePos != null)
             {
@@ -108,7 +108,7 @@ namespace ResurrectionRP_Server.Society
             }
 
             if (BankAccount == null)
-                BankAccount = new BankAccount(AccountType.Society, await BankAccount.GenerateNewAccountNumber(), 0);
+                BankAccount = new BankAccount(AccountType.Society, BankAccount.GenerateNewAccountNumber(), 0);
 
             Inventory.MaxSlot = 40;
             InService = new ConcurrentDictionary<string, string>();

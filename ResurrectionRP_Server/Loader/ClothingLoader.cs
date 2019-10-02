@@ -70,7 +70,7 @@ namespace ResurrectionRP_Server.Loader
 
         private static string basePath = $"clothings{Path.DirectorySeparatorChar}";
 
-        public static Task LoadAllCloth()
+        public static void LoadAllCloth()
         {
             Alt.Server.LogInfo("[ClothingLoader] Loading all cloths file...");
 
@@ -82,7 +82,7 @@ namespace ResurrectionRP_Server.Loader
                 var cloths = Get(maskFile);
 
                 if (cloths == null)
-                    return Task.CompletedTask;
+                    return;
 
                 MasksList = cloths.Value;
             }
@@ -191,7 +191,6 @@ namespace ResurrectionRP_Server.Loader
             #endregion
 
             Alt.Server.LogInfo("[ClothingLoader] Loading completed!");
-            return Task.CompletedTask;
         }
 
         private static ClothManifest? Get(string filename)

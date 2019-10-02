@@ -154,43 +154,61 @@ export class Game {
                 if (key == 117)
                     this.DebugInfo = !this.DebugInfo
             });
+            /*
+            alt.setInterval(() =>
+            {
+                alt.Player.all.forEach((entity: alt.Player) => {
 
-            alt.on('gameEntityCreate', async (entity: alt.Entity) => {
+                    if (!entity.valid)
+                        return;
 
-                if (!game.isEntityAPed(entity.scriptID))
-                    return;
+                    let invincible: boolean = entity.getSyncedMeta("SetInvincible");
+                    let invisible: boolean = entity.getSyncedMeta("SetInvisible");
 
-                let invincible: boolean = entity.getSyncedMeta("SetInvincible");
-                let invisible: boolean = entity.getSyncedMeta("SetInvisible");
-                let walkingStyle: string = entity.getSyncedMeta("WalkingStyle");
-                let facialAnim: string = entity.getSyncedMeta("FacialAnim");
-                let crounch: boolean = entity.getSyncedMeta("Crounch");
+                    game.setEntityAlpha(entity.scriptID, invisible ? 0 : 255, false);
+                    game.setEntityInvincible(entity.scriptID, invincible);
+                });
+            }, 250);
+            */
+            alt.on('gameEntityCreate', (entity: alt.Entity) => {
 
-                game.setEntityAlpha(entity.scriptID, invisible ? 0 : 255, false);
-                game.setEntityInvincible(entity.scriptID, invincible);
-                
-                if (crounch) {
-                    await utils.loadMovement("move_ped_crouched");
+                alt.setTimeout(async () => {
+                    if (!game.isEntityAPed(entity.scriptID))
+                        return;
 
-                    game.setPedMovementClipset(entity.scriptID, "move_ped_crouched", 0.2);
-                    game.setPedStrafeClipset(entity.scriptID, "move_ped_crouched_strafing");
-                }
+                    game.clearPedBloodDamage(entity.scriptID);
 
-                if (walkingStyle != null) {
+                    let invincible: boolean = entity.getSyncedMeta("SetInvincible");
+                    let invisible: boolean = entity.getSyncedMeta("SetInvisible");
+                    let walkingStyle: string = entity.getSyncedMeta("WalkingStyle");
+                    let facialAnim: string = entity.getSyncedMeta("FacialAnim");
+                    let crounch: boolean = entity.getSyncedMeta("Crounch");
 
-                    await utils.loadMovement(walkingStyle);
-                    game.setPedMovementClipset(entity.scriptID, walkingStyle, 0.2);
-                }
+                    game.setEntityAlpha(entity.scriptID, invisible ? 0 : 255, false);
+                    game.setEntityInvincible(entity.scriptID, invincible);
 
-                if (facialAnim != null)
-                    game.setFacialIdleAnimOverride(entity.scriptID, facialAnim, undefined);
+                    if (crounch) {
+                        await utils.loadMovement("move_ped_crouched");
+
+                        game.setPedMovementClipset(entity.scriptID, "move_ped_crouched", 0.2);
+                        game.setPedStrafeClipset(entity.scriptID, "move_ped_crouched_strafing");
+                    }
+
+                    if (walkingStyle != null) {
+
+                        await utils.loadMovement(walkingStyle);
+                        game.setPedMovementClipset(entity.scriptID, walkingStyle, 0.2);
+                    }
+
+                    if (facialAnim != null)
+                        game.setFacialIdleAnimOverride(entity.scriptID, facialAnim, undefined);
+                }, 250);
             });
 
             alt.on('syncedMetaChange', async (entity: alt.Entity, key: string, value: any) => {
                 if (!game.isEntityAPed(entity.scriptID))
                     return;
 
-                
                 switch (key) {
                     case 'SetInvisible':
                         alt.log("SetInvisible");
@@ -256,9 +274,27 @@ export class Game {
                     ui.DrawText2d("Essence: " + Math.round(100 * veh.getFuel()) / 100 + "/" + veh.getMaxFuel() + " Consommation: " + Math.round(1000 * veh.getFuelConsumption()) / 1000, 0.5, 0.10, 0.3, 4, 255, 255, 255, 180, true, true, 99);
                 }
             }
-
+            this.disableSeatShuffle();
             this._Time.OnTick();
         });
+    }
+
+    public disableSeatShuffle() {
+        if (!game.isPedInAnyVehicle(alt.Player.local.scriptID, undefined)) return;
+        let vehicle = game.getVehiclePedIsIn(
+            alt.Player.local.scriptID,
+            undefined
+        );
+
+        let passenger = game.getPedInVehicleSeat(vehicle, 0, 0);
+
+        if (!game.getIsTaskActive(passenger, 165)) return;
+
+        if (game.isVehicleSeatFree(vehicle, -1, false)) {
+            if (passenger === alt.Player.local.scriptID) {
+                game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle, 0);
+            }
+        }
     }
 
     public static closeAllMenus() {

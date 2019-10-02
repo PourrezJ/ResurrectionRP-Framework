@@ -13,7 +13,7 @@ namespace ResurrectionRP_Server.Loader
     {
         private static string _basePath = $"vehicleRent{Path.DirectorySeparatorChar}";
 
-        public static async Task LoadAllVehicleRent()
+        public static void LoadAllVehicleRent()
         {
             Alt.Server.LogColored("~grey~ ---- VehicleRent ~w~| Loading all vehicle rent ... ----");
 
@@ -25,7 +25,7 @@ namespace ResurrectionRP_Server.Loader
             {
                 VehicleRentLoader.VehicleRentShop _cardealer = JsonConvert.DeserializeObject<VehicleRentLoader.VehicleRentShop>(File.ReadAllText(file));
                 _cardealer.Name = Path.GetFileNameWithoutExtension(file);
-                await _cardealer.Load();
+                _cardealer.Load();
             }
             Alt.Server.LogColored("~grey~ ---- VehicleRent ~w~| All Rent Vehicle loaded ... ----");
 

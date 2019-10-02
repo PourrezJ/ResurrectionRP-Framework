@@ -30,7 +30,7 @@ namespace ResurrectionRP_Server.Phone
         public PhoneManager()
         {
             PhoneClientList = new ConcurrentDictionary<IPlayer, List<Phone>>();
-            AltAsync.OnClient("PhoneMenuCallBack", PhoneMenuCallBack);
+            Alt.OnClient("PhoneMenuCallBack", PhoneMenuCallBack);
         }
         #endregion
 
@@ -104,7 +104,7 @@ namespace ResurrectionRP_Server.Phone
         }
         #endregion
 
-        private async Task PhoneMenuCallBack(IPlayer client, object[] args)
+        private void PhoneMenuCallBack(IPlayer client, object[] args)
         {
             if (client == null || !client.Exists)
                 return;
@@ -146,7 +146,7 @@ namespace ResurrectionRP_Server.Phone
                     break;
 
                 case "getConversationsV2":
-                    await phone.LoadConversations(client);
+                    phone.LoadConversations(client);
                     break;
 
                 case "DeleteConversation":
@@ -158,16 +158,16 @@ namespace ResurrectionRP_Server.Phone
                     if (Database.MongoDB.GetCollectionSafe<Conversation>("conversations").DeleteOne(filter).DeletedCount > 0)
                     {
                         client.SendNotification("Conversation supprimée");
-                        await client.EmitAsync("deletedConversation");
+                        client.Emit("deletedConversation");
                     }
                     break;
 
                 case "GetMessages":
-                    await phone.GetMessages(client, (string)args[1]);
+                    phone.GetMessages(client, (string)args[1]);
                     break;
 
                 case "SendMessage":
-                    await phone.SendSMS(client, (string)args[1], (string)args[2]);
+                    Task.Run(async ()=>await phone.SendSMS(client, (string)args[1], (string)args[2]));
                     break;
 
                 case "initiateCall":

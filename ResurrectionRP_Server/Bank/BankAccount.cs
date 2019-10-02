@@ -98,14 +98,13 @@ namespace ResurrectionRP_Server.Bank
             return false;
         }
 
-        public static async Task<string> GenerateNewAccountNumber()
+        public static string GenerateNewAccountNumber()
         {
             string _accountNumber = GenerateString();
 
             while (BankAccountsList.Exists(b => b.AccountNumber == _accountNumber))
             {
                 _accountNumber = GenerateString();
-                await Task.Delay(25);
             }
 
             return _accountNumber;

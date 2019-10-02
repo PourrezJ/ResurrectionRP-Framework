@@ -1,38 +1,44 @@
 ﻿using AltV.Net;
 using AltV.Net.Enums;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Utils
 {
     class Utils
     {
-        public static async Task SetInterval(Action action, TimeSpan timeout)
+        // Aucune idée de sont impacte ... djoe
+        //public static async Task SetInterval(Action action, TimeSpan timeout)
+        //{
+        //    await Task.Delay(timeout).ConfigureAwait(false);
+        //    action();
+        //    await SetInterval(action, timeout);
+        //}
+
+        public static void CheckThread(string data = "")
         {
-            await Task.Delay(timeout).ConfigureAwait(false);
-
-            action();
-
-            await SetInterval(action, timeout);
+            if (Startup.MainThreadId != System.Threading.Thread.CurrentThread.ManagedThreadId)
+            {
+                Alt.Server.LogError(data + " not in the main thread!");
+                throw new Exception("not in the main thread!");
+            }
         }
 
         public static int RandomNumber(int max) => new Random().Next(max);
         public static int RandomNumber(int min, int max) => new Random().Next(min, max);
 
-        public static System.Timers.Timer Delay(int ms, bool onlyOnce, Action action)
+        public static void Delay(int ms, Action action)
         {
-            if (onlyOnce)
-            {
-                Task.Delay(ms).ContinueWith((t) => action());
-                return null;
-            }
-            else
-            {
-                var t = new System.Timers.Timer(ms);
-                t.Elapsed += (s, e) => action();
-                t.Start();
-                return t;
-            }
+            Task.Delay(ms).ContinueWith((t) => action());
+        }
+
+        public static System.Timers.Timer SetInterval(Action action, int ms)
+        {
+            var t = new System.Timers.Timer(ms);
+            t.Elapsed += (s, e) => action();
+            t.Start();
+            return t;
         }
 
         public static void StopTimer(System.Timers.Timer timer) => timer.Stop();

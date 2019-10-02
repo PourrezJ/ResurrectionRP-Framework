@@ -186,7 +186,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         }
 
                         client.SendNotification($"Véhicule ~r~{vehFourriere.Plate} ~w~ mis en fourrière...");
-                        Task.Run(async () => await GameMode.Instance.PoundManager.AddVehicleInPound(vehFourriere));
+                        Task.Run(async () => await GameMode.Instance.PoundManager.AddVehicleInPoundAsync(vehFourriere));
                     }
                 };
 
@@ -231,6 +231,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 lifeItem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
                     _playerSelected.Health = 200;
+                    _playerSelected.Client.Health = 200;
                     UpdateFull();
                 };
                 mainMenu.Add(lifeItem);
@@ -276,15 +277,17 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     isInvisible = !isInvisible;
                     _playerSelected.Client.SetInvisible(isInvisible);
-
-                    if (isInvisible)
+                    
+;                    if (isInvisible)
                     {
+                        _playerSelected.Client.Dimension = GameMode.GlobalDimension - 1;
                         _playerSelected.Client.SendNotification("~r~[ADMIN]~w~ Vous êtes invisible.");
                         if (_playerSelected != this)
                             Client.SendNotification($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} est invisible.");
                     }
                     else
                     {
+                        _playerSelected.Client.Dimension = GameMode.GlobalDimension;
                         _playerSelected.Client.SendNotification("~r~[ADMIN]~w~ Vous n'êtes plus invisible.");
                         if (_playerSelected != this)
                             Client.SendNotification($"~r~[ADMIN]~w~ {_playerSelected.Identite.Name} n'est plus invisible.");
@@ -464,7 +467,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (vehicle == null)
                         client.SendNotificationError("Aucun véhicule a proximité");
-                    else if (await vehicle.Delete(true))
+                    else if (await vehicle.DeleteAsync(true))
                         client.SendNotificationSuccess($"Véhicule ~r~{vehicle.Plate}~w~ supprimé...");
                     else
                         client.SendNotificationError($"Erreur de suppression du véhicule");
@@ -481,7 +484,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (vehicle == null)
                         client.SendNotificationError("Aucun véhicule a proximité");
-                    else if (await vehicle.Delete(false))
+                    else if (await vehicle.DeleteAsync(false))
                         client.SendNotificationSuccess($"Véhicule ~r~{vehicle.Plate}~w~ supprimé...");
                     else
                         client.SendNotificationError($"Erreur de suppression du véhicule");
@@ -515,7 +518,7 @@ namespace ResurrectionRP_Server.Entities.Players
             
             List<PlayerHandler> players = PlayerManager.GetPlayersList();
 
-            var test = players.OrderBy(pa => pa.Identite.Name);
+            var test = players.OrderBy(pa => pa.Identite.Name).ToList();
             foreach (PlayerHandler player in test)
             {
                 if (player != null && player.Client.Exists)

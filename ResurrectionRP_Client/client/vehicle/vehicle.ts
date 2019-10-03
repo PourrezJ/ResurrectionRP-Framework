@@ -114,7 +114,7 @@ export function initialize() {
                     break;
 
                 case 'powerMultiplicator':
-                    game.setVehicleEnginePowerMultiplier(entity.scriptID, value);
+                    // game.setVehicleEnginePowerMultiplier(entity.scriptID, value);
                     break;
             }
         }

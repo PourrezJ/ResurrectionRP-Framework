@@ -163,7 +163,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                             RPGInventoryMenu rackmenu = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, rack.InventoryBox.Inventory);
 
-                            rackmenu.OpenMenu(client);
+                            await rackmenu.OpenMenu(client);
                         }
                     }
 
@@ -279,7 +279,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     RPGInventoryMenu menu = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, null);
 
-                    menu.OpenMenu(client);
+                    await menu.OpenMenu(client);
                     break;
 
                 case ConsoleKey.R:
@@ -377,7 +377,9 @@ namespace ResurrectionRP_Server.Entities.Players
                 case ConsoleKey.NumPad7:
                 case ConsoleKey.NumPad8:
                 case ConsoleKey.NumPad9:
-                   OnAnimationKeyPressed(Keycode);
+                    if (ph.HasOpenMenu())
+                        return;
+                    OnAnimationKeyPressed(Keycode);
                     break;
             }
         }

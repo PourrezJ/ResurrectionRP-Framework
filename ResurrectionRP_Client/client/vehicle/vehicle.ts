@@ -72,7 +72,7 @@ export function initialize() {
                     game.setVehicleEngineTorqueMultiplier(vehId, torque);
 
                     let power: number = entity.getSyncedMeta("powerMultiplicator");
-                    // game.setVehicleEnginePowerMultiplier(vehId, 0);
+                    // game.setVehicleEnginePowerMultiplier(vehId, power);
                 }, 500); 
             }
             catch (e) {

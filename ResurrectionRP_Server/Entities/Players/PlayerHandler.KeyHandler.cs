@@ -94,6 +94,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
                     
                 case ConsoleKey.F3:
+                    if (ph.HasOpenMenu())
+                        return;
+
                     if (ph.IsCuff())
                     {
                         client.SendNotificationError("Vous ne pouvez pas faire cette action, vous êtes menotté.");
@@ -200,6 +203,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.U:
+                    if (ph.HasOpenMenu())
+                        return;
+
                     if (vh != null)
                         await vh.LockUnlock(client);
 

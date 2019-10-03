@@ -116,7 +116,7 @@ namespace ResurrectionRP_Server.Factions
                         if (!await clientHandler.BankAccount.GetBankMoney(menuItem.GetData("price"), $"Réglement amende {menuItem.GetData("name")}"))
                         {
                             client.DisplayHelp("Vous n'avez pas assez d'argent en banque pour payer l'amende.", 5000);
-                            await client.PlaySoundFrontEndFix(-1, "ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
+                            client.PlaySoundFrontEnd(-1, "ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
                             menu.CloseMenu(client);
                             break;
                         }

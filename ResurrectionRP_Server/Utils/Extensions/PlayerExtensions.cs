@@ -260,9 +260,8 @@ namespace ResurrectionRP_Server
             client.SetData(Data, null);
         }
 
-        public async static Task PlaySoundFrontEndFix(this IPlayer client, int id, string dict, string anim)
+        public static void PlaySoundFrontEnd(this IPlayer client, int id, string dict, string anim)
         {
-            await Task.CompletedTask;
         }
 
 

@@ -167,7 +167,7 @@ namespace ResurrectionRP_Server.Bank
                 if (! await _bankAccount.GetBankMoney(money, $"Retrait {((_atmType == AtmType.ATM) ? "ATM" : "Banque")}", save: save))
                 {
                     client.SendNotificationError("Vous n'avez pas assez d'argent sur ce compte en banque.");
-                    await client.PlaySoundFrontEndFix(-1,"ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
+                    client.PlaySoundFrontEnd(-1,"ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
                 }
                 else
                 {
@@ -178,7 +178,7 @@ namespace ResurrectionRP_Server.Bank
             else
             {
                 client.SendNotificationError("Problème de saisie.");
-                await client.PlaySoundFrontEndFix(-1,"ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
+                client.PlaySoundFrontEnd(-1,"ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
             }
 
             if (_atmType == AtmType.ATM || _atmType == AtmType.Bank)
@@ -202,7 +202,7 @@ namespace ResurrectionRP_Server.Bank
             else
             {
                 client.SendNotificationError("Problème de saisie.");
-                await client.PlaySoundFrontEndFix(-1, "ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
+                client.PlaySoundFrontEnd(-1, "ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
             }
 
             if (_atmType == AtmType.ATM || _atmType == AtmType.Bank)

@@ -167,7 +167,7 @@ namespace ResurrectionRP_Server.Phone
                     break;
 
                 case "SendMessage":
-                    Task.Run(async ()=>await phone.SendSMS(client, (string)args[1], (string)args[2]));
+                    phone.SendSMS(client, (string)args[1], (string)args[2]);
                     break;
 
                 case "initiateCall":

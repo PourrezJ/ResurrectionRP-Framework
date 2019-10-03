@@ -66,20 +66,22 @@ namespace ResurrectionRP_Server.Phone
 
         #region Gestion des messages
 
-        public async Task SendSMS(IPlayer client, string receiver, string message)
+        public void SendSMS(IPlayer client, string receiver, string message)
         { 
             try
             {
-                Conversation conv1 = await PhoneManager.FindOrCreateConversation(this.PhoneNumber, receiver);
-                Conversation conv2 = await PhoneManager.FindOrCreateConversation(receiver, this.PhoneNumber);
+                Task.Run(async () => {
+                    Conversation conv1 = await PhoneManager.FindOrCreateConversation(this.PhoneNumber, receiver);
+                    Conversation conv2 = await PhoneManager.FindOrCreateConversation(receiver, this.PhoneNumber);
 
-                conv1.messages.Add(new SMS() { content = message, isOwn = true, sentAt = DateTime.Now });
-                conv2.messages.Add(new SMS() { content = message, isOwn = false, sentAt = DateTime.Now });
+                    conv1.messages.Add(new SMS() { content = message, isOwn = true, sentAt = DateTime.Now });
+                    conv2.messages.Add(new SMS() { content = message, isOwn = false, sentAt = DateTime.Now });
 
-                conv2.lastMessageDate = DateTime.Now;
+                    conv2.lastMessageDate = DateTime.Now;
+                    await conv1.Update();
+                    await conv2.Update();
+                });
 
-                await conv1.Update();
-                await conv2.Update();
 
                 GetMessages(client, receiver);
 
@@ -89,14 +91,14 @@ namespace ResurrectionRP_Server.Phone
                 {
                     string contactName = GetNameForNumber(receiver);
                     _client.SendNotification("Message bien envoyé " + ("à " + contactName ?? "au " + receiver));
-                    await _client.PlaySoundFrontEndFix(-1, "MP_5_SECOND_TIMER", "HUD_FRONTEND_DEFAULT_SOUNDSET");
+                    _client.PlaySoundFrontEnd(-1, "MP_5_SECOND_TIMER", "HUD_FRONTEND_DEFAULT_SOUNDSET");
                 }
 
                 Phone _phone = GetPhoneWithPhoneNumber(receiver);
 
                 if (_phone != null)
                 {
-                    await _phone.NewSMS(this.PhoneNumber);
+                    _phone.NewSMS(this.PhoneNumber);
                 }
             }
             catch (Exception ex)
@@ -105,14 +107,14 @@ namespace ResurrectionRP_Server.Phone
             }
         }
 
-        public async Task NewSMS(string phoneNumber)
+        public void NewSMS(string phoneNumber)
         {
             IPlayer _client = GetClientWithPhoneNumber(this.PhoneNumber);
 
             if (_client == null)
                 return;
 
-            if (! await _client.ExistsAsync())
+            if (! _client.Exists)
                 return;
 
             string contactName = GetNameForNumber(phoneNumber);
@@ -126,18 +128,14 @@ namespace ResurrectionRP_Server.Phone
             if (Settings.silenceMode)
                 return;
 
-            await AltAsync.Do(() =>
+            foreach (IPlayer recever in receverList)
             {
-                foreach (IPlayer recever in receverList)
-                {
-                    if (!recever.Exists)
-                        continue;
+                if (!recever.Exists)
+                    continue;
 
-                    if (recever != null && recever.Exists)
-                        recever.PlaySoundFromEntity(_client, -1, "MP_5_SECOND_TIMER", "HUD_FRONTEND_DEFAULT_SOUNDSET");
-                }
-            });
-
+                if (recever != null && recever.Exists)
+                    recever.PlaySoundFromEntity(_client, -1, "MP_5_SECOND_TIMER", "HUD_FRONTEND_DEFAULT_SOUNDSET");
+            }      
         }
 
         public void GetMessages(IPlayer client, string phoneNumber)
@@ -338,7 +336,10 @@ namespace ResurrectionRP_Server.Phone
         public void SendContactListToClient(IPlayer client)
         {
             if (AddressBook == null)
+            {
+                Alt.Server.LogError("SendContactListToClient error: " + client.GetSocialClub());
                 return;
+            }
 
             List<Address> contacts = AddressBook.GetRange(1, AddressBook.Count - 1).OrderBy(c => c?.contactName).ToList();
             contacts.Insert(0, AddressBook[0]);

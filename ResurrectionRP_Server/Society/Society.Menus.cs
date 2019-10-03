@@ -99,20 +99,16 @@ namespace ResurrectionRP_Server.Society
                 {
                     MenuItem depot = new MenuItem("Déposer de l'argent dans les caisses", "", "ID_Depot", true);
                     depot.SetInput("", 10, InputType.UFloat, true);
-                    depot.OnMenuItemCallbackAsync = DepotMoneyMenu;
+                    depot.OnMenuItemCallback = DepotMoneyMenu;
                     menu.Add(depot);
                 }
             }
             else
             {
                 if (Resell)
-                {
                     menu.Add(new MenuItem($"Acheter {SocietyName}", "", "ID_Buy", true, rightLabel: $"${ResellPrice}"));
-                }
                 else
-                {
                     client.SendNotificationError("Vous n'êtes pas autorisé à prendre ce job");
-                }
             }
 
             MenuManager.OpenMenu(client, menu);
@@ -192,28 +188,24 @@ namespace ResurrectionRP_Server.Society
                         menu.CloseMenu(client);
                     }
                     else
-                    {
                         client.SendNotificationError("Erreur dans la saisie!");
-                    }
                     break;
                 case "ID_Buy":
-                    if (await ph.HasBankMoney(ResellPrice, $"Achat société {SocietyName}."))
+                    if (ph.HasBankMoney(ResellPrice, $"Achat société {SocietyName}."))
                     {
                         Resell = false;
                         Owner = client.GetSocialClub();
                         client.SendNotificationSuccess($"Vous avez acheté {SocietyName} pour la somme de ${ResellPrice}");
                     }
                     else
-                    {
                         client.SendNotificationError($"Vous n'avez pas assez d'argent sur votre compte.");
-                    }
                     break;
                 case "ID_NameChange":
                     string societyName = menuItem.InputValue;
 
                     if (!string.IsNullOrEmpty(societyName) && societyName != SocietyName)
                     {
-                        if (await ph.HasBankMoney(PriceNameChange, "Changement de nom de societé."))
+                        if (ph.HasBankMoney(PriceNameChange, "Changement de nom de societé."))
                         {
                             SocietyName = societyName;
                             await Update();
@@ -225,13 +217,9 @@ namespace ResurrectionRP_Server.Society
                     break;
                 case "ID_AddParking":
                     if (SocietyManager.AddParkingList.TryAdd(client, this))
-                    {
                         client.SendNotification("Tapez dans le tchat la commande /addparkingsociety pour ajouter le parking");
-                    }
                     else
-                    {
                         client.SendNotificationError("Un parking est déjà disponible pour cette société.");
-                    }
                     break;
                 default:
                     break;
@@ -239,7 +227,7 @@ namespace ResurrectionRP_Server.Society
         }
 
         // Depot d'argent dans la caisse.
-        private async Task DepotMoneyMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void DepotMoneyMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (double.TryParse(menuItem.InputValue, out double result))
             {
@@ -253,7 +241,7 @@ namespace ResurrectionRP_Server.Society
 
                 if (ph.HasMoney(result))
                 {
-                    await BankAccount.AddMoney(result, $"Ajout d'argent par {ph.Identite.Name}");
+                    BankAccount.AddMoney(result, $"Ajout d'argent par {ph.Identite.Name}");
                     ph.UpdateFull();
                     client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
                 }

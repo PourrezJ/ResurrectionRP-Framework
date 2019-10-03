@@ -197,7 +197,7 @@ namespace ResurrectionRP_Server.Business
 
             if (ph != null)
             {
-                if (await ph.HasBankMoney(BusinessPrice, $"Achat de societé {BusinnessName}."))
+                if (ph.HasBankMoney(BusinessPrice, $"Achat de societé {BusinnessName}."))
                 {
                     Owner = client.GetSocialClub();
                     OnSale = false;

@@ -23,7 +23,7 @@ namespace ResurrectionRP_Server.Services
         #endregion
 
         #region Init
-        public async void Init()
+        public async Task Init()
         {
             if (Parking != null)
             {
@@ -41,7 +41,7 @@ namespace ResurrectionRP_Server.Services
                 {
                     ve.ParkTime = DateTime.Now;
                     Parking.RemoveVehicle(Entities.Vehicles.VehiclesManager.GetVehicleHandler(ve.Plate));
-                    await Pound.AddVehicleInPoundAsync(Entities.Vehicles.VehiclesManager.GetVehicleHandler(ve.Plate) );
+                    await Pound.AddVehicleInPoundAsync(Entities.Vehicles.VehiclesManager.GetVehicleHandler(ve.Plate));
                 }
 
                 if (_poundList.Count != 0)
@@ -91,7 +91,7 @@ namespace ResurrectionRP_Server.Services
             carpark.Parking.Location = borne;
             carpark.Parking.Spawn1 = spawn1;
             carpark.Parking.Spawn2 = spawn2;
-            carpark.Init();
+            await carpark.Init();
             return carpark;
         }
 
@@ -104,7 +104,7 @@ namespace ResurrectionRP_Server.Services
             _carpark.ID = ID;
             _carpark.Parking = new Models.Parking(borne, spawn1, spawn2, name, maxVehicles: 2100, hidden: false);
             await _carpark.Insert();
-            _carpark.Init();
+            await _carpark.Init();
             return _carpark;
         }
         #endregion

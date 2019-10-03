@@ -57,7 +57,7 @@ namespace ResurrectionRP_Server.Business
 
                 MenuItem depot = new MenuItem("Déposer de l'argent", "", "ID_Depot", true);
                 depot.SetInput("", 10, InputType.UFloat, true);
-                depot.OnMenuItemCallbackAsync = DepotMoneyMenu;
+                depot.OnMenuItemCallback = DepotMoneyMenu;
                 mainmenu.Add(depot);
 
                 mainmenu.Add(new ListItem("Client:", "Choix du client", "ID_PlayerSelect", _playerlist, 0, true));
@@ -109,7 +109,7 @@ namespace ResurrectionRP_Server.Business
                     }
 
                     AcceptMenu accept = AcceptMenu.OpenMenu(ClientSelected.Client, "", "Voulez-vous vous faire tatouer?", banner: Banner.Tattoos2);
-                    accept.AcceptMenuCallBack = (async (IPlayer tatouer, bool responce) =>
+                    accept.AcceptMenuCallBack = async (IPlayer tatouer, bool responce) =>
                     {
                         if (responce)
                             await ChoiseBones(client, menuItem.Id);
@@ -118,7 +118,7 @@ namespace ResurrectionRP_Server.Business
                             menu.CloseMenu(client);
                             client.SendNotificationError("Le client ne veut pas être tatoué.");
                         }
-                    });
+                    };
                 }
             }
             else if (menu.Id == "ID_TattooSelect")
@@ -154,7 +154,7 @@ namespace ResurrectionRP_Server.Business
                 }
                 else
                 {
-                    if (await BankAccount.GetBankMoney(Tattoo.Price, $"Tatouage par {this.BusinnessName}"))
+                    if (BankAccount.GetBankMoney(Tattoo.Price, $"Tatouage par {this.BusinnessName}"))
                     {
                         int collection = (int)Alt.Hash(Tattoo.Collection);
                         int overlay = (ClientSelected.Character.Gender == 0)
@@ -244,7 +244,7 @@ namespace ResurrectionRP_Server.Business
 
         #region Depot
         // Depot d'argent dans la caisse.
-        private async Task DepotMoneyMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void DepotMoneyMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (double.TryParse(menuItem.InputValue, out double amount))
             {
@@ -255,7 +255,7 @@ namespace ResurrectionRP_Server.Business
 
                 if (ph.HasMoney(amount))
                 {
-                    await BankAccount.AddMoney(amount, $"Ajout d'argent par {ph.Identite.Name}");
+                    BankAccount.AddMoney(amount, $"Ajout d'argent par {ph.Identite.Name}");
                     client.SendNotificationSuccess($"Vous avez déposé ${amount} dans la caisse.");
                 }
                 else

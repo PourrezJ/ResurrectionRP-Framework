@@ -53,7 +53,7 @@ namespace ResurrectionRP_Server.Business.Barber
 
                 MenuItem depot = new MenuItem("Déposer de l'argent", "", "ID_Depot", true);
                 depot.SetInput("", 10, InputType.UFloat, true);
-                depot.OnMenuItemCallbackAsync = DepotMoneyMenu;
+                depot.OnMenuItemCallback = DepotMoneyMenu;
                 mainMenu.Add(depot);
 
                 MenuItem haircut = new MenuItem("Faire une coupe de cheveux", "", "ID_Hair", true);
@@ -123,7 +123,7 @@ namespace ResurrectionRP_Server.Business.Barber
             return Task.CompletedTask;
         }
 
-        private async Task DepotMoneyMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void DepotMoneyMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (double.TryParse(menuItem.InputValue, out double result))
             {
@@ -134,7 +134,7 @@ namespace ResurrectionRP_Server.Business.Barber
 
                 if (ph.HasMoney(result))
                 {
-                    await BankAccount.AddMoney(result, $"Ajout d'argent par {ph.Identite.Name}");
+                    BankAccount.AddMoney(result, $"Ajout d'argent par {ph.Identite.Name}");
                     client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
                 }
                 else
@@ -188,7 +188,7 @@ namespace ResurrectionRP_Server.Business.Barber
         {
             Beards beard = Beards.BeardsList[itemIndex];
 
-            if (await BankAccount.GetBankMoney(beard.Price, $"Barbe par {client.GetPlayerHandler().Identite.Name}"))
+            if (BankAccount.GetBankMoney(beard.Price, $"Barbe par {client.GetPlayerHandler().Identite.Name}"))
             {
                 ClientSelected.Character.Appearance[1].Index = (byte)itemIndex;
                 ClientSelected.Character.Appearance[1].Color = (byte)ClientSelected.Character.Hair.Color;
@@ -248,7 +248,7 @@ namespace ResurrectionRP_Server.Business.Barber
             List<Hairs> _hairsList = (ClientSelected.Character.Gender == 0) ? Hairs.HairsMenList : Hairs.HairsGirlList;
             Hairs hair = _hairsList[itemIndex];
 
-            if (await BankAccount.GetBankMoney(hair.Price, $"Coupe cheveux par {client.GetPlayerHandler().Identite.Name}"))
+            if (BankAccount.GetBankMoney(hair.Price, $"Coupe cheveux par {client.GetPlayerHandler().Identite.Name}"))
             {
                 ClientSelected.Character.Hair.Hair = hair.ID;
                 ClientSelected.Client.ApplyCharacter();
@@ -325,7 +325,7 @@ namespace ResurrectionRP_Server.Business.Barber
 
         private async Task ColorValidChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            if (await BankAccount.GetBankMoney(ColorPrice, $"Couleur par {client.GetPlayerHandler().Identite.Name}"))
+            if (BankAccount.GetBankMoney(ColorPrice, $"Couleur par {client.GetPlayerHandler().Identite.Name}"))
             {
                 ClientSelected.Character.Hair.Color = _hairFirstColor;
                 ClientSelected.Character.Hair.HighlightColor = _hairSecondColor;

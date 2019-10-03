@@ -176,7 +176,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 else if (menuItem.Id == "ID_Duplicate")
                 {
                     bool result = false;
-                    Task.Run(async () => { result = await GameMode.Instance.FactionManager.LSCustom.BankAccount.GetBankMoney(350, "Duplication de la clé: " + menu.Title); }).Wait();
+                    result = GameMode.Instance.FactionManager.LSCustom.BankAccount.GetBankMoney(350, "Duplication de la clé: " + menu.Title);
 
                     if (result)
                     {

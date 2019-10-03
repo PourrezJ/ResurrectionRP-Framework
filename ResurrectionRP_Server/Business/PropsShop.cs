@@ -155,7 +155,7 @@ namespace ResurrectionRP_Server.Business
             return Task.CompletedTask;
         }
 
-        private async Task BuyProp(IPlayer client, byte componentID, int drawable, int variation, double price, string clothName)
+        private void BuyProp(IPlayer client, byte componentID, int drawable, int variation, double price, string clothName)
         {
             Item item = null;
             ClothManifest? propData = ClothingLoader.FindProps(client, componentID) ?? null;
@@ -193,13 +193,10 @@ namespace ResurrectionRP_Server.Business
 
             if (ph.BankAccount.Balance >= price)
             {
-                if (ph.AddItem(item, 1))
+                if (ph.AddItem(item, 1) && ph.HasBankMoney(price, $"Achat {clothName}", false))
                 {
-                    if (await ph.HasBankMoney(price, $"Achat {clothName}"))
-                    {
-                        client.SendNotificationSuccess($"Vous avez acheté {clothName} pour la somme de ${price}");
-                        ph.UpdateFull();
-                    }
+                    client.SendNotificationSuccess($"Vous avez acheté {clothName} pour la somme de ${price}");
+                    ph.UpdateFull();
                 }
                 else
                     client.SendNotificationError("Vous n'avez pas la place pour cette élément.");
@@ -523,7 +520,7 @@ namespace ResurrectionRP_Server.Business
             List<int> compoList = menu.GetData("Categorie");
             menu.SubTitle = menuItem.Text.ToUpper();
             menu.BackCloseMenu = false;
-            menu.ItemSelectCallbackAsync = OnCallBackWithCat;
+            menu.ItemSelectCallback = OnCallBackWithCat;
             menu.IndexChangeCallbackAsync = OnCurrentItem;
 
             byte componentID = menu.GetData("componentID");
@@ -562,7 +559,7 @@ namespace ResurrectionRP_Server.Business
             await OnCurrentItem(client, menu, 0, menu.Items[0]);
         }
 
-        private async Task OnCallBackWithCat(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void OnCallBackWithCat(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
@@ -577,7 +574,7 @@ namespace ResurrectionRP_Server.Business
             double price = menuItem.GetData("price");
             string clothName = menuItem.Text;
 
-            await BuyProp(client, componentID, drawable, variation, price, clothName);
+            BuyProp(client, componentID, drawable, variation, price, clothName);
         }
 
         private Task OnCurrentItem(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
@@ -609,7 +606,7 @@ namespace ResurrectionRP_Server.Business
             menu.ClearItems();
             menu.SubTitle = _componentName;
             menu.BackCloseMenu = false;
-            menu.ItemSelectCallbackAsync = OnCallBackWithoutCat;
+            menu.ItemSelectCallback = OnCallBackWithoutCat;
             menu.IndexChangeCallbackAsync = OnCurrentItem;
 
             List<int> compoList = null;
@@ -669,7 +666,7 @@ namespace ResurrectionRP_Server.Business
             OnCurrentItem(client, menu, 0, menu.Items[0]);
         }
 
-        private async Task OnCallBackWithoutCat(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void OnCallBackWithoutCat(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
@@ -683,7 +680,7 @@ namespace ResurrectionRP_Server.Business
             double price = menuItem.GetData("price");
             string clothName = menuItem.Text;
 
-            await BuyProp(client, componentID, drawable, variation, price, clothName);
+            BuyProp(client, componentID, drawable, variation, price, clothName);
         }
         #endregion
     }

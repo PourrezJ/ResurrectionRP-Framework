@@ -69,27 +69,25 @@ namespace ResurrectionRP_Server.Business
             int price = CalculEssencePriceNeeded(vh, this.Station.EssencePrice);
             AcceptMenu accept = AcceptMenu.OpenMenu(client, menu.Title, $"Prix du litre: ${Station.EssencePrice} || Taxe Etat: ${GameMode.Instance?.Economy.Taxe_Essence}", $"Mettre le plein dans {vh.Plate} pour la somme de ~r~${price}~w~.", rightlabel: $"${price}");
 
-            accept.AcceptMenuCallBack += (async (IPlayer _client, bool reponse) => {
+            accept.AcceptMenuCallBack = async (IPlayer _client, bool reponse) =>
+            {
                 if (reponse)
                 {
-                    if (await client.GetPlayerHandler().HasBankMoney(price, $"Plein d'essence {vh.Plate}."))
+                    if (client.GetPlayerHandler().HasBankMoney(price, $"Plein d'essence {vh.Plate}."))
                     {
                         vh.Fuel = vh.FuelMax;
-                        await BankAccount.AddMoney(price, $"Plein du véhicule {vh.Plate}");
+                        BankAccount.AddMoney(price, $"Plein du véhicule {vh.Plate}");
                         client.DisplayHelp($"Le plein est fait.\n Vous avez payé ~r~${price}", 6000);
                         await Update();
                     }
                     else
-                    {
                         client.SendNotificationError("Vous n'avez pas assez d'argent en banque.");
-                    }
+
                     MenuManager.CloseMenu(client);
                 }
                 else
-                {
                     MenuManager.CloseMenu(client);
-                }
-            });
+            };
 
             return Task.CompletedTask;
         }
@@ -98,19 +96,21 @@ namespace ResurrectionRP_Server.Business
         {
             if (!client.Exists)
                 return;
+
             if(client.Vehicle.Model == 4097861161)
-            {
                 client.DisplayHelp("Ce véhicule n'est plus homologué pour la livraison d'essence.", 10000);
-            }
+
             if (client.IsInVehicle)
             {
                 if (!client.Vehicle.GetVehicleHandler().hasTrailer)
                     return;
+
                 if (Array.IndexOf(allowedTrailers, client.Vehicle.GetVehicleHandler().Trailer.Model) == -1)
                 {
                     client.DisplayHelp("La remorque n'est pas homologuée pour cette action!", 10000);
                     return;
                 }
+
                 IVehicle fueltruck = (IVehicle)client.Vehicle.GetVehicleHandler().Trailer;
                 VehicleHandler hfuel = ((IVehicle)(client.Vehicle.GetVehicleHandler().Trailer)).GetVehicleHandler();
                 var data = Convert.ToInt32(menuItem.InputValue);
@@ -126,13 +126,12 @@ namespace ResurrectionRP_Server.Business
 
                     MenuManager.CloseMenu(client);
 
-
                     var EssenceTransfert = 0;
                     //API.Shared.OnProgressBar(client, true, 0, currentmax, 750);
                     client.DisplaySubtitle("Début du transfert ...", 1000);
                     Task.Run(() =>
                     {
-                        timer = Utils.Utils.SetInterval(async () =>
+                        timer = Utils.Utils.SetInterval(() =>
                         {
                             //API.OnProgressBar(client, true, i, currentmax);
                             if (Station.Litrage == Station.LitrageMax)
@@ -159,10 +158,10 @@ namespace ResurrectionRP_Server.Business
                             {
                                 _ravitaillement = false;
                                 _utilisateurRavi = null;
-                                if (await BankAccount.GetBankMoney(EssenceTransfert * this.Station.buyEssencePrice, "Achat essence au vendeur " + client.GetPlayerHandler()?.Identite.FirstName + " " + client.GetPlayerHandler()?.Identite.LastName, "", true))
-                                {
-                                    await client.GetPlayerHandler()?.BankAccount.AddMoney(EssenceTransfert * this.Station.buyEssencePrice, "Vente essence à la station " + this.BusinnessName);
-                                }
+
+                                if (BankAccount.GetBankMoney(EssenceTransfert * this.Station.buyEssencePrice, "Achat essence au vendeur " + client.GetPlayerHandler()?.Identite.FirstName + " " + client.GetPlayerHandler()?.Identite.LastName, "", true))
+                                    client.GetPlayerHandler()?.BankAccount.AddMoney(EssenceTransfert * this.Station.buyEssencePrice, "Vente essence à la station " + this.BusinnessName);
+
                                 Utils.Utils.StopTimer(timer);
                                 return;
                             }

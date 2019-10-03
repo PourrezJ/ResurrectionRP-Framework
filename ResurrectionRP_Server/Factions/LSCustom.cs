@@ -164,7 +164,7 @@ namespace ResurrectionRP_Server.Factions
                     item.RightLabel = $"${PeinturePrice}";
 
                     item.SetData("Color", Convert.ToInt32(color));
-                    item.OnMenuItemCallbackAsync += OnColorChoice;
+                    item.OnMenuItemCallback = OnColorChoice;
                 }
 
                 menu.Add(item);
@@ -186,7 +186,7 @@ namespace ResurrectionRP_Server.Factions
             }
         }
 
-        private async Task OnColorChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void OnColorChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             int color = menuItem.GetData("Color");
             if (VehicleInColorCabin == null)
@@ -200,7 +200,7 @@ namespace ResurrectionRP_Server.Factions
             if (vh == null)
                 return;
 
-            if (await BankAccount.GetBankMoney(PeinturePrice, $"Peinture du véhicule {vh.Plate} par {ph.Identite.Name}"))
+            if (BankAccount.GetBankMoney(PeinturePrice, $"Peinture du véhicule {vh.Plate} par {ph.Identite.Name}"))
             {
                 if (menu.Id == "ID_First")
                 {
@@ -387,7 +387,7 @@ namespace ResurrectionRP_Server.Factions
                     break;
 
                 case "ID_Body":
-                    if (await BankAccount.GetBankMoney(ReparBody, $"Réparation carrosserie {_vh.Plate} par {ph.Identite.Name}"))
+                    if (BankAccount.GetBankMoney(ReparBody, $"Réparation carrosserie {_vh.Plate} par {ph.Identite.Name}"))
                     {
                         await _vh.UpdatePropertiesAsync();
 
@@ -413,7 +413,7 @@ namespace ResurrectionRP_Server.Factions
                     break;
 
                 case "ID_Engine":
-                    if (await BankAccount.GetBankMoney(ReparEnginePrice, $"Réparation moteur {_vh.Plate} par {ph.Identite.Name}"))
+                    if (BankAccount.GetBankMoney(ReparEnginePrice, $"Réparation moteur {_vh.Plate} par {ph.Identite.Name}"))
                     {
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.","C'est parti!");
 
@@ -456,7 +456,7 @@ namespace ResurrectionRP_Server.Factions
                     break;
 
                 case "ID_Clean":
-                    if (await BankAccount.GetBankMoney(ClearVehicle, $"Néttoyage vehicule {_vh.Plate} par {ph.Identite.Name}"))
+                    if (BankAccount.GetBankMoney(ClearVehicle, $"Néttoyage vehicule {_vh.Plate} par {ph.Identite.Name}"))
                     {
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~r~Démarrage~w~.","C'est parti!" );
 

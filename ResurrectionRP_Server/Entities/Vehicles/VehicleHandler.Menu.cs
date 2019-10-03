@@ -276,7 +276,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                             if (ph != null)
                             {
-                                if (await ph.HasBankMoney(carPrice, $"Achat de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
+                                if (ph.HasBankMoney(carPrice, $"Achat de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
                                     await _place.CarDealer.BuyCar(_place, ph);
                                 else
                                     client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque");
@@ -300,7 +300,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                             if (ph != null)
                             {
-                                if (await ph.HasBankMoney(_place.VehicleInfo.Price, $"Location de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
+                                if (ph.HasBankMoney(_place.VehicleInfo.Price, $"Location de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
                                     await _place.RentShop.RentCar(_place, ph);
                                 else
                                     client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque");

@@ -14,13 +14,9 @@ namespace ResurrectionRP_Server.Entities.Players
     public partial class PlayerHandler
     {
         #region Fields
-        [BsonIgnore]
         private static readonly double _updateWaitTime = 2000.0;
-        [BsonIgnore]
         private DateTime _lastUpdateRequest;
-        [BsonIgnore]
         private bool _updateWaiting = false;
-        [BsonIgnore]
         private int _nbUpdateRequests;
         #endregion
 
@@ -111,7 +107,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
                 catch (Exception ex)
                 {
-                    Alt.Server.LogError($"PlayerHandler.SaveAsync() - {Client.GetSocialClub()}, {Identite.Name} - {ex}");
+                    Alt.Server.LogError($"PlayerHandler.UpdateInBackground() - {Client.GetSocialClub()}, {Identite.Name} - {ex}");
                 }
             });
         }

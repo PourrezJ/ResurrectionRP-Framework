@@ -222,16 +222,10 @@ namespace ResurrectionRP_Server.Business
 
             if (ph.BankAccount.Balance >= price)
             {
-                if (ph.AddItem(item, 1))
+                if (ph.AddItem(item, 1) && ph.HasBankMoney(price, $"Achat vêtement {clothName}", false))
                 {
-                    Task.Run(async () =>
-                    {
-                        if (await ph.HasBankMoney(price, $"Achat vêtement {clothName}"))
-                        {
-                            client.SendNotificationSuccess($"Vous avez acheté le vêtement {clothName} pour la somme de ${price}");
-                            ph.UpdateFull();
-                        }
-                    });
+                    client.SendNotificationSuccess($"Vous avez acheté le vêtement {clothName} pour la somme de ${price}");
+                    ph.UpdateFull();
                 }
                 else
                     client.SendNotificationError("Vous n'avez pas la place pour cette élément.");

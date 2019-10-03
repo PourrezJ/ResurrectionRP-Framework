@@ -699,8 +699,8 @@ namespace ResurrectionRP_Server.Business
             }
 
             menu.ClearItems();
-
             List<int> compoList = menu.GetData("Categorie");
+
             menu.SubTitle = menuItem.Text.ToUpper();
             menu.BackCloseMenu = false;
             menu.ItemSelectCallback = OnCallBackWithCat;
@@ -735,6 +735,12 @@ namespace ResurrectionRP_Server.Business
                     ui.SetData("price", drawables.Price);
                     menu.Add(ui);
                 }
+            }
+
+            if (menu.Items.Count == 0)
+            {
+                OpenComponentMenu(client, menu, componentID);
+                return;
             }
 
             menu.OpenMenu(client);
@@ -801,9 +807,6 @@ namespace ResurrectionRP_Server.Business
                     break;
             }
 
-            if (compoList == null)
-                return;
-
             foreach (int compo in compoList)
             {
                 if (!data.Value.DrawablesList.ContainsKey(compo))
@@ -826,6 +829,12 @@ namespace ResurrectionRP_Server.Business
                     ui.SetData("price", price);
                     menu.Add(ui);
                 }
+            }
+
+            if (menu.Items.Count == 0)
+            {
+                OpenComponentMenu(client, menu, componentID);
+                return;
             }
 
             menu.SetData("componentID", componentID);

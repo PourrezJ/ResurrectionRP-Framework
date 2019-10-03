@@ -118,7 +118,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 case ConsoleKey.Backspace:
                     XMenuManager.XMenuManager.CloseMenu(client);
-                    await RPGInventoryManager.CloseMenu(client);
+                    RPGInventoryManager.CloseMenu(client);
                     break;
 
                 case ConsoleKey.E:
@@ -163,7 +163,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                             RPGInventoryMenu rackmenu = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, rack.InventoryBox.Inventory);
 
-                            await rackmenu.OpenMenu(client);
+                            rackmenu.OpenMenu(client);
                         }
                     }
 
@@ -279,7 +279,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     RPGInventoryMenu menu = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, null);
 
-                    await menu.OpenMenu(client);
+                    menu.OpenMenu(client);
                     break;
 
                 case ConsoleKey.R:

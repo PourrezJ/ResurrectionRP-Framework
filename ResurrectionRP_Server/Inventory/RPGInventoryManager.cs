@@ -27,10 +27,12 @@ namespace ResurrectionRP_Server.Inventory
             AltAsync.OnClient("RPGInventory_UseItem", RPGInventory_UseItem);
             AltAsync.OnClient("RPGInventory_DropItem", RPGInventory_DropItem);
             AltAsync.OnClient("RPGInventory_GiveItem", RPGInventory_GiveItem);
-            AltAsync.OnClient("RPGInventory_SwitchItemInventory_SRV", RPGInventory_SwitchItemInventory_SRV);
-            AltAsync.OnClient("RPGInventory_SplitItemInventory_SRV", RPGInventory_SplitItemInventory_SRV);
             AltAsync.OnClient("RPGInventory_ClosedMenu_SRV", RPGInventory_ClosedMenu_SRV);
             AltAsync.OnClient("RPGInventory_PriceItemInventory_SRV", RPGInventory_PriceItemInventory_SRV);
+
+            Alt.OnClient("RPGInventory_SplitItemInventory_SRV", RPGInventory_SplitItemInventory_SRV);
+            Alt.OnClient("RPGInventory_SwitchItemInventory_SRV", RPGInventory_SwitchItemInventory_SRV);
+
         }
         #endregion
 
@@ -39,24 +41,23 @@ namespace ResurrectionRP_Server.Inventory
         {
             if (HasInventoryOpen(sender))
             {
-                Task.Run(async () =>
-                await CloseMenu(sender));
+                CloseMenu(sender);
             }
         }
         #endregion
 
         #region Public static methods
-        public static async Task CloseMenu(IPlayer client, RPGInventoryMenu oldmenu = null)
+        public static void CloseMenu(IPlayer client, RPGInventoryMenu oldmenu = null)
         {
             RPGInventoryMenu menu = null;
             if (oldmenu != null || _clientMenus.TryRemove(client, out menu))
             {
                 if (menu?.OnClose != null)
-                    await menu.OnClose.Invoke(client, menu);
+                    Task.Run(async ()=> await menu.OnClose.Invoke(client, menu));
 
                 if (!client.Exists)
                     return;
-                await client.EmitAsync("InventoryManager_CloseMenu");
+                client.EmitLocked("InventoryManager_CloseMenu");
             }
         }
 
@@ -71,7 +72,7 @@ namespace ResurrectionRP_Server.Inventory
             return null;
         }
 
-        public static Task<bool> OpenMenu(IPlayer client, RPGInventoryMenu menu)
+        public static bool OpenMenu(IPlayer client, RPGInventoryMenu menu)
         {
             RPGInventoryMenu oldMenu = null;
             _clientMenus.TryRemove(client, out oldMenu);
@@ -84,11 +85,9 @@ namespace ResurrectionRP_Server.Inventory
                     JsonConvert.SerializeObject(menu.DistantItems),
                     JsonConvert.SerializeObject(menu.OutfitItems),
                     (menu.DistantPlayer == null) ? false : true);
-
-                return Task.FromResult(true);
             }
 
-            return Task.FromResult(false);
+            return false;
         }
         #endregion
 
@@ -515,7 +514,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Switch
-        private async Task RPGInventory_SwitchItemInventory_SRV(IPlayer client, object[] args)
+        private void RPGInventory_SwitchItemInventory_SRV(IPlayer client, object[] args)
         {
             try
             {
@@ -525,418 +524,423 @@ namespace ResurrectionRP_Server.Inventory
                 int slotID = Convert.ToInt32(args[3]);
                 int oldslotID = Convert.ToInt32(args[4]);
 
-                RPGInventoryMenu menu = null;
-                _clientMenus.TryGetValue(client, out menu);
-
-                if (menu != null)
+                lock (_clientMenus)
                 {
-                    Inventory oldInventory = null;
+                    RPGInventoryMenu menu = null;
+                    _clientMenus.TryGetValue(client, out menu);
 
-                    switch (oldRPGInv) // OLD Inventory
+                    if (menu != null)
                     {
-                        case InventoryTypes.Pocket:
-                            oldInventory = menu.Inventory;
-                            break;
-                        case InventoryTypes.Bag:
-                            oldInventory = menu.Bag;
-                            break;
-                        case InventoryTypes.Distant:
-                            oldInventory = menu.Distant;
-                            break;
-                    }
+                        Inventory oldInventory = null;
 
-                    Models.ItemStack stack = null;
-                    Models.Item item = null;
 
-                    Entities.Players.PlayerHandler player = client.GetPlayerHandler();
-                    if (player == null)
-                        return;
 
-                    if (oldInventory != null)
-                    {
-                        if (oldInventory.InventoryList[oldslotID] != null)
+                        switch (oldRPGInv) // OLD Inventory
                         {
-                            stack = oldInventory.InventoryList[oldslotID];
-                            item = stack?.Item;
+                            case InventoryTypes.Pocket:
+                                oldInventory = menu.Inventory;
+                                break;
+                            case InventoryTypes.Bag:
+                                oldInventory = menu.Bag;
+                                break;
+                            case InventoryTypes.Distant:
+                                oldInventory = menu.Distant;
+                                break;
                         }
-                    }
-                    else
-                    {
-                        if (oldRPGInv == Utils.Enums.InventoryTypes.Outfit)
+
+                        Models.ItemStack stack = null;
+                        Models.Item item = null;
+
+                        Entities.Players.PlayerHandler player = client.GetPlayerHandler();
+                        if (player == null)
+                            return;
+
+                        if (oldInventory != null)
                         {
-                            stack = menu.Outfit.Slots[oldslotID];
-                            item = stack?.Item;
-                        }
-                    }
-
-                    if (item != null)
-                    {
-                        if (oldRPGInv == targetRPGInv) // Changement de slots
-                        {
-                            if (oldInventory == null) // Changement de slots dans le outfit?! 
-                                return;
-
-                            //stack.SlotIndex = slotID;
-                            if (oldInventory.InventoryList[slotID] != null)
+                            if (oldInventory.InventoryList[oldslotID] != null)
                             {
-                                if (oldInventory.InventoryList[slotID].Item.id == item.id)
-                                {
-                                    oldInventory.InventoryList[slotID].Quantity += stack.Quantity;
-                                }
-                            }
-                            else
-                            {
-                                oldInventory.InventoryList[slotID] = stack;
-                            }
-
-                            oldInventory.InventoryList[oldslotID] = null;
-
-                            switch (oldRPGInv) // OLD Inventory
-                            {
-                                case InventoryTypes.Pocket:
-                                    menu.Inventory = oldInventory;
-                                    break;
-                                case InventoryTypes.Bag:
-                                    menu.Bag = oldInventory;
-                                    break;
-                                case InventoryTypes.Distant:
-                                    menu.Distant = oldInventory;
-                                    break;
+                                stack = oldInventory.InventoryList[oldslotID];
+                                item = stack?.Item;
                             }
                         }
                         else
                         {
-                            if (stack.Item.id == ItemID.Bag && targetRPGInv != Utils.Enums.InventoryTypes.Outfit)
+                            if (oldRPGInv == Utils.Enums.InventoryTypes.Outfit)
                             {
-                                var backpack = item as Items.BagItem;
+                                stack = menu.Outfit.Slots[oldslotID];
+                                item = stack?.Item;
+                            }
+                        }
 
-                                if (!backpack.InventoryBag.IsEmpty())
-                                {
-                                    await menu.CloseMenu(client);
-                                    client.SendNotificationError("Votre sac n'est pas vide!");
+                        if (item != null)
+                        {
+                            if (oldRPGInv == targetRPGInv) // Changement de slots
+                            {
+                                if (oldInventory == null) // Changement de slots dans le outfit?! 
                                     return;
+
+                                //stack.SlotIndex = slotID;
+                                if (oldInventory.InventoryList[slotID] != null)
+                                {
+                                    if (oldInventory.InventoryList[slotID].Item.id == item.id)
+                                    {
+                                        oldInventory.InventoryList[slotID].Quantity += stack.Quantity;
+                                    }
+                                }
+                                else
+                                {
+                                    oldInventory.InventoryList[slotID] = stack;
+                                }
+
+                                oldInventory.InventoryList[oldslotID] = null;
+
+                                switch (oldRPGInv) // OLD Inventory
+                                {
+                                    case InventoryTypes.Pocket:
+                                        menu.Inventory = oldInventory;
+                                        break;
+                                    case InventoryTypes.Bag:
+                                        menu.Bag = oldInventory;
+                                        break;
+                                    case InventoryTypes.Distant:
+                                        menu.Distant = oldInventory;
+                                        break;
                                 }
                             }
-
-                            switch (targetRPGInv) // NEW Inventory
+                            else
                             {
-                                case InventoryTypes.Pocket:
-                                    if (!menu.Inventory.IsFull(stack.Quantity * stack.Item.weight)) // vérification si y'a de la place
+                                if (stack.Item.id == ItemID.Bag && targetRPGInv != Utils.Enums.InventoryTypes.Outfit)
+                                {
+                                    var backpack = item as Items.BagItem;
+
+                                    if (!backpack.InventoryBag.IsEmpty())
                                     {
-                                        if (menu.Inventory.InventoryList[slotID] != null)
+                                        menu.CloseMenu(client);
+                                        client.SendNotificationError("Votre sac n'est pas vide!");
+                                        return;
+                                    }
+                                }
+
+                                switch (targetRPGInv) // NEW Inventory
+                                {
+                                    case InventoryTypes.Pocket:
+                                        if (!menu.Inventory.IsFull(stack.Quantity * stack.Item.weight)) // vérification si y'a de la place
                                         {
-                                            if (menu.Inventory.InventoryList[slotID].Item.id == stack.Item.id)
+                                            if (menu.Inventory.InventoryList[slotID] != null)
                                             {
-                                                menu.Inventory.InventoryList[slotID].Quantity += stack.Quantity;
+                                                if (menu.Inventory.InventoryList[slotID].Item.id == stack.Item.id)
+                                                {
+                                                    menu.Inventory.InventoryList[slotID].Quantity += stack.Quantity;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                menu.Inventory.InventoryList[slotID] = stack;
                                             }
                                         }
                                         else
                                         {
-                                            menu.Inventory.InventoryList[slotID] = stack;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
-                                        return;
-                                    }
-
-                                    break;
-
-                                case InventoryTypes.Bag:
-                                    if (!menu.Bag.IsFull(stack.Quantity * stack.Item.weight)) // vérification si y'a de la place
-                                    {
-                                        if (stack.Item.id == ItemID.Bag)
-                                        {
-                                            await menu.CloseMenu(client);
-                                            client.SendNotificationError("Euh ... non!");
+                                            client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
                                             return;
                                         }
 
-                                        if (menu.Bag.InventoryList[slotID] != null)
+                                        break;
+
+                                    case InventoryTypes.Bag:
+                                        if (!menu.Bag.IsFull(stack.Quantity * stack.Item.weight)) // vérification si y'a de la place
                                         {
-                                            if (menu.Bag.InventoryList[slotID].Item.id == stack.Item.id)
+                                            if (stack.Item.id == ItemID.Bag)
                                             {
-                                                menu.Bag.InventoryList[slotID].Quantity += stack.Quantity;
+                                                menu.CloseMenu(client);
+                                                client.SendNotificationError("Euh ... non!");
+                                                return;
+                                            }
+
+                                            if (menu.Bag.InventoryList[slotID] != null)
+                                            {
+                                                if (menu.Bag.InventoryList[slotID].Item.id == stack.Item.id)
+                                                {
+                                                    menu.Bag.InventoryList[slotID].Quantity += stack.Quantity;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                menu.Bag.InventoryList[slotID] = stack;
                                             }
                                         }
                                         else
                                         {
-                                            menu.Bag.InventoryList[slotID] = stack;
+                                            client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
+                                            return;
                                         }
-                                    }
-                                    else
-                                    {
-                                        client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
-                                        return;
-                                    }
 
-                                    break;
+                                        break;
 
-                                case Utils.Enums.InventoryTypes.Distant:
-                                    if (!menu.Distant.IsFull(stack.Quantity * stack.Item.weight)) // vérification si y'a de la place
-                                    {
-                                        if (menu.Distant.InventoryList[slotID] != null)
+                                    case Utils.Enums.InventoryTypes.Distant:
+                                        if (!menu.Distant.IsFull(stack.Quantity * stack.Item.weight)) // vérification si y'a de la place
                                         {
-                                            if (menu.Distant.InventoryList[slotID].Item.id == stack.Item.id)
+                                            if (menu.Distant.InventoryList[slotID] != null)
                                             {
-                                                menu.Distant.InventoryList[slotID].Quantity += stack.Quantity;
+                                                if (menu.Distant.InventoryList[slotID].Item.id == stack.Item.id)
+                                                {
+                                                    menu.Distant.InventoryList[slotID].Quantity += stack.Quantity;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                menu.Distant.InventoryList[slotID] = stack;
                                             }
                                         }
                                         else
                                         {
-                                            menu.Distant.InventoryList[slotID] = stack;
+                                            client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
+                                            return;
                                         }
-                                    }
-                                    else
+
+                                        break;
+
+                                    case Utils.Enums.InventoryTypes.Outfit:
+                                        menu.Outfit.Slots[slotID] = stack;
+
+                                        break;
+                                }
+
+                                if (oldInventory != null)
+                                    oldInventory.InventoryList[oldslotID] = null;
+
+                                #region Clothing 
+                                // Remove
+                                if (oldRPGInv == Utils.Enums.InventoryTypes.Outfit)
+                                {
+                                    switch (item.id)
                                     {
-                                        client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
-                                        return;
+                                        case ItemID.Glasses: // glasses
+                                            player.Clothing.Glasses = (player.Character.Gender == 0) ? new PropData(14, 0) : new PropData(13, 0);
+                                            break;
+
+                                        case ItemID.Hats: // hair
+                                            player.Clothing.Hats = (player.Character.Gender == 0) ? new PropData(121, 0) : new PropData(120, 0);
+                                            break;
+
+                                        case ItemID.Necklace: // necklace
+                                            player.Clothing.Accessory = new ClothData();
+                                            break;
+
+                                        case ItemID.Mask: // mask
+                                            player.Clothing.Mask = new ClothData();
+                                            break;
+
+                                        case ItemID.Ears: // earring
+                                            player.Clothing.Ears = (player.Character.Gender == 0) ? new PropData(33, 0) : new PropData(12, 0);
+                                            break;
+
+                                        case ItemID.Jacket: // jacket
+                                            player.Clothing.Torso = new ClothData(15, 0, 0);
+                                            player.Clothing.Tops = new ClothData(15, 0, 0);
+                                            break;
+
+                                        case ItemID.Watch: // watch
+                                            player.Clothing.Watches = (player.Character.Gender == 0) ? new PropData(2, 0) : new PropData(1, 0);
+                                            break;
+
+                                        case ItemID.TShirt: // shirt
+                                            player.Clothing.Undershirt = (player.Character.Gender == 0) ? new ClothData(57, 0, 0) : new ClothData(34, 0, 0);
+                                            break;
+
+                                        case ItemID.Bracelet: // bracelet
+                                            player.Clothing.Bracelets = new PropData(15, 0);
+                                            break;
+
+                                        case ItemID.Pant: // pants
+                                            player.Clothing.Legs = (player.Character.Gender == 0) ? new ClothData(14, 0, 0) : new ClothData(15, 0, 0);
+                                            break;
+
+                                        case ItemID.Glove: // gloves
+                                            player.Clothing.Glasses = (player.Character.Gender == 0) ? new PropData(6, 0) : new PropData(5, 0);
+                                            break;
+
+                                        case ItemID.Shoes: // shoes
+                                            player.Clothing.Feet = (player.Character.Gender == 0) ? new ClothData(34, 0, 0) : new ClothData(35, 0, 0);
+                                            break;
+
+                                        case ItemID.Kevlar: // kevlar
+                                            player.Clothing.BodyArmor = new ClothData(0, 0, 0);
+                                            break;
+
+                                        case ItemID.Bag: // backpack
+                                            player.Clothing.Bags = new ClothData();
+                                            player.BagInventory = null;
+                                            menu.Bag = null;
+                                            //await menu.CloseMenu(sender);
+                                            break;
+
+                                        case ItemID.Phone:
+                                            player.PhoneSelected = null;
+                                            break;
+
+                                        case ItemID.Radio:
+                                            player.RadioSelected = null;
+                                            break;
+
+                                        case ItemID.Weapon:
+                                        case ItemID.LampeTorche:
+                                        case ItemID.Carabine:
+                                        case ItemID.Matraque:
+                                        case ItemID.Bat:
+                                        case ItemID.BattleAxe:
+                                        case ItemID.CombatPistol:
+                                        case ItemID.Flashlight:
+                                        case ItemID.Hache:
+                                        case ItemID.HeavyPistol:
+                                        case ItemID.Knife:
+                                        case ItemID.Machete:
+                                        case ItemID.Musket:
+                                        case ItemID.SNSPistol:
+                                        case ItemID.Colt6Coup:
+                                        case ItemID.Colt1911:
+                                        case ItemID.Magnum357:
+                                        case ItemID.Pistol50:
+                                        case ItemID.Pistol:
+                                        case ItemID.Pump:
+                                        case ItemID.Taser:
+                                            client.RemoveAllWeapons();
+                                            break;
                                     }
 
-                                    break;
-
-                                case Utils.Enums.InventoryTypes.Outfit:
-                                    menu.Outfit.Slots[slotID] = stack;
-
-                                    break;
-                            }
-
-                            if (oldInventory != null)
-                                oldInventory.InventoryList[oldslotID] = null;
-
-                            #region Clothing 
-                            // Remove
-                            if (oldRPGInv == Utils.Enums.InventoryTypes.Outfit)
-                            {
-                                switch (item.id)
-                                {
-                                    case ItemID.Glasses: // glasses
-                                        player.Clothing.Glasses = (player.Character.Gender == 0) ? new PropData(14, 0) : new PropData(13, 0);
-                                        break;
-
-                                    case ItemID.Hats: // hair
-                                        player.Clothing.Hats = (player.Character.Gender == 0) ? new PropData(121, 0) : new PropData(120, 0);
-                                        break;
-
-                                    case ItemID.Necklace: // necklace
-                                        player.Clothing.Accessory = new ClothData();
-                                        break;
-
-                                    case ItemID.Mask: // mask
-                                        player.Clothing.Mask = new ClothData();
-                                        break;
-
-                                    case ItemID.Ears: // earring
-                                        player.Clothing.Ears = (player.Character.Gender == 0) ? new PropData(33, 0) : new PropData(12, 0);
-                                        break;
-
-                                    case ItemID.Jacket: // jacket
-                                        player.Clothing.Torso = new ClothData(15, 0, 0);
-                                        player.Clothing.Tops = new ClothData(15, 0, 0);
-                                        break;
-
-                                    case ItemID.Watch: // watch
-                                        player.Clothing.Watches = (player.Character.Gender == 0) ? new PropData(2, 0) : new PropData(1, 0);
-                                        break;
-
-                                    case ItemID.TShirt: // shirt
-                                        player.Clothing.Undershirt = (player.Character.Gender == 0) ? new ClothData(57, 0, 0) : new ClothData(34, 0, 0);
-                                        break;
-
-                                    case ItemID.Bracelet: // bracelet
-                                        player.Clothing.Bracelets = new PropData(15, 0);
-                                        break;
-
-                                    case ItemID.Pant: // pants
-                                        player.Clothing.Legs = (player.Character.Gender == 0) ? new ClothData(14, 0, 0) : new ClothData(15, 0, 0);
-                                        break;
-
-                                    case ItemID.Glove: // gloves
-                                        player.Clothing.Glasses = (player.Character.Gender == 0) ? new PropData(6, 0) : new PropData(5, 0);
-                                        break;
-
-                                    case ItemID.Shoes: // shoes
-                                        player.Clothing.Feet = (player.Character.Gender == 0) ? new ClothData(34, 0, 0) : new ClothData(35, 0, 0);
-                                        break;
-
-                                    case ItemID.Kevlar: // kevlar
-                                        player.Clothing.BodyArmor = new ClothData(0, 0, 0);
-                                        break;
-
-                                    case ItemID.Bag: // backpack
-                                        player.Clothing.Bags = new ClothData();
-                                        player.BagInventory = null;
-                                        menu.Bag = null;
-                                        //await menu.CloseMenu(sender);
-                                        break;
-
-                                    case ItemID.Phone:
-                                        player.PhoneSelected = null;
-                                        break;
-
-                                    case ItemID.Radio:
-                                        player.RadioSelected = null;
-                                        break;
-
-                                    case ItemID.Weapon:
-                                    case ItemID.LampeTorche:
-                                    case ItemID.Carabine:
-                                    case ItemID.Matraque:
-                                    case ItemID.Bat:
-                                    case ItemID.BattleAxe:
-                                    case ItemID.CombatPistol:
-                                    case ItemID.Flashlight:
-                                    case ItemID.Hache:
-                                    case ItemID.HeavyPistol:
-                                    case ItemID.Knife:
-                                    case ItemID.Machete:
-                                    case ItemID.Musket:
-                                    case ItemID.SNSPistol:
-                                    case ItemID.Colt6Coup:
-                                    case ItemID.Colt1911:
-                                    case ItemID.Magnum357:
-                                    case ItemID.Pistol50:
-                                    case ItemID.Pistol:
-                                    case ItemID.Pump:
-                                    case ItemID.Taser:
-                                        await client.RemoveAllWeaponsAsync();
-                                        break;
+                                    player.Clothing.UpdatePlayerClothing();
+                                    menu.Outfit.Slots[oldslotID] = null;
                                 }
-
-                                player.Clothing.UpdatePlayerClothing();
-                                menu.Outfit.Slots[oldslotID] = null;
-                            }
-                            // Equip
-                            else if (targetRPGInv == Utils.Enums.InventoryTypes.Outfit)
-                            {
-                                var cloth = item as ClothItem;
-
-                                switch (item.id)
+                                // Equip
+                                else if (targetRPGInv == Utils.Enums.InventoryTypes.Outfit)
                                 {
-                                    case ItemID.Glasses: // glasses
-                                        player.Clothing.Glasses = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
-                                        break;
+                                    var cloth = item as ClothItem;
 
-                                    case ItemID.Hats: // hair
-                                        player.Clothing.Hats = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
-                                        break;
+                                    switch (item.id)
+                                    {
+                                        case ItemID.Glasses: // glasses
+                                            player.Clothing.Glasses = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                                            break;
 
-                                    case ItemID.Necklace: // necklace
-                                        player.Clothing.Accessory = cloth.Clothing;
-                                        break;
+                                        case ItemID.Hats: // hair
+                                            player.Clothing.Hats = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                                            break;
 
-                                    case ItemID.Mask: // mask
-                                        player.Clothing.Mask = cloth.Clothing;
-                                        break;
+                                        case ItemID.Necklace: // necklace
+                                            player.Clothing.Accessory = cloth.Clothing;
+                                            break;
 
-                                    case ItemID.Ears: // earring
-                                        player.Clothing.Ears = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
-                                        break;
+                                        case ItemID.Mask: // mask
+                                            player.Clothing.Mask = cloth.Clothing;
+                                            break;
 
-                                    case ItemID.Jacket: // jacket
-                                        player.Clothing.Tops = cloth.Clothing;
+                                        case ItemID.Ears: // earring
+                                            player.Clothing.Ears = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                                            break;
 
-                                        int torso = 0;
+                                        case ItemID.Jacket: // jacket
+                                            player.Clothing.Tops = cloth.Clothing;
 
-                                        if (player.Character.Gender == 0)
-                                            torso = Loader.ClothingLoader.ClothingsMaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
-                                        else
-                                            torso = Loader.ClothingLoader.ClothingsFemaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
+                                            int torso = 0;
 
-                                        player.Clothing.Torso = new ClothData((byte)torso, 0, 0);
-                                        break;
+                                            if (player.Character.Gender == 0)
+                                                torso = Loader.ClothingLoader.ClothingsMaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
+                                            else
+                                                torso = Loader.ClothingLoader.ClothingsFemaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
 
-                                    case ItemID.Watch: // watch
-                                        player.Clothing.Watches = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
-                                        break;
+                                            player.Clothing.Torso = new ClothData((byte)torso, 0, 0);
+                                            break;
 
-                                    case ItemID.TShirt: // shirt
-                                        player.Clothing.Undershirt = cloth.Clothing;
-                                        break;
+                                        case ItemID.Watch: // watch
+                                            player.Clothing.Watches = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                                            break;
 
-                                    case ItemID.Bracelet: // bracelet
-                                        player.Clothing.Bracelets = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
-                                        break;
+                                        case ItemID.TShirt: // shirt
+                                            player.Clothing.Undershirt = cloth.Clothing;
+                                            break;
 
-                                    case ItemID.Pant: // pants
-                                        player.Clothing.Legs = cloth.Clothing;
-                                        break;
+                                        case ItemID.Bracelet: // bracelet
+                                            player.Clothing.Bracelets = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                                            break;
 
-                                    case ItemID.Glove: // gloves
-                                        player.Clothing.Glasses = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
-                                        break;
+                                        case ItemID.Pant: // pants
+                                            player.Clothing.Legs = cloth.Clothing;
+                                            break;
 
-                                    case ItemID.Shoes: // shoes
-                                        player.Clothing.Feet = cloth.Clothing;
-                                        break;
+                                        case ItemID.Glove: // gloves
+                                            player.Clothing.Glasses = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                                            break;
 
-                                    case ItemID.Kevlar: // kevlar
-                                        player.Clothing.BodyArmor = cloth.Clothing;
-                                        break;
+                                        case ItemID.Shoes: // shoes
+                                            player.Clothing.Feet = cloth.Clothing;
+                                            break;
 
-                                    case ItemID.Bag: // backpack
-                                        var backpack = (item) as Items.BagItem;
-                                        if (backpack != null)
-                                        {
-                                            player.BagInventory = backpack.InventoryBag;
-                                            player.Clothing.Bags = backpack.Clothing;
-                                            menu.Bag = backpack.InventoryBag;
-                                        }
-                                        break;
+                                        case ItemID.Kevlar: // kevlar
+                                            player.Clothing.BodyArmor = cloth.Clothing;
+                                            break;
 
-                                    case ItemID.Phone:
-                                        var phoneItem = (item) as Items.PhoneItem;
-                                        if (phoneItem != null)
-                                            player.PhoneSelected = phoneItem.PhoneHandler;
-                                        break;
+                                        case ItemID.Bag: // backpack
+                                            var backpack = (item) as Items.BagItem;
+                                            if (backpack != null)
+                                            {
+                                                player.BagInventory = backpack.InventoryBag;
+                                                player.Clothing.Bags = backpack.Clothing;
+                                                menu.Bag = backpack.InventoryBag;
+                                            }
+                                            break;
 
-                                    case ItemID.Radio:
-                                        var radioItem = (item) as Items.RadioItem;
-                                        if (radioItem != null)
-                                            player.RadioSelected = radioItem.Radio;
-                                        break;
+                                        case ItemID.Phone:
+                                            var phoneItem = (item) as Items.PhoneItem;
+                                            if (phoneItem != null)
+                                                player.PhoneSelected = phoneItem.PhoneHandler;
+                                            break;
 
-                                    case ItemID.Weapon:
-                                    case ItemID.LampeTorche:
-                                    case ItemID.Carabine:
-                                    case ItemID.Matraque:
-                                    case ItemID.Bat:
-                                    case ItemID.BattleAxe:
-                                    case ItemID.CombatPistol:
-                                    case ItemID.Flashlight:
-                                    case ItemID.Hache:
-                                    case ItemID.HeavyPistol:
-                                    case ItemID.Knife:
-                                    case ItemID.Machete:
-                                    case ItemID.Musket:
-                                    case ItemID.SNSPistol:
-                                    case ItemID.Colt6Coup:
-                                    case ItemID.Colt1911:
-                                    case ItemID.Magnum357:
-                                    case ItemID.Pistol50:
-                                    case ItemID.Pistol:
-                                    case ItemID.Pump:
-                                    case ItemID.Taser:
-                                        var weaponItem = (item) as Items.Weapons;
-                                        if (weaponItem != null)
-                                        {
-                                            await client.GiveWeaponAsync((uint)weaponItem.Hash, 99999, true);
-                                        }
-                                        break;
+                                        case ItemID.Radio:
+                                            var radioItem = (item) as Items.RadioItem;
+                                            if (radioItem != null)
+                                                player.RadioSelected = radioItem.Radio;
+                                            break;
+
+                                        case ItemID.Weapon:
+                                        case ItemID.LampeTorche:
+                                        case ItemID.Carabine:
+                                        case ItemID.Matraque:
+                                        case ItemID.Bat:
+                                        case ItemID.BattleAxe:
+                                        case ItemID.CombatPistol:
+                                        case ItemID.Flashlight:
+                                        case ItemID.Hache:
+                                        case ItemID.HeavyPistol:
+                                        case ItemID.Knife:
+                                        case ItemID.Machete:
+                                        case ItemID.Musket:
+                                        case ItemID.SNSPistol:
+                                        case ItemID.Colt6Coup:
+                                        case ItemID.Colt1911:
+                                        case ItemID.Magnum357:
+                                        case ItemID.Pistol50:
+                                        case ItemID.Pistol:
+                                        case ItemID.Pump:
+                                        case ItemID.Taser:
+                                            var weaponItem = (item) as Items.Weapons;
+                                            if (weaponItem != null)
+                                            {
+                                                client.GiveWeapon((uint)weaponItem.Hash, 99999, true);
+                                            }
+                                            break;
+                                    }
+
+                                    player.Clothing.UpdatePlayerClothing();
                                 }
-
-                                player.Clothing.UpdatePlayerClothing();
+                                #endregion
                             }
-                            #endregion
                         }
+                        player.UpdateFull();
+
+                        if (menu.OnMove != null)
+                            Task.Run(async () => await menu.OnMove.Invoke(client, menu));
+
+                        Refresh(client, menu);
                     }
-
-                    if (menu.OnMove != null)
-                        await menu.OnMove.Invoke(client, menu);
-
-                    player.UpdateFull();
-                    Refresh(client, menu);
                 }
             }
             catch (Exception ex)
@@ -947,7 +951,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Split
-        private async Task RPGInventory_SplitItemInventory_SRV(IPlayer client, object[] args)
+        private void RPGInventory_SplitItemInventory_SRV(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -992,7 +996,7 @@ namespace ResurrectionRP_Server.Inventory
                     }
                 }
             }
-            await new RPGInventoryMenu(menu.Inventory, menu.Outfit, menu.Bag, menu.Distant).OpenMenu(client);
+            Task.Run(async ()=> new RPGInventoryMenu(menu.Inventory, menu.Outfit, menu.Bag, menu.Distant).OpenMenu(client));
         }
 
         #endregion

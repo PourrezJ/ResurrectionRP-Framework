@@ -10,11 +10,19 @@ export class RPGInventoryManager {
     public distant: object;
     public outfit: object;
     public give: boolean;
+    public callbackTime: number;
 
     constructor() {
         alt.onServer("InventoryManager_OpenMenu", (pocket: string, bag: string, distant: string, outfit: string, give: boolean) => {
             if (chat.isOpened() || game.isPauseMenuActive())
                 return;
+
+            const time = Date.now() - this.callbackTime;
+
+            if (time < 100) {
+                alt.logWarning('Double call XMenuManager_Callback: ' + time + 'ms');
+                return;
+            }
 
             this.pocket = JSON.parse(pocket);
             this.bag = JSON.parse(bag);
@@ -25,6 +33,7 @@ export class RPGInventoryManager {
             this.loading = true;
 
             if (this.view == null) {
+                alt.log("debug inventaire: ouverture de l'inventaire.");
                 // création du webview
                 this.view = new alt.WebView("http://resource/client/cef/inventory/index.html");
 
@@ -36,9 +45,9 @@ export class RPGInventoryManager {
                 this.view.on('inventoryDropItem', (arg1: any, arg2: any, arg3: any, arg4: any) => alt.emitServer("RPGInventory_DropItem", arg1, arg2, arg3, arg4));
                 this.view.on('inventoryChangeItemPrice', (arg1: any, arg2: any, arg3: any, arg4: any) => alt.emitServer("RPGInventory_PriceItemInventory_SRV", arg1, arg2, arg3, arg4));
                 this.view.on('inventoryGiveItem', (arg1: any, arg2: any, arg3: any, arg4: any) => alt.emitServer("RPGInventory_GiveItem", arg1, arg2, arg3, arg4));
-
+                alt.log("debug inventaire: création events.");
                 this.view.on('inventorySwitchItem', (arg1: any, arg2: any, arg3: any, arg4: any, arg5: any) => {
-                    alt.log("debug: inventorySwitchItem");
+                    alt.log(`debug inventaire: inventorySwitchItem ${arg1} ${arg2} ${arg3} ${arg4} ${arg5}`);
                     alt.emitServer("RPGInventory_SwitchItemInventory_SRV", arg1, arg2, arg3, arg4, arg5);
                 });
 
@@ -49,34 +58,25 @@ export class RPGInventoryManager {
                     if (!this.view)
                         return;
 
-                    alt.setTimeout(() => {
-                        this.view.emit('loadInventory',
-                            this.pocket,
-                            (this.bag != null) ? this.bag : null,
-                            (this.distant) ? this.distant : null,
-                            (this.outfit) ? this.outfit : null,
-                            (this.give) ? "true" : "false");
-                    }, 500);
+                    this.view.emit('loadInventory',
+                        this.pocket,
+                        (this.bag != null) ? this.bag : null,
+                        (this.distant) ? this.distant : null,
+                        (this.outfit) ? this.outfit : null,
+                        (this.give) ? "true" : "false");
 
                     this.loading = false;
                 });
 
                 alt.emit("hideChat");
             }
-            else {
-                this.view.emit('loadInventory',
-                    this.pocket,
-                    (this.bag != null) ? this.bag : null,
-                    (this.distant) ? this.distant : null,
-                    (this.outfit) ? this.outfit : null,
-                    (this.give) ? "true" : "false");
-            }
-
         });
 
         alt.onServer("InventoryManager_RefreshMenu", (pocket: string, bag: string, distant: string, outfit: string, give: boolean) => {
             if (this.view == null)
                 return;
+
+            alt.log("debug inventaire: refresh de l'inventaire.");
 
             this.pocket = JSON.parse(pocket);
             this.bag = JSON.parse(bag);

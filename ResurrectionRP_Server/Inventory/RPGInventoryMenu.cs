@@ -147,14 +147,14 @@ namespace ResurrectionRP_Server.Inventory
         {
             if (OnOpen != null)
                 await OnOpen.Invoke(client, this);
-            await RPGInventoryManager.OpenMenu(client, this);
+            RPGInventoryManager.OpenMenu(client, this);
         }
 
-        public async Task CloseMenu(IPlayer client)
+        public void CloseMenu(IPlayer client)
         {
             if (OnClose != null)
-                await OnClose.Invoke(client, this);
-            await RPGInventoryManager.CloseMenu(client, this);
+                Task.Run(async ()=> await OnClose.Invoke(client, this));
+            RPGInventoryManager.CloseMenu(client, this);
         }
     }
 }

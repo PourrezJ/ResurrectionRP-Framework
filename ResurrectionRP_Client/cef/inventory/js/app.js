@@ -7,6 +7,13 @@
  */
 let app = angular.module("ResurrectionInventory", ['cp.ngConfirm', 'ngDragDrop']);
 
+window.addEventListener('load', function () {
+    if ('alt' in window) {
+        alt.on('loadInventory', loadInventory);
+        alt.emit('loaditem');
+    }
+});
+
 app.config(['$compileProvider', ($compileProvider) => {
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|package):/);
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|package|file):/);
@@ -16,13 +23,6 @@ function loadInventory(pocket, bag, distant, outfit, give) {
     var event = new CustomEvent("ItemsLoaded", { "detail": { pocket, bag, distant, outfit, give } });
     window.dispatchEvent(event);
 }
-
-$(() => {
-    if ('alt' in window) {
-        alt.on('loadInventory', loadInventory);
-        alt.emit('loaditem');
-    }
-});
 
 /**
  * ngRightClick

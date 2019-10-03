@@ -16,9 +16,9 @@ namespace ResurrectionRP_Server.Entities.Players
         IPlayer TargetClient;
         PlayerHandler TargetHandler;
 
-        public async Task OpenXtremPlayer(IPlayer targetClient)
+        public void OpenXtremPlayer(IPlayer targetClient)
         {
-            if (!await targetClient.ExistsAsync())
+            if (!targetClient.Exists)
                 return;
 
             TargetClient = targetClient;
@@ -27,7 +27,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
 
             XMenu xmenu = new XMenu("PlayerMenu");
-            xmenu.CallbackAsync = PlayerXMenuCallback;
+            xmenu.Callback = PlayerXMenuCallback;
 
             xmenu.Add(new XMenuItem("Passeport", "Montrer son passeport", "ID_ShowPassport", XMenuItemIcons.PASSPORT_SOLID, false));
             xmenu.Add(new XMenuItem("Licences", "Montrer ses permis", "ID_Licences", XMenuItemIcons.HAND_PAPER_SOLID, false));
@@ -57,7 +57,7 @@ namespace ResurrectionRP_Server.Entities.Players
             xmenu.OpenXMenu(Client);
         }
 
-        private async Task PlayerXMenuCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void PlayerXMenuCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             var ph = client.GetPlayerHandler();
             if (ph == null)
@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 case "ID_GiveItem":
                     var rpg = new Inventory.RPGInventoryMenu(PocketInventory, OutfitInventory, BagInventory, null, false, TargetClient);
-                    await rpg.OpenMenu(client);
+                    Task.Run(async ()=> await rpg.OpenMenu(client));
                     break;
 
                 case "ID_Licences":
@@ -128,15 +128,12 @@ namespace ResurrectionRP_Server.Entities.Players
                         TargetHandler.UpdateFull();
                         return Task.CompletedTask;
                     };
-                    await invmenu.OpenMenu(client);
+                    Task.Run(async ()=> await invmenu.OpenMenu(client));
                     break;
 
                 case "ID_Handcuff":
-                    await AltAsync.Do(() =>
-                    {
-                        bool cuffed = TargetHandler.IsCuff();
-                        TargetHandler?.SetCuff(!cuffed);
-                    });
+                    bool cuffed = TargetHandler.IsCuff();
+                    TargetHandler?.SetCuff(!cuffed);
                     break;
 
                 case "ID_Admin":
@@ -150,7 +147,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                         if (vehicle != null)
                         {
-                            if (await vehicle.GetLockStateAsync() == AltV.Net.Enums.VehicleLockState.Locked)
+                            if (vehicle.LockState == AltV.Net.Enums.VehicleLockState.Locked)
                                 Client.SendNotificationError("Le véhicule est fermé");
                             else
                             {

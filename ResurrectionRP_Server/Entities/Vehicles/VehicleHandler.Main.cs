@@ -304,11 +304,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }  
 
-        public async Task<bool> LockUnlock(IPlayer client)
+        public bool LockUnlock(IPlayer client)
         {
             VehicleHandler VH = Vehicle.GetVehicleHandler() ;
 
-            if (client.HasVehicleKey( await Vehicle.GetNumberplateTextAsync()) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())
+            if (client.HasVehicleKey(Vehicle.NumberplateText) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())
             {
                 LockState = (LockState == VehicleLockState.Locked) ? VehicleLockState.Unlocked : VehicleLockState.Locked;
                 client.SendNotification($"Vous avez {(LockState == VehicleLockState.Locked ? " fermé" : "ouvert")} le véhicule");

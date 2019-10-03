@@ -111,7 +111,7 @@ namespace ResurrectionRP_Server.Factions
         {
             if (ServiceLocation != Vector3.Zero)
             {
-                Vestiaire_colShape = Alt.CreateColShapeCylinder(ServiceLocation - new Vector3(0, 0, 1), 1.0f, 1f);
+                Vestiaire_colShape = Alt.CreateColShapeCylinder(ServiceLocation - new Vector3(0, 0, 1), 1.0f, 2f);
                 Vestiaire_colShape.SetOnPlayerEnterColShape(OnPlayerEnterVestiaire);
                 Vestiaire_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveVestiaire);
                 Marker.CreateMarker(MarkerType.HorizontalCircleArrow, ServiceLocation - new Vector3(0, 0, 0.95f), new Vector3(1, 1, 1));

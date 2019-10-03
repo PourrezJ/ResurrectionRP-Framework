@@ -170,7 +170,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (veh == null)
                 return;
 
-            if (await veh.LockUnlock(player))
+            if (veh.LockUnlock(player))
             {
                 var receverList = vehicle.GetPlayersInRange(5f);
 

@@ -56,7 +56,7 @@ namespace ResurrectionRP_Server.Radio
             client.EmitLocked("CloseRadio");
         }
 
-        public Task UseRadio(IPlayer client)
+        public void UseRadio(IPlayer client)
         {
             Owner = client;
 
@@ -67,7 +67,6 @@ namespace ResurrectionRP_Server.Radio
 
                 client.PlayAnimation("random@arrests", "generic_radio_chatter", 4, -8, -1, (AnimationFlags)49);
             }
-            return Task.CompletedTask;
         }
 
         public void DontUse(IPlayer client)

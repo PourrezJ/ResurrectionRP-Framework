@@ -996,7 +996,7 @@ namespace ResurrectionRP_Server.Inventory
                     }
                 }
             }
-            Task.Run(async ()=> new RPGInventoryMenu(menu.Inventory, menu.Outfit, menu.Bag, menu.Distant).OpenMenu(client));
+            Task.Run(async ()=> await new RPGInventoryMenu(menu.Inventory, menu.Outfit, menu.Bag, menu.Distant).OpenMenu(client));
         }
 
         #endregion

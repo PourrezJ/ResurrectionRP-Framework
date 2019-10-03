@@ -40,13 +40,13 @@ namespace ResurrectionRP_Server.Entities.Players
         [BsonIgnore]
         public KeyReleasedDelegate OnKeyReleased { get; set; }
 
-        private async Task OnKeyPressedCallbackAsync(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicleDistant, IPlayer playerDistant, int streamedID)
+        private void OnKeyPressedCallbackAsync(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicleDistant, IPlayer playerDistant, int streamedID)
         {
             if (!client.Exists)
                 return;
 
             PlayerHandler ph = client.GetPlayerHandler();
-            IVehicle vehicle = vehicleDistant ?? await client.GetVehicleAsync();
+            IVehicle vehicle = vehicleDistant ?? client.Vehicle;
             VehicleHandler vh = vehicle?.GetVehicleHandler();
             Position playerPos = Position.Zero;
 
@@ -103,7 +103,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    if (vehicle != null && await vehicle.ExistsAsync())
+                    if (vehicle != null && vehicle.Exists)
                         vh.OpenXtremMenu(client);
                     else if (HouseManager.IsInHouse(Client))
                     {
@@ -132,7 +132,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (farm != null)
                     {
-                        await AltAsync.Do(()=> farm.StartFarming(client));
+                        farm.StartFarming(client);
                         return;
                     }
 
@@ -142,7 +142,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (playerDistant != null || distantPh != null && distantPh != this)
                     {
-                        await ph.OpenXtremPlayer(playerDistant ?? distantPh.Client);
+                        ph.OpenXtremPlayer(playerDistant ?? distantPh.Client);
                         return;
                     }
 
@@ -166,7 +166,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                             RPGInventoryMenu rackmenu = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, rack.InventoryBox.Inventory);
 
-                            await rackmenu.OpenMenu(client);
+                            Task.Run(async () => await rackmenu.OpenMenu(client));
                         }
                     }
 
@@ -189,7 +189,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         ResuPickup resupickup = ResuPickup.GetResuPickup(pickup.ID);
 
                         if (resupickup != null)
-                            await resupickup.Take(client);
+                            Task.Run(async () => await resupickup.Take(client));
 
                         return;
                     }
@@ -207,7 +207,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
 
                     if (vh != null)
-                        await vh.LockUnlock(client);
+                        vh.LockUnlock(client);
 
                     break;
                     
@@ -215,29 +215,26 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (ph.HasOpenMenu())
                         return;
 
-                    await AltAsync.Do(() =>
+                    if (!client.Exists)
+                        return;
+
+                    if (client.GetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, out object voiceRange))
                     {
-                        if (!client.Exists)
-                            return;
-
-                        if (client.GetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, out object voiceRange))
+                        switch (voiceRange)
                         {
-                            switch (voiceRange)
-                            {
-                                case "Parler":
-                                    voiceRange = "Crier";
-                                    break;
-                                case "Crier":
-                                    voiceRange = "Chuchoter";
-                                    break;
-                                case "Chuchoter":
-                                    voiceRange = "Parler";
-                                    break;
-                            }
-
-                            client.SetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, voiceRange);
+                            case "Parler":
+                                voiceRange = "Crier";
+                                break;
+                            case "Crier":
+                                voiceRange = "Chuchoter";
+                                break;
+                            case "Chuchoter":
+                                voiceRange = "Parler";
+                                break;
                         }
-                    });
+
+                        client.SetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, voiceRange);
+                    }
                     break;
 
                 case ConsoleKey.G:
@@ -250,12 +247,12 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (!vehicle.Exists)
                         return;
 
-                    if (await client.GetSeatAsync() != 1)
+                    if (client.Seat != 1)
                         return;
 
                     vh.SirenSound = !vh.SirenSound;
 
-                    await vehicle.SetSyncedMetaDataAsync("SirenDisabled", vh.SirenSound);
+                    vehicle.SetSyncedMetaData("SirenDisabled", vh.SirenSound);
 
                     break;
                     
@@ -270,7 +267,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
 
                     ph.PlayerSync.Crounch = !ph.PlayerSync.Crounch;
-                    await Client.SetSyncedMetaDataAsync("Crounch", ph.PlayerSync.Crounch);
+                    Client.SetSyncedMetaData("Crounch", ph.PlayerSync.Crounch);
                     break;
          
                 case ConsoleKey.I:
@@ -285,15 +282,15 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     RPGInventoryMenu menu = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, null);
 
-                    await menu.OpenMenu(client);
+                    Task.Run(async ()=> await menu.OpenMenu(client));
                     break;
 
                 case ConsoleKey.R:
 
-                    if (!await Client.IsDeadAsync())
+                    if (!Client.IsDead)
                         return;
 
-                    await Client.ReviveAsync();
+                    Client.Revive();
 
                     break;
 
@@ -349,7 +346,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
 
                     if (ph.RadioSelected != null)
-                        await ph.RadioSelected.UseRadio(client);
+                        ph.RadioSelected.UseRadio(client);
 
                     break;
 
@@ -357,21 +354,21 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (ph.HasOpenMenu())
                         return;
 
-                    await SwitchWeapon(1);
+                    SwitchWeapon(1);
                     break;
 
                 case ConsoleKey.D2:
                     if (ph.HasOpenMenu())
                         return;
 
-                    await SwitchWeapon(2);
+                    SwitchWeapon(2);
                     break;
 
                 case ConsoleKey.D3:
                     if (ph.HasOpenMenu())
                         return;
 
-                    await SwitchWeapon(3);
+                    SwitchWeapon(3);
                     break;
 
                 case ConsoleKey.NumPad1:
@@ -391,7 +388,7 @@ namespace ResurrectionRP_Server.Entities.Players
         }
 
         #region Misc
-        public async Task SwitchWeapon(int slot)
+        public void SwitchWeapon(int slot)
         {
             switch (slot)
             {
@@ -401,10 +398,10 @@ namespace ResurrectionRP_Server.Entities.Players
                         var weaponItem = (OutfitInventory.Slots[16].Item) as Items.Weapons;
                         if (weaponItem != null)
                         {
-                            await Client.GiveWeaponAsync((uint)weaponItem.Hash, 99999, true);
+                            Client.GiveWeapon((uint)weaponItem.Hash, 99999, true);
                         }
                     }
-                    else await Client.RemoveAllWeaponsAsync();
+                    else Client.RemoveAllWeapons();
                     break;
 
                 case 2:
@@ -413,13 +410,13 @@ namespace ResurrectionRP_Server.Entities.Players
                         var weaponItem = (OutfitInventory.Slots[17].Item) as Items.Weapons;
                         if (weaponItem != null)
                         {
-                            await Client.GiveWeaponAsync((uint)weaponItem.Hash, 99999, true);
+                            Client.GiveWeapon((uint)weaponItem.Hash, 99999, true);
                         }
                     }
-                    else await Client.RemoveAllWeaponsAsync();
+                    else Client.RemoveAllWeapons();
                     break;
                 case 3:
-                    await Client.RemoveAllWeaponsAsync();
+                    Client.RemoveAllWeapons();
                     break;
             }
 

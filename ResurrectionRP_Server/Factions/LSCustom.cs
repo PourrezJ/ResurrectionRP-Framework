@@ -88,8 +88,8 @@ namespace ResurrectionRP_Server.Factions
             BlipSprite = 446;
 
             ParkingLocation = new Location(new Vector3(-368.9921f, -108.6537f, 38.68017f), new Vector3(0, 0, 70.15666f));
-            ServiceLocation = new Vector3(-347.0162f, -133.5529f, 39.00962f);
-            ShopLocation = new Vector3(-344.9704f, -123.2633f, 38.00966f);
+            ServiceLocation = new Vector3(-348.72528f, -121.76703f, 39f);
+            ShopLocation = new Vector3(-350.74286f, -125.74945f, 38.002197f);
 
             // Items SHOP
             ItemShop.Add(new FactionShopItem(new LockPick(ItemID.LockPick, "Kit De Crochetage", "", 0.2, true, false, true, true), 5000, 1));

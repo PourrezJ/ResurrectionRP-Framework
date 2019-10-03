@@ -1,4 +1,5 @@
-﻿using AltV.Net.Elements.Entities;
+﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using System;
@@ -17,11 +18,23 @@ namespace ResurrectionRP_Server.Bank
 
     public class BankAccount
     {
-        #region Static Variable
+        #region Delegates
+        public delegate Task OnDepositDelagate(IPlayer client);
+        public delegate Task OnWithdrawDelegate(IPlayer client);
+        #endregion
+
+        #region Static fields
         public static List<BankAccount> BankAccountsList = new List<BankAccount>();
         #endregion
 
-        #region Variables
+        #region Fields
+        private static readonly double _updateWaitTime = 2000.0;
+        private DateTime _lastUpdateRequest;
+        private bool _updateWaiting = false;
+        private int _nbUpdateRequests;
+        #endregion
+
+        #region Properties
         public AccountType AccountType { get; set; }
         public string AccountNumber { get; set; }
         public double Balance { get; private set; }
@@ -29,8 +42,6 @@ namespace ResurrectionRP_Server.Bank
         [BsonIgnore]
         public object Owner { get; set; }
 
-        public delegate Task OnDepositDelagate(IPlayer client);
-        public delegate Task OnWithdrawDelegate(IPlayer client);
         [JsonIgnore]
         public OnDepositDelagate OnDeposit { get; set; }
         public OnWithdrawDelegate OnWithdraw { get; set; }
@@ -49,7 +60,7 @@ namespace ResurrectionRP_Server.Bank
         #endregion
 
         #region Method
-        public async Task AddMoney(double money, string reason, bool save = true)
+        public void AddMoney(double money, string reason, bool save = true)
         {
             Balance += money;
             History.Add(new BankAccountHistory()
@@ -61,18 +72,18 @@ namespace ResurrectionRP_Server.Bank
             });
 
             if (save)
-                await Save();
+                UpdateInBackground();
         }
 
-        public async Task AddMoney(double money, bool save = true)
+        public void AddMoney(double money, bool save = true)
         {
             Balance += money;
 
             if (save)
-                await Save();
+                UpdateInBackground();
         }
 
-        public async Task<bool> GetBankMoney(double money, string reason, string details = null, bool save = true)
+        public bool GetBankMoney(double money, string reason, string details = null, bool save = true)
         {
             if (money == 0)
                 return true;
@@ -90,7 +101,7 @@ namespace ResurrectionRP_Server.Bank
                 });
 
                 if (save)
-                    await Save();
+                    UpdateInBackground();
 
                 return true;
             }
@@ -115,9 +126,48 @@ namespace ResurrectionRP_Server.Bank
         private static string GenerateString() =>
             $"{new Random().Next(1000000, 9999999)}";
 
-        private async Task Save()
+        public void UpdateInBackground()
         {
-            await Database.MongoDB.UpdateBankAccount(this);
+            _lastUpdateRequest = DateTime.Now;
+
+            if (_updateWaiting)
+            {
+                _nbUpdateRequests++;
+                return;
+            }
+
+            _updateWaiting = true;
+            _nbUpdateRequests = 1;
+
+            Task.Run(async () =>
+            {
+                DateTime updateTime = _lastUpdateRequest.AddMilliseconds(_updateWaitTime);
+
+                while (DateTime.Now < updateTime)
+                {
+                    TimeSpan waitTime = updateTime - DateTime.Now;
+
+                    if (waitTime.TotalMilliseconds < 1)
+                        waitTime = new TimeSpan(0, 0, 0, 0, 1);
+
+                    await Task.Delay((int)waitTime.TotalMilliseconds);
+                    updateTime = _lastUpdateRequest.AddMilliseconds(_updateWaitTime);
+                }
+
+                try
+                {
+                    var result = await Database.MongoDB.UpdateBankAccount(this);
+                    
+                    if (result.MatchedCount == 0)
+                        Alt.Server.LogWarning($"Bank account update error for Id {AccountNumber}");
+
+                    _updateWaiting = false;
+                }
+                catch (Exception ex)
+                {
+                    Alt.Server.LogError($"BankAccount.UpdateInBackground() - {AccountNumber} - {ex}");
+                }
+            });
         }
         #endregion
     }

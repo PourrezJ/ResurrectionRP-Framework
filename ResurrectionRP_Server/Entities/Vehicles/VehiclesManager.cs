@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Numerics;
+using ResurrectionRP_Server.Services;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
@@ -80,7 +81,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             Task.Run(async () =>
                             {
                                 if (VehicleHandlerList.TryRemove(vehicle, out VehicleHandler value))
-                                    await GameMode.Instance.PoundManager.AddVehicleInPoundAsync(vh);
+                                    await Pound.AddVehicleInPoundAsync(vh);
                             });
                         }
                         catch (Exception ex)

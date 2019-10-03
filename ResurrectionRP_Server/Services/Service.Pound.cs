@@ -20,17 +20,19 @@ namespace ResurrectionRP_Server.Services
     public class Pound
     {
         #region Fields
-        private Location _poundSpawn = new Location(new Vector3(408.7641f, -1638.905f, 28.26795f), new Vector3(0.07774173f, 0.05821822f, 137.2628f));
-        [BsonIgnore]
-        private IColShape _colshape = null;
+        private static Location _poundSpawn = new Location(new Vector3(408.7641f, -1638.905f, 28.26795f), new Vector3(0.07774173f, 0.05821822f, 137.2628f));
+        private static IColShape _colshape = null;
 
-        public int Price = 0;
+        public static int Price = 500;
         #endregion
 
         #region Init
-        public void Init()
+        public static void Init()
         {
             Alt.Server.LogInfo("--- [POUND] Starting pound ---");
+
+            if (Config.GetSetting<bool>("AutoPound"))
+                Price = 0;
 
             Entities.Blips.BlipsManager.CreateBlip("Fourrière", _poundSpawn.Pos, 0, 88,1,true);
             _colshape = Alt.CreateColShapeCylinder(_poundSpawn.Pos, 3f, 3f);
@@ -52,9 +54,9 @@ namespace ResurrectionRP_Server.Services
         #endregion
 
         #region Event handlers
-        public void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        public static void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
         {
-            if (colShape != this._colshape)
+            if (colShape != _colshape)
                 return;
             IVehicle vehicle = client.Vehicle;
 
@@ -72,7 +74,7 @@ namespace ResurrectionRP_Server.Services
         #endregion
 
         #region Methods
-        private async Task AcceptMenuCallBack(IPlayer client, bool reponse)
+        private static async Task AcceptMenuCallBack(IPlayer client, bool reponse)
         {
             if (reponse)
             {
@@ -106,7 +108,7 @@ namespace ResurrectionRP_Server.Services
             }
         }
 
-        public void OpenPoundMenu(IPlayer client)
+        public static void OpenPoundMenu(IPlayer client)
         {
             Menu _menu = new Menu("ID_PoundMenu", "Fourrière", $"Sortir un véhicule pour la somme: ${Price}", backCloseMenu: true);
             _menu.ItemSelectCallbackAsync = PoundMenuCallBack;
@@ -141,7 +143,7 @@ namespace ResurrectionRP_Server.Services
             _menu.OpenMenu(client);
         }
 
-        private async Task PoundMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private static async Task PoundMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menu.Id == "ID_PoundMenu" && menuItem.Id == "ID_Get" && menuItem.HasData("Vehicle"))
             {
@@ -173,12 +175,12 @@ namespace ResurrectionRP_Server.Services
             }
         }
 
-        public IEnumerable<VehicleHandler> GetVehicleInPound(IPlayer client)
+        public static IEnumerable<VehicleHandler> GetVehicleInPound(IPlayer client)
         {
             return VehiclesManager.GetAllVehicles().Where(v => (v.OwnerID == client.GetSocialClub() || client.GetPlayerHandler().HasKey(v.Plate)) && v.IsInPound);
         }
 
-        public async Task AddVehicleInPoundAsync(VehicleHandler veh)
+        public static async Task AddVehicleInPoundAsync(VehicleHandler veh)
         {
             Alt.Server.LogInfo ($"Mise en fourrière véhicule {veh.Plate}");
 

@@ -289,10 +289,8 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (firstspawn)
                     UpdateFull();
 
-                OnKeyPressed += OnKeyPressedCallbackAsync;
-                OnKeyReleasedAsync += OnKeyReleasedCallbackAsync;
-
                 OnKeyPressed += OnKeyPressedCallback;
+                OnKeyReleased += OnKeyReleasedCallback;
             }
             else
             {

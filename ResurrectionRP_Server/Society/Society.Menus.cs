@@ -158,7 +158,7 @@ namespace ResurrectionRP_Server.Society
                         return Task.CompletedTask;
                     };
 
-                    invmenu.OpenMenu(client);
+                    await invmenu.OpenMenu(client);
                     break;
                 case "pproprio":
                     string socialClub = menuItem.InputValue;

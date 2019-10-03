@@ -118,7 +118,7 @@ namespace ResurrectionRP_Server.Factions
             VehicleAllowed.Add(new FactionVehicle(2, VehicleModel.Cog552, 400000, 60));
             VehicleAllowed.Add(new FactionVehicle(2, VehicleModel.Schafter6, 400000, 90));
             VehicleAllowed.Add(new FactionVehicle(3, VehicleModel.Kuruma2, 1500000, 60));
-            //VehicleAllowed.Add(new FactionVehicle(3, (VehicleModel)VehicleHash2.rmodx6, 1500000, 60)); Véhicule moddé ?
+            VehicleAllowed.Add(new FactionVehicle(3, (VehicleModel)VehicleModel2.rmodx6, 1500000, 60));
 
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Flashlight, "Lampe de poche", "Une lampe leds 500watts.", hash: WeaponHash.Flashlight), 0, 0));
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Matraque, "Matraque", "Une matraque de marque Théo.", hash: WeaponHash.Nightstick), 0, 0));

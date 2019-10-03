@@ -15,7 +15,6 @@ using AltV.Net.Data;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Utils.Enums;
-using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Entities.Peds;
 using System.Collections.Generic;
 using ResurrectionRP_Server.Factions;
@@ -40,7 +39,7 @@ namespace ResurrectionRP_Server.Entities.Players
         [BsonIgnore]
         public KeyReleasedDelegate OnKeyReleased { get; set; }
 
-        private void OnKeyPressedCallbackAsync(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicleDistant, IPlayer playerDistant, int streamedID)
+        private void OnKeyPressedCallback(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicleDistant, IPlayer playerDistant, int streamedID)
         {
             if (!client.Exists)
                 return;
@@ -49,11 +48,16 @@ namespace ResurrectionRP_Server.Entities.Players
             IVehicle vehicle = vehicleDistant ?? client.Vehicle;
             VehicleHandler vh = vehicle?.GetVehicleHandler();
             Position playerPos = Position.Zero;
-
+            
             client.GetPositionLocked(ref playerPos);
 
             if (ph == null)
                 return;
+
+            Ped pnj = null;
+
+            if (raycastData.entityType == 1)
+                pnj = Ped.NPCList.Find(p => p.Position.DistanceTo(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE && p.Model == (AltV.Net.Enums.PedModel)raycastData.entityHash);
 
             switch (Keycode)
             {
@@ -137,7 +141,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
 
                     PlayerHandler distantPh = null;
-                    if (playerDistant == null)
+                    if (playerDistant == null && vehicle == null)
                          distantPh = PlayerManager.GetPlayersList().Find(p => p.Location.Pos.DistanceTo(raycastData.pos) < Globals.MAX_INTERACTION_DISTANCE);
 
                     if (playerDistant != null || distantPh != null && distantPh != this)
@@ -150,8 +154,20 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (door != null)
                         door.Interact?.Invoke(client, door);
 
+                    if (raycastData.entityType == 1)
+                    {
+                        if (pnj == null)
+                            return;
 
-                    if (raycastData.entityType == 3)
+                        if (pnj.Position.DistanceTo(client.Position) > 3)
+                            return;
+
+                        if (pnj.NpcInteractCallBackAsync != null)
+                            Task.Run(async () => await pnj.NpcInteractCallBackAsync.Invoke(client, pnj));
+                        else if (pnj.NpcInteractCallBack != null)
+                            pnj.NpcInteractCallBack.Invoke(client, pnj);
+                    }
+                    else if (raycastData.entityType == 3)
                     {
                         if (raycastData.entityHash == 307713837)
                         {
@@ -269,7 +285,25 @@ namespace ResurrectionRP_Server.Entities.Players
                     ph.PlayerSync.Crounch = !ph.PlayerSync.Crounch;
                     Client.SetSyncedMetaData("Crounch", ph.PlayerSync.Crounch);
                     break;
-         
+
+
+                case ConsoleKey.W:
+                    if (raycastData.entityType != 1)
+                        return;
+
+                    if (pnj == null)
+                        return;
+
+                    if (pnj.Position.DistanceTo(client.Position) > 3)
+                        return;
+
+                    if (pnj.NpcSecInteractCallBackAsync != null)
+                        Task.Run(async () => await pnj.NpcSecInteractCallBackAsync.Invoke(client, pnj));
+                    else if (pnj.NpcSecInteractCallBack != null)
+                        pnj.NpcSecInteractCallBack.Invoke(client, pnj);
+                    break;
+
+
                 case ConsoleKey.I:
                     if (ph.HasOpenMenu())
                         return;
@@ -423,59 +457,42 @@ namespace ResurrectionRP_Server.Entities.Players
         }
         #endregion
 
-        private Task OnKeyReleasedCallbackAsync(IPlayer client, ConsoleKey Keycode)
+        private void OnKeyReleasedCallback(IPlayer client, ConsoleKey Keycode)
         {
             if (!client.Exists)
-                return Task.CompletedTask;
+                return;
 
             PlayerHandler ph = client.GetPlayerHandler();
 
             if (ph == null)
-                return Task.CompletedTask;
+                return;
 
 
             switch (Keycode)
             {
                 case (ConsoleKey)20:
                     if (ph.HasOpenMenu())
-                        return Task.CompletedTask;
+                        return;
 
                     ph.RadioSelected?.DontUse(client);
                     break;
             }
-
-            return Task.CompletedTask;
         }
 
-        private void OnKeyPressedCallback(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicle, IPlayer playerDistant, int streamedID)
+        private void OnKeyReleasedCallback(IPlayer client, ConsoleKey Keycode, RaycastData raycastData, IVehicle vehicle, IPlayer playerDistant, int streamedID)
         {
             if (!client.Exists)
                 return;
 
-            if (raycastData.entityType != 1)
-                return;
 
-            Ped ped = Ped.NPCList.Find(p => p.Position.DistanceTo(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE && p.Model == (AltV.Net.Enums.PedModel)raycastData.entityHash);
-
-            if (ped == null)
-                return;
-
-            if (ped.Position.DistanceTo(client.Position) > 3)
-                return;
 
             if (Keycode == ConsoleKey.E)
             {
-                if (ped.NpcInteractCallBackAsync != null)
-                    Task.Run(async () => await ped.NpcInteractCallBackAsync.Invoke(client, ped));
-                else if (ped.NpcInteractCallBack != null)
-                    ped.NpcInteractCallBack.Invoke(client, ped);
+
             }
             else if (Keycode == ConsoleKey.W)
             {
-                if (ped.NpcSecInteractCallBackAsync != null)
-                    Task.Run(async () => await ped.NpcSecInteractCallBackAsync.Invoke(client, ped));
-                else if (ped.NpcSecInteractCallBack != null)
-                    ped.NpcSecInteractCallBack.Invoke(client, ped);
+
             }
         }
 

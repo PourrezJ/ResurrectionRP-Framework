@@ -22,6 +22,7 @@ using AltV.Net.Data;
 using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Services;
 using ResurrectionRP_Server.Utils;
+using ResurrectionRP_Server.Illegal;
 
 namespace ResurrectionRP_Server
 {
@@ -57,7 +58,6 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public List<IPlayer> PlayerList = new List<IPlayer>();
 
-        //public const short GlobalDimension = short.MaxValue;
         public const short GlobalDimension = 0;
 
         public uint DatabaseVersion { get; set; }
@@ -69,7 +69,6 @@ namespace ResurrectionRP_Server
 
         [BsonIgnore]
         public VehiclesManager VehicleManager { get; private set; }
-        public Services.Pound PoundManager { get; set; }
 
         [BsonIgnore]
         public Jobs.JobsManager JobsManager { get; private set; }
@@ -116,6 +115,7 @@ namespace ResurrectionRP_Server
 
         public static bool ServerLock;
 
+        public BlackMarket BlackMarket { get; private set; }
         public Time Time { get; set; }
 
         [BsonIgnore]
@@ -209,8 +209,9 @@ namespace ResurrectionRP_Server
             if (Time == null)
                 Time = new Time();
 
-            if (PoundManager == null)
-                PoundManager = new Pound();
+            if (BlackMarket == null)
+                BlackMarket = new BlackMarket();
+            BlackMarket.Init();
 
             Alt.Server.LogColored("~g~Initialisations des controlleurs...");
             Task.Run(async () =>
@@ -228,7 +229,7 @@ namespace ResurrectionRP_Server
             });
 
 
-            PoundManager.Init();
+            Pound.Init();
             Loader.CarDealerLoaders.LoadAllCardealer();
             // DrivingSchoolManager.InitAll();
             Loader.ClothingLoader.LoadAllCloth();
@@ -239,11 +240,6 @@ namespace ResurrectionRP_Server
             LifeInvader.Load();
             VoiceController.OnResourceStart();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
-
-            AutoPound = Config.GetSetting<bool>("AutoPound");
-
-            if (AutoPound)
-                PoundManager.Price = 0;
 
             Events.Initialize();
 

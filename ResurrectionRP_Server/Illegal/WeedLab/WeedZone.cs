@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Timers;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Streamer.Data;
+using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server.Illegal.WeedLab
 {
@@ -45,10 +47,10 @@ namespace ResurrectionRP_Server.Illegal.WeedLab
         public OnGrowingClientEnterDelegate OnGrowingClientEnter { get; set; }
         [JsonIgnore, BsonIgnore]
         public IColShape Colshape = null;
-/*        [JsonIgnore, BsonIgnore]
-        public ITextLabel Textlabel = null;
         [JsonIgnore, BsonIgnore]
-        public IMarker Marker = null;*/
+        public TextLabel Textlabel = null;
+        [JsonIgnore, BsonIgnore]
+        public Marker Marker = null;
         [JsonIgnore, BsonIgnore]
         DateTime ArrosageTime;
         [JsonIgnore, BsonIgnore]

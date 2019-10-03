@@ -28,7 +28,7 @@ namespace ResurrectionRP_Server.Items
         {
             return new List<Item>()
                 {
-                new Eat(ItemID.Lasagnes, "Lasagnes", "Les lasagnes de la Mama!", 1 , true, true, true, food:15),
+                    new Eat(ItemID.Lasagnes, "Lasagnes", "Les lasagnes de la Mama!", 1 , true, true, true, food:15),
                     new Eat(ItemID.Fromage, "Fromage de chèvre", "Fromage de chèvre bien odorant", 1, true, true,true, food:15, isDockable: true, itemPrice: 23, icon:"cheese"),
                     new Eat(ItemID.Sardine, "Sardine", "La sardine est une espèce de poisson de la famille des Clupeidae", 1, true, true,true, food:2, isDockable: true, itemPrice: 4, icon:"sardine"),
                     new Eat(ItemID.JambonBeurre, "Sandwich jambon beurre", "Sandwich jambon beurre au pain sans gluten", 1 , true, true, true, food:15,icon:"jambon-beurre", isDockable:true, itemPrice:20),

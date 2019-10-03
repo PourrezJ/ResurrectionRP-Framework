@@ -10,6 +10,7 @@ using AltV.Net.Async;
 using ResurrectionRP_Server.Utils.Enums;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Services;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -340,7 +341,7 @@ namespace ResurrectionRP_Server.Factions
                         return;
 
                     client.SendNotificationPicture(CharPicture.CHAR_CHAT_CALL, "Bureau Shérif", "Demande de mise en fourrière.", "La fourrière est venu récupérer le véhicule.");
-                    await GameMode.Instance.PoundManager.AddVehicleInPoundAsync(vh);
+                    await Pound.AddVehicleInPoundAsync(vh);
                 });
             }
         }

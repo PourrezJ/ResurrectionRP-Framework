@@ -9,6 +9,7 @@ using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.XMenuManager;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Services;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -334,7 +335,7 @@ namespace ResurrectionRP_Server.Factions
                         return;
 
                     client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande de mise en fourrière.", "La fourrière est venu récupérer le véhicule.");
-                    Task.Run(async ()=>await GameMode.Instance.PoundManager.AddVehicleInPoundAsync(vh));
+                    Task.Run(async ()=>await Pound.AddVehicleInPoundAsync(vh));
                 });
             }
         }

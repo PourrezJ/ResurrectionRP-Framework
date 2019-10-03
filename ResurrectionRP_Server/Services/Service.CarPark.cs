@@ -41,7 +41,7 @@ namespace ResurrectionRP_Server.Services
                 {
                     ve.ParkTime = DateTime.Now;
                     Parking.RemoveVehicle(Entities.Vehicles.VehiclesManager.GetVehicleHandler(ve.Plate));
-                    GameMode.Instance?.PoundManager.AddVehicleInPoundAsync(Entities.Vehicles.VehiclesManager.GetVehicleHandler(ve.Plate) );
+                    await Pound.AddVehicleInPoundAsync(Entities.Vehicles.VehiclesManager.GetVehicleHandler(ve.Plate) );
                 }
 
                 if (_poundList.Count != 0)

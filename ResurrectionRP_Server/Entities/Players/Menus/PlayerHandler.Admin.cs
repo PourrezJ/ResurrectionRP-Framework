@@ -4,6 +4,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Services;
 using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.Utils.Enums;
 using System;
@@ -186,7 +187,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         }
 
                         client.SendNotification($"Véhicule ~r~{vehFourriere.Plate} ~w~ mis en fourrière...");
-                        Task.Run(async () => await GameMode.Instance.PoundManager.AddVehicleInPoundAsync(vehFourriere));
+                        Task.Run(async () => await Pound.AddVehicleInPoundAsync(vehFourriere));
                     }
                 };
 

@@ -502,7 +502,6 @@ namespace ResurrectionRP_Server.Business
             menu.ClearItems();
             menu.BackCloseMenu = false;
             menu.SubTitle = _componentName;
-            menu.IndexChangeCallback = null;
             var data = ClothingLoader.FindTops(client) ?? null;
 
             if (data == null)

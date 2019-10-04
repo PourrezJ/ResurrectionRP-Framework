@@ -312,6 +312,9 @@ namespace ResurrectionRP_Server.Phone
 
         public bool RemoveContactFromAddressBook(string number)
         {
+            if (AddressBook == null)
+                return false;
+
             int indexToRemove = -1;
             for (int i = 0; i < AddressBook.Count; i++)
             {

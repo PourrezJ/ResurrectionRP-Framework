@@ -123,7 +123,7 @@ namespace ResurrectionRP_Server.Illegal
             Timer.Start();
             WeedlabsList.Add(this);
 
-            Alt.OnColShape += Alt_OnColShape;
+           // Alt.OnColShape += Alt_OnColShape;
 
             await base.Load();
         }
@@ -132,6 +132,8 @@ namespace ResurrectionRP_Server.Illegal
         {
             if (!state)
                 return;
+
+
 
             var client = (IPlayer)targetEntity;
 

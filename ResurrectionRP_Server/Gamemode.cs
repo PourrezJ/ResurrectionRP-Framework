@@ -223,7 +223,7 @@ namespace ResurrectionRP_Server
                 await FactionManager.InitAllFactions();
                 await Loader.BusinessesLoader.LoadAllBusinesses();         
                 await Society.SocietyManager.LoadAllSociety();
-                
+                await IllegalManager.InitAll();
                 //await JobsManager.Init();
                 await HouseManager.LoadAllHouses();
 
@@ -231,7 +231,7 @@ namespace ResurrectionRP_Server
                 ServerLoaded = true;
             });
 
-            IllegalManager.InitAll();
+            
             Pound.Init();
             Loader.CarDealerLoaders.LoadAllCardealer();
             // DrivingSchoolManager.InitAll();

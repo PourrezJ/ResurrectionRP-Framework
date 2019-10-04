@@ -95,7 +95,6 @@ namespace ResurrectionRP_Server
 
         public override void OnStop()
         {
-            ColshapeManager.Shutdown();
             Alt.Log("GameMode Stopped");
         }
 

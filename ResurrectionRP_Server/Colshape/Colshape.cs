@@ -45,15 +45,20 @@ namespace ResurrectionRP_Server.Colshape
         #region Public methods
         public void AddEntity(IEntity entity)
         {
+            bool entityAdded;
+
             lock (_entities)
             {
-                _entities.Add(entity);
+                entityAdded = _entities.Add(entity);
             }
 
-            if (entity.Type == BaseObjectType.Player)
-                OnPlayerEnterColshape?.Invoke(this, (IPlayer)entity);
-            else if (entity.Type == BaseObjectType.Vehicle)
-                OnVehicleEnterColshape?.Invoke(this, (IVehicle)entity);
+            if (entityAdded)
+            {
+                if (entity.Type == BaseObjectType.Player)
+                    OnPlayerEnterColshape?.Invoke(this, (IPlayer)entity);
+                else if (entity.Type == BaseObjectType.Vehicle)
+                    OnVehicleEnterColshape?.Invoke(this, (IVehicle)entity);
+            }
         }
 
         public void Delete()
@@ -75,15 +80,20 @@ namespace ResurrectionRP_Server.Colshape
 
         public void RemoveEntity(IEntity entity)
         {
+            bool entityRemoved;
+
             lock (_entities)
             {
-                _entities.Remove(entity);
+                entityRemoved = _entities.Remove(entity);
             }
 
-            if (entity.Type == BaseObjectType.Player)
-                OnPlayerLeaveColshape?.Invoke(this, (IPlayer)entity);
-            else if (entity.Type == BaseObjectType.Vehicle)
-                OnVehicleLeaveColshape?.Invoke(this, (IVehicle)entity);
+            if (entityRemoved)
+            {
+                if (entity.Type == BaseObjectType.Player)
+                    OnPlayerLeaveColshape?.Invoke(this, (IPlayer)entity);
+                else if (entity.Type == BaseObjectType.Vehicle)
+                    OnVehicleLeaveColshape?.Invoke(this, (IVehicle)entity);
+            }
         }
         #endregion
     }

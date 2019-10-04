@@ -351,12 +351,20 @@ namespace ResurrectionRP_Server.Models
                 string social = client.GetSocialClub();
                 List<ParkedCar> vehicleListParked = null;
 
-                if (canGetAllVehicle)
-                    vehicleListParked = ListVehicleStored;
-                else if (vehicleType == -1)
-                    vehicleListParked = ListVehicleStored.FindAll(p => VehiclesManager.GetVehicleHandler(p.Plate).OwnerID == social || ph.ListVehicleKey.Exists(v => v.Plate == p.Plate));
-                else
-                    vehicleListParked = ListVehicleStored.FindAll(p => (VehiclesManager.GetVehicleHandler(p.Plate).OwnerID == social || ph.ListVehicleKey.Exists(v => v.Plate == p.Plate) && VehiclesManager.GetVehicleHandler(p.Plate).VehicleManifest.VehicleClass == vehicleType));
+                try
+                {
+                    if (canGetAllVehicle)
+                        vehicleListParked = ListVehicleStored;
+                    else if (vehicleType == -1)
+                        vehicleListParked = ListVehicleStored.FindAll(p => VehiclesManager.GetVehicleHandler(p.Plate)?.OwnerID == social || ph.ListVehicleKey.Exists(v => v?.Plate == p.Plate));
+                    else
+                        vehicleListParked = ListVehicleStored.FindAll(p => (VehiclesManager.GetVehicleHandler(p.Plate)?.OwnerID == social || ph.ListVehicleKey.Exists(v => v?.Plate == p.Plate) && VehiclesManager.GetVehicleHandler(p.Plate)?.VehicleManifest?.VehicleClass == vehicleType));
+
+                }
+                catch (Exception ex)
+                {
+                    Alt.Server.LogError($"OpenParkingMenu player: {client.GetSocialClub()} | parking: {this.Name} {this.ID}");
+                }
 
                 List<VehicleHandler> vehicleList = VehiclesManager.GetAllVehicles().Where(v => vehicleListParked.Select(p => p.Plate).Contains(v.Plate)).ToList();
 

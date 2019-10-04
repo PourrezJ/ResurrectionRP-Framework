@@ -241,32 +241,26 @@ namespace ResurrectionRP_Server.Phone
                 AddNameToAddressBook(client, contactName, contactNumber);
                 return true;
             }
+
             return false;
         }
 
-        public bool TryEditContact(IPlayer client, String contactName, String contactNumber, String originalNumber, bool message = true)
+        public bool TryEditContact(IPlayer client, string contactName, string contactNumber, string originalNumber, bool message = true)
         {
-            try
+            if (ValidateContact(contactName, contactNumber, true))
             {
-                if (ValidateContact(contactName, contactNumber, true))
+                if (AddressBook == null || string.IsNullOrEmpty(originalNumber))
+                    return false;
+
+                Address foundAddress = AddressBook.Find(address => address?.phoneNumber == originalNumber);
+                if (foundAddress.phoneNumber != null && foundAddress.phoneNumber != "")
                 {
-                    if (AddressBook == null)
-                        return false;
+                    RemoveContactFromAddressBook(originalNumber);
+                    AddNameToAddressBook(client, contactName, contactNumber);
 
-                    Address foundAddress = AddressBook.Find(address => address?.phoneNumber == originalNumber);
-                    if (foundAddress.phoneNumber != null && foundAddress.phoneNumber != "")
-                    {
-                        RemoveContactFromAddressBook(originalNumber);
-                        AddNameToAddressBook(client, contactName, contactNumber);
-
-                        client.EmitLocked("ContactEdited");
-                        return true;
-                    }
+                    client.EmitLocked("ContactEdited");
+                    return true;
                 }
-            }
-            catch(Exception ex)
-            {
-                Alt.Server.LogError(ex.ToString());
             }
 
             return false;
@@ -275,6 +269,7 @@ namespace ResurrectionRP_Server.Phone
         private bool ValidateContact(string name, string number, bool edit = false)
         {
             IPlayer _client = GetClientWithPhoneNumber(PhoneNumber);
+
             if (_client != null)
             {
                 if (string.IsNullOrEmpty(name))
@@ -282,25 +277,23 @@ namespace ResurrectionRP_Server.Phone
                     _client.SendNotificationError("Le nom du contact ne peut être vide!");
                     return false;
                 }
-
-                if (number.Length != 9)
-                {
-                    _client.SendNotificationError("Le numéro de téléphone doit comporter 9 chiffres!");
-                    return false;
-                }
-
-                if (name.Length > 17)
+                else if (name.Length > 17)
                 {
                     _client.SendNotificationError("Le nom ne peut pas être plus long que 17 caractères!");
                     return false;
                 }
-
-                if (!edit && HasContactForNumber(number))
+                else if (string.IsNullOrEmpty(number) || number.Length != 9)
+                {
+                    _client.SendNotificationError("Le numéro de téléphone doit comporter 9 chiffres!");
+                    return false;
+                }
+                else if (!edit && HasContactForNumber(number))
                 {
                     _client.SendNotificationError("Vous avez déjà un contact pour le numéro " + number);
                     return false;
                 }
             }
+
             return true;
         }
 

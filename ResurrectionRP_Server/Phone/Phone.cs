@@ -272,12 +272,12 @@ namespace ResurrectionRP_Server.Phone
             return false;
         }
 
-        private bool ValidateContact(String name, String number, bool edit = false)
+        private bool ValidateContact(string name, string number, bool edit = false)
         {
             IPlayer _client = GetClientWithPhoneNumber(PhoneNumber);
             if (_client != null)
             {
-                if (name.Length == 0)
+                if (string.IsNullOrEmpty(name))
                 {
                     _client.SendNotificationError("Le nom du contact ne peut être vide!");
                     return false;
@@ -312,7 +312,7 @@ namespace ResurrectionRP_Server.Phone
 
         public bool RemoveContactFromAddressBook(string number)
         {
-            if (AddressBook == null)
+            if (AddressBook == null || string.IsNullOrEmpty(number))
                 return false;
 
             int indexToRemove = -1;

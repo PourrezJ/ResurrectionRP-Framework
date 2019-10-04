@@ -259,8 +259,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (Vehicle == null)
                 return false;
 
-            if (await Vehicle.ExistsAsync())
-                await Vehicle.RemoveAsync();
+            await AltAsync.Do(() =>
+            {
+                if (Vehicle.Exists)
+                    Vehicle.Remove();
+            });
 
             if (VehiclesManager.VehicleHandlerList.TryRemove(Vehicle, out VehicleHandler _))
             {

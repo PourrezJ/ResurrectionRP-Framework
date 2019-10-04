@@ -266,8 +266,11 @@ namespace ResurrectionRP_Server.Farms
 
                 if (exit)
                 {
-                    FarmTimers[client].Close();
-                    FarmTimers[client] = null;
+                    if (FarmTimers[client] != null)
+                    {
+                        FarmTimers[client].Close();
+                        FarmTimers[client] = null;
+                    }
                     return;
                 }
 
@@ -337,8 +340,11 @@ namespace ResurrectionRP_Server.Farms
 
                 if (player.CountItem(ItemIDBrute) < Process_QuantityNeeded || exit)
                 {
-                    ProcessTimers[sender].Stop();
-                    ProcessTimers[sender] = null;
+                    if (ProcessTimers[sender] != null)
+                    {
+                        ProcessTimers[sender].Stop();
+                        ProcessTimers[sender] = null;
+                    }
                 }
 
                 if (sender.IsInVehicle)
@@ -458,12 +464,6 @@ namespace ResurrectionRP_Server.Farms
                 if (!sender.Exists)
                     return;
 
-                if (player.CountItem(ItemIDBrute) >= 1 && player.CountItem(ItemIDBrute2) >= 1|| exit)
-                {
-                    DoubleProcessTimers[sender].Stop();
-                    DoubleProcessTimers[sender] = null;
-                }
-
                 if (sender.IsInVehicle)
                 {
                     sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous ne pouvez pas traiter depuis le véhicule.", 5000);
@@ -477,6 +477,12 @@ namespace ResurrectionRP_Server.Farms
 
                 if (exit)
                 {
+                    if (DoubleProcessTimers[sender] != null)
+                    {
+                        DoubleProcessTimers[sender].Stop();
+                        DoubleProcessTimers[sender] = null;
+                    }
+                    player.UpdateFull();
                     player.IsOnProgress = false;
                     return;
                 }
@@ -492,8 +498,14 @@ namespace ResurrectionRP_Server.Farms
                 else
                 {
                     sender.DisplaySubtitle($"Traitement terminé: Vous avez traité ~r~ {i} {_itemTraite.name}(s)", 15000);
+                    exit = true;
                     player.UpdateFull();
                     player.IsOnProgress = false;
+                    if (DoubleProcessTimers[sender] != null)
+                    {
+                        DoubleProcessTimers[sender].Stop();
+                        DoubleProcessTimers[sender] = null;
+                    }
                     return;
                 }
             }, DoubleProcess_Time);

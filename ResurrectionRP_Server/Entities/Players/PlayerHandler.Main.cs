@@ -279,7 +279,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     GameMode.Instance.Streamer.LoadStreamPlayer(client);
                     Door.OnPlayerConnected(client);
                     Houses.HouseManager.OnPlayerConnected(client);
-                    GameMode.Instance.IllegalManager.OnPlayerConnected(client);
+                    //GameMode.Instance.IllegalManager.OnPlayerConnected(client);
                 });
                 
                 await Task.Delay(500);

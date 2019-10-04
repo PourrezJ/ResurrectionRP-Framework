@@ -213,7 +213,7 @@ namespace ResurrectionRP_Server
 
             if (BlackMarket == null)
                 BlackMarket = new BlackMarket();
-            BlackMarket.Init();
+            //BlackMarket.Init();
 
             Alt.Server.LogColored("~g~Initialisations des controlleurs...");
             Task.Run(async () =>
@@ -223,7 +223,7 @@ namespace ResurrectionRP_Server
                 await FactionManager.InitAllFactions();
                 await Loader.BusinessesLoader.LoadAllBusinesses();         
                 await Society.SocietyManager.LoadAllSociety();
-                await IllegalManager.InitAll();
+                //await IllegalManager.InitAll();
                 //await JobsManager.Init();
                 await HouseManager.LoadAllHouses();
 

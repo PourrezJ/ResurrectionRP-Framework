@@ -58,6 +58,9 @@ namespace ResurrectionRP_Server.Colshape
 
             foreach (IPlayer player in Alt.GetAllPlayers())
             {
+                if (!player.Exists)
+                    continue;
+
                 lock (_colshapes)
                 {
                     foreach (IColshape colshape in _colshapes.Values)
@@ -75,6 +78,9 @@ namespace ResurrectionRP_Server.Colshape
 
             foreach (IVehicle vehicle in VehiclesManager.GetAllVehiclesInGame())
             {
+                if (!vehicle.Exists)
+                    continue;
+
                 lock (_colshapes)
                 {
                     foreach (IColshape colshape in _colshapes.Values)

@@ -112,6 +112,8 @@ namespace ResurrectionRP_Server
         public LifeInvader LifeInvader { get; private set; }
         [BsonIgnore]
         public HouseManager HouseManager { get; private set; }
+        [BsonIgnore]
+        public IllegalManager IllegalManager { get; private set; }
 
         public static bool ServerLock;
 
@@ -200,7 +202,7 @@ namespace ResurrectionRP_Server
             JobsManager = new Jobs.JobsManager();
             VoiceController = new Voice();
             HouseManager = new HouseManager();
-
+            IllegalManager = new IllegalManager();
             RadioManager = new RadioManager();
             LifeInvader = new LifeInvader();
             //FactionManager = new FactionManager();
@@ -221,6 +223,7 @@ namespace ResurrectionRP_Server
                 await FactionManager.InitAllFactions();
                 await Loader.BusinessesLoader.LoadAllBusinesses();         
                 await Society.SocietyManager.LoadAllSociety();
+                
                 //await JobsManager.Init();
                 await HouseManager.LoadAllHouses();
 
@@ -228,7 +231,7 @@ namespace ResurrectionRP_Server
                 ServerLoaded = true;
             });
 
-
+            IllegalManager.InitAll();
             Pound.Init();
             Loader.CarDealerLoaders.LoadAllCardealer();
             // DrivingSchoolManager.InitAll();

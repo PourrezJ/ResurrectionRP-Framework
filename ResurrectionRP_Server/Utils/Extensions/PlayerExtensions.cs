@@ -87,23 +87,30 @@ namespace ResurrectionRP_Server
             // var vehs = Alt.GetAllVehicles();
             var vehs = VehiclesManager.GetAllVehiclesInGame();
             List<IVehicle> endup = new List<IVehicle>();
-            Utils.Utils.CheckThread("GetVehiclesInRange");
-            AltAsync.Do(() =>
+            try
             {
-                var position = client.GetPosition();
-                Vector3 pos = new Vector3(position.X, position.Y, position.Z);
-
-                foreach (IVehicle veh in vehs)
+                Utils.Utils.CheckThread("GetVehiclesInRange");
+                AltAsync.Do(() =>
                 {
-                    if (!veh.Exists)
-                        continue;
+                    var position = client.GetPosition();
+                    Vector3 pos = new Vector3(position.X, position.Y, position.Z);
 
-                    var vehpos = veh.GetPosition();
+                    foreach (IVehicle veh in vehs)
+                    {
+                        if (!veh.Exists)
+                            continue;
 
-                    if (pos.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= Range)
-                        endup.Add(veh);
-                }
-            }).Wait();
+                        var vehpos = veh.GetPosition();
+
+                        if (pos.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= Range)
+                            endup.Add(veh);
+                    }
+                }).Wait();
+            }
+            catch(Exception ex)
+            {
+                Alt.Server.LogError(ex.ToString());
+            }
 
             return endup;
         }

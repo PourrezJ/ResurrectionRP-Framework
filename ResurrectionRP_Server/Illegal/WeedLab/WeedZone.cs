@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using System;
 using System.Numerics;
-using System.Threading.Tasks;
 using System.Timers;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
@@ -38,8 +37,8 @@ namespace ResurrectionRP_Server.Illegal.WeedLab
 
     public class WeedZone
     {
-        public delegate Task OnGrowingChangeDelegate(WeedZone zone, bool growingStateChange);
-        public delegate Task OnGrowingClientEnterDelegate(IPlayer client, WeedZone zone);
+        public delegate void OnGrowingChangeDelegate(WeedZone zone, bool growingStateChange);
+        public delegate void OnGrowingClientEnterDelegate(IPlayer client, WeedZone zone);
 
         [JsonIgnore, BsonIgnore]
         public OnGrowingChangeDelegate OnGrowingChange { get; set; }
@@ -93,19 +92,18 @@ namespace ResurrectionRP_Server.Illegal.WeedLab
             Position = position;
         }
 
-        public async Task GrowLoop()
+        public void GrowLoop()
         {
-
             try
             {
                 if (Spray == Spray.Off && DateTime.Now >= ArrosageTime)
                 {
                     Advert = (Hydratation > 0) ? Advert = 0 : Advert++;
-
+                     
                     ArrosageTime = DateTime.Now.AddMinutes(1);
 
                     if (OnGrowingChange != null)
-                        await OnGrowingChange.Invoke(this, false);
+                        OnGrowingChange.Invoke(this, false);
                 }
 
                 if (Hydratation > 0 && DateTime.Now > MaxGrowtimeEtape)
@@ -113,7 +111,7 @@ namespace ResurrectionRP_Server.Illegal.WeedLab
                     GrowingState++;
 
                     if (OnGrowingChange != null)
-                        await OnGrowingChange.Invoke(this, true);
+                        OnGrowingChange.Invoke(this, true);
                     MaxGrowtimeEtape = DateTime.Now.Add(new TimeSpan(0, 0, 15, 0));
                 }
 
@@ -130,12 +128,12 @@ namespace ResurrectionRP_Server.Illegal.WeedLab
             }
         }
 
-        public async Task OnGrowingZoneEnter(IColShape colshape, IPlayer client)
+        public void OnGrowingZoneEnter(IColShape colshape, IPlayer client)
         {
             colshape.GetData("id", out int colid);
             this.Colshape.GetData("id", out int Colid);
             if (OnGrowingClientEnter != null && colid == Colid)
-                await OnGrowingClientEnter.Invoke(client, this);
+                OnGrowingClientEnter.Invoke(client, this);
         }
     }
 }

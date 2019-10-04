@@ -23,6 +23,12 @@ namespace ResurrectionRP_Server.Illegal
 
         private void BlackMarketCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
+            if (menuItem == null)
+            {
+                menu.CloseMenu(client);
+                return;
+            }
+
             switch (menuItem.Id)
             {
                 case "ID_Weapons":
@@ -69,7 +75,10 @@ namespace ResurrectionRP_Server.Illegal
         private void BlackMarketItemSelected(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (itemIndex == -1)
+            {
+                OnBlackMInteract(client, BlackMPed);
                 return;
+            }
             var item = IllegalItems[itemIndex];
             var ph = client.GetPlayerHandler();
 

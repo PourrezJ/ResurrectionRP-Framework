@@ -336,7 +336,7 @@ namespace ResurrectionRP_Server.Factions
                 return false;
             }
 
-            if (!await BankAccount.GetBankMoney(CalculPrice(importItems), "Importation commande"))
+            if (!BankAccount.GetBankMoney(CalculPrice(importItems), "Importation commande"))
             {
                 player.SendNotificationError("Vous n'avez pas les fonds pour cette commande!");
                 return false;

@@ -284,7 +284,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Methods
-        public virtual async Task PayCheck()
+        public virtual Task PayCheck()
         {
             foreach (string socialClub in ServicePlayerList.ToList())
             {
@@ -295,18 +295,20 @@ namespace ResurrectionRP_Server.Factions
                     double salaire = FactionRang[GetRangPlayer(ph.Client)].Salaire;
 
                     if (salaire == 0)
-                        return;
+                        return Task.CompletedTask;
 
-                    if (await BankAccount.GetBankMoney(salaire, $"Salaire {ph.Identite.Name}", save: false))
+                    if (BankAccount.GetBankMoney(salaire, $"Salaire {ph.Identite.Name}", save: false))
                     {
                         FactionPlayerList[socialClub].LastPayCheck = DateTime.Now.AddMinutes(PayCheckMinutes);
-                        await ph.BankAccount.AddMoney(salaire, $"Salaire {FactionName}");
+                        ph.BankAccount.AddMoney(salaire, $"Salaire {FactionName}");
                         ph.Client.SendNotification($"Vous avez touché votre salaire ~g~${salaire}~w~.");
                     }
                     else
                         ph.Client.SendNotificationError("Vous n'avez pas reçu votre salaire, les caisses sont vide!");
                 }
             }
+
+            return Task.CompletedTask;
         }
 
         public virtual async Task<bool> TryAddIntoFaction(IPlayer client, int rang = 1)

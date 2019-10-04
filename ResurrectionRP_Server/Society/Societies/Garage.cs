@@ -669,7 +669,7 @@ namespace ResurrectionRP_Server.Society.Societies
             VehicleHandler vh = VehicleBench.GetVehicleHandler();
 
             Menu menu = new Menu("ID_Neons", "", "Néons :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: MenuBanner);
-            menu.ItemSelectCallbackAsync = NeonsMenuCallback;
+            menu.ItemSelectCallback = NeonsMenuCallback;
             menu.ListItemChangeCallback = NeonListItemChangeCallback;
             menu.FinalizerAsync = Finalizer;
 
@@ -692,7 +692,7 @@ namespace ResurrectionRP_Server.Society.Societies
             ClientInMenu = client;
         }
 
-        protected async Task NeonsMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        protected void NeonsMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (VehicleBench == null || !VehicleBench.Exists)
             {
@@ -713,7 +713,7 @@ namespace ResurrectionRP_Server.Society.Societies
             if (menuItem.Id == "Validate")
             {
                 double price = menuItem.GetData("price");
-                await InstallNeon(client, price);
+                InstallNeon(client, price);
             }
         }
 
@@ -837,7 +837,7 @@ namespace ResurrectionRP_Server.Society.Societies
             return Task.CompletedTask;
         }
 
-        protected async Task InstallNeon(IPlayer client, double price)
+        protected void InstallNeon(IPlayer client, double price)
         {
             if (VehicleBench == null || !VehicleBench.Exists)
             {
@@ -847,7 +847,7 @@ namespace ResurrectionRP_Server.Society.Societies
 
             VehicleHandler vh = VehicleBench.GetVehicleHandler();
 
-            if (await BankAccount.GetBankMoney(price, $"{SocietyName}: Néons"))
+            if (BankAccount.GetBankMoney(price, $"{SocietyName}: Néons"))
             {
                 _neonColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
                 vh.NeonColor = _neonColor;
@@ -885,7 +885,7 @@ namespace ResurrectionRP_Server.Society.Societies
             bool hasMoney = true;
 
             if (price > 0)
-                hasMoney = await BankAccount.GetBankMoney(price, $"{SocietyName}: {modName}");
+                hasMoney = BankAccount.GetBankMoney(price, $"{SocietyName}: {modName}");
 
             if (hasMoney)
             {

@@ -44,7 +44,7 @@ namespace ResurrectionRP_Server.Services
         public void OpenMenuLifeInvader(IPlayer player)
         {
             Menu menu = new Menu("Id_LifeInvader", "LifeInvader", "Service d'annonce", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
-            menu.ItemSelectCallbackAsync = LifeInvaderMenuCallBack;
+            menu.ItemSelectCallback = LifeInvaderMenuCallBack;
 
             MenuItem x1 = new MenuItem("Créer une annonce", "Créer une annonce ~r~99 caractères max!", "ID_AnnonceX1", true, rightLabel: $"${(AnnoncePrice + CalcPriceAnnonce(AnnoncePrice))}");
             x1.SetInput("", 50, InputType.Text);
@@ -55,7 +55,7 @@ namespace ResurrectionRP_Server.Services
             menu.OpenMenu(player);
         }
 
-        private async Task LifeInvaderMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void LifeInvaderMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             switch (menuItem.Id)
             {
@@ -68,18 +68,13 @@ namespace ResurrectionRP_Server.Services
                     }
                     else
                     {
-                        if (await client.GetPlayerHandler().HasBankMoney((AnnoncePrice + CalcPriceAnnonce(AnnoncePrice)), "Message Life Invader"))
+                        if (client.GetPlayerHandler().HasBankMoney(AnnoncePrice + CalcPriceAnnonce(AnnoncePrice), "Message Life Invader"))
                         {
+                            Utils.Utils.Delay(50000, () => { Utils.Utils.SendNotificationPicture(CharPicture.CHAR_LIFEINVADER, "Life Invander", "Message d'annonce:", message); });
                             client.SendNotification("Votre annonce va être diffusée.");
-                            Utils.Utils.Delay(50000, () =>
-                            {
-                                Utils.Utils.SendNotificationPicture(CharPicture.CHAR_LIFEINVADER, "Life Invander", "Message d'annonce:", message);
-                            });
                         }
                         else
-                        {
                             client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte bancaire");
-                        }
 
                         menu.CloseMenu(client);
                     }

@@ -183,7 +183,7 @@ namespace ResurrectionRP_Server.Houses
                     if (player == null)
                         return;
 
-                    if (await player.HasBankMoney(house.Price, "Achat immobilier."))
+                    if (player.HasBankMoney(house.Price, "Achat immobilier."))
                     {
                         GameMode.Instance.Economy.CaissePublique += house.Price;
                         await house.SetOwner(client.GetPlayerHandler().PID);

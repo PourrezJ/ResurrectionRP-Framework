@@ -68,13 +68,11 @@ export function initialize() {
                     const r = (neonColor & 0xFF0000) >>> 16;
                     game.setVehicleNeonLightsColour(vehId, r, g, b);
 
-
                     let torque: number = entity.getSyncedMeta("torqueMultiplicator");
-                    game.setVehicleEngineTorqueMultiplier(entity.scriptID, torque);
+                    game.setVehicleEngineTorqueMultiplier(vehId, torque);
 
                     let power: number = entity.getSyncedMeta("powerMultiplicator");
-                    game.setVehicleEnginePowerMultiplier(entity.scriptID, power);
-
+                    // game.setVehicleEnginePowerMultiplier(vehId, power);
                 }, 500); 
             }
             catch (e) {
@@ -116,7 +114,7 @@ export function initialize() {
                     break;
 
                 case 'powerMultiplicator':
-                    game.setVehicleEnginePowerMultiplier(entity.scriptID, value);
+                    // game.setVehicleEnginePowerMultiplier(entity.scriptID, value);
                     break;
             }
         }

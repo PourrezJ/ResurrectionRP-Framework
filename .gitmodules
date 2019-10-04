@@ -1,0 +1,2 @@
+[submodule "coreclr-module"]
+	url = https://github.com/FabianTerhorst/coreclr-module

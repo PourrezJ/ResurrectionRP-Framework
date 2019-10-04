@@ -333,14 +333,14 @@ namespace ResurrectionRP_Server.Entities.Players
             return false;
         }
 
-        public async Task<bool> HasBankMoney(double somme, string reason)
+        public bool HasBankMoney(double somme, string reason, bool save = true)
         {
             if (somme < 0)
                 return false;
 
             if (BankAccount.Balance >= somme)
             {
-                await BankAccount.GetBankMoney(somme, reason);
+                BankAccount.GetBankMoney(somme, reason, null, save);
                 return true;
             }
 

@@ -2,6 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Peds;
+using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.XMenuManager;
 using ResurrectionRP_Server.Models.InventoryData;
 using ResurrectionRP_Server.Items;
@@ -18,21 +19,29 @@ namespace ResurrectionRP_Server.Factions
         {
             AcceptMenu healmenu = AcceptMenu.OpenMenu(client, "Infirmière", "Voulez-vous être soigné?", rightlabel: $"${healprice}");
 
-            healmenu.AcceptMenuCallBack = async (IPlayer player, bool reponse) =>
+            healmenu.AcceptMenuCallBack = (IPlayer player, bool reponse) =>
             {
                 if (reponse)
                 {
-                    if (await player.GetPlayerHandler().HasBankMoney(healprice, "Soin Hospital"))
+                    PlayerHandler ph = player.GetPlayerHandler();
+
+                    if (ph == null)
+                        return Task.CompletedTask;
+
+                    if (player.GetPlayerHandler().HasBankMoney(healprice, "Soin Hospital", false))
                     {
-                        player.Health = 200;
-                        player.GetPlayerHandler().PlayerSync.Injured = false;
-                        player.SendNotificationSuccess("Voilà qui est fait!");
+                        ph.Health = 200;
+                        ph.PlayerSync.Injured = false;
+                        ph.UpdateInBackground();
+                        ph.Client.SendNotificationSuccess("Voilà qui est fait!");
                     }
                     else
                         player.SendNotificationError("Désolé Mr mais la banque refuse le paiement de vos soins.");
                 }
                 else
                     player.SendNotification("Ne me faites pas perdre mon temps alors!");
+
+                return Task.CompletedTask;
             };
         }
         #endregion

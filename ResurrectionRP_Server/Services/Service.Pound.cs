@@ -92,7 +92,7 @@ namespace ResurrectionRP_Server.Services
                         {
                             if (VehiclesManager.VehicleHandlerList.Remove(vehicle, out _))
                             {
-                                await GameMode.Instance.FactionManager.LSCustom.BankAccount.AddMoney(750, $"Mise en fourrière {_towedvehicle.Plate} par {ph.Identite.Name}");
+                                GameMode.Instance.FactionManager.LSCustom.BankAccount.AddMoney(750, $"Mise en fourrière {_towedvehicle.Plate} par {ph.Identite.Name}");
                                 ph.AddMoney(250);
 
                                 _vh.TowTruck = null;

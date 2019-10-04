@@ -14,6 +14,7 @@ export class Blesse {
     public Blip: alt.Blip;
     public Marker: alt.Entity;
     private EveryTick: number;
+    public destroyed: boolean = false;
 
     constructor(player: alt.Player, id: string, position: alt.Vector3) {
         this.ID = id;
@@ -41,10 +42,7 @@ export class Blesse {
                     return;
                 if (game.getDistanceBetweenCoords(parseFloat(blesse.Position.x + ""), parseFloat(blesse.Position.y + "") , parseFloat(blesse.Position.z + ""), alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, false) < 15) {
                     Medical.isInMission = false;
-                    alt.emitServer('ONU_BlesseRemoveBlip', blesse.BlessePlayer);
                     blesse.Destroy();
-                    alt.clearEveryTick(this.EveryTick);
-                    delete Medical.BlesseList[Medical.BlesseList.findIndex(p => p.ID == this.ID)];
                     return;
                 }
             
@@ -59,9 +57,8 @@ export class Blesse {
     }
 
     private KeyHandler = (key) => {
-        if (key == 'Y'.charCodeAt(0)) {
-            alt.emitServer("ONU_ImAccept", this.BlessePlayer.id);
-        }
+        if (key == 'Y'.charCodeAt(0)) 
+                alt.emitServer("ONU_ImAccept", this.BlessePlayer.id);
         else if (key == 'N'.charCodeAt(0)) {
             this.CallRefuse();
         }
@@ -80,7 +77,7 @@ export class Blesse {
 
     public CallAcceptHandler = (key) => {
         if (key == 'Y'.charCodeAt(0)) {
-            alt.emit("ONU_Available");
+            alt.emit("ONU_Available", this.BlessePlayer);
             alt.off('keydown', this.CallAcceptHandler)
         }
     }
@@ -94,12 +91,19 @@ export class Blesse {
         this.Destroy();
     }
 
-    public Destroy = (keepWaypoint : boolean = false) => {
-        this.Traited = false;
-        this.Blip.destroy();
-        this.RemoveBindKey();
-        if (keepWaypoint)
-            game.setWaypointOff();
+    public Destroy = (keepWaypoint: boolean = false) => {
+        if (!this.destroyed) {
+            this.Traited = true;
+            this.Blip.destroy();
+            this.Blip = null;
+            this.RemoveBindKey();
+            if (keepWaypoint)
+                game.setWaypointOff();
+            alt.emitServer('ONU_BlesseRemoveBlip', this.BlessePlayer);
+            alt.clearEveryTick(this.EveryTick);
+            this.destroyed = true;
+        }
+
     }
 }
 
@@ -121,20 +125,23 @@ export class Medical {
 
         alt.onServer("ONU_IAccept", (player: alt.Player) => {
             Medical.isInMission = true;
-            let call = Medical.BlesseList.find(p => p.BlessePlayer.id == player.id);
+            let call = Medical.BlesseList.find(p =>( p.BlessePlayer.id == player.id) && p.destroyed == false);
             if (call != null)
                 call.CallAccept();
         });
 
-        alt.onServer("ONU_Available", (player: alt.Player) => {
+        alt.on("ONU_Available", (player: alt.Player) => {
             Medical.isInMission = false;
             let call = Medical.BlesseList.find(p => p.BlessePlayer.id == player.id);
-            if (call != null)
+            if (call != null) {
                 call.CallTaken();
+                call.Destroy();
+            }
+            alt.emit("notify","Vous êtes de nouveaux disponible pour des appels.");
         });
 
         alt.onServer("ONU_BlesseCalled", (player: alt.Player, name: string, position: any) => {
-            let call = Medical.BlesseList.find(p => p.BlessePlayer.id == player.id && p.Traited == false);
+            let call = Medical.BlesseList.find(p => p.BlessePlayer.id == player.id && p.Traited == false && p.destroyed == false);
             if (call != null)
                 call.Destroy();
             position = JSON.parse(position);
@@ -145,7 +152,7 @@ export class Medical {
 
         alt.onServer("ONU_BlesseCallTaken", (player: alt.Player) => {
             alt.emit("notify", "APPEL D'URGENCE", "L'appel a déjà été pris en charge par un médecin.");
-            let call = Medical.BlesseList.find(p => p.BlessePlayer.id == player.id);
+            let call = Medical.BlesseList.find(p => p.BlessePlayer.id == player.id && p.destroyed == false);
             if (call != null)
                 call.CallTaken();
         });
@@ -220,7 +227,7 @@ export class Medical {
                 let waitTime = Medical.RequestedTimeMedic.getTime() - Date.now();
 
                 if (waitTime < 60000) {
-                    Medical.deathMessage = `Il vous reste à attendre ${Math.ceil(waitTime / 1000)} secondes pour re-contacter les secours.`
+                    Medical.deathMessage = `Il reste à attendre ${Math.ceil(waitTime / 1000)} secondes pour re-contacter les secours.`
                 } else {
                     Medical.deathMessage = `Il vous reste à attendre ${Math.ceil(waitTime / 60000)} minutes pour re-contacter les secours.`
                 }

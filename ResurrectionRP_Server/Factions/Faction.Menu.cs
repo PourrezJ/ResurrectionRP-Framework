@@ -251,7 +251,7 @@ namespace ResurrectionRP_Server.Factions
                 {
                     MenuItem depot = new MenuItem("Déposer de l'argent dans les caisses", "", "ID_Depot", true);
                     depot.SetInput("", 10, InputType.UNumber, true);
-                    depot.OnMenuItemCallbackAsync = DepotMoneyMenu;
+                    depot.OnMenuItemCallback = DepotMoneyMenu;
                     menu.Add(depot);
                 }
 
@@ -316,7 +316,7 @@ namespace ResurrectionRP_Server.Factions
         }
 
         // Depot d'argent dans la caisse.
-        private async Task DepotMoneyMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void DepotMoneyMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (double.TryParse(menuItem.InputValue, out double result))
             {
@@ -330,7 +330,7 @@ namespace ResurrectionRP_Server.Factions
 
                 if (ph.HasMoney(result))
                 {
-                    await BankAccount.AddMoney(result, $"Ajout d'argents par {ph.Identite.Name}");
+                    BankAccount.AddMoney(result, $"Ajout d'argents par {ph.Identite.Name}");
                     ph.UpdateFull();
                     client.SendNotificationSuccess($"Vous avez déposé ${result} dans la caisse.");
                 }
@@ -478,7 +478,7 @@ namespace ResurrectionRP_Server.Factions
                 return;
 
             Menu menu = new Menu("ID_Shop", FactionName, "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
-            menu.ItemSelectCallbackAsync = ShopMenuCallBack;
+            menu.ItemSelectCallback = ShopMenuCallBack;
 
             foreach (FactionShopItem item in ItemShop)
             {
@@ -493,7 +493,7 @@ namespace ResurrectionRP_Server.Factions
             menu.OpenMenu(client);
         }
 
-        private async Task ShopMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void ShopMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             FactionShopItem item = menuItem.GetData("Item");
             PlayerHandler ph = client.GetPlayerHandler();
@@ -501,7 +501,7 @@ namespace ResurrectionRP_Server.Factions
             if (item == null || ph == null)
                 return;
 
-            if (await BankAccount.GetBankMoney(item.Price, $"Achat de {item.Item.name} par {ph.Identite.Name}"))
+            if (BankAccount.GetBankMoney(item.Price, $"Achat de {item.Item.name} par {ph.Identite.Name}"))
             {
                 try
                 {
@@ -670,7 +670,7 @@ namespace ResurrectionRP_Server.Factions
                 PlayerHandler ph = client.GetPlayerHandler();
                 string vhname = (string)menuItem.GetData("Manifest");
 
-                if (await BankAccount.GetBankMoney(fv.Price, $"Achat véhicule {vhname} par {ph.Identite.Name}"))
+                if (BankAccount.GetBankMoney(fv.Price, $"Achat véhicule {vhname} par {ph.Identite.Name}"))
                 {
                     VehicleHandler vh = VehiclesManager.SpawnVehicle(client.GetSocialClub(), (uint)fv.Hash, location.Pos, location.Rot, inventory: new Inventory.Inventory(fv.Weight, fv.MaxSlot), primaryColor: fv.PrimaryColor, secondaryColor: fv.SecondaryColor);
                     await vh.InsertVehicle();

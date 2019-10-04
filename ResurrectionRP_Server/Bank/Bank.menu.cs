@@ -93,14 +93,14 @@ namespace ResurrectionRP_Server.Bank
             #region Withdraw
             var withdrawItem = new MenuItem("Retirer", null, "ID_Withdraw", executeCallback: true);
             withdrawItem.SetInput("", (_atmType == AtmType.ATM ? (byte)4 : (byte)9), InputType.UNumber, true);
-            withdrawItem.OnMenuItemCallbackAsync += OnWithdrawItem;
+            withdrawItem.OnMenuItemCallback += OnWithdrawItem;
             _bankMenu.Add(withdrawItem);
             #endregion
 
             #region Deposit
             var depositItem = new MenuItem("Déposer", null, "ID_Deposit", executeCallback: true);
             depositItem.SetInput("", (_atmType == AtmType.ATM ? (byte)4 : (byte)9), InputType.UNumber, true);
-            depositItem.OnMenuItemCallbackAsync += OnDepositItem;
+            depositItem.OnMenuItemCallback += OnDepositItem;
             _bankMenu.Add(depositItem);
             #endregion
 
@@ -158,13 +158,13 @@ namespace ResurrectionRP_Server.Bank
             _bankMenu.OpenMenu(client);
         }
 
-        private async Task OnWithdrawItem(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void OnWithdrawItem(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (uint.TryParse(menuItem.InputValue, out uint money) && money > 0)
             {
                 bool save = !(_bankAccount == _player.BankAccount);
 
-                if (! await _bankAccount.GetBankMoney(money, $"Retrait {((_atmType == AtmType.ATM) ? "ATM" : "Banque")}", save: save))
+                if (! _bankAccount.GetBankMoney(money, $"Retrait {((_atmType == AtmType.ATM) ? "ATM" : "Banque")}", save: save))
                 {
                     client.SendNotificationError("Vous n'avez pas assez d'argent sur ce compte en banque.");
                     client.PlaySoundFrontEnd(-1,"ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
@@ -185,7 +185,7 @@ namespace ResurrectionRP_Server.Bank
                 menu.CloseMenu(client);
         }
 
-        private async Task OnDepositItem(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void OnDepositItem(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (uint.TryParse(menuItem.InputValue, out uint somme) && somme > 0)
             {
@@ -195,7 +195,7 @@ namespace ResurrectionRP_Server.Bank
                 }
                 else
                 {
-                    await _bankAccount.AddMoney(somme, $"Dépôt {((_atmType == AtmType.ATM) ? "ATM" : "Banque")}", true);
+                    _bankAccount.AddMoney(somme, $"Dépôt {((_atmType == AtmType.ATM) ? "ATM" : "Banque")}", true);
                     client.SendNotificationSuccess($"Vous avez déposé ${menuItem.InputValue} sur le compte {_bankAccount.AccountNumber}");
                 }
             }

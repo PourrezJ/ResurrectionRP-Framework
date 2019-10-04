@@ -12,13 +12,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
     public partial class VehicleHandler
     {
         #region Fields
-        [BsonIgnore]
         private static readonly double _updateWaitTime = 2000.0;
-        [BsonIgnore]
         private DateTime _lastUpdateRequest;
-        [BsonIgnore]
         private bool _updateWaiting = false;
-        [BsonIgnore]
         private int _nbUpdateRequests;
         #endregion
 
@@ -90,7 +86,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 }
                 catch (Exception ex)
                 {
-                    Alt.Server.LogError("VehicleHandler Update: " + ex);
+                    Alt.Server.LogError("VehicleHandler.UpdateInBackground(): " + ex);
                 }
             });
         }

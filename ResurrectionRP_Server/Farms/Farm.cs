@@ -4,6 +4,7 @@ using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Blips;
 using ResurrectionRP_Server.Entities.Peds;
@@ -15,7 +16,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Farms
 {
@@ -96,8 +96,6 @@ namespace ResurrectionRP_Server.Farms
 
         /*                  Harvest                     */
         [JsonIgnore]
-        public IColShape Harvest_ColShape { get; set; }
-        [JsonIgnore]
         public Blips Harvest_Blip { get; set; }
 
         public string Harvest_Name { get; set; }
@@ -125,7 +123,7 @@ namespace ResurrectionRP_Server.Farms
         public string DoubleProcess_Name { get; set; }
         public int DoubleProcess_BlipSprite { get; set; }
         [JsonIgnore]
-        public Entities.Blips.Blips DoubleProcess_Blip { get; set; }
+        public Blips DoubleProcess_Blip { get; set; }
         public Location DoubleProcess_PosRot { get; set; }
         [JsonIgnore]
         public Ped DoubleProcess_Ped { get; set; }
@@ -134,7 +132,7 @@ namespace ResurrectionRP_Server.Farms
 
         /*                  Selling                     */
         public string Selling_Name { get; set; }
-        public Entities.Blips.Blips Selling_Blip { get; set; }
+        public Blips Selling_Blip { get; set; }
         public int Selling_BlipSprite { get; set; }
         [JsonIgnore]
         public Ped Selling_Ped { get; set; }
@@ -163,23 +161,17 @@ namespace ResurrectionRP_Server.Farms
         public virtual void Init()
         {
             #region Harvest          
-          if (Harvest_Position.Count > 0)
+            if (Harvest_Position.Count > 0)
             {
-                foreach (Vector3 position in Harvest_Position)
+                if (Debug)
                 {
-                    Harvest_ColShape = Alt.CreateColShapeCylinder(position, Harvest_Range, 4);
-
-                    if (Debug)
-                    {
+                    foreach (Vector3 position in Harvest_Position)
                         Marker.CreateMarker(MarkerType.VerticalCylinder, position - new Vector3(0.0f, 0.0f, Harvest_Range), new Vector3(0, 0, Harvest_Range));
-                    }
                 }
             }
 
             if (Harvest_BlipPosition != new Vector3(0, 0, 0))
                 Harvest_Blip = BlipsManager.CreateBlip(Harvest_Name, Harvest_BlipPosition, BlipColor, Harvest_BlipSprite);
-
-
             #endregion
 
             #region Process

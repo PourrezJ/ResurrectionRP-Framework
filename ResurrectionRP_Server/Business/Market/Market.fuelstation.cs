@@ -161,6 +161,7 @@ namespace ResurrectionRP_Server.Business
                                 _ravitaillement = false;
                                 _utilisateurRavi = null;
                                 Utils.Utils.StopTimer(timer);
+                                UpdateInBackground();
                                 return;
 
                             }
@@ -171,6 +172,7 @@ namespace ResurrectionRP_Server.Business
                                 _ravitaillement = false;
                                 _utilisateurRavi = null;
                                 Utils.Utils.StopTimer(timer);
+                                UpdateInBackground();
                                 return;
                             }
 
@@ -181,6 +183,7 @@ namespace ResurrectionRP_Server.Business
 
 
                                 Utils.Utils.StopTimer(timer);
+                                UpdateInBackground();
                                 return;
                             }
 

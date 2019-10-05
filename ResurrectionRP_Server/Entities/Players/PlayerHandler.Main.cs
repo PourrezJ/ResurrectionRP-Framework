@@ -245,7 +245,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         Client.Emit("HeadOverlayVariation", Character.Appearance[i].Index, Character.Appearance[i].Opacity, Character.Appearance[i].Color, Character.Appearance[i].SecondaryColor, i);
 
                     foreach (Decoration decoration in Character.Decorations)
-                        Client.Emit("DecorationVariation", decoration.Collection, decoration.Overlay);
+                        Client.SetDecoration(decoration.Collection, decoration.Overlay);
 
                     Client.Emit("EyeColorVariation", (uint)Character.EyeColor);
                     Client.Emit("ComponentVariation", 2, Character.Hair.Hair, 0, 0);

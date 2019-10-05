@@ -300,12 +300,12 @@ namespace ResurrectionRP_Server
 
         public static void SetDecoration(this IPlayer client, uint collection, uint overlay)
         {
-            // TODO
+            client.EmitLocked("DecorationVariation", (int)collection, (int)overlay);
         }
 
         public static void ClearDecorations(this IPlayer client)
         {
-            // TODO
+            client.EmitLocked("ClearDecorations");
         }
 
         public static Task ClearDecorationsAsync(this IPlayer client)

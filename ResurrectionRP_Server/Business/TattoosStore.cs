@@ -3,6 +3,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Entities.Players.Data;
 using ResurrectionRP_Server.Loader.TattooLoader;
 using ResurrectionRP_Server.Utils;
 using System.Collections.Generic;
@@ -143,12 +144,12 @@ namespace ResurrectionRP_Server.Business
                 if (!ClientSelected.Client.Exists)
                     return;
 
-                int selectedTattoo = (int)Alt.Hash((ClientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
+                uint selectedTattoo = Alt.Hash((ClientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
 
                 if (ClientSelected.Character.HasDecoration(selectedTattoo))
                 {
-                    Entities.Players.Data.Decoration decoration = ClientSelected.Character.Decorations.FirstOrDefault(d => d.Overlay == selectedTattoo);
-                    ClientSelected.Client.RemoveDecorationAsync((uint)decoration.Collection, (uint)decoration.Overlay);
+                    Decoration decoration = ClientSelected.Character.Decorations.FirstOrDefault(d => d.Overlay == selectedTattoo);
+                    ClientSelected.Client.RemoveDecorationAsync(decoration.Collection, decoration.Overlay);
                     ClientSelected.Character.Decorations.Remove(decoration);
                     ClientSelected.UpdateFull();
                     UpdateInBackground();
@@ -158,9 +159,9 @@ namespace ResurrectionRP_Server.Business
                 {
                     if (BankAccount.GetBankMoney(Tattoo.Price, $"Tatouage par {BusinnessName}"))
                     {
-                        int collection = (int)Alt.Hash(Tattoo.Collection);
-                        int overlay = (ClientSelected.Character.Gender == 0) ? (int)Alt.Hash(Tattoo.HashNameMale) : (int)Alt.Hash(Tattoo.HashNameFemale);
-                        ClientSelected.Character.Decorations.Add(new Entities.Players.Data.Decoration(collection, overlay));
+                        uint collection = Alt.Hash(Tattoo.Collection);
+                        uint overlay = (ClientSelected.Character.Gender == 0) ? Alt.Hash(Tattoo.HashNameMale) : Alt.Hash(Tattoo.HashNameFemale);
+                        ClientSelected.Character.Decorations.Add(new Decoration(collection, overlay));
                         ClientSelected.UpdateFull();
                         UpdateInBackground();
                         client.SendNotificationSuccess("Vous avez appliqué le tatouage");
@@ -184,7 +185,7 @@ namespace ResurrectionRP_Server.Business
 
             foreach (Tattoo Tattoo in TattooList)
             {
-                int overlay = (int)Alt.Hash((ClientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
+                uint overlay = Alt.Hash((ClientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
 
                 if (overlay == 0)
                     continue;
@@ -211,12 +212,10 @@ namespace ResurrectionRP_Server.Business
                 Tattoo Tattoo = menuItem.GetData("Tattoo");
                 uint collection = Alt.Hash(Tattoo.Collection);
                 uint overlay = Alt.Hash((ClientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
+                ResetTattoos();
 
-                if (!ClientSelected.Character.HasDecoration((int)overlay))
-                {
-                    ResetTattoos();
+                if (!ClientSelected.Character.HasDecoration(overlay))
                     ClientSelected.Client.SetDecoration(collection, overlay);
-                }
             }
         }
 
@@ -227,8 +226,8 @@ namespace ResurrectionRP_Server.Business
 
             ClientSelected.Client.ClearDecorations();
 
-            foreach (Entities.Players.Data.Decoration decoration in ClientSelected.Character.Decorations)
-                ClientSelected.Client.SetDecoration((uint)decoration.Collection,(uint) decoration.Overlay);
+            foreach (Decoration decoration in ClientSelected.Character.Decorations)
+                ClientSelected.Client.SetDecoration(decoration.Collection, decoration.Overlay);
         }
         #endregion
 

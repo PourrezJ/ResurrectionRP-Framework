@@ -94,6 +94,9 @@ namespace ResurrectionRP_Server.Illegal.WeedLab
 
         public void GrowLoop()
         {
+            if (!Plant)
+                return;
+
             try
             {
                 if (Spray == Spray.Off && DateTime.Now >= ArrosageTime)
@@ -103,23 +106,24 @@ namespace ResurrectionRP_Server.Illegal.WeedLab
                     ArrosageTime = DateTime.Now.AddMinutes(1);
 
                     if (OnGrowingChange != null)
-                        OnGrowingChange.Invoke(this, false);
+                        OnGrowingChange(this, false);
                 }
 
-                if (Hydratation > 0 && DateTime.Now > MaxGrowtimeEtape)
+                if ((Spray == Spray.On || Hydratation > 0) && DateTime.Now > MaxGrowtimeEtape && GrowingState < StateZone.Stage3)
                 {
                     GrowingState++;
 
                     if (OnGrowingChange != null)
-                        OnGrowingChange.Invoke(this, true);
-                    MaxGrowtimeEtape = DateTime.Now.Add(new TimeSpan(0, 0, 15, 0));
+                        OnGrowingChange(this, true);
+                    //MaxGrowtimeEtape = DateTime.Now.Add(new TimeSpan(0, 0, 15, 0));
+                    MaxGrowtimeEtape = DateTime.Now.Add(new TimeSpan(0, 0, 1, 0));
                 }
 
-                if (GrowingState == StateZone.Stage3)
+                if (GrowingState >= StateZone.Stage3)
                 {
                     if (Timer != null)
                         Timer.Stop();
-                    Spray = Spray.Off;
+                    //Spray = Spray.Off;
                 }
             }
             catch (Exception ex)

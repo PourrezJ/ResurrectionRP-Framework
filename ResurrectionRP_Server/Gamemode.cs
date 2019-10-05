@@ -117,7 +117,6 @@ namespace ResurrectionRP_Server
 
         public static bool ServerLock;
 
-        public BlackMarket BlackMarket { get; private set; }
         public Time Time { get; set; }
 
         [BsonIgnore]
@@ -205,15 +204,10 @@ namespace ResurrectionRP_Server
             IllegalManager = new IllegalManager();
             RadioManager = new RadioManager();
             LifeInvader = new LifeInvader();
-            //FactionManager = new FactionManager();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
             if (Time == null)
                 Time = new Time();
-
-            if (BlackMarket == null)
-                BlackMarket = new BlackMarket();
-            //BlackMarket.Init();
 
             Alt.Server.LogColored("~g~Initialisations des controlleurs...");
             Task.Run(async () =>
@@ -223,7 +217,7 @@ namespace ResurrectionRP_Server
                 await FactionManager.InitAllFactions();
                 await Loader.BusinessesLoader.LoadAllBusinesses();         
                 await Society.SocietyManager.LoadAllSociety();
-                //await IllegalManager.InitAll();
+                await IllegalManager.InitAll();
                 //await JobsManager.Init();
                 await HouseManager.LoadAllHouses();
 
@@ -323,6 +317,7 @@ namespace ResurrectionRP_Server
             if (PlayerList.Find(b => b == origin) != null)
                 PlayerList.Remove(origin);
 
+            IllegalManager.OnPlayerDisconnected(player);
             await PlayerManager.OnPlayerDisconnected(player, origin, reason);   
         }
 

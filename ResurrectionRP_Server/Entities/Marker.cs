@@ -73,8 +73,8 @@ namespace ResurrectionRP_Server.Entities
             data["scaley"] = this.scaley;
             data["scalez"] = this.scalez;
             data["r"] = this.r;
-            data["b"] = this.g;
-            data["g"] = this.b;
+            data["b"] = this.b;
+            data["g"] = this.g;
             data["a"] = this.a;
             data["entityType"] = (int)EntityType.Marker;
             data["id"] = this.id;

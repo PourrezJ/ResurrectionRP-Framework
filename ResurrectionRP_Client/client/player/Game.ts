@@ -16,6 +16,7 @@ import { RadioManager } from '../menus/RadioManager';
 import { DustManManager } from '../Jobs/DustManManager';
 import { VoiceChat } from '../Voice/VoiceChat';
 import { Medical } from '../Medical';
+import { Weedlabs } from '../Env/WeedLabs';
 import * as veh from '../vehicle/vehicle';
 import * as interaction from '../player/Interaction';
 import * as utils from '../Utils/Utils';
@@ -106,6 +107,7 @@ export class Game {
             new DrivingSchool();
             new DustManManager();
             new Medical();
+            new Weedlabs();
 
             game.setAudioFlag('LoadMPData', true);
             game.setAudioFlag('DisableFlightMusic', true);

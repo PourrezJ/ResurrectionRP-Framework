@@ -18,7 +18,8 @@ namespace ResurrectionRP_Server.Business
 
         public static void OpenGasPumpMenu(IPlayer client)
         {
-            var fuelpump = Market.MarketsList.Find(x => x.Station.Colshape.IsEntityInColShape(client));
+            Market fuelpump = MarketsList.Find(x => x.Station.Colshape.IsEntityIn(client));
+
             if (fuelpump == null)
             {
                 client.DisplaySubtitle( "Cette pompe est hors service.", 10000);
@@ -26,10 +27,8 @@ namespace ResurrectionRP_Server.Business
             }
 
             Menu menu = new Menu("ID_GasPumpMenuMain", "Station Essence", $"Prix du litre: {fuelpump.Station.EssencePrice}", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
-            menu.ItemSelectCallbackAsync = fuelpump.FuelMenuCallBack;
-
+            menu.ItemSelectCallback = fuelpump.FuelMenuCallBack;
             menu.SubTitle = "Mettre le plein dans:";
-
 
             if (fuelpump.Station.VehicleInStation.Count == 0)
             {
@@ -43,6 +42,7 @@ namespace ResurrectionRP_Server.Business
 
                 if (vehicle == null)
                     continue;
+
                 VehicleHandler vh = vehicle.GetVehicleHandler();
 
                 if (vh.Fuel > vh.FuelMax - 2)
@@ -59,17 +59,17 @@ namespace ResurrectionRP_Server.Business
             menu.OpenMenu(client);
         }
 
-        private Task FuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void FuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             VehicleHandler vh = menuItem.GetData("Vehicle");
 
             if (vh == null)
-                return Task.CompletedTask;
+                return;
 
             int price = CalculEssencePriceNeeded(vh, this.Station.EssencePrice);
             AcceptMenu accept = AcceptMenu.OpenMenu(client, menu.Title, $"Prix du litre: ${Station.EssencePrice} || Taxe Etat: ${GameMode.Instance?.Economy.Taxe_Essence}", $"Mettre le plein dans {vh.Plate} pour la somme de ~r~${price}~w~.", rightlabel: $"${price}");
 
-            accept.AcceptMenuCallBack = async (IPlayer _client, bool reponse) =>
+            accept.AcceptMenuCallBack = (IPlayer _client, bool reponse) =>
             {
                 if (reponse)
                 {
@@ -78,7 +78,7 @@ namespace ResurrectionRP_Server.Business
                         vh.Fuel = vh.FuelMax;
                         BankAccount.AddMoney(price, $"Plein du véhicule {vh.Plate}");
                         client.DisplayHelp($"Le plein est fait.\n Vous avez payé ~r~${price}", 6000);
-                        await Update();
+                        UpdateInBackground();
                     }
                     else
                         client.SendNotificationError("Vous n'avez pas assez d'argent en banque.");
@@ -87,9 +87,9 @@ namespace ResurrectionRP_Server.Business
                 }
                 else
                     MenuManager.CloseMenu(client);
-            };
 
-            return Task.CompletedTask;
+                return Task.CompletedTask;
+            };
         }
         
         private void RefuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)

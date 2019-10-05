@@ -29,12 +29,12 @@ namespace ResurrectionRP_Server.Business
         #region Menus
         public override void OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
         {
-            Menu _menu = new Menu("Armurerie", "", "Emplacements: " + Inventory.CurrentSize() + "/" + Inventory.MaxSize, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
-            _menu.BannerSprite = Banner.Guns;
-
             if (!Inventory.IsEmpty())
             {
-                _menu.ItemSelectCallbackAsync = StoreMenuManager;
+                Menu menu = new Menu("Armurerie", "", "Emplacements: " + Inventory.CurrentSize() + "/" + Inventory.MaxSize, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
+                menu.BannerSprite = Banner.Guns;
+                menu.ItemSelectCallback = StoreMenuManager;
+
                 for (int a = 0; a < Inventory.InventoryList.Length; a++)
                 {
                     var inv = Inventory.InventoryList[a];
@@ -46,13 +46,19 @@ namespace ResurrectionRP_Server.Business
                         ListItem item = new ListItem(inv.Item.name + " ($ " + (inv.Price + gettaxe).ToString() + ")", inv.Item.description, "item_" + inv.Item.name, values, 0);
                         item.ExecuteCallback = true;
                         item.SetData("StackIndex", a);
-                        _menu.Add(item);
+                        menu.Add(item);
                     }
                 }
+
+                menu.OpenMenu(client);
             }
             else
+            {
                 client.SendNotification("Il n'y a pas de produits en vente.");
-            MenuManager.OpenMenu(client, _menu);
+
+                if (MenuManager.HasOpenMenu(client))
+                    MenuManager.CloseMenu(client);
+            }
         }
 
         public override async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
@@ -60,7 +66,7 @@ namespace ResurrectionRP_Server.Business
             if ( IsOwner(client) ||  IsEmployee(client))
             {
                 Inactivity = DateTime.Now;
-                menu.ItemSelectCallbackAsync += StoreOwnerMenuManager;
+                menu.ItemSelectCallback = StoreOwnerMenuManager;
 
                 menu.Add(new MenuItem("Ajouter des produits", "", "ID_Add", true));
 
@@ -75,11 +81,11 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Callbacks
-        public async Task StoreOwnerMenuManager(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        public void StoreOwnerMenuManager(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
-                await OnNpcSecondaryInteract(client, Ped);
+                Task.Run(async () => { await OnNpcSecondaryInteract(client, Ped); });
                 return;
             }
 
@@ -90,39 +96,42 @@ namespace ResurrectionRP_Server.Business
                 case "ID_TakeMoney":
                     Bank.BankMenu.OpenBankMenu(client, BankAccount, Bank.AtmType.Business, menu, StoreOwnerMenuManager);
                     break;
+
                 case "ID_Add":
                     menu.CloseMenu(client);
-                    var invmenu = new Inventory.RPGInventoryMenu(player.PocketInventory, player.OutfitInventory, player.BagInventory, Inventory, true);
                     Inventory.Locked = true;
-                    invmenu.OnMove += async (p, m) =>
+                    var invmenu = new Inventory.RPGInventoryMenu(player.PocketInventory, player.OutfitInventory, player.BagInventory, Inventory, true);
+
+                    invmenu.OnMove += (p, m) =>
                     {
                         player.UpdateFull();
-                        await Update();
+                        UpdateInBackground();
+                        return Task.CompletedTask;
                     };
-                    invmenu.PriceChange += async (p, m, stack, stackprice) =>
+
+                    invmenu.PriceChange += (p, m, stack, stackprice) =>
                     {
                         client.SendNotification($"Le nouveau prix de {stack.Item.name} est de ${stackprice} ");
                         player.UpdateFull();
-                        await Update();
+                        UpdateInBackground();
+                        return Task.CompletedTask;
                     };
+
                     invmenu.OnClose += (p, m) =>
                     {
                         Inventory.Locked = false;
                         return Task.CompletedTask;
                     };
-                    await invmenu.OpenMenu(client);
+
+                    Task.Run(async () => { await invmenu.OpenMenu(client); });
                     break;
 
                 default:
-
                     break;
             }
-
-            await Update();
-            player.UpdateFull();
         }
 
-        private async Task StoreMenuManager(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void StoreMenuManager(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             try
             {
@@ -145,7 +154,7 @@ namespace ResurrectionRP_Server.Business
                                 Inventory.Delete(itemStack, quantity);
                                 BankAccount.AddMoney(itemStack.Price * quantity, $"Achat de {itemStack.Item.name}", false);
                                 GameMode.Instance.Economy.CaissePublique += tax;
-                                await Update();
+                                UpdateInBackground();
                                 client.SendNotification($"Vous avez acheté un/des {itemStack.Item.name}(s) pour la somme de {(itemStack.Price * quantity) + tax} dont {tax} de taxes.");
                                 OpenMenu(client);
                             }

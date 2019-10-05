@@ -338,7 +338,7 @@ namespace ResurrectionRP_Server.Factions
         {
             Menu menu = new Menu("ID_MainReparMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.CarMod);
             menu.SetData("Vehicle", vehicle);
-            menu.ItemSelectCallbackAsync = MenuCallBack;
+            menu.ItemSelectCallback = MenuCallBack;
 
             if (HasPlayerIntoFaction(client))
             {
@@ -355,7 +355,7 @@ namespace ResurrectionRP_Server.Factions
             menu.OpenMenu(client);
         }
 
-        private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             IVehicle veh = menu.GetData("Vehicle");
 
@@ -389,7 +389,7 @@ namespace ResurrectionRP_Server.Factions
                 case "ID_Body":
                     if (BankAccount.GetBankMoney(ReparBody, $"Réparation carrosserie {_vh.Plate} par {ph.Identite.Name}"))
                     {
-                        await _vh.UpdatePropertiesAsync();
+                        _vh.UpdateProperties();
 
                         Utils.Utils.Delay(20000, () =>
                         {
@@ -405,7 +405,7 @@ namespace ResurrectionRP_Server.Factions
                             client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~g~Terminé~w~.", "Elle est niquel!");
                         });
 
-                        await UpdateDatabase();
+                        UpdateInBackground();
                     }
                     else
                         client.SendNotificationError("Vous n'avez pas assez d'argent dans les caisses!");
@@ -448,7 +448,7 @@ namespace ResurrectionRP_Server.Factions
                             _vh.ApplyDamage();
                         });
 
-                        await UpdateDatabase();
+                        UpdateInBackground();
                     }
                     else
                        client.SendNotificationError("Vous n'avez pas assez d'argent dans les caisses!");
@@ -472,7 +472,7 @@ namespace ResurrectionRP_Server.Factions
                             _vh.ApplyDamage();
                         });
 
-                        await UpdateDatabase();
+                        UpdateInBackground();
                     }
                     else
                         client.SendNotificationError("Vous n'avez pas assez d'argent dans les caisses!");

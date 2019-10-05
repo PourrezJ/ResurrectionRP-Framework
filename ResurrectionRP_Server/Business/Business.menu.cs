@@ -64,13 +64,13 @@ namespace ResurrectionRP_Server.Business
             {
                 if (menuItem.Id == "ID_Buy")
                 {
-                    await Buy(client);
+                    Buy(client);
                     await OnNpcSecondaryInteract(client, Ped);
                 }
                 else if (menuItem.Id == "ID_Sell")
                 {
                     if (int.TryParse(menuItem.InputValue, out int value))
-                        await Sell(client, value);
+                        Sell(client, value);
                     else
                         client.SendNotificationError("Montant non valide");
 
@@ -91,7 +91,7 @@ namespace ResurrectionRP_Server.Business
                     OnSale = true;
                     BusinessPrice = 0;
                     BankAccount.Clear();
-                    await Update();
+                    UpdateInBackground();
                     Entities.Blips.BlipsManager.SetColor(Blip, 35);
                     client.SendNotificationSuccess("Propriétaire retiré");
                     await OnNpcSecondaryInteract(client, Ped);
@@ -165,7 +165,7 @@ namespace ResurrectionRP_Server.Business
                     {
                         Employees.Add(ph.PID, ph.Identite.Name);
                         client.SendNotificationSuccess($"{_msg} est ajouté à la liste des employés");
-                        await Update();
+                        UpdateInBackground();
                     }
                     else
                         client.SendNotificationError($"{_msg} est introuvable.");
@@ -182,7 +182,7 @@ namespace ResurrectionRP_Server.Business
                     if ((await Models.Identite.GetOfflineIdentite(playerID.Key)).Name == menuItem.Text)
                     {
                         Employees.Remove(playerID.Key);
-                        await Update();
+                        UpdateInBackground();
                         client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
                         GestionEmployee(client, menu);
                         break;
@@ -191,7 +191,7 @@ namespace ResurrectionRP_Server.Business
             }
         }
 
-        public async Task Buy(IPlayer client)
+        public void Buy(IPlayer client)
         {
             Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
 
@@ -201,7 +201,7 @@ namespace ResurrectionRP_Server.Business
                 {
                     Owner = client.GetSocialClub();
                     OnSale = false;
-                    await Update();
+                    UpdateInBackground();
                     Entities.Blips.BlipsManager.SetColor(Blip, 2);
                     client.SendNotificationSuccess($"Vous avez acheté {BusinnessName} pour la somme de ${BusinessPrice}.");
                 }
@@ -210,11 +210,11 @@ namespace ResurrectionRP_Server.Business
             }
         }
 
-        public async Task Sell(IPlayer client, int money)
+        public void Sell(IPlayer client, int money)
         {
             OnSale = true;
             BusinessPrice = money;
-            await Update();
+            UpdateInBackground();
             Entities.Blips.BlipsManager.SetColor(Blip, 35);
             client.SendNotificationSuccess($"Vous avez mis en vente {BusinnessName} pour la somme de ${BusinessPrice}.");
         }

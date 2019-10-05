@@ -100,7 +100,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (faction.FactionPlayerList.ContainsKey(phWipe.PID))
                 {
                     faction.FactionPlayerList.Remove(phWipe.PID, out FactionPlayer useless);
-                    await faction.UpdateDatabase();
+                    faction.UpdateInBackground();
                 }
             }
 
@@ -109,7 +109,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (society.Employees.ContainsKey(phWipe.PID))
                 {
                     society.Employees.TryRemove(phWipe.PID, out _);
-                    await society.Update();
+                    society.UpdateInBackground();
                 }
             }
 
@@ -118,7 +118,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (business.Employees.ContainsKey(phWipe.PID))
                 {
                     business.Employees.Remove(phWipe.PID);
-                    await business.Update();
+                    business.UpdateInBackground();
                 }
             }
 

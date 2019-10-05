@@ -300,12 +300,12 @@ namespace ResurrectionRP_Server
 
         public static void SetDecoration(this IPlayer client, uint collection, uint overlay)
         {
-            // TODO
+            client.EmitLocked("DecorationVariation", (int)collection, (int)overlay);
         }
 
         public static void ClearDecorations(this IPlayer client)
         {
-            // TODO
+            client.EmitLocked("ClearDecorations");
         }
 
         public static Task ClearDecorationsAsync(this IPlayer client)
@@ -344,7 +344,6 @@ namespace ResurrectionRP_Server
             client.GetSyncedMetaData<bool>("SetInvincible", out bool result);
             return result;
         }
-
 
         public static void SetHeadOverlay(this IPlayer client, int overlayId, Business.Barber.HeadOverlayData overlayData)
         {
@@ -399,6 +398,16 @@ namespace ResurrectionRP_Server
         public static void StopAnimation(this IPlayer client)
         {
             client.EmitLocked("StopAnimation");
+        }
+
+        public static void SetHeading(this IPlayer client, float heading)
+        {
+            client.EmitLocked("setEntityHeading", client, heading);
+        }
+
+        public static async Task SetHeadingAsync(this IPlayer client, float heading)
+        {
+            await client.EmitAsync("setEntityHeading", client, heading);
         }
 
         public static void RequestCollisionAtCoords(this IPlayer client, Vector3 pos)

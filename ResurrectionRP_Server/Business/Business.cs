@@ -17,8 +17,7 @@ namespace ResurrectionRP_Server.Business
     [BsonKnownTypes(typeof(Market), typeof(TattoosStore), typeof(Barber.BarberStore), typeof(WeaponsShop), typeof(ClothingStore), typeof(PawnShop), typeof(DigitalDeen), typeof(PropsStore))]
     public partial class Business
     {
-
-        #region Variables
+        #region Fields
         [JsonIgnore]
         public BsonObjectId _id;
 
@@ -120,6 +119,7 @@ namespace ResurrectionRP_Server.Business
         }
 
         public virtual Task OpenMenuAsync(IPlayer client, Ped npc) => Task.CompletedTask;
+
         public virtual void OpenMenu(IPlayer client, Ped npc) { }
         #endregion
     }

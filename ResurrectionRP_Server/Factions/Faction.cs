@@ -2,8 +2,11 @@
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Bank;
+using ResurrectionRP_Server.Colshape;
+using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Factions.Model;
 using ResurrectionRP_Server.Models;
 using System;
 using System.Collections.Generic;
@@ -11,8 +14,6 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
-using ResurrectionRP_Server.Factions.Model;
-using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -49,13 +50,11 @@ namespace ResurrectionRP_Server.Factions
         public Vector3 BlipPosition;
 
         [BsonIgnore]
-        public IColShape Vestiaire_colShape { get; private set; }
+        public IColshape Vestiaire_colShape { get; private set; }
         [BsonIgnore]
-        public IColShape Parking_colShape { get; private set; }
+        public IColshape Heliport_colShape { get; private set; }
         [BsonIgnore]
-        public IColShape Heliport_colShape { get; private set; }
-        [BsonIgnore]
-        public IColShape Shop_colShape { get; private set; }
+        public IColshape Shop_colShape { get; private set; }
 
         public double PayCheckMinutes { get; set; } = 30;
 
@@ -111,9 +110,9 @@ namespace ResurrectionRP_Server.Factions
         {
             if (ServiceLocation != Vector3.Zero)
             {
-                Vestiaire_colShape = Alt.CreateColShapeCylinder(ServiceLocation - new Vector3(0, 0, 1), 1.0f, 2f);
-                Vestiaire_colShape.SetOnPlayerEnterColShape(OnPlayerEnterVestiaire);
-                Vestiaire_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveVestiaire);
+                Vestiaire_colShape = ColshapeManager.CreateCylinderColshape(ServiceLocation - new Vector3(0, 0, 1), 1.0f, 2f);
+                Vestiaire_colShape.OnPlayerEnterColshape += OnPlayerEnterVestiaire;
+                Vestiaire_colShape.OnPlayerLeaveColshape += OnPlayerLeaveVestiaire;
                 Marker.CreateMarker(MarkerType.HorizontalCircleArrow, ServiceLocation - new Vector3(0, 0, 0.95f), new Vector3(1, 1, 1));
             }
 
@@ -138,18 +137,18 @@ namespace ResurrectionRP_Server.Factions
                 if (Parking == null)
                     Parking = new Parking(HeliportLocation.Pos, HeliportLocation);
 
-                Heliport_colShape = Alt.CreateColShapeCylinder(HeliportLocation.Pos - new Vector3(0, 0, 1), 3.0f, 2f);
-                Heliport_colShape.SetOnPlayerEnterColShape(OnPlayerEnterHeliport);
-                Heliport_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveHeliport);
+                Heliport_colShape = ColshapeManager.CreateCylinderColshape(HeliportLocation.Pos - new Vector3(0, 0, 1), 3.0f, 2f);
+                Heliport_colShape.OnPlayerEnterColshape += OnPlayerEnterHeliport;
+                Heliport_colShape.OnPlayerLeaveColshape += OnPlayerLeaveHeliport;
                 Marker.CreateMarker(MarkerType.VerticalCylinder, HeliportLocation.Pos - new Vector3(0, 0, 3), new Vector3(3, 3, 3));
                 GameMode.Instance.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", HeliportLocation.Pos, 4);
             }
 
             if (ShopLocation != null && ShopLocation != Vector3.Zero)
             {
-                Shop_colShape = Alt.CreateColShapeCylinder(ShopLocation, 1.0f, 2f);
-                Shop_colShape.SetOnPlayerEnterColShape(OnPlayerEnterShop);
-                Shop_colShape.SetOnPlayerLeaveColShape(OnPlayerLeaveShop);
+                Shop_colShape = ColshapeManager.CreateCylinderColshape(ShopLocation, 1.0f, 2f);
+                Shop_colShape.OnPlayerEnterColshape += OnPlayerEnterShop;
+                Shop_colShape.OnPlayerLeaveColshape += OnPlayerLeaveShop;
                 Marker.CreateMarker(MarkerType.VerticalCylinder, ShopLocation - new Vector3(0, 0, 0), new Vector3(1, 1, 1));
                 GameMode.Instance.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", ShopLocation, 4);
             }
@@ -168,25 +167,27 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Event handlers
-        public virtual async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
+        public virtual Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
         {
             client.SetPlayerIntoVehicle(vehicle.Vehicle);
             vehicle.LockState = AltV.Net.Enums.VehicleLockState.Unlocked;
-            await UpdateDatabase();
+            UpdateInBackground();
+            return Task.CompletedTask;
         }
 
-        private async Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
+        private Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
         {
             vehicle.ParkingName = FactionName;
-            await UpdateDatabase();
+            UpdateInBackground();
+            return Task.CompletedTask;
         }
 
-        public void OnPlayerEnterVestiaire(IColShape colShape, IPlayer client)
+        public void OnPlayerEnterVestiaire(IColshape colshape, IPlayer client)
         {
             PriseServiceMenu(client);
         }
 
-        public void OnPlayerLeaveVestiaire(IColShape colShape, IPlayer client)
+        public void OnPlayerLeaveVestiaire(IColshape colshape, IPlayer client)
         {
             PlayerHandler player = client.GetPlayerHandler();
 
@@ -197,12 +198,12 @@ namespace ResurrectionRP_Server.Factions
                 MenuManager.CloseMenu(client);
         }
 
-        public void OnPlayerEnterShop(IColShape colShape, IPlayer client)
+        public void OnPlayerEnterShop(IColshape colshape, IPlayer client)
         {
             OpenShopMenu(client);
         }
 
-        public void OnPlayerLeaveShop(IColShape colShape, IPlayer client)
+        public void OnPlayerLeaveShop(IColshape colshape, IPlayer client)
         {
             PlayerHandler player = client.GetPlayerHandler();
 
@@ -223,12 +224,12 @@ namespace ResurrectionRP_Server.Factions
             OpenConcessMenu(vehicle?.Vehicle?.Driver, ConcessType.Vehicle, ParkingLocation, FactionName);
         }
 
-        public void OnPlayerEnterHeliport(IColShape colShape, IPlayer client)
+        public void OnPlayerEnterHeliport(IColshape colshape, IPlayer client)
         {
             OpenConcessMenu(client, ConcessType.Helico, HeliportLocation, FactionName);
         }
 
-        public void OnPlayerLeaveHeliport(IColShape colShape, IPlayer client)
+        public void OnPlayerLeaveHeliport(IColshape colshape, IPlayer client)
         {
             PlayerHandler player = client.GetPlayerHandler();
 
@@ -274,11 +275,11 @@ namespace ResurrectionRP_Server.Factions
             });
         }
 
-        public virtual void OnPlayerEnterColShape(IColShape colShape, IPlayer player)
+        public virtual void OnPlayerEnterColShape(IColshape colshape, IPlayer player)
         {
         }
 
-        public virtual void OnPlayerExitColShape(IColShape colShape, IPlayer player)
+        public virtual void OnPlayerExitColShape(IColshape colshape, IPlayer player)
         {
         }
         #endregion
@@ -318,7 +319,7 @@ namespace ResurrectionRP_Server.Factions
             {
                 client.SendNotification($"Vous êtes désormais membre de {FactionName}");
                 client.GetPlayerHandler()?.UpdateFull();
-                await UpdateDatabase();
+                UpdateInBackground();
                 await PlayerFactionAdded(client);
             }
             else if (FactionPlayerList.ContainsKey(client.GetSocialClub()))
@@ -382,21 +383,6 @@ namespace ResurrectionRP_Server.Factions
 
             return _employeeOnline;
         }
-
-        public async Task UpdateDatabase()
-        {
-            try
-            {
-                await Database.MongoDB.Update(this, "factions", FactionName);
-            }
-            catch (Exception ex)
-            {
-                Alt.Server.LogError($"UpdateDatabase Faction: {FactionName}: " + ex);
-            }
-        }
-
-        public async Task InsertDatabase()
-            => await Database.MongoDB.Insert("factions", this);
 
         public List<FactionVehicle> GetVehicleAllowed(int rang)
         {

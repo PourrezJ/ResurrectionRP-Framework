@@ -2,6 +2,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson.Serialization.Attributes;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Inventory;
@@ -224,8 +225,8 @@ namespace ResurrectionRP_Server.Factions
                     if (rack != null)
                     {
                         Racks[i].Load();
-                        Racks[i].Colshape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
-                        Racks[i].Colshape.SetOnVehicleEnterColShape(OnVehicleEnterColShape);
+                        Racks[i].Colshape.OnPlayerEnterColshape += OnPlayerEnterColShape;
+                        Racks[i].Colshape.OnVehicleEnterColshape += OnVehicleEnterColShape;
                     }
                 }
             }
@@ -270,7 +271,7 @@ namespace ResurrectionRP_Server.Factions
             OpenImportationMenu(client, listItem);
         }
 
-        public void OnVehicleEnterColShape(IColShape colShape, IVehicle vehicle)
+        public void OnVehicleEnterColShape(IColshape colshape, IVehicle vehicle)
         {
             if (vehicle.Driver == null)
                 return;
@@ -278,9 +279,9 @@ namespace ResurrectionRP_Server.Factions
 
             for (int i = 0; i < Racks.Count; i++)
             {
-                if (Racks[i].Colshape.IsEntityInColShape(player))
+                if (Racks[i].Colshape.IsEntityIn(player))
                 {
-                    Racks[i].OnPlayerEnterColShape(colShape, player);
+                    Racks[i].OnPlayerEnterColShape(colshape, player);
                     break;
                 }
             }
@@ -314,7 +315,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Methods
-        private async Task<bool> Dock_CommandeValidate(IPlayer player, Menu menu, Dictionary<DockItemData, int> importItems)
+        private bool Dock_CommandeValidate(IPlayer player, Menu menu, Dictionary<DockItemData, int> importItems)
         {
             if (!player.Exists)
                 return false;
@@ -363,7 +364,7 @@ namespace ResurrectionRP_Server.Factions
                 }
             }
 
-            await UpdateDatabase();
+            UpdateInBackground();
             Importation.RefreshLabel();
             player.SendNotificationSuccess("Commande validée!");
             return true;
@@ -422,19 +423,21 @@ namespace ResurrectionRP_Server.Factions
             await _inv.OpenMenu(player);
 
             // Save Inventory on move
-            _inv.OnMove = async (IPlayer c, RPGInventoryMenu m) =>
+            _inv.OnMove = (IPlayer c, RPGInventoryMenu m) =>
             {
                 ph.UpdateFull();
-                await UpdateDatabase();
+                UpdateInBackground();
                 rack?.RefreshLabel();
+                return Task.CompletedTask;
             };
 
             // Save Inventory on close
-            _inv.OnClose = async (IPlayer c, RPGInventoryMenu m) =>
+            _inv.OnClose = (IPlayer c, RPGInventoryMenu m) =>
             {
                 ph.UpdateFull();
-                await UpdateDatabase();
+                UpdateInBackground();
                 rack?.RefreshLabel();
+                return Task.CompletedTask;
             };
         }
 

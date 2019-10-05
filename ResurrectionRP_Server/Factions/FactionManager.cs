@@ -44,7 +44,7 @@ namespace ResurrectionRP_Server.Factions
             {
                 foreach (var faction in FactionList)
                 {       
-                    await faction.UpdateDatabase();
+                    faction.UpdateInBackground();
                     await Task.Delay(50);
                 }
             });
@@ -168,7 +168,7 @@ namespace ResurrectionRP_Server.Factions
             for (int i = 0; i < GameMode.Instance.FactionManager.FactionList.Count; i++)
             {
                 await GameMode.Instance.FactionManager.FactionList[i].PayCheck();
-                await GameMode.Instance.FactionManager.FactionList[i].UpdateDatabase();
+                GameMode.Instance.FactionManager.FactionList[i].UpdateInBackground();
             }
         }
         #endregion

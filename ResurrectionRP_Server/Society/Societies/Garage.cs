@@ -3,6 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using ResurrectionRP_Server.Bank;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities.Peds;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Models;
@@ -153,7 +154,7 @@ namespace ResurrectionRP_Server.Society.Societies
     {
         #region Private fields
         private Ped _npc;
-        private IColShape _workZone;
+        private IColshape _workZone;
         private byte _modType;
         private string _subtitle;
         private double _price;
@@ -193,9 +194,9 @@ namespace ResurrectionRP_Server.Society.Societies
             _npc = Ped.CreateNPC(PedModel.Benny, PnjLocation.Pos, PnjLocation.Rot.Z, GameMode.GlobalDimension);
             _npc.NpcInteractCallBack = OnInteractWithPnj;
 
-            _workZone = Alt.CreateColShapeCylinder(new Vector3(WorkZonePosition.X, WorkZonePosition.Y, WorkZonePosition.Z - 1), 10, 5);
-            _workZone.SetOnVehicleEnterColShape(OnVehicleEnterWorkzone);
-            _workZone.SetOnVehicleLeaveColShape(OnVehicleLeaveWorkzone);
+            _workZone = ColshapeManager.CreateCylinderColshape(new Vector3(WorkZonePosition.X, WorkZonePosition.Y, WorkZonePosition.Z - 1), 10, 5);
+            _workZone.OnVehicleEnterColshape += OnVehicleEnterWorkzone;
+            _workZone.OnVehicleLeaveColshape += OnVehicleLeaveWorkzone;
 
             base.Init();
         }
@@ -210,7 +211,7 @@ namespace ResurrectionRP_Server.Society.Societies
                 client.SendNotificationError("Aucun véhicule devant l'établi.");
         }
 
-        private void OnVehicleEnterWorkzone(IColShape colShape, IVehicle vehicle)
+        private void OnVehicleEnterWorkzone(IColshape colshape, IVehicle vehicle)
         {
             if (vehicle == null || !vehicle.Exists)
                 return;
@@ -219,7 +220,7 @@ namespace ResurrectionRP_Server.Society.Societies
                 VehicleBench = vehicle;
         }
 
-        private void OnVehicleLeaveWorkzone(IColShape colShape, IVehicle vehicle)
+        private void OnVehicleLeaveWorkzone(IColshape colshape, IVehicle vehicle)
         {
             if (vehicle == null || !vehicle.Exists)
                 return;
@@ -286,7 +287,7 @@ namespace ResurrectionRP_Server.Society.Societies
 
             Menu mainMenu = new Menu("ID_Main", "", SocietyName, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, MenuBanner);
             mainMenu.ItemSelectCallback = MainMenuCallback;
-            mainMenu.FinalizerAsync = Finalizer;
+            mainMenu.Finalizer = Finalizer;
 
             MenuItem design = new MenuItem("Esthétique", "", "Design", true);
             mainMenu.Add(design);
@@ -399,8 +400,8 @@ namespace ResurrectionRP_Server.Society.Societies
 
             Menu menu = new Menu("ID_Perfs", "", _subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: MenuBanner);
             menu.ItemSelectCallback = PerformanceChoiceMenuCallback;
-            menu.IndexChangeCallbackAsync = ModPreview;
-            menu.FinalizerAsync = Finalizer;
+            menu.IndexChangeCallback = ModPreview;
+            menu.Finalizer = Finalizer;
 
             var mods = manifest.Mods(_modType);
             var perfdata = Data.GetPerformanceData(_modType).Value;
@@ -443,7 +444,7 @@ namespace ResurrectionRP_Server.Society.Societies
                         item.RightLabel = $"${price}";
 
                     item.SetData("price", price);
-                    item.OnMenuItemCallbackAsync = ModChoice;
+                    item.OnMenuItemCallback = ModChoice;
                 }
 
                 menu.Add(item);
@@ -488,7 +489,7 @@ namespace ResurrectionRP_Server.Society.Societies
 
             Menu menu = new Menu("ID_Design", "", "Choisissez l'élément à installer :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: MenuBanner);
             menu.ItemSelectCallback = DesignMenuCallback;
-            menu.FinalizerAsync = Finalizer;
+            menu.Finalizer = Finalizer;
 
             VehicleHandler vh = VehicleBench.GetVehicleHandler();
             var manifest = vh.VehicleManifest;
@@ -502,7 +503,7 @@ namespace ResurrectionRP_Server.Society.Societies
                     MenuItem item = new MenuItem(mod.ModName, rightLabel: $"${price}", executeCallback: true);
                     item.SetData("mod", mod.ModID);
                     item.SetData("price", price);
-                    item.OnMenuItemCallbackAsync = DesignMenuItemCallback;
+                    item.OnMenuItemCallback = DesignMenuItemCallback;
                     menu.Add(item);
                 }
             }
@@ -539,7 +540,7 @@ namespace ResurrectionRP_Server.Society.Societies
             }
         }
 
-        protected async Task DesignMenuItemCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        protected void DesignMenuItemCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (VehicleBench == null || !VehicleBench.Exists)
             {
@@ -556,15 +557,15 @@ namespace ResurrectionRP_Server.Society.Societies
             _modType = menuItem.GetData("mod");
             _price = menuItem.GetData("price");
             _subtitle = $"{menuItem.Text} :";
-            await OpenDesignChoiceMenu(client);
+            OpenDesignChoiceMenu(client);
         }
 
-        protected Task OpenDesignChoiceMenu(IPlayer client, int selectedItem = 0)
+        protected void OpenDesignChoiceMenu(IPlayer client, int selectedItem = 0)
         {
             if (VehicleBench == null || !VehicleBench.Exists)
             {
                 MenuManager.CloseMenu(client);
-                return Task.CompletedTask;
+                return;
             }
 
             VehicleHandler vh = VehicleBench.GetVehicleHandler();
@@ -577,9 +578,9 @@ namespace ResurrectionRP_Server.Society.Societies
             }
 
             Menu menu = new Menu("ID_DesignChoice", "", _subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: MenuBanner);
-            menu.IndexChangeCallbackAsync = ModPreview;
+            menu.IndexChangeCallback = ModPreview;
             menu.ItemSelectCallback = DesignChoiceCallback;
-            menu.FinalizerAsync = Finalizer;
+            menu.Finalizer = Finalizer;
 
             IEnumerable<VehicleMod> mods = manifest.Mods(_modType);
             vh.Mods.TryGetValue(_modType, out byte valueInstalled);
@@ -612,7 +613,7 @@ namespace ResurrectionRP_Server.Society.Societies
                     item.SetData("price", _price);
                 }
 
-                item.OnMenuItemCallbackAsync = ModChoice;
+                item.OnMenuItemCallback = ModChoice;
                 menu.Add(item);
             }
 
@@ -620,7 +621,6 @@ namespace ResurrectionRP_Server.Society.Societies
             menu.OpenMenu(client);
             ClientInMenu = client;
             ModPreview(client, menu, selectedItem, menu.Items[selectedItem]);
-            return Task.CompletedTask;
         }
 
         protected void DesignChoiceCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -671,7 +671,7 @@ namespace ResurrectionRP_Server.Society.Societies
             Menu menu = new Menu("ID_Neons", "", "Néons :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: MenuBanner);
             menu.ItemSelectCallback = NeonsMenuCallback;
             menu.ListItemChangeCallback = NeonListItemChangeCallback;
-            menu.FinalizerAsync = Finalizer;
+            menu.Finalizer = Finalizer;
 
             _neonColor = vh.NeonColor;
             _red = vh.NeonColor.R / 17;
@@ -764,7 +764,7 @@ namespace ResurrectionRP_Server.Society.Societies
             {
                 Menu menu = new Menu("ID_Histo", "", "Historique :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, MenuBanner);
                 menu.ItemSelectCallback = HistoricMenuCallback;
-                menu.FinalizerAsync = Finalizer;
+                menu.Finalizer = Finalizer;
 
                 foreach (var mod in vh.Mods)
                 {
@@ -815,12 +815,12 @@ namespace ResurrectionRP_Server.Society.Societies
         #endregion
 
         #region Methods
-        protected Task ModPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        protected void ModPreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
             if (VehicleBench == null || !VehicleBench.Exists)
             {
                 MenuManager.CloseMenu(client);
-                return Task.CompletedTask;
+                return;
             }
 
             byte selected = (byte)itemIndex;
@@ -833,8 +833,6 @@ namespace ResurrectionRP_Server.Society.Societies
                 VehicleBench.SetWindowTint(Utils.Utils.GetWindowTint(selected));
             else
                 VehicleBench.SetMod(_modType, selected);
-
-            return Task.CompletedTask;
         }
 
         protected void InstallNeon(IPlayer client, double price)
@@ -858,7 +856,7 @@ namespace ResurrectionRP_Server.Society.Societies
             }
         }
 
-        protected async Task ModChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        protected void ModChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (VehicleBench == null || !VehicleBench.Exists)
             {
@@ -914,7 +912,7 @@ namespace ResurrectionRP_Server.Society.Societies
                 client.SendNotificationError("Vous n'avez pas assez sur le compte de l'entreprise.");
 
             if (menu.Id == "ID_DesignChoice")
-                await OpenDesignChoiceMenu(client, itemIndex);
+                OpenDesignChoiceMenu(client, itemIndex);
             else if (menu.Id == "ID_Perfs")
                 OpenPerformanceChoiceMenu(client, itemIndex);
         }
@@ -951,10 +949,9 @@ namespace ResurrectionRP_Server.Society.Societies
             }
         }
 
-        protected async Task Finalizer(IPlayer client, Menu menu)
+        protected void Finalizer(IPlayer client, Menu menu)
         {
             ClientInMenu = null;
-            await Task.CompletedTask;
         }
         #endregion
     }

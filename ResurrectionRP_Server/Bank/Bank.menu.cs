@@ -24,7 +24,7 @@ namespace ResurrectionRP_Server.Bank
         private BankAccount _bankAccount;
         private Menu _bankMenu;
         private AtmType _atmType;
-        private Menu.MenuCallbackAsync _businessMenuCallback;
+        private Menu.MenuCallback _businessMenuCallback;
         #endregion
 
         #region Constructors
@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Bank
             _businessMenuCallback = null;
         }
 
-        public BankMenu(PlayerHandler player, BankAccount bankAccount, AtmType atmType, Menu businessMenu, Menu.MenuCallbackAsync businessMenuCallback)
+        public BankMenu(PlayerHandler player, BankAccount bankAccount, AtmType atmType, Menu businessMenu, Menu.MenuCallback businessMenuCallback)
         {
             _player = player;
             _bankAccount = bankAccount;
@@ -54,7 +54,7 @@ namespace ResurrectionRP_Server.Bank
             return BM.OpenBankMenu(player.Client);
         }
 
-        public static Menu OpenBankMenu(IPlayer client, BankAccount bankAccount, AtmType atmType, Menu businessMenu, Menu.MenuCallbackAsync businessMenuCallback)
+        public static Menu OpenBankMenu(IPlayer client, BankAccount bankAccount, AtmType atmType, Menu businessMenu, Menu.MenuCallback businessMenuCallback)
         {
             #region Vérification
             PlayerHandler player = client.GetPlayerHandler();
@@ -79,7 +79,7 @@ namespace ResurrectionRP_Server.Bank
             {
                 _bankMenu.SubTitle = $"Compte: {_bankAccount.AccountNumber} | Solde: ${Math.Round(_bankAccount.Balance, 2)}";
                 _bankMenu.BackCloseMenu = false;
-                _bankMenu.ItemSelectCallbackAsync = BankMenuCallback;
+                _bankMenu.ItemSelectCallback = BankMenuCallback;
                 _bankMenu.Reset();
             }
             #endregion
@@ -119,12 +119,12 @@ namespace ResurrectionRP_Server.Bank
         #endregion
 
         #region Callbacks
-        private async Task BankMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void BankMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem != null)
                 return;
 
-            await _businessMenuCallback(client, menu, menuItem, itemIndex);
+            _businessMenuCallback(client, menu, menuItem, itemIndex);
         }
 
         private void HistoryAccountCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)

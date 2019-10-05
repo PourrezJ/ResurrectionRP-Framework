@@ -3,6 +3,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Entities.Players.Data;
 using ResurrectionRP_Server.Loader.TattooLoader;
 using ResurrectionRP_Server.Utils;
 using System.Collections.Generic;
@@ -36,10 +37,10 @@ namespace ResurrectionRP_Server.Business
                 return;
             }
 
-            Menu mainmenu = new Menu("ID_TattooMain", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true)
+            Menu mainmenu = new Menu("ID_TattooMain", "", "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true)
             {
                 BannerSprite = Banner.Tattoos2,
-                ItemSelectCallbackAsync = TattooMenuCallBack,
+                ItemSelectCallback = TattooMenuCallBack,
                 Finalizer = MenuFinalizer
             };
 
@@ -73,7 +74,7 @@ namespace ResurrectionRP_Server.Business
                 client.SendNotificationError("Aucun client autour.");
         }
 
-        private async Task TattooMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void TattooMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menu.Id == "ID_TattooMain")
             {
@@ -104,20 +105,22 @@ namespace ResurrectionRP_Server.Business
                 {
                     if (ClientSelected.Client == client)
                     {
-                        await ChoiseBones(client, menuItem.Id);
+                        ChoiseBones(client, menuItem.Id);
                         return;
                     }
 
                     AcceptMenu accept = AcceptMenu.OpenMenu(ClientSelected.Client, "", "Voulez-vous vous faire tatouer?", banner: Banner.Tattoos2);
-                    accept.AcceptMenuCallBack = async (IPlayer tatouer, bool responce) =>
+                    accept.AcceptMenuCallBack = (IPlayer tatouer, bool responce) =>
                     {
                         if (responce)
-                            await ChoiseBones(client, menuItem.Id);
+                            ChoiseBones(client, menuItem.Id);
                         else
                         {
                             menu.CloseMenu(client);
                             client.SendNotificationError("Le client ne veut pas être tatoué.");
                         }
+
+                        return Task.CompletedTask;
                     };
                 }
             }
@@ -141,29 +144,26 @@ namespace ResurrectionRP_Server.Business
                 if (!ClientSelected.Client.Exists)
                     return;
 
-                int selectedTattoo = (int)Alt.Hash((ClientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
+                uint selectedTattoo = Alt.Hash((ClientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
 
                 if (ClientSelected.Character.HasDecoration(selectedTattoo))
                 {
-                    Entities.Players.Data.Decoration decoration = ClientSelected.Character.Decorations.FirstOrDefault(d => d.Overlay == selectedTattoo);
-                    await ClientSelected.Client.RemoveDecorationAsync((uint)decoration.Collection, (uint)decoration.Overlay);
+                    Decoration decoration = ClientSelected.Character.Decorations.FirstOrDefault(d => d.Overlay == selectedTattoo);
                     ClientSelected.Character.Decorations.Remove(decoration);
-                    ClientSelected.UpdateFull();
-                    await Update();
+                    ResetTattoos();
+                    ClientSelected.UpdateInBackground();
+                    UpdateInBackground();
                     client.SendNotificationSuccess("Vous avez retiré le tatouage");
                 }
                 else
                 {
-                    if (BankAccount.GetBankMoney(Tattoo.Price, $"Tatouage par {this.BusinnessName}"))
+                    if (BankAccount.GetBankMoney(Tattoo.Price, $"Tatouage par {BusinnessName}"))
                     {
-                        int collection = (int)Alt.Hash(Tattoo.Collection);
-                        int overlay = (ClientSelected.Character.Gender == 0)
-                            ? (int)Alt.Hash(Tattoo.HashNameMale)
-                            : (int)Alt.Hash(Tattoo.HashNameFemale);
-
-                        ClientSelected.Character.Decorations.Add(new Entities.Players.Data.Decoration(collection, overlay));
-                        ClientSelected.UpdateFull();
-                        await Update();
+                        uint collection = Alt.Hash(Tattoo.Collection);
+                        uint overlay = (ClientSelected.Character.Gender == 0) ? Alt.Hash(Tattoo.HashNameMale) : Alt.Hash(Tattoo.HashNameFemale);
+                        ClientSelected.Character.Decorations.Add(new Decoration(collection, overlay));
+                        ClientSelected.UpdateInBackground();
+                        UpdateInBackground();
                         client.SendNotificationSuccess("Vous avez appliqué le tatouage");
                     }
                     else
@@ -176,16 +176,16 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Choix & Preview
-        private async Task TattooChoiseMenu(List<Tattoo> TattooList, IPlayer tatoueur)
+        private void TattooChoiseMenu(List<Tattoo> TattooList, IPlayer tatoueur)
         {
             Menu selectMenu = new Menu("ID_TattooSelect", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.Tattoos2);
-            selectMenu.IndexChangeCallbackAsync = TattooChoiseIndex; 
-            selectMenu.ItemSelectCallbackAsync = TattooMenuCallBack;
+            selectMenu.IndexChangeCallback = TattooChoiseIndex; 
+            selectMenu.ItemSelectCallback = TattooMenuCallBack;
             selectMenu.Finalizer = MenuFinalizer;
 
             foreach (Tattoo Tattoo in TattooList)
             {
-                int overlay = (int)Alt.Hash((ClientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
+                uint overlay = Alt.Hash((ClientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
 
                 if (overlay == 0)
                     continue;
@@ -202,25 +202,21 @@ namespace ResurrectionRP_Server.Business
             }
 
             MenuManager.OpenMenu(tatoueur, selectMenu);
-            await TattooChoiseIndex(tatoueur, selectMenu, 0, selectMenu.Items[0]);
+            TattooChoiseIndex(tatoueur, selectMenu, 0, selectMenu.Items[0]);
         }
 
-        private Task TattooChoiseIndex(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        private void TattooChoiseIndex(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
             if (ClientSelected != null)
             {
                 Tattoo Tattoo = menuItem.GetData("Tattoo");
                 uint collection = Alt.Hash(Tattoo.Collection);
                 uint overlay = Alt.Hash((ClientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
+                ResetTattoos();
 
-                if (!ClientSelected.Character.HasDecoration((int)overlay))
-                {
-                    ResetTattoos();
+                if (!ClientSelected.Character.HasDecoration(overlay))
                     ClientSelected.Client.SetDecoration(collection, overlay);
-                }
             }
-
-            return Task.CompletedTask;
         }
 
         private void ResetTattoos()
@@ -230,8 +226,8 @@ namespace ResurrectionRP_Server.Business
 
             ClientSelected.Client.ClearDecorations();
 
-            foreach (Entities.Players.Data.Decoration decoration in ClientSelected.Character.Decorations)
-                ClientSelected.Client.SetDecoration((uint)decoration.Collection,(uint) decoration.Overlay);
+            foreach (Decoration decoration in ClientSelected.Character.Decorations)
+                ClientSelected.Client.SetDecoration(decoration.Collection, decoration.Overlay);
         }
         #endregion
 
@@ -248,7 +244,7 @@ namespace ResurrectionRP_Server.Business
         {
             if (double.TryParse(menuItem.InputValue, out double amount))
             {
-                if (amount < 0)
+                if (amount <= 0)
                     return;
 
                 var ph = client.GetPlayerHandler();
@@ -265,27 +261,27 @@ namespace ResurrectionRP_Server.Business
             OpenMenu(client);
         }
 
-        private async Task ChoiseBones(IPlayer client, string bone)
+        private void ChoiseBones(IPlayer client, string bone)
         {
             switch (bone)
             {
                 case "ID_Head":
-                    await TattooChoiseMenu(TattooLoader.HeadTattooList, client);
+                    TattooChoiseMenu(TattooLoader.HeadTattooList, client);
                     break;
                 case "ID_Torso":
-                    await TattooChoiseMenu(TattooLoader.TorsoTattooList, client);
+                    TattooChoiseMenu(TattooLoader.TorsoTattooList, client);
                     break;
                 case "ID_LeftArm":
-                    await TattooChoiseMenu(TattooLoader.LeftArmTattooList, client);
+                    TattooChoiseMenu(TattooLoader.LeftArmTattooList, client);
                     break;
                 case "ID_RightArm":
-                    await TattooChoiseMenu(TattooLoader.RightArmTattooList, client);
+                    TattooChoiseMenu(TattooLoader.RightArmTattooList, client);
                     break;
                 case "ID_LeftLeg":
-                    await TattooChoiseMenu(TattooLoader.LeftLegTattooList, client);
+                    TattooChoiseMenu(TattooLoader.LeftLegTattooList, client);
                     break;
                 case "ID_RightLeg":
-                    await TattooChoiseMenu(TattooLoader.RightLegTattooList, client);
+                    TattooChoiseMenu(TattooLoader.RightLegTattooList, client);
                     break;
             }
         }

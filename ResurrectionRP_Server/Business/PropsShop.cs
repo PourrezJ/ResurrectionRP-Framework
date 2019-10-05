@@ -343,7 +343,7 @@ namespace ResurrectionRP_Server.Business
 
                 categories.Add(category);
                 categories.Sort();
-                await Update();
+                UpdateInBackground();
                 client.SendNotificationSuccess($"Catégorie {category} ajoutée");
             }
             else if (menuItem.Id == "ID_RemCategory")
@@ -360,7 +360,7 @@ namespace ResurrectionRP_Server.Business
                 }
 
                 categories.Remove(category);
-                await Update();
+                UpdateInBackground();
                 client.SendNotificationSuccess($"Catégorie {category} retirée");
             }
         }
@@ -453,7 +453,7 @@ namespace ResurrectionRP_Server.Business
             menu.ClearItems();
             menu.SubTitle = _componentName;
             menu.BackCloseMenu = false;
-            menu.ItemSelectCallbackAsync = CategorieCallBack;
+            menu.ItemSelectCallback = CategorieCallBack;
             menu.IndexChangeCallbackAsync = null;
 
             List<int> compoList = null;
@@ -507,7 +507,7 @@ namespace ResurrectionRP_Server.Business
             menu.OpenMenu(client);
         }
 
-        private async Task CategorieCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void CategorieCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
@@ -521,7 +521,7 @@ namespace ResurrectionRP_Server.Business
             menu.SubTitle = menuItem.Text.ToUpper();
             menu.BackCloseMenu = false;
             menu.ItemSelectCallback = OnCallBackWithCat;
-            menu.IndexChangeCallbackAsync = OnCurrentItem;
+            menu.IndexChangeCallback = OnCurrentItem;
 
             byte componentID = menu.GetData("componentID");
 
@@ -556,7 +556,7 @@ namespace ResurrectionRP_Server.Business
             }
 
             menu.OpenMenu(client);
-            await OnCurrentItem(client, menu, 0, menu.Items[0]);
+            OnCurrentItem(client, menu, 0, menu.Items[0]);
         }
 
         private void OnCallBackWithCat(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -577,7 +577,7 @@ namespace ResurrectionRP_Server.Business
             BuyProp(client, componentID, drawable, variation, price, clothName);
         }
 
-        private Task OnCurrentItem(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        private void OnCurrentItem(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
             try
             {
@@ -590,8 +590,6 @@ namespace ResurrectionRP_Server.Business
             {
                 Alt.Server.LogError("OnCurrentItem" + ex);
             }
-
-            return Task.CompletedTask;
         }
         #endregion
 
@@ -607,7 +605,7 @@ namespace ResurrectionRP_Server.Business
             menu.SubTitle = _componentName;
             menu.BackCloseMenu = false;
             menu.ItemSelectCallback = OnCallBackWithoutCat;
-            menu.IndexChangeCallbackAsync = OnCurrentItem;
+            menu.IndexChangeCallback = OnCurrentItem;
 
             List<int> compoList = null;
 

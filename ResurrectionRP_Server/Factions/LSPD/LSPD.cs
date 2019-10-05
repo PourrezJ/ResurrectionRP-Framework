@@ -3,6 +3,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using AltV.Net.Async;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils.Enums;
 using ResurrectionRP_Server.Utils;
@@ -204,7 +205,7 @@ namespace ResurrectionRP_Server.Factions
             return Task.CompletedTask;
         }
 
-        public override void OnPlayerEnterColShape(IColShape colshape,IPlayer client)
+        public override void OnPlayerEnterColShape(IColshape colshape, IPlayer client)
         {
             /*
             try

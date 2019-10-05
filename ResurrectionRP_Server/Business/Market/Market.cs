@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Numerics;
-using System.Threading.Tasks;
-using AltV.Net.Elements.Entities;
+﻿using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
-using AltV.Net;
-using AltV.Net.Async;
+using ResurrectionRP_Server.Colshape;
+using System.Collections.Generic;
+using System.Numerics;
 using System;
 
 namespace ResurrectionRP_Server.Business
@@ -34,16 +32,14 @@ namespace ResurrectionRP_Server.Business
         #region Init
         public override void Init()
         {
-            Station = new StationService(this.ID, this.Range, this.StationPos);
+            Station = new StationService(ID, Range, StationPos);
             Station.StationBlip = Entities.Blips.BlipsManager.CreateBlip("Station essence", StationPos, 128, 361, 0.5f);
-            Station.Colshape = Alt.CreateColShapeCylinder(StationPos - new Vector3(0,0,2), 14f, 6f);
-
+            Station.Colshape = ColshapeManager.CreateCylinderColshape(StationPos - new Vector3(0,0,2), 14f, 6f);
             Station.LitrageMax = 3000; // temp
-
-            Station.Colshape.SetOnPlayerEnterColShape(Events_PlayerEnterColshape);
-            Station.Colshape.SetOnPlayerLeaveColShape(Events_PlayerExitColshape);
-            Station.Colshape.SetOnVehicleEnterColShape(Events_VehicleEnterColshape);
-            Station.Colshape.SetOnVehicleLeaveColShape(Events_VehicleExitColshape);
+            Station.Colshape.OnPlayerEnterColshape += Events_PlayerEnterColshape;
+            Station.Colshape.OnPlayerLeaveColshape += Events_PlayerExitColshape;
+            Station.Colshape.OnVehicleEnterColshape += Events_VehicleEnterColshape;
+            Station.Colshape.OnVehicleLeaveColshape += Events_VehicleExitColshape;
 
             Inventory.MaxSlot = 40;
             Inventory.MaxSize = 750;
@@ -54,7 +50,7 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Event handlers
-        private void Events_PlayerExitColshape(IColShape colShape, IPlayer client)
+        private void Events_PlayerExitColshape(IColshape colshape, IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -62,12 +58,12 @@ namespace ResurrectionRP_Server.Business
             MenuManager.CloseMenu(client);
         }
 
-        private void Events_PlayerEnterColshape(IColShape colShape, IPlayer client)
+        private void Events_PlayerEnterColshape(IColshape colshape, IPlayer client)
         {
             if (!client.Exists)
                 return;
 
-            if (!colShape.IsEntityInColShape(client)) return;
+            if (!colshape.IsEntityIn(client)) return;
 
             if (client.Vehicle == null)
                 return;
@@ -103,7 +99,7 @@ namespace ResurrectionRP_Server.Business
             }
         }
 
-        private void Events_VehicleEnterColshape(IColShape colshape, IVehicle vehicle)
+        private void Events_VehicleEnterColshape(IColshape colshape, IVehicle vehicle)
         {
             if (!vehicle.Exists)
                 return;
@@ -114,28 +110,28 @@ namespace ResurrectionRP_Server.Business
             return;
         }
 
-        private void Events_VehicleExitColshape(IColShape colshape, IVehicle vehicle)
+        private void Events_VehicleExitColshape(IColshape colshape, IVehicle vehicle)
         {
             if (!vehicle.Exists)
                 return;
 
-            if (this.Station.VehicleInStation.ContainsKey(vehicle.Id) && Array.IndexOf(allowedTrailers, vehicle.Model) == -1)
-                this.Station.VehicleInStation.TryRemove(vehicle.Id, out IVehicle veh);
+            if (Station.VehicleInStation.ContainsKey(vehicle.Id) && Array.IndexOf(allowedTrailers, vehicle.Model) == -1)
+                Station.VehicleInStation.TryRemove(vehicle.Id, out IVehicle veh);
 
             if (vehicle.Driver == null)
                 return;
+
             IPlayer client = vehicle.Driver;
 
             if (!client.Exists)
                 return;
-
 
             if (_utilisateurRavi == client && _ravitaillement )
             {
                 _ravitaillement = false;
                 _utilisateurRavi = null;
                 // API.Shared.OnProgressBar(client, false);
-                Task.Run(async () => { await Update(); });
+                UpdateInBackground();
                 client.DisplayHelp("~r~Vous êtes sorti de la zone de ravitaillement", 12000);
             }
         }

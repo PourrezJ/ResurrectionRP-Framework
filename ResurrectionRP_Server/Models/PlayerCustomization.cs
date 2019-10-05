@@ -110,7 +110,7 @@ namespace ResurrectionRP_Server.Models
             }
         }
 
-        public bool HasDecoration(int overlay)
+        public bool HasDecoration(uint overlay)
         {
             if (Decorations == null)
                 return false;

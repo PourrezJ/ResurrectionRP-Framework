@@ -11,5 +11,6 @@ namespace ResurrectionRP_Server.Utils
         public const byte NB_VEHICLE_DOORS = 8;
         public const int NB_VEHICLE_WINDOWS = 4;
         public const double MAX_INTERACTION_DISTANCE = 1.5f;
+        public const double SAVE_WAIT_TIME = 2000.0;
     }
 }

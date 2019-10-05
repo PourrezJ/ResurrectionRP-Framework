@@ -3,6 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using ResurrectionRP_Server.Bank;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities.Peds;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Models;
@@ -153,7 +154,7 @@ namespace ResurrectionRP_Server.Society.Societies
     {
         #region Private fields
         private Ped _npc;
-        private IColShape _workZone;
+        private IColshape _workZone;
         private byte _modType;
         private string _subtitle;
         private double _price;
@@ -193,9 +194,9 @@ namespace ResurrectionRP_Server.Society.Societies
             _npc = Ped.CreateNPC(PedModel.Benny, PnjLocation.Pos, PnjLocation.Rot.Z, GameMode.GlobalDimension);
             _npc.NpcInteractCallBack = OnInteractWithPnj;
 
-            _workZone = Alt.CreateColShapeCylinder(new Vector3(WorkZonePosition.X, WorkZonePosition.Y, WorkZonePosition.Z - 1), 10, 5);
-            _workZone.SetOnVehicleEnterColShape(OnVehicleEnterWorkzone);
-            _workZone.SetOnVehicleLeaveColShape(OnVehicleLeaveWorkzone);
+            _workZone = ColshapeManager.CreateCylinderColshape(new Vector3(WorkZonePosition.X, WorkZonePosition.Y, WorkZonePosition.Z - 1), 10, 5);
+            _workZone.OnVehicleEnterColshape += OnVehicleEnterWorkzone;
+            _workZone.OnVehicleLeaveColshape += OnVehicleLeaveWorkzone;
 
             base.Init();
         }
@@ -210,7 +211,7 @@ namespace ResurrectionRP_Server.Society.Societies
                 client.SendNotificationError("Aucun véhicule devant l'établi.");
         }
 
-        private void OnVehicleEnterWorkzone(IColShape colShape, IVehicle vehicle)
+        private void OnVehicleEnterWorkzone(IColshape colshape, IVehicle vehicle)
         {
             if (vehicle == null || !vehicle.Exists)
                 return;
@@ -219,7 +220,7 @@ namespace ResurrectionRP_Server.Society.Societies
                 VehicleBench = vehicle;
         }
 
-        private void OnVehicleLeaveWorkzone(IColShape colShape, IVehicle vehicle)
+        private void OnVehicleLeaveWorkzone(IColshape colshape, IVehicle vehicle)
         {
             if (vehicle == null || !vehicle.Exists)
                 return;

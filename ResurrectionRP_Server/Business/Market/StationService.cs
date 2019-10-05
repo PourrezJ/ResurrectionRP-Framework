@@ -12,11 +12,10 @@ namespace ResurrectionRP_Server.Business
         public float Range;
         public int ID;
         public int EssencePrice = 1;
-        public float Litrage = 0;
+        public float Litrage;
         public int LitrageMax = 3000;
-        public float buyEssencePrice = 0.5f;
         [BsonIgnore]
-        public ConcurrentDictionary<int, IVehicle> VehicleInStation = new ConcurrentDictionary<int,IVehicle>();
+        public ConcurrentDictionary<int, IVehicle> VehicleInStation;
         [BsonIgnore]
         public Entities.Blips.Blips StationBlip;
         [BsonIgnore]

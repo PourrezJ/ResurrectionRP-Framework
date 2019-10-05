@@ -69,9 +69,6 @@ namespace ResurrectionRP_Server.Business
                 MenuItem _item = new MenuItem("Prix de revente de l'essence", "", "ID_EssencePrice", true, false, $"${Station.EssencePrice} + ${GameMode.Instance.Economy.Taxe_Essence}");
                 _item.SetInput(Station.EssencePrice.ToString(), 10, InputType.UFloat);
                 menu.Add(_item);
-                _item = new MenuItem("Prix acheté de l'essence", "", "ID_BuyEssencePrice", true, false, $"${Station.buyEssencePrice}");
-                _item.SetInput(Station.EssencePrice.ToString(), 10, InputType.UFloat);
-                menu.Add(_item);
 
                 if ( IsOwner(client))
                     menu.Add(new MenuItem($"Gérer les finances", "", "ID_TakeMoney", true, rightLabel: $"${BankAccount.Balance}"));
@@ -140,17 +137,6 @@ namespace ResurrectionRP_Server.Business
                         Task.Run(async () => { await OnNpcSecondaryInteract(client, Ped); });
                     }
                     break;
-
-                case "ID_BuyEssencePrice":
-                    if (int.TryParse(menuItem.InputValue, out int prix))
-                    {
-                        Station.buyEssencePrice = prix;
-                        UpdateInBackground();
-                        client.SendNotification($"Le nouveau prix de l'essence acheté est de ${Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence} .");
-                        Task.Run(async () => { await OnNpcSecondaryInteract(client, Ped); });
-                    }
-                    break;
-
                 default:
                     break;
             }

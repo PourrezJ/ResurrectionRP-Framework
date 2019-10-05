@@ -64,12 +64,11 @@ namespace ResurrectionRP_Server.Farms
         public override void Init()
         {
             base.Init();
-            RaffinerieColshape = AltV.Net.Alt.CreateColShapeCylinder(RaffineriePos, 10, 4);
+            RaffinerieColshape = Alt.CreateColShapeCylinder(RaffineriePos, 10, 4);
             RaffinerieColshape.Dimension = GameMode.GlobalDimension;
             RaffinerieColshape.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
 
-
-            SellingColshape = AltV.Net.Alt.CreateColShapeCylinder(SellPos, 10, 4);
+            SellingColshape = Alt.CreateColShapeCylinder(SellPos, 10, 4);
             SellingColshape.Dimension = GameMode.GlobalDimension;
             SellingColshape.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
 

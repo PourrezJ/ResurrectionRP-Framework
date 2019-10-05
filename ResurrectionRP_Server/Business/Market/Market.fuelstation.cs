@@ -18,7 +18,7 @@ namespace ResurrectionRP_Server.Business
 
         public static void OpenGasPumpMenu(IPlayer client)
         {
-            Market fuelpump = MarketsList.Find(x => x.Station.Colshape.IsEntityInColShape(client));
+            Market fuelpump = MarketsList.Find(x => x.Station.Colshape.IsEntityIn(client));
 
             if (fuelpump == null)
             {

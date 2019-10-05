@@ -358,7 +358,7 @@ namespace ResurrectionRP_Server.Models
                     else if (vehicleType == -1)
                         vehicleListParked = ListVehicleStored.FindAll(p => VehiclesManager.GetVehicleHandler(p.Plate)?.OwnerID == social || ph.ListVehicleKey.Exists(v => v?.Plate == p.Plate));
                     else
-                        vehicleListParked = ListVehicleStored.FindAll(p => (VehiclesManager.GetVehicleHandler(p.Plate)?.OwnerID == social || ph.ListVehicleKey.Exists(v => v?.Plate == p.Plate) && VehiclesManager.GetVehicleHandler(p.Plate)?.VehicleManifest?.VehicleClass == vehicleType));
+                        vehicleListParked = ListVehicleStored.FindAll(p => (VehiclesManager.GetVehicleHandler(p.Plate)?.OwnerID == social || ph.ListVehicleKey.Exists(v => v?.Plate == p.Plate)) && VehiclesManager.GetVehicleHandler(p.Plate).VehicleManifest.VehicleClass == vehicleType);
 
                 }
                 catch (Exception ex)

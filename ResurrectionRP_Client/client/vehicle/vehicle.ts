@@ -42,9 +42,12 @@ export function initialize() {
             {
                 let vehId = entity.scriptID;
 
-                //if (game.isVehicleSeatFree(vehId, -1, false))
-                //    game.setVehicleOnGroundProperly(vehId, 5.0);
-               
+                if (game.isVehicleSeatFree(vehId, -1, false))
+                    game.setVehicleOnGroundProperly(vehId, 0);
+
+                game.setVehicleAsNoLongerNeeded(vehId);
+
+
                 alt.setTimeout(() => {
                     let sirenSound: boolean = entity.getSyncedMeta("SirenDisabled");
                     

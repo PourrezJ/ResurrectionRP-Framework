@@ -40,9 +40,20 @@ namespace ResurrectionRP_Server.Illegal
             }
         }
 
+        public void OnPlayerDisconnected(IPlayer client)
+        {
+            foreach (var illegal in IllegalList)
+            {
+                illegal.OnPlayerDisconnected(client);
+            }
+        }
+
         public static async Task InitAll()
         {
             Alt.Server.LogDebug("--- Start loading all illegal business in database ---");
+
+            var BlackMarket = new BlackMarket();
+            BlackMarket.Init();
 
             var _illagelBusinessesList = await Database.MongoDB.GetCollectionSafe<IllegalSystem>("illegal").AsQueryable().ToListAsync();
             foreach (var _businesses in _illagelBusinessesList)
@@ -50,11 +61,17 @@ namespace ResurrectionRP_Server.Illegal
                 if (_businesses.GetType() == typeof(WeedBusiness))
                     WeedBusiness = _businesses as WeedBusiness;
 
-                
-
-                await _businesses.Load();
+                _businesses.Load();
                 IllegalList.Add(_businesses);
             }
+
+            if (WeedBusiness == null)
+            {
+                WeedBusiness = new WeedBusiness();
+                await WeedBusiness.Insert();
+                WeedBusiness.Load();
+            }
+
 
             Alt.Server.LogDebug($"--- Finish loading all illegal businesses in database: {_illagelBusinessesList.Count} ---");
 
@@ -94,13 +111,13 @@ namespace ResurrectionRP_Server.Illegal
         [BsonIgnore]
         public Ped DealerPed;
 
-        public virtual async Task Load()
+        public virtual void Load()
         {
             if (NextRefreshDealerPos < DateTime.Now || NextRefreshDealerPos == new DateTime())
             {
                 NextRefreshDealerPos = DateTime.UtcNow.AddDays(7);
                 CurrentPos = Utils.Utils.RandomNumber(0, DealerLocations.Length);
-                await Update();
+                Task.Run(async()=> await Update());
             }
 
             if (DealerLocations.Length > 0)
@@ -169,12 +186,21 @@ namespace ResurrectionRP_Server.Illegal
             return Task.CompletedTask;
         }
 
+        public async Task Insert()
+        {
+            await Database.MongoDB.Insert("illegal", this);
+        }
+
         public async Task Update()
         {
             await Database.MongoDB.Update(this, "illegal", _id);
         }
 
         public virtual void OnPlayerConnected(IPlayer client)
+        {
+        }
+
+        public virtual void OnPlayerDisconnected(IPlayer client)
         {
         }
     }

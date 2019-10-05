@@ -10,6 +10,7 @@ using ResurrectionRP_Server.Entities.Players.Data;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Factions;
 using ResurrectionRP_Server.Houses;
+using ResurrectionRP_Server.Illegal;
 using ResurrectionRP_Server.Inventory;
 using ResurrectionRP_Server.Models;
 using System;
@@ -43,6 +44,7 @@ namespace ResurrectionRP_Server.Entities.Players
             new VehicleCommands();
             new FactionsCommands();
             new HouseCommands();
+            new IllegalCommands();
 
             AltAsync.OnClient("LogPlayer", LogPlayer);
             AltAsync.OnClient("MakePlayer", MakePlayer);

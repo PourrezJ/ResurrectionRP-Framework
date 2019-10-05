@@ -5,10 +5,9 @@ using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Illegal.WeedLab;
-using ResurrectionRP_Server.Inventory;
+using ResurrectionRP_Server.Illegal.WeedLab.Data;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
-using ResurrectionRP_Server.XMenuManager;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -19,22 +18,10 @@ using System.Timers;
 
 namespace ResurrectionRP_Server.Illegal
 {
-    public class Drying
+    public partial class WeedBusiness : IllegalSystem
     {
-        public SeedType WeedType = SeedType.Aucune;
-        public DateTime FinalDateTime { private set; get; } = DateTime.Now.AddMinutes(10);
-        public Drying(SeedType weedtype) { WeedType = weedtype; }
-    }
-
-    public class WeedBusiness : IllegalSystem
-    {
-        #region Static Variables
-        public static List<WeedBusiness> WeedlabsList = new List<WeedBusiness>();
-        #endregion
-
         #region Private Variables
-        private Vector3 Position = new Vector3(1744.833f, -1600.628f, 112.639f);
-        private Vector3 InventoryPos = new Vector3(1758.7f, -1616.392f, 113.6451f);
+        private Vector3 InventoryPos = new Vector3(1043.7627f, -3194.756f, -39.16992f);
         private Location InsideBat = new Location(new Vector3(1066.032f, -3183.42f, -39.1635f), new Vector3(0, 0, 85.58551f));
         private Timer Timer = new Timer(10000);
         #endregion
@@ -57,8 +44,11 @@ namespace ResurrectionRP_Server.Illegal
         };
 
         public List<Drying> InDryings { get; set; } = new List<Drying>();
-        [BsonIgnore]
+        [BsonIgnore, JsonIgnore]
         public IColShape InventoryColshape { get; private set; }
+
+        [BsonIgnore, JsonIgnore]
+        public List<IPlayer> PlayersInside = new List<IPlayer>();
         #endregion
 
         #region C4tor
@@ -70,27 +60,12 @@ namespace ResurrectionRP_Server.Illegal
         #endregion
 
         #region Load
-        public override async Task Load()
+        public override void Load()
         {
             DealerPedHash = PedModel.Hippie01;
 
             if (LabEnter == null)
-                Alt.Server.LogError("Aucune entrée pour le laboratoire de weed! Utilisez la commande /createweedlabs");
-
-            
-
-            foreach (WeedZone weedzone in WeedZoneList)
-            {
-                Marker.CreateMarker(MarkerType.VerticalCylinder, weedzone.Position,  new Vector3(1,1,1), Color.FromArgb(80, 0, 160, 0), GameMode.GlobalDimension);
-                weedzone.Textlabel = GameMode.Instance.Streamer.AddEntityTextLabel(LabelRefresh(weedzone), weedzone.Position + new Vector3(0, 0, 0.25f));
-                weedzone.Colshape = Alt.CreateColShapeCylinder(weedzone.Position, 1f, 1f);
-                weedzone.Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, weedzone.Position - new Vector3(0, 0, 1));
-
-                weedzone.OnGrowingChange += OnGrowingChange;
-                weedzone.OnGrowingClientEnter += OnGrowingClientEnter;
-
-                weedzone.Timer = Utils.Utils.SetInterval(() => weedzone.GrowLoop(), 5000);
-            }
+                LabEnter = new Location(new Vector3(), new Vector3());
 
             DealerLocations = new Location[]
             {
@@ -114,33 +89,56 @@ namespace ResurrectionRP_Server.Illegal
             if (Inventory == null)
                 Inventory = new Inventory.Inventory(1000, 40);
 
-            InventoryColshape = Alt.CreateColShapeCylinder(InventoryPos, 1f, 1f);
-            Marker.CreateMarker(MarkerType.VerticalCylinder, InventoryPos - new Vector3(0, 0, 1));
+            Marker.CreateMarker(MarkerType.VerticalCylinder, InventoryPos, new Vector3(1, 1, 0.1f));
+            InventoryColshape = Alt.CreateColShapeCylinder(InventoryPos - new Vector3(0,0,1), 1f, 3f);
+            InventoryColshape.SetOnPlayerInteractInColShape(ColshapeInteract);
+            InventoryColshape.SetOnPlayerEnterColShape(OnEnterColshape);
+
+            foreach (WeedZone weedzone in WeedZoneList)
+            {
+                weedzone.Textlabel = GameMode.Instance.Streamer.AddEntityTextLabel(LabelRefresh(weedzone), weedzone.Position + new Vector3(0, 0, 0.75f));
+                weedzone.Colshape = Alt.CreateColShapeCylinder(weedzone.Position, 1f, 1f);
+                weedzone.Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, weedzone.Position, new Vector3(1, 1, 0.2f), Color.FromArgb(160, 0, 100, 0));
+
+                weedzone.OnGrowingChange += OnGrowingChange;
+                weedzone.OnGrowingClientEnter += OnGrowingClientEnter;
+
+                weedzone.Timer = Utils.Utils.SetInterval(() => weedzone.GrowLoop(), 5000);
+
+                weedzone.Colshape.SetOnPlayerInteractInColShape(ColshapeInteract);
+                weedzone.Colshape.SetOnPlayerEnterColShape(OnEnterColshape);
+            }
+
+            if (LabEnter != null)
+                MakeDoor(LabEnter);
+
+            Marker.CreateMarker(MarkerType.VerticalCylinder, InsideBat.Pos - new Vector3(0, 0, 1), new Vector3(1, 1, 0.5f));
+            var colShape = Alt.CreateColShapeCylinder(InsideBat.Pos - new Vector3(0, 0, 1), 1.0f, 3f);
+            colShape.SetOnPlayerEnterColShape(OnEnterColshape);
+            colShape.SetOnPlayerInteractInColShape(OnPlayerInteractInColShapeOut);
 
             Timer.Elapsed += async (sender, e)
                 => await DryingLoop();
 
             Timer.Start();
-            WeedlabsList.Add(this);
 
-           // Alt.OnColShape += Alt_OnColShape;
-
-            await base.Load();
+            base.Load();
         }
 
-        private void Alt_OnColShape(IColShape colShape, IEntity targetEntity, bool state)
+        private void OnPlayerInteractInColShapeOut(IColShape colShape, IPlayer client)
         {
-            if (!state)
-                return;
+            client.Position = LabEnter.Pos;
+            client.Rotation = LabEnter.Rot;
+        }
 
+        private void OnEnterColshape(IColShape colShape, IPlayer client)
+        {
+            client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
+        }
 
-
-            var client = (IPlayer)targetEntity;
-
-            if (client == null)
-                return;
-
-            if (InventoryColshape == colShape)
+        private void ColshapeInteract(IColShape colShape, IPlayer client)
+        {
+            if (colShape == InventoryColshape)
             {
                 Menu menu = new Menu("ID_WeedMenu", "Weed Labs", $"Plante en cours de séchage: {InDryings.Count}", backCloseMenu: true);
                 menu.ItemSelectCallback = OnMenuCallBack;
@@ -151,29 +149,60 @@ namespace ResurrectionRP_Server.Illegal
             {
                 foreach (WeedZone weedzone in WeedZoneList)
                 {
-                    weedzone.OnGrowingZoneEnter(colShape, client);
+                    if (weedzone.Colshape == colShape)
+                    {
+                        weedzone.OnGrowingZoneEnter(colShape, client);
+                        return;
+                    }
                 }
             }
         }
         #endregion
 
         #region Events
+
+        public void MakeDoor(Location labenter)
+        {
+            if (LabEnter != labenter)
+            {
+                LabEnter = labenter;
+                Task.Run(async () => await Update());
+            }
+
+            Marker.CreateMarker(MarkerType.VerticalCylinder, LabEnter.Pos - new Vector3(0, 0, 1), new Vector3(1, 1, 0.2f));
+            var colShape = Alt.CreateColShapeCylinder(LabEnter.Pos - new Vector3(0, 0, 1), 1.0f, 3f);
+            colShape.SetOnPlayerEnterColShape(OnEnterColshape);
+            colShape.SetOnPlayerInteractInColShape(OnPlayerInteractInColShape);
+        }
+
+        private void OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
+        {
+            client.Position = InsideBat.Pos;
+            client.Rotation = InsideBat.Rot;
+            PlayersInside.Add(client);
+
+            client.Emit("Weedlabs_Enter", JsonConvert.SerializeObject(WeedZoneList), AdvancedEquipement);
+        }
+
         private void OnGrowingChange(WeedZone zone, bool changeGrowingState)
         {
-            if (zone.Advert >= 15)
+            lock (zone)
             {
-                zone.GrowingState = StateZone.Stage0;
-                zone.SeedUsed = SeedType.Aucune;
-                zone.Hydratation = 0;
-                zone.Plant = false;
+                if (zone.Advert >= 15)
+                {
+                    zone.GrowingState = StateZone.Stage0;
+                    zone.SeedUsed = SeedType.Aucune;
+                    zone.Hydratation = 0;
+                    zone.Plant = false;
+                }
+                else if (zone.GrowingState < StateZone.Stage3 && zone.Hydratation > 0 && zone.Spray == Spray.Off)
+                    zone.Hydratation -= 5;
+
+                LabelRefresh(zone);
+
+                if (changeGrowingState && zone.GrowingState != 0)
+                    RefreshClientInLabs(zone);
             }
-            else if (zone.GrowingState < StateZone.Stage3 && zone.Hydratation > 0 && zone.Spray == Spray.Off)
-                zone.Hydratation -= 5;
-
-            LabelRefresh(zone);
-
-            if (changeGrowingState && zone.GrowingState != 0)
-                RefreshClientInLabs(zone);
         }
 
         private void OnGrowingClientEnter(IPlayer client, WeedZone zone)
@@ -217,7 +246,13 @@ namespace ResurrectionRP_Server.Illegal
 
         public void RefreshClientInLabs(WeedZone zone)
         {
-            Alt.EmitAllClients("Weedlabs_Update", JsonConvert.SerializeObject(Position), JsonConvert.SerializeObject(zone));
+            foreach(var client in this.PlayersInside.ToList())
+            {
+                if (client.Exists)
+                    client.Emit("Weedlabs_Update", JsonConvert.SerializeObject(zone));
+                else
+                    PlayersInside.Remove(client);
+            }
         }
 
         public void Recolte(WeedZone zone)
@@ -227,6 +262,7 @@ namespace ResurrectionRP_Server.Illegal
             zone.Hydratation = 0;
             zone.Plant = false;
             InDryings.Add(new Drying(weedtype));
+            RefreshClientInLabs(zone);
         }
 
         private async Task DryingLoop()
@@ -260,157 +296,6 @@ namespace ResurrectionRP_Server.Illegal
         }
         #endregion
 
-        #region Menu
-        public void OpenMenuGrow(IPlayer client, WeedZone zone)
-        {
-            XMenu xmenu = new XMenu("ID_Weed");
-            xmenu.SetData("Zone", zone);
-            xmenu.Callback = GrowZoneMenuCallback;
-
-            var ph = client.GetPlayerHandler();
-
-            if (ph == null)
-                return;
-
-            if (zone.GrowingState == 0 && !zone.Plant)
-            {
-                if (GameMode.Instance.FactionManager.Lspd.ServicePlayerList.Count < 2)
-                {
-                    client.SendNotificationError("[HRP] Pas assez de miliciens de présent sur le serveur.");
-                    return;
-                }
-
-                if (!ph.HasItemID(ItemID.GSkunk) && !ph.HasItemID(ItemID.GSkunk) && ph.HasItemID(ItemID.GSkunk) && ph.HasItemID(ItemID.GSkunk))
-                {
-                    client.SendNotificationError("Vous n'avez pas de graine sur vous.");
-                    return;
-                }
-
-                if (ph.HasItemID(ItemID.GSkunk))
-                {
-                    xmenu.Add(new XMenuItem("Planter Skunk", "Planter vos graines de Skunk", "ID_SeedSkunk", XMenuItemIcons.SEEDLING_SOLID));
-                }
-
-                if (ph.HasItemID(ItemID.GPurple))
-                {
-                    xmenu.Add(new XMenuItem("Planter Purple", "Planter vos graines de Purple", "ID_SeedPurple", XMenuItemIcons.SEEDLING_SOLID));
-                }
-
-                if (ph.HasItemID(ItemID.GOrange))
-                {
-                    xmenu.Add(new XMenuItem("Planter OrangeBud", "Planter vos graines d'orange bud", "ID_SeedOrange", XMenuItemIcons.SEEDLING_SOLID));
-                }
-
-                if (ph.HasItemID(ItemID.GWhite))
-                {
-                    xmenu.Add(new XMenuItem("Planter White Widow", "Planter vos graines de White Widow", "ID_SeedWhite", XMenuItemIcons.SEEDLING_SOLID));
-                }
-            }
-
-            if (ph.HasItemID(ItemID.Hydro) && zone.Spray == Spray.Off)
-            {
-                xmenu.Add(new XMenuItem("Installer l'hydroponie", "Relier les pots au système d'hydroponie", "ID_Hydro", XMenuItemIcons.BRANDING_WATERMARK));
-            }
-
-            if (zone.Plant)
-            {
-                xmenu.Add(new XMenuItem("Arosser", "Arroser les pieds fait monter l'hydratation", "ID_Tint", XMenuItemIcons.TINT_SOLID));
-            }
-
-            if (zone.GrowingState == StateZone.Stage3 && ph.HasItemID(ItemID.Secateur))
-            {
-                xmenu.Add(new XMenuItem("Récolter", $"Récolter vos pieds de {zone.SeedUsed.ToString()} et les mettre a sécher (10minutes).", "ID_Recolte", XMenuItemIcons.CUT_SOLID));
-            }
-            xmenu.OpenXMenu(client);
-        }
-
-        private void GrowZoneMenuCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
-        {
-            WeedZone zone = (WeedZone)menu.GetData("Zone");
-            if (zone == null) return;
-
-            var ph = client.GetPlayerHandler();
-
-            if (ph == null)
-                return;
-
-            switch (menuItem.Id)
-            {
-                case "ID_SeedSkunk":
-                    if (ph.DeleteOneItemWithID(ItemID.GSkunk))
-                    {
-                        zone.SeedUsed = SeedType.Skunk;
-                        zone.Plant = true;
-                    }
-                    break;
-                case "ID_SeedPurple":
-                    if (ph.DeleteOneItemWithID(ItemID.GPurple))
-                    {
-                        zone.SeedUsed = SeedType.Purple;
-                        zone.Plant = true;
-                    }
-                    break;
-                case "ID_SeedOrange":
-                    if (ph.DeleteOneItemWithID(ItemID.GOrange))
-                    {
-                        zone.SeedUsed = SeedType.Orange;
-                        zone.Plant = true;
-                    }
-                    break;
-                case "ID_SeedWhite":
-                    if (ph.DeleteOneItemWithID(ItemID.GWhite))
-                    {
-                        zone.SeedUsed = SeedType.WhiteWidow;
-                        zone.Plant = true;
-                    }
-                    break;
-                case "ID_Hydro":
-                    if (ph.DeleteOneItemWithID(ItemID.Hydro))
-                    {
-                        zone.Spray = Spray.On;
-                        zone.Hydratation = 100;
-                    }
-                    break;
-                case "ID_Tint":
-                    if (zone.Hydratation + 10 <= 100)
-                        zone.Hydratation += 10;
-                    else zone.Hydratation = 100;
-                    break;
-                case "ID_Recolte":
-                    Recolte(zone);
-                    break;
-            }
-
-            LabelRefresh(zone);
-            Task.Run(async () => await Update());
-            
-            if (menuItem.Id == "ID_Tint")
-                menu.OpenXMenu(client);
-            else
-                RefreshClientInLabs(zone);
-        }
-
-        //public override void OnPlayerConnected(IPlayer client)
-        //{
-        //    client.Emit("Weedlabs_UpdateAll", JsonConvert.SerializeObject(Position), AdvancedEquipement, JsonConvert.SerializeObject(WeedZoneList));
-        //}
-        
-        private void OnMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
-        {
-            if (menuItem.Id == "OpenInventory")
-            {
-                var ph = client.GetPlayerHandler();
-                var inv = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, Inventory);
-                inv.OnMove += async (cl, inventaire) =>
-                {
-                    ph.UpdateFull();
-                    await Update();
-                };
-                menu.CloseMenu(client);
-                Task.Run(async()=> await inv.OpenMenu(client));
-            }
-        }
-
-        #endregion
+   
     }
 }

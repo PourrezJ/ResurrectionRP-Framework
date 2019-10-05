@@ -2,6 +2,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson.Serialization.Attributes;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Inventory;
@@ -224,8 +225,8 @@ namespace ResurrectionRP_Server.Factions
                     if (rack != null)
                     {
                         Racks[i].Load();
-                        Racks[i].Colshape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
-                        Racks[i].Colshape.SetOnVehicleEnterColShape(OnVehicleEnterColShape);
+                        Racks[i].Colshape.OnPlayerEnterColshape += OnPlayerEnterColShape;
+                        Racks[i].Colshape.OnVehicleEnterColshape += OnVehicleEnterColShape;
                     }
                 }
             }
@@ -270,7 +271,7 @@ namespace ResurrectionRP_Server.Factions
             OpenImportationMenu(client, listItem);
         }
 
-        public void OnVehicleEnterColShape(IColShape colShape, IVehicle vehicle)
+        public void OnVehicleEnterColShape(IColshape colshape, IVehicle vehicle)
         {
             if (vehicle.Driver == null)
                 return;
@@ -278,9 +279,9 @@ namespace ResurrectionRP_Server.Factions
 
             for (int i = 0; i < Racks.Count; i++)
             {
-                if (Racks[i].Colshape.IsEntityInColShape(player))
+                if (Racks[i].Colshape.IsEntityIn(player))
                 {
-                    Racks[i].OnPlayerEnterColShape(colShape, player);
+                    Racks[i].OnPlayerEnterColShape(colshape, player);
                     break;
                 }
             }

@@ -1,15 +1,14 @@
 using AltV.Net;
 using AltV.Net.Elements.Entities;
-using AltV.Net.Async;
 using AltV.Net.Enums;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Streamer.Data;
 using ResurrectionRP_Server.Utils;
 using System.Drawing;
 using System.Numerics;
-using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -24,7 +23,7 @@ namespace ResurrectionRP_Server.Factions
         [BsonIgnore, JsonIgnore]
         public TextLabel TextLabel = null;
         [BsonIgnore, JsonIgnore]
-        public IColShape Colshape;
+        public IColshape Colshape;
         #endregion
 
         #region Methods
@@ -64,11 +63,11 @@ namespace ResurrectionRP_Server.Factions
             }
 
             RefreshLabel();
-            Colshape = Alt.CreateColShapeCylinder(RackPos, 3, 6);
-            Colshape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
+            Colshape = ColshapeManager.CreateCylinderColshape(RackPos, 3, 6);
+            Colshape.OnPlayerEnterColshape += OnPlayerEnterColShape;
         }
 
-        public void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        public void OnPlayerEnterColShape(IColshape colshape, IPlayer client)
         {
             if (client.IsInVehicle)
             {

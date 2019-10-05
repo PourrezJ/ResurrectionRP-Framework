@@ -3,10 +3,11 @@ using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
-using ResurrectionRP_Server.Models;
-using ResurrectionRP_Server.Entities.Vehicles;
-using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Bank;
+using ResurrectionRP_Server.Colshape;
+using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Society.Societies;
 using ResurrectionRP_Server.Society.Societies.Bennys;
 using ResurrectionRP_Server.Society.Societies.WildCustom;
@@ -55,7 +56,7 @@ namespace ResurrectionRP_Server.Society
         public Parking Parking { get; set; }
 
         [BsonIgnore]
-        public IColShape ServiceColshape;
+        public IColshape ServiceColshape;
         [BsonIgnore]
         public Marker Marker;
 
@@ -91,9 +92,9 @@ namespace ResurrectionRP_Server.Society
                 // Blip
                 Blip = Entities.Blips.BlipsManager.CreateBlip(SocietyName, ServicePos, BlipColor,(int) BlipSprite, 1);
 
-                ServiceColshape = Alt.CreateColShapeCylinder(ServicePos - new Vector3(0.0f, 0.0f, 1f), 1f, 2f);
-                ServiceColshape.SetOnPlayerEnterColShape(OnPlayerEnterServiceColshape);
-                ServiceColshape.SetOnPlayerLeaveColShape(OnPlayerLeaveServiceColshape);
+                ServiceColshape = ColshapeManager.CreateCylinderColshape(ServicePos - new Vector3(0.0f, 0.0f, 1f), 1f, 2f);
+                ServiceColshape.OnPlayerEnterColshape += OnPlayerEnterServiceColshape;
+                ServiceColshape.OnPlayerLeaveColshape += OnPlayerLeaveServiceColshape;
                 Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, ServicePos - new Vector3(0.0f, 0.0f, 1f), new Vector3(1, 1f, 1f), Color.FromArgb(128, 255, 255, 255));
             }
 
@@ -119,7 +120,7 @@ namespace ResurrectionRP_Server.Society
         #endregion
 
         #region Event handlers
-        public virtual void OnPlayerEnterServiceColshape(IColShape colShape, IPlayer client)
+        public virtual void OnPlayerEnterServiceColshape(IColshape colshape, IPlayer client)
         {
             if (client == null || !client.Exists)
                 return;
@@ -127,7 +128,7 @@ namespace ResurrectionRP_Server.Society
             Task.Run(async () => { await OpenSocietyMainMenu(client); }).Wait();
         }
 
-        public virtual void OnPlayerLeaveServiceColshape(IColShape colShape, IPlayer client)
+        public virtual void OnPlayerLeaveServiceColshape(IColshape colshape, IPlayer client)
         {
             if (client == null || !client.Exists)
                 return;

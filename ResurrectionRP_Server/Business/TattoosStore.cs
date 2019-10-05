@@ -149,9 +149,9 @@ namespace ResurrectionRP_Server.Business
                 if (ClientSelected.Character.HasDecoration(selectedTattoo))
                 {
                     Decoration decoration = ClientSelected.Character.Decorations.FirstOrDefault(d => d.Overlay == selectedTattoo);
-                    ClientSelected.Client.RemoveDecorationAsync(decoration.Collection, decoration.Overlay);
                     ClientSelected.Character.Decorations.Remove(decoration);
-                    ClientSelected.UpdateFull();
+                    ResetTattoos();
+                    ClientSelected.UpdateInBackground();
                     UpdateInBackground();
                     client.SendNotificationSuccess("Vous avez retiré le tatouage");
                 }
@@ -162,7 +162,7 @@ namespace ResurrectionRP_Server.Business
                         uint collection = Alt.Hash(Tattoo.Collection);
                         uint overlay = (ClientSelected.Character.Gender == 0) ? Alt.Hash(Tattoo.HashNameMale) : Alt.Hash(Tattoo.HashNameFemale);
                         ClientSelected.Character.Decorations.Add(new Decoration(collection, overlay));
-                        ClientSelected.UpdateFull();
+                        ClientSelected.UpdateInBackground();
                         UpdateInBackground();
                         client.SendNotificationSuccess("Vous avez appliqué le tatouage");
                     }

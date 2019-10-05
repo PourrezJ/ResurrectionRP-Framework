@@ -22,7 +22,7 @@ namespace ResurrectionRP_Server.Colshape
         {
             if (!entity.Exists)
                 return false;
-            if (entity.Dimension != Dimension)
+            else if (entity.Dimension != Dimension)
                 return false;
             else if (entity.Position.Z < Position.Z || entity.Position.Z > Position.Z + Height)
                 return false;

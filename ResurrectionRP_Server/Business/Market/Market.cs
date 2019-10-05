@@ -119,23 +119,23 @@ namespace ResurrectionRP_Server.Business
             if (!vehicle.Exists)
                 return;
 
-            if (this.Station.VehicleInStation.ContainsKey(vehicle.Id) && Array.IndexOf(allowedTrailers, vehicle.Model) == -1)
-                this.Station.VehicleInStation.TryRemove(vehicle.Id, out IVehicle veh);
+            if (Station.VehicleInStation.ContainsKey(vehicle.Id) && Array.IndexOf(allowedTrailers, vehicle.Model) == -1)
+                Station.VehicleInStation.TryRemove(vehicle.Id, out IVehicle veh);
 
             if (vehicle.Driver == null)
                 return;
+
             IPlayer client = vehicle.Driver;
 
             if (!client.Exists)
                 return;
-
 
             if (_utilisateurRavi == client && _ravitaillement )
             {
                 _ravitaillement = false;
                 _utilisateurRavi = null;
                 // API.Shared.OnProgressBar(client, false);
-                Task.Run(async () => { await Update(); });
+                UpdateInBackground();
                 client.DisplayHelp("~r~Vous êtes sorti de la zone de ravitaillement", 12000);
             }
         }

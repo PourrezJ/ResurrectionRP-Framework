@@ -25,7 +25,7 @@ namespace ResurrectionRP_Server.Loader
             {
                 foreach (var _businesses in _businessesList)
                 {
-                    await _businesses.Update();
+                    _businesses.UpdateInBackground();
                     await Task.Delay(50);
                 }
             }, (int)TimeSpan.FromMinutes(5).TotalMilliseconds);

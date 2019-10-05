@@ -174,7 +174,7 @@ namespace ResurrectionRP_Server.Business.Barber
                 else
                 {
                     item.RightLabel = $"${beard.Price}";
-                    item.OnMenuItemCallbackAsync = BeardCutSelected;
+                    item.OnMenuItemCallback = BeardCutSelected;
                 }
 
                 menu.Add(item);
@@ -184,7 +184,7 @@ namespace ResurrectionRP_Server.Business.Barber
             await HairCutPreview(client, menu, 0, menu.Items[0]);
         }
 
-        private async Task BeardCutSelected(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void BeardCutSelected(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             Beards beard = Beards.BeardsList[itemIndex];
 
@@ -197,7 +197,7 @@ namespace ResurrectionRP_Server.Business.Barber
 
                 ClientSelected.Client.ApplyCharacter();
                 ClientSelected.UpdateFull();
-                await Update();
+                UpdateInBackground();
             }
             else
                 client.SendNotificationError("Vous n'avez pas de fond de caisse.");
@@ -233,7 +233,7 @@ namespace ResurrectionRP_Server.Business.Barber
                 else
                 {
                     item.RightLabel = $"${hairs.Price}";
-                    item.OnMenuItemCallbackAsync = HairCutSelected;
+                    item.OnMenuItemCallback = HairCutSelected;
                 }
 
                 menu.Add(item);
@@ -243,7 +243,7 @@ namespace ResurrectionRP_Server.Business.Barber
             await HairCutPreview(client, menu, 0, menu.Items[0]);
         }
 
-        private async Task HairCutSelected(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void HairCutSelected(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             List<Hairs> _hairsList = (ClientSelected.Character.Gender == 0) ? Hairs.HairsMenList : Hairs.HairsGirlList;
             Hairs hair = _hairsList[itemIndex];
@@ -253,7 +253,7 @@ namespace ResurrectionRP_Server.Business.Barber
                 ClientSelected.Character.Hair.Hair = hair.ID;
                 ClientSelected.Client.ApplyCharacter();
                 ClientSelected.UpdateFull();
-                await Update();
+                UpdateInBackground();
             }
             else
                 client.SendNotificationError("Vous n'avez pas de fond de caisse.");
@@ -317,13 +317,13 @@ namespace ResurrectionRP_Server.Business.Barber
             menu.Add(new ListItem("Couleur barbe secondaire", "Changer la couleur de la barbe secondaire.", "ID_BeardSecondColor", _colorlist, ClientSelected.Character.Hair.HighlightColor, true, true));
 
             MenuItem valid = new MenuItem("~g~Valider les choix", executeCallback: true);
-            valid.OnMenuItemCallbackAsync = ColorValidChoice;
+            valid.OnMenuItemCallback = ColorValidChoice;
             menu.Add(valid);
 
             menu.OpenMenu(client);
         }
 
-        private async Task ColorValidChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void ColorValidChoice(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (BankAccount.GetBankMoney(ColorPrice, $"Couleur par {client.GetPlayerHandler().Identite.Name}"))
             {
@@ -341,7 +341,7 @@ namespace ResurrectionRP_Server.Business.Barber
                 ClientSelected.Character.Appearance[1] = head;
                 ClientSelected.Client.ApplyCharacter();
                 ClientSelected.UpdateFull();
-                await Update();
+                UpdateInBackground();
             }
             else
             {

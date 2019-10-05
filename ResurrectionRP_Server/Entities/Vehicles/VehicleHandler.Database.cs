@@ -77,7 +77,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 try
                 {
                     await UpdatePropertiesAsync();
-                    var result = await Database.MongoDB.Update(this, "vehicles", Plate);
+                    var result = await Database.MongoDB.Update(this, "vehicles", Plate, _nbUpdateRequests);
 
                     if (result.ModifiedCount == 0)
                         Alt.Server.LogError($"Vehicule Update error for vehicle: {Plate} - Owner: {OwnerID}");

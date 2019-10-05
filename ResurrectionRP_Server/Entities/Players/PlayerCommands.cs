@@ -118,7 +118,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (business.Employees.ContainsKey(phWipe.PID))
                 {
                     business.Employees.Remove(phWipe.PID);
-                    await business.Update();
+                    business.UpdateInBackground();
                 }
             }
 

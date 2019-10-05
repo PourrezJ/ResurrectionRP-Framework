@@ -363,7 +363,7 @@ namespace ResurrectionRP_Server.Models
                 }
                 catch (Exception ex)
                 {
-                    Alt.Server.LogError($"OpenParkingMenu player: {client.GetSocialClub()} | parking: {this.Name} {this.ID}");
+                    Alt.Server.LogError($"OpenParkingMenu player: {client.GetSocialClub()} | parking: {Name} {ID} | {ex}");
                 }
 
                 List<VehicleHandler> vehicleList = VehiclesManager.GetAllVehicles().Where(v => vehicleListParked.Select(p => p.Plate).Contains(v.Plate)).ToList();

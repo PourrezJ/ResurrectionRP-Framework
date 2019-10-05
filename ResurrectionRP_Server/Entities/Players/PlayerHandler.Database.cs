@@ -101,7 +101,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     var result = await Database.MongoDB.Update(this, "players", PID, _nbUpdateRequests);
 
                     if (result.MatchedCount == 0)
-                        Alt.Server.LogWarning($"Player update error for: {Client.GetSocialClub()} - {Identite.Name}");
+                        Alt.Server.LogWarning($"Update error for player {Client.GetSocialClub()} - {Identite.Name}");
 
                     _updateWaiting = false;
                 }

@@ -8,7 +8,9 @@ using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Factions;
+using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Services;
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -71,7 +73,6 @@ namespace ResurrectionRP_Server.Database
                 VehicleHandler vehicle = (VehicleHandler)objet;
                 return $"Vehicle: {vehicle.Plate} - Owner: {vehicle.OwnerID} - Last driver: {vehicle.LastDriver}";
             }
-            /*
             else if (objet.GetType() == typeof(CarPark))
             {
                 CarPark park = (CarPark)objet;
@@ -95,16 +96,16 @@ namespace ResurrectionRP_Server.Database
                 else
                     return $"House: {house.ID}";
             }
-            else if (objet.GetType().IsSubclassOf(typeof(Society)))
+            else if (objet.GetType().IsSubclassOf(typeof(Society.Society)))
             {
-                Society society = (Society)objet;
+                Society.Society society = (Society.Society)objet;
 
                 if (society.Parking != null)
                     return $"Society: {society.SocietyName} - Vehicles: {society.Parking.ListVehicleStored.Count}";
                 else
                     return $"Society: {society.SocietyName}";
             }
-            */
+            
             return $"Unsupported object type {objet.GetType().ToString()}";
         }
         #endregion
@@ -201,12 +202,12 @@ namespace ResurrectionRP_Server.Database
             return null;
         }
 
-        public async static Task<UpdateResult> UpdateBankAccount(BankAccount bankAccount, [System.Runtime.CompilerServices.CallerMemberName] string caller = "", [System.Runtime.CompilerServices.CallerFilePath] string file = "", [System.Runtime.CompilerServices.CallerLineNumber] int line = 0)
+        public async static Task<UpdateResult> UpdateBankAccount(BankAccount bankAccount, int requests, [System.Runtime.CompilerServices.CallerMemberName] string caller = "", [System.Runtime.CompilerServices.CallerFilePath] string file = "", [System.Runtime.CompilerServices.CallerLineNumber] int line = 0)
         {
             try
             {
                 if (Config.GetSetting<bool>("DBProfiling"))
-                    Alt.Server.LogColored($"~m~{caller}() in {file.Substring(file.LastIndexOf('\\') + 1)} line {line} - Bank account: {bankAccount.AccountNumber} - Type: {bankAccount.AccountType.ToString()}");
+                    Alt.Server.LogColored($"~m~{caller}() in {file.Substring(file.LastIndexOf('\\') + 1)} line {line} - Requests: {requests} - Bank account: {bankAccount.AccountNumber} - Type: {bankAccount.AccountType.ToString()}");
                 
                 if (bankAccount.AccountType == AccountType.Business)
                 {

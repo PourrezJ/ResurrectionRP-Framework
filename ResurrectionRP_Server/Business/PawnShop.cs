@@ -48,7 +48,7 @@ namespace ResurrectionRP_Server.Business
 
             if (!Inventory.IsEmpty())
             {
-                _menu.ItemSelectCallbackAsync = StoreMenuManager;
+                _menu.ItemSelectCallback = StoreMenuManager;
                 for (int a = 0; a < Inventory.InventoryList.Length; a++)
                 {
                     var inv = Inventory.InventoryList[a];
@@ -109,17 +109,19 @@ namespace ResurrectionRP_Server.Business
                     menu.CloseMenu(client);
                     var invmenu = new Inventory.RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, Inventory, true);
 
-                    invmenu.OnMove += async (p, m) =>
+                    invmenu.OnMove += (p, m) =>
                     {
                         ph.UpdateFull();
-                        await Update();
+                        UpdateInBackground();
+                        return Task.CompletedTask;
                     };
 
-                    invmenu.PriceChange += async (p, m, stack, stackprice) =>
+                    invmenu.PriceChange += (p, m, stack, stackprice) =>
                     {
                         client.SendNotification($"Le nouveau prix de {stack.Item.name} est de ${stackprice} ");
                         ph.UpdateFull();
-                        await Update();
+                        UpdateInBackground();
+                        return Task.CompletedTask;
                     };
 
                     invmenu.OnClose += (p, m) =>
@@ -136,11 +138,11 @@ namespace ResurrectionRP_Server.Business
                     break;
             }
 
-            await Update();
+            UpdateInBackground();
             ph.UpdateFull();
         }
 
-        private async Task StoreMenuManager(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void StoreMenuManager(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             try
             {
@@ -163,7 +165,7 @@ namespace ResurrectionRP_Server.Business
                                 Inventory.Delete(itemStack, quantity);
                                 BankAccount.AddMoney(itemStack.Price * quantity, $"Achat de {itemStack.Item.name}", false);
                                 GameMode.Instance.Economy.CaissePublique += tax;
-                                await Update();
+                                UpdateInBackground();
                                 client.SendNotification($"Vous avez acheté un/des {itemStack.Item.name}(s) pour la somme de {(itemStack.Price * quantity) + tax} dont {tax} de taxes.");
                                 OpenMenu(client);
                             }

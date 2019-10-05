@@ -149,21 +149,18 @@ namespace ResurrectionRP_Server.Business
                     await ClientSelected.Client.RemoveDecorationAsync((uint)decoration.Collection, (uint)decoration.Overlay);
                     ClientSelected.Character.Decorations.Remove(decoration);
                     ClientSelected.UpdateFull();
-                    await Update();
+                    UpdateInBackground();
                     client.SendNotificationSuccess("Vous avez retiré le tatouage");
                 }
                 else
                 {
-                    if (BankAccount.GetBankMoney(Tattoo.Price, $"Tatouage par {this.BusinnessName}"))
+                    if (BankAccount.GetBankMoney(Tattoo.Price, $"Tatouage par {BusinnessName}"))
                     {
                         int collection = (int)Alt.Hash(Tattoo.Collection);
-                        int overlay = (ClientSelected.Character.Gender == 0)
-                            ? (int)Alt.Hash(Tattoo.HashNameMale)
-                            : (int)Alt.Hash(Tattoo.HashNameFemale);
-
+                        int overlay = (ClientSelected.Character.Gender == 0) ? (int)Alt.Hash(Tattoo.HashNameMale) : (int)Alt.Hash(Tattoo.HashNameFemale);
                         ClientSelected.Character.Decorations.Add(new Entities.Players.Data.Decoration(collection, overlay));
                         ClientSelected.UpdateFull();
-                        await Update();
+                        UpdateInBackground();
                         client.SendNotificationSuccess("Vous avez appliqué le tatouage");
                     }
                     else

@@ -156,10 +156,10 @@ namespace ResurrectionRP_Server.Bank
 
                 try
                 {
-                    var result = await Database.MongoDB.UpdateBankAccount(this);
+                    var result = await Database.MongoDB.UpdateBankAccount(this, _nbUpdateRequests);
                     
                     if (result.MatchedCount == 0)
-                        Alt.Server.LogWarning($"Bank account update error for Id {AccountNumber}");
+                        Alt.Server.LogWarning($"Update error for bank account {AccountNumber}");
 
                     _updateWaiting = false;
                 }

@@ -343,7 +343,7 @@ namespace ResurrectionRP_Server.Business
 
                 categories.Add(category);
                 categories.Sort();
-                await Update();
+                UpdateInBackground();
                 client.SendNotificationSuccess($"Catégorie {category} ajoutée");
             }
             else if (menuItem.Id == "ID_RemCategory")
@@ -360,7 +360,7 @@ namespace ResurrectionRP_Server.Business
                 }
 
                 categories.Remove(category);
-                await Update();
+                UpdateInBackground();
                 client.SendNotificationSuccess($"Catégorie {category} retirée");
             }
         }

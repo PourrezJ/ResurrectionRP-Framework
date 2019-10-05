@@ -240,7 +240,7 @@ namespace ResurrectionRP_Server.Factions
                 Menu menu = new Menu("ID_ServiceMenu", FactionName, "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
 
                 MenuItem item = new MenuItem($"{(ServicePlayerList.Contains(client.GetSocialClub()) ? "Quitter" : "Prendre")} son service", "", "ID_PriseService", true);
-                item.OnMenuItemCallbackAsync = ServiceMenuCallBack;
+                item.OnMenuItemCallback = ServiceMenuCallBack;
                 menu.Add(item);
 
                 var staffRank = client.GetPlayerHandler()?.StaffRank;
@@ -286,7 +286,7 @@ namespace ResurrectionRP_Server.Factions
             return null;
         }
 
-        private async Task ServiceMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void ServiceMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
@@ -294,7 +294,7 @@ namespace ResurrectionRP_Server.Factions
                 return;
             }
 
-            await PriseService(client);
+            Task.Run(async () => { await PriseService(client); });
         }
 
         private async Task OpenVestiaire(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)

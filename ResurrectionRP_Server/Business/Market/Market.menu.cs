@@ -55,10 +55,10 @@ namespace ResurrectionRP_Server.Business
 
         public override async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
         {
-            if ( IsOwner(client) ||  IsEmployee(client))
+            if (IsOwner(client) ||  IsEmployee(client))
             {
                 Inactivity = DateTime.Now;
-                menu.ItemSelectCallbackAsync += MarketOwnerMenuManager;
+                menu.ItemSelectCallback = MarketOwnerMenuManager;
 
                 menu.Items.AddRange(new List<MenuItem>()
                 {
@@ -82,11 +82,11 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Callbacks
-        public async Task MarketOwnerMenuManager(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        public void MarketOwnerMenuManager(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
-                await OnNpcSecondaryInteract(client, Ped);
+                Task.Run(async () => { await OnNpcSecondaryInteract(client, Ped); });
                 return;
             }
 
@@ -97,10 +97,12 @@ namespace ResurrectionRP_Server.Business
                 case "ID_TakeMoney":
                     Bank.BankMenu.OpenBankMenu(client, BankAccount, Bank.AtmType.Business, menu, MarketOwnerMenuManager);
                     break;
+
                 case "ID_Add":
                     menu.CloseMenu(client);
-                    var invmenu = new Inventory.RPGInventoryMenu(player.PocketInventory, player.OutfitInventory, player.BagInventory, Inventory, true);
                     Inventory.Locked = true;
+                    var invmenu = new Inventory.RPGInventoryMenu(player.PocketInventory, player.OutfitInventory, player.BagInventory, Inventory, true);
+
                     invmenu.OnMove += (p, m) =>
                     {
                         player.UpdateFull();
@@ -121,7 +123,7 @@ namespace ResurrectionRP_Server.Business
                         Inventory.Locked = false;
                         return Task.CompletedTask;
                     };
-                    await invmenu.OpenMenu(client);
+                    Task.Run(async () => { await invmenu.OpenMenu(client); });
                     break;
 
                 case "ID_Stats":
@@ -135,16 +137,17 @@ namespace ResurrectionRP_Server.Business
                         Station.EssencePrice = price;
                         UpdateInBackground();
                         client.SendNotification($"Le nouveau prix de l'essence est de ${Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence} dont ${GameMode.Instance.Economy.Taxe_Essence} de taxe.");
-                        await OnNpcSecondaryInteract(client, Ped);
+                        Task.Run(async () => { await OnNpcSecondaryInteract(client, Ped); });
                     }
                     break;
+
                 case "ID_BuyEssencePrice":
                     if (int.TryParse(menuItem.InputValue, out int prix))
                     {
                         Station.buyEssencePrice = prix;
                         UpdateInBackground();
                         client.SendNotification($"Le nouveau prix de l'essence acheté est de ${Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence} .");
-                        await OnNpcSecondaryInteract(client, Ped);
+                        Task.Run(async () => { await OnNpcSecondaryInteract(client, Ped); });
                     }
                     break;
 

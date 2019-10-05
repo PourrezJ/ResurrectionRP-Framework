@@ -34,6 +34,7 @@ namespace ResurrectionRP_Server.Society
             if (Owner != null && (client.GetPlayerHandler().StaffRank >= AdminRank.Moderator || FactionManager.IsGouv(client)))
             {
                 var identite = await Identite.GetOfflineIdentite(Owner);
+
                 if (identite != null)
                 {
                     menu.SubTitle = $"Propriétaire: {identite.Name ?? Owner}";
@@ -74,7 +75,7 @@ namespace ResurrectionRP_Server.Society
                 if (Owner == client.GetSocialClub() || FactionManager.IsGouv(client))
                 {
                     MenuItem getmoney = new MenuItem($"Gérer les finances", $"Caisse de l'entreprise: ${BankAccount.Balance}", "ID_money", executeCallback: true);
-                    getmoney.OnMenuItemCallbackAsync = FinanceMenu;
+                    getmoney.OnMenuItemCallback = FinanceMenu;
                     menu.Add(getmoney);
 
                     menu.Add(new MenuItem("Gestion des employés", "", "gemployee", executeCallback: true));
@@ -111,7 +112,7 @@ namespace ResurrectionRP_Server.Society
                     client.SendNotificationError("Vous n'êtes pas autorisé à prendre ce job");
             }
 
-            MenuManager.OpenMenu(client, menu);
+            menu.OpenMenu(client);
             return menu;
         }
 
@@ -252,11 +253,11 @@ namespace ResurrectionRP_Server.Society
         }
 
         // Récupérer l'argent dans la caisse.
-        private async Task FinanceMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void FinanceMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
-                await OpenSocietyMainMenu(client);
+                Task.Run(async () => { await OpenSocietyMainMenu(client); });
                 return;
             }
 

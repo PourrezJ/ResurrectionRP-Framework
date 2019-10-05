@@ -81,7 +81,7 @@ namespace ResurrectionRP_Server.Business
             if ( IsOwner(client) ||  IsEmployee(client))
             {
                 Inactivity = DateTime.Now;
-                menu.ItemSelectCallbackAsync += StoreOwnerMenuManager;
+                menu.ItemSelectCallback = StoreOwnerMenuManager;
 
                 menu.Add(new MenuItem("Ajouter des produits", "", "ID_Add", true));
 
@@ -96,11 +96,11 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Callbacks
-        public async Task StoreOwnerMenuManager(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        public void StoreOwnerMenuManager(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
-                await OnNpcSecondaryInteract(client, Ped);
+                Task.Run(async () => { await OnNpcSecondaryInteract(client, Ped); });
                 return;
             }
 
@@ -111,9 +111,10 @@ namespace ResurrectionRP_Server.Business
                 case "ID_TakeMoney":
                     Bank.BankMenu.OpenBankMenu(client, BankAccount, Bank.AtmType.Business, menu, StoreOwnerMenuManager);
                     break;
+
                 case "ID_Add":
-                    Inventory.Locked = true;
                     menu.CloseMenu(client);
+                    Inventory.Locked = true;
                     var invmenu = new Inventory.RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, Inventory, true);
 
                     invmenu.OnMove += (p, m) =>
@@ -137,16 +138,12 @@ namespace ResurrectionRP_Server.Business
                         return Task.CompletedTask;
                     };
 
-                    await invmenu.OpenMenu(client);
+                    Task.Run(async () => { await invmenu.OpenMenu(client); });
                     break;
 
                 default:
-
                     break;
             }
-
-            UpdateInBackground();
-            ph.UpdateFull();
         }
 
         private void StoreMenuManager(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)

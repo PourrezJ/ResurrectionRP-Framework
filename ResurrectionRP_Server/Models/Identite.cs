@@ -35,7 +35,6 @@ namespace ResurrectionRP_Server.Models
             {
                 var player = await Entities.Players.PlayerManager.GetPlayerHandlerDatabase(socialClub);
                 return player?.Identite;
-
             }
             catch (Exception)
             {

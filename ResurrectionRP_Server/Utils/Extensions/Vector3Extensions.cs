@@ -10,6 +10,7 @@ using AltV.Net.Async;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using ResurrectionRP_Server.Entities.Vehicles;
+using Newtonsoft.Json;
 
 namespace ResurrectionRP_Server
 {
@@ -107,15 +108,6 @@ namespace ResurrectionRP_Server
         }
 
 
-        public static IVehicle GetTowTruckInZone(this Position pos, float distance)
-        {
-            foreach(IVehicle veh in VehiclesManager.GetAllVehicles())
-            {
-                if (veh.Position.Distance(pos) <= distance && veh.Model == (uint)VehicleModel.Flatbed)
-                    return veh;
-            }
-            return null;
-        }
         public static Vector3 ConvertToVector3(this Position pos) => new Vector3(pos.X, pos.Y, pos.Z);
 
         public static Entity.Position ConvertToEntityPosition(this Position pos) => new Entity.Position { X = pos.X, Y = pos.Y, Z = pos.Z };

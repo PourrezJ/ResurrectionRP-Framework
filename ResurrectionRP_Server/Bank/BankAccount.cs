@@ -2,6 +2,7 @@
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -28,7 +29,6 @@ namespace ResurrectionRP_Server.Bank
         #endregion
 
         #region Fields
-        private static readonly double _updateWaitTime = 2000.0;
         private DateTime _lastUpdateRequest;
         private bool _updateWaiting = false;
         private int _nbUpdateRequests;
@@ -141,7 +141,7 @@ namespace ResurrectionRP_Server.Bank
 
             Task.Run(async () =>
             {
-                DateTime updateTime = _lastUpdateRequest.AddMilliseconds(_updateWaitTime);
+                DateTime updateTime = _lastUpdateRequest.AddMilliseconds(Globals.SAVE_WAIT_TIME);
 
                 while (DateTime.Now < updateTime)
                 {
@@ -151,7 +151,7 @@ namespace ResurrectionRP_Server.Bank
                         waitTime = new TimeSpan(0, 0, 0, 0, 1);
 
                     await Task.Delay((int)waitTime.TotalMilliseconds);
-                    updateTime = _lastUpdateRequest.AddMilliseconds(_updateWaitTime);
+                    updateTime = _lastUpdateRequest.AddMilliseconds(Globals.SAVE_WAIT_TIME);
                 }
 
                 try

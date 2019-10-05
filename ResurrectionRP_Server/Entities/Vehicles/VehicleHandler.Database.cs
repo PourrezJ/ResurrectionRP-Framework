@@ -1,9 +1,7 @@
 ﻿using AltV.Net;
-using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Utils;
 using System;
 using System.Threading.Tasks;
 
@@ -12,7 +10,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
     public partial class VehicleHandler
     {
         #region Fields
-        private static readonly double _updateWaitTime = 2000.0;
         private DateTime _lastUpdateRequest;
         private bool _updateWaiting = false;
         private int _nbUpdateRequests;
@@ -61,7 +58,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 _updateWaiting = true;
                 _nbUpdateRequests = 1;
 
-                DateTime updateTime = _lastUpdateRequest.AddMilliseconds(_updateWaitTime);
+                DateTime updateTime = _lastUpdateRequest.AddMilliseconds(Globals.SAVE_WAIT_TIME);
 
                 while (DateTime.Now < updateTime)
                 {
@@ -71,7 +68,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         waitTime = new TimeSpan(0, 0, 0, 0, 1);
 
                     await Task.Delay((int)waitTime.TotalMilliseconds);
-                    updateTime = _lastUpdateRequest.AddMilliseconds(_updateWaitTime);
+                    updateTime = _lastUpdateRequest.AddMilliseconds(Globals.SAVE_WAIT_TIME);
                 }
 
                 try

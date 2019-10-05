@@ -1,7 +1,6 @@
 ﻿using AltV.Net;
+using ResurrectionRP_Server.Utils;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Business
@@ -9,7 +8,6 @@ namespace ResurrectionRP_Server.Business
     public partial class Business
     {
         #region Fields
-        private static readonly double _updateWaitTime = 2000.0;
         private DateTime _lastUpdateRequest;
         private bool _updateWaiting = false;
         private int _nbUpdateRequests;
@@ -45,7 +43,7 @@ namespace ResurrectionRP_Server.Business
 
             Task.Run(async () =>
             {
-                DateTime updateTime = _lastUpdateRequest.AddMilliseconds(_updateWaitTime);
+                DateTime updateTime = _lastUpdateRequest.AddMilliseconds(Globals.SAVE_WAIT_TIME);
 
                 while (DateTime.Now < updateTime)
                 {
@@ -55,7 +53,7 @@ namespace ResurrectionRP_Server.Business
                         waitTime = new TimeSpan(0, 0, 0, 0, 1);
 
                     await Task.Delay((int)waitTime.TotalMilliseconds);
-                    updateTime = _lastUpdateRequest.AddMilliseconds(_updateWaitTime);
+                    updateTime = _lastUpdateRequest.AddMilliseconds(Globals.SAVE_WAIT_TIME);
                 }
 
                 try

@@ -29,6 +29,7 @@ namespace ResurrectionRP_Server.Business
                 for (int a = 0; a < Inventory.InventoryList.Length; a++)
                 {
                     var inv = Inventory.InventoryList[a];
+
                     if (inv != null)
                     {
                         List<object> values = new List<object>();

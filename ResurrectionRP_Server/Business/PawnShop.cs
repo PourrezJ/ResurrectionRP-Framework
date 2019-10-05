@@ -43,15 +43,16 @@ namespace ResurrectionRP_Server.Business
                 return;
             }
 
-            Menu _menu = new Menu("Pawn Shop", "", "Emplacements: " + Inventory.CurrentSize() + "/" + Inventory.MaxSize, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
-            _menu.BannerSprite = Banner.Guns;
-
             if (!Inventory.IsEmpty())
             {
-                _menu.ItemSelectCallback = StoreMenuManager;
+                Menu menu = new Menu("Pawn Shop", "", "Emplacements: " + Inventory.CurrentSize() + "/" + Inventory.MaxSize, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
+                menu.BannerSprite = Banner.Guns;
+                menu.ItemSelectCallback = StoreMenuManager;
+
                 for (int a = 0; a < Inventory.InventoryList.Length; a++)
                 {
                     var inv = Inventory.InventoryList[a];
+
                     if (inv != null)
                     {
                         List<object> values = new List<object>();
@@ -60,13 +61,19 @@ namespace ResurrectionRP_Server.Business
                         ListItem item = new ListItem(inv.Item.name + " ($ " + (inv.Price + gettaxe).ToString() + ")", inv.Item.description, "item_" + inv.Item.name, values, 0);
                         item.ExecuteCallback = true;
                         item.SetData("StackIndex", a);
-                        _menu.Add(item);
+                        menu.Add(item);
                     }
                 }
+
+                menu.OpenMenu(client);
             }
             else
+            {
                 client.SendNotification("Il n'y a pas de produits en vente.");
-            MenuManager.OpenMenu(client, _menu);
+
+                if (MenuManager.HasOpenMenu(client))
+                    MenuManager.CloseMenu(client);
+            }
         }
 
         public override async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)

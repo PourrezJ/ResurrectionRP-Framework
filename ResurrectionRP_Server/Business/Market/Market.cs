@@ -32,14 +32,22 @@ namespace ResurrectionRP_Server.Business
         #region Init
         public override void Init()
         {
-            Station = new StationService(ID, Range, StationPos);
+            Inventory.MaxSlot = 40;
+            Inventory.MaxSize = 750;
+            MaxEmployee = 5;
+            base.Init();
+
+            MarketsList.Add(this);
+
             Station.StationBlip = Entities.Blips.BlipsManager.CreateBlip("Station essence", StationPos, 128, 361, 0.5f);
+            Station.VehicleInStation = new System.Collections.Concurrent.ConcurrentDictionary<int, IVehicle>();
             Station.Colshape = ColshapeManager.CreateCylinderColshape(StationPos - new Vector3(0,0,2), 14f, 6f);
             Station.LitrageMax = 3000; // temp
             Station.Colshape.OnPlayerEnterColshape += Events_PlayerEnterColshape;
             Station.Colshape.OnPlayerLeaveColshape += Events_PlayerExitColshape;
             Station.Colshape.OnVehicleEnterColshape += Events_VehicleEnterColshape;
             Station.Colshape.OnVehicleLeaveColshape += Events_VehicleExitColshape;
+
 
             Inventory.MaxSlot = 40;
             Inventory.MaxSize = 750;

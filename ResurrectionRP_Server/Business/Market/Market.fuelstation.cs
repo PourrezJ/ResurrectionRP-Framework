@@ -25,11 +25,16 @@ namespace ResurrectionRP_Server.Business
                 client.DisplaySubtitle( "Cette pompe est hors service.", 10000);
                 return;
             }
+            else if (fuelpump.Station.Litrage == 0)
+            {
+                client.DisplaySubtitle("La station est vide ! Impossible de faire le plein!", 10000);
+                return;
+            }
 
-            Menu menu = new Menu("ID_GasPumpMenuMain", "Station Essence", $"Prix du litre: {fuelpump.Station.EssencePrice}", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
-            menu.ItemSelectCallback = fuelpump.FuelMenuCallBack;
+            Menu menu = new Menu("ID_GasPumpMenuMain", "Station Essence", $"Prix du litre: {fuelpump.Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence}", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+            menu.ItemSelectCallbackAsync = fuelpump.FuelMenuCallBack;
+
             menu.SubTitle = "Mettre le plein dans:";
-
             if (fuelpump.Station.VehicleInStation.Count == 0)
             {
                 client.DisplaySubtitle( "Aucun véhicule près de la pompe.", 10000);
@@ -45,9 +50,9 @@ namespace ResurrectionRP_Server.Business
 
                 VehicleHandler vh = vehicle.GetVehicleHandler();
 
-                if (vh.Fuel > vh.FuelMax - 2)
+                if (vh.Fuel > (vh.FuelMax - 2))
                 {
-                    client.DisplayHelp("Il se peut que certains véhicule n'aient pas besoin de plein!", 10000);
+                    client.DisplaySubtitle("Il se peut que certains véhicule n'aient pas besoin de plein!", 10000);
                     continue;
                 }
 
@@ -59,30 +64,44 @@ namespace ResurrectionRP_Server.Business
             menu.OpenMenu(client);
         }
 
-        private void FuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private Task FuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             VehicleHandler vh = menuItem.GetData("Vehicle");
 
             if (vh == null)
-                return;
+                return Task.CompletedTask;
 
-            int price = CalculEssencePriceNeeded(vh, this.Station.EssencePrice);
-            AcceptMenu accept = AcceptMenu.OpenMenu(client, menu.Title, $"Prix du litre: ${Station.EssencePrice} || Taxe Etat: ${GameMode.Instance?.Economy.Taxe_Essence}", $"Mettre le plein dans {vh.Plate} pour la somme de ~r~${price}~w~.", rightlabel: $"${price}");
+            float maxFuel = vh.FuelMax - vh.Fuel;
+
+            if ((vh.FuelMax - vh.Fuel) > Station.Litrage && Station.Litrage > 0)
+            {
+                maxFuel = Station.Litrage;
+                client.DisplaySubtitle("Il n'y a pas assez d'essence pour faire le plein, \nvous serez remplis à hauteur du possible !", 10000);
+            }
+
+            float price = CalculEssencePriceNeeded(maxFuel, this.Station.EssencePrice);
+            AcceptMenu accept = AcceptMenu.OpenMenu(client, menu.Title, $"Prix du litre: ${Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence} TTC ", $"Mettre le plein dans {vh.VehicleManifest.DisplayName} pour la somme de ~r~${price}~w~.", rightlabel: $"${price}");
 
             accept.AcceptMenuCallBack = (IPlayer _client, bool reponse) =>
             {
-                if (reponse)
+                if (reponse && Station.Litrage >= maxFuel)
                 {
                     if (client.GetPlayerHandler().HasBankMoney(price, $"Plein d'essence {vh.Plate}."))
                     {
-                        vh.Fuel = vh.FuelMax;
+                        vh.Fuel += maxFuel;
+                        Station.Litrage -= maxFuel;
                         BankAccount.AddMoney(price, $"Plein du véhicule {vh.Plate}");
-                        client.DisplayHelp($"Le plein est fait.\n Vous avez payé ~r~${price}", 6000);
+                        client.DisplaySubtitle($"Le plein est fait.\n Vous avez payé ~r~${price}", 6000);
                         UpdateInBackground();
                     }
                     else
                         client.SendNotificationError("Vous n'avez pas assez d'argent en banque.");
 
+                    MenuManager.CloseMenu(client);
+                } 
+                else if (Station.Litrage < maxFuel)
+                {
+                    client.DisplaySubtitle("Impossible de remplir, la station est maintenant vide ! ", 10000);
                     MenuManager.CloseMenu(client);
                 }
                 else
@@ -90,6 +109,7 @@ namespace ResurrectionRP_Server.Business
 
                 return Task.CompletedTask;
             };
+            return Task.CompletedTask;
         }
         
         private void RefuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -141,6 +161,7 @@ namespace ResurrectionRP_Server.Business
                                 _ravitaillement = false;
                                 _utilisateurRavi = null;
                                 Utils.Utils.StopTimer(timer);
+                                UpdateInBackground();
                                 return;
 
                             }
@@ -151,6 +172,7 @@ namespace ResurrectionRP_Server.Business
                                 _ravitaillement = false;
                                 _utilisateurRavi = null;
                                 Utils.Utils.StopTimer(timer);
+                                UpdateInBackground();
                                 return;
                             }
 
@@ -159,10 +181,9 @@ namespace ResurrectionRP_Server.Business
                                 _ravitaillement = false;
                                 _utilisateurRavi = null;
 
-                                if (BankAccount.GetBankMoney(EssenceTransfert * this.Station.buyEssencePrice, "Achat essence au vendeur " + client.GetPlayerHandler()?.Identite.FirstName + " " + client.GetPlayerHandler()?.Identite.LastName, "", true))
-                                    client.GetPlayerHandler()?.BankAccount.AddMoney(EssenceTransfert * this.Station.buyEssencePrice, "Vente essence à la station " + this.BusinnessName);
 
                                 Utils.Utils.StopTimer(timer);
+                                UpdateInBackground();
                                 return;
                             }
 
@@ -183,7 +204,7 @@ namespace ResurrectionRP_Server.Business
             }
         }
 
-        public int CalculEssencePriceNeeded(Entities.Vehicles.VehicleHandler veh, int essencePrice)
-            => Convert.ToInt32((veh.FuelMax - veh.Fuel) * (GameMode.Instance.Economy.Taxe_Essence + essencePrice));
+        public float CalculEssencePriceNeeded(float fuel, float essencePrice)
+            => (float)((fuel) * (GameMode.Instance.Economy.Taxe_Essence + essencePrice));
     }
 }

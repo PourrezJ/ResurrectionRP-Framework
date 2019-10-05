@@ -191,7 +191,7 @@ namespace ResurrectionRP_Server.Colshape
                         {
                             if (!colshape.IsEntityIn(vehicle) && colshape.IsEntityInside(vehicle))
                             {
-                                Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} entering");
+                                Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} entering, {(DateTime.Now - startTime).TotalMilliseconds}ms");
                                 colshape.AddEntity(vehicle);
                                 OnVehicleEnterColshape?.Invoke(colshape, vehicle);
                             }

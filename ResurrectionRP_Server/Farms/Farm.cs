@@ -1,5 +1,4 @@
-﻿using AltV.Net;
-using AltV.Net.Async;
+﻿using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
@@ -206,12 +205,12 @@ namespace ResurrectionRP_Server.Farms
         #endregion
 
         #region Event handlers
-        public virtual void OnPlayerEnterColshape(IColShape colShape, IPlayer client)
+        public virtual void OnPlayerEnterColshape(IColshape colshape, IPlayer client)
         {
             return;
         }
 
-        public virtual void OnPlayerExitColshape(IColShape colShape, IPlayer player)
+        public virtual void OnPlayerExitColshape(IColshape colshape, IPlayer player)
         {
             PlayerHandler ph = player.GetPlayerHandler();
 

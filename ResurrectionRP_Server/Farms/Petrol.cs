@@ -2,6 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
@@ -26,8 +27,8 @@ namespace ResurrectionRP_Server.Farms
 
         public static VehicleModel[] allowedTrailers = new VehicleModel[3] { VehicleModel.ArmyTanker, VehicleModel.Tanker, VehicleModel.Tanker2 };
 
-        public IColShape RaffinerieColshape = null;
-        public IColShape SellingColshape = null;
+        public IColshape RaffinerieColshape = null;
+        public IColshape SellingColshape = null;
 
         public ConcurrentDictionary<IPlayer, System.Timers.Timer> Timers = new ConcurrentDictionary<IPlayer, System.Timers.Timer>();
 
@@ -64,13 +65,11 @@ namespace ResurrectionRP_Server.Farms
         public override void Init()
         {
             base.Init();
-            RaffinerieColshape = Alt.CreateColShapeCylinder(RaffineriePos, 10, 4);
-            RaffinerieColshape.Dimension = GameMode.GlobalDimension;
-            RaffinerieColshape.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
+            RaffinerieColshape = ColshapeManager.CreateCylinderColshape(RaffineriePos, 10, 4);
+            RaffinerieColshape.OnPlayerEnterColshape += OnPlayerEnterColshape;
 
-            SellingColshape = Alt.CreateColShapeCylinder(SellPos, 10, 4);
-            SellingColshape.Dimension = GameMode.GlobalDimension;
-            SellingColshape.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
+            SellingColshape = ColshapeManager.CreateCylinderColshape(SellPos, 10, 4);
+            SellingColshape.OnPlayerEnterColshape += OnPlayerEnterColshape;
 
             Marker.CreateMarker(MarkerType.VerticalCylinder, RaffineriePos - new Vector3(0,0,1), new Vector3(10, 10, 2), Color.FromArgb(0,0,0));
             Marker.CreateMarker(MarkerType.VerticalCylinder, Selling_PosRot.Pos - new Vector3(0,0,0), new Vector3(10, 10, 2), Color.FromArgb(0,0,0));
@@ -78,9 +77,9 @@ namespace ResurrectionRP_Server.Farms
             GameMode.Instance.Streamer.AddEntityTextLabel("~o~Appuyez sur E en dehors du véhicule\n pour lancer le remplissage", Harvest_Position[0]);
         }
 
-        public override void OnPlayerEnterColshape(IColShape colShape, IPlayer player)
+        public override void OnPlayerEnterColshape(IColshape colshape, IPlayer player)
         {
-            if (RaffinerieColshape.IsEntityInColShape(player))
+            if (RaffinerieColshape.IsEntityIn(player))
             {
                 IVehicle vehicle = null;
                 List<IVehicle> vehs = Process_PosRot.Pos.GetVehiclesInRange(20);
@@ -99,11 +98,11 @@ namespace ResurrectionRP_Server.Farms
                     StartProcessing(player);
 
             }
-            else if (SellingColshape.IsEntityInColShape(player))
+            else if (SellingColshape.IsEntityIn(player))
                 StartSelling(player);
 
 
-            base.OnPlayerEnterColshape(colShape, player);
+            base.OnPlayerEnterColshape(colshape, player);
         }
 
         public void TankFilling(IPlayer client, IVehicle trailer)

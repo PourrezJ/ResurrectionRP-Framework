@@ -275,11 +275,11 @@ namespace ResurrectionRP_Server.Factions
             });
         }
 
-        public virtual void OnPlayerEnterColShape(IColShape colShape, IPlayer player)
+        public virtual void OnPlayerEnterColShape(IColshape colshape, IPlayer player)
         {
         }
 
-        public virtual void OnPlayerExitColShape(IColShape colShape, IPlayer player)
+        public virtual void OnPlayerExitColShape(IColshape colshape, IPlayer player)
         {
         }
         #endregion

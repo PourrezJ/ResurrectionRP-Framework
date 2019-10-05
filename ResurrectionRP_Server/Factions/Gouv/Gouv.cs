@@ -1,6 +1,7 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities.Blips;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Factions.Model;
@@ -165,9 +166,9 @@ namespace ResurrectionRP_Server.Factions
             return base.OnVehicleOut(client, vehicleHandler, location);
         }
 
-        public override void OnPlayerEnterColShape(IColShape ColShapePointer, IPlayer player)
+        public override void OnPlayerEnterColShape(IColshape ColshapePointer, IPlayer player)
         {
-            if (_boatColShape == ColShapePointer)
+            if (_boatColShape == ColshapePointer)
             {
                 Menu menu = new Menu("", "", "", backCloseMenu: true);
                 menu.ItemSelectCallback = MenuCallback;
@@ -176,7 +177,7 @@ namespace ResurrectionRP_Server.Factions
                 menu.OpenMenu(player);
             }
 
-            base.OnPlayerEnterColShape(ColShapePointer, player);
+            base.OnPlayerEnterColShape(ColshapePointer, player);
         }
 
         public override async Task OnPlayerPromote(IPlayer client, int rang)

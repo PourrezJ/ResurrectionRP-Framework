@@ -345,7 +345,6 @@ namespace ResurrectionRP_Server
             return result;
         }
 
-
         public static void SetHeadOverlay(this IPlayer client, int overlayId, Business.Barber.HeadOverlayData overlayData)
         {
             client.EmitLocked("HeadOverlayVariation", overlayData.Index, overlayData.Opacity, overlayData.ColorId, overlayData.SecondaryColorId, overlayId);
@@ -399,6 +398,16 @@ namespace ResurrectionRP_Server
         public static void StopAnimation(this IPlayer client)
         {
             client.EmitLocked("StopAnimation");
+        }
+
+        public static void SetHeading(this IPlayer client, float heading)
+        {
+            client.EmitLocked("setEntityHeading", client, heading);
+        }
+
+        public static async Task SetHeadingAsync(this IPlayer client, float heading)
+        {
+            await client.EmitAsync("setEntityHeading", client, heading);
         }
 
         public static void RequestCollisionAtCoords(this IPlayer client, Vector3 pos)

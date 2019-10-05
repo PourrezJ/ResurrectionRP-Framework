@@ -19,8 +19,8 @@ namespace ResurrectionRP_Server.Factions
                 return;
 
             Menu menu = new Menu("ID_Importation", "Importation", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
-            menu.ItemSelectCallbackAsync = ImportationMenuCallback;
-            menu.IndexChangeCallbackAsync = ItemChangeCallback;
+            menu.ItemSelectCallback = ImportationMenuCallback;
+            menu.IndexChangeCallback = ItemChangeCallback;
             menu.FinalizerAsync = MenuFinalizer;
 
             foreach (DockItemData item in importItems)
@@ -38,7 +38,7 @@ namespace ResurrectionRP_Server.Factions
             client.Emit("InitDockOrder", ((DockItemData)menu.Items[0].GetData("DockItem")).Price);
         }
 
-        private async Task ImportationMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void ImportationMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem.Id == "Validate")
             {
@@ -61,10 +61,10 @@ namespace ResurrectionRP_Server.Factions
                     menu.CloseMenu(client);
             }
             else
-                await ItemChangeCallback(client, menu, itemIndex, menuItem);
+                ItemChangeCallback(client, menu, itemIndex, menuItem);
         }
 
-        private async Task ItemChangeCallback(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        private void ItemChangeCallback(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
             double itemPrice = 0;
             double itemTotal = 0;
@@ -79,7 +79,7 @@ namespace ResurrectionRP_Server.Factions
             }
 
             _orderPrice = CalculateOrderTotal(menu);
-            await client.EmitAsync("UpdateDockOrder", itemPrice, itemTotal, _orderPrice);
+            client.EmitLocked("UpdateDockOrder", itemPrice, itemTotal, _orderPrice);
         }
 
         private async Task MenuFinalizer(IPlayer client, Menu menu)

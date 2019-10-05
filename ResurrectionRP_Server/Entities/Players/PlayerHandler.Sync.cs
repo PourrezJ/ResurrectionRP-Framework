@@ -22,16 +22,16 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public bool IsCuff() => PlayerSync.IsCuff;
 
-        public async Task SetWalkingStyleAsync(string walkingAnim)
+        public void SetWalkingStyle(string walkingAnim)
         {
             PlayerSync.WalkingAnim = walkingAnim;
-            await Client?.SetSyncedMetaDataAsync("WalkingStyle", walkingAnim);
+            Client?.SetSyncedMetaData("WalkingStyle", walkingAnim);
         }
 
-        public async Task ResetWalkingStyleAsync()
+        public void ResetWalkingStyle()
         {
             PlayerSync.WalkingAnim = null;
-            await Client?.SetSyncedMetaDataAsync("WalkingStyle", null);
+            Client?.SetSyncedMetaData("WalkingStyle", null);
         }
 
         public async Task SetFacialAnim(string facial)

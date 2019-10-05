@@ -79,7 +79,7 @@ namespace ResurrectionRP_Server.Factions
                     return;
 
                 Menu menu = new Menu("ID_Rack", RackName, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
-                menu.ItemSelectCallbackAsync = MenuCallBack;
+                menu.ItemSelectCallback = MenuCallBack;
 
                 vehicle.GetData<InventoryBox>("BoxForks", out InventoryBox boxOnForks);
 
@@ -95,11 +95,11 @@ namespace ResurrectionRP_Server.Factions
             }
         }
 
-        private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menu.Id == "ID_Rack")
             {
-                var vehicle = await client.GetVehicleAsync();
+                IVehicle vehicle = client.Vehicle;
 
                 if (menuItem.Id == "ID_TakeRack")
                 {
@@ -110,9 +110,7 @@ namespace ResurrectionRP_Server.Factions
                 }
                 else if (menuItem.Id == "ID_OutRack")
                 {
-                    InventoryBox inventoryBox = null;
-
-                    if (vehicle.GetData("BoxForks", out inventoryBox))
+                    if (vehicle.GetData("BoxForks", out InventoryBox inventoryBox))
                     {
                         if (inventoryBox == null)
                             return;

@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server.Models
                 menu = new Menu("ID_WalkingMenu", "Style de marche", "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR)
             };
 
-            walkmenu.menu.ItemSelectCallbackAsync = walkmenu.WalkingStyleMenuCallBack;
+            walkmenu.menu.ItemSelectCallback = walkmenu.WalkingStyleMenuCallBack;
 
             foreach (WalkingStyle walk in WalkingStyles)
             {
@@ -57,7 +57,7 @@ namespace ResurrectionRP_Server.Models
         #endregion
 
         #region Callback
-        private async Task WalkingStyleMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void WalkingStyleMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             var ph = client.GetPlayerHandler();
 
@@ -73,10 +73,9 @@ namespace ResurrectionRP_Server.Models
             string anim = WalkingStyles.Find(x => x.Name == menuItem.Text).AnimName ?? "";
             
             if (string.IsNullOrEmpty(anim))
-                await ph.ResetWalkingStyleAsync();
+                ph.ResetWalkingStyle();
             else
-                await ph.SetWalkingStyleAsync(anim);
-            
+                ph.SetWalkingStyle(anim);
         }
         #endregion
     }

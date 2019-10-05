@@ -58,7 +58,7 @@ namespace ResurrectionRP_Server.Teleport
                         return;
 
                     Menu _menu = new Menu("ID_TeleportMenu", teleport.MenuTitle, "Sélectionnez une destination :", backCloseMenu: true);
-                    _menu.ItemSelectCallbackAsync = MenuCallBack;
+                    _menu.ItemSelectCallback = MenuCallBack;
 
                     if (data.State == TeleportState.Out)
                     {
@@ -141,7 +141,7 @@ namespace ResurrectionRP_Server.Teleport
         #endregion
 
         #region Methods
-        private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (!menuItem.HasData("Location"))
                 return;
@@ -149,8 +149,11 @@ namespace ResurrectionRP_Server.Teleport
             Location etage = menuItem.GetData("Location");
             client.RequestCollisionAtCoords(etage.Pos);
 
-            await client.SetPositionAsync(etage.Pos);
-            await client.SetRotationAsync(etage.Rot);
+            client.Position = etage.Pos;
+
+            // BUG v801: Set rotation when player in game not working
+            client.SetHeading(etage.Rot.Z);
+            // client.Rotation = etage.Rot;
         }
 
         public Teleport GetTeleport(int id) => Teleports.Find(t => t.ID == id);

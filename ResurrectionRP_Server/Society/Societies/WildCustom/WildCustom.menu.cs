@@ -64,7 +64,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
 
             Menu mainMenu = new Menu("ID_Main", "", SocietyName, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Garage);
             mainMenu.ItemSelectCallback = MainMenuCallback;
-            mainMenu.FinalizerAsync = Finalizer;
+            mainMenu.Finalizer = Finalizer;
 
             MenuItem cleaning = new MenuItem("Nettoyage", "", "Cleaning", true);
             mainMenu.Add(cleaning);

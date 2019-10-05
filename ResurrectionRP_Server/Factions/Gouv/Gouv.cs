@@ -170,7 +170,7 @@ namespace ResurrectionRP_Server.Factions
             if (_boatColShape == ColShapePointer)
             {
                 Menu menu = new Menu("", "", "", backCloseMenu: true);
-                menu.ItemSelectCallbackAsync = MenuCallback;
+                menu.ItemSelectCallback = MenuCallback;
                 menu.Add(new MenuItem("Inventaire", "", "ID_Inventaire", true));
 
                 menu.OpenMenu(player);
@@ -240,7 +240,7 @@ namespace ResurrectionRP_Server.Factions
             XMenuManager.XMenuManager.CloseMenu(client);
         }
 
-        private async Task MenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void MenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             var ph = client.GetPlayerHandler();
 
@@ -252,13 +252,15 @@ namespace ResurrectionRP_Server.Factions
                 if (menuItem.Id == "ID_Inventaire")
                 {
                     var inv = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, BoatInventory);
+
                     inv.OnMove += (cl, inventaire) =>
                     {
                         ph.UpdateFull();
                         UpdateInBackground();
                         return Task.CompletedTask;
                     };
-                    await inv.OpenMenu(client);
+
+                    Task.Run(async () => { await inv.OpenMenu(client); });
                 }
             }
         }

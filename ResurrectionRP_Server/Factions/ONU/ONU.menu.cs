@@ -30,7 +30,7 @@ namespace ResurrectionRP_Server.Factions
 
                     if (player.GetPlayerHandler().HasBankMoney(healprice, "Soin Hospital", false))
                     {
-                        ph.Health = 200;
+                        ph.SetHealth(200);
                         ph.PlayerSync.Injured = false;
                         ph.UpdateInBackground();
                         ph.Client.SendNotificationSuccess("Voilà qui est fait!");

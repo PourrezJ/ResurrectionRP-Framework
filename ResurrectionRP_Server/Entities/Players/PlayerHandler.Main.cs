@@ -313,6 +313,19 @@ namespace ResurrectionRP_Server.Entities.Players
 
             UpdateFull();
         }
+        
+        public void SetHealth(ushort health)
+        {
+            if (health < 0)
+                Health = 0;
+
+            Health = health;
+
+            if (Client.Exists)
+                Client.Health = health;
+
+            UpdateFull();
+        }
 
         public bool HasMoney(double somme)
         {

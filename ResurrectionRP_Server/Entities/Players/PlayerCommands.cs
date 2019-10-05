@@ -1,4 +1,4 @@
-﻿using AltV.Net.Async;
+using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Vehicles;
@@ -64,7 +64,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
             }
 
-            foreach (var vehicle in VehiclesManager.VehicleHandlerList.ToList())
+            foreach (KeyValuePair<IVehicle, VehicleHandler> vehicle in VehiclesManager.VehicleHandlerList)
             {
                 if (vehicle.Value.OwnerID == phWipe.PID)
                     await vehicle.Value.DeleteAsync(true);
@@ -82,7 +82,7 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 bool saveNeeded = false;
 
-                foreach (var vehicle in parking.ListVehicleStored.ToList())
+                foreach (ParkedCar vehicle in parking.ListVehicleStored)
                 {
                     if (vehicleOwned.Exists(p=>p.Plate == vehicle.Plate))
                     {

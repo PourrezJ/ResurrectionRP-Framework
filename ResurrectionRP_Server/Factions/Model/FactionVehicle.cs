@@ -16,7 +16,7 @@ namespace ResurrectionRP_Server.Factions.Model
         public int PrimaryColor;
         public int SecondaryColor;
 
-        public FactionVehicle(int rang, VehicleModel hash, int price = 0, int weight = 40, int maxSlot = 20, int primaryColor = -1, int secondaryColor = -1)
+        public FactionVehicle(int rang, VehicleModel hash, int price = 0, int weight = 40, int maxSlot = 20, byte primaryColor = 0, byte secondaryColor = 0)
         {
             Rang = rang;
             Hash = hash;

@@ -148,17 +148,19 @@ namespace ResurrectionRP_Server.Society
             OpenParkingMenu(vehicle?.Vehicle?.Driver);
         }
 
-        public virtual async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
+        public virtual Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
         {
             vehicle.Vehicle.Rotation = location.Rot.ConvertRotationToRadian();
             client.SetPlayerIntoVehicle(vehicle.Vehicle);
-            await Update();
+            UpdateInBackground();
+            return Task.CompletedTask;
         }
 
-        public virtual async Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
+        public virtual Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
         {
             vehicle.ParkingName = SocietyName;
-            await Update();
+            UpdateInBackground();
+            return Task.CompletedTask;
         }
         #endregion
 
@@ -220,12 +222,6 @@ namespace ResurrectionRP_Server.Society
 
             return employees;
         }
-
-        public async Task Insert()
-            => await Database.MongoDB.Insert("society", this);
-
-        public async Task Update()
-            => await Database.MongoDB.Update(this, "society", _id);
         #endregion
     }
 }

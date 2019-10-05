@@ -41,7 +41,7 @@ namespace ResurrectionRP_Server.Society
                 else
                 {
                     Owner = null;
-                    await Update();
+                    UpdateInBackground();
                 }
             }
 
@@ -142,10 +142,11 @@ namespace ResurrectionRP_Server.Society
                     menu.CloseMenu(client);
                     var invmenu = new Inventory.RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, Inventory, true);
 
-                    invmenu.OnMove += async (p, m) =>
+                    invmenu.OnMove += (p, m) =>
                     {
                         ph.UpdateFull();
-                        await Update();
+                        UpdateInBackground();
+                        return Task.CompletedTask;
                     };
 
                     invmenu.OnClose += (p, m) =>
@@ -168,7 +169,7 @@ namespace ResurrectionRP_Server.Society
                         else
                         {
                             Owner = socialClub;
-                            await Update();
+                            UpdateInBackground();
                             client.SendNotificationSuccess("Propriétaire changé");
                             await OpenSocietyMainMenu(client);
                         }
@@ -208,7 +209,7 @@ namespace ResurrectionRP_Server.Society
                         if (ph.HasBankMoney(PriceNameChange, "Changement de nom de societé."))
                         {
                             SocietyName = societyName;
-                            await Update();
+                            UpdateInBackground();
                             client.SendNotificationSuccess($"Vous avez changé le nom en {SocietyName}");
                         }
                         else
@@ -320,7 +321,7 @@ namespace ResurrectionRP_Server.Society
                     {
                         Employees.TryAdd(ph.PID, ph.Identite.Name);
                         client.SendNotificationSuccess($"{_msg} a été ajouté à la liste des employés");
-                        await Update();
+                        UpdateInBackground();
                     }
                     else
                         client.SendNotificationError($"{_msg} est introuvable.");
@@ -342,7 +343,7 @@ namespace ResurrectionRP_Server.Society
                             await QuitterService(ph.Client);
 
                         Employees.TryRemove(ph.PID, out _);
-                        await Update();
+                        UpdateInBackground();
                         client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
                         GestionEmployee(client, menu);
                         break;
@@ -350,7 +351,7 @@ namespace ResurrectionRP_Server.Society
                     else if ((await Identite.GetOfflineIdentite(playerID.Key)).Name == menuItem.Text)
                     {
                         Employees.TryRemove(ph.PID, out _);
-                        await Update();
+                        UpdateInBackground();
                         client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
                         GestionEmployee(client, menu);
                         break;

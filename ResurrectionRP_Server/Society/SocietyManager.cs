@@ -19,14 +19,14 @@ namespace ResurrectionRP_Server.Society
             Alt.Server.LogInfo("--- Start loading all society in database ---");
             var societyList = await Database.MongoDB.GetCollectionSafe<Society>("society").AsQueryable().ToListAsync();
 
-            Utils.Utils.Delay((int)TimeSpan.FromMinutes(7).TotalMilliseconds, async() =>
+            Utils.Utils.Delay((int)TimeSpan.FromMinutes(7).TotalMilliseconds, (Action)(async() =>
             {
                 foreach (var society in societyList)
                 {
-                    await society.Update();
+                    society.UpdateInBackground();
                     await Task.Delay(50);
                 }
-            });
+            }));
 
             await AltV.Net.Async.AltAsync.Do(() =>
             {

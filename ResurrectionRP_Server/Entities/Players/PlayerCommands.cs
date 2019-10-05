@@ -109,7 +109,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (society.Employees.ContainsKey(phWipe.PID))
                 {
                     society.Employees.TryRemove(phWipe.PID, out _);
-                    await society.Update();
+                    society.UpdateInBackground();
                 }
             }
 

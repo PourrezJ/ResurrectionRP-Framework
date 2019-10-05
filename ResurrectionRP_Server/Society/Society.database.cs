@@ -50,13 +50,13 @@ namespace ResurrectionRP_Server.Society
                     var result = await Database.MongoDB.Update(this, "society", _id, _nbUpdateRequests);
 
                     if (result.MatchedCount == 0)
-                        Alt.Server.LogWarning($"Update error for business {_id}");
+                        Alt.Server.LogWarning($"Update error for society {_id}");
 
                     _updateWaiting = false;
                 }
                 catch (Exception ex)
                 {
-                    Alt.Server.LogError($"BankAccount.UpdateInBackground() - {_id} - {ex}");
+                    Alt.Server.LogError($"Society.UpdateInBackground() - {_id} - {ex}");
                 }
             });
         }

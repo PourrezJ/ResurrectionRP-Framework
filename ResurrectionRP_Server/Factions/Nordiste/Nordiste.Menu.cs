@@ -124,7 +124,7 @@ namespace ResurrectionRP_Server.Factions
 
                         BankAccount.AddMoney(Convert.ToDouble(menuItem.GetData("price")), $"Paiement par {client.GetPlayerHandler()?.Identite.Name}, réglement amende {menuItem.GetData("name")}", false);
                         invoice.paid = true;
-                        await UpdateDatabase();
+                        UpdateInBackground();
                         client.DisplayHelp($"Vous venez de payer ~r~${menuItem.GetData("price")}~w~ pour régler votre amende.", 5000);
                         menu.CloseMenu(client);
                     }
@@ -186,7 +186,7 @@ namespace ResurrectionRP_Server.Factions
             MotifList.Add(new Motif("Client de la prostitution", 10000));
 
             Menu motifMenu = new Menu("ID_Invoice_Motif", "Amende", backCloseMenu: true);
-            motifMenu.ItemSelectCallbackAsync = InvoiceCallBack;
+            motifMenu.ItemSelectCallback = InvoiceCallBack;
             motifMenu.SetData("Player", _target);
 
             var validate = new MenuItem("~o~Verbaliser la personne", "Confirmer la verbalisation", "ID_Validate", executeCallback: true);
@@ -232,7 +232,7 @@ namespace ResurrectionRP_Server.Factions
             //await invoicemenu.OpenMenu(client);
         }
 
-        private async Task InvoiceCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void InvoiceCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             Invoice invoice = (!menu.HasData("CurrentInvoice")) ? new Invoice() : menu.GetData("CurrentInvoice");
 
@@ -272,7 +272,7 @@ namespace ResurrectionRP_Server.Factions
                         client.DisplaySubtitle("~r~Vous devez avoir sélectionné un motif et un prix pour mettre une amende.", 10000);
                         break;
                     }
-                    await CreateInvoice(client, invoice);
+                    CreateInvoice(client, invoice);
                     PlayerHandler clientHandler = invoice.Player.GetPlayerHandler();
                     client.DisplayHelp($"L'amende est enregistrée et a été envoyée à {clientHandler.Identite.Name}.", 10000);
                     invoice.Player.DisplayHelp($"Vous venez de recevoir une amende.\nVous avez 7 jours pour vous rendre au poste.", 10000);
@@ -286,12 +286,12 @@ namespace ResurrectionRP_Server.Factions
                 client.DisplaySubtitle($"~o~Motif~w~: {invoice.Desc} \n~g~Prix~w~: ~g~$~w~{invoice.Amount}", 5000);
         }
 
-        private async Task CreateInvoice(IPlayer client, Invoice invoice)
+        private void CreateInvoice(IPlayer client, Invoice invoice)
         {
             try
             {
                 InvoiceList.Add(invoice);
-                await UpdateDatabase();
+                UpdateInBackground();
             }
             catch (Exception ex)
             {

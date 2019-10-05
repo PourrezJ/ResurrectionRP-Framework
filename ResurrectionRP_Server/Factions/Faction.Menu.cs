@@ -101,14 +101,17 @@ namespace ResurrectionRP_Server.Factions
             menu.OpenXMenu(client);
         }
 
-        private async Task DissMissPlayer(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private Task DissMissPlayer(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             IPlayer _target = menu.GetData("Player");
-            if (_target == null) return;
+
+            if (_target == null)
+                return Task.CompletedTask;
 
             FactionPlayerList.Remove( _target.GetSocialClub(), out FactionPlayer value);
             _target.SendNotification($"Vous avez été renvoyé de {FactionName}.");
-            await UpdateDatabase();
+            UpdateInBackground();
+            return Task.CompletedTask;
         }
 
         private void InviteFactionChoise(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
@@ -175,18 +178,21 @@ namespace ResurrectionRP_Server.Factions
             await OnPlayerPromote(_target, itemIndex - 1);
             _target.SendNotification($"Vous êtes désormais {(rang.Rang >= rangActuel ? "~g~promu~w~" : "~r~rétrogradé~w~")} au rang de {rang.RangName}");
             client.SendNotificationSuccess($"Vous avez promu {_target.GetPlayerHandler().Identite.Name} au rang de {FactionRang[itemIndex - 1].RangName}");
-            await UpdateDatabase();
+            UpdateInBackground();
         }
 
-        private async Task Dismiss(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex)
+        private Task Dismiss(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex)
         {
             IPlayer target = menu.GetData("Target");
+
             if (target != null)
             {
-                this.FactionPlayerList.Remove(target.GetSocialClub(), out FactionPlayer value);
+                FactionPlayerList.Remove(target.GetSocialClub(), out FactionPlayer value);
                 target.SendNotification($"Vous avez été congédié de {FactionName}.");
-                await UpdateDatabase();
+                UpdateInBackground();
             }
+
+            return Task.CompletedTask;
         }
         #endregion
 
@@ -301,16 +307,18 @@ namespace ResurrectionRP_Server.Factions
                 return;
 
             var invmenu = new RPGInventoryMenu(_player.PocketInventory, _player.OutfitInventory, _player.BagInventory, FactionPlayerList[client.GetSocialClub()].Inventory);
-            invmenu.OnMove += async (p, m) =>
+            invmenu.OnMove += (p, m) =>
             {
                 _player.UpdateFull();
-                await UpdateDatabase();
+                UpdateInBackground();
+                return Task.CompletedTask;
             };
-            invmenu.PriceChange += async (p, m, stack, stackprice) =>
+            invmenu.PriceChange += (p, m, stack, stackprice) =>
             {
                 client.SendNotification($"Le nouveau prix de {stack.Item.name} est de ${stackprice} ");
                 _player.UpdateFull();
-                await UpdateDatabase();
+                UpdateInBackground();
+                return Task.CompletedTask;
             };
             await invmenu.OpenMenu(client);
         }
@@ -372,7 +380,7 @@ namespace ResurrectionRP_Server.Factions
                 }
             }
 
-            MenuManager.OpenMenu(client, menu);
+            menu.OpenMenu(client);
         }
 
         private async Task GestionMemberCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -386,6 +394,7 @@ namespace ResurrectionRP_Server.Factions
             if (menuItem.Id == "add_employe")
             {
                 string _msg = menuItem.InputValue;
+
                 if (!string.IsNullOrEmpty(_msg))
                 {
                     var ph = PlayerManager.GetPlayerByName(_msg);
@@ -401,18 +410,14 @@ namespace ResurrectionRP_Server.Factions
                         if (FactionPlayerList.TryAdd(ph.PID, new FactionPlayer(ph.PID, 0)))
                         {
                             client.SendNotificationSuccess($"{_msg} est ajouté à la liste des employés");
-                            await UpdateDatabase();
+                            UpdateInBackground();
                         }
                     }
                     else
-                    {
                         client.SendNotificationError($"{_msg} est introuvable.");
-                    }
                 }
                 else
-                {
                     client.SendNotificationError("Aucun nom de rentré.");
-                }
 
                 PriseServiceMenu(client);
             }
@@ -431,8 +436,9 @@ namespace ResurrectionRP_Server.Factions
                         {
                             client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
                             PriseServiceMenu(client);
-                            await UpdateDatabase();
+                            UpdateInBackground();
                         }
+
                         return;
                     }
                     else if ((await Identite.GetOfflineIdentite(playerID.Key)).Name == menuItem.Text)
@@ -441,12 +447,14 @@ namespace ResurrectionRP_Server.Factions
                         {
                             client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
                             PriseServiceMenu(client);
-                            await UpdateDatabase();
+                            UpdateInBackground();
                         }
+
                         return;
                     }
                 }
-            } else if(menuItem.Id == "ID_demissioner")
+            }
+            else if(menuItem.Id == "ID_demissioner")
             {
                 foreach (var playerID in FactionPlayerList)
                 {
@@ -462,8 +470,9 @@ namespace ResurrectionRP_Server.Factions
                         {
                             client.DisplayHelp($"Vous avez démissionné de la faction {FactionName}", 10000);
                             menu.CloseMenu(client);
-                            await UpdateDatabase();
+                            UpdateInBackground();
                         }
+
                         return;
                     }
                 }

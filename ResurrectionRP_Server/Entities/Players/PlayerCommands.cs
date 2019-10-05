@@ -100,7 +100,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (faction.FactionPlayerList.ContainsKey(phWipe.PID))
                 {
                     faction.FactionPlayerList.Remove(phWipe.PID, out FactionPlayer useless);
-                    await faction.UpdateDatabase();
+                    faction.UpdateInBackground();
                 }
             }
 

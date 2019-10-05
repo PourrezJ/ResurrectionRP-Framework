@@ -314,7 +314,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Methods
-        private async Task<bool> Dock_CommandeValidate(IPlayer player, Menu menu, Dictionary<DockItemData, int> importItems)
+        private bool Dock_CommandeValidate(IPlayer player, Menu menu, Dictionary<DockItemData, int> importItems)
         {
             if (!player.Exists)
                 return false;
@@ -363,7 +363,7 @@ namespace ResurrectionRP_Server.Factions
                 }
             }
 
-            await UpdateDatabase();
+            UpdateInBackground();
             Importation.RefreshLabel();
             player.SendNotificationSuccess("Commande validée!");
             return true;
@@ -422,19 +422,21 @@ namespace ResurrectionRP_Server.Factions
             await _inv.OpenMenu(player);
 
             // Save Inventory on move
-            _inv.OnMove = async (IPlayer c, RPGInventoryMenu m) =>
+            _inv.OnMove = (IPlayer c, RPGInventoryMenu m) =>
             {
                 ph.UpdateFull();
-                await UpdateDatabase();
+                UpdateInBackground();
                 rack?.RefreshLabel();
+                return Task.CompletedTask;
             };
 
             // Save Inventory on close
-            _inv.OnClose = async (IPlayer c, RPGInventoryMenu m) =>
+            _inv.OnClose = (IPlayer c, RPGInventoryMenu m) =>
             {
                 ph.UpdateFull();
-                await UpdateDatabase();
+                UpdateInBackground();
                 rack?.RefreshLabel();
+                return Task.CompletedTask;
             };
         }
 

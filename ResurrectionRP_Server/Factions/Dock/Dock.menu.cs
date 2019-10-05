@@ -55,7 +55,7 @@ namespace ResurrectionRP_Server.Factions
                     }
                 }
 
-                bool validation = await Dock_CommandeValidate(client, menu, importItems);
+                bool validation = Dock_CommandeValidate(client, menu, importItems);
 
                 if (validation)
                     menu.CloseMenu(client);

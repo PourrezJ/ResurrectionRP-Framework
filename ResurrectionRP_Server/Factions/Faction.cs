@@ -168,17 +168,19 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Event handlers
-        public virtual async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
+        public virtual Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
         {
             client.SetPlayerIntoVehicle(vehicle.Vehicle);
             vehicle.LockState = AltV.Net.Enums.VehicleLockState.Unlocked;
-            await UpdateDatabase();
+            UpdateInBackground();
+            return Task.CompletedTask;
         }
 
-        private async Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
+        private Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
         {
             vehicle.ParkingName = FactionName;
-            await UpdateDatabase();
+            UpdateInBackground();
+            return Task.CompletedTask;
         }
 
         public void OnPlayerEnterVestiaire(IColShape colShape, IPlayer client)
@@ -318,7 +320,7 @@ namespace ResurrectionRP_Server.Factions
             {
                 client.SendNotification($"Vous êtes désormais membre de {FactionName}");
                 client.GetPlayerHandler()?.UpdateFull();
-                await UpdateDatabase();
+                UpdateInBackground();
                 await PlayerFactionAdded(client);
             }
             else if (FactionPlayerList.ContainsKey(client.GetSocialClub()))
@@ -382,21 +384,6 @@ namespace ResurrectionRP_Server.Factions
 
             return _employeeOnline;
         }
-
-        public async Task UpdateDatabase()
-        {
-            try
-            {
-                await Database.MongoDB.Update(this, "factions", FactionName);
-            }
-            catch (Exception ex)
-            {
-                Alt.Server.LogError($"UpdateDatabase Faction: {FactionName}: " + ex);
-            }
-        }
-
-        public async Task InsertDatabase()
-            => await Database.MongoDB.Insert("factions", this);
 
         public List<FactionVehicle> GetVehicleAllowed(int rang)
         {

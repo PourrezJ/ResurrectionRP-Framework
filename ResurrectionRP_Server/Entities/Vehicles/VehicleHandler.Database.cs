@@ -39,25 +39,25 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (SpawnVeh)
                 return;
 
+            if (updateLastUse)
+                LastUse = DateTime.Now;
+
+            if (immediatePropertiesUpdate)
+                UpdateProperties();
+
+            _lastUpdateRequest = DateTime.Now;
+
+            if (_updateWaiting)
+            {
+                _nbUpdateRequests++;
+                return;
+            }
+
+            _updateWaiting = true;
+            _nbUpdateRequests = 1;
+
             Task.Run(async () =>
             {
-                if (updateLastUse)
-                    LastUse = DateTime.Now;
-
-                if (immediatePropertiesUpdate)
-                    await UpdatePropertiesAsync();
-
-                _lastUpdateRequest = DateTime.Now;
-
-                if (_updateWaiting)
-                {
-                    _nbUpdateRequests++;
-                    return;
-                }
-
-                _updateWaiting = true;
-                _nbUpdateRequests = 1;
-
                 DateTime updateTime = _lastUpdateRequest.AddMilliseconds(Globals.SAVE_WAIT_TIME);
 
                 while (DateTime.Now < updateTime)
@@ -73,7 +73,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 try
                 {
-                    await UpdatePropertiesAsync();
+                    UpdateProperties();
                     var result = await Database.MongoDB.Update(this, "vehicles", Plate, _nbUpdateRequests);
 
                     if (result.ModifiedCount == 0)

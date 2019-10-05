@@ -3,9 +3,9 @@ using ResurrectionRP_Server.Utils;
 using System;
 using System.Threading.Tasks;
 
-namespace ResurrectionRP_Server.Business
+namespace ResurrectionRP_Server.Factions
 {
-    public partial class Business
+    public partial class Faction
     {
         #region Fields
         private DateTime _lastUpdateRequest;
@@ -14,20 +14,8 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Methods
-        public async Task Insert()
-        {
-            await Database.MongoDB.Insert("businesses", this);
-        }
-
-        public async Task Delete()
-        {
-            GameMode.Instance.BusinessesManager.BusinessesList.Remove(this);
-            Entities.Blips.BlipsManager.Destroy(Blip);
-            Inventory = null;
-            Owner = null;
-            Employees = null;
-            await Database.MongoDB.Delete<Business>("businesses", _id);
-        }
+        public async Task InsertDatabase()
+            => await Database.MongoDB.Insert("factions", this);
 
         public void UpdateInBackground()
         {
@@ -59,16 +47,16 @@ namespace ResurrectionRP_Server.Business
 
                 try
                 {
-                    var result = await Database.MongoDB.Update(this, "businesses", _id, _nbUpdateRequests);
+                    var result = await Database.MongoDB.Update(this, "factions", FactionName, _nbUpdateRequests);
 
                     if (result.MatchedCount == 0)
-                        Alt.Server.LogWarning($"Update error for business {_id}");
+                        Alt.Server.LogWarning($"Update error for faction {FactionName}");
 
                     _updateWaiting = false;
                 }
                 catch (Exception ex)
                 {
-                    Alt.Server.LogError($"Business.UpdateInBackground() - {_id} - {ex}");
+                    Alt.Server.LogError($"Faction.UpdateInBackground() - {FactionName} - {ex}");
                 }
             });
         }

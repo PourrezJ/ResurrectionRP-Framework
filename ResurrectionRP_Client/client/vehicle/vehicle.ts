@@ -37,17 +37,21 @@ export function initialize() {
     })
 
     alt.on('gameEntityCreate', (entity: alt.Entity) => {
-        if (game.isEntityAVehicle(entity.scriptID)) {
-            try
+
+        try {
+            if (game.isEntityAVehicle(entity.scriptID))
             {
                 let vehId = entity.scriptID;
 
-                //if (game.isVehicleSeatFree(vehId, -1, false))
-                //    game.setVehicleOnGroundProperly(vehId, 5.0);
-               
+                if (game.isVehicleSeatFree(vehId, -1, false))
+                    game.setVehicleOnGroundProperly(vehId, 0);
+
+                game.setVehicleAsNoLongerNeeded(vehId);
+                game.setEntityAsMissionEntity(vehId, true, true);
+
                 alt.setTimeout(() => {
                     let sirenSound: boolean = entity.getSyncedMeta("SirenDisabled");
-                    
+
                     game.setDisableVehicleSirenSound(vehId, (sirenSound == null) ? false : sirenSound)
 
                     let freezed: boolean = entity.getSyncedMeta("IsFreezed");
@@ -73,12 +77,14 @@ export function initialize() {
 
                     let power: number = entity.getSyncedMeta("powerMultiplicator");
                     // game.setVehicleEnginePowerMultiplier(vehId, power);
-                }, 500); 
-            }
-            catch (e) {
-                alt.log("Error in setting data: " + e);
+                }, 2500);
             }
         }
+        catch (e) {
+            alt.log("Error in setting data: " + e);
+        }
+
+
     });
 
     alt.on('syncedMetaChange', (entity: alt.Entity, key: string, value: any) => {

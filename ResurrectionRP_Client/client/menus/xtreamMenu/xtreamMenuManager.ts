@@ -53,7 +53,7 @@ export function init()
                     alt.emitServer("XMenuManager_ExecuteCallback", index, JSON.stringify(xmenuData));
                     xmenuData = null;
                     inputView.destroy();
-
+                    inputView = null;
                     alt.showCursor(false);
                     alt.toggleGameControls(true);
                 });   
@@ -82,6 +82,8 @@ function closeMenu(enableControls: boolean = true) {
         alt.toggleGameControls(true);
         alt.showCursor(false);
     }
+
+    inputView = null;
 }
 
 function getIndexOfMenuItem(menuItem) {

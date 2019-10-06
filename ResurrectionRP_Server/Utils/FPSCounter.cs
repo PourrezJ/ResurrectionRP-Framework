@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AltV.Net;
+using ResurrectionRP_Server.Entities.Vehicles;
+using System;
 
 namespace ResurrectionRP_Server.Utils
 {
@@ -11,8 +13,10 @@ namespace ResurrectionRP_Server.Utils
 
         public static void OnTick()
         {
-            if (string.IsNullOrEmpty(title)) title = Console.Title;
-            Console.Title = title + $" FPS: {CalculateFrameRate()} Joueurs: {AltV.Net.Alt.GetAllPlayers().Count} Véhicules: {AltV.Net.Alt.GetAllVehicles().Count}";
+            if (string.IsNullOrEmpty(title))
+                title = Console.Title;
+
+            Console.Title = title + $" FPS: {CalculateFrameRate()} Joueurs: {Alt.GetAllPlayers().Count} Véhicules: {VehiclesManager.GetAllVehiclesInGame().Count}";
         }
 
         public static int CalculateFrameRate()
@@ -23,6 +27,7 @@ namespace ResurrectionRP_Server.Utils
                 frameRate = 0;
                 lastTick = Environment.TickCount;
             }
+
             frameRate++;
             return lastFrameRate;
         }

@@ -35,7 +35,7 @@ namespace ResurrectionRP_Server.Colshape
             }
             catch(AccessViolationException)
             {
-                Alt.Server.LogError($"CylinderColShare.IsEntityInside() - AccessViolationException with entity {entity.Id}");
+                Alt.Server.LogError($"CylinderColshape.IsEntityInside() - AccessViolationException with entity {entity.Id}");
                 return false;
             }
         }

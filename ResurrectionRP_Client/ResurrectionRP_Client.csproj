@@ -88,7 +88,6 @@
     <TypeScriptCompile Include="client\Helpers\Scaleform.ts" />
     <TypeScriptCompile Include="client\InputBox.ts" />
     <TypeScriptCompile Include="client\LSPDCall.ts" />
-    <TypeScriptCompile Include="client\Models\Ped.ts" />
     <TypeScriptCompile Include="client\Helpers\UiHelper.ts" />
     <TypeScriptCompile Include="client\Jobs\Data\Trash.ts" />
     <TypeScriptCompile Include="client\Jobs\DustManManager.ts" />

@@ -23,7 +23,7 @@ namespace ResurrectionRP.Entities.Vehicles.Data
             Position = position;
             Vehicle = vehicle;
             Master = master;
-            timer = Utils.SetInterval(() =>
+/*            timer = Utils.SetInterval(() =>
             {
                 if(!master.HaveTowVehicle())
                 {
@@ -42,7 +42,7 @@ namespace ResurrectionRP.Entities.Vehicles.Data
                     vehicle.Position = new AltV.Net.Data.Position(pos.X, pos.Y - 2, pos.Z + 4);
                 }
                 vehicle.Rotation = master.Vehicle.Rotation;
-            }, 500);
+            }, 500);*/
         }
     }
 }

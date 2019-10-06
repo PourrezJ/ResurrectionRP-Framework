@@ -19,7 +19,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         // Use ConcurrentDictionary as ther eis no concurrent list
         private static ConcurrentDictionary<string, VehicleHandler> _vehicleHandlers = new ConcurrentDictionary<string, VehicleHandler>();
         public static ConcurrentDictionary<IVehicle, VehicleHandler> VehicleHandlerList { get; } = new ConcurrentDictionary<IVehicle, VehicleHandler>();
-
         #endregion
 
         #region Constructor
@@ -28,6 +27,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
             AltAsync.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
+            Alt.OnVehicleRemove += OnVehicleRemove;
 
             AltAsync.OnClient("LockUnlockVehicle", LockUnlockVehicle);
             AltAsync.OnClient("UpdateTrailer", UpdateTrailerState);
@@ -36,65 +36,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         }
         #endregion
 
-        #region Loop
-        private void VehicleManagerLoop()
-        {
-            lock (VehicleHandlerList.Keys)
-            {
-                for (int i = 0; i < VehicleHandlerList.Count; i++)
-                {
-                    var vehicle = VehicleHandlerList.Keys.ElementAt(i);
-
-                    if (vehicle == null)
-                        continue;
-
-                    if (!vehicle.Exists)
-                        continue;
-
-                    var vh = vehicle.GetVehicleHandler();
-
-                    if (vh == null)
-                        continue;
-
-                    if (vehicle.Driver != null)
-                    {
-                        var currentRot = vehicle.Rotation;
-
-                        if (vh.VehicleManifest.VehicleClass != 15 && vh.VehicleManifest.VehicleClass != 16 && currentRot.Pitch >= 1.2 )
-                        {
-                            if (vh.EngineOn)
-                            {
-                                vh.EngineOn = false;
-                                vehicle.Driver.SendNotification("Le moteur vient de caler.");
-                            }
-                        }
-                        vh.LastUse = DateTime.Now;
-                    }
-
-                    // Mise en fourrière auto
-                    TimeSpan test = DateTime.Now - vh.LastUse;
-                    TimeSpan expire = TimeSpan.FromDays(3);
-                    if (test > expire)
-                    {
-                        try
-                        {
-                            Task.Run(async () =>
-                            {
-                                if (VehicleHandlerList.TryRemove(vehicle, out VehicleHandler value))
-                                    await Pound.AddVehicleInPoundAsync(vh);
-                            });
-                        }
-                        catch (Exception ex)
-                        {
-                            Alt.Server.LogError("VehicleManager Tick: " + ex.ToString());
-                        }
-                    }
-                }
-            }
-        }
-        #endregion
-
-        #region Server Events
+        #region Event handlers
         private static Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
             PlayerHandler ph = player.GetPlayerHandler();
@@ -136,10 +78,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 return Task.CompletedTask;
 
             if (GameMode.Instance.IsDebug)
-                Alt.Server.LogInfo("VehicleManager | Update trailer state for " + player.GetPlayerHandler().PID + " to " + args[1] + " for " + ((IVehicle)(args[0])).NumberplateText );
+                Alt.Server.LogInfo("VehicleManager | Update trailer state for " + player.GetPlayerHandler().PID + " to " + args[1] + " for " + ((IVehicle)(args[0])).NumberplateText);
 
             VehicleHandler veh = ((IVehicle)args[0]).GetVehicleHandler();
-           
+
             veh.hasTrailer = (bool)args[1];
 
             if (args[2] != null)
@@ -205,6 +147,69 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 vh.UpdateInBackground();
 
             return Task.CompletedTask;
+        }
+
+        private static void OnVehicleRemove(IVehicle vehicle)
+        {
+            VehicleHandlerList.TryRemove(vehicle, out _);
+        }
+        #endregion
+
+        #region Loop
+        private void VehicleManagerLoop()
+        {
+            lock (VehicleHandlerList.Keys)
+            {
+                for (int i = 0; i < VehicleHandlerList.Count; i++)
+                {
+                    var vehicle = VehicleHandlerList.Keys.ElementAt(i);
+
+                    if (vehicle == null)
+                        continue;
+
+                    if (!vehicle.Exists)
+                        continue;
+
+                    var vh = vehicle.GetVehicleHandler();
+
+                    if (vh == null)
+                        continue;
+
+                    if (vehicle.Driver != null)
+                    {
+                        var currentRot = vehicle.Rotation;
+
+                        if (vh.VehicleManifest.VehicleClass != 15 && vh.VehicleManifest.VehicleClass != 16 && currentRot.Pitch >= 1.2 )
+                        {
+                            if (vh.EngineOn)
+                            {
+                                vh.EngineOn = false;
+                                vehicle.Driver.SendNotification("Le moteur vient de caler.");
+                            }
+                        }
+                        vh.LastUse = DateTime.Now;
+                    }
+
+                    // Mise en fourrière auto
+                    TimeSpan test = DateTime.Now - vh.LastUse;
+                    TimeSpan expire = TimeSpan.FromDays(3);
+                    if (test > expire)
+                    {
+                        try
+                        {
+                            Task.Run(async () =>
+                            {
+                                if (VehicleHandlerList.TryRemove(vehicle, out VehicleHandler value))
+                                    await Pound.AddVehicleInPoundAsync(vh);
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            Alt.Server.LogError("VehicleManager Tick: " + ex.ToString());
+                        }
+                    }
+                }
+            }
         }
         #endregion
 

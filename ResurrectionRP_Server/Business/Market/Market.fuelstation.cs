@@ -31,13 +31,19 @@ namespace ResurrectionRP_Server.Business
                 return;
             }
 
+
             Menu menu = new Menu("ID_GasPumpMenuMain", "Station Essence", $"Prix du litre: {fuelpump.Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence}", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
             menu.ItemSelectCallbackAsync = fuelpump.FuelMenuCallBack;
 
             menu.SubTitle = "Mettre le plein dans:";
-            if (fuelpump.Station.VehicleInStation.Count == 0)
+            if (
+                fuelpump.Station.VehicleInStation.Count == 0 &&
+                (client.GetPlayerHandler().BagInventory != null &&
+                    !client.GetPlayerHandler().BagInventory.HasItemID(Models.InventoryData.ItemID.Jerrycan ) ) &&
+                (client.GetPlayerHandler().PocketInventory.HasItemID(Models.InventoryData.ItemID.Jerrycan) )
+            )
             {
-                client.DisplaySubtitle( "Aucun véhicule près de la pompe.", 10000);
+                client.DisplaySubtitle( "Rien à remplir.", 10000);
                 return;
             }
 
@@ -61,54 +67,124 @@ namespace ResurrectionRP_Server.Business
                 menu.Add(item);
             }
 
+
+/*            Alt.Server.LogInfo("Status Bag Inventory : " + (client.GetPlayerHandler().BagInventory != null).ToString());
+            Alt.Server.LogInfo("Has Item in Bag Inventory : " + (client.GetPlayerHandler().BagInventory != null && !client.GetPlayerHandler().BagInventory.HasItemID(Models.InventoryData.ItemID.Jerrycan)).ToString());
+            Alt.Server.LogInfo("Status Pocket Inventory : " + (client.GetPlayerHandler().PocketInventory != null).ToString());
+            Alt.Server.LogInfo("Has Item in Pocket Inventory : " + ( client.GetPlayerHandler().PocketInventory.HasItemID(Models.InventoryData.ItemID.Jerrycan)).ToString());*/
+            if (client.GetPlayerHandler().BagInventory != null && client.GetPlayerHandler().BagInventory.HasItemID(Models.InventoryData.ItemID.Jerrycan))
+            {
+                MenuItem item = new MenuItem("Remplir le jerrycan", "Remplissez votre jerrycan de 15 litres (remplit le premier jerrycan dans l'inventaire)", "ID_Jerrycan", true);
+                item.SetData("Jerrycan", client.GetPlayerHandler().BagInventory.GetItem(Models.InventoryData.ItemID.Jerrycan));
+                menu.Add(item);
+            }
+            
             menu.OpenMenu(client);
         }
 
         private Task FuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            VehicleHandler vh = menuItem.GetData("Vehicle");
+            AcceptMenu accept = null;
+            float price = 0;
+            float maxFuel = 0;
 
-            if (vh == null)
-                return Task.CompletedTask;
-
-            float maxFuel = vh.FuelMax - vh.Fuel;
-
-            if ((vh.FuelMax - vh.Fuel) > Station.Litrage && Station.Litrage > 0)
+            switch(menuItem.Id)
             {
-                maxFuel = Station.Litrage;
-                client.DisplaySubtitle("Il n'y a pas assez d'essence pour faire le plein, \nvous serez remplis à hauteur du possible !", 10000);
-            }
+                case "ID_Jerrycan":
+                    Items.GasJerrycan item = menuItem.GetData("Jerrycan");
 
-            float price = CalculEssencePriceNeeded(maxFuel, this.Station.EssencePrice);
-            AcceptMenu accept = AcceptMenu.OpenMenu(client, menu.Title, $"Prix du litre: ${Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence} TTC ", $"Mettre le plein dans {vh.VehicleManifest.DisplayName} pour la somme de ~r~${price}~w~.", rightlabel: $"${price}");
+                    maxFuel = (Station.Litrage - 15 < 0) ? Station.Litrage : 15;
 
-            accept.AcceptMenuCallBack = (IPlayer _client, bool reponse) =>
-            {
-                if (reponse && Station.Litrage >= maxFuel)
-                {
-                    if (client.GetPlayerHandler().HasBankMoney(price, $"Plein d'essence {vh.Plate}."))
+                    if(Station.Litrage - 15 < 0)
+                        client.DisplaySubtitle("Il n'y a pas assez d'essence pour faire le plein, \nvous serez remplis à hauteur du possible !", 10000);
+
+                    if(item.Fuel == 15)
                     {
-                        vh.Fuel += maxFuel;
-                        Station.Litrage -= maxFuel;
-                        BankAccount.AddMoney(price, $"Plein du véhicule {vh.Plate}");
-                        client.DisplaySubtitle($"Le plein est fait.\n Vous avez payé ~r~${price}", 6000);
-                        UpdateInBackground();
+                        client.DisplaySubtitle("Votre jerrycan est déjà remplis! ", 10000);
+                        MenuManager.CloseMenu(client);
+                        return Task.CompletedTask;
                     }
-                    else
-                        client.SendNotificationError("Vous n'avez pas assez d'argent en banque.");
 
-                    MenuManager.CloseMenu(client);
-                } 
-                else if (Station.Litrage < maxFuel)
-                {
-                    client.DisplaySubtitle("Impossible de remplir, la station est maintenant vide ! ", 10000);
-                    MenuManager.CloseMenu(client);
-                }
-                else
-                    MenuManager.CloseMenu(client);
+                    if (item.Fuel > 0 && item.Fuel < 15)
+                        maxFuel = (float)(15 - item.Fuel);
 
-                return Task.CompletedTask;
-            };
+                    price = CalculEssencePriceNeeded(maxFuel, this.Station.EssencePrice);
+                    accept = AcceptMenu.OpenMenu(client, menu.Title, $"Prix du litre: ${Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence} TTC ", $"Mettre le plein dans Jerrycan pour la somme de ~r~${price}~w~.", rightlabel: $"${price}");
+
+                    accept.AcceptMenuCallBack = (IPlayer _client, bool response) =>
+                    {
+                        if (!response)
+                            return Task.CompletedTask;
+
+                        if (Station.Litrage < maxFuel)
+                            maxFuel = Station.Litrage;
+
+                        if (maxFuel + item.Fuel > 15)
+                            maxFuel = (float)(15 - item.Fuel);
+
+                        if (client.GetPlayerHandler().HasBankMoney(price, $"Plein d'essence Jerrycan."))
+                        {
+                            item.Fuel += (int)maxFuel;
+                            Station.Litrage -= maxFuel;
+                            BankAccount.AddMoney(price, $"Plein d'un Jerrycan");
+                            client.DisplaySubtitle($"Le plein est fait.\n Vous avez payé ~r~${price}", 6000);
+                            UpdateInBackground();
+                            client.GetPlayerHandler().UpdateFull();
+                        }
+                        else
+                            client.SendNotificationError("Vous n'avez pas assez d'argent en banque.");
+
+                        MenuManager.CloseMenu(client);
+                        return Task.CompletedTask;
+                    };
+
+                    break;
+                default:
+                    VehicleHandler vh = menuItem.GetData("Vehicle");
+
+                    if (vh == null)
+                        return Task.CompletedTask;
+
+                    maxFuel = vh.FuelMax - vh.Fuel;
+
+                    if ((vh.FuelMax - vh.Fuel) > Station.Litrage && Station.Litrage > 0)
+                    {
+                        maxFuel = Station.Litrage;
+                        client.DisplaySubtitle("Il n'y a pas assez d'essence pour faire le plein, \nvous serez remplis à hauteur du possible !", 10000);
+                    }
+
+                    price = CalculEssencePriceNeeded(maxFuel, this.Station.EssencePrice);
+                    accept = AcceptMenu.OpenMenu(client, menu.Title, $"Prix du litre: ${Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence} TTC ", $"Mettre le plein dans {vh.VehicleManifest.DisplayName} pour la somme de ~r~${price}~w~.", rightlabel: $"${price}");
+
+                    accept.AcceptMenuCallBack = (IPlayer _client, bool reponse) =>
+                    {
+                        if (reponse && Station.Litrage >= maxFuel)
+                        {
+                            if (client.GetPlayerHandler().HasBankMoney(price, $"Plein d'essence {vh.Plate}."))
+                            {
+                                vh.Fuel += maxFuel;
+                                Station.Litrage -= maxFuel;
+                                BankAccount.AddMoney(price, $"Plein du véhicule {vh.Plate}");
+                                client.DisplaySubtitle($"Le plein est fait.\n Vous avez payé ~r~${price}", 6000);
+                                UpdateInBackground();
+                            }
+                            else
+                                client.SendNotificationError("Vous n'avez pas assez d'argent en banque.");
+
+                            MenuManager.CloseMenu(client);
+                        }
+                        else if (Station.Litrage < maxFuel)
+                        {
+                            client.DisplaySubtitle("Impossible de remplir, la station est maintenant vide ! ", 10000);
+                            MenuManager.CloseMenu(client);
+                        }
+                        else
+                            MenuManager.CloseMenu(client);
+
+                        return Task.CompletedTask;
+                    };
+                    break;
+            }
             return Task.CompletedTask;
         }
         

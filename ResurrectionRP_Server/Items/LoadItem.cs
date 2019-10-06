@@ -71,7 +71,7 @@ namespace ResurrectionRP_Server.Items
                     new Unusable(ItemID.RondinDeBois, "Rondin de bois", "Un rondin de bois humide.", 3, icon:"wood"),
                     new Unusable(ItemID.GSauvetage, "Gilet de sauvetage", "à ton âge tu ne sais toujours pas nagez ?", 1 , true, true, true),
 
-                    new GasJerrycan(ItemID.Jerrycan,"Jerrican d essence","Un jerrycan d essence, utilisé le près d un véhicule pour le rationner.",3, icon:"jerrycan"),
+                    new GasJerrycan(ItemID.Jerrycan,"Jerrican d'essence","Un jerrycan d'essence, utilisé le près d un véhicule pour le rationner.",16, icon:"jerrycan", isDockable: true, itemPrice: 35, isUsable: true),
 
                     new HealItem(ItemID.Bandages,"Bandages","Des bandages pour soigner les blessures légères.",1,true,true,true,life:5, icon:"bandage"),
                     new HealItem(ItemID.KitSoin,"Kit de Soin","Un Kit de soin pour les blessures graves.",2,true,true,true,life:75, icon:"kit-soin"),

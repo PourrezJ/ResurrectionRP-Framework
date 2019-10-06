@@ -474,26 +474,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (await Vehicle.GetModelAsync() != (int)VehicleModel.Flatbed && !HaveTowVehicle())
                 return;
 
-            TowTruck = new TowTruck(vehicle.NumberplateText, new Vector3(0, -2, 1));
-#pragma warning disable CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
-/*            Task.Run(async () =>
-            {
-                await UpdateAsync();
-                while (HaveTowVehicle())
-                {
-                    if (!vehicle.Exists)
-                        return;
-                    await Task.Delay(500);
-                    if (HaveTowVehicle())
-                    {
-                        AltV.Net.Data.Position pos = await Vehicle.GetPositionAsync();
-                        await vehicle.SetPositionAsync( new AltV.Net.Data.Position(pos.X, pos.Y + 2, pos.Z + 3));
-                        await vehicle.SetRotationAsync(await Vehicle.GetRotationAsync());
-                    }
-
-                }
-            }); TODO VERIFIER POSITION VOITURE A L'ARRIERE ? NEST PAS CORRECT SPAWN EN DESSOUS DU VEH*/
-#pragma warning restore CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
+            TowTruck = new TowTruck(vehicle.NumberplateText, new Vector3(0, -2, 1), vehicle, this);
+            UpdateInBackground();
         }
 
         public async Task<IVehicle> UnTowVehicle(Location position)

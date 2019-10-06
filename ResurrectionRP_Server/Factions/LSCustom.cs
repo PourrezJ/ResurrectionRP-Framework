@@ -528,8 +528,7 @@ namespace ResurrectionRP_Server.Factions
             xmenu.SetData("Vehicle", target);
 
             xmenu.CallbackAsync += MenuCallback;
-            var nearest = (await client.GetPositionAsync()).GetTowTruckInZone(10f)?.GetVehicleHandler();
-
+            var nearest = (await client.GetNearestVehicleAsync(10))?.GetVehicleHandler();
             if (await target.GetModelAsync() != (int)VehicleModel.Flatbed && await LSCustom.IsWhitelistClassTow(target) == true)
             {
                 xmenu.Add(new XMenuItem("Remorquer", "", "ID_attach", XMenuItemIcons.TRUCK_LOADING_SOLID, true));
@@ -575,14 +574,23 @@ namespace ResurrectionRP_Server.Factions
             switch (menuItem.Id)
             {
                 case "ID_attach":
+                    client.DisplaySubtitle("L'attache de véhicule est désactivée pour le moment!", 10000);
+                    XMenuManager.XMenuManager.CloseMenu(client);
                     if (vh.TowTruck == null)
                     {
-                        VehicleHandler _vh = new Position(client.Position.X, client.Position.Y, client.Position.Z).GetTowTruckInZone(5)?.GetVehicleHandler();
+                        IVehicle towtruck = null;
+                        foreach(IVehicle _vh in veh.GetVehiclesInRange(20))
+                        {
+                            if (await _vh.GetModelAsync() == (uint)VehicleModel.Flatbed)
+                                towtruck = _vh;
+                            
+                        }
 
-                        if (_vh != null)
-                            await _vh.TowVehicle(veh);
+                        if (towtruck != null)
+                            await towtruck.GetVehicleHandler().TowVehicle(veh);
                         else
                             client.SendNotificationError("Aucune dépanneuse dans les environs");
+
 
                         XMenuManager.XMenuManager.CloseMenu(client);
                     }

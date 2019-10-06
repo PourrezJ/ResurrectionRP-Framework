@@ -88,6 +88,8 @@ namespace ResurrectionRP_Server.Entities.Players
         public Bank.BankAccount BankAccount { get; set; }
         public int Hunger { get; set; } = 100;
         public int Thirst { get; set; } = 100;
+
+        public double Alcohol = 0;
         public bool Jailed { get; private set; } = false;
 
         public ushort Health;
@@ -270,6 +272,9 @@ namespace ResurrectionRP_Server.Entities.Players
                 
                 await Task.Delay(500);
 
+                if (Alcohol > 0)
+                    AddAlcolhol(0);
+
                 if (firstspawn)
                     UpdateFull();
 
@@ -358,6 +363,28 @@ namespace ResurrectionRP_Server.Entities.Players
 
             if (Client != null && Client.Exists)
                 Client.EmitLocked("UpdateHungerThirst", Hunger, Thirst);
+
+        }
+
+        private System.Timers.Timer DrunkTimer;        
+        public void AddAlcolhol(int quantity)
+        {
+            Alcohol += quantity;
+            Client.EmitLocked("AlcoholDrink", Alcohol);
+            if (DrunkTimer != null)
+                return;
+
+            DrunkTimer = Utils.Utils.SetInterval(() =>
+            {
+                Alcohol -= 0.1;
+                Client.EmitLocked("AlcoholDrink", Alcohol);
+                if (Alcohol <= 0)
+                {
+                    Alcohol = 0;
+                    DrunkTimer.Close();
+                    DrunkTimer = null;
+                }
+            }, 30000);
         }
 
         public bool HasOpenMenu()

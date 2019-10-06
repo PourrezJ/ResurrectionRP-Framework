@@ -88,7 +88,6 @@
     <TypeScriptCompile Include="client\Helpers\Scaleform.ts" />
     <TypeScriptCompile Include="client\InputBox.ts" />
     <TypeScriptCompile Include="client\LSPDCall.ts" />
-    <TypeScriptCompile Include="client\Models\Ped.ts" />
     <TypeScriptCompile Include="client\Helpers\UiHelper.ts" />
     <TypeScriptCompile Include="client\Jobs\Data\Trash.ts" />
     <TypeScriptCompile Include="client\Jobs\DustManManager.ts" />
@@ -103,6 +102,8 @@
     <TypeScriptCompile Include="client\phone\PhoneManager.ts" />
     <TypeScriptCompile Include="client\player\Effects.ts" />
     <TypeScriptCompile Include="client\Ragdoll.ts" />
+    <TypeScriptCompile Include="client\Streamer\Entities\Ped.ts" />
+    <TypeScriptCompile Include="client\Streamer\Entities\TextLabel.ts" />
     <TypeScriptCompile Include="client\Utils\CustomEvents.ts" />
     <TypeScriptCompile Include="client\player\Game.ts" />
     <TypeScriptCompile Include="client\player\Hud.ts" />

@@ -84,17 +84,19 @@ namespace ResurrectionRP_Server.Items
 
                     new CrateTools(ItemID.CrateTool, "Caisse a outil", "", 5, icon:"caissetool"),
 
-                    new Alcohol(ItemID.Sake, "Du Sake", "BANNZAIII!!!!!", 1, true, true,true, drink:15, isDockable: true, itemPrice: 98, icon:"sake"),
-                    new Alcohol(ItemID.Champagne, "Champagne", "Juste si tu es riche", 1 , true, true, true, drink:20, icon:"champagne", isDockable: true, itemPrice: 392),
-                    new Alcohol(ItemID.Whisky, "Whisky", "Juste si tu es pauvre", 1 , true, true, true, drink:20, timer:120000, icon:"whisky", isDockable: true, itemPrice: 294),
-                    new Alcohol(ItemID.Gnole, "Gnole", "Made in Dakota qui peut rendre aveugle", 1 , true, true, true,icon:"gnole", drink:20, timer:120000, isDockable: true, itemPrice: 98),
+                    new Alcohol(ItemID.Sake, "Du Sake", "BANNZAIII!!!!!", 1, true, true,true, drink:15, isDockable: true, itemPrice: 98, icon:"sake", alcohol:1),
+                    new Alcohol(ItemID.Champagne, "Champagne", "Juste si tu es riche", 1 , true, true, true, drink:20, icon:"champagne", isDockable: true, itemPrice: 392, alcohol:0.1),
+                    new Alcohol(ItemID.Whisky, "Whisky", "Juste si tu es pauvre", 1 , true, true, true, drink:20, timer:120000, icon:"whisky", isDockable: true, itemPrice: 294, alcohol:0.5),
+                    new Alcohol(ItemID.Gnole, "Gnole", "Made in Dakota qui peut rendre aveugle", 1 , true, true, true,icon:"gnole", drink:20, timer:120000, isDockable: true, itemPrice: 98, alcohol:1),
                     new Alcohol(ItemID.Biere, "Biere", "Biere Belge bien chaude", 1 , true, true, true, drink:15,icon:"beer", timer:40000, isDockable: true, itemPrice: 98),
-                    new Alcohol(ItemID.Tequila, "Tequila", "AIE CARAMBA", 1 , true, true, true,icon:"tequila", drink:20, timer:90000, isDockable: true, itemPrice: 196),
-                    new Alcohol(ItemID.Vodka, "Vodka", "100% pur patate!", 1 , true, true, true,icon:"vodka", drink:20, timer:120000, isDockable: true, itemPrice: 294),
-                    new Alcohol(ItemID.Mirabelle , "Mirabelle", "Peux servir d'antiseptique ou de carburant.", 1 , true, true, true, drink:30, timer:120000),
+                    new Alcohol(ItemID.Tequila, "Tequila", "AIE CARAMBA", 1 , true, true, true,icon:"tequila", drink:20, timer:90000, isDockable: true, itemPrice: 196, alcohol:0.5),
+                    new Alcohol(ItemID.Vodka, "Vodka", "100% pur patate!", 1 , true, true, true,icon:"vodka", drink:20, timer:120000, isDockable: true, itemPrice: 294, alcohol:0.5),
+                    new Alcohol(ItemID.Mirabelle , "Mirabelle", "Peux servir d'antiseptique ou de carburant.", 1 , true, true, true, drink:30, timer:120000, alcohol:1),
                     new Alcohol(ItemID.Vin, "Une Bouteille de Vin", "Une bouteille de Vin.", 1, true, true,true, icon:"vin"),
                     new Alcohol(ItemID.Vin, "Martini", "Une bouteille de Vin.", 1, true, true,true, icon:"whisky"),
-                    new Alcohol(ItemID.Vin, "Alcool de serpent", "", 1, true, true,true, icon:"vin", isDockable: true, itemPrice: 98),
+                    new Alcohol(ItemID.Vin, "Alcool de serpent", "", 1, true, true,true, icon:"vin", isDockable: true, itemPrice: 98, alcohol:1),
+                    new Alcohol(ItemID.Rhum , "Rhum", "Tous les chemins mènent au Rhum", 1 , true, true, true, drink:20, timer:120000, isDockable: false, itemPrice: 140, icon: "rum", alcohol:0.5),
+
 
                     new Unusable(ItemID.Plastic, "Matière Polymère", "", 4),
 
@@ -126,7 +128,6 @@ namespace ResurrectionRP_Server.Items
                     //new Weapons(ItemID.Weapon, "Hachette en pierre", "", 3, hash: WeaponHash.StoneHatchet, isDockable: true, itemPrice: 2100),
                     new Weapons(ItemID.Weapon, "Katana", "", 3, hash: WeaponHash.Bottle, isDockable: true, itemPrice: 3100),
 
-                    new Alcohol(ItemID.Rhum , "Rhum", "Tous les chemins mènent au Rhum", 1 , true, true, true, timer:120000, isDockable: false, itemPrice: 140, icon: "rum"),
                     new HealItem(ItemID.RhumLiquide, "Rhum Liquide", "Déinfecte et sert de carburant.",1,true,true,true, life:0, icon:"bandage"),
                     new Unusable(ItemID.Canneasurcre, "Canne a sucre", "", 2),
 

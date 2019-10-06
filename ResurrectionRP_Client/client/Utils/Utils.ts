@@ -431,7 +431,7 @@ export function playAnimation(dictionary, name, speed, durationInMS, flag) {
     });
 }
 
-async function loadAnim(dict) {
+export async function loadAnim(dict) {
     return new Promise(resolve => {
         game.requestAnimDict(dict);
 

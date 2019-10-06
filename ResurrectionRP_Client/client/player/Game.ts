@@ -17,6 +17,7 @@ import { DustManManager } from '../Jobs/DustManManager';
 import { VoiceChat } from '../Voice/VoiceChat';
 import { Medical } from '../Medical';
 import { Weedlabs } from '../Env/WeedLabs';
+import { Effects } from './Effects';
 import * as veh from '../vehicle/vehicle';
 import * as utils from '../Utils/Utils';
 
@@ -106,6 +107,7 @@ export class Game {
             new DustManManager();
             new Medical();
             new Weedlabs();
+            new Effects();
 
             game.setAudioFlag('LoadMPData', true);
             game.setAudioFlag('DisableFlightMusic', true);

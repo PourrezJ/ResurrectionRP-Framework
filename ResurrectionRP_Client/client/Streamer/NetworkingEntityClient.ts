@@ -1,6 +1,8 @@
 ﻿import * as alt from 'alt';
 import * as game from 'natives';
 import * as utils from '../Utils/Utils';
+import * as textlabel from './Entities/TextLabel';
+import Ped from './Entities/Ped';
 
 export class NetworkingEntityClient {
 
@@ -22,7 +24,7 @@ export class NetworkingEntityClient {
         alt.everyTick(() => {
             NetworkingEntityClient.EntityList.forEach((item, index) => {
                 if (item != null && item.Text != null) {
-                    this.displayTextLabel(item);
+                    textlabel.drawTextLabel(item.Text, item.PosX, item.PosY, item.PosZ, item.Font, item.Color.r, item.Color.g, item.Color.b, item.Color.a);
                 } else if (item != null && item.scalex != null) {
                     game.drawMarker(
                         item.type,
@@ -46,7 +48,6 @@ export class NetworkingEntityClient {
         alt.onServer('createStaticEntity', this.createStaticEntity.bind(this));
         alt.onServer("deleteStaticEntity", this.deleteStaticEntity.bind(this));
         alt.onServer("setStaticEntityBlipRoute", this.setStaticEntityBlipRoute.bind(this));
-
         alt.onServer("deleteObject", this.deleteObject.bind(this));
 
         alt.on("interactWithPickableObject", this.interactPickup);
@@ -162,8 +163,6 @@ export class NetworkingEntityClient {
 
 
         if (entity.data.entityType.intValue == 1) {
-            alt.log(`entity: ${JSON.stringify(entity)}`);
-
             let obj = NetworkingEntityClient.EntityList[entity.id];
 
             if (entity.data.attach.stringValue != null && game.isEntityAttached(obj)) {
@@ -219,6 +218,8 @@ export class NetworkingEntityClient {
 
                 if (JSON.parse(entity.data.attach.stringValue) != null)
                     this.objectAttach(entity.id, JSON.parse(entity.data.attach.stringValue));
+
+
                 break;
             case 2:
                 await this.streamTextLabel(
@@ -254,49 +255,10 @@ export class NetworkingEntityClient {
         game.deleteObject(NetworkingEntityClient.EntityList[entityid]);
     }
 
-
-    private displayTextLabel(textLabel) {
-        const [bol, _x, _y] = game.getScreenCoordFromWorldCoord(textLabel["PosX"], textLabel["PosY"], textLabel["PosZ"], 0, 0);
-        const camCord = game.getGameplayCamCoords();
-        const dist = game.getDistanceBetweenCoords(camCord.x, camCord.y, camCord.z, textLabel["PosX"], textLabel["PosY"], textLabel["PosZ"], true);
-
-        let scale = (4.00001 / dist) * 0.5
-        if (scale > 0.2)
-            scale = 0.2;
-        if (scale < 0.1)
-            scale = 0;
-
-        const fov = (1 / game.getGameplayCamFov()) * 100;
-        scale = scale * fov;
-
-        if (bol) {
-            game.setTextScale(scale, scale);
-            game.setTextFont(textLabel["Font"]);
-            game.setTextProportional(true);
-            game.setTextColour(textLabel["Color"]["r"], textLabel["Color"]["g"], textLabel["Color"]["b"], textLabel["Color"]["a"]);
-            game.setTextDropshadow(0, 0, 0, 0, 255);
-            game.setTextEdge(2, 0, 0, 0, 150);
-            game.setTextDropShadow();
-            game.setTextOutline();
-            game.setTextCentre(true);
-            game.beginTextCommandDisplayText("STRING");
-            game.addTextComponentSubstringPlayerName(textLabel["Text"]);
-            game.endTextCommandDisplayText(_x, _y + 0.025, 0);
-        }
-    }
-
     private streamPed = async (id: number, model: any, x: number, y: number, z: number, heading: number) => {
-        var entityId = game.createPed(4, model, x, y, z - 1, heading, false, true); 
-
-        if (entityId != 0) {
-            game.taskSetBlockingOfNonTemporaryEvents(entityId, true);
-            game.setEntityInvincible(entityId, true);
-            game.freezeEntityPosition(entityId, true);
-        }
-
-        //alt.logWarning("Streaming in new ped, entity ID " + entityId + " | id global : " + id + "| heading : " + JSON.stringify(heading));
-        //alt.logWarning(`Model : ${model}`);
-        NetworkingEntityClient.EntityList[id] = entityId;
+        var ped = new Ped(id, model, new alt.Vector3(x, y, z), heading);
+        ped.Freeze(true);
+        NetworkingEntityClient.EntityList[id] = ped.Handle;
     }
 
     private streamObject = (id: number, model: any, x: number, y: number, z: number, freeze: boolean) : number  => {
@@ -316,23 +278,6 @@ export class NetworkingEntityClient {
     private objectAttach = (entityId: number, attach: any) => {
         switch (attach.Type) {
             case 5:
-/*
-                var vehicle = Entities.Vehicles.All.Find(p => p.RemoteId == attach.RemoteID);
-                if (vehicle != null && vehicle.Exists) {
-                    try {
-                        int bone = 0;
-
-                        bone = vehicle.GetBoneIndexByName(attach.Bone);
-                        if (Game.Instance.IsDebug)
-                            Utils.LogInfo("Vehicle bone: " + bone.ToString());
-
-                        RAGE.Game.Entity.AttachEntityToEntity(@object.Handle, vehicle.Handle, bone, pos.X, pos.Y, pos.Z, rot.X, rot.Y, rot.Z, true, false, false, false, 0, true);
-                    }
-                    catch (Exception ex)
-                    {
-                        Utils.LogError("Vehicle bone: " + ex.ToString());
-                    }
-                }*/
                 var veh: alt.Vehicle = alt.Vehicle.all.find(p => p.id == attach.RemoteID);
 
                 var bone = game.getEntityBoneIndexByName(veh.scriptID, attach.Bone);

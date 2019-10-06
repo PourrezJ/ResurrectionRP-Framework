@@ -53,7 +53,7 @@ namespace ResurrectionRP_Server.Streamer
 
         public int AddEntityPed(Entities.Peds.Ped ped, int dimension = GameMode.GlobalDimension)
         {
-            INetworkingEntity item = AltNetworking.CreateEntity(ped.Position.ConvertToEntityPosition(), dimension, GameMode.Instance.StreamDistance, ped.export());
+            INetworkingEntity item = AltNetworking.CreateEntity(ped.Position.ConvertToEntityPosition(), dimension, GameMode.Instance.StreamDistance, ped.Export());
             ListEntities.TryAdd(EntityNumber, item);
             return EntityNumber;
         }

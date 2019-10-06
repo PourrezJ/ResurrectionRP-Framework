@@ -1,6 +1,8 @@
-﻿using AltV.Net.Data;
+﻿using AltV.Net;
+using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Utils.Extensions;
+using System;
 
 namespace ResurrectionRP_Server.Colshape
 {
@@ -20,14 +22,22 @@ namespace ResurrectionRP_Server.Colshape
         #region Public methods
         public override bool IsEntityInside(IEntity entity)
         {
-            if (!entity.Exists)
-                return false;
-            else if (entity.Dimension != Dimension)
-                return false;
-            else if (entity.Position.Z < Position.Z || entity.Position.Z > Position.Z + Height)
-                return false;
+            try
+            {
+                if (!entity.Exists)
+                    return false;
+                else if (entity.Dimension != Dimension)
+                    return false;
+                else if (entity.Position.Z < Position.Z || entity.Position.Z > Position.Z + Height)
+                    return false;
 
-            return IsPositionInside(entity.Position);
+                return IsPositionInside(entity.Position);
+            }
+            catch(AccessViolationException)
+            {
+                Alt.Server.LogError($"CylinderColShare.IsEntityInside() - AccessViolationException with entity {entity.Id}");
+                return false;
+            }
         }
 
         public override bool IsPositionInside(Position position)

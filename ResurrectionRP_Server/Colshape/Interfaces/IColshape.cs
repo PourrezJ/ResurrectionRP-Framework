@@ -15,9 +15,7 @@ namespace ResurrectionRP_Server.Colshape
 
         float Radius { get; }
 
-        IEnumerable<IEntity> Entities { get; }
-
-        IDictionary<IEntity, bool> LastChecked { get; }
+        ICollection<IEntity> Entities { get; }
         #endregion
 
         #region Events

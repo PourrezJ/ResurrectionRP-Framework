@@ -17,9 +17,7 @@ namespace ResurrectionRP_Server.Colshape
 
         private readonly HashSet<IEntity> _entities;
 
-        public IDictionary<IEntity, bool> LastChecked { get; }
-
-        public IEnumerable<IEntity> Entities => _entities;
+        public ICollection<IEntity> Entities => _entities;
         #endregion
 
         #region Events
@@ -38,7 +36,6 @@ namespace ResurrectionRP_Server.Colshape
             Radius = radius;
             Dimension = dimension;
             _entities = new HashSet<IEntity>();
-            LastChecked = new Dictionary<IEntity, bool>();
         }
         #endregion
 

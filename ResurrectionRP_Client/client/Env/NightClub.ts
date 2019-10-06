@@ -8,8 +8,7 @@ export function initialize() {
     let interiorID = game.getInteriorAtCoords(-219.3403, -296.4997, 24.46127);
     game.pinInteriorInMemory(interiorID);
     if (game.isValidInterior(interiorID))
-    {
-        
+    {    
         //Name Paradise
         game.activateInteriorEntitySet(interiorID, 'Int01_ba_clubname_09');
         //Style Elegance

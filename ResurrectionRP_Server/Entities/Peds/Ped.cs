@@ -29,12 +29,13 @@ namespace ResurrectionRP_Server.Entities.Peds
         [JsonIgnore, BsonIgnore]
         public NpcSecondaryCallBack NpcSecInteractCallBack { get; set; }
 
-
         public int ID { get; private set; }
         public PedModel Model;
         public short Dimension;
         public Vector3 Position;
         public float Rotation;
+        [JsonIgnore]
+        public IPlayer Owner;
 
         [JsonIgnore]
         public Dictionary<dynamic, dynamic> Variable = new Dictionary<dynamic, dynamic>();
@@ -56,7 +57,7 @@ namespace ResurrectionRP_Server.Entities.Peds
             return ped;
         }
 
-        public Dictionary<string, object> export()
+        public Dictionary<string, object> Export()
         {
             var data = new Dictionary<string, object>();
             data["model"] = (uint)this.Model;

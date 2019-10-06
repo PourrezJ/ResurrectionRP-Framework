@@ -187,12 +187,17 @@ namespace ResurrectionRP_Server.Business
                                 return;
                             }
 
-                            Station.Litrage++;
-                            hfuel.OilTank.Traite--;
-                            EssenceTransfert++;
+                            int Updater = 2;
+
+                            if (data % Updater != 0 && data - EssenceTransfert < Updater)
+                                Updater = (data - EssenceTransfert);
+
+                            Station.Litrage += Updater;
+                            hfuel.OilTank.Traite -= Updater;
+                            EssenceTransfert += Updater;
                             _ravitaillement = true;
 
-                            client.DisplayHelp("Station service \n Litres en station: " + Station.Litrage + "\nLitres dans le camion: " + hfuel.OilTank.Traite, 30000);
+                            client.DisplayHelp("Station service \nLitres en station: " + Station.Litrage + "\nLitres dans le camion: " + hfuel.OilTank.Traite, 30000);
                         }, 1250);
                     });
                 }

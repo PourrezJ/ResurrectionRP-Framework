@@ -23,6 +23,7 @@ namespace ResurrectionRP_Server.Business.Barber
             if (!( IsOwner(client) ||  IsEmployee(client)))
             {
                 client.SendNotification("Men, tu n'es pas coiffeur!");
+                return;
             }
 
             Menu mainMenu = new Menu("ID_BarberMain", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Barber);

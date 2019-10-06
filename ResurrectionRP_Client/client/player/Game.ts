@@ -18,9 +18,7 @@ import { VoiceChat } from '../Voice/VoiceChat';
 import { Medical } from '../Medical';
 import { Weedlabs } from '../Env/WeedLabs';
 import * as veh from '../vehicle/vehicle';
-import * as interaction from '../player/Interaction';
 import * as utils from '../Utils/Utils';
-import Ragdoll from '../ragdoll';
 
 export class Game {
     //region Static Var   

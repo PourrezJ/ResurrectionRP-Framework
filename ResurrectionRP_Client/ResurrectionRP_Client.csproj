@@ -81,6 +81,7 @@
     <TypeScriptCompile Include="client\Creator\Creator.ts" />
     <TypeScriptCompile Include="client\DrivingSchool.ts" />
     <TypeScriptCompile Include="client\Env\Doors.ts" />
+    <TypeScriptCompile Include="client\Env\NightClub.ts" />
     <TypeScriptCompile Include="client\Env\Time.ts" />
     <TypeScriptCompile Include="client\Env\Weather.ts" />
     <TypeScriptCompile Include="client\Env\WeedLabs.ts" />

@@ -80,10 +80,11 @@ namespace ResurrectionRP_Server.Phone
                     conv2.lastMessageDate = DateTime.Now;
                     await conv1.Update();
                     await conv2.Update();
+
+                    GetMessages(client, receiver);
                 });
 
 
-                GetMessages(client, receiver);
 
                 IPlayer _client = GetClientWithPhoneNumber(this.PhoneNumber);
 

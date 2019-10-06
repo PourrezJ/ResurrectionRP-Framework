@@ -81,7 +81,18 @@ export default class PhoneManager {
             this.browser.on("CanClose", (canClose: boolean) => Interaction.SetCanClose(canClose));
 
             alt.onServer("ContactEdited", (args) => { if (this.browser != null) { this.browser.url = "http://resource/client/cef/phone/contacts.html" } });
-            alt.onServer("ConversationsReturnedV2", (args) => { if (this.browser != null) { this.browser.emit("loadConversations", args) } });
+            alt.onServer("ConversationsReturnedV2", (args) => {
+
+                args = JSON.parse(args);
+                for (var key in args) {
+                    args[key].lastReadDate = args[key].lastReadDate.replace("2038", "2019");
+                    args[key].lastMessageDate = args[key].lastMessageDate.replace("2038", "2019");
+                }
+                args = JSON.stringify(args);
+                if (this.browser != null)
+                { this.browser.emit("loadConversations", args) }
+
+            });
 
             alt.onServer("MessagesReturned", (args) =>
             {

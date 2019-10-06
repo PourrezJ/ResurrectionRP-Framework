@@ -306,27 +306,35 @@ namespace ResurrectionRP_Server.Phone
 
         public bool RemoveContactFromAddressBook(string number)
         {
-            if (AddressBook == null || string.IsNullOrEmpty(number))
-                return false;
-
-            int indexToRemove = -1;
-            for (int i = 0; i < AddressBook.Count; i++)
+            try
             {
-                Address a = AddressBook.ElementAt(i);
-                if (a.phoneNumber.Equals(number))
+                if (AddressBook == null || string.IsNullOrEmpty(number))
+                    return false;
+
+                int indexToRemove = -1;
+                for (int i = 0; i < AddressBook.Count; i++)
                 {
-                    indexToRemove = i;
-                    break;
+                    Address a = AddressBook.ElementAt(i);
+                    if (a.phoneNumber.Equals(number))
+                    {
+                        indexToRemove = i;
+                        break;
+                    }
+                }
+
+                if (indexToRemove != -1)
+                {
+                    AddressBook.RemoveAt(indexToRemove);
+                    var client = GetClientWithPhoneNumber(PhoneNumber);
+                    client?.EmitLocked("ContactEdited");
+                    return true;
                 }
             }
-
-            if (indexToRemove != -1)
+            catch(Exception ex)
             {
-                AddressBook.RemoveAt(indexToRemove);
-                var client = GetClientWithPhoneNumber(PhoneNumber);
-                client?.EmitLocked("ContactEdited");
-                return true;
+                Alt.Server.LogError(ex.ToString());
             }
+            
             return false;
         }
 

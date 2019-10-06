@@ -86,9 +86,6 @@ namespace ResurrectionRP_Server.Models
 
             try
             {
-                if (player.Model != ((Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01))
-                    player.Model = (Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01;
-
                 player.EmitLocked("HeadVariation", Parents.ShapeFirst, Parents.ShapeSecond, Parents.ShapeThird, Parents.SkinFirst, Parents.SkinSecond, Parents.SkinThird, Parents.ShapeMix, Parents.SkinMix, Parents.ThirdMix);
 
                 for (int i = 0; i < Features.Length; i++)
@@ -98,7 +95,7 @@ namespace ResurrectionRP_Server.Models
                     player.EmitLocked("HeadOverlayVariation", Appearance[i].Index, Appearance[i].Opacity, Appearance[i].Color, Appearance[i].SecondaryColor, i);
 
                 foreach (Decoration decoration in Decorations)
-                    player.EmitLocked("DecorationVariation", decoration.Collection, decoration.Overlay);
+                    player.SetDecoration(decoration.Collection, decoration.Overlay);
 
                 player.EmitLocked("EyeColorVariation", (uint)EyeColor);
                 player.EmitLocked("ComponentVariation", 2, Hair.Hair, 0, 0);

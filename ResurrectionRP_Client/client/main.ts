@@ -5,6 +5,7 @@ import * as speedometer from './vehicle/vehicle';
 import * as xtreamMenu from './menus/xtreamMenu/xtreamMenuManager';
 import * as utils from './Utils/utils';
 import * as login from './login/Login';
+import * as nightClub from './Env/NightClub';
 import * as PlayerCustomization from './player/PlayerCustomization';
 import { Game } from './player/Game';
 import { OpenCharCreator } from './Creator/Creator';
@@ -14,7 +15,7 @@ import menuManager from './MenuManager/MenuManager';
 import { Admin } from './Utils/Admin';
 import { LSPDManager } from './LSPDCall';
 import * as CustomEvents from './Utils/CustomEvents';
-import Ragdoll from './ragdoll';
+
 
 var GameClass: Game;
 
@@ -72,6 +73,7 @@ const init = async () => {
         utils.initialize();
         login.init();
         xtreamMenu.init();
+        nightClub.initialize();
         new LSPDManager();
         new Notify();
         new NetworkingEntityClient();

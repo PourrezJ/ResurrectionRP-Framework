@@ -232,6 +232,12 @@ namespace ResurrectionRP_Server.Inventory
             return item.CloneItem();
         }
 
+        public Models.Item GetItem(Models.InventoryData.ItemID itemID)
+        {
+            ItemStack item = InventoryList.ToList().Find(p => p?.Item.id == itemID);
+            return item?.Item;
+        }
+
         public bool HasItemID(ItemID id)
         {
             if (InventoryList.Any(x => x?.Item.id == id))

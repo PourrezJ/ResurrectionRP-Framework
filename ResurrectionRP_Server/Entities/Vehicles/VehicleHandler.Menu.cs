@@ -66,7 +66,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         : new XMenuItem("Verrouiller", "Vérrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_SOLID, false));
             }
 
-            if (LockState == VehicleLockState.Unlocked || PlayerHandler.ListVehicleKey.Exists(key => key.Plate == Plate)/* && Inventory != null*/)
+            if (LockState == VehicleLockState.Unlocked || PlayerHandler.ListVehicleKey.Exists(key => key.Plate == Plate) && Inventory != null)
                 xmenu.Add(new XMenuItem("Inventaire", "Ouvre l'inventaire du véhicule", "ID_OpenInventory", XMenuItemIcons.SUITCASE_SOLID, false));
             
             if(Vehicle.GetVehicleHandler().hasTrailer)

@@ -39,7 +39,7 @@ export function init()
                 }
 
                 if (inputView != null)
-                    return;
+                    inputView.destroy();
 
                 inputView = new alt.WebView("http://resource/client/cef/userinput/input.html");
                 inputView.focus();

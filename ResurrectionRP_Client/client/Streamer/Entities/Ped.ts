@@ -9,7 +9,7 @@ export default class Ped
     constructor(id: number, model: number, position: alt.Vector3, heading: number)
     {
         this.RemoteID = id;
-        this.Handle = game.createPed(26, model, position.x as number, position.y as number, position.z as number, heading, true, true);
+        this.Handle = game.createPed(26, model, position.x as number, position.y as number, position.z as number -1, heading, false, true);
     }
 
     public Freeze(status: boolean) {

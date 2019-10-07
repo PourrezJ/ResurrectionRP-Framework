@@ -269,7 +269,6 @@ export class NetworkingEntityClient {
         else
             entityId = NetworkingEntityClient.EntityList[id];
 
-
         game.freezeEntityPosition(entityId, freeze);
         NetworkingEntityClient.EntityList[id] = entityId;
         return entityId;

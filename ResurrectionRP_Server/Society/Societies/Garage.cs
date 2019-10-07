@@ -162,6 +162,8 @@ namespace ResurrectionRP_Server.Society.Societies
         private int _red;
         private int _green;
         private int _blue;
+
+        protected Door GarageDoor;
         #endregion
 
         #region Protected properties

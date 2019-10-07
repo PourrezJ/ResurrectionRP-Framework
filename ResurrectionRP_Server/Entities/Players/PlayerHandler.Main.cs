@@ -220,8 +220,6 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (Client.Model != ((Character.Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01))
                         Client.Model = (Character.Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01;
 
-                    Client.Spawn(Location.Pos, 0);
-
                     Client.Emit
                     (
                         Events.PlayerInitialised,
@@ -237,6 +235,8 @@ namespace ResurrectionRP_Server.Entities.Players
                         GameMode.Instance.IsDebug,
                         Location.Pos.ConvertToVector3Serialized()
                     );
+
+                    Client.Spawn(Location.Pos, 500);
 
                     Character.ApplyCharacter(Client);
                     Client.Dimension = GameMode.GlobalDimension;
@@ -270,7 +270,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     GameMode.Instance.IllegalManager.OnPlayerConnected(client);
                 });
                 
-                await Task.Delay(500);
+                await Task.Delay(600);
 
                 if (Alcohol > 0)
                     AddAlcolhol(0);

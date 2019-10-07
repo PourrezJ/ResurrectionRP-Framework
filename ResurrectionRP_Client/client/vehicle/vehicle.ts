@@ -14,6 +14,8 @@ let enginePreviousState: boolean;
 let engineState: boolean;
 let hasTrailer: boolean = false;
 let Trailer: number = null;
+let speedoState: boolean = false;
+let hudHidden: boolean = false;
 
 export function initialize() {
     alt.onServer('OnPlayerEnterVehicle', onPlayerEnterVehicle);
@@ -187,11 +189,18 @@ export function onPlayerEnterVehicle(vehicle: alt.Vehicle, seat: number, current
 }
 
 export function showSpeedometer(show: boolean) {
-    if (show && speedoWindow !== null) {
+    speedoState = show;
+
+    if (show && speedoWindow !== null && !hudHidden) {
         speedoWindow.emit('showSpeedometer');
-    } else if (!show && speedoWindow !== null) {
+    } else if (!show && speedoWindow !== null || hudHidden) {
         speedoWindow.emit('hideSpeedometer');
     }
+}
+
+export function hideHud(hide: boolean) {
+    hudHidden = hide;
+    showSpeedometer(speedoState);
 }
 
 export function setDoorState(vehicle: alt.Vehicle, door: number, state: number, option: boolean) {

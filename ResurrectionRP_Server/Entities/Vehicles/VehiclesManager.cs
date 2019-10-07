@@ -27,7 +27,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
             AltAsync.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
-            Alt.OnVehicleRemove += OnVehicleRemove;
 
             AltAsync.OnClient("LockUnlockVehicle", LockUnlockVehicle);
             AltAsync.OnClient("UpdateTrailer", UpdateTrailerState);
@@ -147,11 +146,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 vh.UpdateInBackground();
 
             return Task.CompletedTask;
-        }
-
-        private static void OnVehicleRemove(IVehicle vehicle)
-        {
-            VehicleHandlerList.TryRemove(vehicle, out _);
         }
         #endregion
 
@@ -418,6 +412,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (vehicle.Exists && vehicle.EngineOn)
                     vehicle.GetVehicleHandler()?.UpdateMilageAndFuel();
             }
+        }
+
+        public static void DeleteVehicleHandler(VehicleHandler vehicle)
+        {
+            bool result = _vehicleHandlers.TryRemove(vehicle.Plate, out _);
         }
         #endregion
     }

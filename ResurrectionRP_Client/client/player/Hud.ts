@@ -39,7 +39,7 @@ export class Hud {
                 game.displayHud(!this._hide);
                 game.displayRadar(!this._hide);
                 chat.hide(this._hide);
-                veh.showSpeedometer(!this._hide);
+                veh.hideHud(this._hide);
 
                 if (this.Browser != null)
                     this.Browser.emit("showHide", this._hide);

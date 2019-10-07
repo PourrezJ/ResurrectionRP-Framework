@@ -12,91 +12,114 @@ export class RPGInventoryManager {
     public give: boolean;
     public callbackTime: number;
 
-    constructor() {
-        alt.onServer("InventoryManager_OpenMenu", (pocket: string, bag: string, distant: string, outfit: string, give: boolean) => {
-            if (chat.isOpened() || game.isPauseMenuActive())
-                return;
+    constructor()
+    {
+        alt.offServer("InventoryManager_OpenMenu", this.InventoryManager_OpenMenu.bind(this));
+        alt.offServer("InventoryManager_RefreshMenu", this.InventoryManager_RefreshMenu.bind(this));
+        alt.offServer("InventoryManager_CloseMenu", this.CloseMenu.bind(this));
 
-            const time = Date.now() - this.callbackTime;
-
-            if (time < 100) {
-                alt.logWarning('Double call XMenuManager_Callback: ' + time + 'ms');
-                return;
-            }
-
-            this.pocket = JSON.parse(pocket);
-            this.bag = JSON.parse(bag);
-            this.distant = JSON.parse(distant);
-            this.outfit = JSON.parse(outfit);
-            this.give = give;
-
-            this.loading = true;
-
-            if (this.view == null) {
-                alt.log("debug inventaire: ouverture de l'inventaire.");
-                // création du webview
-                this.view = new alt.WebView("http://resource/client/cef/inventory/index.html");
-
-                this.view.focus();
-                alt.showCursor(true);
-                alt.toggleGameControls(false)
-
-                this.view.on('inventoryUseItem', (arg1: any, arg2: any, arg3: any) => alt.emitServer("RPGInventory_UseItem", arg1, arg2, arg3));
-                this.view.on('inventoryDropItem', (arg1: any, arg2: any, arg3: any, arg4: any) => alt.emitServer("RPGInventory_DropItem", arg1, arg2, arg3, arg4));
-                this.view.on('inventoryChangeItemPrice', (arg1: any, arg2: any, arg3: any, arg4: any) => alt.emitServer("RPGInventory_PriceItemInventory_SRV", arg1, arg2, arg3, arg4));
-                this.view.on('inventoryGiveItem', (arg1: any, arg2: any, arg3: any, arg4: any) => alt.emitServer("RPGInventory_GiveItem", arg1, arg2, arg3, arg4));
-                alt.log("debug inventaire: création events.");
-                this.view.on('inventorySwitchItem', (arg1: any, arg2: any, arg3: any, arg4: any, arg5: any) => {
-                    alt.log(`debug inventaire: inventorySwitchItem ${arg1} ${arg2} ${arg3} ${arg4} ${arg5}`);
-                    alt.emitServer("RPGInventory_SwitchItemInventory_SRV", arg1, arg2, arg3, arg4, arg5);
-                });
-
-                this.view.on('inventorySplitItem', (arg1: any, arg2: any, arg3: any, arg4: any, arg5: any, arg6: any, arg7: any) => alt.emitServer("RPGInventory_SplitItemInventory_SRV", arg1, arg2, arg3, arg4, arg5, arg6, arg7));
-
-                // Callback une fois l'inventaire ouvert
-                this.view.on("loaditem", () => {
-                    if (!this.view)
-                        return;
-
-                    this.view.emit('loadInventory',
-                        this.pocket,
-                        (this.bag != null) ? this.bag : null,
-                        (this.distant) ? this.distant : null,
-                        (this.outfit) ? this.outfit : null,
-                        (this.give) ? "true" : "false");
-
-                    this.loading = false;
-                });
-
-                alt.emit("hideChat");
-            }
-        });
-
-        alt.onServer("InventoryManager_RefreshMenu", (pocket: string, bag: string, distant: string, outfit: string, give: boolean) => {
-            if (this.view == null)
-                return;
-
-            alt.log("debug inventaire: refresh de l'inventaire.");
-
-            this.pocket = JSON.parse(pocket);
-            this.bag = JSON.parse(bag);
-            this.distant = JSON.parse(distant);
-            this.outfit = JSON.parse(outfit);
-            this.give = give;
-
-            this.view.emit('loadInventory',
-                this.pocket,
-                (this.bag != null) ? this.bag : null,
-                (this.distant) ? this.distant : null,
-                (this.outfit) ? this.outfit : null,
-                (this.give) ? "true" : "false");
-        });
-        
-        alt.onServer("InventoryManager_CloseMenu", () => this.CloseMenu());
-        alt.on("InventoryManager_CloseMenu", () => this.CloseMenu());
+        alt.onServer("InventoryManager_OpenMenu", this.InventoryManager_OpenMenu.bind(this));
+        alt.onServer("InventoryManager_RefreshMenu", this.InventoryManager_RefreshMenu.bind(this));
+        alt.onServer("InventoryManager_CloseMenu", this.CloseMenu.bind(this));
+        alt.on("InventoryManager_CloseMenu", this.CloseMenu.bind(this));
     }
 
+    /*
+     *                                  Inventory Open   
+     */
+    private InventoryManager_OpenMenu(pocket: string, bag: string, distant: string, outfit: string, give: boolean)
+    {
+        if (chat.isOpened() || game.isPauseMenuActive())
+            return;
+
+        const time = Date.now() - this.callbackTime;
+
+        if (time < 100) {
+            alt.logWarning('Double call RPGInventory: ' + time + 'ms');
+            return;
+        }
+
+        this.pocket = JSON.parse(pocket);
+        this.bag = JSON.parse(bag);
+        this.distant = JSON.parse(distant);
+        this.outfit = JSON.parse(outfit);
+        this.give = give;
+
+        this.loading = true;
+
+        if (this.view == null) {
+            alt.log("debug inventaire: ouverture de l'inventaire.");
+            // création du webview
+            this.view = new alt.WebView("http://resource/client/cef/inventory/index.html");
+
+            this.view.focus();
+            alt.showCursor(true);
+            alt.toggleGameControls(false)
+
+            alt.log("debug inventaire: création events.");
+            this.view.on('inventoryUseItem', (arg1: any, arg2: any, arg3: any) => {
+                alt.log("RPGInventory_UseItem");
+                alt.emitServer("RPGInventory_UseItem", arg1, arg2, arg3);
+            });
+
+            this.view.on('inventoryDropItem', (arg1: any, arg2: any, arg3: any, arg4: any) => alt.emitServer("RPGInventory_DropItem", arg1, arg2, arg3, arg4));
+            this.view.on('inventoryChangeItemPrice', (arg1: any, arg2: any, arg3: any, arg4: any) => alt.emitServer("RPGInventory_PriceItemInventory_SRV", arg1, arg2, arg3, arg4));
+            this.view.on('inventoryGiveItem', (arg1: any, arg2: any, arg3: any, arg4: any) => alt.emitServer("RPGInventory_GiveItem", arg1, arg2, arg3, arg4));  
+            this.view.on('inventorySwitchItem', (arg1: any, arg2: any, arg3: any, arg4: any, arg5: any) => {
+                alt.log(`debug inventaire: inventorySwitchItem ${arg1} ${arg2} ${arg3} ${arg4} ${arg5}`);
+                alt.emitServer("RPGInventory_SwitchItemInventory_SRV", arg1, arg2, arg3, arg4, arg5);
+            });
+
+            this.view.on('inventorySplitItem', (arg1: any, arg2: any, arg3: any, arg4: any, arg5: any, arg6: any, arg7: any) => alt.emitServer("RPGInventory_SplitItemInventory_SRV", arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+
+            // Callback une fois l'inventaire ouvert
+            this.view.on("loaditem", () => {
+                if (!this.view)
+                    return;
+
+                this.view.emit('loadInventory',
+                    this.pocket,
+                    this.bag,
+                    this.distant,
+                    this.outfit,
+                    (this.give) ? "true" : "false");
+
+                this.loading = false;
+            });
+
+            alt.emit("hideChat");
+        }
+    }
+
+
+    /*
+    *                                  Refresh Menu
+    */
+    private InventoryManager_RefreshMenu(pocket: string, bag: string, distant: string, outfit: string, give: boolean) {
+        if (this.view == null)
+            return;
+
+        alt.log("debug inventaire: refresh de l'inventaire.");
+
+        this.pocket = JSON.parse(pocket);
+        this.bag = JSON.parse(bag);
+        this.distant = JSON.parse(distant);
+        this.outfit = JSON.parse(outfit);
+        this.give = give;
+
+        this.view.emit('loadInventory',
+            this.pocket,
+            this.bag,
+            this.distant,
+            this.outfit,
+            (this.give) ? "true" : "false");
+    }
+
+    /*
+    *                                  Close Menu
+    */
     private CloseMenu() {
+        alt.log("Fermeture de l'inventaire");
         if (this.view == null)
             return;
         this.view.destroy();

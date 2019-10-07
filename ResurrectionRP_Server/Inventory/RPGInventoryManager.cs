@@ -103,22 +103,21 @@ namespace ResurrectionRP_Server.Inventory
             string targetInventory = Convert.ToString(args[1]);
             int itemSlot = Convert.ToInt32(args[2]);
 
-
             if (_clientMenus.TryGetValue(client, out menu))
             {
                 Models.ItemStack itemStack = null;
 
                 switch (targetInventory)
                 {
-                    case Utils.Enums.InventoryTypes.Pocket:
+                    case InventoryTypes.Pocket:
                         itemStack = menu.Inventory.InventoryList[itemSlot];
                         break;
 
-                    case Utils.Enums.InventoryTypes.Bag:
+                    case InventoryTypes.Bag:
                         itemStack = menu.Bag.InventoryList[itemSlot];
                         break;
 
-                    case Utils.Enums.InventoryTypes.Distant:
+                    case InventoryTypes.Distant:
                         itemStack = menu.Distant.InventoryList[itemSlot];
                         break;
                 }

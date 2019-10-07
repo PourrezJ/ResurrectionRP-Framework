@@ -253,14 +253,17 @@ namespace ResurrectionRP_Server.Phone
                 if (AddressBook == null || string.IsNullOrEmpty(originalNumber))
                     return false;
 
-                Address foundAddress = AddressBook.Find(address => address?.phoneNumber == originalNumber);
-                if (foundAddress.phoneNumber != null && foundAddress.phoneNumber != "")
+                lock (originalNumber)
                 {
-                    RemoveContactFromAddressBook(originalNumber);
-                    AddNameToAddressBook(client, contactName, contactNumber);
+                    Address foundAddress = AddressBook.Find(address => address?.phoneNumber == originalNumber);
+                    if (foundAddress.phoneNumber != null && foundAddress.phoneNumber != "")
+                    {
+                        RemoveContactFromAddressBook(originalNumber);
+                        AddNameToAddressBook(client, contactName, contactNumber);
 
-                    client.EmitLocked("ContactEdited");
-                    return true;
+                        client.EmitLocked("ContactEdited");
+                        return true;
+                    }
                 }
             }
 
@@ -311,23 +314,26 @@ namespace ResurrectionRP_Server.Phone
                 if (AddressBook == null || string.IsNullOrEmpty(number))
                     return false;
 
-                int indexToRemove = -1;
-                for (int i = 0; i < AddressBook.Count; i++)
+                lock (AddressBook)
                 {
-                    Address a = AddressBook.ElementAt(i);
-                    if (a.phoneNumber.Equals(number))
+                    int indexToRemove = -1;
+                    for (int i = 0; i < AddressBook.Count; i++)
                     {
-                        indexToRemove = i;
-                        break;
+                        Address a = AddressBook.ElementAt(i);
+                        if (a.phoneNumber.Equals(number))
+                        {
+                            indexToRemove = i;
+                            break;
+                        }
                     }
-                }
 
-                if (indexToRemove != -1)
-                {
-                    AddressBook.RemoveAt(indexToRemove);
-                    var client = GetClientWithPhoneNumber(PhoneNumber);
-                    client?.EmitLocked("ContactEdited");
-                    return true;
+                    if (indexToRemove != -1)
+                    {
+                        AddressBook.RemoveAt(indexToRemove);
+                        var client = GetClientWithPhoneNumber(PhoneNumber);
+                        client?.EmitLocked("ContactEdited");
+                        return true;
+                    }
                 }
             }
             catch(Exception ex)

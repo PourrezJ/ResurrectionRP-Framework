@@ -9,12 +9,9 @@ export class RadioManager {
     private view: alt.WebView;
     private favoris: object;
     private frequence: number;
-    private lastcheck: number;
-    private pressed: boolean;
     private status: RadioModes;
     private volume: number = 10;
     private muted: boolean = false;
-    private tick: number;
 
     constructor() {
         alt.onServer('OpenRadio', (favoris: string, frequence: number, status: RadioModes, volume: number) =>
@@ -35,7 +32,7 @@ export class RadioManager {
                 this.view.emit('unhide');
 
             this.view.focus();
-            alt.showCursor(true);
+            alt.showCursor(true);  
             
             /*
              * Events
@@ -89,13 +86,12 @@ export class RadioManager {
             this.CloseRadio();
         });
 
-        this.tick = alt.everyTick( () =>
-        {
-            if (this.view != null)
-            {
-                utils.DisEnableControls(false);
-            }
-        });
+        alt.everyTick(this.onTick.bind(this));
+    }
+
+    public onTick() {
+        if (this.view != null)
+            utils.DisEnableControls(false);
     }
 
     public CloseRadio() {
@@ -104,7 +100,6 @@ export class RadioManager {
         this.view.unfocus();
         this.view.destroy();
         this.view = null;
-        alt.clearEveryTick(this.tick);
         alt.showCursor(false);
         alt.toggleGameControls(true);
         chat.hide(false);

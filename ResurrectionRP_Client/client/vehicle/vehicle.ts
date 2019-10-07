@@ -43,8 +43,8 @@ export function initialize() {
             {
                 let vehId = entity.scriptID;
 
-                if (game.isVehicleSeatFree(vehId, -1, false))
-                    game.setVehicleOnGroundProperly(vehId, 0);
+                //if (game.isVehicleSeatFree(vehId, -1, false))
+                //    game.setVehicleOnGroundProperly(vehId, 0);
 
                 game.setVehicleAsNoLongerNeeded(vehId);
                 game.setEntityAsMissionEntity(vehId, true, true);

@@ -9,7 +9,6 @@ import { Hud as HudLib } from '../player/Hud';
 import { RPGInventoryManager } from '../menus/rpgInventory/RPGinventory';
 import { Weather as WeatherLib } from '../Env/Weather';
 import { Interaction as InteractionLib } from '../Player/Interaction';
-import { Doors as DoorsManagerLib } from '../Env/Doors';
 import PhoneManager from '../phone/PhoneManager';
 import { DrivingSchool } from '../DrivingSchool';
 import { RadioManager } from '../menus/RadioManager';
@@ -38,9 +37,6 @@ export class Game {
 
     private _Weather: WeatherLib = null;
     public get Weather(): WeatherLib { return this._Weather; }
-
-    private _Doors: DoorsManagerLib = null;
-    public get Doors(): DoorsManagerLib { return this._Doors; }
 
     private _IsConnected: boolean;
     public get IsConnected(): boolean { return this._IsConnected; }
@@ -123,7 +119,6 @@ export class Game {
             alt.log('Chargement des pools');
             this._Voice = new VoiceChat();
             this._Hud = new HudLib(Money);
-            this._Doors = new DoorsManagerLib();
             this._Inventory = new RPGInventoryManager();
             this._Weather = new WeatherLib(Weather, WeatherWind, WeatherWindDirection);
             this._Radio = new RadioManager();

@@ -14,6 +14,7 @@ import { Notify } from './Notify/Notify';
 import menuManager from './MenuManager/MenuManager';
 import { Admin } from './Utils/Admin';
 import { LSPDManager } from './LSPDCall';
+import { Doors } from './Env/Doors';
 import * as CustomEvents from './Utils/CustomEvents';
 
 
@@ -22,6 +23,8 @@ var GameClass: Game;
 const init = async () => {
     try {
         alt.log('Chargement des events.');
+
+        new Doors();
 
         alt.onServer("PlayerInitialised", (
             StaffRank: number,

@@ -23,9 +23,9 @@ namespace ResurrectionRP_Server.Society.Societies
 
         public override void Init()
         {
-            Principal = Door.CreateDoor(-1116041313, new Vector3(128.7443f, -1298.621f, 29.23274f), true);
+           // Principal = Door.CreateDoor(-1116041313, new Vector3(128.7443f, -1298.621f, 29.23274f), true);
             Bureau1 = Door.CreateDoor(668467214, new Vector3(95.84587f, -1285.645f, 29.26877f), true);
-            Bureau2 = Door.CreateDoor(-626684119, new Vector3(99.5032f, -1292.784f, 29.26877f), true);
+           // Bureau2 = Door.CreateDoor(-626684119, new Vector3(99.5032f, -1292.784f, 29.26877f), true);
 
             List<Teleport.TeleportEtage> etages = new List<Teleport.TeleportEtage>()
             {

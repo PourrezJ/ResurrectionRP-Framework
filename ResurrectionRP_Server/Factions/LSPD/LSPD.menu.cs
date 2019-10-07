@@ -73,7 +73,7 @@ namespace ResurrectionRP_Server.Factions
                 client.DisplayHelp("Vous n'avez aucune amende à payer !", 5000);
 
             Menu menu = new Menu("ID_Accueil", FactionName, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
-            menu.ItemSelectCallbackAsync = AccueilMenuCallback;
+            menu.ItemSelectCallback = AccueilMenuCallback;
             //List<Invoice> amendes = InvoiceList.FindAll(b => b.SocialClub == client.GetSocialClub());
             //MenuItem menuitem = new MenuItem("Payer mes amendes", rightLabel: amendes.Count.ToString());
             //menu.Add(menuitem);
@@ -100,23 +100,23 @@ namespace ResurrectionRP_Server.Factions
             menu.OpenMenu(client);
         }
 
-        private async Task AccueilMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void AccueilMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             switch (menuItem.Id)
             {
                 case "ID_PayInvoice":
                     var clientHandler = client.GetPlayerHandler();
 
-                    Invoice invoice = InvoiceList.Find(b => b == menuItem.GetData("invoice"));
+                    Invoice invoice = menuItem.GetData("invoice");
 
                     if (invoice != null)
                     {
-                        if (!await clientHandler.BankAccount.GetBankMoney(menuItem.GetData("price"), $"Réglement amende {menuItem.GetData("name")}"))
+                        if (!clientHandler.BankAccount.GetBankMoney(menuItem.GetData("price"), $"Réglement amende {menuItem.GetData("name")}"))
                         {
                             client.DisplayHelp( "Vous n'avez pas assez d'argent en banque pour payer l'amende.", 5000);
                             client.PlaySoundFrontEnd(-1, "ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
                             menu.CloseMenu(client);
-                            break;
+                            return;
                         }
 
                         BankAccount.AddMoney(Convert.ToDouble(menuItem.GetData("price")), $"Paiement par {client.Name}, réglement amende {menuItem.GetData("name")}", false);
@@ -125,11 +125,11 @@ namespace ResurrectionRP_Server.Factions
                         client.DisplayHelp( $"Vous venez de payer ~r~${menuItem.GetData("price")}~w~ pour régler votre amende.", 5000);
                         menu.CloseMenu(client);
                     }
-
+                    menu.CloseMenu(client);
                     if (InvoiceList.FindAll(b => (b.SocialClub == client.GetSocialClub() && b.paid == false)).Count > 0)
                         OpenAccueilMenu(client);
 
-                    break;
+                    return;
             }
         }
         #endregion

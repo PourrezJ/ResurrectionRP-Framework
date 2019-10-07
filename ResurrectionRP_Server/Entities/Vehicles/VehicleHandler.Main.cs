@@ -265,13 +265,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Vehicle.Remove();
             });
 
-            if (VehiclesManager.VehicleHandlerList.TryRemove(Vehicle, out VehicleHandler _))
+            if (VehiclesManager.VehicleHandlerList.TryRemove(Vehicle, out _))
             {
                 if (perm && !SpawnVeh)
                 {
+                    _cancelUpdate = true;
+
                     if (!await RemoveInDatabase())
                         return false;
                 }
+
+                if (perm || SpawnVeh)
+                    VehiclesManager.DeleteVehicleHandler(this);
 
                 return true;
             }

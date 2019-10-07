@@ -13,6 +13,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         private DateTime _lastUpdateRequest;
         private bool _updateWaiting = false;
         private int _nbUpdateRequests;
+        private bool _cancelUpdate;
         #endregion
 
         #region Methods
@@ -54,13 +55,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
 
             _updateWaiting = true;
+            _cancelUpdate = false;
             _nbUpdateRequests = 1;
 
             Task.Run(async () =>
             {
                 DateTime updateTime = _lastUpdateRequest.AddMilliseconds(Globals.SAVE_WAIT_TIME);
 
-                while (DateTime.Now < updateTime)
+                while (DateTime.Now < updateTime && !_cancelUpdate)
                 {
                     TimeSpan waitTime = updateTime - DateTime.Now;
 
@@ -70,6 +72,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     await Task.Delay((int)waitTime.TotalMilliseconds);
                     updateTime = _lastUpdateRequest.AddMilliseconds(Globals.SAVE_WAIT_TIME);
                 }
+
+                if (_cancelUpdate)
+                    return;
 
                 try
                 {

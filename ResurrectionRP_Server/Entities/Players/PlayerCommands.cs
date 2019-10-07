@@ -28,6 +28,20 @@ namespace ResurrectionRP_Server.Entities.Players
             Chat.RegisterCmd("doorstate", DoorState);
             Chat.RegisterCmd("additem", AddItem);
             Chat.RegisterCmd("wipe", Wipe);
+            Chat.RegisterCmd("sobre", Sobre);
+        }
+
+        private Task Sobre(IPlayer player, string[] args)
+        {
+            var ph = player.GetPlayerHandler();
+
+            if (ph == null)
+                return Task.CompletedTask;
+
+            ph.Alcohol = 0;
+            ph.UpdateFull();
+            player.SendNotificationSuccess("Commande éffectuer!");
+            return Task.CompletedTask;
         }
 
         private async Task Wipe(IPlayer player, string[] arguments)

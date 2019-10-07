@@ -381,6 +381,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (Alcohol <= 0)
                 {
                     Alcohol = 0;
+                    Client.EmitLocked("AlcoholDrink", 0);
                     DrunkTimer.Close();
                     DrunkTimer = null;
                 }

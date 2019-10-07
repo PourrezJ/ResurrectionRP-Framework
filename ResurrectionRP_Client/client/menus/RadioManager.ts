@@ -9,12 +9,9 @@ export class RadioManager {
     private view: alt.WebView;
     private favoris: object;
     private frequence: number;
-    private lastcheck: number;
-    private pressed: boolean;
     private status: RadioModes;
     private volume: number = 10;
     private muted: boolean = false;
-    private tick: number;
 
     constructor() {
         alt.onServer('OpenRadio', (favoris: string, frequence: number, status: RadioModes, volume: number) =>

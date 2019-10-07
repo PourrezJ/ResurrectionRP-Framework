@@ -124,27 +124,40 @@ namespace ResurrectionRP_Server.Factions
             #endregion
 
             #region Doors
-            Cellule1 = Door.CreateDoor(631614199, new Vector3(461.8065f, -994.4086f, 25.06443f), true);
-            Cellule2 = Door.CreateDoor(631614199, new Vector3(461.8065f, -997.6583f, 25.06443f), true);
-            Cellule3 = Door.CreateDoor(631614199, new Vector3(461.8065f, -1001.302f, 25.06443f), true);
-            Cellule4 = Door.CreateDoor(631614199, new Vector3(464.5701f, -992.6641f, 25.06443f), true);
 
+            
             var doors = new List<Door>()
             {
-                Cellule1,
-                Cellule2,
-                Cellule3,
-                Cellule4,
-                Door.CreateDoor(320433149, new Vector3(434.7479f, -983.2151f, 30.83926f), false, false),     // Porte devant
-                Door.CreateDoor(-1215222675, new Vector3(434.7479f, -980.6184f, 30.83926f), false, false),    // Porte devant
-                Door.CreateDoor(-2023754432, new Vector3(469.9679f, -1014.452f, 26.53623f), true, false),    // Porte arrière
-                Door.CreateDoor(-2023754432, new Vector3(467.3716f, -1014.452f, 26.53623f), true, false),    // Porte arrière            
-                Door.CreateDoor(749848321, new Vector3(453.0793f, -983.1895f, 30.83926f), true, false),    // Armurerie
-                Door.CreateDoor(749848321, new Vector3(461.2865f, -985.3206f, 30.83926f), true, false), // Toit
-                Door.CreateDoor(-131296141, new Vector3(443.0298f, -991.941f, 30.8393f), true, false), // Briefing
-                Door.CreateDoor(-1320876379, new Vector3(446.5728f, -980.0106f, 30.8393f), true, false), // bureau
-                Door.CreateDoor(3079744621, new Vector3(445.3772f, -998.8503f, 30.73355f), false, false), // Porte garage
-                Door.CreateDoor(320433149, new Vector3(446.853f, -998.8173f, 30.73125f), false, false),    // Porte garage
+                Door.CreateDoor(631614199, new Vector3(461.8065f, -994.4086f, 25.06443f), true),
+                Door.CreateDoor(631614199, new Vector3(461.8065f, -997.6583f, 25.06443f), true),
+                Door.CreateDoor(631614199, new Vector3(461.8065f, -1001.302f, 25.06443f), true),
+                Door.CreateDoor(631614199, new Vector3(464.5701f, -992.6641f, 25.06443f), true),
+                Door.CreateDoor(320433149, new Vector3(434.7479f, -983.2151f, 30.83926f), true, false),     // Porte devant
+                Door.CreateDoor(3079744621, new Vector3(434.7479f, -980.6184f, 30.83926f), true, false),    // Porte devant
+
+                Door.CreateDoor(2974090917, new Vector3(447.75916f, -980.06036f, 30.863531f), true, false), // Capitaine
+                Door.CreateDoor(3261965677, new Vector3(453.01688f, -982.1368f, 31.2781f), true, false),    // Armerurie
+
+                Door.CreateDoor(3261965677, new Vector3(445.63425f, -998.9337f, 31.05f), true, false),      // Porte arrière
+                Door.CreateDoor(3261965677, new Vector3(446.2123f, -998.9335f, 31.05f), true, false),       // Porte arrière
+                
+                Door.CreateDoor(2974090917, new Vector3(462.4174f, -1000.9596f, 36.100f), true, false),     // Bureau haut
+                
+                Door.CreateDoor(3261965677, new Vector3(468.30853f, -996.5477f, 25.144224f), true, false),  // new cell
+                Door.CreateDoor(3261965677, new Vector3(472.60486f, -996.5553f, 25.144224f), true, false),  // new cell
+                Door.CreateDoor(3261965677, new Vector3(476.9196f, -996.55396f, 25.144224f), true, false),  // new cell
+                Door.CreateDoor(3261965677, new Vector3(481.22482f, -996.5246f, 25.144224f), true, false),  // new cell
+                Door.CreateDoor(3261965677, new Vector3(476.02298f, -1003.4777f, 25.144224f), true, false), // new cell
+                Door.CreateDoor(3261965677, new Vector3(467.29504f, -1003.47314f, 25.144224f), true, false),// new cell
+                
+                Door.CreateDoor(3261965677, new Vector3(464.61694f, -1003.64606f, 25.144224f), true, false), // porte du bas
+                
+                Door.CreateDoor(2271212864, new Vector3(468.34406f, -1014.4056f, 26.508888f), true, false), // porte du bas
+                Door.CreateDoor(2271212864, new Vector3(469.09378f, -1014.3942f, 26.508888f), true, false), // porte du bas
+                Door.CreateDoor(749848321, new Vector3(461.2865f, -985.3206f, 30.83926f), true, false),
+
+
+                Door.CreateDoor(91564889, new Vector3(475.48322f, -986.00385f, 25.177326f), true, false)
             };
 
             foreach (var door in doors)

@@ -22,13 +22,13 @@ namespace ResurrectionRP_Server.Society.Societies
             
 
             var PortExt = Door.CreateDoor(993120320, new Vector3(-564.3921f, 276.5233f, 83.13618f), true);
-            var PortInt = Door.CreateDoor(unchecked((int)3668283177), new Vector3(-560.3441f, 291.9776f, 82.17625f), true);
+            //var PortInt = Door.CreateDoor(unchecked((int)3668283177), new Vector3(-560.3441f, 291.9776f, 82.17625f), true);
             var PortArr = Door.CreateDoor(993120320, new Vector3(-561.966f, 293.679f, 87.62682f), true);
 
             Doors = new List<Door>()
             {
                 PortExt,
-                PortInt,
+               // PortInt,
                 PortArr
             };
 

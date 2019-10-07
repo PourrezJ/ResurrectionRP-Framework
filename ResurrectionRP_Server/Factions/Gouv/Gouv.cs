@@ -19,7 +19,6 @@ using System.Numerics;
 
 namespace ResurrectionRP_Server.Factions
 {
-
     public partial class Gouv : Faction
     {
         #region Private fields

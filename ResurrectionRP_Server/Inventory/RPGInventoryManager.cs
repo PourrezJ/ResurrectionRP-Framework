@@ -370,7 +370,7 @@ namespace ResurrectionRP_Server.Inventory
 
                             if (phDistant.AddItem(invItem.stack.Item, quantity))
                             {
-                                phDistant.Client.SendNotification($"On vous à donner {quantity} {invItem.stack.Item.name}");
+                                phDistant.Client.SendNotification($"On vous a donné {quantity} {invItem.stack.Item.name}");
                                 ph.DeleteItem(slot, inventoryType, quantity);
                             }
 
@@ -381,7 +381,7 @@ namespace ResurrectionRP_Server.Inventory
                                 return;
                             if (phDistant.AddItem(invItem.stack.Item, quantity))
                             {
-                                phDistant.Client.SendNotification($"On vous à donner {quantity} {invItem.stack.Item.name}");
+                                phDistant.Client.SendNotification($"On vous a donné {quantity} {invItem.stack.Item.name}");
                                 ph.DeleteItem(slot, inventoryType, quantity);
                             }
 
@@ -392,7 +392,7 @@ namespace ResurrectionRP_Server.Inventory
                                 return;
                             if (phDistant.AddItem(invItem.stack.Item, quantity))
                             {
-                                phDistant.Client.SendNotification($"On vous à donner {quantity} {invItem.stack.Item.name}");
+                                phDistant.Client.SendNotification($"On vous a donné {quantity} {invItem.stack.Item.name}");
                                 ph.DeleteItem(slot, inventoryType, quantity);
                             }
                             break;

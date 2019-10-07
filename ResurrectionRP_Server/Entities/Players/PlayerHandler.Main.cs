@@ -390,6 +390,9 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public bool HasOpenMenu()
         {
+           if (XMenuManager.XMenuManager.HasOpenMenu(Client))
+                return true;
+
             if (MenuManager.HasOpenMenu(Client))
                 return true;
 

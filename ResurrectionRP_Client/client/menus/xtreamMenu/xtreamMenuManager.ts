@@ -1,11 +1,9 @@
 ﻿import * as alt from 'alt';
 
 let xmenuData = null;
-let inputMenu = null;
-let browser = null;
-let inputselected = "";
+let browser: alt.WebView = null;
+let inputView: alt.WebView = null;
 let callbackTime = Date.now();
-let inputView = null;
 
 export function init()
 {
@@ -14,9 +12,9 @@ export function init()
 }
 
 function XMenuManager_OpenMenu(menu) {
-    if (browser !== null)
-        closeMenu(false);
-
+    if (xmenuData != null)
+        return;
+    alt.log("Demande d'ouverture de l'extrem menu.");
     xmenuData = new Array();
     xmenuData = JSON.parse(menu);
     alt.toggleGameControls(false);
@@ -41,16 +39,21 @@ function XMenuManager_Callback(index) {
 
     // Ouverture de l'input menu
     if (menuItem.InputMaxLength > 0) {
+        alt.log("Demande d'ouverture de l'input menu.");
         if (menuItem.InputValue === null) {
             menuItem.InputValue = "";
         }
 
-        if (inputView != null)
+        if (inputView != null) {
             inputView.destroy();
+            alt.log("inputView not null ... destroy");
+        }
+
+        browser.isVisible = false;
+        browser.unfocus();
 
         inputView = new alt.WebView("http://resource/client/cef/userinput/input.html");
         inputView.focus();
-        alt.showCursor(true);
         alt.toggleGameControls(false);
 
         inputView.emit('Input_Data', menuItem.InputMaxLength, menuItem.InputValue);
@@ -58,10 +61,15 @@ function XMenuManager_Callback(index) {
         inputView.on('Input_Submit', (text) => {
             xmenuData.Items[index].InputValue = text;
             alt.emitServer("XMenuManager_ExecuteCallback", index, JSON.stringify(xmenuData));
-            xmenuData = null;
 
-            alt.showCursor(false);
-            alt.toggleGameControls(true);
+            if (inputView != null) {
+                inputView.unfocus();
+                inputView.destroy();
+                inputView = null;
+            }
+
+            browser.isVisible = true;
+            browser.focus();
         });
     }
     else {
@@ -69,22 +77,23 @@ function XMenuManager_Callback(index) {
         alt.emitServer("XMenuManager_ExecuteCallback", index, JSON.stringify(xmenuData));
     }
 
-    closeMenu();
+    //closeMenu();
 }
 
 function closeMenu(enableControls: boolean = true) {
+    alt.log("Fermeture de xtreamMenu");
     if (browser != null) {
         browser.destroy();
         browser = null;
-    }
-
-    if (enableControls) {
-        alt.toggleGameControls(true);
-        alt.showCursor(false);
     }
 
     if (inputView != null) {
         inputView.destroy();
         inputView = null;
     }
+    alt.toggleGameControls(true);
+    alt.showCursor(false);
+
+    xmenuData = null;
+    alt.log("XtreamMenu fermer");
 }

@@ -125,6 +125,8 @@ namespace ResurrectionRP_Server.XMenuManager
                 client.EmitLocked("XMenuManager_CloseMenu");
             }
         }
+
+        internal static bool HasOpenMenu(IPlayer client) => _clientMenus.ContainsKey(client);
         #endregion
     }
 }

@@ -736,28 +736,10 @@ namespace ResurrectionRP_Server.Entities.Players
             else ListVehicleKey.Add(new VehicleKey(keyVehicleName, veh.Plate));
         }
 
-        public bool HasKey(VehicleHandler veh)
-        {
-            if (ListVehicleKey.Exists(k => k.Plate == veh.Plate))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        public bool HasKey(string plate)
-        {
-            if (ListVehicleKey.Exists(k => k.Plate == plate))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        public bool HasKey(VehicleHandler veh) =>
+            ListVehicleKey.Exists(k => k.Plate == veh.Plate);
+        public bool HasKey(string plate) => 
+            ListVehicleKey.Exists(k => k.Plate == plate);
 
         public void RemoveKey(VehicleHandler veh)
         {

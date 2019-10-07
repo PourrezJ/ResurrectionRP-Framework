@@ -126,8 +126,6 @@ namespace ResurrectionRP_Server.Services
             {
                 try
                 {
-                    if (veh.OwnerID != social)
-                        continue;
 
                     string _vehName = VehicleInfoLoader.VehicleInfoLoader.Get(veh.Model)?.DisplayName ?? "Inconnu";
                     var _item = new MenuItem((_vehName != null) ? _vehName : "INCONNU", "", "ID_Get", true, rightLabel: veh.Plate);

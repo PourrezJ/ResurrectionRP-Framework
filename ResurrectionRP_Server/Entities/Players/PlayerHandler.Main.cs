@@ -376,7 +376,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             DrunkTimer = Utils.Utils.SetInterval(() =>
             {
-                Alcohol -= 0.1;
+                Alcohol -= 0.2;
                 Client.EmitLocked("AlcoholDrink", Alcohol);
                 if (Alcohol <= 0)
                 {

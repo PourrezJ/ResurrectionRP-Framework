@@ -190,27 +190,22 @@ namespace ResurrectionRP_Server
 
         public static List<IPlayer> GetNearestPlayers(this IPlayer client, float range, bool withoutme = true, int dimension = GameMode.GlobalDimension)
         {
-            Utils.Utils.CheckThread();
+            Utils.Utils.CheckThread("GetNearestPlayers");
 
             ICollection<IPlayer> players = Alt.GetAllPlayers();
             List<IPlayer> nearestPlayers = new List<IPlayer>();
 
-            Utils.Utils.CheckThread();
-
-            AltAsync.Do(() =>
+            foreach (IPlayer player in players)
             {
-                foreach (IPlayer player in players)
-                {
-                    if (!player.Exists || player.Dimension != dimension)
-                        continue;
+                if (!player.Exists || player.Dimension != dimension)
+                    continue;
 
-                    if (client.Position.Distance(player.Position) <= range)
-                        nearestPlayers.Add(player);
-                }
+                if (client.Position.Distance(player.Position) <= range)
+                    nearestPlayers.Add(player);
+            }
 
-                if (withoutme)
-                    nearestPlayers.Remove(client);
-            }).Wait();
+            if (withoutme)
+                nearestPlayers.Remove(client);
 
             return nearestPlayers;
         }

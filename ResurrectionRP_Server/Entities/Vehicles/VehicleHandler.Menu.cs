@@ -28,7 +28,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 return;
 
             XMenu xmenu = new XMenu("VehiculeMenu");
-            xmenu.CallbackAsync = VehicleXMenuCallback;
+            xmenu.Callback = VehicleXMenuCallback;
 
             if (client.IsInVehicle)
             {
@@ -93,7 +93,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         private void OpenDoorsMenu(IPlayer client)
         {
             XMenu menu = new XMenu("DoorMenu");
-            menu.CallbackAsync = VehicleXMenuCallback;
+            menu.Callback = VehicleXMenuCallback;
             
             menu.Add(new XMenuItem("Porte avant gauche", "", "ID_frontLeft",  GetXMenuIconDoor(GetDoorState(VehicleDoor.DriverFront))));
             menu.Add(new XMenuItem("Porte avant droite", "", "ID_frontRight", GetXMenuIconDoor(GetDoorState(VehicleDoor.PassengerFront))));
@@ -119,7 +119,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         #region Callback
 
-        private async Task VehicleXMenuCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void VehicleXMenuCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             if (Vehicle == null)
                 return;
@@ -164,7 +164,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         Inventory.Locked = false;
                         return Task.CompletedTask;
                     };
-                    await inv.OpenMenu(client);
+                    Task.Run(async ()=> await inv.OpenMenu(client));
                     break;
                 case "ID_DetachTrailer":
                     client.Emit("DetachTrailer");
@@ -222,7 +222,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         
                 case "ID_give":
                     List<IPlayer> players = client.GetNearestPlayers(5f);
-
+                    XMenuManager.XMenuManager.CloseMenu(client);
                     if (players.Count > 0)
                     {
                         Menu menugive = new Menu("ID_GiveVehicle", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
@@ -273,7 +273,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             if (ph != null)
                             {
                                 if (ph.HasBankMoney(carPrice, $"Achat de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
-                                    await _place.CarDealer.BuyCar(_place, ph);
+                                    _place.CarDealer.BuyCar(_place, ph);
                                 else
                                     client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque");
                             }
@@ -297,7 +297,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             if (ph != null)
                             {
                                 if (ph.HasBankMoney(_place.VehicleInfo.Price, $"Location de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
-                                    await _place.RentShop.RentCar(_place, ph);
+                                    _place.RentShop.RentCar(_place, ph);
                                 else
                                     client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque");
                             }
@@ -310,7 +310,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     break;
                     
                 case "ID_delete":
-                    await this.DeleteAsync(true);
+                    Task.Run(async ()=> await DeleteAsync(true));
+                    XMenuManager.XMenuManager.CloseMenu(client);
                     break;
                 /*
                 case "ID_lockpick":
@@ -342,6 +343,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 case "ID_citerne":
                     client.DisplaySubtitle($"Contenu de la citerne: {OilTank.Traite}", 5000);
+                    XMenuManager.XMenuManager.CloseMenu(client);
                     break;
 
                 default:

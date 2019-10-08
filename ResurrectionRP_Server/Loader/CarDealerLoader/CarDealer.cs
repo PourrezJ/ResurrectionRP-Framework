@@ -84,7 +84,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
             }
         }
 
-        public async Task BuyCar(CarDealerPlace vehicleplace, Entities.Players.PlayerHandler ph)
+        public void BuyCar(CarDealerPlace vehicleplace, Entities.Players.PlayerHandler ph)
         {
             if (vehicleplace.TextLabelId != null)
                 vehicleplace.TextLabelId.Destroy();
@@ -93,11 +93,12 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
             vehicleplace.VehicleHandler.SetOwner(ph);
             vehicleplace.VehicleHandler.Vehicle.ResetData("CarDealer");
             ph.ListVehicleKey.Add(Models.VehicleKey.GenerateVehicleKey(vehicleplace.VehicleHandler));
-            await vehicleplace.VehicleHandler.InsertVehicle();
+            
             ph.Client.SendNotificationSuccess($"Vous avez acheté un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");
-            await vehicleplace.VehicleHandler.Vehicle.FreezeAsync(false);
-            await vehicleplace.VehicleHandler.Vehicle.InvincibleAsync(false);
+            vehicleplace.VehicleHandler.Vehicle.Freeze(false);
+            vehicleplace.VehicleHandler.Vehicle.Invincible(false);
             CarDealerPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;
+            Task.Run(async () => await vehicleplace.VehicleHandler.InsertVehicle());
         }
     }
 }

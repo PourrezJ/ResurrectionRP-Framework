@@ -73,13 +73,13 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
             }
         }
 
-        public async Task RentCar(VehicleRentPlace vehicleplace, Entities.Players.PlayerHandler ph)
+        public void RentCar(VehicleRentPlace vehicleplace, Entities.Players.PlayerHandler ph)
         {
             vehicleplace.TextLabelId.Destroy();
             var veh = vehicleplace.VehicleHandler;
             veh.Vehicle.SetSyncedMetaData("VehicleRent", DateTime.Now.ToString());
-            await veh.Vehicle.FreezeAsync(false);
-            await veh.Vehicle.InvincibleAsync(false);
+            veh.Vehicle.Freeze(false);
+            veh.Vehicle.Invincible(false);
             vehicleplace.VehicleHandler.SpawnVeh = true;
             vehicleplace.VehicleHandler.SetOwner(ph);
             vehicleplace.VehicleHandler.Vehicle.ResetData("RentShop");

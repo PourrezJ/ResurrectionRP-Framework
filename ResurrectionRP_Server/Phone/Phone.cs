@@ -248,23 +248,30 @@ namespace ResurrectionRP_Server.Phone
 
         public bool TryEditContact(IPlayer client, string contactName, string contactNumber, string originalNumber, bool message = true)
         {
-            if (ValidateContact(contactName, contactNumber, true))
+            try
             {
-                if (AddressBook == null || string.IsNullOrEmpty(originalNumber))
-                    return false;
-
-                lock (originalNumber)
+                if (ValidateContact(contactName, contactNumber, true))
                 {
-                    Address foundAddress = AddressBook.Find(address => address?.phoneNumber == originalNumber);
-                    if (foundAddress.phoneNumber != null && foundAddress.phoneNumber != "")
-                    {
-                        RemoveContactFromAddressBook(originalNumber);
-                        AddNameToAddressBook(client, contactName, contactNumber);
+                    if (AddressBook == null || string.IsNullOrEmpty(originalNumber))
+                        return false;
 
-                        client.EmitLocked("ContactEdited");
-                        return true;
+                    lock (originalNumber)
+                    {
+                        Address foundAddress = AddressBook.Find(address => address?.phoneNumber == originalNumber);
+                        if (foundAddress.phoneNumber != null && foundAddress.phoneNumber != "")
+                        {
+                            RemoveContactFromAddressBook(originalNumber);
+                            AddNameToAddressBook(client, contactName, contactNumber);
+
+                            client.EmitLocked("ContactEdited");
+                            return true;
+                        }
                     }
                 }
+            }
+            catch (NullReferenceException)
+            {
+                Alt.Server.LogError($"[Phone.TryEditContact()] NullReferenceException : client: {client}, contactName: {contactName}, contactNumber: {contactNumber}, originalNumber: {originalNumber}, message: {message}");
             }
 
             return false;

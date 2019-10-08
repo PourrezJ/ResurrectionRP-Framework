@@ -192,7 +192,9 @@ namespace ResurrectionRP_Server.Colshape
 
         private static void OnEntityInteractInColShape(IPlayer client, object[] args)
         {
-            DateTime startTime = DateTime.Now;
+            try
+            {
+                DateTime startTime = DateTime.Now;
 
             if (args[0] == null || (long)args[0] != 69)
             {
@@ -200,16 +202,21 @@ namespace ResurrectionRP_Server.Colshape
                 return;
             }
 
-            lock (_colshapes)
-            {
-                IColshape colshape = _colshapes[(long)args[1]];
-
-                if (colshape.IsEntityIn(client))
+                lock (_colshapes)
                 {
-                    colshape.PlayerInteractInColshape(client);
-                    OnPlayerInteractInColshape?.Invoke(colshape, client);
-                    Alt.Log($"[Colshape {colshape.Id}] Player {client.Id} interacting, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
+                    IColshape colshape = _colshapes[(long)args[1]];
+
+                    if (colshape.IsEntityIn(client))
+                    {
+                        colshape.PlayerInteractInColshape(client);
+                        OnPlayerInteractInColshape?.Invoke(colshape, client);
+                        Alt.Log($"[Colshape {colshape.Id}] Player {client.Id} interacting, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                Alt.Server.LogError(ex.ToString());
             }
         }
         #endregion

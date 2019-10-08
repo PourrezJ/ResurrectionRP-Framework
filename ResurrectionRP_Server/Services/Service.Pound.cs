@@ -100,7 +100,7 @@ namespace ResurrectionRP_Server.Services
                                 _towedvehicle.IsInPound = true;
                                 _vh.UpdateProperties();
                                 _towedvehicle.UpdateInBackground(false);
-                                await _towedvehicle.DeleteAsync(true);
+                                await _towedvehicle.DeleteAsync(false);
                                 MenuManager.CloseMenu(client);
                             }
                         }

@@ -17,7 +17,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
 
         public static Dictionary<string, Chair> Chairs = new Dictionary<string, Chair>()
         {
-            { "prop_bench_01a", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0, h = 360}},
+            { "prop_bench_01a", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0, y = 0, z = 0.5, h = 180.0}},
             { "prop_bench_01b", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
             { "prop_bench_01c", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
             { "prop_bench_02", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
@@ -63,7 +63,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
             { "prop_skid_chair_02", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
             { "prop_skid_chair_03", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
             { "prop_sol_chair", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
-            { "prop_wheelchair_01", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
+            { "prop_wheelchair_01", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.1, h = 180.0}},
             { "prop_wheelchair_01_s", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
             { "p_armchair_01_s", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
             { "p_clb_officechair_s", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
@@ -131,7 +131,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
         {
             foreach(var chairdic in Chairs)
             {
-                if (IsChair(hash))
+                if (hash == AltV.Net.Alt.Hash(chairdic.Key))
                 {
                     if (GameMode.Instance.IsDebug)
                         AltV.Net.Alt.Server.LogInfo(chairdic.Key);

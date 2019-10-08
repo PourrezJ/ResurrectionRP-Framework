@@ -95,28 +95,32 @@ export class Interaction {
 
                     if (raycastResult == null)
                         return;
-
                     if (raycastResult.isHit) {
                         Streamer.NetworkingEntityClient.EntityList.forEach((item, index) => {
                             if (item == raycastResult.hitEntity) {
                                 objNetId = index;
                             }
                         });
+
+                        //let item = game.getClosestObjectOfType(raycastResult.entityPos.x, raycastResult.entityPos.y, raycastResult.entityPos.z, Globals.MAX_INTERACTION_DISTANCE, raycastResult.hitEntity, false, false, false)
+
+                        raycastResult["entityPos"] = game.getEntityCoords(raycastResult.hitEntity, true);
+                        raycastResult["entityHeading"] = game.getEntityHeading(raycastResult.hitEntity);
                     }
 
                     if (raycastResult.isHit && raycastResult.entityType == 1 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
                         player = alt.Player.all.find(p => p.scriptID == raycastResult.hitEntity);
-                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, player, objNetId);
+                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, player, objNetId, game.getEntityHeading(raycastResult.hitEntity));
                     }
                     else if (raycastResult.isHit && raycastResult.entityType == 2 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
                         vehicle = alt.Vehicle.all.find(v => v.scriptID == raycastResult.hitEntity);
-                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), vehicle, null, objNetId);
+                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), vehicle, null, objNetId, game.getEntityHeading(raycastResult.hitEntity));
                     }
                     else if (raycastResult.isHit && raycastResult.entityType == 3 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
-                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId);
+                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId, game.getEntityHeading(raycastResult.hitEntity));
                     }
                     else {
-                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId);
+                        alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId, game.getEntityHeading(raycastResult.hitEntity));
                     }
 
                     if (key == 69 && this.inColShape) {

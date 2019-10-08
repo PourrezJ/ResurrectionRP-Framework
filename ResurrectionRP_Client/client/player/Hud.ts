@@ -113,15 +113,16 @@ export class Hud {
 
             if (!game.isPedSittingInAnyVehicle(alt.Player.local.scriptID))
                 game.drawSprite("srange_gen", "hits_dot", 0.5, 0.5, 0.005, 0.007, 0, 255, 255, 255, 60, false);
+        });
 
-            if (this.Browser != null)
-            {
+        alt.setInterval(() => {
+            if (this.Browser != null) {
                 let range = "Parler";
                 if (alt.Player.local.getSyncedMeta("Voice_VoiceRange") != null)
                     range = alt.Player.local.getSyncedMeta("Voice_VoiceRange");
 
                 this.Browser.emit("setHUD", Survival.Hunger, Survival.Thirst, VoiceChat.isTalking, range, this.Money, VoiceChat.isMicrophoneMuted);
             }
-        });
+        }, 250);
     }
 }

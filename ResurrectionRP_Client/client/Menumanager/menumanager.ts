@@ -364,6 +364,7 @@ function saveInput(inputText) {
 
         inputItem = null;
         inputIndex = -1;
+        
         alt.showCursor(false);
         alt.toggleGameControls(true);
 

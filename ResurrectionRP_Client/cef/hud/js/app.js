@@ -24,7 +24,7 @@ function setHUD(hunger, thirst, vocal, vocaltype, money, mute)
       $('.burger img').css('animation', 'none');
     }
 
-    if (mute === "1")
+    if (mute)
     {
         $('#speak span').html(`MUTE`);
         $('#speak').addClass('mute');
@@ -33,7 +33,7 @@ function setHUD(hunger, thirst, vocal, vocaltype, money, mute)
     else
     {
         $('#speak span').html(`${vocaltype}`);
-        if (vocal === "1") {
+        if (vocal) {
             $('.listening').css('opacity', '1');
         }
         else {

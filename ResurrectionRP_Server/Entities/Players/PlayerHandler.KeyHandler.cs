@@ -113,6 +113,8 @@ namespace ResurrectionRP_Server.Entities.Players
                             vh.OpenXtremMenu(client);
                         else if (HouseManager.IsInHouse(Client))
                         {
+                            if (Client.Dimension == GameMode.GlobalDimension)
+                                return;
                             House house = HouseManager.GetHouse(Client);
 
                             if (house != null)

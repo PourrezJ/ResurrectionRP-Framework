@@ -194,8 +194,11 @@ namespace ResurrectionRP_Server.Colshape
         {
             DateTime startTime = DateTime.Now;
 
-            if (!int.TryParse(args[0].ToString(), out int key) || key != 69)
+            if (args[0] == null || (long)args[0] != 69)
+            {
+                Alt.Log($"[OnEntityInteractInColShape] Error args[0]: {args[0]}");
                 return;
+            }
 
             lock (_colshapes)
             {

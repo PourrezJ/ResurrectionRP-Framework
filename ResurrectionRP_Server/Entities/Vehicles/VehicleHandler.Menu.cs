@@ -1,5 +1,4 @@
 ﻿using AltV.Net.Async;
-using AltV.Net.Async.Events;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using ResurrectionRP_Server.Entities.Players;
@@ -10,8 +9,6 @@ using ResurrectionRP_Server.Utils.Extensions;
 using ResurrectionRP_Server.XMenuManager;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
 using System.Threading.Tasks;
 using AltV.Net;
 using ResurrectionRP_Server.Factions;
@@ -89,7 +86,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             if (Vehicle != null && Array.IndexOf(Farms.Petrol.allowedTrailers, (VehicleModel)Vehicle.Model) != -1)
                 xmenu.Add(new XMenuItem("Voir le litrage de la citerne", "", "ID_citerne", XMenuItemIcons.GAS_PUMP_SOLID, true));
-
 
             xmenu.OpenXMenu(client);
         }
@@ -238,13 +234,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             menugive.Add(pitem);
                         }
 
-                        menugive.ItemSelectCallbackAsync = async (_client, _menu, _menuitem, _menuindex) =>
+                        menugive.ItemSelectCallback = (_client, _menu, _menuitem, _menuindex) =>
                         {
                             PlayerHandler destinataire = PlayerManager.GetPlayerByName(_menuitem.Text);
                             if (destinataire != null)
                             {
                                 SetOwner(destinataire);
-                                var vehinfo = VehicleInfoLoader.VehicleInfoLoader.Get(await Vehicle.GetModelAsync());
+                                var vehinfo = VehicleInfoLoader.VehicleInfoLoader.Get(Vehicle.Model);
                                 _client.SendNotificationSuccess("Vous avez donné votre " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " à " + destinataire.Identite.Name);
                                 destinataire.Client.SendNotificationSuccess("Vous avez reçu un(e) " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " par " + _client.GetPlayerHandler()?.Identite.Name);
 

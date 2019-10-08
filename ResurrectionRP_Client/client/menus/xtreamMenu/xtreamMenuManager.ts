@@ -86,11 +86,12 @@ function closeMenu(enableControls: boolean = true) {
         browser.destroy();
         browser = null;
     }
-
+    /*
     if (inputView != null) {
         inputView.destroy();
         inputView = null;
     }
+    */
     alt.toggleGameControls(true);
     alt.showCursor(false);
 

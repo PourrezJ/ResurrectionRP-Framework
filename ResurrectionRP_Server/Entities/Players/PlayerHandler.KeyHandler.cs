@@ -18,6 +18,7 @@ using ResurrectionRP_Server.Utils.Enums;
 using ResurrectionRP_Server.Entities.Peds;
 using System.Collections.Generic;
 using ResurrectionRP_Server.Factions;
+using System.Numerics;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -202,7 +203,8 @@ namespace ResurrectionRP_Server.Entities.Players
                                 if (data == null)
                                     return;
 
-                                client.TaskStartScenarioAtPosition(data.task, new System.Numerics.Vector3(Convert.ToSingle(raycastData.pos.X + data.x), Convert.ToSingle(raycastData.pos.Y + data.y), Convert.ToSingle(raycastData.pos.Z + data.z)), (float)data.h, 0, true, true);
+                                Vector3 pos = new Vector3(Convert.ToSingle(raycastData.entityPos.X + data.x), Convert.ToSingle(raycastData.entityPos.Y + data.y), Convert.ToSingle(raycastData.entityPos.Z + data.z));
+                                client.TaskStartScenarioAtPosition(data.task, pos, raycastData.entityHeading + (float)data.h, 0, true, true); ;
                                 client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour vous relevez.", 5000);
                                 IsSitting = true;
                             }

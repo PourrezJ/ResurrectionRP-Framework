@@ -9,5 +9,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
         public int hitEntity;
         public uint entityHash;
         public int entityType;
+        public Vector3 entityPos;
+        public float entityHeading;
     }
 }

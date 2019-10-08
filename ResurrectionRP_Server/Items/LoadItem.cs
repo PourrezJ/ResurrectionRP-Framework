@@ -127,6 +127,7 @@ namespace ResurrectionRP_Server.Items
                     new Weapons(ItemID.Weapon, "Double Action Revolver", "", 3, hash: WeaponHash.DoubleAction, isDockable: true, itemPrice: 40000),
                     //new Weapons(ItemID.Weapon, "Hachette en pierre", "", 3, hash: WeaponHash.StoneHatchet, isDockable: true, itemPrice: 2100),
                     new Weapons(ItemID.Weapon, "Katana", "", 3, hash: WeaponHash.Bottle, isDockable: true, itemPrice: 3100),
+                    new Weapons(ItemID.Weapon, "Lampe Torche", "", 1, hash: WeaponHash.Flashlight, isDockable: true, itemPrice: 250),
 
                     new HealItem(ItemID.RhumLiquide, "Rhum Liquide", "Déinfecte et sert de carburant.",1,true,true,true, life:0, icon:"bandage"),
                     new Unusable(ItemID.Canneasurcre, "Canne a sucre", "", 2),

@@ -3,6 +3,8 @@ using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Utils.Extensions;
 using System;
+using System.Runtime.ExceptionServices;
+using System.Security;
 
 namespace ResurrectionRP_Server.Colshape
 {
@@ -20,6 +22,7 @@ namespace ResurrectionRP_Server.Colshape
         #endregion
 
         #region Public methods
+        [HandleProcessCorruptedStateExceptions, SecurityCritical]
         public override bool IsEntityInside(IEntity entity)
         {
             try

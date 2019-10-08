@@ -27,14 +27,17 @@ namespace ResurrectionRP_Server.Colshape
         {
             try
             {
-                if (!entity.Exists)
-                    return false;
-                else if (entity.Dimension != Dimension)
-                    return false;
-                else if (entity.Position.Z < Position.Z || entity.Position.Z > Position.Z + Height)
-                    return false;
+                lock (entity)
+                {
+                    if (!entity.Exists)
+                        return false;
+                    else if (entity.Dimension != Dimension)
+                        return false;
+                    else if (entity.Position.Z < Position.Z || entity.Position.Z > Position.Z + Height)
+                        return false;
 
-                return IsPositionInside(entity.Position);
+                    return IsPositionInside(entity.Position);
+                }
             }
             catch(AccessViolationException)
             {

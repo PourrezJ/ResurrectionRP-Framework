@@ -17,7 +17,7 @@ namespace ResurrectionRP_Server.Colshape
     {
         #region Private static fields
         private static volatile uint _colshapeId = 0;
-        private static readonly Dictionary<ulong, IColshape> _colshapes = new Dictionary<ulong, IColshape>();
+        private static readonly Dictionary<long, IColshape> _colshapes = new Dictionary<long, IColshape>();
         private static readonly HashSet<IEntity> _entitiesToRemove = new HashSet<IEntity>();
         #endregion
 
@@ -34,6 +34,7 @@ namespace ResurrectionRP_Server.Colshape
         {
             Alt.OnPlayerDisconnect += OnPlayerDisconnect;
             Alt.OnVehicleRemove += OnVehicleRemove;
+            Alt.OnClient("InteractionInColshape", OnEntityInteractInColShape);
         }
         #endregion
 
@@ -185,6 +186,26 @@ namespace ResurrectionRP_Server.Colshape
                             Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} entering, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
                         }
                     }
+                }
+            }
+        }
+
+        private static void OnEntityInteractInColShape(IPlayer client, object[] args)
+        {
+            DateTime startTime = DateTime.Now;
+
+            if (!int.TryParse(args[0].ToString(), out int key) || key != 69)
+                return;
+
+            lock (_colshapes)
+            {
+                IColshape colshape = _colshapes[(long)args[1]];
+
+                if (colshape.IsEntityIn(client))
+                {
+                    colshape.PlayerInteractInColshape(client);
+                    OnPlayerInteractInColshape?.Invoke(colshape, client);
+                    Alt.Log($"[Colshape {colshape.Id}] Player {client.Id} interacting, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
                 }
             }
         }

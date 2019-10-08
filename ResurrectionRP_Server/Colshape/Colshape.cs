@@ -1,5 +1,6 @@
 ﻿using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace ResurrectionRP_Server.Colshape
@@ -18,6 +19,8 @@ namespace ResurrectionRP_Server.Colshape
         private readonly HashSet<IEntity> _entities;
 
         public ICollection<IEntity> Entities => _entities;
+
+        private ConcurrentDictionary<string, object> _data;
         #endregion
 
         #region Events
@@ -36,6 +39,7 @@ namespace ResurrectionRP_Server.Colshape
             Radius = radius;
             Dimension = dimension;
             _entities = new HashSet<IEntity>();
+            _data = new ConcurrentDictionary<string, object>();
         }
         #endregion
 
@@ -63,6 +67,14 @@ namespace ResurrectionRP_Server.Colshape
             ColshapeManager.DeleteColshape(this);
         }
 
+        public bool GetData<T>(string key, out T result)
+        {
+            object value;
+            bool res = _data.TryGetValue(key, out value);
+            result = (T)value;
+            return res;
+        }
+
         public bool IsEntityIn(IEntity entity)
         {
             lock (_entities)
@@ -74,6 +86,11 @@ namespace ResurrectionRP_Server.Colshape
         public abstract bool IsEntityInside(IEntity entity);
 
         public abstract bool IsPositionInside(Position position);
+
+        public void PlayerInteractInColshape(IPlayer client)
+        {
+            OnPlayerInteractInColshape?.Invoke(this, client);
+        }
 
         public void RemoveEntity(IEntity entity)
         {
@@ -91,6 +108,11 @@ namespace ResurrectionRP_Server.Colshape
                 else if (entity.Type == BaseObjectType.Vehicle)
                     OnVehicleLeaveColshape?.Invoke(this, (IVehicle)entity);
             }
+        }
+
+        public void SetData(string key, object value)
+        {
+            _data.AddOrUpdate(key, value, (k, oldValue) => value);
         }
         #endregion
     }

@@ -31,13 +31,19 @@ namespace ResurrectionRP_Server.Colshape
 
         void Delete();
 
+        bool GetData<T>(string key, out T result);
+
         bool IsEntityIn(IEntity entity);
 
         bool IsEntityInside(IEntity entity);
 
         bool IsPositionInside(Position position);
 
+        void PlayerInteractInColshape(IPlayer client);
+
         void RemoveEntity(IEntity entity);
+
+        void SetData(string key, object value);
         #endregion
     }
 }

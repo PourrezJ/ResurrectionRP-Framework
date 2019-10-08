@@ -4,6 +4,7 @@ using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Blips;
 using ResurrectionRP_Server.Entities.Players;
@@ -59,8 +60,8 @@ namespace ResurrectionRP_Server.Houses
 
         // entities
         private Marker Marker;
-        private IColShape ColShapeEnter;
-        private IColShape ColShapeOut;
+        private IColshape ColshapeEnter;
+        private IColshape ColshapeOut;
         private IPlayer OwnerHandle;
 
         // misc
@@ -95,17 +96,15 @@ namespace ResurrectionRP_Server.Houses
             Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, Position - new Vector3(0.0f, 0.0f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f), Color.FromArgb(80, 255, 0, 0));
 
             // create colshape
-            ColShapeEnter = Alt.CreateColShapeCylinder(Position - new Vector3(0, 0, 1), 1f, 3f);
-            ColShapeEnter.Dimension = GameMode.GlobalDimension;
-            ColShapeEnter.SetData("House", ID);
-            ColShapeEnter.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
-            ColShapeEnter.SetOnPlayerLeaveColShape(OnPlayerLeaveColshape);
+            ColshapeEnter = ColshapeManager.CreateCylinderColshape(Position - new Vector3(0, 0, 1), 1f, 3f);
+            ColshapeEnter.SetData("House", ID);
+            ColshapeEnter.OnPlayerEnterColshape += OnPlayerEnterColshape;
+            ColshapeEnter.OnPlayerLeaveColshape += OnPlayerLeaveColshape;
 
-            ColShapeOut = Alt.CreateColShapeCylinder(HouseTypes.HouseTypeList[Type].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), 1f, 3f);
-            ColShapeOut.Dimension = (short)(DIMENSION_START + ID);
-            ColShapeOut.SetData("House", ID);
-            ColShapeOut.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
-            ColShapeOut.SetOnPlayerInteractInColShapeAsync(OnPlayerInteractInColShape);
+            ColshapeOut = ColshapeManager.CreateCylinderColshape(HouseTypes.HouseTypeList[Type].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), 1f, 3f, (short)(DIMENSION_START + ID));
+            ColshapeOut.SetData("House", ID);
+            ColshapeEnter.OnPlayerEnterColshape += OnPlayerEnterColshape;
+            ColshapeOut.OnPlayerInteractInColshape += OnPlayerInteractInColshape;
 
             InitParking();
 
@@ -135,11 +134,11 @@ namespace ResurrectionRP_Server.Houses
             OpenParkingMenu(vehicle?.Vehicle?.Driver);
         }
 
-        private void OnPlayerEnterColshape(IColShape colShape, IPlayer client)
+        private void OnPlayerEnterColshape(IColshape colshape, IPlayer client)
         {
-            if (colShape == ColShapeEnter)
+            if (colshape == ColshapeEnter)
                 HouseManager.OpenHouseMenu(client, this);
-            else if (colShape == ColShapeOut)
+            else if (colshape == ColshapeOut)
                 client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
         }
 
@@ -154,7 +153,7 @@ namespace ResurrectionRP_Server.Houses
                 player.SendNotificationError("Vous n'êtes pas autorisé à utiliser ce parking.");
         }
 
-        private void OnPlayerLeaveColshape(IColShape colShape, IPlayer client)
+        private void OnPlayerLeaveColshape(IColshape colshape, IPlayer client)
         {
             PlayerHandler ph = client.GetPlayerHandler();
 
@@ -165,9 +164,9 @@ namespace ResurrectionRP_Server.Houses
                 MenuManager.CloseMenu(client);
         }
 
-        private async Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
+        private void OnPlayerInteractInColshape(IColshape colshape, IPlayer client)
         {
-            await RemovePlayer(client, true);
+            RemovePlayer(client, true);
         }
 
         private async Task OnParkingSaveNeeded()
@@ -280,9 +279,9 @@ namespace ResurrectionRP_Server.Houses
             }
         }
 
-        public async Task RemovePlayer(IPlayer player, bool set_pos = true)
+        public void RemovePlayer(IPlayer player, bool set_pos = true)
         {
-            if (!await player.ExistsAsync())
+            if (!player.Exists)
                 return;
 
             if (!RemoveFromHouse(player))
@@ -290,8 +289,8 @@ namespace ResurrectionRP_Server.Houses
 
             if (set_pos)
             {
-                await player.SetPositionAsync(Position);
-                await player.SetDimensionAsync(GameMode.GlobalDimension);
+                player.Position = Position;
+                player.Dimension = GameMode.GlobalDimension;
             }
         }
 
@@ -317,11 +316,11 @@ namespace ResurrectionRP_Server.Houses
 
         public async Task Destroy()
         {
-            if (Marker != null || ColShapeEnter != null)
+            if (Marker != null || ColshapeEnter != null)
             {
                 await RemoveAllPlayers();
                 Marker.Destroy();
-                ColShapeEnter.Remove();
+                // ColshapeEnter.Remove();
             }
         }
 

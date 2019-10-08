@@ -29,7 +29,7 @@ namespace ResurrectionRP_Server.Houses
         #region Constructor
         public HouseManager()
         {
-            AltAsync.OnPlayerDead += Alt_OnPlayerDead;
+            Alt.OnPlayerDead += Alt_OnPlayerDead;
 
             for(int i = 0; i < HouseTypes.HouseTypeList.Count; i++)
                 Marker.CreateMarker(MarkerType.VerticalCylinder, HouseTypes.HouseTypeList[i].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), null, null);
@@ -62,7 +62,7 @@ namespace ResurrectionRP_Server.Houses
 
         public static bool RemoveClientHouse(IPlayer client) => ClientHouse.TryRemove(client, out _);
 
-        public async Task RemovePlayerFromHouseList(IPlayer player)
+        public void RemovePlayerFromHouseList(IPlayer player)
         {
             if (IsInHouse(player))
             {
@@ -72,7 +72,7 @@ namespace ResurrectionRP_Server.Houses
                     return;
 
                 if (RemoveClientHouse(player))
-                    await house.RemovePlayer(player, false);                
+                    house.RemovePlayer(player, false);                
             }
         }
         #endregion
@@ -249,10 +249,10 @@ namespace ResurrectionRP_Server.Houses
                 house.SetOwnerHandle(player);
         }
 
-        private async Task Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
+        private void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
         {
             player.Dimension = GameMode.GlobalDimension;
-            await RemovePlayerFromHouseList(player);
+            RemovePlayerFromHouseList(player);
         }
 
         public async Task House_Exit()

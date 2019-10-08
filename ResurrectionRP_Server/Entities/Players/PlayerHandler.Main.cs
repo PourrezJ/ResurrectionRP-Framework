@@ -93,6 +93,9 @@ namespace ResurrectionRP_Server.Entities.Players
         public bool Jailed { get; private set; } = false;
 
         public ushort Health;
+
+        [BsonIgnore]
+        public bool IsSitting = false;
         /*
         private ushort _health = 200;
         public ushort Health

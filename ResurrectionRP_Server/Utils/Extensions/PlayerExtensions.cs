@@ -395,6 +395,11 @@ namespace ResurrectionRP_Server
             client.EmitLocked("StopAnimation");
         }
 
+        public static void TaskStartScenarioAtPosition(this IPlayer client, string scenarioName, Vector3 position, float heading, int duration, bool sittingScenario, bool teleport)
+        {
+            client.EmitLocked("TaskStartScenarioAtPosition", scenarioName, position.X, position.Y, position.Z, heading, duration, sittingScenario, teleport);
+        }
+
         public static void SetHeading(this IPlayer client, float heading)
         {
             client.EmitLocked("setEntityHeading", client, heading);

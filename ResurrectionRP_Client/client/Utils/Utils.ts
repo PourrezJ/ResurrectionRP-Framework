@@ -9,8 +9,14 @@ var loading;
 
 export function initialize() {
 
+    alt.onServer('TaskStartScenarioAtPosition', (scenarioName: string, x: number, y: number, z: number, heading: number, duration: number, sittingScenario: boolean, teleport: boolean) => {
+        alt.log(`${x} ${y} ${z} ${heading}`);
+        game.taskStartScenarioAtPosition(alt.Player.local.scriptID, scenarioName, x, y, z, heading, duration, sittingScenario, teleport);
+    }); 
+
     alt.onServer('StopAnimation', () => {
         game.clearPedTasks(alt.Player.local.scriptID);
+        game.clearPedSecondaryTask(alt.Player.local.scriptID);
     }); 
 
     alt.onServer('SetWaypoint', (posx: number, posy: number, override: boolean) => {

@@ -134,6 +134,13 @@ namespace ResurrectionRP_Server.Entities.Players
                         if (ph.HasOpenMenu())
                             return;
 
+                        if (IsSitting)
+                        {
+                            client.StopAnimation();
+                            IsSitting = false;
+                            return;
+                        }
+
                         Farm farm = FarmManager.PlayerInFarmZone(client);
 
                         if (farm != null)
@@ -186,6 +193,16 @@ namespace ResurrectionRP_Server.Entities.Players
                                 RPGInventoryMenu rackmenu = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, rack.InventoryBox.Inventory);
 
                                 Task.Run(async () => await rackmenu.OpenMenu(client));
+                            }
+                            else if (Chair.IsChair(raycastData.entityHash))
+                            {
+                                var data = Chair.GetChairData(raycastData.entityHash);
+                                if (data == null)
+                                    return;
+
+                                client.TaskStartScenarioAtPosition(data.task, new System.Numerics.Vector3(Convert.ToSingle(raycastData.pos.X + data.x), Convert.ToSingle(raycastData.pos.Y + data.y), Convert.ToSingle(raycastData.pos.Z + data.z)), (float)data.h, 0, true, true);
+                                client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour vous relevez.", 5000);
+                                IsSitting = true;
                             }
                         }
 

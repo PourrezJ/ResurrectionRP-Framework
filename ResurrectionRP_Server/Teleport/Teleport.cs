@@ -1,16 +1,13 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
+using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Colshape;
+using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Entities;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Numerics;
-using System.Threading.Tasks;
-using ResurrectionRP_Server.Models;
-using ResurrectionRP_Server.Entities.Players;
-using AltV.Net;
-using AltV.Net.Async;
-using AltV.Net.Elements.Entities;
-using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server.Teleport
 {
@@ -72,7 +69,7 @@ namespace ResurrectionRP_Server.Teleport
 
             // Entrée
 
-            var enterColshape =Alt.CreateColShapeCylinder(entree.Pos - new Vector3(0,0,1), scale, 3f);
+            IColshape enterColshape = ColshapeManager.CreateCylinderColshape(entree.Pos - new Vector3(0,0,1), scale, 3f);
             Marker.CreateMarker(MarkerType.VerticalCylinder, entree.Pos - new Vector3(0.0f, 0.0f, 1f), new Vector3(1, 1, 1));
             GameMode.Instance.Streamer.AddEntityTextLabel("~o~Appuyez sur ~w~E \n ~o~pour intéragir", entree.Pos, 1, 255, 255, 255, 255, 10);
             enterColshape.SetData("Teleport", JsonConvert.SerializeObject(new
@@ -84,7 +81,7 @@ namespace ResurrectionRP_Server.Teleport
             // Multiple Sorti
             foreach (var sortipos in sorti)
             {
-                var sortiColshape = Alt.CreateColShapeCylinder(sortipos.Location.Pos - new Vector3(0, 0, 1), scale, 3f);
+                IColshape sortiColshape = ColshapeManager.CreateCylinderColshape(sortipos.Location.Pos - new Vector3(0, 0, 1), scale, 3f);
                 Marker.CreateMarker(MarkerType.VerticalCylinder, sortipos.Location.Pos - new Vector3(0, 0, 1f), new Vector3(1, 1, 1), Color.FromArgb(opacite, 255, 255, 255));
                 GameMode.Instance.Streamer.AddEntityTextLabel("~o~Appuyez sur ~w~E \n ~o~pour intéragir", sortipos.Location.Pos, 1, 255, 255, 255, 255, 10);
                 sortiColshape.SetData("Teleport", JsonConvert.SerializeObject( new

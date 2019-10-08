@@ -1,6 +1,7 @@
 ﻿using AltV.Net.Elements.Entities;
 using AltV.Net.Async;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Models;
@@ -24,15 +25,15 @@ namespace ResurrectionRP_Server.Teleport
         #region Constructor
         public TeleportManager()
         {
-            Events.OnPlayerInteractInColShapeAsync += OnTeleportColshape;
-            Events.OnPlayerLeaveColShape += OnPlayerLeaveColShape;
+            ColshapeManager.OnPlayerInteractInColshape += OnTeleportColshape;
+            ColshapeManager.OnPlayerLeaveColshape += OnPlayerLeaveColshape;
         }
         #endregion
 
         #region Event handlers
-        private async Task OnTeleportColshape(IColShape colshape, IPlayer client)
+        private void OnTeleportColshape(IColshape colshape, IPlayer client)
         {
-            if (!await client.ExistsAsync())
+            if (!client.Exists)
                 return;
 
             colshape.GetData("Teleport", out string datad);
@@ -54,7 +55,7 @@ namespace ResurrectionRP_Server.Teleport
 
                 if (teleport.Sortie.Count > 1)
                 {
-                    if (!teleport.VehicleAllowed && await client.GetVehicleAsync() != null)
+                    if (!teleport.VehicleAllowed && client.Vehicle != null)
                         return;
 
                     Menu _menu = new Menu("ID_TeleportMenu", teleport.MenuTitle, "Sélectionnez une destination :", backCloseMenu: true);
@@ -78,22 +79,22 @@ namespace ResurrectionRP_Server.Teleport
                 }
                 else
                 {
-                    if (teleport.VehicleAllowed && await client.GetVehicleAsync() != null)
+                    if (teleport.VehicleAllowed && client.Vehicle != null)
                     {
-                        var vehicle = await client.GetVehicleAsync();
+                        var vehicle = client.Vehicle;
 
                         if (data.State == TeleportState.Enter)
                         {
                             var location = teleport.Sortie[0].Location;
                             client.RequestCollisionAtCoords(location.Pos);
-                            await vehicle.SetPositionAsync(location.Pos);
-                            await vehicle.SetRotationAsync(location.Rot);
+                            vehicle.Position = location.Pos;
+                            vehicle.Rotation = location.Rot;
                         }
                         else
                         {
                             client.RequestCollisionAtCoords(teleport.Entree.Pos);
-                            await vehicle.SetPositionAsync(teleport.Entree.Pos);
-                            await vehicle.SetRotationAsync(teleport.Entree.Rot);
+                            vehicle.Position = teleport.Entree.Pos;
+                            vehicle.Rotation = teleport.Entree.Rot;
                         }
                     }
                     else
@@ -102,25 +103,29 @@ namespace ResurrectionRP_Server.Teleport
                         {
                             var location = teleport.Sortie[0].Location;
                             client.RequestCollisionAtCoords(location.Pos);
-                            await client.SetPositionAsync(location.Pos);
-                            await client.SetRotationAsync(location.Rot);
+                            client.Position = location.Pos;
+                            client.Rotation = location.Rot;
                         }
                         else
                         {
                             client.RequestCollisionAtCoords(teleport.Entree.Pos);
-                            await client.SetPositionAsync(teleport.Entree.Pos);
-                            await client.SetRotationAsync(teleport.Entree.Rot);
+                            client.Position = teleport.Entree.Pos;
+                            client.Rotation = teleport.Entree.Rot;
                         }
                     }
 
                     client.Freeze(true);
-                    await Task.Delay(250);
-                    client.Freeze(false);
+
+                    Task.Run(async () =>
+                    {
+                        await Task.Delay(250);
+                        client.Freeze(false);
+                    });
                 }
             }
         }
 
-        private void OnPlayerLeaveColShape(IColShape colshape, IPlayer client)
+        private void OnPlayerLeaveColshape(IColshape colshape, IPlayer client)
         {
             if (!client.Exists)
                 return;

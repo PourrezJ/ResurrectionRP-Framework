@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AltV.Net;
 using AltV.Net.Enums;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Entities;
@@ -21,8 +22,7 @@ namespace ResurrectionRP_Server.Services
     {
         #region Fields
         private static Location _poundSpawn = new Location(new Vector3(408.7641f, -1638.905f, 28.26795f), new Vector3(0.07774173f, 0.05821822f, 137.2628f));
-        private static IColShape _colshape = null;
-
+        private static IColshape _colshape = null;
         public static int Price = 500;
         #endregion
 
@@ -35,12 +35,12 @@ namespace ResurrectionRP_Server.Services
                 Price = 0;
 
             Entities.Blips.BlipsManager.CreateBlip("Fourrière", _poundSpawn.Pos, 0, 88,1,true);
-            _colshape = Alt.CreateColShapeCylinder(_poundSpawn.Pos, 3f, 3f);
+            _colshape = ColshapeManager.CreateCylinderColshape(_poundSpawn.Pos, 3f, 3f);
             Marker.CreateMarker(MarkerType.VerticalCylinder, _poundSpawn.Pos, new Vector3(1, 1, 1));
 
             //_colshape.OnEntityEnterColShape += _colshape_OnEntityEnterColShape;
             //_colshape.OnEntityExitColShape += _colshape_OnEntityExitColShape;
-            EventHandlers.Events.OnPlayerEnterColShape += OnPlayerEnterColShape;
+            ColshapeManager.OnPlayerEnterColshape += OnPlayerEnterColshape;
 
             Entities.Peds.Ped _npc = Entities.Peds.Ped.CreateNPC(PedModel.Gardener01SMM, new Vector3(409.1505f, -1622.874f, 29.29193f), 227.5882f);
 
@@ -54,10 +54,11 @@ namespace ResurrectionRP_Server.Services
         #endregion
 
         #region Event handlers
-        public static void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        public static void OnPlayerEnterColshape(IColshape colshape, IPlayer client)
         {
-            if (colShape != _colshape)
+            if (colshape != _colshape)
                 return;
+
             IVehicle vehicle = client.Vehicle;
 
             if (vehicle != null && vehicle.Model == (int)VehicleModel.Flatbed && FactionManager.IsLSCustom(client))
@@ -82,7 +83,7 @@ namespace ResurrectionRP_Server.Services
                 VehicleHandler _vh = vehicle.GetVehicleHandler();
                 if (_vh != null)
                 {
-                    VehicleHandler _towedvehicle = VehiclesManager.GetVehicleHandler(_vh.TowTruck.VehPlate);
+                    VehicleHandler _towedvehicle = VehiclesManager.GetVehicleHandler(_vh.TowTruck.Vehicle);
 
                     if (_towedvehicle != null)
                     {
@@ -90,7 +91,7 @@ namespace ResurrectionRP_Server.Services
 
                         if (ph != null)
                         {
-                            if (VehiclesManager.VehicleHandlerList.Remove(vehicle, out _))
+                            if (VehiclesManager.VehicleHandlerList.Remove(_towedvehicle.Vehicle, out _))
                             {
                                 GameMode.Instance.FactionManager.LSCustom.BankAccount.AddMoney(750, $"Mise en fourrière {_towedvehicle.Plate} par {ph.Identite.Name}");
                                 ph.AddMoney(250);

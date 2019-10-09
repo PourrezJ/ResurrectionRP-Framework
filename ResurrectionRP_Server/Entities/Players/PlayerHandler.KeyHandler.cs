@@ -31,11 +31,6 @@ namespace ResurrectionRP_Server.Entities.Players
         public delegate void KeyReleasedDelegate(IPlayer client, ConsoleKey Keycode);
 
         [BsonIgnore]
-        public KeyPressedDelegateAsync OnKeyPressedAsync { get; set; }
-        [BsonIgnore]
-        public KeyReleasedDelegateAsync OnKeyReleasedAsync { get; set; }
-
-        [BsonIgnore]
         public KeyPressedDelegate OnKeyPressed { get; set; }
         [BsonIgnore]
         public KeyReleasedDelegate OnKeyReleased { get; set; }

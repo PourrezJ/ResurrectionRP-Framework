@@ -290,7 +290,9 @@ namespace ResurrectionRP_Server.Entities.Players
                 ph.Character = JsonConvert.DeserializeObject<Models.PlayerCustomization>((string)args[0]);
                 ph.Clothing = new Clothings(client);
                 ph.Identite = JsonConvert.DeserializeObject<Models.Identite>( (string)args[1], new JsonSerializerSettings { DateParseHandling = DateParseHandling.DateTime } );
-            } catch ( Exception ex) {
+            }
+            catch ( Exception ex)
+            {
                 Alt.Server.LogWarning("Character Creator Error | " + ex.Data);
                 await client.KickAsync("Character Creator Error");
             }
@@ -379,11 +381,7 @@ namespace ResurrectionRP_Server.Entities.Players
             if (ph == null)
                 return;
 
-            if (ph.OnKeyPressedAsync != null)
-                Task.Run(async ()=> await ph.OnKeyPressedAsync.Invoke(client, (ConsoleKey)(Int64)args[0], JsonConvert.DeserializeObject<RaycastData>(args[1].ToString()), (IVehicle)args[2] ?? null, (IPlayer)args[3] ?? null, Convert.ToInt32(args[4])));
-            if (ph.OnKeyPressed != null)
-                ph.OnKeyPressed(client, (ConsoleKey)(Int64)args[0], JsonConvert.DeserializeObject<RaycastData>(args[1].ToString()), (IVehicle)args[2] ?? null, (IPlayer)args[3] ?? null, Convert.ToInt32(args[4]));
-
+            ph.OnKeyPressed?.Invoke(client, (ConsoleKey)args[0], JsonConvert.DeserializeObject<RaycastData>(args[1].ToString()), (IVehicle)args[2] ?? null, (IPlayer)args[3] ?? null, Convert.ToInt32(args[4]));
         }
 
         private void OnKeyReleased(IPlayer client, object[] args)
@@ -396,11 +394,7 @@ namespace ResurrectionRP_Server.Entities.Players
             if (ph == null)
                 return;
 
-            if (ph.OnKeyReleasedAsync != null)
-                Task.Run(async () => await ph.OnKeyReleasedAsync.Invoke(client, (ConsoleKey)(Int64)args[0]));
-            else if (ph.OnKeyReleased != null)
-                ph.OnKeyReleased(client, (ConsoleKey)(Int64)args[0]);
-
+            ph.OnKeyReleased?.Invoke(client, (ConsoleKey)args[0]);
         }
         #endregion
 

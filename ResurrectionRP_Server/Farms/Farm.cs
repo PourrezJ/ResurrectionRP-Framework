@@ -259,8 +259,9 @@ namespace ResurrectionRP_Server.Farms
                 {
                     if (FarmTimers[client] != null)
                     {
+                        FarmTimers[client].Stop();
                         FarmTimers[client].Close();
-                        FarmTimers[client] = null;
+                        FarmTimers.TryRemove(client, out _);
                     }
                     return;
                 }

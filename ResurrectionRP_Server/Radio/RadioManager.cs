@@ -9,7 +9,6 @@ using SaltyServer;
 
 namespace ResurrectionRP_Server.Radio
 {
-
     public class FrequenceRadio
     {
         private List<IPlayer> playersInFrequence = new List<IPlayer>();
@@ -47,13 +46,13 @@ namespace ResurrectionRP_Server.Radio
         public List<IPlayer> GetAllPlayersInFrequence() => playersInFrequence;
         public List<IPlayer> GetAllSpeakersInFrequence() => speakers;
     }
-    public class RadioManager
+    public static class RadioManager
     {
         #region Private static properties
         private static ConcurrentDictionary<IPlayer, Radio> _clientMenus = new ConcurrentDictionary<IPlayer, Radio>();
         #endregion
 
-        public RadioManager()
+        public static void Init()
         {
             Alt.OnClient("RadioManager", EventTrigered);
         }
@@ -77,7 +76,7 @@ namespace ResurrectionRP_Server.Radio
             return false;
         }
 
-        private void EventTrigered(IPlayer client, object[] args)
+        private static void EventTrigered(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -160,7 +159,7 @@ namespace ResurrectionRP_Server.Radio
             }
         }
 
-        public int FindRadioInItemList(Radio radio, List<Items.RadioItem> itemList)
+        public static int FindRadioInItemList(Radio radio, List<Items.RadioItem> itemList)
         {
             for (int i = 0; i < itemList.Count; i++)
             {

@@ -82,8 +82,6 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public Phone.PhoneManager PhoneManager { get; private set; }
         [BsonIgnore]
-        public RadioManager RadioManager { get; private set; }
-        [BsonIgnore]
         public LifeInvader LifeInvader { get; private set; }
         [BsonIgnore]
         public HouseManager HouseManager { get; private set; }
@@ -169,7 +167,6 @@ namespace ResurrectionRP_Server
             JobsManager = new Jobs.JobsManager(); 
             HouseManager = new HouseManager();
             IllegalManager = new IllegalManager();
-            RadioManager = new RadioManager();
             LifeInvader = new LifeInvader();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
@@ -214,6 +211,7 @@ namespace ResurrectionRP_Server
             Inventory.RPGInventoryManager.Init();
             MenuManager.Init();
             XMenuManager.XMenuManager.Init();
+            RadioManager.Init();
 
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 

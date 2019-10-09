@@ -34,7 +34,7 @@ namespace ResurrectionRP_Server.Colshape
         {
             Alt.OnPlayerDisconnect += OnPlayerDisconnect;
             Alt.OnVehicleRemove += OnVehicleRemove;
-            Alt.OnClient("InteractionInColshape", OnEntityInteractInColShape);
+            Alt.OnClient("InteractionInColshape", OnEntityInteractInColshape);
         }
         #endregion
 
@@ -190,7 +190,7 @@ namespace ResurrectionRP_Server.Colshape
             }
         }
 
-        private static void OnEntityInteractInColShape(IPlayer client, object[] args)
+        private static void OnEntityInteractInColshape(IPlayer client, object[] args)
         {
             try
             {
@@ -198,7 +198,7 @@ namespace ResurrectionRP_Server.Colshape
 
             if (args[0] == null || (long)args[0] != 69)
             {
-                Alt.Log($"[OnEntityInteractInColShape] Error args[0]: {args[0]}");
+                Alt.Log($"[OnEntityInteractInColshape] Error args[0]: {args[0]}");
                 return;
             }
 

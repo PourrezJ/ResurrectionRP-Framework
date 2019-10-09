@@ -96,11 +96,11 @@ namespace ResurrectionRP_Server.EventHandlers
 
         private static void OnEntityInteractInColShape(IPlayer client, object[] args)
         {
-            if (!int.TryParse(args[0].ToString(), out int key))
+            if (args[0] == null || (long)args[0] != 69)
+            {
+                Alt.Log($"[OnEntityInteractInColShape] Error args[0]: {args[0]}");
                 return;
-
-            if (key != 69)
-                return;
+            }
 
             foreach (IColShape colshape in Alt.GetAllColShapes())
             {

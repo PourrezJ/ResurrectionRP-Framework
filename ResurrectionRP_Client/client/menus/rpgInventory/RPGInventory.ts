@@ -10,7 +10,7 @@ export class RPGInventoryManager {
     public distant: object;
     public outfit: object;
     public give: boolean;
-    public callbackTime: number;
+    private callbackTime: number = Date.now(); 
 
     constructor()
     {
@@ -32,13 +32,6 @@ export class RPGInventoryManager {
         if (chat.isOpened() || game.isPauseMenuActive())
             return;
 
-        const time = Date.now() - this.callbackTime;
-
-        if (time < 100) {
-            alt.logWarning('Double call RPGInventory: ' + time + 'ms');
-            return;
-        }
-
         this.pocket = JSON.parse(pocket);
         this.bag = JSON.parse(bag);
         this.distant = JSON.parse(distant);
@@ -58,57 +51,56 @@ export class RPGInventoryManager {
 
             alt.log("debug inventaire: création events.");
             this.view.on('inventoryUseItem', (arg1: any, arg2: any, arg3: any) => {
-                if (time < 100) {
-                    alt.logWarning('Double call inventoryUseItem: ' + time + 'ms');
+                if (this.CheckMultipleCallbak()) {
                     return;
                 }
+
                 alt.emitServer("RPGInventory_UseItem", arg1, arg2, arg3);
             });
 
             this.view.on('inventoryDropItem', (arg1: any, arg2: any, arg3: any, arg4: any) => {
-                if (time < 100) {
-                    alt.logWarning('Double call inventoryDropItem: ' + time + 'ms');
+                if (this.CheckMultipleCallbak()) {
                     return;
                 }
+
                 alt.emitServer("RPGInventory_DropItem", arg1, arg2, arg3, arg4);
             });
 
             this.view.on('inventoryChangeItemPrice', (arg1: any, arg2: any, arg3: any, arg4: any) => {
-                if (time < 100) {
-                    alt.logWarning('Double call inventoryChangeItemPrice: ' + time + 'ms');
+                if (this.CheckMultipleCallbak()) {
                     return;
                 }
+
                 alt.emitServer("RPGInventory_PriceItemInventory_SRV", arg1, arg2, arg3, arg4);
             });
 
             this.view.on('inventoryGiveItem', (arg1: any, arg2: any, arg3: any, arg4: any) => {
-                if (time < 100) {
-                    alt.logWarning('Double call inventoryGiveItem: ' + time + 'ms');
+                if (this.CheckMultipleCallbak()) {
                     return;
                 }
+
                 alt.emitServer("RPGInventory_GiveItem", arg1, arg2, arg3, arg4);
             });  
 
             this.view.on('inventorySwitchItem', (arg1: any, arg2: any, arg3: any, arg4: any, arg5: any) => {
-                if (time < 100) {
-                    alt.logWarning('Double call inventorySwitchItem: ' + time + 'ms');
+                if (this.CheckMultipleCallbak()) {
                     return;
                 }
+
                 alt.emitServer("RPGInventory_SwitchItemInventory_SRV", arg1, arg2, arg3, arg4, arg5);
             });
 
             this.view.on('inventorySplitItem', (arg1: any, arg2: any, arg3: any, arg4: any, arg5: any, arg6: any, arg7: any) => {
-                if (time < 100) {
-                    alt.logWarning('Double call inventorySplitItem: ' + time + 'ms');
+                if (this.CheckMultipleCallbak()) {
                     return;
                 }
+
                 alt.emitServer("RPGInventory_SplitItemInventory_SRV", arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             });
 
             // Callback une fois l'inventaire ouvert
-            this.view.on("loaditem", () => {
-                if (time < 100) {
-                    alt.logWarning('Double call loaditem: ' + time + 'ms');
+            this.view.on('loaditem', () => {
+                if (this.CheckMultipleCallbak()) {
                     return;
                 }
 
@@ -129,6 +121,17 @@ export class RPGInventoryManager {
         }
     }
 
+    private CheckMultipleCallbak() {
+        const time = Date.now() - this.callbackTime;
+
+        if (time < 100) {
+            alt.logWarning('Inventory multiple callback: ' + time + 'ms');
+            return true;
+        }
+
+        this.callbackTime = Date.now();
+        return false;
+    }
 
     /*
     *                                  Refresh Menu

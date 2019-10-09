@@ -35,10 +35,12 @@ export class Interaction {
     {
         alt.onServer('OnPlayerEnterColshape', (colshapeId: number) => {
             this.colshapes.unshift(colshapeId);
+            alt.log('OnPlayerEnterColshape, colshapes: ' + this.colshapes.length);
         });
 
         alt.onServer('OnPlayerLeaveColshape', (colshapeId: number) => {
             this.colshapes = this.colshapes.filter(item => item != colshapeId);
+            alt.log('OnPlayerLeaveColshape, colshapes: ' + this.colshapes.length);
         });
 
         alt.on('canClose', (close) => {
@@ -123,14 +125,12 @@ export class Interaction {
                     else if (raycastResult.isHit && raycastResult.entityType == 3 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
                         alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId, game.getEntityHeading(raycastResult.hitEntity));
                     }
+                    else if (key == 69 && this.isInColshape()) {
+                        alt.emitServer('InteractionInColshape', key, this.colshapes[0]);
+                    }
                     else {
                         alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId, game.getEntityHeading(raycastResult.hitEntity));
                     }
-
-                    if (key == 69 && this.isInColshape()) {
-                        alt.emitServer('InteractionInColshape', key, this.colshapes[0]);
-                    }
-                    
                     break;
 
                 case 82: // R

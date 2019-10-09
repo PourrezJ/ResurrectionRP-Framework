@@ -11,8 +11,8 @@ export default class PhoneManager {
 
     public browser: alt.WebView = null;
     public animStage: number = 0;
-
     private onTick: number;
+    private callbackTime: number = Date.now(); 
 
     constructor()
     {
@@ -40,15 +40,67 @@ export default class PhoneManager {
 
             this.browser.focus();
 
-            this.browser.on("SavePhoneSettings", (arg) => alt.emitServer("PhoneMenuCallBack", "SavePhoneSettings", arg));
-            this.browser.on("GetContacts", (arg) => alt.emitServer("PhoneMenuCallBack", "GetContacts", arg));
-            this.browser.on("AddOrEditContact", (arg) => alt.emitServer("PhoneMenuCallBack", "AddOrEditContact", arg));
-            this.browser.on("RemoveContact", (arg) => alt.emitServer("PhoneMenuCallBack", "RemoveContact", arg));
-            this.browser.on("getConversations", (arg) => alt.emitServer("PhoneMenuCallBack", "getConversationsV2"));
+            this.browser.on("SavePhoneSettings", (arg) => {
+                if (this.CheckMultipleCallbak()) {
+                    return;
+                }
 
-            this.browser.on("callTaxi", () => alt.emit("alertNotify", "Les services de taxi ne sont pas encore en ville !", 10000));
-            this.browser.on("callUrgences", () => alt.emitServer("ONU_CallUrgenceMedic"));
+                alt.emitServer("PhoneMenuCallBack", "SavePhoneSettings", arg);
+            });
+
+            this.browser.on("GetContacts", (arg) => {
+                if (this.CheckMultipleCallbak()) {
+                    return;
+                }
+
+                alt.emitServer("PhoneMenuCallBack", "GetContacts", arg);
+            });
+
+            this.browser.on("AddOrEditContact", (arg) => {
+                if (this.CheckMultipleCallbak()) {
+                    return;
+                }
+
+                alt.emitServer("PhoneMenuCallBack", "AddOrEditContact", arg);
+            });
+
+            this.browser.on("RemoveContact", (arg) => {
+               if (this.CheckMultipleCallbak()) {
+                    return;
+                }
+
+                alt.emitServer("PhoneMenuCallBack", "RemoveContact", arg);
+            });
+
+            this.browser.on("getConversations", (arg) => {
+               if (this.CheckMultipleCallbak()) {
+                    return;
+                }
+
+                alt.emitServer("PhoneMenuCallBack", "getConversationsV2");
+            });
+
+            this.browser.on("callTaxi", () => {
+                if (this.CheckMultipleCallbak()) {
+                    return;
+                }
+
+               alt.emit("alertNotify", "Les services de taxi ne sont pas encore en ville !", 10000);
+            });
+
+            this.browser.on("callUrgences", () => {
+                if (this.CheckMultipleCallbak()) {
+                    return;
+                }
+
+                alt.emitServer("ONU_CallUrgenceMedic");
+            });
+
             this.browser.on("callPolice", () => {
+                if (this.CheckMultipleCallbak()) {
+                    return;
+                }
+
                 this.ClosePhone();
                 let inputView = new alt.WebView("http://resource/client/cef/userinput/input.html");
                 inputView.focus();
@@ -66,19 +118,66 @@ export default class PhoneManager {
                 });
             });
 
-            this.browser.on("getMessages", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "GetMessages", arg2));
+            this.browser.on("getMessages", (arg, arg2) => {
+               if (this.CheckMultipleCallbak()) {
+                    return;
+                }
+
+                alt.emitServer("PhoneMenuCallBack", "GetMessages", arg2);
+            });
 
             this.browser.on("sendMessage", (arg, arg2) => {
+               if (this.CheckMultipleCallbak()) {
+                    return;
+                }
+
                 alt.emitServer("PhoneMenuCallBack", "SendMessage", arg, arg2);
                 Interaction.SetCanClose(true);
             });
 
-            this.browser.on("deleteConversation", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "DeleteConversation", arg));
-            this.browser.on("initiateCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "initiateCall", arg));
-            this.browser.on("acceptCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "acceptCall", arg));
-            this.browser.on("cancelCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "cancelCall", arg));
-            this.browser.on("endCall", (arg, arg2) => alt.emitServer("PhoneMenuCallBack", "endCall", arg));
-            this.browser.on("CanClose", (canClose: boolean) => Interaction.SetCanClose(canClose));
+            this.browser.on("deleteConversation", (arg, arg2) => {
+                if (this.CheckMultipleCallbak()) {
+                    return;
+                }
+
+                alt.emitServer("PhoneMenuCallBack", "DeleteConversation", arg);
+            });
+
+            this.browser.on("initiateCall", (arg, arg2) => {
+                if (this.CheckMultipleCallbak()) {
+                    return;
+                }
+
+               alt.emitServer("PhoneMenuCallBack", "initiateCall", arg);
+            });
+
+            this.browser.on("acceptCall", (arg, arg2) => {
+                if (this.CheckMultipleCallbak()) {
+                    return;
+                }
+
+                alt.emitServer("PhoneMenuCallBack", "acceptCall", arg);
+            });
+
+            this.browser.on("cancelCall", (arg, arg2) => {
+                if (this.CheckMultipleCallbak()) {
+                    return;
+                }
+
+                alt.emitServer("PhoneMenuCallBack", "cancelCall", arg);
+            });
+
+            this.browser.on("endCall", (arg, arg2) => {
+                if (this.CheckMultipleCallbak()) {
+                    return;
+                }
+
+                alt.emitServer("PhoneMenuCallBack", "endCall", arg);
+            });
+
+            this.browser.on("CanClose", (canClose: boolean) => {
+                Interaction.SetCanClose(canClose);
+            });
 
             alt.onServer("ContactEdited", (args) => { if (this.browser != null) { this.browser.url = "http://resource/client/cef/phone/contacts.html" } });
             alt.onServer("ConversationsReturnedV2", (args) => {
@@ -187,6 +286,18 @@ export default class PhoneManager {
                 }
             });
         });
+    }
+
+    private CheckMultipleCallbak() {
+        const time = Date.now() - this.callbackTime;
+
+        if (time < 100) {
+            alt.logWarning('Phone multiple callback: ' + time + 'ms');
+            return true;
+        }
+
+        this.callbackTime = Date.now();
+        return false;
     }
 
     public ClosePhone = () => {

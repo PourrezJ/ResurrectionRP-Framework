@@ -84,8 +84,6 @@ namespace ResurrectionRP_Server.Phone
                     GetMessages(client, receiver);
                 });
 
-
-
                 IPlayer _client = GetClientWithPhoneNumber(this.PhoneNumber);
 
                 if (_client != null)
@@ -98,9 +96,7 @@ namespace ResurrectionRP_Server.Phone
                 Phone _phone = GetPhoneWithPhoneNumber(receiver);
 
                 if (_phone != null)
-                {
                     _phone.NewSMS(this.PhoneNumber);
-                }
             }
             catch (Exception ex)
             {
@@ -248,30 +244,21 @@ namespace ResurrectionRP_Server.Phone
 
         public bool TryEditContact(IPlayer client, string contactName, string contactNumber, string originalNumber, bool message = true)
         {
-            try
+            if (ValidateContact(contactName, contactNumber, true))
             {
-                if (ValidateContact(contactName, contactNumber, true))
+                if (AddressBook == null || string.IsNullOrEmpty(originalNumber))
+                    return false;
+
+                Address foundAddress = AddressBook.Find(address => address?.phoneNumber == originalNumber);
+
+                if (foundAddress != null && foundAddress.phoneNumber != null && foundAddress.phoneNumber != "")
                 {
-                    if (AddressBook == null || string.IsNullOrEmpty(originalNumber))
-                        return false;
+                    RemoveContactFromAddressBook(originalNumber);
+                    AddNameToAddressBook(client, contactName, contactNumber);
 
-                    lock (originalNumber)
-                    {
-                        Address foundAddress = AddressBook.Find(address => address?.phoneNumber == originalNumber);
-                        if (foundAddress.phoneNumber != null && foundAddress.phoneNumber != "")
-                        {
-                            RemoveContactFromAddressBook(originalNumber);
-                            AddNameToAddressBook(client, contactName, contactNumber);
-
-                            client.EmitLocked("ContactEdited");
-                            return true;
-                        }
-                    }
+                    client.EmitLocked("ContactEdited");
+                    return true;
                 }
-            }
-            catch (NullReferenceException)
-            {
-                Alt.Server.LogError($"[Phone.TryEditContact()] NullReferenceException : client: {client}, contactName: {contactName}, contactNumber: {contactNumber}, originalNumber: {originalNumber}, message: {message}");
             }
 
             return false;
@@ -316,38 +303,30 @@ namespace ResurrectionRP_Server.Phone
 
         public bool RemoveContactFromAddressBook(string number)
         {
-            try
+            if (AddressBook == null || string.IsNullOrEmpty(number))
+                return false;
+
+            int indexToRemove = -1;
+
+            for (int i = 0; i < AddressBook.Count; i++)
             {
-                if (AddressBook == null || string.IsNullOrEmpty(number))
-                    return false;
+                Address a = AddressBook.ElementAt(i);
 
-                lock (AddressBook)
+                if (a.phoneNumber.Equals(number))
                 {
-                    int indexToRemove = -1;
-                    for (int i = 0; i < AddressBook.Count; i++)
-                    {
-                        Address a = AddressBook.ElementAt(i);
-                        if (a.phoneNumber.Equals(number))
-                        {
-                            indexToRemove = i;
-                            break;
-                        }
-                    }
-
-                    if (indexToRemove != -1)
-                    {
-                        AddressBook.RemoveAt(indexToRemove);
-                        var client = GetClientWithPhoneNumber(PhoneNumber);
-                        client?.EmitLocked("ContactEdited");
-                        return true;
-                    }
+                    indexToRemove = i;
+                    break;
                 }
             }
-            catch(Exception ex)
+
+            if (indexToRemove != -1)
             {
-                Alt.Server.LogError(ex.ToString());
+                AddressBook.RemoveAt(indexToRemove);
+                var client = GetClientWithPhoneNumber(PhoneNumber);
+                client?.EmitLocked("ContactEdited");
+                return true;
             }
-            
+
             return false;
         }
 

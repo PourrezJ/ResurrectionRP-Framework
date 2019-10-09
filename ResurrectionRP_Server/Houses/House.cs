@@ -103,7 +103,7 @@ namespace ResurrectionRP_Server.Houses
 
             ColshapeOut = ColshapeManager.CreateCylinderColshape(HouseTypes.HouseTypeList[Type].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), 1f, 3f, (short)(DIMENSION_START + ID));
             ColshapeOut.SetData("House", ID);
-            ColshapeEnter.OnPlayerEnterColshape += OnPlayerEnterColshape;
+            ColshapeOut.OnPlayerEnterColshape += OnPlayerEnterColshape;
             ColshapeOut.OnPlayerInteractInColshape += OnPlayerInteractInColshape;
 
             InitParking();

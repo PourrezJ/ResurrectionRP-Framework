@@ -381,7 +381,7 @@ namespace ResurrectionRP_Server.Entities.Players
             if (ph == null)
                 return;
 
-            ph.OnKeyPressed?.Invoke(client, (ConsoleKey)args[0], JsonConvert.DeserializeObject<RaycastData>(args[1].ToString()), (IVehicle)args[2] ?? null, (IPlayer)args[3] ?? null, Convert.ToInt32(args[4]));
+            ph.OnKeyPressed?.Invoke(client, (ConsoleKey)(long)args[0], JsonConvert.DeserializeObject<RaycastData>(args[1].ToString()), (IVehicle)args[2] ?? null, (IPlayer)args[3] ?? null, Convert.ToInt32(args[4]));
         }
 
         private void OnKeyReleased(IPlayer client, object[] args)
@@ -394,7 +394,7 @@ namespace ResurrectionRP_Server.Entities.Players
             if (ph == null)
                 return;
 
-            ph.OnKeyReleased?.Invoke(client, (ConsoleKey)args[0]);
+            ph.OnKeyReleased?.Invoke(client, (ConsoleKey)(long)args[0]);
         }
         #endregion
 

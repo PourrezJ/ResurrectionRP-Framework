@@ -44,14 +44,14 @@ namespace ResurrectionRP_Server.Entities.Peds
         {
             var ped = new Ped()
             {
-                ID = GameMode.Instance.Streamer.EntityNumber++,
+                ID = Streamer.Streamer.EntityNumber++,
                 Model = pedHash,
                 Position = startPosition,
                 Rotation = facingAngle,
                 Dimension = dimension
             };
 
-            GameMode.Instance.Streamer.AddEntityPed(ped);
+            Streamer.Streamer.AddEntityPed(ped);
 
             NPCList.Add(ped);
             return ped;

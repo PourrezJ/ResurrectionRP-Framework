@@ -69,7 +69,7 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
                 $"Acceleration: {manifest.MaxAcceleration} \n" +
                 $"Places: {manifest.MaxNumberOfPassengers + 1} \n";
 
-                place.TextLabelId = GameMode.Instance.Streamer.AddEntityTextLabel(str, place.Location.Pos + new Vector3(0,0,1f),1,255,255,255, 180);
+                place.TextLabelId = Streamer.Streamer.AddEntityTextLabel(str, place.Location.Pos + new Vector3(0,0,1f),1,255,255,255, 180);
             }
         }
 

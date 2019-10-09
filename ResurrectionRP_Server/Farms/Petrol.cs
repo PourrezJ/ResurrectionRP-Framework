@@ -74,7 +74,7 @@ namespace ResurrectionRP_Server.Farms
             Marker.CreateMarker(MarkerType.VerticalCylinder, RaffineriePos - new Vector3(0,0,1), new Vector3(10, 10, 2), Color.FromArgb(0,0,0));
             Marker.CreateMarker(MarkerType.VerticalCylinder, Selling_PosRot.Pos - new Vector3(0,0,0), new Vector3(10, 10, 2), Color.FromArgb(0,0,0));
 
-            GameMode.Instance.Streamer.AddEntityTextLabel("~o~Appuyez sur E en dehors du véhicule\n pour lancer le remplissage", Harvest_Position[0]);
+            Streamer.Streamer.AddEntityTextLabel("~o~Appuyez sur E en dehors du véhicule\n pour lancer le remplissage", Harvest_Position[0]);
         }
 
         public override void OnPlayerEnterColshape(IColshape colshape, IPlayer player)

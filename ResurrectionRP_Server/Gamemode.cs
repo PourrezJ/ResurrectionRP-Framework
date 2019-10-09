@@ -43,8 +43,7 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public bool ServerLoaded = false;
 
-        [BsonIgnore]
-        public float StreamDistance { get; private set; } = 500;
+        public static float StreamDistance { get; private set; } = 500;
 
         [BsonIgnore]
         public BanManager BanManager { get; private set; }
@@ -154,7 +153,19 @@ namespace ResurrectionRP_Server
  
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
+            Streamer.Streamer.Init();
             ColshapeManager.Init();
+            Voice.Init();
+            PlayerManager.Init();
+            PlayerKeyHandler.Init();
+            Events.Initialize();
+            VehiclesManager.Init();          
+            Teleport.TeleportManager.Init();
+            Inventory.RPGInventoryManager.Init();
+            MenuManager.Init();
+            XMenuManager.XMenuManager.Init();
+            RadioManager.Init();
+
 
             Economy = new Economy.Economy();
             BanManager = new BanManager();
@@ -200,18 +211,7 @@ namespace ResurrectionRP_Server
             FarmManager.InitAll();
             WeatherManager.InitWeather();
             LifeInvader.Load();
-            Voice.Init();
 
-            PlayerManager.Init();
-            PlayerKeyHandler.Init();
-            Events.Initialize();
-            VehiclesManager.Init();
-            Streamer.Streamer.Init();
-            Teleport.TeleportManager.Init();
-            Inventory.RPGInventoryManager.Init();
-            MenuManager.Init();
-            XMenuManager.XMenuManager.Init();
-            RadioManager.Init();
 
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 

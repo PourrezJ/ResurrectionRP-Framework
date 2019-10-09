@@ -277,9 +277,9 @@ namespace ResurrectionRP_Server.Models
             ParkingColshape.OnVehicleLeaveColshape += OnVehicleLeaveColshape;
 
             if (!string.IsNullOrEmpty(Name))
-                EntityLabel = GameMode.Instance.Streamer.AddEntityTextLabel($"{Name}\n~o~Approchez pour intéragir", Location, 4);
+                EntityLabel = Streamer.Streamer.AddEntityTextLabel($"{Name}\n~o~Approchez pour intéragir", Location, 4);
             else
-                EntityLabel = GameMode.Instance.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", Location, 4);
+                EntityLabel = Streamer.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", Location, 4);
 
             if (blip)
                 EntityBlip=  Entities.Blips.BlipsManager.CreateBlip(name, Location,color,(int) sprite);
@@ -488,7 +488,7 @@ namespace ResurrectionRP_Server.Models
             if (EntityMarker != null)
                 Marker.DestroyMarker(EntityMarker);
             if (EntityLabel != null)
-                GameMode.Instance.Streamer.ListEntities[EntityLabel.id].Remove();
+                Streamer.Streamer.ListEntities[EntityLabel.id].Remove();
             if (EntityBlip != null)
                 BlipsManager.Destroy(EntityBlip);
         }

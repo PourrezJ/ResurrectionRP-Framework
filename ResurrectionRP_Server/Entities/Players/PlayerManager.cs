@@ -123,7 +123,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (rpg != null && rpg.OnClose != null)
                     await rpg.OnClose.Invoke(origin, rpg);
 
-                GameMode.Instance.RPGInventory.OnPlayerQuit(origin);
+                RPGInventoryManager.OnPlayerQuit(origin);
             }
 
             if (HouseManager.IsInHouse(origin))

@@ -25,7 +25,7 @@ namespace ResurrectionRP_Server.Entities.Objects
             {
                 _position = value;
                 if (Exists)
-                    GameMode.Instance.Streamer.UpdateEntityObject(this);
+                    Streamer.Streamer.UpdateEntityObject(this);
                
             }
         }
@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Entities.Objects
             {
                 _rotation = value;
                 if (Exists)
-                    GameMode.Instance.Streamer.UpdateEntityObject(this);
+                    Streamer.Streamer.UpdateEntityObject(this);
             }
             get => _rotation;
         }
@@ -69,7 +69,7 @@ namespace ResurrectionRP_Server.Entities.Objects
         public bool DetachAttach()
         {
             Attachment = null;
-            GameMode.Instance.Streamer.UpdateEntityObject(this);
+            Streamer.Streamer.UpdateEntityObject(this);
             return true;
         }
 
@@ -104,13 +104,13 @@ namespace ResurrectionRP_Server.Entities.Objects
                 model,
                 position.ConvertToPosition(),
                 rotation.ConvertToEntityRotation(),
-                GameMode.Instance.Streamer.EntityNumber++,
+                Streamer.Streamer.EntityNumber++,
                 freeze,
                 dimension
             );
 
             ListObject.TryAdd(resuobject.ID, resuobject);
-            GameMode.Instance.Streamer.AddEntityObject(resuobject);
+            Streamer.Streamer.AddEntityObject(resuobject);
             resuobject.Exists = true;
             return resuobject;
         }
@@ -122,13 +122,13 @@ namespace ResurrectionRP_Server.Entities.Objects
                 (int)Alt.Hash(model),
                 position.ConvertToPosition(),
                 rotation.ConvertToEntityRotation(),
-                GameMode.Instance.Streamer.EntityNumber++,
+                Streamer.Streamer.EntityNumber++,
                 freeze,
                 dimension
             );
 
             ListObject.TryAdd(resuobject.ID, resuobject);
-            GameMode.Instance.Streamer.AddEntityObject(resuobject);
+            Streamer.Streamer.AddEntityObject(resuobject);
             resuobject.Exists = true;
             return resuobject;
         }
@@ -145,7 +145,7 @@ namespace ResurrectionRP_Server.Entities.Objects
             };
 
             target.Attachment = attach;
-            GameMode.Instance.Streamer.UpdateEntityObject(target);
+            Streamer.Streamer.UpdateEntityObject(target);
         }
 
         public static void AttachToEntity(IVehicle vehicle, WorldObject target, string bone, Vector3 positionOffset, Vector3 rotationOffset)
@@ -160,18 +160,18 @@ namespace ResurrectionRP_Server.Entities.Objects
             };
 
             target.Attachment = attach;
-            GameMode.Instance.Streamer.UpdateEntityObject(target);
+            Streamer.Streamer.UpdateEntityObject(target);
         }
 
         public static void DetachFromEntity(WorldObject entity)
         {
             entity.Attachment = null;
-            GameMode.Instance.Streamer.UpdateEntityObject(entity);
+            Streamer.Streamer.UpdateEntityObject(entity);
         }
 
         public static void DestroyObject(int oid)
         {
-            GameMode.Instance.Streamer.DeleteEntityObject(ListObject[oid]);
+            Streamer.Streamer.DeleteEntityObject(ListObject[oid]);
         }
     }
 }

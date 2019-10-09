@@ -51,18 +51,18 @@ namespace ResurrectionRP_Server.Entities
                 marker.a = 60;
             }
 
-            marker.id = GameMode.Instance.Streamer.EntityNumber++;
+            marker.id = Streamer.Streamer.EntityNumber++;
             marker.dimension = dimension;
 
-            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, GameMode.Instance.StreamDistance, marker.Export());
-            GameMode.Instance.Streamer.ListEntities.TryAdd(marker.id, item);
+            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, GameMode.StreamDistance, marker.Export());
+            Streamer.Streamer.ListEntities.TryAdd(marker.id, item);
             return marker;
         }
 
         public static void DestroyMarker(Marker marker)
         {
-            GameMode.Instance.Streamer.ListEntities[marker.id].Remove();
-            GameMode.Instance.Streamer.ListEntities[marker.id] = null;
+            Streamer.Streamer.ListEntities[marker.id].Remove();
+            Streamer.Streamer.ListEntities[marker.id] = null;
         }
 
         public Dictionary<string, object> Export()
@@ -88,15 +88,15 @@ namespace ResurrectionRP_Server.Entities
             this.b = color.B;
             this.a = color.A;
 
-            GameMode.Instance.Streamer.ListEntities[id].SetData("r", color.R);
-            GameMode.Instance.Streamer.ListEntities[id].SetData("g", color.G);
-            GameMode.Instance.Streamer.ListEntities[id].SetData("b", color.B);
-            GameMode.Instance.Streamer.ListEntities[id].SetData("a", color.A);
+            Streamer.Streamer.ListEntities[id].SetData("r", color.R);
+            Streamer.Streamer.ListEntities[id].SetData("g", color.G);
+            Streamer.Streamer.ListEntities[id].SetData("b", color.B);
+            Streamer.Streamer.ListEntities[id].SetData("a", color.A);
         }
 
         internal void Destroy()
         {
-            GameMode.Instance.Streamer.DestroyEntity(this.id);
+            Streamer.Streamer.DestroyEntity(this.id);
         }
     }
 

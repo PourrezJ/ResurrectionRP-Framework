@@ -96,7 +96,7 @@ namespace ResurrectionRP_Server.Illegal
 
             foreach (WeedZone weedzone in WeedZoneList)
             {
-                weedzone.Textlabel = GameMode.Instance.Streamer.AddEntityTextLabel(LabelRefresh(weedzone), weedzone.Position + new Vector3(0, 0, 0.75f));
+                weedzone.Textlabel = Streamer.Streamer.AddEntityTextLabel(LabelRefresh(weedzone), weedzone.Position + new Vector3(0, 0, 0.75f));
                 weedzone.Colshape = Alt.CreateColShapeCylinder(weedzone.Position, 1f, 1f);
                 weedzone.Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, weedzone.Position, new Vector3(1, 1, 0.2f), Color.FromArgb(160, 0, 100, 0));
 

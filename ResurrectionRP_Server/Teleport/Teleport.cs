@@ -47,7 +47,7 @@ namespace ResurrectionRP_Server.Teleport
         //public Teleport(Location Entree, Location Sorti, float Scale = 1f, bool VehicleAllowed = false, int opacite = 128, uint dimensionIN = 0, uint dimensionOUT = 0, string menutitle = "Ouvrir la porte", bool iswhitelisted = false, List<string> whitelist = null)
         public Teleport()
         {
-            ID = GameMode.Instance.TeleportManager.Teleports.Count + 1;
+            ID = TeleportManager.Teleports.Count + 1;
         }
 
         public static Teleport CreateTeleport(Location entree, List<TeleportEtage> sorti, float scale = 1f, bool vehicleAllowed = false, byte opacite = 128, uint dimensionIN = 0, uint dimensionOUT = 0, string menutitle = "Ouvrir la porte", bool iswhitelisted = false, List<string> whitelist = null)
@@ -71,7 +71,7 @@ namespace ResurrectionRP_Server.Teleport
 
             IColshape enterColshape = ColshapeManager.CreateCylinderColshape(entree.Pos - new Vector3(0,0,1), scale, 3f);
             Marker.CreateMarker(MarkerType.VerticalCylinder, entree.Pos - new Vector3(0.0f, 0.0f, 1f), new Vector3(1, 1, 1));
-            GameMode.Instance.Streamer.AddEntityTextLabel("~o~Appuyez sur ~w~E \n ~o~pour intéragir", entree.Pos, 1, 255, 255, 255, 255, 10);
+            Streamer.Streamer.AddEntityTextLabel("~o~Appuyez sur ~w~E \n ~o~pour intéragir", entree.Pos, 1, 255, 255, 255, 255, 10);
             enterColshape.SetData("Teleport", JsonConvert.SerializeObject(new
             {
                 teleport.ID,
@@ -83,7 +83,7 @@ namespace ResurrectionRP_Server.Teleport
             {
                 IColshape sortiColshape = ColshapeManager.CreateCylinderColshape(sortipos.Location.Pos - new Vector3(0, 0, 1), scale, 3f);
                 Marker.CreateMarker(MarkerType.VerticalCylinder, sortipos.Location.Pos - new Vector3(0, 0, 1f), new Vector3(1, 1, 1), Color.FromArgb(opacite, 255, 255, 255));
-                GameMode.Instance.Streamer.AddEntityTextLabel("~o~Appuyez sur ~w~E \n ~o~pour intéragir", sortipos.Location.Pos, 1, 255, 255, 255, 255, 10);
+                Streamer.Streamer.AddEntityTextLabel("~o~Appuyez sur ~w~E \n ~o~pour intéragir", sortipos.Location.Pos, 1, 255, 255, 255, 255, 10);
                 sortiColshape.SetData("Teleport", JsonConvert.SerializeObject( new
                 {
                     teleport.ID,
@@ -91,7 +91,7 @@ namespace ResurrectionRP_Server.Teleport
                 }) );
             }
 
-            GameMode.Instance.TeleportManager.Teleports.Add(teleport);
+            TeleportManager.Teleports.Add(teleport);
 
             return teleport;
         }

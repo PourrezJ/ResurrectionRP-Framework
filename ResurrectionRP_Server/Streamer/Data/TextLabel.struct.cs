@@ -14,7 +14,7 @@ namespace ResurrectionRP_Server.Streamer.Data
             set
             {
                 _text = value;
-                GameMode.Instance.Streamer.UpdateEntityTextLabel(this.id, value);
+                Streamer.UpdateEntityTextLabel(this.id, value);
             }
             get => _text;
         }
@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.Streamer.Data
 
         public void Destroy()
         {
-            GameMode.Instance.Streamer.DestroyEntity(this.id);
+            Streamer.DestroyEntity(this.id);
         }
     }
 }

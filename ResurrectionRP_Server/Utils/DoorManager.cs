@@ -39,7 +39,7 @@ namespace ResurrectionRP_Server.Utils
                 Locked = locked,
                 Hide = hide
             };
-            door.TextLabel = GameMode.Instance.Streamer.AddEntityTextLabel($"Porte: {((door.Locked) ? "Verrouillée" : "Deverrouillée")}", door.Position, 1, drawDistance:2);
+            door.TextLabel = Streamer.Streamer.AddEntityTextLabel($"Porte: {((door.Locked) ? "Verrouillée" : "Deverrouillée")}", door.Position, 1, drawDistance:2);
             DoorList.Add(door);
             door.SetDoorLockState(locked);
             return door;
@@ -48,7 +48,7 @@ namespace ResurrectionRP_Server.Utils
         public void SetDoorLockState(bool lockStatut)
         {
             Locked = lockStatut;
-            GameMode.Instance.Streamer.UpdateEntityTextLabel(this.TextLabel.id, $"Porte: {((Locked) ? "Verrouillée" : "Deverrouillée")}");
+            Streamer.Streamer.UpdateEntityTextLabel(this.TextLabel.id, $"Porte: {((Locked) ? "Verrouillée" : "Deverrouillée")}");
 
             Alt.EmitAllClients("SetDoorLockState", ID, Locked);
         }

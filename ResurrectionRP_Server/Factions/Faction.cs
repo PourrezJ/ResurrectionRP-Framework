@@ -141,7 +141,7 @@ namespace ResurrectionRP_Server.Factions
                 Heliport_colShape.OnPlayerEnterColshape += OnPlayerEnterHeliport;
                 Heliport_colShape.OnPlayerLeaveColshape += OnPlayerLeaveHeliport;
                 Marker.CreateMarker(MarkerType.VerticalCylinder, HeliportLocation.Pos - new Vector3(0, 0, 3), new Vector3(3, 3, 3));
-                GameMode.Instance.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", HeliportLocation.Pos, 4);
+                Streamer.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", HeliportLocation.Pos, 4);
             }
 
             if (ShopLocation != null && ShopLocation != Vector3.Zero)
@@ -150,7 +150,7 @@ namespace ResurrectionRP_Server.Factions
                 Shop_colShape.OnPlayerEnterColshape += OnPlayerEnterShop;
                 Shop_colShape.OnPlayerLeaveColshape += OnPlayerLeaveShop;
                 Marker.CreateMarker(MarkerType.VerticalCylinder, ShopLocation - new Vector3(0, 0, 0), new Vector3(1, 1, 1));
-                GameMode.Instance.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", ShopLocation, 4);
+                Streamer.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", ShopLocation, 4);
             }
 
             if (BlipPosition != Vector3.Zero)

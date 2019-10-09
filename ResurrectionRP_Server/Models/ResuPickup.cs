@@ -59,7 +59,7 @@ namespace ResurrectionRP_Server.Models
             if (!hide)
             {
                 string str = $"{item.name} x{quantite}";
-                pickup.Label = GameMode.Instance.Streamer.AddEntityTextLabel(str, pickup.Position + new Vector3(0, 0, 0.5f), 0, 255, 255, 255, 120, 3);
+                pickup.Label = Streamer.Streamer.AddEntityTextLabel(str, pickup.Position + new Vector3(0, 0, 0.5f), 0, 255, 255, 255, 120, 3);
             }
 
             ResuPickupList.TryAdd(worldObject.ID, pickup);

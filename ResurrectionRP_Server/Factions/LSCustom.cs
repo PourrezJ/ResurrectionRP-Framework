@@ -4,6 +4,7 @@ using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson.Serialization.Attributes;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Blips;
 using ResurrectionRP_Server.Entities.Players;
@@ -43,9 +44,9 @@ namespace ResurrectionRP_Server.Factions
         private IVehicle VehicleInColorCabin;
 
         [BsonIgnore]
-        public IColShape ReparationVLColshape { get; private set; }
+        public IColshape ReparationVLColshape { get; private set; }
         [BsonIgnore]
-        public IColShape PeintureColshape { get; private set; }
+        public IColshape PeintureColshape { get; private set; }
         #endregion
 
         #region Constructor
@@ -59,20 +60,18 @@ namespace ResurrectionRP_Server.Factions
         {
             Vector3 reparZone = new Vector3(-324.7894f, -134.2555f, 35.54341f);
             Marker.CreateMarker(MarkerType.VerticalCylinder, reparZone, new Vector3(4, 4, 1), System.Drawing.Color.White, GameMode.GlobalDimension);
-            ReparationVLColshape = Alt.CreateColShapeCylinder(reparZone, 4, 4);
-            ReparationVLColshape.Dimension = GameMode.GlobalDimension;
-            ReparationVLColshape.SetOnPlayerInteractInColShapeAsync(OnEnterRepairZoneVL);
-            ReparationVLColshape.SetOnPlayerEnterColShape(OnEnterColshapeInteract);
-            ReparationVLColshape.SetOnVehicleEnterColShape(OnVehicleEnterColshape);
-            ReparationVLColshape.SetOnVehicleLeaveColShape(OnVehicleLeaveColshape);
+            ReparationVLColshape = ColshapeManager.CreateCylinderColshape(reparZone, 4, 4);
+            ReparationVLColshape.OnPlayerInteractInColshape += OnEnterRepairZoneVL;
+            ReparationVLColshape.OnPlayerEnterColshape += OnEnterColshapeInteract;
+            ReparationVLColshape.OnVehicleEnterColshape += OnVehicleEnterColshape;
+            ReparationVLColshape.OnVehicleLeaveColshape += OnVehicleLeaveColshape;
 
-            PeintureColshape = Alt.CreateColShapeCylinder(PeintureZone, 4, 4);
-            PeintureColshape.Dimension = GameMode.GlobalDimension;
+            PeintureColshape = ColshapeManager.CreateCylinderColshape(PeintureZone, 4, 4);
             Marker.CreateMarker(MarkerType.VerticalCylinder, PeintureZone, new Vector3(4, 4, 1), System.Drawing.Color.White, GameMode.GlobalDimension);
-            PeintureColshape.SetOnPlayerInteractInColShapeAsync(OnEnterPaintZoneVL);
-            PeintureColshape.SetOnPlayerEnterColShape(OnEnterColshapeInteract);
-            PeintureColshape.SetOnVehicleEnterColShape(OnVehicleEnterColshape);
-            PeintureColshape.SetOnVehicleLeaveColShape(OnVehicleLeaveColshape);
+            PeintureColshape.OnPlayerInteractInColshape += OnEnterPaintZoneVL;
+            PeintureColshape.OnPlayerEnterColshape += OnEnterColshapeInteract;
+            PeintureColshape.OnVehicleEnterColshape += OnVehicleEnterColshape;
+            PeintureColshape.OnVehicleLeaveColshape += OnVehicleLeaveColshape;
 
             FactionRang = new FactionRang[] {
                 new FactionRang(0,"Dépanneur", false, 2500, true),
@@ -100,12 +99,12 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Event handlers
-        private Task OnEnterPaintZoneVL(IColShape colShape, IPlayer client)
+        private void OnEnterPaintZoneVL(IColshape colShape, IPlayer client)
         {
             if (VehicleInColorCabin == null)
             {
                 client.SendNotificationError("Le véhicule doit être dans la cabine de peinture pour être repeint.");
-                return Task.CompletedTask;
+                return;
             }
 
             ICollection<string> employees = GetAllSocialClubName();
@@ -113,11 +112,9 @@ namespace ResurrectionRP_Server.Factions
 
             if (employees.Contains(social))
                 OpenPeintureMenu(client);
-
-            return Task.CompletedTask;
         }
 
-        private void OnVehicleLeaveColshape(IColShape colShape, IVehicle vehicle)
+        private void OnVehicleLeaveColshape(IColshape colShape, IVehicle vehicle)
         {
             if (colShape == ReparationVLColshape)
                 VehicleInWorkbench = null;
@@ -128,7 +125,7 @@ namespace ResurrectionRP_Server.Factions
                 MenuManager.CloseMenu(vehicle.Driver);
         }
 
-        private void OnVehicleEnterColshape(IColShape colShape, IVehicle vehicle)
+        private void OnVehicleEnterColshape(IColshape colShape, IVehicle vehicle)
         {
             if (colShape == ReparationVLColshape)
                 VehicleInWorkbench = vehicle;
@@ -136,7 +133,7 @@ namespace ResurrectionRP_Server.Factions
                 VehicleInColorCabin = vehicle;
         }
 
-        private void OnEnterColshapeInteract(IColShape colShape, IPlayer client)
+        private void OnEnterColshapeInteract(IColshape colShape, IPlayer client)
         {
             client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
         }
@@ -226,12 +223,10 @@ namespace ResurrectionRP_Server.Factions
                 client.SendNotificationError("Le fond de commerce est vide.");
         }
 
-        private Task OnEnterRepairZoneVL(IColShape colShape, IPlayer client)
+        private void OnEnterRepairZoneVL(IColshape colShape, IPlayer client)
         {
             if (VehicleInWorkbench != null)
                 OpenMenu(client, VehicleInWorkbench);
-
-            return Task.CompletedTask;
         }
 
         public override async Task OnPlayerServiceEnter(IPlayer client, int rang)

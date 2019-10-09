@@ -97,8 +97,11 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
             ph.Client.SendNotificationSuccess($"Vous avez acheté un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");
             vehicleplace.VehicleHandler.Vehicle.Freeze(false);
             vehicleplace.VehicleHandler.Vehicle.Invincible(false);
-            CarDealerPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;
-            Task.Run(async () => await vehicleplace.VehicleHandler.InsertVehicle());
+            Task.Run(async () =>
+            {
+                await vehicleplace.VehicleHandler.InsertVehicle();
+                CarDealerPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;
+            });
         }
     }
 }

@@ -139,15 +139,8 @@ namespace ResurrectionRP_Server.Entities.Players
                             return;
                         }
 
-                        Farm farm = FarmManager.PlayerInFarmZone(client);
-
-                        if (farm != null)
-                        {
-                            farm.StartFarming(client);
-                            return;
-                        }
-
                         PlayerHandler distantPh = null;
+
                         if (playerDistant == null && vehicle == null)
                             distantPh = PlayerManager.GetPlayersList().Find(p => p.Location.Pos.DistanceTo(raycastData.pos) < Globals.MAX_INTERACTION_DISTANCE);
 
@@ -232,6 +225,14 @@ namespace ResurrectionRP_Server.Entities.Players
                         if (raycastData.isHit && IsPump(raycastData.entityHash) && client.Position.Distance(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE)
                         {
                             Business.Market.OpenGasPumpMenu(client);
+                            return;
+                        }
+
+                        Farm farm = FarmManager.PlayerInFarmZone(client);
+
+                        if (farm != null)
+                        {
+                            farm.StartFarming(client);
                             return;
                         }
 

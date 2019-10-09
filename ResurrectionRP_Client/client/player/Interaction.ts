@@ -35,10 +35,12 @@ export class Interaction {
     {
         alt.onServer('OnPlayerEnterColshape', (colshapeId: number) => {
             this.colshapes.unshift(colshapeId);
+            alt.log('OnPlayerEnterColshape, colshapes: ' + this.colshapes.length);
         });
 
         alt.onServer('OnPlayerLeaveColshape', (colshapeId: number) => {
             this.colshapes = this.colshapes.filter(item => item != colshapeId);
+            alt.log('OnPlayerLeaveColshape, colshapes: ' + this.colshapes.length);
         });
 
         alt.on('canClose', (close) => {

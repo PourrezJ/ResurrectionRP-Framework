@@ -97,6 +97,9 @@ namespace ResurrectionRP_Server.Inventory
             if (!client.Exists)
                 return;
 
+            if (args.Length != 3)
+                return;
+
             RPGInventoryMenu menu = null;
 
            // ItemID itemID = (ItemID)Convert.ToInt32(args[0]);
@@ -138,6 +141,9 @@ namespace ResurrectionRP_Server.Inventory
         {
             try
             {
+                if (args.Length != 4)
+                    return;
+
                 string inventoryType = Convert.ToString(args[0]);
                // ItemID itemID = (ItemID)Convert.ToInt32(args[1]);
                 int slot = Convert.ToInt32(args[2]);
@@ -329,6 +335,9 @@ namespace ResurrectionRP_Server.Inventory
         {
             try
             {
+                if (args.Length != 4)
+                    return;
+
                 string inventoryType = Convert.ToString(args[0]);
                 int itemID = Convert.ToInt32(args[1]);
                 int slot = Convert.ToInt32(args[2]);
@@ -958,6 +967,9 @@ namespace ResurrectionRP_Server.Inventory
             if (!client.Exists)
                 return;
 
+            if (args.Length != 7)
+                return;
+
             string inventoryType = Convert.ToString(args[0]);
             int itemID = Convert.ToInt32(args[1]);
             int newSlot = Convert.ToInt32(args[2]);
@@ -1007,6 +1019,9 @@ namespace ResurrectionRP_Server.Inventory
         private async Task RPGInventory_PriceItemInventory_SRV(IPlayer client, object[] args)
         {
             if (!client.Exists)
+                return;
+
+            if (args.Length != 4)
                 return;
 
             string inventoryType = Convert.ToString(args[0]);

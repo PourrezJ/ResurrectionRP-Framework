@@ -4,6 +4,7 @@ using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using ResurrectionRP_Server.Colshape;
+using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Utils;
 using System;
 using System.Globalization;
@@ -81,16 +82,11 @@ namespace ResurrectionRP_Server
 
             while (gamemode == null)
                 await Task.Delay(50);
-
-            while (gamemode.PlayerManager == null)
-                await Task.Delay(50);
-
         }
 
         private void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
         {
-            if (gamemode != null)
-                gamemode.PlayerManager.Alt_OnPlayerDead(player, killer, weapon);
+            PlayerManager.Alt_OnPlayerDead(player, killer, weapon);
         }
 
         public override void OnStop()

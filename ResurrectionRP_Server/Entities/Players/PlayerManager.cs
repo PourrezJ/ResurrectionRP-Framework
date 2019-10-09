@@ -23,7 +23,7 @@ using WordPressPCL.Models;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
-    public class PlayerManager
+    public static class PlayerManager
     {
         #region Variables 
         private readonly static Location charpos = new Location(new Vector3(402.8664f, -996.4108f, -99.00027f), new Vector3(0,0,60));
@@ -33,12 +33,10 @@ namespace ResurrectionRP_Server.Entities.Players
         private static short Dimension = short.MinValue;
         public static int StartMoney = 0;
         public static int StartBankMoney = 0;
-
-        private bool _whitelistOn = false;
         #endregion
 
         #region Constructor
-        public PlayerManager()
+        public static void Init()
         {
             new PlayerCommands();
             new VehicleCommands();
@@ -105,7 +103,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region ServerEvents
-        public async Task OnPlayerDisconnected(ReadOnlyPlayer player, IPlayer origin, string reason)
+        public static async Task OnPlayerDisconnected(ReadOnlyPlayer player, IPlayer origin, string reason)
         {
             PlayerHandler.PlayerHandlerList.TryGetValue(origin, out PlayerHandler ph);
 
@@ -164,7 +162,7 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.Server.LogInfo($"Joueur social: {ph.PID} || Nom: {ph.Identite.Name} est déconnecté raison: {reason}.");
         }
 
-        public void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
+        public static void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
         {
             if (player.Exists)
             {
@@ -188,7 +186,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        public async Task Events_PlayerJoin(IPlayer player, object[] args)
+        public static async Task Events_PlayerJoin(IPlayer player, object[] args)
         {
             if (!player.Exists)
                 return;
@@ -277,7 +275,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region RemoteEvents
-        private async Task MakePlayer(IPlayer client, object[] args)
+        private static async Task MakePlayer(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -298,7 +296,7 @@ namespace ResurrectionRP_Server.Entities.Players
             await ph.LoadPlayer(client, true);
         }
 
-        private async Task SendLogin(IPlayer client, object[] args)
+        private static async Task SendLogin(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -328,22 +326,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        private void UpdateHungerThirst(IPlayer client, object[] arg)
-        {
-            if (!client.Exists)
-                return;
-
-            PlayerHandler ph = client.GetPlayerHandler();
-
-            if (ph != null)
-            {
-                ph.Hunger = Convert.ToInt32(arg[0]);
-                ph.Thirst = Convert.ToInt32(arg[1]);
-                ph.UpdateFull();
-            }
-        }
-
-        private async Task LogPlayer(IPlayer client, object[] args)
+        private static async Task LogPlayer(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -373,7 +356,7 @@ namespace ResurrectionRP_Server.Entities.Players
         public static async Task<PlayerHandler> GetPlayerHandlerDatabase(string socialClub) =>
             await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == socialClub.ToLower()).FirstOrDefaultAsync();
 
-        private async Task IWantToDie(IPlayer client, object[] args)
+        private static async Task IWantToDie(IPlayer client, object[] args)
         {
             await client.ReviveAsync(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
             client.GetPlayerHandler()?.UpdateFull();

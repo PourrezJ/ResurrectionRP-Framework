@@ -53,9 +53,6 @@ namespace ResurrectionRP_Server
         public BanManager BanManager { get; private set; }
 
         [BsonIgnore]
-        public PlayerManager PlayerManager { get; private set; }
-
-        [BsonIgnore]
         public List<IPlayer> PlayerList = new List<IPlayer>();
 
         public const short GlobalDimension = 0;
@@ -184,7 +181,6 @@ namespace ResurrectionRP_Server
             ColshapeManager.Init();
             Streamer = new Streamer.Streamer();
             Economy = new Economy.Economy();
-            PlayerManager = new PlayerManager();
             BanManager = new BanManager();
             VehicleManager = new VehiclesManager();
             BlipsManager = new Entities.Blips.BlipsManager();
@@ -239,6 +235,7 @@ namespace ResurrectionRP_Server
             VoiceController.OnResourceStart();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
+            PlayerManager.Init();
             PlayerKeyHandler.Init();
             Events.Initialize();
 

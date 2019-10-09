@@ -239,6 +239,7 @@ namespace ResurrectionRP_Server
             VoiceController.OnResourceStart();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
+            PlayerKeyHandler.Init();
             Events.Initialize();
 
             Utils.Utils.SetInterval(async () => await Save(), 15000);

@@ -4,7 +4,6 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
 using AltV.Net;
-using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Async;
 using PropData = ResurrectionRP_Server.Models.PropData;
@@ -15,14 +14,14 @@ using ResurrectionRP_Server.Utils.Enums;
 
 namespace ResurrectionRP_Server.Inventory
 {
-    public class RPGInventoryManager
+    public static class RPGInventoryManager
     {
         #region Private static properties
         private static ConcurrentDictionary<IPlayer, RPGInventoryMenu> _clientMenus = new ConcurrentDictionary<IPlayer, RPGInventoryMenu>();
         #endregion
 
-        #region Constructor
-        public RPGInventoryManager()
+        #region Init
+        public static void Init()
         {
             AltAsync.OnClient("RPGInventory_UseItem", RPGInventory_UseItem);
             AltAsync.OnClient("RPGInventory_DropItem", RPGInventory_DropItem);
@@ -32,12 +31,11 @@ namespace ResurrectionRP_Server.Inventory
 
             Alt.OnClient("RPGInventory_SplitItemInventory_SRV", RPGInventory_SplitItemInventory_SRV);
             Alt.OnClient("RPGInventory_SwitchItemInventory_SRV", RPGInventory_SwitchItemInventory_SRV);
-
         }
         #endregion
 
         #region Server Events
-        public void OnPlayerQuit(IPlayer sender)
+        public static void OnPlayerQuit(IPlayer sender)
         {
             if (HasInventoryOpen(sender))
             {
@@ -92,7 +90,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Use
-        private async Task RPGInventory_UseItem(IPlayer client, object[] args)
+        private static async Task RPGInventory_UseItem(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -137,7 +135,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Drop
-        private async Task RPGInventory_DropItem(IPlayer client, object[] args)
+        private static async Task RPGInventory_DropItem(IPlayer client, object[] args)
         {
             try
             {
@@ -331,7 +329,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Give
-        private async Task RPGInventory_GiveItem(IPlayer client, object[] args)
+        private static async Task RPGInventory_GiveItem(IPlayer client, object[] args)
         {
             try
             {
@@ -522,7 +520,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Switch
-        private void RPGInventory_SwitchItemInventory_SRV(IPlayer client, object[] args)
+        private static void RPGInventory_SwitchItemInventory_SRV(IPlayer client, object[] args)
         {
             try
             {
@@ -959,7 +957,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Split
-        private void RPGInventory_SplitItemInventory_SRV(IPlayer client, object[] args)
+        private static void RPGInventory_SplitItemInventory_SRV(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -1013,7 +1011,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Price
-        private async Task RPGInventory_PriceItemInventory_SRV(IPlayer client, object[] args)
+        private static async Task RPGInventory_PriceItemInventory_SRV(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -1138,7 +1136,7 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Close
-        private async Task RPGInventory_ClosedMenu_SRV(IPlayer client, object[] args)
+        private static async Task RPGInventory_ClosedMenu_SRV(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;

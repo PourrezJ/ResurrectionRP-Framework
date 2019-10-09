@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.XMenuManager
 {
-    public class XMenuManager
+    public static class XMenuManager
     {
         #region Private static properties
         private static ConcurrentDictionary<IPlayer, XMenu> _clientMenus = new ConcurrentDictionary<IPlayer, XMenu>();
         #endregion
 
         #region Constructor
-        public XMenuManager()
+        public static void Init()
         {
             Alt.OnClient("XMenuManager_ExecuteCallback", XMenuManager_ExecuteCallback);
             Alt.OnClient("XMenuManager_ClosedMenu", XMenuManager_ClosedMenu);
@@ -23,7 +23,7 @@ namespace ResurrectionRP_Server.XMenuManager
         #endregion
 
         #region Sync Callback
-        private void XMenuManager_ExecuteCallback(IPlayer client, object[] args)
+        private static void XMenuManager_ExecuteCallback(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.XMenuManager
             }
         }
 
-        public void XMenuManager_ClosedMenu(IPlayer client, object[] args)
+        public static void XMenuManager_ClosedMenu(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;

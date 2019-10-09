@@ -69,10 +69,6 @@ namespace ResurrectionRP_Server
 
         // Menus
         [BsonIgnore]
-        public MenuManager MenuManager { get; private set; }
-        [BsonIgnore]
-        public XMenuManager.XMenuManager XMenuManager { get; private set; }
-        [BsonIgnore]
         public Loader.BusinessesLoader BusinessesManager { get; private set; }
 
         [BsonIgnore]
@@ -82,12 +78,7 @@ namespace ResurrectionRP_Server
         public DrivingSchool.DrivingSchoolManager DrivingSchoolManager { get; private set; }
 
         [BsonIgnore]
-        public Teleport.TeleportManager TeleportManager { get; private set; }
-
-        [BsonIgnore]
         public Weather.WeatherManager WeatherManager { get; private set; }
-        [BsonIgnore]
-        public Inventory.RPGInventoryManager RPGInventory { get; private set; }
         [BsonIgnore]
         public Phone.PhoneManager PhoneManager { get; private set; }
         [BsonIgnore]
@@ -171,12 +162,8 @@ namespace ResurrectionRP_Server
             BanManager = new BanManager();
             PhoneManager = new Phone.PhoneManager();
             FactionManager = new Factions.FactionManager();
-            RPGInventory = new Inventory.RPGInventoryManager();
             SocietyManager = new Society.SocietyManager();
-            MenuManager = new MenuManager();
-            TeleportManager = new Teleport.TeleportManager();
             BusinessesManager = new Loader.BusinessesLoader();
-            XMenuManager = new XMenuManager.XMenuManager();
             WeatherManager = new Weather.WeatherManager();
             //DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
             JobsManager = new Jobs.JobsManager(); 
@@ -217,13 +204,18 @@ namespace ResurrectionRP_Server
             WeatherManager.InitWeather();
             LifeInvader.Load();
             Voice.Init();
-            Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
             PlayerManager.Init();
             PlayerKeyHandler.Init();
             Events.Initialize();
             VehiclesManager.Init();
             Streamer.Streamer.Init();
+            Teleport.TeleportManager.Init();
+            Inventory.RPGInventoryManager.Init();
+            MenuManager.Init();
+            XMenuManager.XMenuManager.Init();
+
+            Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
             Utils.Utils.SetInterval(async () => await Save(), 15000);
             Utils.Utils.SetInterval(async () => await FactionManager.Update(), 60000);

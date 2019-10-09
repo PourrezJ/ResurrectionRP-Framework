@@ -9,21 +9,15 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server
 {
-    public class MenuManager
+    public static class MenuManager
     {
         #region Private static properties
         private static ConcurrentDictionary<IPlayer, Menu> _clientMenus = new ConcurrentDictionary<IPlayer, Menu>();
         #endregion
 
         #region Constructor
-        public MenuManager()
+        public static void Init()
         {
-            //AltAsync.OnClient("MenuManager_ExecuteCallback", MenuManager_ExecuteCallbacks);
-            //AltAsync.OnClient("MenuManager_IndexChanged", MenuManager_IndexChanged);
-            //AltAsync.OnClient("MenuManager_ListChanged", MenuManager_ListChanged);
-            //AltAsync.OnClient("MenuManager_BackKey", MenuManager_BackKey);
-            //AltAsync.OnClient("MenuManager_ClosedMenu", MenuManager_ClosedMenu);
-
             Alt.OnClient("MenuManager_ExecuteCallback", MenuManager_ExecuteCallbacks);
             Alt.OnClient("MenuManager_IndexChanged", MenuManager_IndexChanged);
             Alt.OnClient("MenuManager_ListChanged", MenuManager_ListChanged);
@@ -41,7 +35,7 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Private API triggers
-        public void MenuManager_BackKey(IPlayer player, object[] args)
+        public static void MenuManager_BackKey(IPlayer player, object[] args)
         {
             if (!player.Exists)
                 return;
@@ -65,7 +59,7 @@ namespace ResurrectionRP_Server
             }
         }
 
-        private void MenuManager_ExecuteCallbacks(IPlayer player, object[] args)
+        private static void MenuManager_ExecuteCallbacks(IPlayer player, object[] args)
         {
             if (!player.Exists)
                 return;
@@ -120,7 +114,7 @@ namespace ResurrectionRP_Server
             }
         }
 
-        public void MenuManager_IndexChanged(IPlayer player, object[] args)
+        public static void MenuManager_IndexChanged(IPlayer player, object[] args)
         {
             if (!player.Exists)
                 return;
@@ -138,7 +132,7 @@ namespace ResurrectionRP_Server
             }
         }
 
-        public void MenuManager_ListChanged(IPlayer player, object[] args)
+        public static void MenuManager_ListChanged(IPlayer player, object[] args)
         {
             if (!player.Exists)
                 return;
@@ -154,7 +148,7 @@ namespace ResurrectionRP_Server
             }
         }
 
-        public void MenuManager_ClosedMenu(IPlayer player, object[] args)
+        public static void MenuManager_ClosedMenu(IPlayer player, object[] args)
         {
             if (!player.Exists)
                 return;
@@ -186,7 +180,7 @@ namespace ResurrectionRP_Server
             client.EmitLocked("MenuManager_CloseMenu");
         }
 
-        public void ForceCallback(IPlayer client)
+        public static void ForceCallback(IPlayer client)
         {
             _clientMenus.TryGetValue(client, out Menu menu);
 
@@ -194,7 +188,7 @@ namespace ResurrectionRP_Server
                 client.EmitLocked("MenuManager_ForceCallback");
         }
 
-        public Menu GetMenu(IPlayer client)
+        public static Menu GetMenu(IPlayer client)
         {
             _clientMenus.TryGetValue(client, out Menu menu);
             return menu;

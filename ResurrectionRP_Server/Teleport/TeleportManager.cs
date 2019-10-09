@@ -16,14 +16,14 @@ namespace ResurrectionRP_Server.Teleport
         Out
     }
 
-    public class TeleportManager
+    public static class TeleportManager
     {
         #region Fields
-        public List<Teleport> Teleports = new List<Teleport>();
+        public static List<Teleport> Teleports = new List<Teleport>();
         #endregion
 
-        #region Constructor
-        public TeleportManager()
+        #region Init
+        public static void Init()
         {
             ColshapeManager.OnPlayerInteractInColshape += OnTeleportColshape;
             ColshapeManager.OnPlayerLeaveColshape += OnPlayerLeaveColshape;
@@ -31,7 +31,7 @@ namespace ResurrectionRP_Server.Teleport
         #endregion
 
         #region Event handlers
-        private void OnTeleportColshape(IColshape colshape, IPlayer client)
+        private static void OnTeleportColshape(IColshape colshape, IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -125,7 +125,7 @@ namespace ResurrectionRP_Server.Teleport
             }
         }
 
-        private void OnPlayerLeaveColshape(IColshape colshape, IPlayer client)
+        private static void OnPlayerLeaveColshape(IColshape colshape, IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -146,7 +146,7 @@ namespace ResurrectionRP_Server.Teleport
         #endregion
 
         #region Methods
-        private void MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private static void MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (!menuItem.HasData("Location"))
                 return;
@@ -161,7 +161,7 @@ namespace ResurrectionRP_Server.Teleport
             // client.Rotation = etage.Rot;
         }
 
-        public Teleport GetTeleport(int id) => Teleports.Find(t => t.ID == id);
+        public static Teleport GetTeleport(int id) => Teleports.Find(t => t.ID == id);
         #endregion
     }
 }

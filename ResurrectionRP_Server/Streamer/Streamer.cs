@@ -17,15 +17,15 @@ using AltV.Net.Data;
 
 namespace ResurrectionRP_Server.Streamer
 {
-    public partial class Streamer
+    public static partial class Streamer
     {
-        public int EntityNumber = 0;
-        public ConcurrentDictionary<int, INetworkingEntity> ListEntities = new ConcurrentDictionary<int, INetworkingEntity>();
+        public static int EntityNumber = 0;
+        public static ConcurrentDictionary<int, INetworkingEntity> ListEntities = new ConcurrentDictionary<int, INetworkingEntity>();
 
-        public int StaticEntityNumber = 0;
-        public ConcurrentDictionary<int, dynamic> ListStaticEntities = new ConcurrentDictionary<int, dynamic>();
+        public static int StaticEntityNumber = 0;
+        public static ConcurrentDictionary<int, dynamic> ListStaticEntities = new ConcurrentDictionary<int, dynamic>();
 
-        public Streamer()
+        public static void Init()
         {
             try
             {
@@ -51,14 +51,14 @@ namespace ResurrectionRP_Server.Streamer
             }
         }
 
-        public int AddEntityPed(Entities.Peds.Ped ped, int dimension = GameMode.GlobalDimension)
+        public static int AddEntityPed(Entities.Peds.Ped ped, int dimension = GameMode.GlobalDimension)
         {
             INetworkingEntity item = AltNetworking.CreateEntity(ped.Position.ConvertToEntityPosition(), dimension, GameMode.Instance.StreamDistance, ped.Export());
             ListEntities.TryAdd(EntityNumber, item);
             return EntityNumber;
         }
 
-        public WorldObject AddEntityObject(WorldObject data)
+        public static WorldObject AddEntityObject(WorldObject data)
         {
             INetworkingEntity item = AltNetworking.CreateEntity(data.Position.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.Instance.StreamDistance, data.export());
             
@@ -66,18 +66,18 @@ namespace ResurrectionRP_Server.Streamer
             return data;
         }
 
-        public WorldObject UpdateEntityObject(WorldObject obj)
+        public static WorldObject UpdateEntityObject(WorldObject obj)
         {
             if (ListEntities.ContainsKey(obj.ID))
             {
-                INetworkingEntity oitem = this.ListEntities[obj.ID];
+                INetworkingEntity oitem = ListEntities[obj.ID];
                 oitem.SetData("attach", JsonConvert.SerializeObject(obj.Attachment));
             }
 
             return obj;
         }
 
-        public void DeleteEntityObject(WorldObject data)
+        public static void DeleteEntityObject(WorldObject data)
         {
             if (ListEntities.ContainsKey(data.ID))
             {
@@ -87,7 +87,7 @@ namespace ResurrectionRP_Server.Streamer
             }      
         }
 
-        public TextLabel AddEntityTextLabel(string label, Vector3 pos, int font = 1, int r = 255, int g = 255, int b = 255, int a = 255, int drawDistance = 5, int dimension = GameMode.GlobalDimension)
+        public static TextLabel AddEntityTextLabel(string label, Vector3 pos, int font = 1, int r = 255, int g = 255, int b = 255, int a = 255, int drawDistance = 5, int dimension = GameMode.GlobalDimension)
         {
             var data = new TextLabel(label, font, r, g, b, a, EntityNumber++);
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, drawDistance, data.export());
@@ -95,13 +95,13 @@ namespace ResurrectionRP_Server.Streamer
             return data;
         }
 
-        public int UpdateEntityTextLabel(int entityid, string label)
+        public static int UpdateEntityTextLabel(int entityid, string label)
         {
             ListEntities[entityid].SetData("text", label);
             return entityid;
         }
 
-        public int DestroyEntity(int entityid)
+        public static int DestroyEntity(int entityid)
         {
             if (ListEntities.ContainsKey(entityid))
             {
@@ -113,7 +113,7 @@ namespace ResurrectionRP_Server.Streamer
             return 0;
         }
 
-        public int AddStaticEntityBlip(Blips blip)
+        public static int AddStaticEntityBlip(Blips blip)
         {
             ListStaticEntities.TryAdd(blip.id, blip.export());
 
@@ -123,7 +123,7 @@ namespace ResurrectionRP_Server.Streamer
             return blip.id;
         }
 
-        public void UpdateStaticEntityBlip(Blips blip)
+        public static void UpdateStaticEntityBlip(Blips blip)
         {
             ListStaticEntities[blip.id] = blip.export();
 
@@ -131,14 +131,14 @@ namespace ResurrectionRP_Server.Streamer
             Alt.EmitAllClients("createStaticEntity", blip.export());
         }
 
-        public void DestroyStaticEntityBlip(Blips blip)
+        public static void DestroyStaticEntityBlip(Blips blip)
         {
             Alt.EmitAllClients("deleteStaticEntity", blip.id, (int)blip.type);
 
             ListStaticEntities.TryRemove(blip.id, out _);
         }
 
-        public void LoadStreamPlayer(IPlayer player)
+        public static void LoadStreamPlayer(IPlayer player)
         {
             foreach(KeyValuePair<int, object> item in ListStaticEntities)
             {

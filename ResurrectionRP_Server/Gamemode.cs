@@ -44,9 +44,6 @@ namespace ResurrectionRP_Server
         public bool ServerLoaded = false;
 
         [BsonIgnore]
-        public Streamer.Streamer Streamer { get; private set; }
-
-        [BsonIgnore]
         public float StreamDistance { get; private set; } = 500;
 
         [BsonIgnore]
@@ -173,7 +170,7 @@ namespace ResurrectionRP_Server
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
             ColshapeManager.Init();
-            Streamer = new Streamer.Streamer();
+
             Economy = new Economy.Economy();
             BanManager = new BanManager();
             BlipsManager = new Entities.Blips.BlipsManager();
@@ -231,6 +228,7 @@ namespace ResurrectionRP_Server
             PlayerKeyHandler.Init();
             Events.Initialize();
             VehiclesManager.Init();
+            Streamer.Streamer.Init();
 
             Utils.Utils.SetInterval(async () => await Save(), 15000);
             Utils.Utils.SetInterval(async () => await FactionManager.Update(), 60000);

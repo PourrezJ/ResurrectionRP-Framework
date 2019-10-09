@@ -517,6 +517,9 @@ namespace ResurrectionRP_Server.Inventory
         {
             try
             {
+                if (args.Length != 5)
+                    return;
+
                 string targetRPGInv = Convert.ToString(args[0]);
                 string oldRPGInv = Convert.ToString(args[1]);
                 int itemID = Convert.ToInt32(args[2]);

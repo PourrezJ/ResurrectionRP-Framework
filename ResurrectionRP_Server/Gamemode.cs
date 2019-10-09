@@ -72,10 +72,6 @@ namespace ResurrectionRP_Server
         public MenuManager MenuManager { get; private set; }
         [BsonIgnore]
         public XMenuManager.XMenuManager XMenuManager { get; private set; }
-
-        [BsonIgnore]
-        public Entities.Blips.BlipsManager BlipsManager { get; private set; }
-
         [BsonIgnore]
         public Loader.BusinessesLoader BusinessesManager { get; private set; }
 
@@ -173,7 +169,6 @@ namespace ResurrectionRP_Server
 
             Economy = new Economy.Economy();
             BanManager = new BanManager();
-            BlipsManager = new Entities.Blips.BlipsManager();
             PhoneManager = new Phone.PhoneManager();
             FactionManager = new Factions.FactionManager();
             RPGInventory = new Inventory.RPGInventoryManager();

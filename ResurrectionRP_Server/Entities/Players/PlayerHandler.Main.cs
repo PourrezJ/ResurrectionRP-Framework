@@ -267,7 +267,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (PlayerSync.IsCuff)
                         SetCuff(true);
 
-                    GameMode.Instance.Streamer.LoadStreamPlayer(client);
+                    Streamer.Streamer.LoadStreamPlayer(client);
                     Door.OnPlayerConnected(client);
                     Houses.HouseManager.OnPlayerConnected(client);
                     GameMode.Instance.IllegalManager.OnPlayerConnected(client);

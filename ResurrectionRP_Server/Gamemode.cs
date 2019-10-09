@@ -100,9 +100,6 @@ namespace ResurrectionRP_Server
         public Inventory.RPGInventoryManager RPGInventory { get; private set; }
         [BsonIgnore]
         public Phone.PhoneManager PhoneManager { get; private set; }
-
-        [BsonIgnore]
-        public Voice VoiceController { get; private set; }
         [BsonIgnore]
         public RadioManager RadioManager { get; private set; }
         [BsonIgnore]
@@ -194,8 +191,7 @@ namespace ResurrectionRP_Server
             XMenuManager = new XMenuManager.XMenuManager();
             WeatherManager = new Weather.WeatherManager();
             //DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
-            JobsManager = new Jobs.JobsManager();
-            VoiceController = new Voice();
+            JobsManager = new Jobs.JobsManager(); 
             HouseManager = new HouseManager();
             IllegalManager = new IllegalManager();
             RadioManager = new RadioManager();
@@ -232,7 +228,7 @@ namespace ResurrectionRP_Server
             FarmManager.InitAll();
             WeatherManager.InitWeather();
             LifeInvader.Load();
-            VoiceController.OnResourceStart();
+            Voice.Init();
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
             PlayerManager.Init();

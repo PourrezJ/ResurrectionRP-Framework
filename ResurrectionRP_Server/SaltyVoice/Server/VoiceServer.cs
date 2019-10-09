@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SaltyServer
 {
-    public class Voice
+    public static class Voice
     {
         #region Properties
         public static string ServerUniqueIdentifier { get; private set; }
@@ -28,7 +28,7 @@ namespace SaltyServer
 
         #region Events
 
-        public void OnResourceStart()
+        public static void Init()
         {
             Voice.ServerUniqueIdentifier = Config.GetSetting<string>("ServerUniqueIdentifier");
             Voice.RequiredUpdateBranch = Config.GetSetting<string>("RequiredUpdateBranch");
@@ -42,7 +42,7 @@ namespace SaltyServer
             Alt.OnClient(SaltyShared.Event.Voice_IsTalking, OnPlayerTalking);
         }
 
-        public void OnPlayerDisconnected(IPlayer client)
+        public static void OnPlayerDisconnected(IPlayer client)
         {
             Voice.RemovePlayerRadioChannel(client);
 
@@ -57,7 +57,7 @@ namespace SaltyServer
             }
         }
 
-        private void OnRejectedVersion(IPlayer client, object[] args)
+        private static void OnRejectedVersion(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -76,7 +76,7 @@ namespace SaltyServer
             client.Kick("SaltyChat version");
         }
 
-        public void OnPlayerTalking(IPlayer client, object[] args)
+        public static void OnPlayerTalking(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -92,7 +92,7 @@ namespace SaltyServer
             }
         }
 
-        public void OnPlayerTalkingOnRadio(IPlayer client, object[] args)
+        public static void OnPlayerTalkingOnRadio(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -102,7 +102,7 @@ namespace SaltyServer
             Voice.SetPlayerSendingOnRadioChannel(client, radioChannel, isSending);
         }
 
-        public void OnSetRadioChannel(IPlayer client, string radioChannel)
+        public static void OnSetRadioChannel(IPlayer client, string radioChannel)
         {
             if (String.IsNullOrWhiteSpace(radioChannel))
                 return;
@@ -113,7 +113,7 @@ namespace SaltyServer
             client.EmitLocked(SaltyShared.Event.Voice_SetRadioChannel, radioChannel);
         }
 
-        public void OnLeaveRadioChannel(IPlayer client)
+        public static void OnLeaveRadioChannel(IPlayer client)
         {
             Voice.RemovePlayerRadioChannel(client);
 

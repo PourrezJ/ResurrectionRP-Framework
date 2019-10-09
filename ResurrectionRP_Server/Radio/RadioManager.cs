@@ -5,6 +5,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using RadioModes = ResurrectionRP_Server.Radio.Data.RadioModes;
 using System.Globalization;
+using SaltyServer;
 
 namespace ResurrectionRP_Server.Radio
 {
@@ -105,12 +106,12 @@ namespace ResurrectionRP_Server.Radio
                         radio.Statut = ((bool)args[1]) ? RadioModes.LISTENING : RadioModes.OFF;
                         if (radio.Statut == RadioModes.OFF)
                         {
-                            SaltyServer.Voice.RemovePlayerRadioChannel(player);
+                            Voice.RemovePlayerRadioChannel(player);
                         }
                         else
                         {
-                            GameMode.Instance.VoiceController.OnSetRadioChannel(player, radio.GetCurrentFrequence().ToString());
-                            SaltyServer.Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
+                            Voice.OnSetRadioChannel(player, radio.GetCurrentFrequence().ToString());
+                            Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
                         }
                     }
                     catch (Exception ex)

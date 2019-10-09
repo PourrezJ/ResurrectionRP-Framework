@@ -546,16 +546,13 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public bool InventoryIsFull(double itemSize = 0)
         {
-            if (BagInventory != null)
-            {
-                if (BagInventory.IsFull(itemSize) && PocketInventory.IsFull(itemSize)) return true;
-                else return false;
-            }
-            else
-            {
-                if (PocketInventory.IsFull(itemSize)) return true;
-                else return false;
-            }
+            if (!PocketInventory.IsFull(itemSize))
+                return false;
+
+            if (BagInventory != null && !BagInventory.IsFull(itemSize))
+                return false;
+
+            return true;
         }
 
         public bool AddItem(Item item, int quantity = 1)

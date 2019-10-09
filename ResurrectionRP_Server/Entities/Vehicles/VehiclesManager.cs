@@ -13,7 +13,7 @@ using ResurrectionRP_Server.Services;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
-    public class VehiclesManager
+    public static class VehiclesManager
     {
         #region Fields
         // Use ConcurrentDictionary as ther eis no concurrent list
@@ -22,7 +22,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Constructor
-        public VehiclesManager()
+        public static void Init()
         {
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
@@ -150,7 +150,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Loop
-        private void VehicleManagerLoop()
+        private static void VehicleManagerLoop()
         {
             lock (VehicleHandlerList.Keys)
             {

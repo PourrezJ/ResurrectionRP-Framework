@@ -65,9 +65,6 @@ namespace ResurrectionRP_Server
         public Economy.Economy Economy { get; private set; }
 
         [BsonIgnore]
-        public VehiclesManager VehicleManager { get; private set; }
-
-        [BsonIgnore]
         public Jobs.JobsManager JobsManager { get; private set; }
 
         [BsonIgnore]
@@ -179,7 +176,6 @@ namespace ResurrectionRP_Server
             Streamer = new Streamer.Streamer();
             Economy = new Economy.Economy();
             BanManager = new BanManager();
-            VehicleManager = new VehiclesManager();
             BlipsManager = new Entities.Blips.BlipsManager();
             PhoneManager = new Phone.PhoneManager();
             FactionManager = new Factions.FactionManager();
@@ -234,6 +230,7 @@ namespace ResurrectionRP_Server
             PlayerManager.Init();
             PlayerKeyHandler.Init();
             Events.Initialize();
+            VehiclesManager.Init();
 
             Utils.Utils.SetInterval(async () => await Save(), 15000);
             Utils.Utils.SetInterval(async () => await FactionManager.Update(), 60000);

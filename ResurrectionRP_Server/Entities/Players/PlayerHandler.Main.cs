@@ -596,16 +596,12 @@ namespace ResurrectionRP_Server.Entities.Players
             List<ItemStack> _stacks = new List<ItemStack>();
 
             foreach (ItemStack stack in PocketInventory.InventoryList)
-            {
                 _stacks.Add(stack);
-            }
 
             if (BagInventory != null)
             {
                 foreach (ItemStack stack in BagInventory.InventoryList)
-                {
                     _stacks.Add(stack);
-                }
             }
 
             return _stacks;
@@ -615,15 +611,16 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             switch (inventoryType)
             {
-                case Utils.Enums.InventoryTypes.Pocket:
+                case InventoryTypes.Pocket:
                     return PocketInventory.Delete(slot, quantity);
 
-                case Utils.Enums.InventoryTypes.Bag:
+                case InventoryTypes.Bag:
                     return BagInventory.Delete(slot, quantity);
 
-                case Utils.Enums.InventoryTypes.Outfit:
+                case InventoryTypes.Outfit:
                     return OutfitInventory.Delete(slot, quantity);
             }
+
             return false;
         }
 
@@ -635,6 +632,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 return true;
             if (OutfitInventory != null && OutfitInventory.Delete(itemID, 1))
                 return true;
+
             return false;
         }
 
@@ -670,9 +668,7 @@ namespace ResurrectionRP_Server.Entities.Players
             somme += PocketInventory.CountItem(itemid);
 
             if (BagInventory != null)
-            {
                 somme += BagInventory.CountItem(itemid);
-            }
 
             return somme;
         }
@@ -683,9 +679,7 @@ namespace ResurrectionRP_Server.Entities.Players
             somme += PocketInventory.CountItem(item);
 
             if (BagInventory != null)
-            {
                 somme += BagInventory.CountItem(item);
-            }
 
             return somme;
         }
@@ -699,7 +693,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 var pocket = PocketInventory.FindAllItemWithType(itemID);
 
                 if (pocket != null && pocket.Length > 0)
-                    items.Add(Utils.Enums.InventoryTypes.Pocket, pocket);
+                    items.Add(InventoryTypes.Pocket, pocket);
             }
 
             if (BagInventory != null)
@@ -707,7 +701,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 var bag = BagInventory.FindAllItemWithType(itemID);
 
                 if (bag != null && bag.Length > 0)
-                    items.Add(Utils.Enums.InventoryTypes.Bag, bag);
+                    items.Add(InventoryTypes.Bag, bag);
             }
 
             if (OutfitInventory != null)
@@ -715,7 +709,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 var outfit = OutfitInventory.FindAllItemWithType(itemID);
 
                 if (outfit != null && outfit.Length > 0)
-                    items.Add(Utils.Enums.InventoryTypes.Outfit, outfit);
+                    items.Add(InventoryTypes.Outfit, outfit);
             }
             return items;
         }

@@ -1,4 +1,5 @@
-﻿using AltV.Net.Elements.Entities;
+﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Models;
 using System.Threading.Tasks;
 using System.Numerics;
@@ -20,6 +21,7 @@ namespace ResurrectionRP_Server.Items
 
         public override void Use(IPlayer client, string inventoryType, int slot)
         {
+            Alt.Server.LogInfo($"[Eat.Use()] : inventoryType: {inventoryType}, slot: {slot}");
             Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
 
             if (ph != null)

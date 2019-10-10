@@ -70,7 +70,7 @@ namespace ResurrectionRP_Server.Teleport
             // Entrée
 
             IColshape enterColshape = ColshapeManager.CreateCylinderColshape(entree.Pos - new Vector3(0,0,1), scale.X, 3f);
-            Marker.CreateMarker(MarkerType.VerticalCylinder, entree.Pos - new Vector3(0.0f, 0.0f, 1f), new Vector3(1, 1, 1));
+            Marker.CreateMarker(MarkerType.VerticalCylinder, entree.Pos - new Vector3(0.0f, 0.0f, 1f), scale, Color.FromArgb(opacite, 255, 255, 255));
             if (!hide) Streamer.Streamer.AddEntityTextLabel("~o~Appuyez sur ~w~E \n ~o~pour intéragir", entree.Pos, 1, 255, 255, 255, 255, 10);
             enterColshape.SetData("Teleport", JsonConvert.SerializeObject(new
             {

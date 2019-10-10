@@ -558,15 +558,17 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 LastKnowLocation = new Location(Vehicle.Position, Vehicle.Rotation);
             }).Wait();
         }
-
+        private int tick;
         public void UpdateMilageAndFuel()
         {
-            if (WasTeleported && _previousPosition != Vehicle.Position.ConvertToVector3())
+            tick++;
+            if (WasTeleported && _previousPosition != Vehicle.Position.ConvertToVector3() && tick > 100)
             {
                 _previousPosition = Vehicle.Position.ConvertToVector3();
                 WasTeleported = false;
                 return;
             }
+            tick = 0;
 
             DateTime updateTime = DateTime.Now;
             Vector3 oldPos = _previousPosition;

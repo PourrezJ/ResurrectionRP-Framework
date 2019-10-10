@@ -184,7 +184,7 @@ namespace ResurrectionRP_Server.Factions
                 new TeleportEtage() { Name = "Bureau", Location = new Location(new Vector3(992.6411f, -3097.875f, -38.99584f), new Vector3(0, 0, 269.3458f))}
             };
 
-            Teleports.Add(Teleport.Teleport.CreateTeleport(new Location(new Vector3(1181.065f, -3113.788f, 6.028026f), new Vector3(0, 0, 94.32016f)), doors, 1, true, iswhitelisted: true, menutitle: "Porte", whitelist: FactionPlayerList.Keys.ToList()));
+            Teleports.Add(Teleport.Teleport.CreateTeleport(new Location(new Vector3(1181.065f, -3113.788f, 6.028026f), new Vector3(0, 0, 94.32016f)), doors, new Vector3(1,1,0.2f), true, iswhitelisted: true, menutitle: "Porte", whitelist: FactionPlayerList.Keys.ToList()));
 
             // Entrée chariot bâtiment
             doors = new List<TeleportEtage>()
@@ -192,7 +192,7 @@ namespace ResurrectionRP_Server.Factions
                 new TeleportEtage() { Name = "Entrepôt", Location = new Location(new Vector3(1023.734f, -3101.668f, -39.55f), new Vector3(0.09950814f, 0.3552414f, 76.95227f))}
             };
 
-            Teleports.Add( Teleport.Teleport.CreateTeleport(new Location(new Vector3(1189.579f, -3106.517f, 5.3f), new Vector3(-3.693874f, -0.06248324f, 358.6757f)), doors, 2, true, iswhitelisted: true, menutitle: "Entrepôt", whitelist: ServicePlayerList));
+            Teleports.Add( Teleport.Teleport.CreateTeleport(new Location(new Vector3(1189.579f, -3106.517f, 5.3f), new Vector3(-3.693874f, -0.06248324f, 358.6757f)), doors, new Vector3(1, 1, 0.2f), true, iswhitelisted: true, menutitle: "Entrepôt", whitelist: ServicePlayerList));
 
             Parking.Hidden = true;
             Parking.Spawn1 = new Location(new Vector3(1186.454f, -3200.917f, 6.101458f), new Vector3(0.01919898f, 0.2955396f, 88.09204f));

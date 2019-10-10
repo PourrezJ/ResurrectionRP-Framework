@@ -31,7 +31,7 @@ namespace ResurrectionRP_Server.Society.Societies
                 new TeleportEtage() { Name = "Sortie arrière", Location = new Location(new Vector3(-1368.322f, -647.4513f, 28.69429f), new Vector3(0, 0, 124.4904f))}
             };
 
-            Teleport.Teleport.CreateTeleport(new Location(new Vector3(-1386.159f, -627.3551f, 30.81957f), new Vector3(0, 0, 309.1539f)), etages, menutitle: "Porte");
+            Teleport.Teleport.CreateTeleport(new Location(new Vector3(-1386.159f, -627.3551f, 30.81957f), new Vector3(0, 0, 309.1539f)), etages, new Vector3(1, 1, 0.2f), menutitle: "Porte");
 
             PorteDevant1.Interact = OpenDoor;
             PorteDevant2.Interact = OpenDoor;

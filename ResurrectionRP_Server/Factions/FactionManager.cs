@@ -19,7 +19,7 @@ namespace ResurrectionRP_Server.Factions
 
         public static LSCustom LSCustom { get; private set; }
 
-        //public Division Rebelle { get; private set; }
+        public static Division Rebelle { get; private set; }
 
         public static Gouv Gouvernement { get; private set; }
 
@@ -33,7 +33,7 @@ namespace ResurrectionRP_Server.Factions
         {
             Onu = (ONU)(await LoadFaction<ONU>("ONU") ?? new ONU("ONU", FactionType.ONU)).Init();
             Lspd = (LSPD)(await LoadFaction<LSPD>("LSPD") ?? new LSPD("LSPD", FactionType.LSPD)).Init();
-            // fm.Rebelle = (Division)(await LoadFaction<Division>("Division") ?? new Division("Division", FactionType.Division)).Init();
+            Rebelle = (Division)(await LoadFaction<Division>("Division") ?? new Division("Division", FactionType.Division)).Init();
             LSCustom = (LSCustom)(await LoadFaction<LSCustom>("LSCustom") ?? new LSCustom("LSCustom", FactionType.LSCustom)).Init();
             Gouvernement = (Gouv)(await LoadFaction<Gouv>("Gouv") ?? new Gouv("Gouv", FactionType.Gouv)).Init();
             Dock = (Dock)(await LoadFaction<Dock>("Dock") ?? new Dock("Dock", FactionType.Dock)).Init();
@@ -58,7 +58,7 @@ namespace ResurrectionRP_Server.Factions
             Onu?.OnPlayerConnected(client);
             Lspd?.OnPlayerConnected(client);
             LSCustom?.OnPlayerConnected(client);
-            //Rebelle?.OnPlayerConnected(client);
+            Rebelle?.OnPlayerConnected(client);
             Dock?.OnPlayerConnected(client);
             Gouvernement?.OnPlayerConnected(client);
             Nordiste?.OnPlayerConnected(client);
@@ -69,7 +69,7 @@ namespace ResurrectionRP_Server.Factions
             Onu?.OnPlayerDisconnected(client);
             Lspd?.OnPlayerDisconnected(client);
             LSCustom?.OnPlayerDisconnected(client);
-            //Rebelle?.OnPlayerDisconnected(client);
+            Rebelle?.OnPlayerDisconnected(client);
             Dock?.OnPlayerDisconnected(client);
             Nordiste?.OnPlayerConnected(client);
         }
@@ -81,7 +81,7 @@ namespace ResurrectionRP_Server.Factions
             Onu?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.BRIEFCASE_MEDICAL_SOLID);
             Lspd?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
             LSCustom?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.TOOLBOX_SOLID);
-            //GameMode.Instance.FactionManager.Rebelle?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.REBEL_BRAND);
+            Rebelle?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.REBEL_BRAND);
             Gouvernement?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
             Dock?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
             Nordiste?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
@@ -92,7 +92,7 @@ namespace ResurrectionRP_Server.Factions
             Onu?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.BRIEFCASE_MEDICAL_SOLID);
             Lspd?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
             LSCustom?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.TOOLBOX_SOLID);
-            //GameMode.Instance.FactionManager.Rebelle?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.REBEL_BRAND);
+            Rebelle?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.REBEL_BRAND);
             Gouvernement?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
             Dock?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
             Nordiste?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
@@ -126,13 +126,13 @@ namespace ResurrectionRP_Server.Factions
             return false;
         }
         
-/*        public static async Task<bool> IsRebelle(IPlayer client)
+        public static bool IsRebelle(IPlayer client)
         {
-            if (GameMode.Instance.FactionManager.Rebelle != null)
-                return await GameMode.Instance.FactionManager.Rebelle.HasPlayerIntoFaction(client);
+            if (Rebelle != null)
+                return Rebelle.HasPlayerIntoFaction(client);
             return false;
         }
-*/
+
 
         public static bool IsLSCustom(IPlayer client)
         {

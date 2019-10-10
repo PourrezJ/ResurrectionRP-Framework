@@ -82,7 +82,7 @@ namespace ResurrectionRP_Server.Teleport
                     if (teleport.VehicleAllowed && client.Vehicle != null)
                     {
                         var vehicle = client.Vehicle;
-
+                        vehicle.GetVehicleHandler().WasTeleported = true;
                         if (data.State == TeleportState.Enter)
                         {
                             var location = teleport.Sortie[0].Location;

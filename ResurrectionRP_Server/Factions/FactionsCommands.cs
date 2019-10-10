@@ -1,5 +1,3 @@
-using AltV.Net;
-using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Utils.Enums;
 using System.Threading.Tasks;
@@ -12,7 +10,7 @@ namespace ResurrectionRP_Server.Factions
         {
             Chat.RegisterCmd("addonu", AddPlayerONU);
             Chat.RegisterCmd("addlspd", AddPlayerLSPD);
-            //Chat.RegisterCmd("addrebelle", AddPlayerRebelle);
+            Chat.RegisterCmd("addrebelle", AddPlayerRebelle);
             Chat.RegisterCmd("addlscustom", AddPlayerLSCustom);
             Chat.RegisterCmd("addgouv", AddPlayerGouv);
             Chat.RegisterCmd("adddock", AddPlayerDock);
@@ -32,13 +30,13 @@ namespace ResurrectionRP_Server.Factions
                 return;
             await FactionManager.Lspd.TryAddIntoFaction(client, 4);
         }
-        /*
-        public void AddPlayerRebelle(IPlayer client, string[] args)
+        
+        public async Task AddPlayerRebelle(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            Task.Run(async () => await GameMode.Instance.FactionManager?.Rebelle.TryAddIntoFaction(client, 3));
-        }*/
+            await FactionManager.Rebelle.TryAddIntoFaction(client, 3);
+        }
 
         public async Task AddPlayerLSCustom(IPlayer client, string[] args)
         {

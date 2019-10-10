@@ -235,7 +235,18 @@ namespace ResurrectionRP_Server
             {
                 if (player.GetPlayerHandler()?.StaffRank <= 0)
                     return;
-                await player.SetPositionAsync(new Position(float.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
+                try
+                {
+                    float x = Convert.ToSingle(args[0].ToString().Replace('f',' ').Replace(',',' '));
+                    float y = Convert.ToSingle(args[1].ToString().Replace('f', ' ').Replace(',', ' '));
+                    float z = Convert.ToSingle(args[2].ToString().Replace('f', ' ').Replace(',', ' '));
+
+                    await player.SetPositionAsync(new Position(x, y, z));
+                }
+                catch(Exception ex)
+                {
+                    Alt.Server.LogError(ex.ToString());
+                }      
             });
         }
 

@@ -322,7 +322,7 @@ namespace ResurrectionRP_Server.Factions
             IVehicle target = menu.GetData("Vehicle");
             if (target != null && target.Exists)
             {
-                if ((GameMode.Instance.FactionManager.LSCustom?.GetEmployeeOnline()).Count > 0)
+                if ((Factions.FactionManager.LSCustom?.GetEmployeeOnline()).Count > 0)
                 {
                     // appel vers la fourrière
                     client.SendNotificationPicture(CharPicture.CHAR_CHAT_CALL, "Bureau Shérif", "Demande de mise en fourrière.", "Fourrière indisponible, contacter un dépanneur.");

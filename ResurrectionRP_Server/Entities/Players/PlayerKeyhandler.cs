@@ -194,9 +194,9 @@ namespace ResurrectionRP_Server.Entities.Players
                         if (raycastData.entityHash == 307713837)
                         {
                             List<Rack> rackList = new List<Rack>();
-                            rackList.AddRange(GameMode.Instance.FactionManager.Dock.Racks);
-                            rackList.Add(GameMode.Instance.FactionManager.Dock.Importation);
-                            rackList.Add(GameMode.Instance.FactionManager.Dock.Quai);
+                            rackList.AddRange(FactionManager.Dock.Racks);
+                            rackList.Add(FactionManager.Dock.Importation);
+                            rackList.Add(FactionManager.Dock.Quai);
 
                             var rack = rackList.Find(p => p.InventoryBox.Obj.ID == streamedID);
                             if (rack == null)

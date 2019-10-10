@@ -232,9 +232,9 @@ namespace ResurrectionRP_Server.Entities.Players
                         Thirst,
                         Hunger,
                         JsonConvert.SerializeObject(GameMode.Instance.Time),
-                        GameMode.Instance.WeatherManager.Actual_weather.ToString(),
-                        GameMode.Instance.WeatherManager.Wind,
-                        GameMode.Instance.WeatherManager.WindDirection,
+                        Weather.WeatherManager.Actual_weather.ToString(),
+                        Weather.WeatherManager.Wind,
+                        Weather.WeatherManager.WindDirection,
                         GameMode.Instance.IsDebug,
                         Location.Pos.ConvertToVector3Serialized()
                     );
@@ -270,7 +270,8 @@ namespace ResurrectionRP_Server.Entities.Players
                     Streamer.Streamer.LoadStreamPlayer(client);
                     Door.OnPlayerConnected(client);
                     Houses.HouseManager.OnPlayerConnected(client);
-                    GameMode.Instance.IllegalManager.OnPlayerConnected(client);
+                    Illegal.IllegalManager.OnPlayerConnected(client);
+                    Factions.FactionManager.OnPlayerConnected(client);
                 });
                 
                 await Task.Delay(600);

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Houses
 {
-    public class HouseManager
+    public static class HouseManager
     {
         #region Public fields
         public static Dictionary<IPlayer, House> AddParkingList = new Dictionary<IPlayer, House>();
@@ -27,7 +27,7 @@ namespace ResurrectionRP_Server.Houses
         #endregion
 
         #region Constructor
-        public HouseManager()
+        public static void Init()
         {
             Alt.OnPlayerDead += Alt_OnPlayerDead;
 
@@ -62,7 +62,7 @@ namespace ResurrectionRP_Server.Houses
 
         public static bool RemoveClientHouse(IPlayer client) => ClientHouse.TryRemove(client, out _);
 
-        public void RemovePlayerFromHouseList(IPlayer player)
+        public static void RemovePlayerFromHouseList(IPlayer player)
         {
             if (IsInHouse(player))
             {
@@ -78,7 +78,7 @@ namespace ResurrectionRP_Server.Houses
         #endregion
 
         #region Events        
-        public async Task LoadAllHouses()
+        public static async Task LoadAllHouses()
         {
             Alt.Server.LogInfo($"Loading houses ...");
             
@@ -249,13 +249,13 @@ namespace ResurrectionRP_Server.Houses
                 house.SetOwnerHandle(player);
         }
 
-        private void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
+        private static void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
         {
             player.Dimension = GameMode.GlobalDimension;
             RemovePlayerFromHouseList(player);
         }
 
-        public async Task House_Exit()
+        public static async Task House_Exit()
         {
             foreach(House house in Houses)
             {

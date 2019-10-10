@@ -2,10 +2,12 @@ using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Factions;
 using ResurrectionRP_Server.Factions.Model;
 using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Society;
 using ResurrectionRP_Server.Utils.Enums;
 using System;
 using System.Collections.Generic;
@@ -109,7 +111,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     await parking.OnSaveNeeded.Invoke();
             }
 
-            foreach (var faction in GameMode.Instance.FactionManager.FactionList)
+            foreach (var faction in FactionManager.FactionList)
             {
                 if (faction.FactionPlayerList.ContainsKey(phWipe.PID))
                 {
@@ -118,7 +120,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
             }
 
-            foreach (var society in GameMode.Instance.SocietyManager.SocietyList)
+            foreach (var society in SocietyManager.SocietyList)
             {
                 if (society.Employees.ContainsKey(phWipe.PID))
                 {
@@ -127,7 +129,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
             }
 
-            foreach (var business in GameMode.Instance.BusinessesManager.BusinessesList)
+            foreach (var business in Loader.BusinessesManager.BusinessesList)
             {
                 if (business.Employees.ContainsKey(phWipe.PID))
                 {

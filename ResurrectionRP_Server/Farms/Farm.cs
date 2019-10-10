@@ -18,16 +18,15 @@ using System.Numerics;
 
 namespace ResurrectionRP_Server.Farms
 {
-    public class FarmManager
+    public static class FarmManager
     {
         #region Static fields
         public static List<Farm> FarmList = new List<Farm>();
         #endregion
 
         #region Init
-        public static FarmManager InitAll()
+        public static void InitAll()
         {
-            var farmManager = new FarmManager();
             var validator_type = typeof(Farm);
 
             var sub_validator_types =
@@ -51,7 +50,6 @@ namespace ResurrectionRP_Server.Farms
                     }
                 }
             }
-            return farmManager;
         }
         #endregion
 
@@ -74,16 +72,6 @@ namespace ResurrectionRP_Server.Farms
             }
 
             return null;
-        }
-
-
-        private void StartFarming(IPlayer player, object[] args)
-        {
-            if (!player.Exists)
-                return;
-
-            Farm farm = FarmList.Find(f => f.Harvest_Name == (string)args[0]);
-            farm?.StartFarming(player);
         }
         #endregion
     }

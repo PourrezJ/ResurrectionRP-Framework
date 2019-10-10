@@ -115,7 +115,7 @@ namespace ResurrectionRP_Server.Society
             InService = new ConcurrentDictionary<string, string>();
             BankAccount.Owner = this;
 
-            GameMode.Instance.SocietyManager.SocietyList.Add(this);
+            SocietyManager.SocietyList.Add(this);
         }
         #endregion
 

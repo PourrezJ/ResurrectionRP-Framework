@@ -6,9 +6,9 @@ using System.Collections.Generic;
 
 namespace ResurrectionRP_Server.Loader
 {
-    public class BusinessesLoader
+    public static class BusinessesManager
     {
-        public List<Business.Business> BusinessesList = new List<Business.Business>();
+        public static List<Business.Business> BusinessesList = new List<Business.Business>();
         public static async Task LoadAllBusinesses()
         {
             Alt.Server.LogColored("--- Start loading all businesses in database ---");

@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server.Loader
         public string Gxt { get; set; }
     }
 
-    public class ClothingLoader
+    public static class ClothingLoader
     {
         public static Dictionary<byte, ClothManifest> ClothingsMaleList
             = new Dictionary<byte, ClothManifest>();

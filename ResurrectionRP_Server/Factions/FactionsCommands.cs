@@ -23,14 +23,14 @@ namespace ResurrectionRP_Server.Factions
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            await GameMode.Instance.FactionManager?.Onu.TryAddIntoFaction(client, 4);
+            await FactionManager.Onu.TryAddIntoFaction(client, 4);
         }
 
         public async Task AddPlayerLSPD(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            await GameMode.Instance.FactionManager?.Lspd.TryAddIntoFaction(client, 4);
+            await FactionManager.Lspd.TryAddIntoFaction(client, 4);
         }
         /*
         public void AddPlayerRebelle(IPlayer client, string[] args)
@@ -44,28 +44,28 @@ namespace ResurrectionRP_Server.Factions
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            await GameMode.Instance.FactionManager?.LSCustom.TryAddIntoFaction(client, 2);
+            await FactionManager.LSCustom.TryAddIntoFaction(client, 2);
         }
 
         public async Task AddPlayerGouv(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            await GameMode.Instance.FactionManager?.Gouvernement.TryAddIntoFaction(client, 7);
+            await FactionManager.Gouvernement.TryAddIntoFaction(client, 7);
         }
         
         public async Task AddPlayerDock(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            await GameMode.Instance.FactionManager?.Dock.TryAddIntoFaction(client, 5);
+            await FactionManager.Dock.TryAddIntoFaction(client, 5);
         }
         
         public async Task AddPlayerSheriff(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            await GameMode.Instance.FactionManager?.Nordiste.TryAddIntoFaction(client, 6);
+            await FactionManager.Nordiste.TryAddIntoFaction(client, 6);
         }
     }
 }

@@ -372,35 +372,35 @@ namespace ResurrectionRP_Server.Phone
         #region Static Methods
         public static void AddPhoneInList(IPlayer client, Phone phone)
         {
-                if (GameMode.Instance.PhoneManager.PhoneClientList.ContainsKey(client))
+                if (PhoneManager.PhoneClientList.ContainsKey(client))
                 {
-                    if (!GameMode.Instance.PhoneManager.PhoneClientList[client].Exists(p => p?.PhoneNumber == phone?.PhoneNumber))
+                    if (!PhoneManager.PhoneClientList[client].Exists(p => p?.PhoneNumber == phone?.PhoneNumber))
                     {
-                        GameMode.Instance.PhoneManager.PhoneClientList[client].Add(phone);
+                        PhoneManager.PhoneClientList[client].Add(phone);
                     }
                 }
                 else
                 {
-                    GameMode.Instance.PhoneManager.PhoneClientList.TryAdd(client, new List<Phone>() { phone });
+                    PhoneManager.PhoneClientList.TryAdd(client, new List<Phone>() { phone });
                 }
         }
 
         public static void RemovePhoneInList(IPlayer client, Phone phonee)
         {
-            if (GameMode.Instance.PhoneManager.PhoneClientList.ContainsKey(client))
+            if (PhoneManager.PhoneClientList.ContainsKey(client))
             {
-                if (GameMode.Instance.PhoneManager.PhoneClientList[client].Exists(p => p.PhoneNumber == phonee.PhoneNumber))
+                if (PhoneManager.PhoneClientList[client].Exists(p => p.PhoneNumber == phonee.PhoneNumber))
                 {
-                    var id = GameMode.Instance.PhoneManager.PhoneClientList[client].FindIndex(p => p.PhoneNumber == phonee.PhoneNumber);
+                    var id = PhoneManager.PhoneClientList[client].FindIndex(p => p.PhoneNumber == phonee.PhoneNumber);
                     if (id != -1)
-                        GameMode.Instance.PhoneManager.PhoneClientList[client].RemoveAt(id);
+                        PhoneManager.PhoneClientList[client].RemoveAt(id);
                 }
             }
         }
 
         public static IPlayer GetClientWithPhoneNumber(string phoneNumber)
         {
-            foreach (var phones in GameMode.Instance.PhoneManager.PhoneClientList)
+            foreach (var phones in PhoneManager.PhoneClientList)
             {
                 if (phones.Value.Exists(f => f.PhoneNumber == phoneNumber))
                 {
@@ -412,7 +412,7 @@ namespace ResurrectionRP_Server.Phone
 
         public static Phone GetPhoneWithPhoneNumber(string phoneNumber)
         {
-            foreach (var phones in GameMode.Instance.PhoneManager.PhoneClientList)
+            foreach (var phones in PhoneManager.PhoneClientList)
             {
                 if (phones.Value.Exists(f => f.PhoneNumber == phoneNumber))
                 {

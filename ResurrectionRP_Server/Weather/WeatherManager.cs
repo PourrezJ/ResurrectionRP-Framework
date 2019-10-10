@@ -6,15 +6,15 @@ using WeatherType = ResurrectionRP_Server.Weather.Data.WeatherType;
 
 namespace ResurrectionRP_Server.Weather
 {
-    public class WeatherManager
+    public static class WeatherManager
     {
-        public WeatherType Actual_weather { get; set; } = WeatherType.Extrasunny;
-        public double Wind { get; set; } = 0;
-        public double WindDirection { get; set; } = 0;
-        public float WeatherTransition { get; set; }
-        public bool Forced { get; set; }
+        public static WeatherType Actual_weather { get; set; } = WeatherType.Extrasunny;
+        public static double Wind { get; set; } = 0;
+        public static double WindDirection { get; set; } = 0;
+        public static float WeatherTransition { get; set; }
+        public static bool Forced { get; set; }
 
-        public void InitWeather()
+        public static void InitWeather()
         {
             try
             {
@@ -43,13 +43,13 @@ namespace ResurrectionRP_Server.Weather
             }
         }
 
-        public void UpdatePlayersWeather()
+        public static void UpdatePlayersWeather()
         {
-            Alt.EmitAllClients("WeatherChange", this.Actual_weather.ToString(), this.Wind, this.WindDirection, this.WeatherTransition);
+            Alt.EmitAllClients("WeatherChange", Actual_weather.ToString(), Wind, WindDirection, WeatherTransition);
         }
 
-        private Timer timer = null;
-        public void ChangeWeather(WeatherType weather, double wind, double winddirection)
+        private static Timer timer = null;
+        public static void ChangeWeather(WeatherType weather, double wind, double winddirection)
         {
             if (Forced)
                 return;
@@ -65,7 +65,7 @@ namespace ResurrectionRP_Server.Weather
 
             if (Actual_weather != weather)
             {
-                this.Actual_weather = weather;
+                Actual_weather = weather;
                 WeatherTransition = 0.0f;
                 timer = Utils.Utils.SetInterval(() =>
                 {
@@ -86,7 +86,7 @@ namespace ResurrectionRP_Server.Weather
             }
         }
 
-        private void WeatherDataReceived(OpenWeatherAPI.Weather weather, Wind wind)
+        private static void WeatherDataReceived(OpenWeatherAPI.Weather weather, Wind wind)
         {
             if (wind == null || weather == null) return;
             switch (weather.ID)

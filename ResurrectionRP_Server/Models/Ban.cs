@@ -23,15 +23,11 @@ namespace ResurrectionRP_Server.Models
         }
     }
 
-    public class BanManager
+    public static class BanManager
     {
-        public List<Ban> BanList = new List<Ban>();
+        public static List<Ban> BanList = new List<Ban>();
 
-        public BanManager()
-        {
-        }
-
-        public async Task Init()
+        public static async Task Init()
         {
             var banList = await Database.MongoDB.GetCollectionSafe<Ban>("ban").AsQueryable().ToListAsync();
             foreach (Ban ban in banList)
@@ -45,8 +41,6 @@ namespace ResurrectionRP_Server.Models
                         var player = GameMode.Instance.PlayerList.Find(p => p.Exists && (p.SocialClubId == ban.SocialID)) ?? null;
                         player.Kick("Vous êtes bannis du serveur.");
                     }
-
-
                 });
             }
         }
@@ -64,7 +58,7 @@ namespace ResurrectionRP_Server.Models
                     DateEnd = endtime
                 };
 
-                GameMode.Instance.BanManager.BanList.Add(ban);
+                BanList.Add(ban);
                 Alt.Server.LogColored($"~c~Ban du joueur {player.GetSocialClub()} pour la raison: {reason}");
                 await Database.MongoDB.Insert("ban", ban);
                 await player.KickAsync(reason);

@@ -18,13 +18,13 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Illegal
 {
-    public class IllegalManager
+    public static class IllegalManager
     {
         public static List<IllegalSystem> IllegalList = new List<IllegalSystem>();
 
         public static WeedBusiness WeedBusiness { get; set; }
 
-        public async Task OnEnterColshape(IPlayer client, IColshape colshape)
+        public static async Task OnEnterColshape(IPlayer client, IColshape colshape)
         {
             foreach (var illegal in IllegalList)
             {
@@ -32,7 +32,7 @@ namespace ResurrectionRP_Server.Illegal
             }
         }
 
-        public void OnPlayerConnected(IPlayer client)
+        public static void OnPlayerConnected(IPlayer client)
         {
             foreach (var illegal in IllegalList)
             {
@@ -40,7 +40,7 @@ namespace ResurrectionRP_Server.Illegal
             }
         }
 
-        public void OnPlayerDisconnected(IPlayer client)
+        public static void OnPlayerDisconnected(IPlayer client)
         {
             foreach (var illegal in IllegalList)
             {
@@ -136,7 +136,7 @@ namespace ResurrectionRP_Server.Illegal
             if (player.IsOnProgress || sender.IsInVehicle)
                 return;
 
-            if (GameMode.Instance.FactionManager.Lspd.ServicePlayerList.Count < 2)
+            if (Factions.FactionManager.Lspd.ServicePlayerList.Count < 2)
             {
                 sender.SendNotificationError("[HRP] Pas assez de miliciens de présent sur le serveur.");
                 return;

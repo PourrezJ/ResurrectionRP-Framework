@@ -77,29 +77,6 @@ namespace ResurrectionRP_Server.Entities.Players
             }, 300000);
         }
 
-
-        /**
-        private async Task PlayerSync_TaskStartScenarioAtPosition(object sender, Models.PlayerRemoteEventEventArgs eventArgs)
-        {
-            if (!eventArgs.Player.Exists)
-                return;
-
-            var players = MP.Players.ToList();
-            for (int i = 0; i < players.Count; i++)
-            {
-                var player = players[i];
-
-                if (player != null && player.Exists)
-                {
-                    await player.CallAsync("PlayerSyncCL_TaskStartScenarioAtPosition", eventArgs.Player.Id, eventArgs.Arguments[0], eventArgs.Arguments[1], eventArgs.Arguments[2], eventArgs.Arguments[3], eventArgs.Arguments[4], eventArgs.Arguments[5], eventArgs.Arguments[6], eventArgs.Arguments[7]);
-                }
-            }
-        }
-
-        private async Task Events_PlayerStreamIn(object sender, Models.PlayerStreamEventArgs eventArgs)
-        {
-            await eventArgs.ForPlayer.CallAsync("PlayerStream_DataUpdate", eventArgs.Player.Id, GetPlayerByClient(eventArgs.Player)?.PlayerSyncToJson);
-        }**/
         #endregion
 
         #region ServerEvents
@@ -112,9 +89,10 @@ namespace ResurrectionRP_Server.Entities.Players
 
             ph.IsOnline = false;
             MenuManager.OnPlayerDisconnect(origin);
+            FactionManager.OnPlayerDisconnected(origin);
 
-            if (GameMode.Instance.PhoneManager.PhoneClientList.ContainsKey(origin))
-                GameMode.Instance.PhoneManager.PhoneClientList.TryRemove(origin, out List<Phone.Phone> phoneList);
+            if (Phone.PhoneManager.PhoneClientList.ContainsKey(origin))
+                Phone.PhoneManager.PhoneClientList.TryRemove(origin, out List<Phone.Phone> phoneList);
 
             if (RPGInventoryManager.HasInventoryOpen(origin))
             {
@@ -392,10 +370,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public static bool IsBan(string social)
         {
-            if (GameMode.Instance.BanManager == null)
-                return false;
-
-            foreach(Ban ban in GameMode.Instance.BanManager.BanList)
+            foreach(Ban ban in BanManager.BanList)
             {
                 if (ban.SocialClub == social)
                     return true;

@@ -129,7 +129,7 @@ namespace ResurrectionRP_Server.Factions
                     InventoryBox = null;
                 }
 
-                GameMode.Instance.FactionManager.Dock.UpdateInBackground();
+                FactionManager.Dock.UpdateInBackground();
                 MenuManager.CloseMenu(client);
                 RefreshLabel();
             }

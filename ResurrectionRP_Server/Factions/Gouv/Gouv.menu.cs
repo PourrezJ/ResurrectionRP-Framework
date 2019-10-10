@@ -11,6 +11,7 @@ using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Utils;
 using System.Linq;
+using ResurrectionRP_Server.Society;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -49,7 +50,7 @@ namespace ResurrectionRP_Server.Factions
                 menu = new Menu("ID_Businesses", "Comptabilité", "Consulter la comptabilité d'une entreprise", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR);
                 menu.ItemSelectCallback = SecretaireMenuCallback;
 
-                foreach (Society.Society market in GameMode.Instance.SocietyManager.SocietyList)
+                foreach (Society.Society market in SocietyManager.SocietyList)
                 {
                     var item = new MenuItem(market.SocietyName, "", "ID_BusinessSelect", executeCallback: true);
                     item.SetData("Society", market);

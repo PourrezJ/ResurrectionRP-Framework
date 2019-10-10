@@ -1,15 +1,12 @@
 ﻿
 using Newtonsoft.Json;
-using System;
 using System.IO;
-using System.Numerics;
 using AltV.Net;
-using System.Threading.Tasks;
 
 
 namespace ResurrectionRP_Server.Loader
 {
-    public class VehicleRentLoaders
+    public static class VehicleRentLoaders
     {
         private static string _basePath = $"vehicleRent{Path.DirectorySeparatorChar}";
 

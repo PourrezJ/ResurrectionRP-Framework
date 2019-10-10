@@ -18,7 +18,7 @@ using ResurrectionRP_Server.Entities.Players;
 
 namespace ResurrectionRP_Server.Services
 {
-    public class Pound
+    public static class Pound
     {
         #region Fields
         private static Location _poundSpawn = new Location(new Vector3(408.7641f, -1638.905f, 28.26795f), new Vector3(0.07774173f, 0.05821822f, 137.2628f));
@@ -93,7 +93,7 @@ namespace ResurrectionRP_Server.Services
                         {
                             if (VehiclesManager.VehicleHandlerList.Remove(_towedvehicle.Vehicle, out _))
                             {
-                                GameMode.Instance.FactionManager.LSCustom.BankAccount.AddMoney(750, $"Mise en fourrière {_towedvehicle.Plate} par {ph.Identite.Name}");
+                                Factions.FactionManager.LSCustom.BankAccount.AddMoney(750, $"Mise en fourrière {_towedvehicle.Plate} par {ph.Identite.Name}");
                                 ph.AddMoney(250);
 
                                 _vh.TowTruck = null;

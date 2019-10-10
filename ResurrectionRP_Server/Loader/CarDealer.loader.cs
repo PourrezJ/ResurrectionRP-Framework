@@ -1,13 +1,11 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.IO;
-using System.Threading.Tasks;
 using AltV.Net;
 using CarDealer = ResurrectionRP_Server.Loader.CarDealerLoader.CarDealer;
 
 namespace ResurrectionRP_Server.Loader
 {
-    public class CarDealerLoaders
+    public static class CarDealerLoaders
     {
         private static string _basePath = $"cardealer{Path.DirectorySeparatorChar}";
 

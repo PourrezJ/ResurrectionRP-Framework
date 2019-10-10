@@ -21,7 +21,7 @@ namespace ResurrectionRP_Server.Business
 
         public async Task Delete()
         {
-            GameMode.Instance.BusinessesManager.BusinessesList.Remove(this);
+            Loader.BusinessesManager.BusinessesList.Remove(this);
             Entities.Blips.BlipsManager.Destroy(Blip);
             Inventory = null;
             Owner = null;

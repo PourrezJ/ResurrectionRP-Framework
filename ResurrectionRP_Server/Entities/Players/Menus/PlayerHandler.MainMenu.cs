@@ -115,7 +115,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 menu.Add(new MenuItem("Donner", "", "ID_Give", executeCallback: true));
                 menu.Add(new MenuItem("Jeter", "~r~Détruire la clefs", "ID_Delete", executeCallback: true));
 
-               if (GameMode.Instance.FactionManager.LSCustom.HasPlayerIntoFaction(this.Client))
+               if (Factions.FactionManager.LSCustom.HasPlayerIntoFaction(this.Client))
                      menu.Add(new MenuItem("Dupliquer", "", "ID_Duplicate", executeCallback: true, rightLabel:$"${keyDupliPrice}"));
 
                 menu.OpenMenu(Client);
@@ -176,7 +176,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 else if (menuItem.Id == "ID_Duplicate")
                 {
                     bool result = false;
-                    result = GameMode.Instance.FactionManager.LSCustom.BankAccount.GetBankMoney(350, "Duplication de la clé: " + menu.Title);
+                    result = Factions.FactionManager.LSCustom.BankAccount.GetBankMoney(350, "Duplication de la clé: " + menu.Title);
 
                     if (result)
                     {

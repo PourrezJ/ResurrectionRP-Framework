@@ -15,21 +15,20 @@ using System.Collections.Concurrent;
 
 namespace ResurrectionRP_Server.Phone
 {
-    public class PhoneManager
+    public static class PhoneManager
     {
         #region Private static properties
         private static ConcurrentDictionary<IPlayer, Phone> _ClientPhoneMenu = new ConcurrentDictionary<IPlayer, Phone>();
-        public ConcurrentDictionary<IPlayer, List<Phone>> PhoneClientList = new ConcurrentDictionary<IPlayer, List<Phone>>();
+        public static ConcurrentDictionary<IPlayer, List<Phone>> PhoneClientList = new ConcurrentDictionary<IPlayer, List<Phone>>();
         #endregion
 
         #region Public Variables
-        public List<string> PhoneNumberList = new List<string>();
+        public static List<string> PhoneNumberList = new List<string>();
         #endregion
 
         #region Constructor
-        public PhoneManager()
+        public static void Init()
         {
-            PhoneClientList = new ConcurrentDictionary<IPlayer, List<Phone>>();
             Alt.OnClient("PhoneMenuCallBack", PhoneMenuCallBack);
         }
         #endregion
@@ -73,7 +72,7 @@ namespace ResurrectionRP_Server.Phone
             Phone phone = new Phone();
 
             var phoneNumber = GeneratePhoneNumber();
-            GameMode.Instance.PhoneManager.PhoneNumberList.Add(phoneNumber);
+            PhoneNumberList.Add(phoneNumber);
 
             phone.PhoneNumber = phoneNumber;
             phone.AddressBook.Add(new Address() { contactName = "Votre Numéro", phoneNumber = phone.PhoneNumber });
@@ -85,7 +84,7 @@ namespace ResurrectionRP_Server.Phone
         {
 
             string phoneNumber = $"{Utils.Utils.RandomNumber(1000, 9999)}-{Utils.Utils.RandomNumber(1000, 9999)}";
-            while (GameMode.Instance.PhoneManager.PhoneNumberList.Contains(phoneNumber))
+            while (PhoneNumberList.Contains(phoneNumber))
             {
                 phoneNumber = $"{Utils.Utils.RandomNumber(1000, 9999)}-{Utils.Utils.RandomNumber(1000, 9999)}";
             }
@@ -104,7 +103,7 @@ namespace ResurrectionRP_Server.Phone
         }
         #endregion
 
-        private void PhoneMenuCallBack(IPlayer client, object[] args)
+        private static void PhoneMenuCallBack(IPlayer client, object[] args)
         {
             if (client == null || !client.Exists)
                 return;

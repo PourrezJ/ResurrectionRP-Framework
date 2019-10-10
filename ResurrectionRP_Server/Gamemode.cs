@@ -21,7 +21,6 @@ using AltV.Net.Async;
 using AltV.Net.Data;
 using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Services;
-using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.Illegal;
 
 namespace ResurrectionRP_Server
@@ -46,9 +45,6 @@ namespace ResurrectionRP_Server
         public static float StreamDistance { get; private set; } = 500;
 
         [BsonIgnore]
-        public BanManager BanManager { get; private set; }
-
-        [BsonIgnore]
         public List<IPlayer> PlayerList = new List<IPlayer>();
 
         public const short GlobalDimension = 0;
@@ -64,28 +60,10 @@ namespace ResurrectionRP_Server
         public Jobs.JobsManager JobsManager { get; private set; }
 
         [BsonIgnore]
-        public Factions.FactionManager FactionManager { get; private set; }
-
-        // Menus
-        [BsonIgnore]
-        public Loader.BusinessesLoader BusinessesManager { get; private set; }
-
-        [BsonIgnore]
-        public Society.SocietyManager SocietyManager { get; private set; }
-
-        [BsonIgnore]
         public DrivingSchool.DrivingSchoolManager DrivingSchoolManager { get; private set; }
 
         [BsonIgnore]
-        public Weather.WeatherManager WeatherManager { get; private set; }
-        [BsonIgnore]
-        public Phone.PhoneManager PhoneManager { get; private set; }
-        [BsonIgnore]
         public LifeInvader LifeInvader { get; private set; }
-        [BsonIgnore]
-        public HouseManager HouseManager { get; private set; }
-        [BsonIgnore]
-        public IllegalManager IllegalManager { get; private set; }
 
         public static bool ServerLock;
 
@@ -165,19 +143,12 @@ namespace ResurrectionRP_Server
             MenuManager.Init();
             XMenuManager.XMenuManager.Init();
             RadioManager.Init();
-
+            Weather.WeatherManager.InitWeather();
+            Phone.PhoneManager.Init();
 
             Economy = new Economy.Economy();
-            BanManager = new BanManager();
-            PhoneManager = new Phone.PhoneManager();
-            FactionManager = new Factions.FactionManager();
-            SocietyManager = new Society.SocietyManager();
-            BusinessesManager = new Loader.BusinessesLoader();
-            WeatherManager = new Weather.WeatherManager();
             //DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
             JobsManager = new Jobs.JobsManager(); 
-            HouseManager = new HouseManager();
-            IllegalManager = new IllegalManager();
             LifeInvader = new LifeInvader();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
@@ -187,10 +158,11 @@ namespace ResurrectionRP_Server
             Alt.Server.LogColored("~g~Initialisations des controlleurs...");
             Task.Run(async () =>
             {
+                await BanManager.Init();
                 await VehiclesManager.LoadAllVehicles();
                 await Loader.CarParkLoader.LoadAllCarPark();  
-                await FactionManager.InitAllFactions();
-                await Loader.BusinessesLoader.LoadAllBusinesses();         
+                await Factions.FactionManager.InitAllFactions();
+                await Loader.BusinessesManager.LoadAllBusinesses();         
                 await Society.SocietyManager.LoadAllSociety();
                 if (IsDebug)
                     await IllegalManager.InitAll();
@@ -209,14 +181,14 @@ namespace ResurrectionRP_Server
             Loader.TattooLoader.TattooLoader.LoadAllTattoo();
             Loader.VehicleRentLoaders.LoadAllVehicleRent();
             FarmManager.InitAll();
-            WeatherManager.InitWeather();
+            Weather.WeatherManager.InitWeather();
             LifeInvader.Load();
-
+            Phone.PhoneManager.Init();
 
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
             Utils.Utils.SetInterval(async () => await Save(), 15000);
-            Utils.Utils.SetInterval(async () => await FactionManager.Update(), 60000);
+            Utils.Utils.SetInterval(async () => await Factions.FactionManager.Update(), 60000);
             Utils.Utils.SetInterval(async () => await Restart(), 1000);
             
             Utils.Utils.SetInterval(() => Time.Update(), 1000);           

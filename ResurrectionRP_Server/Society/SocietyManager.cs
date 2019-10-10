@@ -6,10 +6,10 @@ using AltV.Net.Elements.Entities;
 using AltV.Net;
 namespace ResurrectionRP_Server.Society
 {
-    public class SocietyManager
+    public static class SocietyManager
     {
         #region Public fields
-        public List<Society> SocietyList = new List<Society>();
+        public static List<Society> SocietyList = new List<Society>();
         public static Dictionary<IPlayer, Society> AddParkingList = new Dictionary<IPlayer, Society>();
         #endregion
 

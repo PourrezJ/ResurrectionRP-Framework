@@ -83,7 +83,7 @@ namespace ResurrectionRP_Server.Business
                 Employees = new Dictionary<string, string>();
 
             BankAccount.Owner = this;
-            GameMode.Instance.BusinessesManager.BusinessesList.Add(this);
+            Loader.BusinessesManager.BusinessesList.Add(this);
         }
         #endregion
 
@@ -102,7 +102,7 @@ namespace ResurrectionRP_Server.Business
         public bool IsOwner(IPlayer client)
             => client.GetSocialClub() == Owner;
 
-        public static bool CanIHaveABusiness(string owner) => (GameMode.Instance.BusinessesManager.BusinessesList.Find(x => x.Owner == owner) == null || (PlayerManager.GetPlayerBySCN(owner)).StaffRank >= AdminRank.Moderator) ? true : false;
+        public static bool CanIHaveABusiness(string owner) => (Loader.BusinessesManager.BusinessesList.Find(x => x.Owner == owner) == null || (PlayerManager.GetPlayerBySCN(owner)).StaffRank >= AdminRank.Moderator) ? true : false;
         #endregion
 
         #region Events

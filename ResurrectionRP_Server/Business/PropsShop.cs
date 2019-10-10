@@ -3,10 +3,9 @@ using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
-using MongoDB.Bson.Serialization.Attributes;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Players;
-using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Loader;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
@@ -22,7 +21,7 @@ namespace ResurrectionRP_Server.Business
     public class PropsStore : Business
     {
         #region Fields
-        private IColShape _clothingColShape;
+        private IColshape _clothingColshape;
         private string _componentName;
 
         public Vector3 ClothingPos;
@@ -106,23 +105,23 @@ namespace ResurrectionRP_Server.Business
                 GirlBracelets = new List<int>();
 
             MaxEmployee = 5;
-            _clothingColShape = Alt.CreateColShapeCylinder(ClothingPos - new Vector3(0, 0, 1), 4f, 3f);
+            _clothingColshape = ColshapeManager.CreateCylinderColshape(ClothingPos - new Vector3(0, 0, 1), 4f, 3f);
             Marker.CreateMarker(MarkerType.VerticalCylinder, ClothingPos - new Vector3(0, 0, 1), new Vector3(3, 3, 0.3f), Color.FromArgb(80, 255, 255, 255));
             Entities.Blips.BlipsManager.SetColor(Blip, 25);
 
-            _clothingColShape.SetOnPlayerEnterColShape(OnPlayerEnterColShape);
-            _clothingColShape.SetOnPlayerLeaveColShape(OnPlayerLeaveColShape);
-            _clothingColShape.SetOnPlayerInteractInColShapeAsync(OnPlayerInteractInColShape);    
+            _clothingColshape.OnPlayerEnterColshape += OnPlayerEnterColshape;
+            _clothingColshape.OnPlayerLeaveColshape += OnPlayerLeaveColshape;
+            _clothingColshape.OnPlayerInteractInColshape += OnPlayerInteractInColshape;    
         }
         #endregion
 
         #region Event handlers
-        public void OnPlayerEnterColShape(IColShape colShape, IPlayer client)
+        public void OnPlayerEnterColshape(IColshape colshape, IPlayer client)
         {
             client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
         }
 
-        public virtual void OnPlayerLeaveColShape(IColShape colShape, IPlayer client)
+        public virtual void OnPlayerLeaveColshape(IColshape colshape, IPlayer client)
         {
             PlayerHandler player = client.GetPlayerHandler();
 
@@ -133,13 +132,12 @@ namespace ResurrectionRP_Server.Business
                 MenuManager.CloseMenu(client);
         }
 
-        private Task OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
+        private void OnPlayerInteractInColshape(IColshape colshape, IPlayer client)
         {
             if (!client.Exists)
-                return Task.CompletedTask;
+                return;
 
             OpenPropsStoreMenu(client);
-            return Task.CompletedTask;
         }
         #endregion
 

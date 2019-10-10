@@ -39,7 +39,7 @@ namespace ResurrectionRP_Server.Jobs
         #endregion
 
         #region Load
-        public virtual Task Load()
+        public virtual void Load()
         {
             if (ServicePos != null)
             {
@@ -47,8 +47,6 @@ namespace ResurrectionRP_Server.Jobs
                 _serviceColshape = Alt.CreateColShapeCylinder(ServicePos, 1f, 1f);
                 _marker = Marker.CreateMarker(MarkerType.VerticalCylinder, ServicePos - new Vector3(0, 0, 1), new Vector3(1, 1, 1), Color.FromArgb(128, 255, 255, 255));
             }
-
-            return Task.CompletedTask;
         }
         #endregion
 

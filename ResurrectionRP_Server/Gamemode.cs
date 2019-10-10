@@ -57,9 +57,6 @@ namespace ResurrectionRP_Server
         public Economy.Economy Economy { get; private set; }
 
         [BsonIgnore]
-        public Jobs.JobsManager JobsManager { get; private set; }
-
-        [BsonIgnore]
         public DrivingSchool.DrivingSchoolManager DrivingSchoolManager { get; private set; }
 
         [BsonIgnore]
@@ -147,7 +144,6 @@ namespace ResurrectionRP_Server
 
             Economy = new Economy.Economy();
             //DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
-            JobsManager = new Jobs.JobsManager(); 
             LifeInvader = new LifeInvader();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
@@ -167,7 +163,7 @@ namespace ResurrectionRP_Server
                     await IllegalManager.InitAll();
                 //await JobsManager.Init();
                 await HouseManager.LoadAllHouses();
-
+                
                 Alt.Server.LogColored("~g~Serveur charger!");
                 ServerLoaded = true;
             });
@@ -183,6 +179,7 @@ namespace ResurrectionRP_Server
             Weather.WeatherManager.InitWeather();
             LifeInvader.Load();
             Phone.PhoneManager.Init();
+            Jobs.JobsManager.Init();
 
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 

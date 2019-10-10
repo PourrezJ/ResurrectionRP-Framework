@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.Jobs
             VehicleSpawnHash = VehicleModel.Trash;
         }
 
-        public override async Task Load()
+        public override void Load()
         {
             #region ColShape
 
@@ -161,7 +161,7 @@ namespace ResurrectionRP_Server.Jobs
                 }
             }, (int)TimeSpan.FromMinutes(2).TotalMilliseconds);
 
-            await base.Load();
+            base.Load();
         }
 
         public override Task OnPlayerEnterVehicleJob(IVehicle vehicle, IPlayer client, byte seat)

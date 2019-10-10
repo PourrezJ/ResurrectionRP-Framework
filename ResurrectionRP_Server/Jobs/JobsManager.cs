@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Jobs
 {
-    public class JobsManager
+    public static class JobsManager
     {
-        public List<Jobs> JobsList = new List<Jobs>();
+        public static List<Jobs> JobsList = new List<Jobs>();
 
-        public async Task Init()
+        public static void Init()
         {
             var validator_type = typeof(Jobs);
 
@@ -35,7 +35,7 @@ namespace ResurrectionRP_Server.Jobs
 
                 if (jobs != null)
                 {
-                    await jobs.Load();
+                    jobs.Load();
                     JobsList.Add(jobs);
                 }
             }
@@ -43,7 +43,7 @@ namespace ResurrectionRP_Server.Jobs
             AltAsync.OnColShape += OnEntityColShape;
         }
 
-        public async Task OnEntityColShape(IColShape colShape, IEntity entity, bool state)
+        public static async Task OnEntityColShape(IColShape colShape, IEntity entity, bool state)
         {
             foreach (Jobs job in JobsList)
             {

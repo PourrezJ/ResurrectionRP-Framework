@@ -137,9 +137,13 @@ export function initialize() {
     });
 
     alt.everyTick(() => {
-        if (player.vehicle != null) {
+        if (player.vehicle != null ) {
             enginePreviousState = engineState;
             engineState = game.getIsVehicleEngineRunning(player.vehicle.scriptID);
+
+            if (game.isThisModelABike(player.vehicle.model)) {
+                game.setVehicleEngineOn(player.vehicle.scriptID, true, true, false);
+            }
 
             if (game.isVehicleAttachedToTrailer(player.vehicle.scriptID) != hasTrailer) {
                 hasTrailer = game.isVehicleAttachedToTrailer(player.vehicle.scriptID)

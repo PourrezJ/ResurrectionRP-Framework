@@ -596,7 +596,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 else
                     speedFuel = speed / 80 * FUEL_FACTOR;
 
-                Fuel -= (float)(FuelConsumption * distance * speedFuel / 100);
+                Fuel -= (float)((FuelConsumption * distance * speedFuel / 100) * 0.75);
             }
 
             _previousUpdate = updateTime;

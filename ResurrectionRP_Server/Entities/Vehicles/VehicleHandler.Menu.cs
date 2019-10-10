@@ -147,7 +147,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     inv.OnOpen = (IPlayer c, RPGInventoryMenu m) =>
                     {
                         Inventory.Locked = true;
-                        return Task.CompletedTask;
                     };
 
                     inv.OnMove = (IPlayer c, RPGInventoryMenu m) =>
@@ -156,15 +155,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             PlayerHandler.UpdateFull();
 
                         UpdateInBackground();
-                        return Task.CompletedTask;
                     };
 
                     inv.OnClose = (IPlayer c, RPGInventoryMenu m) =>
                     {
                         Inventory.Locked = false;
-                        return Task.CompletedTask;
                     };
-                    Task.Run(async ()=> await inv.OpenMenu(client));
+                    inv.OpenMenu(client);
                     break;
                 case "ID_DetachTrailer":
                     client.Emit("DetachTrailer");

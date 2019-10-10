@@ -203,8 +203,7 @@ namespace ResurrectionRP_Server.Entities.Players
                                 return;
 
                             RPGInventoryMenu rackmenu = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, rack.InventoryBox.Inventory);
-
-                            Task.Run(async () => await rackmenu.OpenMenu(client));
+                            rackmenu.OpenMenu(client);
                         }
                         else if (Chair.IsChair(raycastData.entityHash))
                         {
@@ -356,8 +355,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
 
                     RPGInventoryMenu menu = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, null);
-
-                    Task.Run(async () => await menu.OpenMenu(client));
+                    menu.OpenMenu(client);
                     break;
 
                 case ConsoleKey.R:

@@ -84,7 +84,7 @@ namespace ResurrectionRP_Server.Houses
                             await _house.Save();
                         };
                         menu.CloseMenu(client);
-                        await inv.OpenMenu(client);
+                        inv.OpenMenu(client);
                         break;
 
                     case "opencloseDoor":

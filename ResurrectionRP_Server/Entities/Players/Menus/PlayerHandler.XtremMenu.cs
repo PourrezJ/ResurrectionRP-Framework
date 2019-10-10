@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 case "ID_GiveItem":
                     var rpg = new Inventory.RPGInventoryMenu(PocketInventory, OutfitInventory, BagInventory, null, false, TargetClient);
-                    Task.Run(async ()=> await rpg.OpenMenu(client));
+                    rpg.OpenMenu(client);
                     break;
 
                 case "ID_Licences":
@@ -119,16 +119,14 @@ namespace ResurrectionRP_Server.Entities.Players
                     invmenu.OnMove += (p, m) =>
                     {
                         UpdateFull();
-                        return Task.CompletedTask;
                     };
 
                     invmenu.OnClose += (p, m) =>
                     {
                         UpdateFull();
                         TargetHandler.UpdateFull();
-                        return Task.CompletedTask;
                     };
-                    Task.Run(async ()=> await invmenu.OpenMenu(client));
+                    invmenu.OpenMenu(client);
                     break;
 
                 case "ID_Handcuff":

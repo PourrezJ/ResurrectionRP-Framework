@@ -147,16 +147,14 @@ namespace ResurrectionRP_Server.Society
                     {
                         ph.UpdateFull();
                         UpdateInBackground();
-                        return Task.CompletedTask;
                     };
 
                     invmenu.OnClose += (p, m) =>
                     {
                         Inventory.Locked = false;
-                        return Task.CompletedTask;
                     };
 
-                    await invmenu.OpenMenu(client);
+                    invmenu.OpenMenu(client);
                     break;
                 case "pproprio":
                     string socialClub = menuItem.InputValue;

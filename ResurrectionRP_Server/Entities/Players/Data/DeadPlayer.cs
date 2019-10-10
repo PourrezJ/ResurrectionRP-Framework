@@ -106,16 +106,14 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                     {
                         ph.UpdateFull();
                         vh.UpdateFull();
-                        return Task.CompletedTask;
                     };
 
                     invmenu.OnClose += (p, m) =>
                     {
                         ph.UpdateFull();
                         vh.UpdateFull();
-                        return Task.CompletedTask;
                     };
-                    await invmenu.OpenMenu(client);
+                    invmenu.OpenMenu(client);
                     break;
 
                 case "ID_GetMoney":

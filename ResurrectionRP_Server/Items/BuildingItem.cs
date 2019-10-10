@@ -17,17 +17,5 @@ namespace ResurrectionRP_Server.Items
         {
             return base.Give(sender, recever, quantite);
         }
-
-        public override Task UseAsync(IPlayer Client, string inventoryType, int slot)
-        {
-            //await MenuManager.CloseMenu(Client);
-            if (Hash != 0)
-            {
-                //await BuildingManager.CreateBuilding(Client, Hash, new Location(Vector3Extensions.Backward(new Vector3(Client.Position.X, Client.Position.Y, Client.Position.Z - 1f), Client.Rotation.Z, 3f), Client.Rotation), id);
-                //PlayerManager.GetPlayerByClient(Client)?.PocketInventory?.Delete(slot);
-            }
-
-            return Task.CompletedTask;
-        }
     }
 }

@@ -1,4 +1,4 @@
-using AltV.Net.Async;
+using AltV.Net;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson.Serialization.Attributes;
@@ -231,7 +231,7 @@ namespace ResurrectionRP_Server.Factions
                 }
             }
 
-            AltAsync.OnClient("OpenRackInventory", OpenRackInventory);
+            Alt.OnClient("OpenRackInventory", OpenRackInventory);
 
             return this;
         }
@@ -380,7 +380,7 @@ namespace ResurrectionRP_Server.Factions
             return price;
         }
 
-        private async Task OpenRackInventory(IPlayer player, object[] args)
+        private void OpenRackInventory(IPlayer player, object[] args)
         {
             if (!player.Exists)
                 return;
@@ -420,7 +420,7 @@ namespace ResurrectionRP_Server.Factions
             if (_inv == null)
                 return;
 
-            await _inv.OpenMenu(player);
+            _inv.OpenMenu(player);
 
             // Save Inventory on move
             _inv.OnMove = (IPlayer c, RPGInventoryMenu m) =>
@@ -428,7 +428,6 @@ namespace ResurrectionRP_Server.Factions
                 ph.UpdateFull();
                 UpdateInBackground();
                 rack?.RefreshLabel();
-                return Task.CompletedTask;
             };
 
             // Save Inventory on close
@@ -437,7 +436,6 @@ namespace ResurrectionRP_Server.Factions
                 ph.UpdateFull();
                 UpdateInBackground();
                 rack?.RefreshLabel();
-                return Task.CompletedTask;
             };
         }
 

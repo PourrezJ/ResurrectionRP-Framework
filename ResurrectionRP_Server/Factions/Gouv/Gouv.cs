@@ -257,10 +257,9 @@ namespace ResurrectionRP_Server.Factions
                     {
                         ph.UpdateFull();
                         UpdateInBackground();
-                        return Task.CompletedTask;
                     };
 
-                    Task.Run(async () => { await inv.OpenMenu(client); });
+                    inv.OpenMenu(client);
                 }
             }
         }

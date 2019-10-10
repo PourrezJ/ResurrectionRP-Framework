@@ -122,7 +122,7 @@ namespace ResurrectionRP_Server
             }
 
             Alt.OnPlayerConnect += OnPlayerConnected;
-            AltAsync.OnPlayerDisconnect += OnPlayerDisconnected;
+            Alt.OnPlayerDisconnect += OnPlayerDisconnected;
             Alt.OnConsoleCommand += Alt_OnConsoleCommand;
  
             IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
@@ -269,13 +269,13 @@ namespace ResurrectionRP_Server
             }
         }
 
-        private async Task OnPlayerDisconnected(ReadOnlyPlayer player, IPlayer origin, string reason)
+        private void OnPlayerDisconnected(IPlayer player, string reason)
         {
-            if (PlayerList.Find(b => b == origin) != null)
-                PlayerList.Remove(origin);
+            if (PlayerList.Find(b => b == player) != null)
+                PlayerList.Remove(player);
 
             IllegalManager.OnPlayerDisconnected(player);
-            await PlayerManager.OnPlayerDisconnected(player, origin, reason);   
+            PlayerManager.OnPlayerDisconnected(player, reason);   
         }
 
         #endregion

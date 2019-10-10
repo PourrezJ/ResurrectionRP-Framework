@@ -152,7 +152,7 @@ namespace ResurrectionRP_Server.Illegal
                     await Update();
                 };
                 menu.CloseMenu(client);
-                Task.Run(async () => await inv.OpenMenu(client));
+                inv.OpenMenu(client);
             }
         }
 

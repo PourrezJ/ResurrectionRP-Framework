@@ -82,10 +82,10 @@ namespace ResurrectionRP_Server.Models
         {
         }
         
-        public virtual Task<bool> Drop(IPlayer c, int quantite, int slot, OutfitInventory inventory)
+        public virtual bool Drop(IPlayer c, int quantite, int slot, OutfitInventory inventory)
         {
             if (!isDropable)
-                return Task.FromResult(false);
+                return false;
 
             if (inventory.Delete(slot, quantite))
             {
@@ -94,16 +94,16 @@ namespace ResurrectionRP_Server.Models
                 ResuPickup pickup = ResuPickup.CreatePickup("prop_money_bag_01", this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), dimension); 
                 pickup.OnTakePickup += OnPickup;
 
-                return Task.FromResult(true);
+                return true;
             }
 
-            return Task.FromResult(false);
+            return false;
         }
 
-        public virtual Task<bool> Drop(IPlayer c, int quantite, int slot, Inventory.Inventory inventory)
+        public virtual bool Drop(IPlayer c, int quantite, int slot, Inventory.Inventory inventory)
         {
             if (!isDropable)
-                return Task.FromResult(false);
+                return false;
 
             if (inventory.Delete(slot, quantite))
             {
@@ -112,10 +112,10 @@ namespace ResurrectionRP_Server.Models
                 ResuPickup resu = ResuPickup.CreatePickup("prop_money_bag_01", this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), dimension); 
                 resu.OnTakePickup += OnPickup;
 
-                return Task.FromResult(true);
+                return true;
             }
 
-            return Task.FromResult(false);
+            return false;
         }
 
         public virtual Task OnPickup(IPlayer client, ResuPickup pickup)

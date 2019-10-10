@@ -269,7 +269,7 @@ namespace ResurrectionRP_Server.Factions
                 }
 
                 var vestiaire = new MenuItem("Ouvrir votre vestiaire", "", "ID_Vestiaire", true);
-                vestiaire.OnMenuItemCallbackAsync = OpenVestiaire;
+                vestiaire.OnMenuItemCallback = OpenVestiaire;
                 menu.Add(vestiaire);
 
                 var demission = new MenuItem("Démissioner", "", "ID_demissioner", executeCallback: true);
@@ -297,7 +297,7 @@ namespace ResurrectionRP_Server.Factions
             Task.Run(async () => { await PriseService(client); });
         }
 
-        private async Task OpenVestiaire(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void OpenVestiaire(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             menu.CloseMenu(client);
 
@@ -311,16 +311,14 @@ namespace ResurrectionRP_Server.Factions
             {
                 _player.UpdateFull();
                 UpdateInBackground();
-                return Task.CompletedTask;
             };
             invmenu.PriceChange += (p, m, stack, stackprice) =>
             {
                 client.SendNotification($"Le nouveau prix de {stack.Item.name} est de ${stackprice} ");
                 _player.UpdateFull();
                 UpdateInBackground();
-                return Task.CompletedTask;
             };
-            await invmenu.OpenMenu(client);
+            invmenu.OpenMenu(client);
         }
 
         // Depot d'argent dans la caisse.

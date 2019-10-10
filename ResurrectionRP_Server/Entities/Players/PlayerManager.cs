@@ -80,35 +80,35 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region ServerEvents
-        public static async Task OnPlayerDisconnected(ReadOnlyPlayer player, IPlayer origin, string reason)
+        public static void OnPlayerDisconnected(IPlayer player, string reason)
         {
-            PlayerHandler.PlayerHandlerList.TryGetValue(origin, out PlayerHandler ph);
+            PlayerHandler.PlayerHandlerList.TryGetValue(player, out PlayerHandler ph);
 
             if (ph == null)
                 return;
 
             ph.IsOnline = false;
-            MenuManager.OnPlayerDisconnect(origin);
-            FactionManager.OnPlayerDisconnected(origin);
+            MenuManager.OnPlayerDisconnect(player);
+            FactionManager.OnPlayerDisconnected(player);
 
-            if (Phone.PhoneManager.PhoneClientList.ContainsKey(origin))
-                Phone.PhoneManager.PhoneClientList.TryRemove(origin, out List<Phone.Phone> phoneList);
+            if (Phone.PhoneManager.PhoneClientList.ContainsKey(player))
+                Phone.PhoneManager.PhoneClientList.TryRemove(player, out List<Phone.Phone> phoneList);
 
-            if (RPGInventoryManager.HasInventoryOpen(origin))
+            if (RPGInventoryManager.HasInventoryOpen(player))
             {
-                var rpg = RPGInventoryManager.GetRPGInventory(origin);
+                var rpg = RPGInventoryManager.GetRPGInventory(player);
 
-                if (rpg != null && rpg.OnClose != null)
-                    await rpg.OnClose.Invoke(origin, rpg);
+                if (rpg != null)
+                    rpg.OnClose?.Invoke(player, rpg);
 
-                RPGInventoryManager.OnPlayerQuit(origin);
+                RPGInventoryManager.OnPlayerQuit(player);
             }
 
-            if (HouseManager.IsInHouse(origin))
+            if (HouseManager.IsInHouse(player))
             {
-                House house = HouseManager.GetHouse(origin);
+                House house = HouseManager.GetHouse(player);
                 ph.Location = new Location(house.Position, new Vector3());
-                house.PlayersInside.Remove(origin);
+                house.PlayersInside.Remove(player);
             }
             else
                 ph.Location = new Location(player.Position, player.Rotation);
@@ -119,12 +119,12 @@ namespace ResurrectionRP_Server.Entities.Players
                 ph.LastUpdate = DateTime.Now;
             }
 
-            var dead = DeadPlayers.FindLast(p => p.Victime == origin);
+            var dead = DeadPlayers.FindLast(p => p.Victime == player);
             if (dead != null)
                 dead.Remove();
 
             ph.UpdateInBackground();
-            PlayerHandler.PlayerHandlerList.Remove(origin, out _);
+            PlayerHandler.PlayerHandlerList.Remove(player, out _);
 
             if (ph.Vehicle != null)
             {

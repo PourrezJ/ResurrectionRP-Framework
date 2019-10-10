@@ -64,10 +64,10 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Public Delegate
-        public delegate Task OnOpenDelegate(IPlayer client, RPGInventoryMenu menu);
-        public delegate Task OnCloseDelegate(IPlayer client, RPGInventoryMenu menu);
-        public delegate Task OnMoveDelegate(IPlayer client, RPGInventoryMenu menu);
-        public delegate Task OnPriceChangeDelegate(IPlayer client, RPGInventoryMenu menu, Models.ItemStack stack, int price);
+        public delegate void OnOpenDelegate(IPlayer client, RPGInventoryMenu menu);
+        public delegate void OnCloseDelegate(IPlayer client, RPGInventoryMenu menu);
+        public delegate void OnMoveDelegate(IPlayer client, RPGInventoryMenu menu);
+        public delegate void OnPriceChangeDelegate(IPlayer client, RPGInventoryMenu menu, Models.ItemStack stack, int price);
         #endregion
 
         public RPGInventoryMenu(Inventory inventory, OutfitInventory outfitInventory = null, Inventory bag = null, Inventory distant = null, bool ismarket = false, IPlayer distantPlayer = null)
@@ -143,17 +143,15 @@ namespace ResurrectionRP_Server.Inventory
             }
         }
 
-        public async Task OpenMenu(IPlayer client)
+        public void OpenMenu(IPlayer client)
         {
-            if (OnOpen != null)
-                await OnOpen.Invoke(client, this);
+            OnOpen?.Invoke(client, this);
             RPGInventoryManager.OpenMenu(client, this);
         }
 
         public void CloseMenu(IPlayer client)
         {
-            if (OnClose != null)
-                Task.Run(async ()=> await OnClose.Invoke(client, this));
+            OnClose?.Invoke(client, this);
             RPGInventoryManager.CloseMenu(client, this);
         }
     }

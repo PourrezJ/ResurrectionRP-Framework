@@ -16,13 +16,13 @@ namespace ResurrectionRP_Server.Items
             this.description = PhoneHandler.PhoneNumber;
         }
 
-        public override Task<bool> Drop(IPlayer c, int quantite, int slot, Inventory.OutfitInventory inventory)
+        public override bool Drop(IPlayer c, int quantite, int slot, Inventory.OutfitInventory inventory)
         {
             Phone.Phone.RemovePhoneInList(c, PhoneHandler);
             return base.Drop(c, quantite, slot, inventory);
         }
 
-        public override Task<bool> Drop(IPlayer c, int quantite, int slot, Inventory.Inventory inventory)
+        public override bool Drop(IPlayer c, int quantite, int slot, Inventory.Inventory inventory)
         {
             Phone.Phone.RemovePhoneInList(c, PhoneHandler);
             return base.Drop(c, quantite, slot, inventory);

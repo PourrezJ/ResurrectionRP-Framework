@@ -104,7 +104,6 @@ namespace ResurrectionRP_Server.Business
                     {
                         player.UpdateFull();
                         UpdateInBackground();
-                        return Task.CompletedTask;
                     };
 
                     invmenu.PriceChange += (p, m, stack, stackprice) =>
@@ -112,15 +111,13 @@ namespace ResurrectionRP_Server.Business
                         client.SendNotification($"Le nouveau prix de {stack.Item.name} est de ${stackprice}");
                         player.UpdateFull();
                         UpdateInBackground();
-                        return Task.CompletedTask;
                     };
 
                     invmenu.OnClose += (p, m) =>
                     {
                         Inventory.Locked = false;
-                        return Task.CompletedTask;
                     };
-                    Task.Run(async () => { await invmenu.OpenMenu(client); });
+                    invmenu.OpenMenu(client);
                     break;
 
                 case "ID_Stats":

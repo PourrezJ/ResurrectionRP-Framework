@@ -60,7 +60,7 @@ namespace ResurrectionRP_Server.Phone
 
         public bool HasContactForNumber(String number)
         {
-            return AddressBook.Any(x => x?.phoneNumber.Equals(number) == false);
+            return AddressBook.Any(x => x?.phoneNumber.Equals(number) == true);
         }
         #endregion
 

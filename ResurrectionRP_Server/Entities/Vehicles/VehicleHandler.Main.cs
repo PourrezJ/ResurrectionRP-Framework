@@ -302,19 +302,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }
         
-        public void LockUnlock(IPlayer client, bool locked)
-        {
-            VehicleHandler vh = Vehicle.GetVehicleHandler();
-
-            if (client.HasVehicleKey(vh.Plate) || vh.SpawnVeh && vh.OwnerID == client.GetSocialClub())
-            {
-                LockState = locked ? VehicleLockState.Locked : VehicleLockState.Unlocked;
-                client.SendNotification($"Vous avez {(locked ? " ~r~ouvert" : "~g~fermé")} ~w~le véhicule");
-            }
-        }  
 
         public bool LockUnlock(IPlayer client)
         {
+            if (!client.Exists)
+                return false;
+
+            if (!Vehicle.Exists)
+                return false;
+
             VehicleHandler VH = Vehicle.GetVehicleHandler() ;
 
             if (client.HasVehicleKey(Vehicle.NumberplateText) || VH.SpawnVeh && VH.OwnerID == client.GetSocialClub())

@@ -29,8 +29,8 @@ namespace ResurrectionRP_Server.Factions
 
         public override Faction Init()
         {
-            this.ServiceLocation = new Vector3(3349.717f, 5476.838f, 21.01448f);
-            this.ShopLocation = new Vector3(3350.275f, 5473.722f, 20.2592f);
+            this.ServiceLocation = new Vector3(903.7235f, -3199.718f, -97.18795f);
+            this.ShopLocation = new Vector3(909.0047f, -3211.328f, -99.22219f);
             this.ParkingLocation = new Location(new Vector3(840.60657f, -3237.3625f, -98.44177f), new Vector3(0, 0, 270f));
             //this.HeliportLocation = new Location(new Vector3(1423.278f, 6374.691f, 29.10139f), new Vector3(0, 0, 258.6528f));
             this.HeliportLocation = null;

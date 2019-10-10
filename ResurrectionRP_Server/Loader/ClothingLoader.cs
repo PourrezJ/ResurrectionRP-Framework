@@ -68,7 +68,7 @@ namespace ResurrectionRP_Server.Loader
         public static Dictionary<byte, ClothManifest> PropsFemaleList
             = new Dictionary<byte, ClothManifest>();
 
-        private static string basePath = $"clothings{Path.DirectorySeparatorChar}";
+        private static readonly string basePath = $"clothings{Path.DirectorySeparatorChar}";
 
         public static void LoadAllCloth()
         {

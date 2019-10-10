@@ -26,7 +26,7 @@ namespace ResurrectionRP_Server
 
         public override void OnStart()
         {
-            MainThreadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
+            MainThreadId = Thread.CurrentThread.ManagedThreadId;
 
             var ci = new CultureInfo("fr-FR");
             CultureInfo.DefaultThreadCurrentCulture = ci;

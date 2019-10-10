@@ -4,7 +4,7 @@ using System;
 
 namespace ResurrectionRP_Server.Utils
 {
-    public class FPSCounter
+    public static class FPSCounter
     {
         private static int lastTick;
         private static int lastFrameRate;

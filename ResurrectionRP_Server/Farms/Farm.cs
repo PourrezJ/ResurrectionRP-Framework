@@ -39,9 +39,7 @@ namespace ResurrectionRP_Server.Farms
 
             foreach (var sub_validator_type in sub_validator_types)
             {
-                Farm farm = Activator.CreateInstance(sub_validator_type) as Farm;
-
-                if (farm != null)
+                if (Activator.CreateInstance(sub_validator_type) is Farm farm)
                 {
                     if (farm.Enabled)
                     {

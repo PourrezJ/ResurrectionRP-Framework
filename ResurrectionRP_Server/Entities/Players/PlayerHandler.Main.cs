@@ -131,10 +131,9 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (OutfitInventory.Slots[15] == null)
                     return null;
 
-                var radio = OutfitInventory.Slots[15].Item as Items.RadioItem;
-                if (radio != null)
+                if (OutfitInventory.Slots[15].Item is Items.RadioItem radio)
                     return radio.Radio;
-                return null;
+                return radioSelected;
             }
             set => radioSelected = value;
         }
@@ -148,10 +147,9 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (OutfitInventory.Slots[14] == null)
                     return null;
 
-                var phone = OutfitInventory.Slots[14].Item as Items.PhoneItem;
-                if (phone != null)
+                if (OutfitInventory.Slots[14].Item is Items.PhoneItem phone)
                     return phone.PhoneHandler;
-                return null;
+                return phoneSelected;
             }
             set => phoneSelected = value;
         }
@@ -208,8 +206,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     {
                         foreach (var phone in stacks.Value)
                         {
-                            var phoneItem = phone.Item as Items.PhoneItem;
-                            if (phoneItem != null)
+                            if (phone.Item is Items.PhoneItem phoneItem)
                                 Phone.Phone.AddPhoneInList(Client, phoneItem.PhoneHandler);
                         }
                     }
@@ -396,8 +393,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             if (MenuManager.HasOpenMenu(Client))
                 return true;
-
-            if (Phone.PhoneManager.HasOpenPhone(Client, out Phone.Phone phone))
+            if (Phone.PhoneManager.HasOpenPhone(Client, out _))
                 return true;
 
             if (RPGInventoryManager.HasInventoryOpen(Client))
@@ -516,8 +512,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         case 14: // phone
                             if (clothSlot?.Item != null)
                             {
-                                var phone = clothSlot.Item as Items.PhoneItem;
-                                if (phone != null)
+                                if (clothSlot.Item is Items.PhoneItem phone)
                                     PhoneSelected = phone.PhoneHandler;
                             }
                             break;
@@ -525,8 +520,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         case 15:
                             if (clothSlot?.Item != null)
                             {
-                                var radio = clothSlot.Item as Items.RadioItem;
-                                if (radio != null)
+                                if (clothSlot.Item is Items.RadioItem radio)
                                     RadioSelected = radio.Radio;
                                 else
                                     RadioSelected = null;

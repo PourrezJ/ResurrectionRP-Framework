@@ -145,45 +145,47 @@ namespace ResurrectionRP_Server.Factions
             if (_target == null)
                 return;
 
-            List<Motif> MotifList = new List<Motif>();
-            MotifList.Add(new Motif("Arrêt Gênant", 1000));
-            MotifList.Add(new Motif("Stationnement Gênant", 1500, "Mise en fourrière si le propriétaire n'est pas présent"));
-            MotifList.Add(new Motif("Non respect du code de la route", 5000, "Non respect d'un stop, Feu tricolore...\n Retrait de 1 point"));
-            MotifList.Add(new Motif("Véhicule non conforme", 100000, "Présence de pièces interdits (Turbo)"));
-            MotifList.Add(new Motif("Conduite OFF ROAD", 5000, "Conduite hors piste"));
-            MotifList.Add(new Motif("Excés de Vitesse", 10000));
-            MotifList.Add(new Motif("Non maîtrise du véhicule", 10000));
-            MotifList.Add(new Motif("Visage masqué", 1500));
-            MotifList.Add(new Motif("Conduite sans permis", 50000));
-            MotifList.Add(new Motif("Conduite dangeureuse", 25000, "Contre sens, rouler sur les trottoirs..."));
-            MotifList.Add(new Motif("Délit de fuite", 30000));
-            MotifList.Add(new Motif("Conduite en état d'ivresse", 17500));
-            MotifList.Add(new Motif("Conduite sous l'emprise de stupéfiants", 17500));
-            MotifList.Add(new Motif("Dégradation de bien public/privé", 2000, "Prix allant de 2000 à 2 000 000$ (Faire prix personnalisé)"));
-            MotifList.Add(new Motif("Ivresse sur la voie publique", 1500));
-            MotifList.Add(new Motif("Agression verbable", 1500));
-            MotifList.Add(new Motif("Agression physique", 15000));
-            MotifList.Add(new Motif("Harcèlement moral", 25000));
-            MotifList.Add(new Motif("Harcèlement physique", 50000));
-            MotifList.Add(new Motif("Exhibition", 5000, "Nudité"));
-            MotifList.Add(new Motif("Violation de propriété privée", 3000));
-            MotifList.Add(new Motif("Vol", 0, "Dédommagement 2x le prix de l'objet"));
-            MotifList.Add(new Motif("Recel", 0, "Dédommagement 2x la valeur de l'objet"));
-            MotifList.Add(new Motif("Vol de véhicule", 0, "Dédommagement 2x la valeur de l'objet"));
-            MotifList.Add(new Motif("Vol de ressource", 0, "Dédommagement 2x la valeur de l'objet"));
-            MotifList.Add(new Motif("Travail au noir", 15000));
-            MotifList.Add(new Motif("Outrage à agent LSPD", 10000));
-            MotifList.Add(new Motif("Outrage à un membre de la Chancellerie", 50000));
-            MotifList.Add(new Motif("Non coopération", 15000, "Refus d'obtempérer à un injonction"));
-            MotifList.Add(new Motif("Diffamation", 10000));
-            MotifList.Add(new Motif("Organisation d'évènement, manifestation non déclaré / autorisé", 100000));
-            MotifList.Add(new Motif("Participation à un évènement, manifestation non autorisée", 10000));
-            MotifList.Add(new Motif("Arme non déclarée", 0, "50% de la valeur de l'arme"));
-            MotifList.Add(new Motif("Tir avec arme légale", 50000, "Hors légitime défense"));
-            MotifList.Add(new Motif("Consommation de stupéfiants", 10000, "10,000$ par unité, dans la limite de 2 unités"));
-            MotifList.Add(new Motif("Vente de stupéfiants", 5000, "5000$ par unité, dans la limite de 10 unités"));
-            MotifList.Add(new Motif("Prostitution", 5000));
-            MotifList.Add(new Motif("Client de la prostitution", 10000));
+            List<Motif> MotifList = new List<Motif>
+            {
+                new Motif("Arrêt Gênant", 1000),
+                new Motif("Stationnement Gênant", 1500, "Mise en fourrière si le propriétaire n'est pas présent"),
+                new Motif("Non respect du code de la route", 5000, "Non respect d'un stop, Feu tricolore...\n Retrait de 1 point"),
+                new Motif("Véhicule non conforme", 100000, "Présence de pièces interdits (Turbo)"),
+                new Motif("Conduite OFF ROAD", 5000, "Conduite hors piste"),
+                new Motif("Excés de Vitesse", 10000),
+                new Motif("Non maîtrise du véhicule", 10000),
+                new Motif("Visage masqué", 1500),
+                new Motif("Conduite sans permis", 50000),
+                new Motif("Conduite dangeureuse", 25000, "Contre sens, rouler sur les trottoirs..."),
+                new Motif("Délit de fuite", 30000),
+                new Motif("Conduite en état d'ivresse", 17500),
+                new Motif("Conduite sous l'emprise de stupéfiants", 17500),
+                new Motif("Dégradation de bien public/privé", 2000, "Prix allant de 2000 à 2 000 000$ (Faire prix personnalisé)"),
+                new Motif("Ivresse sur la voie publique", 1500),
+                new Motif("Agression verbable", 1500),
+                new Motif("Agression physique", 15000),
+                new Motif("Harcèlement moral", 25000),
+                new Motif("Harcèlement physique", 50000),
+                new Motif("Exhibition", 5000, "Nudité"),
+                new Motif("Violation de propriété privée", 3000),
+                new Motif("Vol", 0, "Dédommagement 2x le prix de l'objet"),
+                new Motif("Recel", 0, "Dédommagement 2x la valeur de l'objet"),
+                new Motif("Vol de véhicule", 0, "Dédommagement 2x la valeur de l'objet"),
+                new Motif("Vol de ressource", 0, "Dédommagement 2x la valeur de l'objet"),
+                new Motif("Travail au noir", 15000),
+                new Motif("Outrage à agent LSPD", 10000),
+                new Motif("Outrage à un membre de la Chancellerie", 50000),
+                new Motif("Non coopération", 15000, "Refus d'obtempérer à un injonction"),
+                new Motif("Diffamation", 10000),
+                new Motif("Organisation d'évènement, manifestation non déclaré / autorisé", 100000),
+                new Motif("Participation à un évènement, manifestation non autorisée", 10000),
+                new Motif("Arme non déclarée", 0, "50% de la valeur de l'arme"),
+                new Motif("Tir avec arme légale", 50000, "Hors légitime défense"),
+                new Motif("Consommation de stupéfiants", 10000, "10,000$ par unité, dans la limite de 2 unités"),
+                new Motif("Vente de stupéfiants", 5000, "5000$ par unité, dans la limite de 10 unités"),
+                new Motif("Prostitution", 5000),
+                new Motif("Client de la prostitution", 10000)
+            };
 
             Menu motifMenu = new Menu("ID_Invoice_Motif", "Amende", backCloseMenu: true);
             motifMenu.ItemSelectCallback = InvoiceCallBack;

@@ -129,7 +129,7 @@ namespace ResurrectionRP_Server.Services
                 {
 
                     string _vehName = VehicleInfoLoader.VehicleInfoLoader.Get(veh.Model)?.DisplayName ?? "Inconnu";
-                    var _item = new MenuItem((_vehName != null) ? _vehName : "INCONNU", "", "ID_Get", true, rightLabel: veh.Plate);
+                    var _item = new MenuItem(_vehName ?? "INCONNU", "", "ID_Get", true, rightLabel: veh.Plate);
                     _item.SetData("Vehicle", veh);
                     _menu.Add(_item);
                 }

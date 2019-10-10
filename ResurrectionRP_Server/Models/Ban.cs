@@ -36,9 +36,9 @@ namespace ResurrectionRP_Server.Models
 
                 await AltAsync.Do(() =>
                 {
-                    if (GameMode.Instance.PlayerList.Any(p => p.SocialClubId == ban.SocialID))
+                    if (GameMode.PlayerList.Any(p => p.SocialClubId == ban.SocialID))
                     {
-                        var player = GameMode.Instance.PlayerList.Find(p => p.Exists && (p.SocialClubId == ban.SocialID)) ?? null;
+                        var player = GameMode.PlayerList.Find(p => p.Exists && (p.SocialClubId == ban.SocialID)) ?? null;
                         player.Kick("Vous êtes bannis du serveur.");
                     }
                 });

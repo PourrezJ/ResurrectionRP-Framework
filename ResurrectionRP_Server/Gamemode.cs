@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server
         public static float StreamDistance { get; private set; } = 500;
 
         [BsonIgnore]
-        public List<IPlayer> PlayerList = new List<IPlayer>();
+        public static List<IPlayer> PlayerList = new List<IPlayer>();
 
         public const short GlobalDimension = 0;
 
@@ -97,11 +97,10 @@ namespace ResurrectionRP_Server
         #region Events
         private void OnServerStop()
         {
-            var players = GameMode.Instance.PlayerList;
-            for (int i = 0; i < players.Count; i++)
+            for (int i = 0; i < PlayerList.Count; i++)
             {
-                if (players[i] != null && players[i].Exists)
-                    players[i].Kick("Server stop");
+                if (PlayerList[i] != null && PlayerList[i].Exists)
+                    PlayerList[i].Kick("Server stop");
             }
 
             //await HouseManager.House_Exit();
@@ -264,10 +263,13 @@ namespace ResurrectionRP_Server
 
         private void OnPlayerConnected(IPlayer player, string reason)
         {
-            if (PlayerList.Find(b => b == player) == null)
-                PlayerList.Add(player);
+            lock (PlayerList)
+            {
+                if (PlayerList.Find(b => b == player) == null)
+                    PlayerList.Add(player);
 
-            Alt.Log($"==> {player.Name} has connected.");
+                Alt.Log($"==> {player.Name} has connected.");
+            }
         }
 
         private async Task OnPlayerDisconnected(ReadOnlyPlayer player, IPlayer origin, string reason)

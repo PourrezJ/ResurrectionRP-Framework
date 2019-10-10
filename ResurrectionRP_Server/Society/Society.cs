@@ -212,7 +212,7 @@ namespace ResurrectionRP_Server.Society
         {
             int employees = 0;
 
-            foreach (IPlayer player in GameMode.Instance.PlayerList)
+            foreach (IPlayer player in GameMode.PlayerList)
             {
                 if (player == null || !player.Exists)
                     continue;

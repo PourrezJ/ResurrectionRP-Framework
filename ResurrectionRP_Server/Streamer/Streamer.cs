@@ -117,7 +117,7 @@ namespace ResurrectionRP_Server.Streamer
         {
             ListStaticEntities.TryAdd(blip.id, blip.export());
 
-            if (GameMode.Instance.PlayerList.Count > 0)
+            if (GameMode.PlayerList.Count > 0)
                 Alt.EmitAllClients("createStaticEntity", ListStaticEntities[blip.id]);
 
             return blip.id;

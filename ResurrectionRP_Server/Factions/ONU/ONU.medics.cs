@@ -28,7 +28,7 @@ namespace ResurrectionRP_Server.Factions
 
         private void ONU_IAccept(IPlayer client, object[] args)
         {
-            IPlayer victim = GameMode.Instance.PlayerList.Find(p => p.Id == ushort.Parse(args[0].ToString()));
+            IPlayer victim = GameMode.PlayerList.Find(p => p.Id == ushort.Parse(args[0].ToString()));
 
             if (victim == null)
                 return;

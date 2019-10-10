@@ -270,7 +270,7 @@ namespace ResurrectionRP_Server.Factions
 
             Utils.Utils.Delay(60000 * 10, () =>
             {
-                if (!GameMode.Instance.PlayerList.Any(p => p.GetSocialClub() == socialClub))
+                if (!GameMode.PlayerList.Any(p => p.GetSocialClub() == socialClub))
                     ServicePlayerList.Remove(socialClub);
             });
         }

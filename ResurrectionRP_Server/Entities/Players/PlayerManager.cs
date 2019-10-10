@@ -66,7 +66,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (!ph.Key.Exists)
                         continue;
 
-                    if (GameMode.Instance.PlayerList.Any(v => v.Id == ph.Key.Id))
+                    if (GameMode.PlayerList.Any(v => v.Id == ph.Key.Id))
                     {
                         if (ph.Value != null)
                             ph.Value.UpdateFull();
@@ -344,7 +344,7 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             try
             {
-                var players = GameMode.Instance.PlayerList;
+                var players = GameMode.PlayerList;
                 for (int a = 0; a < players.Count; a++)
                 {
                     if (players[a] == null)
@@ -366,7 +366,7 @@ namespace ResurrectionRP_Server.Entities.Players
         }
 
         public static PlayerHandler GetPlayerByName(string name)
-            => GameMode.Instance.PlayerList.FirstOrDefault(x => x.Exists && x.GetPlayerHandler()?.Identite?.Name.ToLower() == name.ToLower())?.GetPlayerHandler() ?? null;
+            => GameMode.PlayerList.FirstOrDefault(x => x.Exists && x.GetPlayerHandler()?.Identite?.Name.ToLower() == name.ToLower())?.GetPlayerHandler() ?? null;
 
         public static bool IsBan(string social)
         {

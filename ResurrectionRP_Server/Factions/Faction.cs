@@ -247,11 +247,13 @@ namespace ResurrectionRP_Server.Factions
 
         public virtual Task OnPlayerServiceEnter(IPlayer client, int rang)
         {
+            EventHandlers.Events.InvokeEmergencyCallState(client, this.FactionName, true);
             return Task.CompletedTask;
         }
 
         public virtual Task OnPlayerServiceQuit(IPlayer client, int rang)
         {
+            EventHandlers.Events.InvokeEmergencyCallState(client, this.FactionName, false);
             return Task.CompletedTask;
         }
 

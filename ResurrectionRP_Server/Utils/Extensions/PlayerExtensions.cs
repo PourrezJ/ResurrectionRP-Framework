@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Numerics;
 using Newtonsoft.Json;
-using ResurrectionRP_Server.Entities.Players.Data;
 
 namespace ResurrectionRP_Server
 {
@@ -81,43 +80,8 @@ namespace ResurrectionRP_Server
         public static void SendNotificationPicture(this IPlayer client, Utils.Enums.CharPicture img, string sender, string subject, string message) =>
             client.EmitLocked("SetNotificationMessage", img.ToString(), sender, subject, message);
 
-        public static List<IVehicle> GetVehiclesInRange(this IPlayer client, int Range)
-        {
-            // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
-            // var vehs = Alt.GetAllVehicles();
-            var vehs = VehiclesManager.GetAllVehiclesInGame();
-            List<IVehicle> endup = new List<IVehicle>();
-            try
-            {
-                Utils.Utils.CheckThread("GetVehiclesInRange");
-                AltAsync.Do(() =>
-                {
-                    var position = client.GetPosition();
-                    Vector3 pos = new Vector3(position.X, position.Y, position.Z);
-
-                    foreach (IVehicle veh in vehs)
-                    {
-                        if (!veh.Exists)
-                            continue;
-
-                        var vehpos = veh.GetPosition();
-
-                        if (pos.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= Range)
-                            endup.Add(veh);
-                    }
-                }).Wait();
-            }
-            catch(Exception ex)
-            {
-                Alt.Server.LogError(ex.ToString());
-            }
-
-            return endup;
-        }
-
         public static List<IPlayer> GetPlayersInRange(this IPlayer client, float Range)
         {
-            Utils.Utils.CheckThread("GetPlayersInRange");
             List<IPlayer> endup = new List<IPlayer>();
             try
             {
@@ -171,27 +135,8 @@ namespace ResurrectionRP_Server
             return endup;
         }
 
-        public static IPlayer GetNearestPlayer(this IPlayer client)
-        {
-            ICollection<IPlayer> players = Alt.GetAllPlayers();
-            IPlayer nearestPlayer = null;
-
-            foreach (IPlayer player in players)
-            {
-                if (player == client || !player.Exists || player.Dimension != player.Dimension)
-                    continue;
-
-                if (nearestPlayer == null || client.Position.Distance(player.Position) <= client.Position.Distance(nearestPlayer.Position))
-                    nearestPlayer = player;
-            }
-
-            return nearestPlayer;
-        }
-
         public static List<IPlayer> GetNearestPlayers(this IPlayer client, float range, bool withoutme = true, int dimension = GameMode.GlobalDimension)
         {
-            Utils.Utils.CheckThread("GetNearestPlayers");
-
             ICollection<IPlayer> players = Alt.GetAllPlayers();
             List<IPlayer> nearestPlayers = new List<IPlayer>();
 
@@ -212,9 +157,6 @@ namespace ResurrectionRP_Server
 
         public static IVehicle GetNearestVehicle(this IPlayer client)
         {
-            Utils.Utils.CheckThread();
-            // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
-            // var vehs = Alt.GetAllVehicles();
             var vehs = VehiclesManager.GetAllVehiclesInGame();
 
             IVehicle endup = null;
@@ -432,7 +374,6 @@ namespace ResurrectionRP_Server
             }
             catch (Exception ex)
             {
-                // await player.SendNotificationError("Erreur avec votre compte, contactez un membre du staff.");
                 Alt.Server.LogError("PlayerHandlerExist" + ex);
             }
             return false;
@@ -481,22 +422,6 @@ namespace ResurrectionRP_Server
                 }
             }
         }
-
-        //public static async Task ReviveAsync(this IPlayer client, ushort health = 200, Vector3? position = null)
-        //{
-        //    Vector3 pos = position ?? await client.GetPositionAsync();
-        //    await client.SpawnAsync(new Position(pos.X, pos.Y, pos.Z));
-        //    //client.Resurrect(health);
-        //    await client.SetHealthAsync(200);
-
-        //    if (GameMode.Instance.FactionManager.Onu != null && GameMode.Instance.FactionManager.Onu.ServicePlayerList?.Count > 0)
-        //    {
-        //        foreach (var medecin in GameMode.Instance.FactionManager.Onu?.GetEmployeeOnline())
-        //        {
-        //            medecin.EmitLocked("ONU_BlesseEnd", client.Id);
-        //        }
-        //    }
-        //}
 
         public static bool HasVehicleKey(this IPlayer client, string plate)
             => client.GetPlayerHandler().ListVehicleKey.Exists(x => x.Plate == plate);

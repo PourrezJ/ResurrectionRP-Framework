@@ -60,7 +60,7 @@ namespace ResurrectionRP_Server.Phone
 
         public bool HasContactForNumber(String number)
         {
-            return AddressBook.Any(x => x.phoneNumber.Equals(number));
+            return AddressBook.Any(x => x?.phoneNumber.Equals(number) == false);
         }
         #endregion
 
@@ -233,11 +233,18 @@ namespace ResurrectionRP_Server.Phone
 
         public bool TryAddNewContact(IPlayer client, String contactName, String contactNumber)
         {
-            if (ValidateContact(contactName, contactNumber))
+            try
             {
-                AddNameToAddressBook(client, contactName, contactNumber);
-                return true;
+                if (ValidateContact(contactName, contactNumber))
+                {
+                    AddNameToAddressBook(client, contactName, contactNumber);
+                    return true;
+                }
+            }catch(Exception ex)
+            {
+                Alt.Server.LogError(ex.ToString());
             }
+
 
             return false;
         }

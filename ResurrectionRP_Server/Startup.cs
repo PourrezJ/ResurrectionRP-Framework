@@ -35,7 +35,7 @@ namespace ResurrectionRP_Server
 
             AppDomain.CurrentDomain.UnhandledException += OnException;
 
-            AltAsync.OnPlayerConnect += AltAsync_OnPlayerConnect;
+            Alt.OnPlayerConnect += Alt_OnPlayerConnect;
             Alt.OnPlayerDead += Alt_OnPlayerDead;
 
             Database.MongoDB.Init();
@@ -65,7 +65,6 @@ namespace ResurrectionRP_Server
                 gamemode = new GameMode();
                 gamemode.OnStart();
                 Task.Run(async () => await gamemode.Save());
-                
             }
         }
 
@@ -76,12 +75,9 @@ namespace ResurrectionRP_Server
             Alt.Server.LogError($"Runtime terminating: {args.IsTerminating}");
         }
 
-        private async Task AltAsync_OnPlayerConnect(IPlayer player, string reason)
+        private void Alt_OnPlayerConnect(IPlayer player, string reason)
         {
             player.Emit("FadeOut", 0);
-
-            while (gamemode == null)
-                await Task.Delay(50);
         }
 
         private void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)

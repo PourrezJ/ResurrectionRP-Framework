@@ -22,6 +22,8 @@ namespace ResurrectionRP_Server.Factions
 
         public Door Gate { get; private set; }
 
+        private Teleport.Teleport teleport;
+
         public Division(string FactionName, FactionType FactionType) : base(FactionName, FactionType)
         {
 
@@ -87,13 +89,16 @@ namespace ResurrectionRP_Server.Factions
                 new TeleportEtage() { Name = "Bunker", Location = new Location(new Vector3(887.0242f, -3244.5364f, -98.32385f), new Vector3(0, 0, 90))}
             };
 
-            Teleport.Teleport.CreateTeleport(new Location(new Vector3(1015.8593f, 2906.1626f, 41.35f), new Vector3(0, 0, 348.4453f)), etages, new Vector3(3,3,0.1f), true, 60, GameMode.GlobalDimension, GameMode.GlobalDimension, "", true, FactionPlayerList.Keys.ToList(), true);
+            teleport = Teleport.Teleport.CreateTeleport(new Location(new Vector3(1015.8593f, 2906.1626f, 41.35f), new Vector3(0, 0, 348.4453f)), etages, new Vector3(3,3,0.1f), true, 60, GameMode.GlobalDimension, GameMode.GlobalDimension, "", true, FactionPlayerList.Keys.ToList(), true);
 
             return base.Init();
         }
 
         public override Task OnPlayerPromote(IPlayer client, int rang)
         {
+            if (!teleport.Whileliste.Contains(client.GetSocialClub()))
+                teleport.Whileliste.Add(client.GetSocialClub());
+
             return base.OnPlayerPromote(client, rang);
         }
 

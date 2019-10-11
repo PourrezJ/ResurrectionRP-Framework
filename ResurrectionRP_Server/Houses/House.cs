@@ -111,7 +111,7 @@ namespace ResurrectionRP_Server.Houses
             if (!string.IsNullOrEmpty(Owner))
                 Marker.SetColor(Color.FromArgb(80, 255, 255, 255));
 
-            if (GameMode.Instance.IsDebug)
+            if (GameMode.IsDebug)
                 BlipsManager.CreateBlip(Name, Position, 4, 1);
 
             this.Inventory.MaxSlot = 40;

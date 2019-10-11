@@ -51,7 +51,8 @@ namespace ResurrectionRP_Server.Colshape
                     {
                         colshape.RemoveEntity(player);
                         OnPlayerLeaveColshape?.Invoke(colshape, player);
-                        Alt.Log($"[Colshape {colshape.Id}] Player {player.Id} removed, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
+                        if (GameMode.IsDebug)
+                            Alt.Log($"[Colshape {colshape.Id}] Player {player.Id} removed, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
                     }
                 }
             }
@@ -69,7 +70,8 @@ namespace ResurrectionRP_Server.Colshape
                     {
                         colshape.RemoveEntity(vehicle);
                         OnVehicleLeaveColshape?.Invoke(colshape, vehicle);
-                        Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} removed, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
+                        if (GameMode.IsDebug) 
+                            Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} removed, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
                     }
                 }
             }
@@ -129,12 +131,14 @@ namespace ResurrectionRP_Server.Colshape
                                 {
                                     OnPlayerLeaveColshape?.Invoke(colshape, (IPlayer)entity);
                                     ((IPlayer)entity).EmitLocked("OnPlayerLeaveColshape", colshape.Id);
-                                    Alt.Log($"[Colshape {colshape.Id}] Player {entity.Id} leaving, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count - _entitiesToRemove.Count}");
+                                    if (GameMode.IsDebug)
+                                        Alt.Log($"[Colshape {colshape.Id}] Player {entity.Id} leaving, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count - _entitiesToRemove.Count}");
                                 }
                                 else if (entity.Type == BaseObjectType.Vehicle)
                                 {
                                     OnVehicleLeaveColshape?.Invoke(colshape, (IVehicle)entity);
-                                    Alt.Log($"[Colshape {colshape.Id}] Vehicle {entity.Id} leaving, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count - _entitiesToRemove.Count}");
+                                    if (GameMode.IsDebug)
+                                        Alt.Log($"[Colshape {colshape.Id}] Vehicle {entity.Id} leaving, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count - _entitiesToRemove.Count}");
                                 }
                             }
                         }
@@ -164,7 +168,8 @@ namespace ResurrectionRP_Server.Colshape
                             colshape.AddEntity(player);
                             OnPlayerEnterColshape?.Invoke(colshape, player);
                             player.EmitLocked("OnPlayerEnterColshape", colshape.Id);
-                            Alt.Log($"[Colshape {colshape.Id}] Player {player.Id} entering, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
+                            if (GameMode.IsDebug)
+                                Alt.Log($"[Colshape {colshape.Id}] Player {player.Id} entering, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
                         }
                     }
                 }
@@ -183,7 +188,8 @@ namespace ResurrectionRP_Server.Colshape
                         {
                             colshape.AddEntity(vehicle);
                             OnVehicleEnterColshape?.Invoke(colshape, vehicle);
-                            Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} entering, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
+                            if (GameMode.IsDebug)
+                                Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} entering, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
                         }
                     }
                 }
@@ -210,7 +216,8 @@ namespace ResurrectionRP_Server.Colshape
                     {
                         colshape.PlayerInteractInColshape(client);
                         OnPlayerInteractInColshape?.Invoke(colshape, client);
-                        Alt.Log($"[Colshape {colshape.Id}] Player {client.Id} interacting, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
+                        if (GameMode.IsDebug)
+                            Alt.Log($"[Colshape {colshape.Id}] Player {client.Id} interacting, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
                     }
                 }
             }

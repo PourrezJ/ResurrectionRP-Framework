@@ -76,7 +76,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (args[0] == null || args[1] == null)
                 return Task.CompletedTask;
 
-            if (GameMode.Instance.IsDebug)
+            if (GameMode.IsDebug)
                 Alt.Server.LogInfo("VehicleManager | Update trailer state for " + player.GetPlayerHandler().PID + " to " + args[1] + " for " + ((IVehicle)(args[0])).NumberplateText);
 
             VehicleHandler veh = ((IVehicle)args[0]).GetVehicleHandler();
@@ -99,7 +99,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         private static async Task LockUnlockVehicle(IPlayer player, object[] args)
         {
-            if (GameMode.Instance.IsDebug)
+            if (GameMode.IsDebug)
                 Alt.Server.LogColored("~b~VehicleManager ~w~| " + player.GetSocialClub() + " is trying to lock/unlock a car");
 
             var vehicle = args[0] as IVehicle;

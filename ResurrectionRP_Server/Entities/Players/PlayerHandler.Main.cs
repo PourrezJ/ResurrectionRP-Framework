@@ -232,7 +232,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         Weather.WeatherManager.Actual_weather.ToString(),
                         Weather.WeatherManager.Wind,
                         Weather.WeatherManager.WindDirection,
-                        GameMode.Instance.IsDebug,
+                        GameMode.IsDebug,
                         Location.Pos.ConvertToVector3Serialized()
                     );
 

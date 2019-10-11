@@ -71,7 +71,7 @@ namespace ResurrectionRP_Server.Services
         {
             try
             {
-                if (GameMode.Instance.IsDebug)
+                if (GameMode.IsDebug)
                     Alt.Server.LogColored("~b~Service CarPark ~w~| Saving parkings ()");
 
                 await Database.MongoDB.Update(this, "carparks", ID);

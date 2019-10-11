@@ -21,7 +21,7 @@ namespace ResurrectionRP_Server.Factions
             Menu menu = new Menu("ID_Importation", "Importation", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
             menu.ItemSelectCallback = ImportationMenuCallback;
             menu.IndexChangeCallback = ItemChangeCallback;
-            menu.FinalizerAsync = MenuFinalizer;
+            menu.Finalizer = MenuFinalizer;
 
             foreach (DockItemData item in importItems)
             {
@@ -82,9 +82,9 @@ namespace ResurrectionRP_Server.Factions
             client.EmitLocked("UpdateDockOrder", itemPrice, itemTotal, _orderPrice);
         }
 
-        private async Task MenuFinalizer(IPlayer client, Menu menu)
+        private void MenuFinalizer(IPlayer client, Menu menu)
         {
-            await client.EmitAsync("EndDockOrder");
+            client.EmitLocked("EndDockOrder");
         }
         #endregion
 

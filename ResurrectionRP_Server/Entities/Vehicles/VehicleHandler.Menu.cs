@@ -146,6 +146,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     var inv = new RPGInventoryMenu(PlayerHandler.PocketInventory, PlayerHandler.OutfitInventory, PlayerHandler.BagInventory, this.Inventory);
                     inv.OnOpen = (IPlayer c, RPGInventoryMenu m) =>
                     {
+                        Alt.Server.LogInfo($"[RPGInventoryMenu.OnOpen()] VehicleHandler: {this}, Inventory: {Inventory}");
                         Inventory.Locked = true;
                     };
 

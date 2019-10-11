@@ -138,7 +138,7 @@ namespace ResurrectionRP_Server.Factions
             client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
         }
 
-        private async Task OnPeintureSelect(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void OnPeintureSelect(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (VehicleInColorCabin == null)
             {
@@ -148,7 +148,7 @@ namespace ResurrectionRP_Server.Factions
 
             menu = new Menu(menuItem.Id, "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, Banner.CarMod);
             menu.ItemSelectCallback = PeintureSelectCallback;
-            menu.IndexChangeCallbackAsync = PeinturePreview;
+            menu.IndexChangeCallback = PeinturePreview;
 
             foreach (VehicleColor color in Enum.GetValues(typeof(VehicleColor)))
             {
@@ -168,7 +168,7 @@ namespace ResurrectionRP_Server.Factions
             }
 
             menu.OpenMenu(client);
-            await PeinturePreview(client, menu, 0, menu.Items[0]);
+            PeinturePreview(client, menu, 0, menu.Items[0]);
         }
 
         private void PeintureSelectCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -266,26 +266,26 @@ namespace ResurrectionRP_Server.Factions
             Menu menu = new Menu("ID_MainReparMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.CarMod);
 
             MenuItem primary = new MenuItem("Peinture Principal", "", "ID_First", executeCallback: true, executeCallbackIndexChange: true);
-            primary.OnMenuItemCallbackAsync = OnPeintureSelect;
+            primary.OnMenuItemCallback = OnPeintureSelect;
             menu.Add(primary);
 
             MenuItem secondary = new MenuItem("Peinture Secondaire", "", "ID_Second", executeCallback: true, executeCallbackIndexChange: true);
-            secondary.OnMenuItemCallbackAsync = OnPeintureSelect;
+            secondary.OnMenuItemCallback = OnPeintureSelect;
             menu.Add(secondary);
 
             MenuItem pearl = new MenuItem("Peinture Pearler", "", "ID_Pearl", executeCallback: true, executeCallbackIndexChange: true);
-            pearl.OnMenuItemCallbackAsync = OnPeintureSelect;
+            pearl.OnMenuItemCallback = OnPeintureSelect;
             menu.Add(pearl);
 
             menu.OpenMenu(client);
         }
 
-        private Task PeinturePreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
+        private void PeinturePreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
             int color = menuItem.GetData("Color");
 
             if (VehicleInColorCabin == null)
-                return Task.CompletedTask;
+                return;
 
             if (menu.Id == "ID_First")
                 VehicleInColorCabin.PrimaryColor = (byte)color;
@@ -293,8 +293,6 @@ namespace ResurrectionRP_Server.Factions
                 VehicleInColorCabin.SecondaryColor = (byte)color;
             else if (menu.Id == "ID_Pearl")
                 VehicleInColorCabin.PearlColor = (byte)color;
-
-            return Task.CompletedTask;
         }
         #endregion
 

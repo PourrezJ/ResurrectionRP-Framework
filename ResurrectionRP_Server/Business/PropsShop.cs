@@ -142,15 +142,14 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Private methods
-        private Task MenuClose(IPlayer client, Menu menu)
+        private void MenuClose(IPlayer client, Menu menu)
         {
             var ph = client.GetPlayerHandler();
 
             if (ph == null)
-                return Task.CompletedTask;
+                return;
 
             ph.Clothing.UpdatePlayerClothing();
-            return Task.CompletedTask;
         }
 
         private void BuyProp(IPlayer client, byte componentID, int drawable, int variation, double price, string clothName)
@@ -369,7 +368,7 @@ namespace ResurrectionRP_Server.Business
         {
             Menu menu = new Menu("ClothingMenu", "", "Que souhaitez-vous acheter?", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, BannerStyle);
             menu.ItemSelectCallback = MenuCallBack;
-            menu.FinalizerAsync = MenuClose;
+            menu.Finalizer = MenuClose;
 
             if (client.Model == (uint)PedModel.FreemodeMale01)
             {
@@ -452,7 +451,7 @@ namespace ResurrectionRP_Server.Business
             menu.SubTitle = _componentName;
             menu.BackCloseMenu = false;
             menu.ItemSelectCallback = CategorieCallBack;
-            menu.IndexChangeCallbackAsync = null;
+            menu.IndexChangeCallback = null;
 
             List<int> compoList = null;
 

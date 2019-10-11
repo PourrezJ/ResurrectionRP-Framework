@@ -20,12 +20,12 @@ namespace ResurrectionRP_Server
             Ped vendor = Ped.CreateNPC(PedModel.Lifeinvad01, new Vector3(-591.5868f, -933.32306f, 23.871094f), 0);
             vendor.NpcInteractCallBack = ((IPlayer client, Ped npc) =>
             {
-                OpenMenuLifeInvader(client);
+                OpenMenuWeazelNews(client);
             });
 
             base.Init();
         }
-        public void OpenMenuLifeInvader(IPlayer player)
+        public void OpenMenuWeazelNews(IPlayer player)
         {
             Menu menu = new Menu("Id_Weazel", "Weazel News", "Service d'annonce", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
             menu.ItemSelectCallback = LifeInvaderMenuCallBack;

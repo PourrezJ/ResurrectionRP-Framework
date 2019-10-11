@@ -92,10 +92,10 @@ namespace ResurrectionRP_Server.Society
                 // Blip
                 Blip = Entities.Blips.BlipsManager.CreateBlip(SocietyName, ServicePos, BlipColor,(int) BlipSprite, 1);
 
-                ServiceColshape = ColshapeManager.CreateCylinderColshape(ServicePos - new Vector3(0.0f, 0.0f, 1f), 1f, 2f);
+                ServiceColshape = ColshapeManager.CreateCylinderColshape(ServicePos - new Vector3(0.0f, 0.0f, 0.2f), 1f, 2f);
                 ServiceColshape.OnPlayerEnterColshape += OnPlayerEnterServiceColshape;
                 ServiceColshape.OnPlayerLeaveColshape += OnPlayerLeaveServiceColshape;
-                Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, ServicePos - new Vector3(0.0f, 0.0f, 1f), new Vector3(1, 1f, 1f), Color.FromArgb(128, 255, 255, 255));
+                Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, ServicePos - new Vector3(0.0f, 0.0f, 0.2f), new Vector3(1, 1f, 1f), Color.FromArgb(128, 255, 255, 255));
             }
 
             if (Parking != null)

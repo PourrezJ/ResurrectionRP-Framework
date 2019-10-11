@@ -214,9 +214,8 @@ namespace ResurrectionRP_Server
             await Task.CompletedTask;
         }
 
-        public async static Task PlaySoundFromEntity(this IPlayer client, IVehicle initiator, int id, string dict, string anim)
+        public async static void PlaySoundFromEntity(this IPlayer client, IVehicle initiator, int id, string dict, string anim)
         {
-            await Task.CompletedTask;
         }
 
         public static void PlaySoundFromEntity(this IPlayer client, IEntity initiator, int id, string dict, string anim)

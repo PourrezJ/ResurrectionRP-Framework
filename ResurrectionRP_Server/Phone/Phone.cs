@@ -115,7 +115,7 @@ namespace ResurrectionRP_Server.Phone
                 return;
 
             string contactName = GetNameForNumber(phoneNumber);
-            _client.SendNotification("Nouveau message de ~b~~h~" + (contactName ?? phoneNumber));
+            _client.SendNotification("Nouveau message de " + (contactName ?? phoneNumber));
 
             var receverList = _client.GetPlayersInRange(3f);
 
@@ -230,7 +230,6 @@ namespace ResurrectionRP_Server.Phone
         #endregion
 
         #region Gestion des contacts
-
         public bool TryAddNewContact(IPlayer client, String contactName, String contactNumber)
         {
             try
@@ -240,7 +239,8 @@ namespace ResurrectionRP_Server.Phone
                     AddNameToAddressBook(client, contactName, contactNumber);
                     return true;
                 }
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                 Alt.Server.LogError(ex.ToString());
             }

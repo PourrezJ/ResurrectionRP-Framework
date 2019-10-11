@@ -145,7 +145,7 @@ export class NetworkingEntityClient {
                     this.onStreamIn(entity);
                     break;
                 case 1:
-                   // game.deleteObject(this.EntityList[entity.id])
+                    //game.deleteObject(NetworkingEntityClient.EntityList[entity.id])
                     this.onStreamIn(entity);
                     break;
                 case 2:

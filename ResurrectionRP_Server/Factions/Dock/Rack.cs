@@ -46,7 +46,7 @@ namespace ResurrectionRP_Server.Factions
 
         public void Load(bool empty = false)
         {
-            if (GameMode.Instance.IsDebug)
+            if (GameMode.IsDebug)
                 Entities.Marker.CreateMarker(Entities.MarkerType.VerticalCylinder,RackPos ,new Vector3(2,2,1), Color.FromArgb(80, 255, 255, 255) );
             if (!empty && InventoryBox != null)
             {

@@ -24,19 +24,19 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Constructor
         public static void Init()
         {
-            AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
-            AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
-            AltAsync.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
+            Alt.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
+            Alt.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
+            Alt.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
 
-            AltAsync.OnClient("LockUnlockVehicle", LockUnlockVehicle);
-            AltAsync.OnClient("UpdateTrailer", UpdateTrailerState);
+            Alt.OnClient("LockUnlockVehicle", LockUnlockVehicle);
+            Alt.OnClient("UpdateTrailer", UpdateTrailerState);
 
             Utils.Utils.SetInterval(VehicleManagerLoop, 250);
         }
         #endregion
 
         #region Event handlers
-        private static Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
+        private static void OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
             PlayerHandler ph = player.GetPlayerHandler();
             VehicleHandler vh = vehicle.GetVehicleHandler();
@@ -50,11 +50,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 ph.UpdateFull();
                 player.EmitLocked("OnPlayerEnterVehicle", vehicle, Convert.ToInt32(seat), vh.Fuel, vh.FuelMax, vh.Milage, vh.FuelConsumption);
             }
-
-            return Task.CompletedTask;
         }
 
-        private static Task OnPlayerChangeVehicleSeat(IVehicle vehicle, IPlayer player, byte oldSeat, byte newSeat)
+        private static void OnPlayerChangeVehicleSeat(IVehicle vehicle, IPlayer player, byte oldSeat, byte newSeat)
         {
             PlayerHandler ph = player.GetPlayerHandler();
             VehicleHandler vh = vehicle.GetVehicleHandler();
@@ -64,47 +62,46 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 vh.LastDriver = ph.Identite.Name;
                 vh.UpdateInBackground();
             }
-
-            return Task.CompletedTask;
         }
 
-        public static Task UpdateTrailerState(IPlayer player, object[] args)
+        public static void UpdateTrailerState(IPlayer player, object[] args)
         {
             if (!player.Exists)
-                return Task.CompletedTask;
+                return;
 
             if (args[0] == null || args[1] == null)
-                return Task.CompletedTask;
+                return;
 
-            if (GameMode.Instance.IsDebug)
+            if (GameMode.IsDebug)
                 Alt.Server.LogInfo("VehicleManager | Update trailer state for " + player.GetPlayerHandler().PID + " to " + args[1] + " for " + ((IVehicle)(args[0])).NumberplateText);
 
-            VehicleHandler veh = ((IVehicle)args[0]).GetVehicleHandler();
+            VehicleHandler veh = ((IVehicle)args[0])?.GetVehicleHandler();
+
+            if (veh == null)
+                return;
 
             veh.hasTrailer = (bool)args[1];
 
             if (args[2] != null)
             {
                 veh.Trailer = (IEntity)args[2];
-                ((IVehicle)veh.Trailer).GetVehicleHandler().UpdateInBackground();
+                ((IVehicle)veh.Trailer)?.GetVehicleHandler().UpdateInBackground();
             }
             else
             {
-                ((IVehicle)veh.Trailer).GetVehicleHandler().UpdateInBackground();
+                ((IVehicle)veh.Trailer)?.GetVehicleHandler().UpdateInBackground();
                 veh.Trailer = null;
             }
-
-            return Task.CompletedTask;
         }
 
-        private static async Task LockUnlockVehicle(IPlayer player, object[] args)
+        private static void LockUnlockVehicle(IPlayer player, object[] args)
         {
-            if (GameMode.Instance.IsDebug)
+            if (GameMode.IsDebug)
                 Alt.Server.LogColored("~b~VehicleManager ~w~| " + player.GetSocialClub() + " is trying to lock/unlock a car");
 
             var vehicle = args[0] as IVehicle;
 
-            if (!vehicle.Exists)
+            if (vehicle != null && !vehicle.Exists)
                 return;
 
             VehicleHandler veh = vehicle.GetVehicleHandler();
@@ -121,17 +118,17 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     if (!recever.Exists)
                         continue;
 
-                    await recever.PlaySoundFromEntity(veh.Vehicle, 0, "5_SEC_WARNING", "HUD_MINI_GAME_SOUNDSET");
+                    recever.PlaySoundFromEntity(veh.Vehicle, 0, "5_SEC_WARNING", "HUD_MINI_GAME_SOUNDSET");
                 }
 
                 veh.UpdateInBackground();
             }
         }
 
-        private static Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
+        private static void OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
             if (!player.Exists || !vehicle.Exists)
-                return Task.CompletedTask;
+                return;
 
             VehicleHandler vh = vehicle.GetVehicleHandler();
             PlayerHandler ph = player.GetPlayerHandler();
@@ -144,8 +141,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             if (vh != null)
                 vh.UpdateInBackground();
-
-            return Task.CompletedTask;
         }
         #endregion
 

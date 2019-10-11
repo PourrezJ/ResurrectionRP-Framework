@@ -423,7 +423,7 @@ namespace ResurrectionRP_Server.Models
                     if (veh.IsParked)
                         return;
 
-                    if (GameMode.Instance.IsDebug)
+                    if (GameMode.IsDebug)
                         Alt.Server.LogColored($"~b~Parking ~w~| New vehicle in parking id {ID}");
 
                     veh.EngineOn = false;

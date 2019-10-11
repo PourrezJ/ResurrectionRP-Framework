@@ -51,7 +51,7 @@ namespace ResurrectionRP_Server.Models
 
         protected bool AddConcernedPlayer(IPlayer player)
         {
-            if (GameMode.Instance.IsDebug)
+            if (GameMode.IsDebug)
                 Alt.Server.LogInfo("EmergencyCall | Add player into concernedPlayers " + player.GetPlayerHandler()?.PID);
 
             if (!player.Exists)
@@ -70,7 +70,7 @@ namespace ResurrectionRP_Server.Models
 
         protected bool RemoveConcernedPlayer(IPlayer player)
         {
-            if (GameMode.Instance.IsDebug)
+            if (GameMode.IsDebug)
                 Alt.Server.LogInfo("EmergencyCall | Remove player into concernedPlayers " + player.GetPlayerHandler()?.PID);
 
             if (!player.Exists)

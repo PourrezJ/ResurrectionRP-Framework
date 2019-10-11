@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Jobs
         {
             AltAsync.OnClient("Jobs_Dustman_Depot", OnDepot);
             DustManClient.SendNotificationSuccess($"Vous devez vous rendre dans la zone de ~g~{Zone.NameZone}~w~.");
-            if (GameMode.Instance.IsDebug)
+            if (GameMode.IsDebug)
             DustManClient.SetWaypoint(Zone.ZonePosition, true);
             await DustManClient.EmitAsync("Jobs_Dustman", JsonConvert.SerializeObject(Zone.ZonePosition), JsonConvert.SerializeObject(Zone.TrashList));
         }

@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server
         public static bool IsLinux { get; private set; }
 
         [BsonIgnore]
-        public bool IsDebug { get; private set; } = true;
+        public static bool IsDebug { get; private set; } = true;
 
         [BsonIgnore]
         public bool ServerLoaded = false;

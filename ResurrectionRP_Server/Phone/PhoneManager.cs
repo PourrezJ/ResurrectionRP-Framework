@@ -44,7 +44,7 @@ namespace ResurrectionRP_Server.Phone
 
                 if (_ClientPhoneMenu.TryAdd(client, phone))
                 {
-                    phone.props = Entities.Objects.WorldObject.CreateObject("prop_npc_phone_02", client.Position, new Vector3(), true);
+                    phone.props = Entities.Objects.WorldObject.CreateObject("prop_npc_phone_02", client.Position, new Vector3(), false, false);
                     phone.props.SetAttachToEntity(client, "PH_L_Hand", new AltV.Net.Data.Position(), new AltV.Net.Data.Rotation());
 
                      if (!phone.props.Exists)
@@ -189,7 +189,7 @@ namespace ResurrectionRP_Server.Phone
                     break;
 
                 case "ClosePhone":
-                    PhoneManager.ClosePhone(client);
+                    ClosePhone(client);
                     break;
 
                 default:
@@ -206,8 +206,11 @@ namespace ResurrectionRP_Server.Phone
 
                 Utils.Utils.Delay(750, () =>
                 {
-                    if (value.props.Exists)
-                        value.props.Destroy();
+                    AltAsync.Do(() =>
+                    {
+                        if (value.props.Exists)
+                            value.props.Destroy();
+                    });
                 });
             }
         }

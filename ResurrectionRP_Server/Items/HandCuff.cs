@@ -1,28 +1,31 @@
 ﻿using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Models;
-using System.Threading.Tasks;
+using ResurrectionRP_Server.Models.InventoryData;
 
 namespace ResurrectionRP_Server.Items
 {
     class HandCuff : Item
     {
-        public HandCuff(Models.InventoryData.ItemID id, string name, string description, double weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, int itemPrice = 0, string type = "handcuff", string icon = "unknown-item", string classes = "basic") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
+        public HandCuff(ItemID id, string name, string description, double weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, int itemPrice = 0, string type = "handcuff", string icon = "unknown-item", string classes = "basic") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
         {
         }
 
-        public override Task Give(IPlayer sender, IPlayer recever, int quantite)
+        public override void Use(IPlayer Client, string inventoryType, int slot)
         {
-            return base.Give(sender, recever, quantite);
-        }
+            if (id == ItemID.Serflex || name == "Serflex")
+            {
+                var ph = Client.GetPlayerHandler();
 
-        public override Task OnPickup(IPlayer client, ResuPickup pickup)
-        {
-            return base.OnPickup(client, pickup);
-        }
+                if (ph == null)
+                    return;
 
-        public override void OnPlayerGetItem(IPlayer player)
-        {
-            base.OnPlayerGetItem(player);
+                if (inventoryType == Utils.Enums.InventoryTypes.Pocket)
+                    ph.PocketInventory?.Delete(slot, 1);
+                else if (inventoryType == Utils.Enums.InventoryTypes.Bag)
+                    ph.BagInventory?.Delete(slot, 1);
+            }
+
+            base.Use(Client, inventoryType, slot);
         }
     }
 }

@@ -203,7 +203,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             await player.SetDimensionAsync(Dimension++);
 
-            if (!GameMode.Instance.IsDebug)
+            if (!GameMode.IsDebug)
             {
                 try
                 {

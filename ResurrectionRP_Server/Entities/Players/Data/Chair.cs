@@ -133,7 +133,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
             {
                 if (hash == AltV.Net.Alt.Hash(chairdic.Key))
                 {
-                    if (GameMode.Instance.IsDebug)
+                    if (GameMode.IsDebug)
                         AltV.Net.Alt.Server.LogInfo(chairdic.Key);
                     return chairdic.Value;
                 }

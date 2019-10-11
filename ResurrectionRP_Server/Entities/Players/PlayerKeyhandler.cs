@@ -198,7 +198,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             rackList.Add(FactionManager.Dock.Importation);
                             rackList.Add(FactionManager.Dock.Quai);
 
-                            var rack = rackList.Find(p => p.InventoryBox.Obj.ID == streamedID);
+                            var rack = rackList.Find(p => p?.InventoryBox.Obj.ID == streamedID);
                             if (rack == null)
                                 return;
 

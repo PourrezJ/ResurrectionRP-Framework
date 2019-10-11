@@ -59,9 +59,6 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public DrivingSchool.DrivingSchoolManager DrivingSchoolManager { get; private set; }
 
-        [BsonIgnore]
-        public LifeInvader LifeInvader { get; private set; }
-
         public static bool ServerLock;
 
         public Time Time { get; set; }
@@ -144,7 +141,6 @@ namespace ResurrectionRP_Server
 
             Economy = new Economy.Economy();
             //DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
-            LifeInvader = new LifeInvader();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
             if (Time == null)
@@ -177,7 +173,6 @@ namespace ResurrectionRP_Server
             Loader.VehicleRentLoaders.LoadAllVehicleRent();
             FarmManager.InitAll();
             Weather.WeatherManager.InitWeather();
-            LifeInvader.Load();
             Phone.PhoneManager.Init();
             Jobs.JobsManager.Init();
 

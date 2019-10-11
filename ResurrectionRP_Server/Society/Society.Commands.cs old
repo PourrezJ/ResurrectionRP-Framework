@@ -9,6 +9,9 @@ using AltV.Net.Elements.Entities;
 
 namespace ResurrectionRP_Server.Society
 {
+
+
+
 /*    public partial class SocietyCommands : ICommandHandler TODO
     {
         [AlternateLife.RageMP.Net.Attributes.Command("addparkingsociety")]

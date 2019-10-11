@@ -1,49 +1,33 @@
-﻿using AltV.Net.Elements.Entities;
+﻿using System.Numerics;
+using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
-using ResurrectionRP_Server.Entities.Blips;
 using ResurrectionRP_Server.Entities.Peds;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils.Enums;
-using System.Numerics;
-using System.Threading.Tasks;
 
-namespace ResurrectionRP_Server.Services
+namespace ResurrectionRP_Server
 {
-    public class LifeInvader
+    public class Weazel : Society.Society
     {
-        #region Public fields
-        public static LifeInvader Instance
+        public int AnnoncePrice = 500;
+
+        public Weazel(string societyName, Vector3 servicePos, uint blipSprite, int blipColor, string owner = null, Inventory.Inventory inventory = null, Parking parking = null) : base(societyName, servicePos, blipSprite, blipColor, owner, inventory, parking)
         {
-            get
-            {
-                if (_instance == null) _instance = new LifeInvader();
-                return _instance;
-            }
-            set => _instance = value;
         }
 
-        public int AnnoncePrice = 1000;
-        #endregion
-
-        #region Private fields
-        private static LifeInvader _instance;
-        private readonly Location Location = new Location(new Vector3(-1081.521f, -244.8004f, 37.76327f), new Vector3(0, 0, 199.0072f));
-        #endregion
-
-        #region Methods
-        public void Load()
+        public override void Init()
         {
-            BlipsManager.CreateBlip("Life Invader", Location.Pos, BlipColor.Red, 77);
-            Ped vendor = Ped.CreateNPC(PedModel.Lifeinvad01, Location.Pos, Location.Rot.Z);
+            Ped vendor = Ped.CreateNPC(PedModel.Lifeinvad01, new Vector3(-591.5868f, -933.32306f, 23.871094f), 0);
             vendor.NpcInteractCallBack = ((IPlayer client, Ped npc) =>
             {
                 OpenMenuLifeInvader(client);
             });
-        }
 
+            base.Init();
+        }
         public void OpenMenuLifeInvader(IPlayer player)
         {
-            Menu menu = new Menu("Id_LifeInvader", "LifeInvader", "Service d'annonce", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+            Menu menu = new Menu("Id_Weazel", "Weazel News", "Service d'annonce", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
             menu.ItemSelectCallback = LifeInvaderMenuCallBack;
 
             MenuItem x1 = new MenuItem("Créer une annonce", "Créer une annonce ~r~99 caractères max!", "ID_AnnonceX1", true, rightLabel: $"${(AnnoncePrice + CalcPriceAnnonce(AnnoncePrice))}");
@@ -68,10 +52,11 @@ namespace ResurrectionRP_Server.Services
                     }
                     else
                     {
-                        if (client.GetPlayerHandler().HasBankMoney(AnnoncePrice + CalcPriceAnnonce(AnnoncePrice), "Message Life Invader"))
+                        if (client.GetPlayerHandler().HasBankMoney(AnnoncePrice + CalcPriceAnnonce(AnnoncePrice), "Message Weazel News"))
                         {
-                            Utils.Utils.Delay(50000, () => { Utils.Utils.SendNotificationPicture(CharPicture.CHAR_LIFEINVADER, "Life Invander", "Message d'annonce:", message); });
+                            Utils.Utils.Delay(50000, () => Utils.Utils.SendNotificationPicture(CharPicture.CHAR_DEFAULT, "Weazel News", "Message d'annonce:", message));
                             client.SendNotification("Votre annonce va être diffusée.");
+                            BankAccount.AddMoney(AnnoncePrice);
                         }
                         else
                             client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte bancaire");
@@ -87,6 +72,5 @@ namespace ResurrectionRP_Server.Services
 
         public double CalcPriceAnnonce(double price)
             => Economy.Economy.CalculPriceTaxe(price, GameMode.Instance.Economy.Taxe_Market);
-        #endregion
     }
 }

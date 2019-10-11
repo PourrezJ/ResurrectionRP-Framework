@@ -1,5 +1,7 @@
 ﻿using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Models.InventoryData;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Items
@@ -10,19 +12,22 @@ namespace ResurrectionRP_Server.Items
         {
         }
 
-        public override Task Give(IPlayer sender, IPlayer recever, int quantite)
+        public override void Use(IPlayer Client, string inventoryType, int slot)
         {
-            return base.Give(sender, recever, quantite);
-        }
+            if (this.id == ItemID.Serflex || this.name == "Serflex")
+            {
+                var ph = Client.GetPlayerHandler();
 
-        public override Task OnPickup(IPlayer client, ResuPickup pickup)
-        {
-            return base.OnPickup(client, pickup);
-        }
+                if (ph == null)
+                    return;
 
-        public override void OnPlayerGetItem(IPlayer player)
-        {
-            base.OnPlayerGetItem(player);
+                if (inventoryType == Utils.Enums.InventoryTypes.Pocket)
+                    ph.PocketInventory?.Delete(slot, 1);
+                else if (inventoryType == Utils.Enums.InventoryTypes.Bag)
+                    ph.BagInventory?.Delete(slot, 1);
+            }
+
+            base.Use(Client, inventoryType, slot);
         }
     }
 }

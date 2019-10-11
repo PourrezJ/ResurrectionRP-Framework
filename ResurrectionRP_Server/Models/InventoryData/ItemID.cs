@@ -151,6 +151,7 @@ namespace ResurrectionRP_Server.Models.InventoryData
         RhumLiquide,
         BouquetFleur,
         Bague,
-        LockPick
+        LockPick,
+        Serflex
     }
 }

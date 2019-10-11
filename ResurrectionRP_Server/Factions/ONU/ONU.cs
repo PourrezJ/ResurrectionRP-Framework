@@ -60,7 +60,7 @@ namespace ResurrectionRP_Server.Factions
             ItemShop.Add(new FactionShopItem(Inventory.Inventory.ItemByID(ItemID.KitSoin), 0, 0));
             ItemShop.Add(new FactionShopItem(Inventory.Inventory.ItemByID(ItemID.Defibrilateur), 0, 0));
             ItemShop.Add(new FactionShopItem(Inventory.Inventory.ItemByID(ItemID.Donuts), 2, 0));
-            ItemShop.Add(new FactionShopItem(Inventory.Inventory.ItemByID(ItemID.Cafe), 2, 0));
+            ItemShop.Add(new FactionShopItem(Inventory.Inventory.ItemByID(ItemID.Coffee), 2, 0));
             ItemShop.Add(new FactionShopItem(new RadioItem(ItemID.Radio, "Talky", "", 1, true, true, false, true, true, 2000, icon: "talky"), 500, 0));
             ItemShop.Add(new FactionShopItem(new BagItem(ItemID.Bag, "Backpack", "", new ClothData(45, 0, 0), 40, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"), 500, 0));
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Taser, "Taser", "", 3, hash: WeaponHash.StunGun), 30000, 0));

@@ -12,6 +12,7 @@ using PhoneSettings = ResurrectionRP_Server.Phone.Data.PhoneSettings;
 using Conversation = ResurrectionRP_Server.Phone.Data.Conversation;
 using ResurrectionRP_Server.Utils.Enums;
 using System.Collections.Concurrent;
+using System.Numerics;
 
 namespace ResurrectionRP_Server.Phone
 {
@@ -43,13 +44,15 @@ namespace ResurrectionRP_Server.Phone
 
                 if (_ClientPhoneMenu.TryAdd(client, phone))
                 {
-                    // phone.props = await ObjectHandlerManager.CreateObject(MP.Utility.Joaat("prop_npc_phone_02"), client.Position, client.Rotation);
-                    /*
-                     if (phone.props == null)
+                    phone.props = Entities.Objects.WorldObject.CreateObject("prop_npc_phone_02", client.Position, new Vector3(), true);
+                    phone.props.SetAttachToEntity(client, "PH_L_Hand", new AltV.Net.Data.Position(), new AltV.Net.Data.Rotation());
+
+                     if (!phone.props.Exists)
                          return false;
-     */
+     
 
                     client.PlayAnimation((client.IsInVehicle) ? "cellphone@in_car@ds" : (client.Model == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_read_base", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.Loop | AnimationFlags.SecondaryTask));
+                    phone.props.SetAttachToEntity(client, "PH_R_Hand", new Vector3(), new Vector3());
                     long newMessagesCount = GetNewMessagesOnConversationsCount(phone.PhoneNumber);
                     client.Emit("OpenPhone", newMessagesCount, JsonConvert.SerializeObject(phone.Settings), incomingCall, contactNumber, contactName);
                     //client.EmitLocked("ShowCursor", true);
@@ -198,7 +201,15 @@ namespace ResurrectionRP_Server.Phone
         public static void ClosePhone(IPlayer client)
         {
             if( _ClientPhoneMenu.TryRemove(client, out Phone value))
+            {
                 client.EmitLocked("ClosePhone");
+
+                Utils.Utils.Delay(750, () =>
+                {
+                    if (value.props.Exists)
+                        value.props.Destroy();
+                });
+            }
         }
 
         #region Gestion des conversations (liste de messages) 

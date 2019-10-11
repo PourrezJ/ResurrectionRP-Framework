@@ -174,7 +174,7 @@ namespace ResurrectionRP_Server.Factions
             BlipColor = BlipColor.Yellow;
             BlipSprite = 356;
 
-            ItemShop.Add(new FactionShopItem(Inventory.Inventory.ItemByID(ItemID.Cafe), 0, 0));
+            ItemShop.Add(new FactionShopItem(Inventory.Inventory.ItemByID(ItemID.Coffee), 0, 0));
 
             base.Init();
 

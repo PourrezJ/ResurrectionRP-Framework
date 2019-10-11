@@ -42,8 +42,8 @@ namespace ResurrectionRP_Server.Items
                     new Eat(ItemID.HotDog, "HotDog", "Du pur chien chaud ...", 1 , true, true, true, food:15, icon:"hotdog", isDockable:true, itemPrice:12),
                     new Eat(ItemID.Chocolat, "Chocolat", "Belge fourré …", 1 , true, true, true, food:15, icon:"chocolate", isDockable:true, itemPrice:12),
                     new Eat(ItemID.Tacos , "Tacos ", "Sans gluten", 1 , true, true, true, food:30, icon:"tacos", isDockable:true, itemPrice:12),
-                    new Eat(ItemID.Cafe, "Un Café", "Du café soluble dégueulasse.", 1 , true, true,true, drink:15, icon:"coffee", isDockable:true, itemPrice:12),
-                    new Eat(ItemID.Eau, "Bouteille Eau", "Eau potable?.", 1 , true, true, true, drink:20, icon:"water", isDockable: true, itemPrice: 20),
+                    new Eat(ItemID.Coffee, "Un Café", "Du café soluble dégueulasse.", 1 , true, true,true, drink:15, icon:"coffee", isDockable:true, itemPrice:12),
+                    new Eat(ItemID.Water, "Bouteille Eau", "Eau potable?.", 1 , true, true, true, drink:20, icon:"water", isDockable: true, itemPrice: 20),
                     new Eat(ItemID.Sprunk, "Canette de Sprunk", "Peut-être radioactif...", 1 , true, true, true, drink:15, icon:"sprunk", isDockable: true, itemPrice: 12),
                     new Eat(ItemID.Ramen, "Ramen", "Des nouilles chinoise en gros ...", 1 , true, true, true, food:15),
                     new Eat(ItemID.Grappa, "Grappa", "Je suis rital et je le reste ... ", 1 , true, true, true, drink:20),
@@ -92,9 +92,9 @@ namespace ResurrectionRP_Server.Items
                     new Alcohol(ItemID.Tequila, "Tequila", "AIE CARAMBA", 1 , true, true, true,icon:"tequila", drink:20, timer:90000, isDockable: true, itemPrice: 196, alcohol:0.5),
                     new Alcohol(ItemID.Vodka, "Vodka", "100% pur patate!", 1 , true, true, true,icon:"vodka", drink:20, timer:120000, isDockable: true, itemPrice: 294, alcohol:0.5),
                     new Alcohol(ItemID.Mirabelle , "Mirabelle", "Peux servir d'antiseptique ou de carburant.", 1 , true, true, true, drink:30, timer:120000, alcohol:1),
-                    new Alcohol(ItemID.Vin, "Une Bouteille de Vin", "Une bouteille de Vin.", 1, true, true,true, icon:"vin"),
-                    new Alcohol(ItemID.Vin, "Martini", "Une bouteille de Vin.", 1, true, true,true, icon:"whisky"),
-                    new Alcohol(ItemID.Vin, "Alcool de serpent", "", 1, true, true,true, icon:"vin", isDockable: true, itemPrice: 98, alcohol:1),
+                    new Alcohol(ItemID.Vine, "Une Bouteille de Vin", "Une bouteille de Vin.", 1, true, true,true, icon:"vin"),
+                    new Alcohol(ItemID.Vine, "Martini", "Une bouteille de Vin.", 1, true, true,true, icon:"whisky"),
+                    new Alcohol(ItemID.Vine, "Alcool de serpent", "", 1, true, true,true, icon:"vin", isDockable: true, itemPrice: 98, alcohol:1),
                     new Alcohol(ItemID.Rhum , "Rhum", "Tous les chemins mènent au Rhum", 1 , true, true, true, drink:20, timer:120000, isDockable: false, itemPrice: 140, icon: "rum", alcohol:0.5),
 
 

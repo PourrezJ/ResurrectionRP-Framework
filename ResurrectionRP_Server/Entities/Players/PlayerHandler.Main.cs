@@ -187,7 +187,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (firstspawn)
                 {
                     PocketInventory.AddItem(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.JambonBeurre), 1);
-                    PocketInventory.AddItem(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.Eau), 1);
+                    PocketInventory.AddItem(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.Water), 1);
 
                     OutfitInventory.Slots[11] = new ItemStack(new ClothItem(Models.InventoryData.ItemID.Shoes, "Chaussure", "", new ClothData((Character.Gender == 0) ? 1 : 3, 0, 0), 0, true, false, false, true, false, 0, classes: "shoes", icon: "shoes"), 1, 11);
                     OutfitInventory.Slots[9] = new ItemStack(new ClothItem(Models.InventoryData.ItemID.Pant, "Pantalon", "", new ClothData(0, 0, 0), 0, true, false, false, true, false, 0, classes: "pants", icon: "pants"), 1, 9);

@@ -2,6 +2,7 @@
 import * as game from 'natives';
 import * as utils from '../Utils/Utils';
 import * as textlabel from './Entities/TextLabel';
+import * as enums from '../Utils/Enums/Enums';
 import Ped from './Entities/Ped';
 
 export class NetworkingEntityClient {
@@ -206,6 +207,7 @@ export class NetworkingEntityClient {
                 );
                 break;
             case 1:
+                alt.log("loading object");
                 await utils.loadModelAsync(game.getHashKey(entity.data.model.stringValue));
                 let object = await this.streamObject(
                     entity.id,
@@ -269,6 +271,8 @@ export class NetworkingEntityClient {
         else
             entityId = NetworkingEntityClient.EntityList[id];
 
+        alt.log(`streamObject: ${entityId} ${model} ${x} ${y} ${z}`);
+
         game.freezeEntityPosition(entityId, freeze);
         NetworkingEntityClient.EntityList[id] = entityId;
         return entityId;
@@ -276,6 +280,26 @@ export class NetworkingEntityClient {
 
     private objectAttach = (entityId: number, attach: any) => {
         switch (attach.Type) {
+            case 0:
+                var player: alt.Player = alt.Player.local.id != attach.RemoteID ? alt.Player.all.find(p => p.id == attach.RemoteID) : alt.Player.local;
+
+                let boneID = 0;
+
+                switch (attach.Bone) {
+                    case "PH_L_Hand":
+                        boneID = enums.Bone.PH_L_Hand;
+                        break;
+
+                    case "PH_R_Hand":
+                        boneID = enums.Bone.PH_R_Hand;
+                        break;
+                }
+
+                var bone = game.getPedBoneIndex(player.scriptID, boneID);
+                alt.log(`attach: ${player.scriptID} ${enums.Bone[attach.Bone]} ${ NetworkingEntityClient.EntityList[entityId] }`)
+                game.attachEntityToEntity(NetworkingEntityClient.EntityList[entityId], player.scriptID, bone, attach.PositionOffset.X, attach.PositionOffset.Y, attach.PositionOffset.Z, attach.RotationOffset.X, attach.RotationOffset.Y, attach.RotationOffset.Z, true, false, false, false, 0, true);
+                break;
+
             case 5:
                 var veh: alt.Vehicle = alt.Vehicle.all.find(p => p.id == attach.RemoteID);
 

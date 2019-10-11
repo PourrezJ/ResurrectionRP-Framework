@@ -60,7 +60,7 @@ namespace ResurrectionRP_Server.Entities.Objects
             Datas = new ConcurrentDictionary<string, object>();
         }
 
-        public bool SetAttachToEntity(IVehicle target, string bone, Position positionOffset, Rotation rotationOffset)
+        public bool SetAttachToEntity(IEntity target, string bone, Position positionOffset, Rotation rotationOffset)
         {
             AttachToEntity(target, this, bone, positionOffset, rotationOffset);
             return true;
@@ -75,7 +75,8 @@ namespace ResurrectionRP_Server.Entities.Objects
 
         public void Destroy()
         {
-            DestroyObject(ID);
+            if (Exists)
+                Streamer.Streamer.DeleteEntityObject(this);
         }
 
         public bool SetData(string key, object data)
@@ -148,16 +149,26 @@ namespace ResurrectionRP_Server.Entities.Objects
             Streamer.Streamer.UpdateEntityObject(target);
         }
 
-        public static void AttachToEntity(IVehicle vehicle, WorldObject target, string bone, Vector3 positionOffset, Vector3 rotationOffset)
+        public static void AttachToEntity(IEntity entity, WorldObject target, string bone, Vector3 positionOffset, Vector3 rotationOffset)
         {
             var attach = new Models.Attachment()
             {
                 Bone = bone,
                 PositionOffset = positionOffset,
                 RotationOffset = rotationOffset,
-                RemoteID = vehicle.Id,
-                Type = EntityType.Vehicle
+                RemoteID = entity.Id,
             };
+
+            switch (entity.Type)
+            {
+                case BaseObjectType.Vehicle:
+                    attach.Type = EntityType.Vehicle;
+                    break;
+
+                case BaseObjectType.Player:
+                    attach.Type = EntityType.Ped;
+                    break;
+            }
 
             target.Attachment = attach;
             Streamer.Streamer.UpdateEntityObject(target);
@@ -167,11 +178,6 @@ namespace ResurrectionRP_Server.Entities.Objects
         {
             entity.Attachment = null;
             Streamer.Streamer.UpdateEntityObject(entity);
-        }
-
-        public static void DestroyObject(int oid)
-        {
-            Streamer.Streamer.DeleteEntityObject(ListObject[oid]);
         }
     }
 }

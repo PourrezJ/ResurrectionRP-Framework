@@ -38,7 +38,7 @@ namespace ResurrectionRP_Server.Houses
                     house.UpdateInBackground();
                     await Task.Delay(100);
                 }
-            }, (int)TimeSpan.FromMinutes(1).TotalMilliseconds);
+            }, (int)TimeSpan.FromMinutes(10).TotalMilliseconds);
         }
         #endregion
 

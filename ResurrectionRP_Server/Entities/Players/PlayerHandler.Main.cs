@@ -266,6 +266,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     Streamer.Streamer.LoadStreamPlayer(client);
                     Door.OnPlayerConnected(client);
+                    Houses.HouseManager.OnPlayerConnected(client);
                     Illegal.IllegalManager.OnPlayerConnected(client);
                     Factions.FactionManager.OnPlayerConnected(client);
                 });

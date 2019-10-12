@@ -29,7 +29,6 @@ namespace ResurrectionRP_Server.Houses
         #region Init
         public static void Init()
         {
-            Alt.OnPlayerConnect += OnPlayerConnect;
             Alt.OnPlayerDisconnect += OnPlayerDisconnect;
             Alt.OnPlayerDead += OnPlayerDead;
 
@@ -49,7 +48,7 @@ namespace ResurrectionRP_Server.Houses
 
         #region Event handlers
 
-        public static void OnPlayerConnect(IPlayer player, string reason)
+        public static void OnPlayerConnected(IPlayer player)
         {
             string social = player.GetSocialClub();
 

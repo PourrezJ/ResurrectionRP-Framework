@@ -160,7 +160,7 @@ namespace ResurrectionRP_Server
                 //await JobsManager.Init();
                 await HouseManager.LoadAllHouses();
                 
-                Alt.Server.LogColored("~g~Serveur charger!");
+                Alt.Server.LogColored("~g~Serveur chargé!");
                 ServerLoaded = true;
             });
 
@@ -183,7 +183,6 @@ namespace ResurrectionRP_Server
             Utils.Utils.SetInterval(async () => await Restart(), 1000);
             
             Utils.Utils.SetInterval(() => Time.Update(), 1000);           
-            Utils.Utils.SetInterval(() => VehiclesManager.UpdateVehiclesMilageAndFuel(), 1000);
 
             Chat.Initialize();
 

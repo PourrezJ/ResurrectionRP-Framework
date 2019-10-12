@@ -53,12 +53,12 @@ namespace ResurrectionRP_Server.Houses
             }
         }
 
-        public async Task Addparkinghouse(IPlayer client, string[] arguments = null)
+        public void Addparkinghouse(IPlayer client, string[] arguments = null)
         {
             try
             {
-                var position = await client.GetPositionAsync();
-                var rotation = await client.GetRotationAsync();
+                var position = client.Position;
+                var rotation = client.Rotation;
 
                 if (HouseManager.AddParkingList[client] != null)
                 {
@@ -69,7 +69,7 @@ namespace ResurrectionRP_Server.Houses
                         if (house.Parking != null)
                         {
                             IColShape parkingColshape = Alt.CreateColShapeCylinder(HouseManager.AddParkingList.GetValueOrDefault(client).Parking.Spawn1.Pos, 3f, 1f);
-                            await parkingColshape.SetMetaDataAsync("House_Parking", house.ID);
+                            parkingColshape.SetMetaData("House_Parking", house.ID);
 
                             //await MP.Markers.NewAsync(MarkerType.VerticalCylinder, HouseManager.AddParkingList.GetValueOrDefault(client).Parking.Spawn1.Pos - new Vector3(0.0f, 0.0f, 3f), new Vector3(), new Vector3(), 3f, Color.FromArgb(128, 255, 255, 255), true);
                             Marker.CreateMarker(MarkerType.VerticalCylinder, HouseManager.AddParkingList.GetValueOrDefault(client).Parking.Spawn1.Pos - new Vector3(0.0f, 0.0f, 3f), new Vector3(1,1,1));

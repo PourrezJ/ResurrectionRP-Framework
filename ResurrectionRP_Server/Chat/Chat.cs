@@ -11,30 +11,34 @@ namespace ResurrectionRP_Server
     static class Chat
     {
         #region Delegates
-        public delegate Task CmdCallback(IPlayer player, string[] args = null);
+        public delegate void CmdCallback(IPlayer player, string[] args = null);
+        public delegate Task CmdCallbackAsync(IPlayer player, string[] args = null);
         #endregion
 
         #region Static fields
         static ConcurrentDictionary<string, CmdCallback> _cmdHandlers = new ConcurrentDictionary<string, CmdCallback>();
+        static ConcurrentDictionary<string, CmdCallbackAsync> _cmdAsyncHandlers = new ConcurrentDictionary<string, CmdCallbackAsync>();
         #endregion
 
         #region Client events
         public static void Initialize()
         {
-            AltAsync.OnClient("chatmessage", OnChatMessage);
+            Alt.OnClient("chatmessage", OnChatMessage);
         }
         #endregion
 
         #region Private static methods
         private static void InvokeCmd(IPlayer player, string cmd, string[] args)
         {
-            if (!_cmdHandlers.ContainsKey(cmd))
-                Send(player, $"{{FF0000}} Unknown command /{cmd}");
-            else
+            if (_cmdHandlers.ContainsKey(cmd))
                 _cmdHandlers[cmd](player, args);
+            else if (_cmdAsyncHandlers.ContainsKey(cmd))
+                Task.Run(async () => { await _cmdAsyncHandlers[cmd](player, args); });
+            else
+                Send(player, $"{{FF0000}} Unknown command /{cmd}");
         }
 
-        private static Task OnChatMessage(IPlayer player, object[] args)
+        private static void OnChatMessage(IPlayer player, object[] args)
         {
             string msg = (string)args[0];
 
@@ -45,7 +49,6 @@ namespace ResurrectionRP_Server
                 if (msg.Length > 0)
                 {
                     Alt.Log($"[Chat:cmd] {player.Name}: /{msg}");
-                    string[] arguments = msg.Split(' ');
                     int cmdEnd = msg.IndexOf(' ');
 
                     if (cmdEnd == -1)
@@ -58,7 +61,7 @@ namespace ResurrectionRP_Server
                         InvokeCmd(player, cmd, null);
                     else
                     {
-                        arguments = msg.Split(' ');
+                        string[] arguments = msg.Split(' ');
                         InvokeCmd(player, cmd, arguments);
                     }
                 }
@@ -68,11 +71,10 @@ namespace ResurrectionRP_Server
                 msg = msg.Trim();
 
                 if (msg.Length == 0)
-                    return Task.CompletedTask;
+                    return;
 
                 Alt.Log($"[Chat:msg] {player.Name}: {msg}");
             }
-            return Task.CompletedTask;
         }
         #endregion
 
@@ -80,6 +82,17 @@ namespace ResurrectionRP_Server
         public static void Broadcast(string msg)
         {
             Alt.EmitAllClients("ChatMessage", msg);
+        }
+
+        public static bool RegisterCmd(string cmd, CmdCallbackAsync callback)
+        {
+            if (!_cmdAsyncHandlers.TryAdd(cmd, callback))
+            {
+                Alt.Log($"[Error]Failed to register command /{cmd}, already registered");
+                return false;
+            }
+
+            return true;
         }
 
         public static bool RegisterCmd(string cmd, CmdCallback callback)

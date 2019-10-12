@@ -88,6 +88,9 @@ namespace ResurrectionRP_Server.Factions
             = new ConcurrentDictionary<string, FactionPlayer>(); // all players into faction
 
         public BankAccount BankAccount { get; set; }
+
+        [BsonIgnore]
+        protected EmergencyCall EmCall = null;
         #endregion
 
         #region Constructor
@@ -247,13 +250,15 @@ namespace ResurrectionRP_Server.Factions
 
         public virtual Task OnPlayerServiceEnter(IPlayer client, int rang)
         {
-            EventHandlers.Events.InvokeEmergencyCallState(client, this.FactionName, true);
+            if (EmCall != null)
+                EventHandlers.Events.InvokeEmergencyCallState(client, FactionName,true);
             return Task.CompletedTask;
         }
 
         public virtual Task OnPlayerServiceQuit(IPlayer client, int rang)
         {
-            EventHandlers.Events.InvokeEmergencyCallState(client, this.FactionName, false);
+            if (EmCall != null)
+                EventHandlers.Events.InvokeEmergencyCallState(client, FactionName, false);
             return Task.CompletedTask;
         }
 
@@ -275,6 +280,7 @@ namespace ResurrectionRP_Server.Factions
                 if (!GameMode.PlayerList.Any(p => p.GetSocialClub() == socialClub))
                     ServicePlayerList.Remove(socialClub);
             });
+            OnPlayerServiceQuit(client, GetRangPlayer(client));
         }
 
         public virtual void OnPlayerEnterColShape(IColshape colshape, IPlayer player)

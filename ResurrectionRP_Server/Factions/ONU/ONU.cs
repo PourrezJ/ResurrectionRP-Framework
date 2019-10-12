@@ -19,8 +19,9 @@ namespace ResurrectionRP_Server.Factions
     {
         #region Static fields
         private static readonly double healprice = 1000;
-       
+
         #endregion
+
 
         #region Constructor
         public ONU(string FactionName, FactionType FactionType) : base(FactionName, FactionType)
@@ -70,9 +71,6 @@ namespace ResurrectionRP_Server.Factions
 
             ServicePlayerList = new List<string>();
 
-            Alt.OnClient("ONU_CallUrgenceMedic", ONU_CallUrgenceMedic);
-            Alt.OnClient("ONU_ImAccept", ONU_IAccept);
-            Alt.OnClient("ONU_BlesseRemoveBlip", ONU_BlesseRemoveBlip);
 
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pistol, "Pistol MK2", "", hash: WeaponHash.PistolMk2), 0, 1));
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Carabine, "Special Carbine MK2", "", hash: WeaponHash.SpecialCarbineMk2), 0, 3));
@@ -94,6 +92,7 @@ namespace ResurrectionRP_Server.Factions
             Entities.Peds.Ped npcmedic2 = Entities.Peds.Ped.CreateNPC(PedModel.Scrubs01SFY, new Vector3(-264.5344f, 6314.32f, 32.4364f), 320.3845f);
             npcmedic2.NpcInteractCallBack = OnNPCInteract;
 
+            EmCall = new EmergencyCall(FactionName);
             return base.Init();
         }
         #endregion

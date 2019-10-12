@@ -169,7 +169,8 @@ namespace ResurrectionRP_Server.Factions
             #endregion
 
             Alt.OnClient("CallUrgenceLSPD", CallUrgenceLSPD);
-            
+
+            EmCall = new EmergencyCall(FactionName);
 
             return base.Init();
         }
@@ -184,14 +185,14 @@ namespace ResurrectionRP_Server.Factions
                 OpenAccueilMenu(client);
         }
 
-        public override Task OnPlayerServiceEnter(IPlayer client, int rang)
+        public override async Task OnPlayerServiceEnter(IPlayer client, int rang)
         {
             // Accès aux docks
             /*            foreach (var teleport in GameMode.Instance.FactionManager.Dock.Teleports) TODO
                         {
                             teleport.Whileliste.Add( client.GetSocialClub());
                         };*/
-            return Task.CompletedTask;
+            await base.OnPlayerServiceEnter(client, rang);
         }
 
         public override async Task OnPlayerServiceQuit(IPlayer client, int rang)

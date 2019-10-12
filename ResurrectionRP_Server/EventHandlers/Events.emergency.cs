@@ -13,17 +13,18 @@ namespace ResurrectionRP_Server.EventHandlers
     {
 
         #region Delegates
-        public delegate Task EmergencyCallEmitAsync(IPlayer client, string factionName, Vector3 position, string reason);
-        public delegate Task EmergencyCallPlayerState(IPlayer client, string factionName, bool state);
-        public delegate void EmergencyCall(IPlayer client, string factionName, int call);
+        public delegate void EmergencyCallEmit(IPlayer client, string factionName, Vector3 position, string reason);
+        public delegate Task EmergencyCallPlayerState(IPlayer client, string FactionName,bool state);
+        public delegate void EmergencyCall(IPlayer client, int call);
+        public delegate void EmergencyCallMenu(IPlayer client);
         #endregion
 
         #region Public events 
-        public static event EmergencyCallEmitAsync OnPlayerEmitEmergencyCall;
+        public static event EmergencyCallEmit OnPlayerEmitEmergencyCall;
         public static event EmergencyCallPlayerState OnPlayerChangeStateEmergencyCall;
-        public static event EmergencyCall OnPlayerTakeEmergencyCall;
         public static event EmergencyCall OnPlayerReleaseEmergencyCall;
         public static event EmergencyCall OnPlayerRemoveEmergencyCall;
+        public static event EmergencyCallMenu OnPlayerMenuEmergencyCall;
         #endregion
 
 
@@ -41,20 +42,19 @@ namespace ResurrectionRP_Server.EventHandlers
          **/
         public static void InteractEmergencyCall(IPlayer client, object[] args)
         {
+            if (!client.Exists)
+                return;
             var reason = args[0];
             switch (reason)
             {
 
                 case "emit":
-                    OnPlayerEmitEmergencyCall.Invoke(client,  args[1].ToString(), client.Position.ConvertToVector3(), args[2].ToString());
+                    OnPlayerEmitEmergencyCall?.Invoke(client, args[1].ToString(), client.Position.ConvertToVector3(), args[2].ToString());
                     break;
 
-                case "take":
-                    OnPlayerTakeEmergencyCall?.Invoke(client, args[1].ToString(), (int)args[2]);
-                    break;
 
                 case "release":
-                    OnPlayerReleaseEmergencyCall?.Invoke(client, args[1].ToString(), (int)args[2]);
+                    OnPlayerReleaseEmergencyCall?.Invoke(client, int.Parse(args[1] + ""));
                     break;
 
                 case "state":
@@ -62,7 +62,11 @@ namespace ResurrectionRP_Server.EventHandlers
                     break;
 
                 case "remove":
-                    OnPlayerRemoveEmergencyCall?.Invoke(client, args[1].ToString(), (int)args[2]);
+                    OnPlayerRemoveEmergencyCall?.Invoke(client, int.Parse(args[1] + ""));
+                    break;
+
+                case "openMenu":
+                    OnPlayerMenuEmergencyCall?.Invoke(client);
                     break;
 
                 default:
@@ -71,8 +75,8 @@ namespace ResurrectionRP_Server.EventHandlers
             }
         }
 
-        public static void InvokeEmergencyCallState(IPlayer client, string factionName, bool state) =>
-            OnPlayerChangeStateEmergencyCall?.Invoke(client, factionName, state);
+        public static void InvokeEmergencyCallState(IPlayer client, string faction,bool state) =>
+            OnPlayerChangeStateEmergencyCall?.Invoke(client, faction,state);
 
 
     }

@@ -7,6 +7,7 @@ import * as Utils from '../Utils/Utils';
 import * as Globals from '../Utils/Globals';
 import * as Streamer from '../Streamer/NetworkingEntityClient';
 import Ragdoll from '../Ragdoll';
+import { EmergencyCall } from '../EmergencyCall';
 
 /*
  * POUR LE RAY CAST LES FLAGS
@@ -138,6 +139,9 @@ export class Interaction {
                         return;
                     ragdoll.start();
                     break;
+                case 89:
+                    if (EmergencyCall.IsAnyMissionAvailable || EmergencyCall.IsInMission)
+                        alt.emitServer("InteractEmergencyCall", "openMenu");
 
             }
         });

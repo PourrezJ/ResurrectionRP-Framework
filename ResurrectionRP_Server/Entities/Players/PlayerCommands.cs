@@ -71,44 +71,40 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 if (house.Owner == phWipe.PID)
                 {
-                    await house.SetOwner(string.Empty);
+                    house.SetOwner(string.Empty);
 
                     if (house.Parking != null)
                         house.Parking.ListVehicleStored = new List<ParkedCar>();
 
-                    await house.Save();
+                    house.UpdateInBackground();
                 }
             }
 
-            foreach (KeyValuePair<IVehicle, VehicleHandler> vehicle in VehiclesManager.VehicleHandlerList)
+            IEnumerable<VehicleHandler> vehicles = VehiclesManager.GetAllVehicles().ToArray();
+            
+            foreach (VehicleHandler vehicle in vehicles)
             {
-                if (vehicle.Value.OwnerID == phWipe.PID)
-                    await vehicle.Value.DeleteAsync(true);
-            }
+                if (vehicle.OwnerID != phWipe.PID)
+                    continue;
 
-            List<VehicleHandler> vehicleOwned = new List<VehicleHandler>();
-
-            foreach(var vh in VehiclesManager.GetAllVehicles())
-            {
-                if (vh.OwnerID == phWipe.PID)
-                    vehicleOwned.Add(vh);
-            }
-
-            foreach (Parking parking in Parking.ParkingList)
-            {
-                bool saveNeeded = false;
-
-                foreach (ParkedCar vehicle in parking.ListVehicleStored)
+                foreach (Parking parking in Parking.ParkingList)
                 {
-                    if (vehicleOwned.Exists(p=>p.Plate == vehicle.Plate))
+                    bool saveNeeded = false;
+
+                    foreach (ParkedCar parkedCar in parking.ListVehicleStored)
                     {
-                        parking.ListVehicleStored.Remove(vehicle);
-                        saveNeeded = true;
+                        if (parkedCar.Plate == vehicle.Plate)
+                        {
+                            parking.ListVehicleStored.Remove(parkedCar);
+                            saveNeeded = true;
+                        }
                     }
+
+                    if (saveNeeded)
+                        await parking.OnSaveNeeded();
                 }
 
-                if (saveNeeded)
-                    await parking.OnSaveNeeded.Invoke();
+                await vehicle.DeleteAsync(true);
             }
 
             foreach (var faction in FactionManager.FactionList)

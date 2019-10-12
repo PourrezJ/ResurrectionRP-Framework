@@ -167,6 +167,7 @@ namespace ResurrectionRP_Server.Factions
             for (int i = 0; i < FactionList.Count; i++)
             {
                 await FactionList[i].PayCheck();
+                await Task.Delay(50);
                 FactionList[i].UpdateInBackground();
             }
         }

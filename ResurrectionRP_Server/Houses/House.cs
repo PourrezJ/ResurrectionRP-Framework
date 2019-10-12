@@ -232,6 +232,7 @@ namespace ResurrectionRP_Server.Houses
         public void SetOwnerHandle(IPlayer player)
         {
             OwnerHandle = player;   
+
             if (player != null)
                 player.CreateBlip(411, Position, Name, 1, 69, 255, true);
         }

@@ -29,7 +29,9 @@ namespace ResurrectionRP_Server.Houses
         #region Init
         public static void Init()
         {
-            Alt.OnPlayerDead += Alt_OnPlayerDead;
+            Alt.OnPlayerConnect += OnPlayerConnect;
+            Alt.OnPlayerDisconnect += OnPlayerDisconnect;
+            Alt.OnPlayerDead += OnPlayerDead;
 
             for (int i = 0; i < HouseTypes.HouseTypeList.Count; i++)
                 Marker.CreateMarker(MarkerType.VerticalCylinder, HouseTypes.HouseTypeList[i].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), null, null);
@@ -42,6 +44,28 @@ namespace ResurrectionRP_Server.Houses
                     await Task.Delay(100);
                 }
             }, (int)TimeSpan.FromMinutes(10).TotalMilliseconds);
+        }
+        #endregion
+
+        #region Event handlers
+
+        public static void OnPlayerConnect(IPlayer player, string reason)
+        {
+            string social = player.GetSocialClub();
+
+            foreach (House house in Houses.Where(h => h.Owner == social))
+                house.SetOwnerHandle(player);
+        }
+
+        public static void OnPlayerDisconnect(IPlayer player, string reason)
+        {
+            RemovePlayerFromHouseList(player);
+        }
+
+        private static void OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
+        {
+            player.Dimension = GameMode.GlobalDimension;
+            RemovePlayerFromHouseList(player);
         }
         #endregion
 
@@ -80,8 +104,7 @@ namespace ResurrectionRP_Server.Houses
                 if (house == null)
                     return;
 
-                if (RemoveClientHouse(player))
-                    house.RemovePlayer(player, false);                
+                house.RemovePlayer(player, false);                
             }
         }
         #endregion
@@ -248,20 +271,6 @@ namespace ResurrectionRP_Server.Houses
                 default:
                     break;
             }
-        }
-
-        public static void OnPlayerConnected(IPlayer player)
-        {
-            var social = player.GetSocialClub();
-
-            foreach (House house in Houses.Where(h => h.Owner == social))
-                house.SetOwnerHandle(player);
-        }
-
-        private static void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
-        {
-            player.Dimension = GameMode.GlobalDimension;
-            RemovePlayerFromHouseList(player);
         }
 
         public static void House_Exit()

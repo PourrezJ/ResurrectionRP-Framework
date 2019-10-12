@@ -576,16 +576,17 @@ namespace ResurrectionRP_Server.Business
 
         private void OnCurrentItem(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
+            byte componentID = menu.GetData("componentID");
+
             try
             {
-                byte componentID = menu.GetData("componentID");
                 int drawable = menuItem.GetData("drawable");
                 int variation = menuItem.GetData("variation");
                 client.SetProp((PropSlot)componentID, new PropData(drawable, variation));
             }
             catch (Exception ex)
             {
-                Alt.Server.LogError("OnCurrentItem" + ex);
+                Alt.Server.LogError($"OnCurrentItem - componentID: {componentID} - {ex}");
             }
         }
         #endregion

@@ -25,13 +25,8 @@ namespace ResurrectionRP_Server.Illegal
         private Vector3 InventoryPos = new Vector3(1043.7627f, -3194.756f, -39.16992f);
         private Location InsideBat = new Location(new Vector3(1066.032f, -3183.42f, -39.1635f), new Vector3(0, 0, 85.58551f));
         private Timer Timer = new Timer(10000);
-        #endregion
 
-        #region Public Variables
-        public Location LabEnter { get; set; }
-        public bool AdvancedEquipement { get; set; } = false;
-
-        public WeedZone[] WeedZoneList = new WeedZone[9]
+        private WeedZone[] WeedZoneList = new WeedZone[9]
         {
             new WeedZone(0, StateZone.Stage0 , SeedType.Aucune, new Vector3(1053.894f, -3196.052f, -40.16129f)),
             new WeedZone(1, StateZone.Stage0 , SeedType.Aucune, new Vector3(1053.783f, -3189.879f, -40.16138f)),
@@ -43,6 +38,11 @@ namespace ResurrectionRP_Server.Illegal
             new WeedZone(7, StateZone.Stage0 , SeedType.Aucune, new Vector3(1057.831f, -3196.909f, -40.12994f)),
             new WeedZone(8, StateZone.Stage0 , SeedType.Aucune, new Vector3(1051.53f, -3201.792f, -40.11644f))
         };
+        #endregion
+
+        #region Public Variables
+        public Location LabEnter { get; set; }
+        public bool AdvancedEquipement { get; set; } = false;
 
         public List<Drying> InDryings { get; set; } = new List<Drying>();
         [BsonIgnore, JsonIgnore]
@@ -99,7 +99,7 @@ namespace ResurrectionRP_Server.Illegal
             {
                 weedzone.Textlabel = Streamer.Streamer.AddEntityTextLabel(LabelRefresh(weedzone), weedzone.Position + new Vector3(0, 0, 0.75f));
                 weedzone.Colshape = ColshapeManager.CreateCylinderColshape(weedzone.Position, 1f, 1f);
-                weedzone.Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, weedzone.Position, new Vector3(1, 1, 0.2f), Color.FromArgb(160, 0, 100, 0));
+                weedzone.Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, weedzone.Position, new Vector3(1, 1, 0.2f), Color.FromArgb(80, 0, 100, 0));
 
                 weedzone.OnGrowingChange += OnGrowingChange;
                 weedzone.OnGrowingClientEnter += OnGrowingClientEnter;

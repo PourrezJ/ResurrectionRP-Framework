@@ -282,17 +282,20 @@ namespace ResurrectionRP_Server.Factions
 
         private void PeinturePreview(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
-            int color = menuItem.GetData("Color");
+            int? color = menuItem.GetData("Color");
+
+            if (!color.HasValue)
+                return;
 
             if (VehicleInColorCabin == null)
                 return;
 
             if (menu.Id == "ID_First")
-                VehicleInColorCabin.PrimaryColor = (byte)color;
+                VehicleInColorCabin.PrimaryColor = (byte)color.Value;
             else if (menu.Id == "ID_Second")
-                VehicleInColorCabin.SecondaryColor = (byte)color;
+                VehicleInColorCabin.SecondaryColor = (byte)color.Value;
             else if (menu.Id == "ID_Pearl")
-                VehicleInColorCabin.PearlColor = (byte)color;
+                VehicleInColorCabin.PearlColor = (byte)color.Value;
         }
         #endregion
 

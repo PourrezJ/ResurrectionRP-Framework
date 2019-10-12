@@ -589,7 +589,7 @@ namespace ResurrectionRP_Server.Factions
 
                 if (menuItem == null)
                 {
-                    await OpenConcessMenu(client, type, menu.GetData("Faction_Location"), _factionName);
+                    OpenConcessMenu(client, type, menu.GetData("Faction_Location"), _factionName);
                     return;
                 }
 

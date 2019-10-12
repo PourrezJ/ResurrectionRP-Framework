@@ -94,15 +94,15 @@ namespace ResurrectionRP_Server.Factions
             return base.Init();
         }
 
-        public override Task OnPlayerPromote(IPlayer client, int rang)
+        public override void OnPlayerPromote(IPlayer client, int rang)
         {
             if (!teleport.Whileliste.Contains(client.GetSocialClub()))
                 teleport.Whileliste.Add(client.GetSocialClub());
 
-            return base.OnPlayerPromote(client, rang);
+            base.OnPlayerPromote(client, rang);
         }
 
-        public override async Task PlayerFactionAdded(IPlayer client)
+        public override void PlayerFactionAdded(IPlayer client)
         {
             var ph = client.GetPlayerHandler();
 
@@ -148,7 +148,7 @@ namespace ResurrectionRP_Server.Factions
                 FactionPlayerList[client.GetSocialClub()].Inventory.AddItem(cloth, 1);
             }
 
-            await base.PlayerFactionAdded(client);
+            base.PlayerFactionAdded(client);
         }
 
         public override XMenu InteractPlayerMenu(IPlayer client, IPlayer target, XMenu xmenu)

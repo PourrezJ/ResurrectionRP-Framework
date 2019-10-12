@@ -93,7 +93,7 @@ namespace ResurrectionRP_Server.Factions
                 if (rang.Rang > clientRank) continue;
 
                 var item = new XMenuItem(rang.RangName, "", "", XMenuItemIcons.CHECK);
-                item.OnMenuItemCallbackAsync = RankChange;
+                item.OnMenuItemCallback = RankChange;
                 item.SetData("Rang", rang);
                 menu.Add(item);
             }
@@ -148,11 +148,11 @@ namespace ResurrectionRP_Server.Factions
             FactionRang rang = menuItem.GetData("Rang");
 
             AcceptMenu accept = AcceptMenu.OpenMenu(_target, $"{FactionName}", $"Rejoindre la faction {FactionName} rang {rang.RangName}?");
-            accept.AcceptMenuCallBack = async (IPlayer c, bool reponse) =>
+            accept.AcceptMenuCallBack = (IPlayer c, bool reponse) =>
             {
                 if (reponse)
                 {
-                    if (await TryAddIntoFaction(_target, rang.Rang))
+                    if (TryAddIntoFaction(_target, rang.Rang))
                     {
                         c.SendNotificationSuccess($"Vous faites désormais partie de la faction {FactionName} au rang {rang.RangName}.");
                         client.SendNotificationSuccess($"La personne fait dorénavant partie de {FactionName} au rang {rang.RangName}.");
@@ -160,22 +160,24 @@ namespace ResurrectionRP_Server.Factions
                 }
                 else
                     client.SendNotificationError($"La personne ne souhaite pas rejoindre {FactionName}.");
+
+                return Task.CompletedTask;
             };
         }
 
-        private async Task RankChange(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void RankChange(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             IPlayer _target = menu.GetData("Player");
-            if (_target == null) return;
+
+            if (_target == null)
+                return;
+
             FactionRang rang = menuItem.GetData("Rang");
             var social =  _target.GetSocialClub();
-
             FactionPlayerList.GetOrAdd(social, new FactionPlayer(social, rang.Rang));
-
             int rangActuel = FactionPlayerList[social].Rang;
-
             FactionPlayerList[social].Rang = rang.Rang;
-            await OnPlayerPromote(_target, itemIndex - 1);
+            OnPlayerPromote(_target, itemIndex - 1);
             _target.SendNotification($"Vous êtes désormais {(rang.Rang >= rangActuel ? "~g~promu~w~" : "~r~rétrogradé~w~")} au rang de {rang.RangName}");
             client.SendNotificationSuccess($"Vous avez promu {_target.GetPlayerHandler().Identite.Name} au rang de {FactionRang[itemIndex - 1].RangName}");
             UpdateInBackground();
@@ -294,7 +296,7 @@ namespace ResurrectionRP_Server.Factions
                 return;
             }
 
-            Task.Run(async () => { await PriseService(client); });
+            PriseService(client);
         }
 
         private void OpenVestiaire(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
@@ -428,7 +430,7 @@ namespace ResurrectionRP_Server.Factions
                     if (ph != null && ph.Identite.Name == menuItem.Text)
                     {
                         if (ServicePlayerList.Contains(playerID.Key))
-                            await PriseService(ph.Client);
+                            PriseService(ph.Client);
 
                         if (FactionPlayerList.TryRemove(playerID.Key, out FactionPlayer value))
                         {
@@ -461,7 +463,7 @@ namespace ResurrectionRP_Server.Factions
                         if (ServicePlayerList.Contains(playerID.Key))
                         {
                             PlayerHandler ph = PlayerManager.GetPlayerBySCN(playerID.Key);
-                            await PriseService(ph.Client);
+                            PriseService(ph.Client);
                         }
 
                         if (FactionPlayerList.TryRemove(playerID.Key, out FactionPlayer value))

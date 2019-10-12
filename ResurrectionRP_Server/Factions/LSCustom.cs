@@ -228,7 +228,7 @@ namespace ResurrectionRP_Server.Factions
                 OpenMenu(client, VehicleInWorkbench);
         }
 
-        public override async Task OnPlayerServiceEnter(IPlayer client, int rang)
+        public override void OnPlayerServiceEnter(IPlayer client, int rang)
         {
             switch (client.GetPlayerHandler().Character.Gender)
             {
@@ -242,14 +242,15 @@ namespace ResurrectionRP_Server.Factions
                     client.SendNotificationError("Vous ne pouvez pas avoir de tenue avec ce personnage");
                     break;
             }
-            await base.OnPlayerServiceEnter(client, rang);
+
+            base.OnPlayerServiceEnter(client, rang);
         }
 
-        public override async Task OnPlayerServiceQuit(IPlayer client, int rang)
+        public override void OnPlayerServiceQuit(IPlayer client, int rang)
         {
-            client.ApplyCharacter();
             // rendre la tenue
-            await base.OnPlayerServiceQuit(client, rang);
+            client.ApplyCharacter();
+            base.OnPlayerServiceQuit(client, rang);
         }
         #endregion
 

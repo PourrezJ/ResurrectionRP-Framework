@@ -98,7 +98,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Event handlers
-        public override async Task OnPlayerPromote(IPlayer client, int rang)
+        public override void OnPlayerPromote(IPlayer client, int rang)
         {
             if (!client.Exists)
                 return;
@@ -155,10 +155,11 @@ namespace ResurrectionRP_Server.Factions
                         break;
                 }
             }
-            await base.OnPlayerPromote(client, rang);
+
+            base.OnPlayerPromote(client, rang);
         }
 
-        public override async Task PlayerFactionAdded(IPlayer client)
+        public override void PlayerFactionAdded(IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -249,7 +250,7 @@ namespace ResurrectionRP_Server.Factions
                 FactionPlayerList[socialClub].Inventory.AddItem(cloth, 1);
             }
 
-            await base.PlayerFactionAdded(client);
+            base.PlayerFactionAdded(client);
         }
 
         public override Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)

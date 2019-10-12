@@ -26,11 +26,14 @@ namespace ResurrectionRP_Server.Houses
         private static ConcurrentDictionary<IPlayer, House> ClientHouse = new ConcurrentDictionary<IPlayer, House>();
         #endregion
 
-        #region Constructor
+        #region Init
         public static void Init()
         {
             Alt.OnPlayerDead += Alt_OnPlayerDead;
 
+            for (int i = 0; i < HouseTypes.HouseTypeList.Count; i++)
+                Marker.CreateMarker(MarkerType.VerticalCylinder, HouseTypes.HouseTypeList[i].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), null, null);
+            
             Utils.Utils.SetInterval(async () =>
             {
                 foreach (var house in Houses)
@@ -97,6 +100,7 @@ namespace ResurrectionRP_Server.Houses
                     try
                     {
                         var house = housesList[i];
+
                         if (house != null)
                         {
                             house.Init();
@@ -192,7 +196,7 @@ namespace ResurrectionRP_Server.Houses
                     {
                         GameMode.Instance.Economy.CaissePublique += house.Price;
                         house.SetOwner(client.GetPlayerHandler().PID);
-                        await house.SendPlayer(client);
+                        house.SendPlayer(client);
                         MenuManager.CloseMenu(client);
                         client.SendNotificationSuccess("Vous avez acheté ce logement.");
                     }
@@ -201,7 +205,7 @@ namespace ResurrectionRP_Server.Houses
                     break;
 
                 case "ID_Enter":
-                    await house.SendPlayer(client);
+                    house.SendPlayer(client);
                     menu.CloseMenu(client);
                     break;
 
@@ -216,7 +220,7 @@ namespace ResurrectionRP_Server.Houses
                         client.SendNotificationError("Un parking est déjà disponible pour cette maison.");
                     break;
                 case "ID_Delete":
-                    await house.Destroy();
+                    house.Destroy();
                     await house.RemoveInDatabase();
                     client.SendNotificationSuccess("Vous avez supprimé le logement.");
                     break;
@@ -260,12 +264,12 @@ namespace ResurrectionRP_Server.Houses
             RemovePlayerFromHouseList(player);
         }
 
-        public static async Task House_Exit()
+        public static void House_Exit()
         {
             foreach(House house in Houses)
             {
                 house.UpdateInBackground();
-                await house.Destroy();
+                house.Destroy();
             }
 
             Houses.Clear();

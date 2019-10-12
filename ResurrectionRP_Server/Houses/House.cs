@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Houses
 {
-    public class House
+    public partial class House
     {
         #region Constants
         private const ushort DIMENSION_START = 1000;
@@ -169,21 +169,24 @@ namespace ResurrectionRP_Server.Houses
             RemovePlayer(client, true);
         }
 
-        private async Task OnParkingSaveNeeded()
+        private Task OnParkingSaveNeeded()
         {
-            await Save();
+            UpdateInBackground();
+            return Task.CompletedTask;
         }
 
-        private async Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
+        private Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
         {
             vehicle.ParkingName = $"{Name} {ID}";
-            await Save();
+            UpdateInBackground();
+            return Task.CompletedTask;
         }
 
-        private async Task OnVehicleOutParking(IPlayer client, VehicleHandler vehicle, Location location)
+        private Task OnVehicleOutParking(IPlayer client, VehicleHandler vehicle, Location location)
         {
-            await Save();
+            UpdateInBackground();
             client.SetPlayerIntoVehicle(vehicle.Vehicle);
+            return Task.CompletedTask;
         }
         #endregion
 
@@ -203,9 +206,11 @@ namespace ResurrectionRP_Server.Houses
                 Parking.OnVehicleOut += OnVehicleOutParking;
             }
         }
-        public async Task SetOwner(string owner)
+        public void SetOwner(string owner)
         {
-            if (OwnerHandle != null) OwnerHandle.EmitLocked("ResetHouseBlip", ID);
+            if (OwnerHandle != null)
+                OwnerHandle.EmitLocked("ResetHouseBlip", ID);
+
             if (!string.IsNullOrEmpty(owner))
             {
                 Owner = owner;
@@ -217,11 +222,9 @@ namespace ResurrectionRP_Server.Houses
                 SetOwnerHandle(player.Client);
             }
             else
-            {
                 Owner = null;
-            }
 
-            await Save();
+            UpdateInBackground();
         }
 
         public void SetOwnerHandle(IPlayer player)
@@ -231,28 +234,28 @@ namespace ResurrectionRP_Server.Houses
                 player.CreateBlip(411, Position, Name, 1, 69, 255, true);
         }
 
-        public async Task SetName(string new_name)
+        public void SetName(string new_name)
         {
             Name = new_name;
-            await Save();
+            UpdateInBackground();
         }
 
-        public async Task SetLock(bool locked)
+        public void SetLock(bool locked)
         {
             Locked = locked;
-            await Save();
+            UpdateInBackground();
         }
 
-        public async Task SetType(int new_type)
+        public void SetType(int new_type)
         {
             Type = new_type;
-            await Save();
+            UpdateInBackground();
         }
 
-        public async Task SetPrice(int new_price)
+        public void SetPrice(int new_price)
         {
             Price = new_price;
-            await Save();
+            UpdateInBackground();
         }
 
         public bool SetIntoHouse(IPlayer client) 
@@ -307,12 +310,6 @@ namespace ResurrectionRP_Server.Houses
                 }         
             }
         }
-
-        public async Task InsertHouse() => await Database.MongoDB.Insert<House>("houses", this);
-
-        public async Task Save() => await Database.MongoDB.Update(this, "houses", ID);
-
-        public async Task RemoveInDatabase() => await Database.MongoDB.Delete<House>("houses", ID);
 
         public async Task Destroy()
         {

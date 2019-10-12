@@ -77,7 +77,7 @@ namespace ResurrectionRP_Server.Houses
                             {
                                 house.Parking.ParkingType = ParkingType.House;
                                 house.InitParking();
-                                await house.Save();
+                                house.UpdateInBackground();
                                 client.SendNotificationSuccess("Le parking à bien été ajouté.");
                             }
                         }

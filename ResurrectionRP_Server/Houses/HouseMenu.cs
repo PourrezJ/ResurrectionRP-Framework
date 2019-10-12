@@ -30,7 +30,7 @@ namespace ResurrectionRP_Server.Houses
 
             houseMenu._menu = new Menu("houseMenu", "House Menu", "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
             houseMenu._menu.BannerColor = new MenuColor(0, 255, 255, 0);
-            houseMenu._menu.ItemSelectCallbackAsync = houseMenu.HouseCallBackMenu;
+            houseMenu._menu.ItemSelectCallback = houseMenu.HouseCallBackMenu;
 
             houseMenu._menu.Add(new MenuItem("Ouvrir le coffre", "", "openInventory", executeCallback: true));
 
@@ -69,7 +69,7 @@ namespace ResurrectionRP_Server.Houses
         #endregion
 
         #region Callback
-        private async Task HouseCallBackMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void HouseCallBackMenu(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menu.Id == "houseMenu")
             {
@@ -78,17 +78,17 @@ namespace ResurrectionRP_Server.Houses
                     case "openInventory":
                         var ph = client.GetPlayerHandler();
                         var inv = new RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory ,ph.BagInventory, _house.Inventory);
-                        inv.OnMove += async (cl, inventaire) =>
+                        inv.OnMove += (cl, inventaire) =>
                         {
                             ph.UpdateFull();
-                            await _house.Save();
+                            _house.UpdateInBackground();
                         };
                         menu.CloseMenu(client);
                         inv.OpenMenu(client);
                         break;
 
                     case "opencloseDoor":
-                        await _house.SetLock(!_house.Locked);
+                        _house.SetLock(!_house.Locked);
 
                         if (_house.Locked)
                             client.SendNotification("Vous avez fermé votre maison.");
@@ -107,7 +107,7 @@ namespace ResurrectionRP_Server.Houses
                         var player = PlayerManager.GetPlayerByName(name.ToString());
 
                         if (player == null) return;
-                        await _house.SetOwner(player.PID);
+                        _house.SetOwner(player.PID);
                         client.SendNotification($"Vous avez vendu la maison à {player.Identite.Name}");
                         client.SendNotification("Vous êtes désormais propriétaire de ce logement");
                         MenuManager.CloseMenu(client);

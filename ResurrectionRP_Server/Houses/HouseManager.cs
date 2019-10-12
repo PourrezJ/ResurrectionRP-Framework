@@ -31,17 +31,14 @@ namespace ResurrectionRP_Server.Houses
         {
             Alt.OnPlayerDead += Alt_OnPlayerDead;
 
-            for(int i = 0; i < HouseTypes.HouseTypeList.Count; i++)
-                Marker.CreateMarker(MarkerType.VerticalCylinder, HouseTypes.HouseTypeList[i].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), null, null);
-
             Utils.Utils.SetInterval(async () =>
             {
                 foreach (var house in Houses)
                 {
-                    await house.Save();
+                    house.UpdateInBackground();
                     await Task.Delay(100);
                 }
-            }, (int)TimeSpan.FromMinutes(10).TotalMilliseconds);
+            }, (int)TimeSpan.FromMinutes(1).TotalMilliseconds);
         }
         #endregion
 
@@ -112,7 +109,6 @@ namespace ResurrectionRP_Server.Houses
                     }
                 }
             });
-
 
             Alt.Server.LogInfo($"Loaded {Houses.Count} houses.");
         }
@@ -195,7 +191,7 @@ namespace ResurrectionRP_Server.Houses
                     if (player.HasBankMoney(house.Price, "Achat immobilier."))
                     {
                         GameMode.Instance.Economy.CaissePublique += house.Price;
-                        await house.SetOwner(client.GetPlayerHandler().PID);
+                        house.SetOwner(client.GetPlayerHandler().PID);
                         await house.SendPlayer(client);
                         MenuManager.CloseMenu(client);
                         client.SendNotificationSuccess("Vous avez acheté ce logement.");
@@ -227,22 +223,22 @@ namespace ResurrectionRP_Server.Houses
                 case "ID_PriceChange":
                     int price = Convert.ToInt32(menuItem.InputValue);
                     house.Price = price;
-                    await house.SetPrice(price);
+                    house.SetPrice(price);
                     client.SendNotificationSuccess("Vous avez changé le prix du logement par " + price);
                     break;
                 case "ID_Change":
                     int type = Convert.ToInt32(menuItem.InputValue);
-                    await house.SetType(type);
+                    house.SetType(type);
                     client.SendNotificationSuccess("Vous avez changé le type du logement par " + type);
                     break;
                 case "ID_RemoveParking":
                     house.Parking.Destroy();
                     house.Parking = null;
-                    await house.Save();
+                    house.UpdateInBackground();
                     client.SendNotificationSuccess("Vous avez supprimé le parking");
                     break;
                 case "ID_ChangeProprio":
-                    await house.SetOwner(menuItem.InputValue);
+                    house.SetOwner(menuItem.InputValue);
                     client.SendNotificationSuccess("Proprio changé.");
                     break;
                 default:
@@ -268,7 +264,7 @@ namespace ResurrectionRP_Server.Houses
         {
             foreach(House house in Houses)
             {
-                await house.Save();
+                house.UpdateInBackground();
                 await house.Destroy();
             }
 

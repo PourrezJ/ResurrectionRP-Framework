@@ -130,7 +130,8 @@ namespace ResurrectionRP_Server
             PlayerManager.Init();
             PlayerKeyHandler.Init();
             Events.Initialize();
-            VehiclesManager.Init();          
+            VehiclesManager.Init();
+            HouseManager.Init();
             Teleport.TeleportManager.Init();
             Inventory.RPGInventoryManager.Init();
             MenuManager.Init();

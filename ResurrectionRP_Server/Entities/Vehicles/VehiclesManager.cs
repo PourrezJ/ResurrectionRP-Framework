@@ -16,7 +16,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
     public static class VehiclesManager
     {
         #region Fields
-        // Use ConcurrentDictionary as ther eis no concurrent list
+        private static DateTime _nextLoop = DateTime.Now;
+        // Use ConcurrentDictionary as there is no concurrent list
         private static ConcurrentDictionary<string, VehicleHandler> _vehicleHandlers = new ConcurrentDictionary<string, VehicleHandler>();
         public static ConcurrentDictionary<IVehicle, VehicleHandler> VehicleHandlerList { get; } = new ConcurrentDictionary<IVehicle, VehicleHandler>();
         #endregion
@@ -30,8 +31,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             Alt.OnClient("LockUnlockVehicle", LockUnlockVehicle);
             Alt.OnClient("UpdateTrailer", UpdateTrailerState);
-
-            Utils.Utils.SetInterval(VehicleManagerLoop, 250);
         }
         #endregion
 
@@ -145,60 +144,44 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Loop
-        private static void VehicleManagerLoop()
+        public static void OnTick()
         {
-            lock (VehicleHandlerList.Keys)
+            if (_nextLoop < DateTime.Now)
+                return;
+
+            IEnumerable<VehicleHandler> vehicles = VehicleHandlerList.Values.ToArray();
+            TimeSpan expireTime = TimeSpan.FromDays(3);
+
+            foreach (VehicleHandler vehicle in vehicles)
             {
-                for (int i = 0; i < VehicleHandlerList.Count; i++)
+                if (vehicle == null || vehicle.Vehicle == null || !vehicle.Vehicle.Exists)
+                    continue;
+
+                if (vehicle.Vehicle.EngineOn)
                 {
-                    var vehicle = VehicleHandlerList.Keys.ElementAt(i);
+                    vehicle.UpdateMilageAndFuel();
+                    var currentRot = vehicle.Vehicle.Rotation;
 
-                    if (vehicle == null)
-                        continue;
-
-                    if (!vehicle.Exists)
-                        continue;
-
-                    var vh = vehicle.GetVehicleHandler();
-
-                    if (vh == null)
-                        continue;
-
-                    if (vehicle.Driver != null)
+                    if (vehicle.VehicleManifest.VehicleClass != 15 && vehicle.VehicleManifest.VehicleClass != 16 && currentRot.Pitch >= 1.2)
                     {
-                        var currentRot = vehicle.Rotation;
+                        vehicle.EngineOn = false;
 
-                        if (vh.VehicleManifest.VehicleClass != 15 && vh.VehicleManifest.VehicleClass != 16 && currentRot.Pitch >= 1.2 )
+                        if (vehicle.Vehicle.Driver != null)
                         {
-                            if (vh.EngineOn)
-                            {
-                                vh.EngineOn = false;
-                                vehicle.Driver.SendNotification("Le moteur vient de caler.");
-                            }
-                        }
-                        vh.LastUse = DateTime.Now;
-                    }
-
-                    // Mise en fourrière auto
-                    TimeSpan test = DateTime.Now - vh.LastUse;
-                    TimeSpan expire = TimeSpan.FromDays(3);
-                    if (test > expire)
-                    {
-                        try
-                        {
-                            Task.Run(async () =>
-                            {
-                                if (VehicleHandlerList.TryRemove(vehicle, out VehicleHandler value))
-                                    await Pound.AddVehicleInPoundAsync(vh);
-                            });
-                        }
-                        catch (Exception ex)
-                        {
-                            Alt.Server.LogError("VehicleManager Tick: " + ex.ToString());
+                            vehicle.LastUse = DateTime.Now;
+                            vehicle.Vehicle.Driver.SendNotification("Le moteur vient de caler.");
                         }
                     }
                 }
+
+                // Mise en fourrière auto
+                TimeSpan timeSinceLastUse = DateTime.Now - vehicle.LastUse;
+
+                if (timeSinceLastUse >= expireTime)
+                    Task.Run(async () => { await Pound.AddVehicleInPoundAsync(vehicle); });
             }
+
+            _nextLoop.AddMilliseconds(250);
         }
         #endregion
 
@@ -345,7 +328,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public static ICollection<IVehicle> GetAllVehiclesInGame()
         {
-            return VehicleHandlerList.Select(v => v.Value.Vehicle).ToArray();
+            return VehicleHandlerList.Keys;
         }
 
         public static IVehicle GetVehicleByPlate(string plate)
@@ -398,15 +381,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
 
             return null;
-        }
-
-        public static void UpdateVehiclesMilageAndFuel()
-        {
-            foreach (IVehicle vehicle in GetAllVehiclesInGame())
-            {
-                if (vehicle.Exists && vehicle.EngineOn)
-                    vehicle.GetVehicleHandler()?.UpdateMilageAndFuel();
-            }
         }
 
         public static void DeleteVehicleHandler(VehicleHandler vehicle)

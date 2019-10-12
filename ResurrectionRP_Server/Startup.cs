@@ -5,6 +5,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Utils;
 using System;
 using System.Globalization;
@@ -94,6 +95,7 @@ namespace ResurrectionRP_Server
         {
             FPSCounter.OnTick();
             ColshapeManager.OnTick();
+            VehiclesManager.OnTick();
             base.OnTick();
         }
     }

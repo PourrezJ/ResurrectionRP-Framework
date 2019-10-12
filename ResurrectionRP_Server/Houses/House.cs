@@ -35,11 +35,13 @@ namespace ResurrectionRP_Server.Houses
             private set {
                 if (string.IsNullOrEmpty(value))
                 {
-                    if (Marker != null) Marker.SetColor(Color.FromArgb(80, 255, 0, 0));
+                    if (Marker != null)
+                        Marker.SetColor(Color.FromArgb(80, 255, 0, 0));
                 }
                 else
                 {
-                    if (Marker != null) Marker.SetColor(Color.FromArgb(80, 255, 255, 255));
+                    if (Marker != null)
+                        Marker.SetColor(Color.FromArgb(80, 255, 255, 255));
                 }
 
                 _owner = value;
@@ -264,40 +266,46 @@ namespace ResurrectionRP_Server.Houses
         public bool RemoveFromHouse(IPlayer client) 
             => HouseManager.RemoveClientHouse(client);
 
-        public async Task SendPlayer(IPlayer player)
+        public void SendPlayer(IPlayer player)
         {
-            if (!player.Exists)
-                return;
-
-            if (!SetIntoHouse(player))
-                Alt.Server.LogWarning($"Player {player.GetPlayerHandler().Identite.Name} trying to enter house {ID} but already registered in another house");
-            else
+            AltAsync.Do(() =>
             {
-                await player.SetDimensionAsync((short)(DIMENSION_START + ID));
-                await player.SetPositionAsync(HouseTypes.HouseTypeList[Type].Position.Pos);
+                if (!player.Exists)
+                    return;
 
-                // BUG v801: Set rotation when player in game not working
-                await player.SetHeadingAsync(HouseTypes.HouseTypeList[Type].Position.Rot.Z);
-                // await player.SetRotationAsync(HouseTypes.HouseTypeList[Type].Position.Rot);
-            }
+                if (!SetIntoHouse(player))
+                    Alt.Server.LogWarning($"Player {player.GetPlayerHandler().Identite.Name} trying to enter house {ID} but already registered in another house");
+                else
+                {
+                    player.Dimension = (short)(DIMENSION_START + ID);
+                    player.Position = HouseTypes.HouseTypeList[Type].Position.Pos;
+
+                    // BUG v801: Set rotation when player in game not working
+                    player.SetHeading(HouseTypes.HouseTypeList[Type].Position.Rot.Z);
+                    // player.Rotation = HouseTypes.HouseTypeList[Type].Position.Rot.ConvertRotationToRadian();
+                }
+            }).Wait();
         }
 
         public void RemovePlayer(IPlayer player, bool set_pos = true)
         {
-            if (!player.Exists)
-                return;
-
-            if (!RemoveFromHouse(player))
-                Alt.Server.LogWarning($"Exiting unregistered player {player.GetPlayerHandler().Identite.Name} from house {ID}");
-
-            if (set_pos)
+            AltAsync.Do(() =>
             {
-                player.Position = Position;
-                player.Dimension = GameMode.GlobalDimension;
-            }
+                if (!player.Exists)
+                    return;
+
+                if (!RemoveFromHouse(player))
+                    Alt.Server.LogWarning($"Exiting unregistered player {player.GetPlayerHandler().Identite.Name} from house {ID}");
+
+                if (set_pos)
+                {
+                    player.Position = Position;
+                    player.Dimension = GameMode.GlobalDimension;
+                }
+            }).Wait();
         }
 
-        public async Task RemoveAllPlayers()
+        public void RemoveAllPlayers()
         {
             foreach (IPlayer player in PlayersInside)
             {
@@ -305,17 +313,17 @@ namespace ResurrectionRP_Server.Houses
                     Alt.Server.LogWarning($"Exiting unregistered player {player.GetPlayerHandler().Identite.Name} from house {ID}");
                 else
                 {
-                    await player.SetPositionAsync(Position);
-                    await player.SetDimensionAsync(GameMode.GlobalDimension);
+                    player.Position = Position;
+                    player.Dimension = GameMode.GlobalDimension;
                 }         
             }
         }
 
-        public async Task Destroy()
+        public void Destroy()
         {
             if (Marker != null || ColshapeEnter != null)
             {
-                await RemoveAllPlayers();
+                RemoveAllPlayers();
                 Marker.Destroy();
                 // ColshapeEnter.Remove();
             }

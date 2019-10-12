@@ -146,7 +146,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #region Loop
         public static void OnTick()
         {
-            if (_nextLoop < DateTime.Now)
+            if (_nextLoop > DateTime.Now)
                 return;
 
             IEnumerable<VehicleHandler> vehicles = VehicleHandlerList.Values.ToArray();

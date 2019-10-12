@@ -46,7 +46,11 @@ namespace ResurrectionRP_Server.Houses
         #endregion
 
         #region Methods
-        public static bool SetIntoHouse(IPlayer client, House house) => ClientHouse.TryAdd(client, house);
+        public static bool SetIntoHouse(IPlayer client, House house)
+        {
+            Alt.Server.LogInfo($"Set client {client.Id} into house {house.ID}");
+            return ClientHouse.TryAdd(client, house);
+        }
 
         public static bool IsInHouse(IPlayer client) => ClientHouse.ContainsKey(client);
 
@@ -60,7 +64,12 @@ namespace ResurrectionRP_Server.Houses
             return null;
         }
 
-        public static bool RemoveClientHouse(IPlayer client) => ClientHouse.TryRemove(client, out _);
+        public static bool RemoveClientHouse(IPlayer client)
+        {
+            bool result = ClientHouse.TryRemove(client, out House house);
+            Alt.Server.LogInfo($"Remove client {client.Id} from house {house.ID}");
+            return result;
+        }
 
         public static void RemovePlayerFromHouseList(IPlayer player)
         {

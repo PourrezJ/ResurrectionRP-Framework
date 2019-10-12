@@ -47,7 +47,6 @@ namespace ResurrectionRP_Server.Houses
         #endregion
 
         #region Event handlers
-
         public static void OnPlayerConnected(IPlayer player)
         {
             string social = player.GetSocialClub();

@@ -181,7 +181,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     Task.Run(async () => { await Pound.AddVehicleInPoundAsync(vehicle); });
             }
 
-            _nextLoop.AddMilliseconds(250);
+            _nextLoop = _nextLoop.AddMilliseconds(1000);
         }
         #endregion
 

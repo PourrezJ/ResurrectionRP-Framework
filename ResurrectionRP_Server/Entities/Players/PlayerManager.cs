@@ -167,24 +167,31 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public static async Task Events_PlayerJoin(IPlayer player, object[] args)
         {
-            if (!player.Exists)
+            if (!await player.ExistsAsync())
                 return;
 
             string socialclub = args[0].ToString();
             DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(args[1].ToString());
-            Alt.Server.LogInfo($" {socialclub} : ({player.Ip}) en attente de connexion.");
+            string playerIp = string.Empty;
+
+            lock (player)
+            {
+                if (player.Exists)
+                    playerIp = player.Ip;
+            }
+
+            Alt.Server.LogInfo($" {socialclub} : ({playerIp}) en attente de connexion.");
 
             if (socialclub == "UNKNOWN")
             {
-                Alt.Server.LogInfo($"({player.Ip}) kick pour problème de social club.");
+                Alt.Server.LogInfo($"({playerIp}) kick pour problème de social club.");
                 await player.KickAsync("Vous avez un problème avec votre social club.");
                 return;
             }
 
-
             if (IsBan(socialclub))
             {
-                Alt.Server.LogInfo($"({player.Ip}) est banni.");
+                Alt.Server.LogInfo($"({playerIp}) est banni.");
                 await player.KickAsync("Vous êtes banni!");
                 return;
             }
@@ -315,8 +322,14 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public static async Task ConnectPlayer(IPlayer client)
         {
-            if (client.SocialClubId == 0)
+            ulong socialClubId = 0;
+
+            lock (client)
+                socialClubId = client.SocialClubId;
+
+            if (socialClubId == 0)
                 await client.KickAsync("Vous n'êtes pas connecté correctement, redémarrez.");
+
             if (await client.PlayerHandlerExist())
             {
                 await client.EmitAsync("FadeOut",0);

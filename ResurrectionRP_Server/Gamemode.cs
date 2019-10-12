@@ -91,13 +91,16 @@ namespace ResurrectionRP_Server
         #region Events
         private void OnServerStop()
         {
-            for (int i = 0; i < PlayerList.Count; i++)
+            AltAsync.Do(() =>
             {
-                if (PlayerList[i] != null && PlayerList[i].Exists)
-                    PlayerList[i].Kick("Server stop");
-            }
+                foreach (IPlayer player in PlayerList.ToArray())
+                {
+                    if (player != null && player.Exists)
+                        player.Kick("Server stop");
+                }
 
-            //await HouseManager.House_Exit();
+                //await HouseManager.House_Exit();
+            });
         }
 
         public void OnStart()

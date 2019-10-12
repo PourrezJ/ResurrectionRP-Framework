@@ -43,6 +43,7 @@ namespace ResurrectionRP_Server.Entities.Players
             new FactionsCommands();
             new HouseCommands();
             new IllegalCommands();
+            new Society.Commands();
 
             AltAsync.OnClient("LogPlayer", LogPlayer);
             AltAsync.OnClient("MakePlayer", MakePlayer);

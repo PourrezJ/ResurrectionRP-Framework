@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 namespace ResurrectionRP_Server.Society
 {
     [BsonIgnoreExtraElements]
-    [BsonKnownTypes(typeof(Bennys), typeof(Unicorn), typeof(Sandjob), typeof(Rhumerie), typeof(PetrolSociety), typeof(Tequilala), typeof(WhiteWereWolf), typeof(PawnCar), typeof(WildCustom), typeof(BlackStreetNation), typeof(YellowJack), typeof(Amphitheatre))]
+    [BsonKnownTypes(typeof(Bennys), typeof(Unicorn), typeof(Sandjob), typeof(Rhumerie), typeof(PetrolSociety), typeof(Tequilala), typeof(WhiteWereWolf), typeof(PawnCar), typeof(WildCustom), typeof(BlackStreetNation), typeof(YellowJack), typeof(Amphitheatre), typeof(Weazel))]
     public partial class Society
     {
         #region Static fields
@@ -92,10 +92,10 @@ namespace ResurrectionRP_Server.Society
                 // Blip
                 Blip = Entities.Blips.BlipsManager.CreateBlip(SocietyName, ServicePos, BlipColor,(int) BlipSprite, 1);
 
-                ServiceColshape = ColshapeManager.CreateCylinderColshape(ServicePos - new Vector3(0.0f, 0.0f, 1f), 1f, 2f);
+                ServiceColshape = ColshapeManager.CreateCylinderColshape(ServicePos - new Vector3(0.0f, 0.0f, 0.2f), 1f, 2f);
                 ServiceColshape.OnPlayerEnterColshape += OnPlayerEnterServiceColshape;
                 ServiceColshape.OnPlayerLeaveColshape += OnPlayerLeaveServiceColshape;
-                Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, ServicePos - new Vector3(0.0f, 0.0f, 1f), new Vector3(1, 1f, 1f), Color.FromArgb(128, 255, 255, 255));
+                Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, ServicePos - new Vector3(0.0f, 0.0f, 0.2f), new Vector3(1, 1f, 1f), Color.FromArgb(128, 255, 255, 255));
             }
 
             if (Parking != null)

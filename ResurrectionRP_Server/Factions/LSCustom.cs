@@ -159,11 +159,10 @@ namespace ResurrectionRP_Server.Factions
                 else
                 {
                     item.RightLabel = $"${PeinturePrice}";
-
-                    item.SetData("Color", Convert.ToInt32(color));
                     item.OnMenuItemCallback = OnColorChoice;
                 }
 
+                item.SetData("Color", Convert.ToInt32(color));
                 menu.Add(item);
             }
 

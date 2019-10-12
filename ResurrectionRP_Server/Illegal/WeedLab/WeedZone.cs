@@ -7,6 +7,7 @@ using AltV.Net;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Streamer.Data;
 using ResurrectionRP_Server.Entities;
+using ResurrectionRP_Server.Colshape;
 
 namespace ResurrectionRP_Server.Illegal.WeedLab
 {
@@ -45,7 +46,7 @@ namespace ResurrectionRP_Server.Illegal.WeedLab
         [JsonIgnore, BsonIgnore]
         public OnGrowingClientEnterDelegate OnGrowingClientEnter { get; set; }
         [JsonIgnore, BsonIgnore]
-        public IColShape Colshape = null;
+        public IColshape Colshape = null;
         [JsonIgnore, BsonIgnore]
         public TextLabel Textlabel = null;
         [JsonIgnore, BsonIgnore]
@@ -132,7 +133,7 @@ namespace ResurrectionRP_Server.Illegal.WeedLab
             }
         }
 
-        public void OnGrowingZoneEnter(IColShape colshape, IPlayer client)
+        public void OnGrowingZoneEnter(IColshape colshape, IPlayer client)
         {
             colshape.GetData("id", out int colid);
             this.Colshape.GetData("id", out int Colid);

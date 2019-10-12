@@ -201,15 +201,16 @@ namespace ResurrectionRP_Server.Factions
 
             if (ph == null)
                 return;
-
+            /*
             var social =  client.GetSocialClub();
 
             // Accès aux docks
-/*            foreach (var teleport in GameMode.Instance.FactionManager.Dock.Teleports) TODO
+            foreach (var teleport in GameMode.Instance.FactionManager.Dock.Teleports) TODO
             {
                 if (teleport.Whileliste.Contains(social))
                     teleport.Whileliste.Remove(social);
-            };*/
+            };
+            */
 
             await base.OnPlayerServiceQuit(client, rang);
         }

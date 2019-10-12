@@ -273,14 +273,11 @@ namespace ResurrectionRP_Server.Factions
 
         public virtual void OnPlayerDisconnected(IPlayer client)
         {
-            string socialClub = client.GetSocialClub();
-
-            Utils.Utils.Delay(60000 * 10, () =>
+            if (IsOnService(client))
             {
-                if (!GameMode.PlayerList.Any(p => p.GetSocialClub() == socialClub))
-                    ServicePlayerList.Remove(socialClub);
-            });
-            OnPlayerServiceQuit(client, GetRangPlayer(client));
+                ServicePlayerList.Remove(client.GetSocialClub());
+                OnPlayerServiceQuit(client, GetRangPlayer(client));
+            }
         }
 
         public virtual void OnPlayerEnterColShape(IColshape colshape, IPlayer player)
@@ -358,7 +355,7 @@ namespace ResurrectionRP_Server.Factions
             else
             {
                 client.SendNotificationSuccess("Vous avez pris votre service");
-                FactionPlayerList[client.GetSocialClub()].LastPayCheck = (DateTime.Now).AddMinutes(PayCheckMinutes);
+                FactionPlayerList[client.GetSocialClub()].LastPayCheck = DateTime.Now.AddMinutes(PayCheckMinutes);
                 ServicePlayerList.Add(client.GetSocialClub());
                 await OnPlayerServiceEnter(client, GetRangPlayer(client));
             }

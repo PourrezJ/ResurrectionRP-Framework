@@ -70,8 +70,7 @@ namespace ResurrectionRP_Server.Inventory
 
         public static bool OpenMenu(IPlayer client, RPGInventoryMenu menu)
         {
-            RPGInventoryMenu oldMenu = null;
-            _clientMenus.TryRemove(client, out oldMenu);
+            _clientMenus.TryRemove(client, out _);
 
             if (_clientMenus.TryAdd(client, menu))
             {

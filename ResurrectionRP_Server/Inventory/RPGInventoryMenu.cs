@@ -145,8 +145,7 @@ namespace ResurrectionRP_Server.Inventory
 
         public void OpenMenu(IPlayer client)
         {
-            if (OnOpen != null)
-                OnOpen(client, this);
+            OnOpen?.Invoke(client, this);
             RPGInventoryManager.OpenMenu(client, this);
         }
 

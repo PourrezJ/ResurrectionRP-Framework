@@ -29,7 +29,7 @@ namespace ResurrectionRP_Server
         {
             MainThreadId = Thread.CurrentThread.ManagedThreadId;
 
-            var ci = new CultureInfo("fr-FR");
+            var ci = new CultureInfo("en-US");
             CultureInfo.DefaultThreadCurrentCulture = ci;
             Thread.CurrentThread.CurrentCulture = ci;
             Thread.CurrentThread.CurrentUICulture = ci;

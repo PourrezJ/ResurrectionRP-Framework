@@ -230,9 +230,10 @@ namespace ResurrectionRP_Server
                     float x = Convert.ToSingle(args[0].ToString().Replace('f',' ').Replace(',',' '));
                     float y = Convert.ToSingle(args[1].ToString().Replace('f', ' ').Replace(',', ' '));
                     float z = Convert.ToSingle(args[2].ToString().Replace('f', ' ').Replace(',', ' '));
-                    player.Position = new Position(x, y, z);
+
+                    await player.SetPositionAsync(new Position(x, y, z));
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Alt.Server.LogError(ex.ToString());
                 }      

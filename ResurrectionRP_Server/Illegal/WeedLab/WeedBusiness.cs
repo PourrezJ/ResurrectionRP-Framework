@@ -3,6 +3,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Illegal.WeedLab;
 using ResurrectionRP_Server.Illegal.WeedLab.Data;
@@ -24,13 +25,8 @@ namespace ResurrectionRP_Server.Illegal
         private Vector3 InventoryPos = new Vector3(1043.7627f, -3194.756f, -39.16992f);
         private Location InsideBat = new Location(new Vector3(1066.032f, -3183.42f, -39.1635f), new Vector3(0, 0, 85.58551f));
         private Timer Timer = new Timer(10000);
-        #endregion
 
-        #region Public Variables
-        public Location LabEnter { get; set; }
-        public bool AdvancedEquipement { get; set; } = false;
-
-        public WeedZone[] WeedZoneList = new WeedZone[9]
+        private WeedZone[] WeedZoneList = new WeedZone[9]
         {
             new WeedZone(0, StateZone.Stage0 , SeedType.Aucune, new Vector3(1053.894f, -3196.052f, -40.16129f)),
             new WeedZone(1, StateZone.Stage0 , SeedType.Aucune, new Vector3(1053.783f, -3189.879f, -40.16138f)),
@@ -42,10 +38,15 @@ namespace ResurrectionRP_Server.Illegal
             new WeedZone(7, StateZone.Stage0 , SeedType.Aucune, new Vector3(1057.831f, -3196.909f, -40.12994f)),
             new WeedZone(8, StateZone.Stage0 , SeedType.Aucune, new Vector3(1051.53f, -3201.792f, -40.11644f))
         };
+        #endregion
+
+        #region Public Variables
+        public Location LabEnter { get; set; }
+        public bool AdvancedEquipement { get; set; } = false;
 
         public List<Drying> InDryings { get; set; } = new List<Drying>();
         [BsonIgnore, JsonIgnore]
-        public IColShape InventoryColshape { get; private set; }
+        public IColshape InventoryColshape { get; private set; }
 
         [BsonIgnore, JsonIgnore]
         public List<IPlayer> PlayersInside = new List<IPlayer>();
@@ -90,32 +91,32 @@ namespace ResurrectionRP_Server.Illegal
                 Inventory = new Inventory.Inventory(1000, 40);
 
             Marker.CreateMarker(MarkerType.VerticalCylinder, InventoryPos, new Vector3(1, 1, 0.1f));
-            InventoryColshape = Alt.CreateColShapeCylinder(InventoryPos - new Vector3(0,0,1), 1f, 3f);
-            InventoryColshape.SetOnPlayerInteractInColShape(ColshapeInteract);
-            InventoryColshape.SetOnPlayerEnterColShape(OnEnterColshape);
+            InventoryColshape = ColshapeManager.CreateCylinderColshape(InventoryPos - new Vector3(0,0,1), 1f, 3f);
+            InventoryColshape.OnPlayerInteractInColshape += ColshapeInteract;
+            InventoryColshape.OnPlayerEnterColshape += OnEnterColshape;
 
             foreach (WeedZone weedzone in WeedZoneList)
             {
                 weedzone.Textlabel = Streamer.Streamer.AddEntityTextLabel(LabelRefresh(weedzone), weedzone.Position + new Vector3(0, 0, 0.75f));
-                weedzone.Colshape = Alt.CreateColShapeCylinder(weedzone.Position, 1f, 1f);
-                weedzone.Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, weedzone.Position, new Vector3(1, 1, 0.2f), Color.FromArgb(160, 0, 100, 0));
+                weedzone.Colshape = ColshapeManager.CreateCylinderColshape(weedzone.Position, 1f, 1f);
+                weedzone.Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, weedzone.Position, new Vector3(1, 1, 0.2f), Color.FromArgb(80, 0, 100, 0));
 
                 weedzone.OnGrowingChange += OnGrowingChange;
                 weedzone.OnGrowingClientEnter += OnGrowingClientEnter;
 
                 weedzone.Timer = Utils.Utils.SetInterval(() => weedzone.GrowLoop(), 5000);
 
-                weedzone.Colshape.SetOnPlayerInteractInColShape(ColshapeInteract);
-                weedzone.Colshape.SetOnPlayerEnterColShape(OnEnterColshape);
+                weedzone.Colshape.OnPlayerInteractInColshape += ColshapeInteract;
+                weedzone.Colshape.OnPlayerEnterColshape += OnEnterColshape;
             }
 
             if (LabEnter != null)
                 MakeDoor(LabEnter);
 
             Marker.CreateMarker(MarkerType.VerticalCylinder, InsideBat.Pos - new Vector3(0, 0, 1), new Vector3(1, 1, 0.5f));
-            var colShape = Alt.CreateColShapeCylinder(InsideBat.Pos - new Vector3(0, 0, 1), 1.0f, 3f);
-            colShape.SetOnPlayerEnterColShape(OnEnterColshape);
-            colShape.SetOnPlayerInteractInColShape(OnPlayerInteractInColShapeOut);
+            var colShape = ColshapeManager.CreateCylinderColshape(InsideBat.Pos - new Vector3(0, 0, 1), 1.0f, 3f);
+            colShape.OnPlayerEnterColshape += OnEnterColshape;
+            colShape.OnPlayerInteractInColshape += OnPlayerInteractInColShapeOut;
 
             Timer.Elapsed += async (sender, e)
                 => await DryingLoop();
@@ -125,18 +126,18 @@ namespace ResurrectionRP_Server.Illegal
             base.Load();
         }
 
-        private void OnPlayerInteractInColShapeOut(IColShape colShape, IPlayer client)
+        private void OnPlayerInteractInColShapeOut(IColshape colShape, IPlayer client)
         {
             client.Position = LabEnter.Pos;
             client.Rotation = LabEnter.Rot;
         }
 
-        private void OnEnterColshape(IColShape colShape, IPlayer client)
+        private void OnEnterColshape(IColshape colShape, IPlayer client)
         {
             client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir", 5000);
         }
 
-        private void ColshapeInteract(IColShape colShape, IPlayer client)
+        private void ColshapeInteract(IColshape colShape, IPlayer client)
         {
             if (colShape == InventoryColshape)
             {
@@ -170,12 +171,12 @@ namespace ResurrectionRP_Server.Illegal
             }
 
             Marker.CreateMarker(MarkerType.VerticalCylinder, LabEnter.Pos - new Vector3(0, 0, 1), new Vector3(1, 1, 0.2f));
-            var colShape = Alt.CreateColShapeCylinder(LabEnter.Pos - new Vector3(0, 0, 1), 1.0f, 3f);
-            colShape.SetOnPlayerEnterColShape(OnEnterColshape);
-            colShape.SetOnPlayerInteractInColShape(OnPlayerInteractInColShape);
+            var colShape = ColshapeManager.CreateCylinderColshape(LabEnter.Pos - new Vector3(0, 0, 1), 1.0f, 3f);
+            colShape.OnPlayerEnterColshape += OnEnterColshape;
+            colShape.OnPlayerInteractInColshape += OnPlayerInteractInColShape;
         }
 
-        private void OnPlayerInteractInColShape(IColShape colShape, IPlayer client)
+        private void OnPlayerInteractInColShape(IColshape colShape, IPlayer client)
         {
             client.Position = InsideBat.Pos;
             client.Rotation = InsideBat.Rot;

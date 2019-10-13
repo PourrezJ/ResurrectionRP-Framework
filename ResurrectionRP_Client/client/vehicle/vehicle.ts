@@ -17,6 +17,8 @@ let Trailer: number = null;
 let speedoState: boolean = false;
 let hudHidden: boolean = false;
 
+let bikes = [0x43779C54, 0x1ABA13B5, 0xCE23D3BF, 0xF4E1AA15, 0x4339CD69, 0xB67597EC, 0xE823FB48];
+
 export function initialize() {
     alt.onServer('OnPlayerEnterVehicle', onPlayerEnterVehicle);
     alt.onServer('SetDoorState', setDoorState);
@@ -141,9 +143,8 @@ export function initialize() {
             enginePreviousState = engineState;
             engineState = game.getIsVehicleEngineRunning(player.vehicle.scriptID);
 
-            if (game.isThisModelABike(player.vehicle.model)) {
+            if (bikes.find(p => p == player.vehicle.model) != null)
                 game.setVehicleEngineOn(player.vehicle.scriptID, true, true, false);
-            }
 
             if (game.isVehicleAttachedToTrailer(player.vehicle.scriptID) != hasTrailer) {
                 hasTrailer = game.isVehicleAttachedToTrailer(player.vehicle.scriptID)

@@ -8,18 +8,23 @@ using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Data;
 using System.Numerics;
+using ResurrectionRP_Server.Colshape;
+using Newtonsoft.Json;
 
 namespace ResurrectionRP_Server.DrivingSchool
 {
     public class Exam : IDisposable
     {
         #region Fields
-        public IPlayer PlayerExam;
-        public Entities.Vehicles.VehicleHandler VehicleExam;
+        public IPlayer Player;
+        public Entities.Vehicles.VehicleHandler Vehicle;
+
         public int CurrentCheckpoint = -1;
         public List<Ride> Trajectoire;
+
         public ICheckpoint checkpoint;
-        public IColShape colshape = null;
+        public IColshape colshape = null;
+
         public int avert = 0;
         public int id = 0;
         #endregion
@@ -27,8 +32,8 @@ namespace ResurrectionRP_Server.DrivingSchool
         #region Constructor
         public Exam(IPlayer client, Entities.Vehicles.VehicleHandler vehicle, List<Ride> traj, int SchooldId)
         {
-            PlayerExam = client;
-            VehicleExam = vehicle;
+            Player = client;
+            Vehicle = vehicle;
             this.id = SchooldId;
             this.Trajectoire = traj;
 
@@ -38,47 +43,38 @@ namespace ResurrectionRP_Server.DrivingSchool
         #endregion
 
         #region Methods
-        private async Task onColShape(IColShape colShape, IEntity entity, bool state)
+        private void Colshape_OnPlayerEnterColshape(IColshape colshape, IPlayer client)
         {
-            if (!state || entity.Type != BaseObjectType.Player)
-                return;
-            if (colShape.Position != this.colshape.Position)
-                return;
-            this.colshape.GetData("DrivingSchool", out bool result);
-            if (result != true)
-                return;
-            await this.NextTraj();
+            lock (colshape)
+            {
+                this.NextTraj();
+            }
         }
 
-        private async Task NextTraj()
+        private void NextTraj()
         {
-            if(this.checkpoint != null)
-                Alt.RemoveCheckpoint(this.checkpoint);
             if (this.colshape != null)
-                Alt.RemoveColShape(this.colshape);
+                ColshapeManager.DeleteColshape(this.colshape);
 
 
             this.CurrentCheckpoint++;
             if(this.CurrentCheckpoint == this.Trajectoire.Count )
             {
-                await endTraj();
+                this.Player.Emit("DriveSchool_CreateCP");
+                endTraj();
                 return;
             }
 
-            this.checkpoint = await AltAsync.CreateCheckpoint(this.PlayerExam, (byte)CheckpointType.Cyclinder2, this.Trajectoire[this.CurrentCheckpoint].Position, 3, 6, new Rgba(255, 255, 255, 128));
-            this.colshape = Alt.CreateColShapeCylinder(this.Trajectoire[this.CurrentCheckpoint].Position, 3, 6);
-            this.PlayerExam.SetWaypoint(this.Trajectoire[this.CurrentCheckpoint].Position);
-            this.colshape.SetData("DrivingSchool", true);
-
+            this.colshape = ColshapeManager.CreateCylinderColshape(this.Trajectoire[this.CurrentCheckpoint].Position, 3, 6);
+            this.colshape.OnPlayerEnterColshape += Colshape_OnPlayerEnterColshape;
+            this.Player.Emit("DriveSchool_CreateCP", JsonConvert.SerializeObject( this.Trajectoire[this.CurrentCheckpoint].Position));
 
         }
 
-        private async Task endTraj()
+
+        private void endTraj()
         {
-            await this.PlayerExam.EmitAsync("DrivingSchool_End");
-            await this.End();
-            await this.PlayerExam.EmitAsync("DeleteWaypoint");
-            await AltAsync.EmitAsync(PlayerExam, "DrivingSchool_End", this.id, this.avert);
+            this.End();
         }
 
         private Task VehicleChecker(IPlayer client, object[] args)
@@ -96,20 +92,15 @@ namespace ResurrectionRP_Server.DrivingSchool
         {
             if (seat != 1)
                 return;
-            if (vehicle != this.VehicleExam.Vehicle)
+            if (vehicle != this.Vehicle.Vehicle)
                 return;
-            //await client.SendNotificationPicture("Ok! Maintenant allumer le moteur ~r~(F3) ~w~et rendez-vous au prochain point.", "CHAR_ANDREAS", false, 0, "CHAR_ANDREAS",  "Auto-école");
-            client.SendNotificationSuccess("Génial, l'instructeur vous fait signe de démarrer le moteur (F3), et de rejoindre le point blanc");
-            await client.EmitAsync("DrivingSchool_Start");
-            AltAsync.OnClient("DrivingSchool_Checker", VehicleChecker);
-            await NextTraj();
-
-            AltAsync.OnColShape += this.onColShape;
+            client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANDREAS, "Auto-Ecole", "Information", "Ok! Maintenant allumer le moteur ~r~(F3) ~w~et rendez-vous au prochain point.");
+            NextTraj();
         }
         public async Task End()
         {
-            await VehicleExam.DeleteAsync();
-            PlayerExam.GetPlayerHandler()?.RemoveKey(VehicleExam);
+            Player.GetPlayerHandler()?.RemoveKey(Vehicle);
+            await Vehicle.DeleteAsync();
             Dispose();
         }
         #endregion

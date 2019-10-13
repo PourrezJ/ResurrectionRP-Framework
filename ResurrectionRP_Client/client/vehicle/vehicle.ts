@@ -143,7 +143,7 @@ export function initialize() {
             enginePreviousState = engineState;
             engineState = game.getIsVehicleEngineRunning(player.vehicle.scriptID);
 
-            if (bikes.find(p => p == player.vehicle.model) != null)
+            if (game.isThisModelABicycle(player.vehicle.model))
                 game.setVehicleEngineOn(player.vehicle.scriptID, true, true, false);
 
             if (game.isVehicleAttachedToTrailer(player.vehicle.scriptID) != hasTrailer) {

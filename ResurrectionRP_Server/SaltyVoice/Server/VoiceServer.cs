@@ -227,23 +227,26 @@ namespace SaltyServer
             if (!Voice.RadioChannels.ContainsKey(radioChannel) || !Voice.RadioChannels[radioChannel].Contains(client) || !client.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName))
                 return;
 
-            if (isSending && !Voice.PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
+            try
             {
-                Voice.PlayersTalkingOnRadioChannels[radioChannel].Add(client);
-
-                foreach (IPlayer radioClient in Voice.RadioChannels[radioChannel])
+                if (isSending && !Voice.PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
                 {
-                    radioClient.EmitLocked(SaltyShared.Event.Voice_TalkingOnRadio, tsName, true, radioChannel);
+                    Voice.PlayersTalkingOnRadioChannels[radioChannel].Add(client);
+
+                    foreach (IPlayer radioClient in Voice.RadioChannels[radioChannel])
+                        radioClient.EmitLocked(SaltyShared.Event.Voice_TalkingOnRadio, tsName, true, radioChannel);
+                }
+                else if (!isSending && Voice.PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
+                {
+                    Voice.PlayersTalkingOnRadioChannels[radioChannel].Remove(client);
+
+                    foreach (IPlayer radioClient in Voice.RadioChannels[radioChannel])
+                        radioClient.EmitLocked(SaltyShared.Event.Voice_TalkingOnRadio, tsName, false, radioChannel);
                 }
             }
-            else if (!isSending && Voice.PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
+            catch(Exception ex)
             {
-                Voice.PlayersTalkingOnRadioChannels[radioChannel].Remove(client);
-
-                foreach (IPlayer radioClient in Voice.RadioChannels[radioChannel])
-                {
-                    radioClient.EmitLocked(SaltyShared.Event.Voice_TalkingOnRadio, tsName, false, radioChannel);
-                }
+                Alt.Server.LogError($"SetPlayerSendingOnRadioChannel - radioChannel: {radioChannel}, RadioChannels: {RadioChannels.ContainsKey(radioChannel)}, PlayersTalkingOnRadioChannels: {PlayersTalkingOnRadioChannels .ContainsKey(radioChannel)} - {ex}");
             }
         }
         #endregion

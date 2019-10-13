@@ -181,18 +181,15 @@ namespace ResurrectionRP_Server.Services
 
         public static async Task AddVehicleInPoundAsync(VehicleHandler veh)
         {
-            try
-            {
-                veh.IsInPound = true;
-                veh.ParkingName = "Fourrière";
-                veh.UpdateInBackground(false, true);
-                await veh.DeleteAsync();
-            }
-            catch(Exception ex)
-            {
-                Alt.Server.LogError(ex.ToString());
-            }
-            Alt.Server.LogInfo ($"Mise en fourrière véhicule {veh.Plate}");
+            if (veh == null)
+                return;
+
+            veh.IsInPound = true;
+            veh.ParkingName = "Fourrière";
+            veh.UpdateInBackground(false, true);
+            await veh.DeleteAsync();
+
+            Alt.Server.LogInfo($"Mise en fourrière véhicule {veh.Plate}");
         }
         #endregion
     }

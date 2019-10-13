@@ -63,7 +63,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         : new XMenuItem("Verrouiller", "Vérrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_SOLID, false));
             }
 
-            if (LockState == VehicleLockState.Unlocked || PlayerHandler.ListVehicleKey.Exists(key => key.Plate == Plate) && Inventory != null)
+            if ((LockState == VehicleLockState.Unlocked || PlayerHandler.ListVehicleKey.Exists(key => key.Plate == Plate)) && Inventory != null)
                 xmenu.Add(new XMenuItem("Inventaire", "Ouvre l'inventaire du véhicule", "ID_OpenInventory", XMenuItemIcons.SUITCASE_SOLID, false));
             
             if(Vehicle.GetVehicleHandler().hasTrailer)
@@ -121,10 +121,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         private void VehicleXMenuCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
-            if (Vehicle == null)
-                return;
-
-            if (!Vehicle.Exists)
+            if (Vehicle == null || !Vehicle.Exists)
                 return;
 
             switch (menuItem.Id)
@@ -136,6 +133,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     break;
                 
                 case "ID_OpenInventory":
+                    if (Inventory == null)
+                        return;
+
                     if (RPGInventoryManager.HasInventoryOpen(Inventory))
                     {
                         client.SendNotificationError("Le coffre est déjà occupé.");
@@ -143,10 +143,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     }
 
                     XMenuManager.XMenuManager.CloseMenu(client);
-                    var inv = new RPGInventoryMenu(PlayerHandler.PocketInventory, PlayerHandler.OutfitInventory, PlayerHandler.BagInventory, this.Inventory);
+                    var inv = new RPGInventoryMenu(PlayerHandler.PocketInventory, PlayerHandler.OutfitInventory, PlayerHandler.BagInventory, Inventory);
                     inv.OnOpen = (IPlayer c, RPGInventoryMenu m) =>
                     {
-                        Alt.Server.LogInfo($"[RPGInventoryMenu.OnOpen()] VehicleHandler: {this}, Inventory: {Inventory}");
                         Inventory.Locked = true;
                     };
 

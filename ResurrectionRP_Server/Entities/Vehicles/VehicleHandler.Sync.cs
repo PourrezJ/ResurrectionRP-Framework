@@ -20,7 +20,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
     public partial class VehicleHandler
     {
         #region constants
-        const double FUEL_FACTOR = 5;
+        const double FUEL_FACTOR = 4;
         #endregion
 
         #region Private fields
@@ -596,7 +596,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 else
                     speedFuel = speed / 80 * FUEL_FACTOR;
 
-                Fuel -= (float)((FuelConsumption * distance * speedFuel / 100) * 0.75);
+                Fuel -= (float)(FuelConsumption * distance * speedFuel / 100);
             }
 
             _previousUpdate = updateTime;

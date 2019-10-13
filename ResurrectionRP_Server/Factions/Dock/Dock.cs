@@ -288,14 +288,15 @@ namespace ResurrectionRP_Server.Factions
 
         }
 
-        public override async Task OnPlayerPromote(IPlayer client, int rang)
+        public override void OnPlayerPromote(IPlayer client, int rang)
         {
             foreach (var teleport in Teleports)
             {
                 if (!teleport.Whileliste.Contains(client.GetSocialClub()))
                     teleport.Whileliste.Add(client.GetSocialClub());
             }
-            await base.OnPlayerPromote(client, rang);
+
+            base.OnPlayerPromote(client, rang);
         }
 
         public override Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
@@ -303,14 +304,15 @@ namespace ResurrectionRP_Server.Factions
             return base.OnVehicleOut(client, vehicle, location);
         }
 
-        public override async Task PlayerFactionAdded(IPlayer client)
+        public override void PlayerFactionAdded(IPlayer client)
         {
             foreach (var teleport in Teleports)
             {
                 if (!teleport.Whileliste.Contains(client.GetSocialClub()))
                     teleport.Whileliste.Add(client.GetSocialClub());
             }
-            await base.PlayerFactionAdded(client);
+
+            base.PlayerFactionAdded(client);
         }
         #endregion
 

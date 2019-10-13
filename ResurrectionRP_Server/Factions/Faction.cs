@@ -88,6 +88,9 @@ namespace ResurrectionRP_Server.Factions
             = new ConcurrentDictionary<string, FactionPlayer>(); // all players into faction
 
         public BankAccount BankAccount { get; set; }
+
+        [BsonIgnore]
+        protected EmergencyCall EmCall = null;
         #endregion
 
         #region Constructor
@@ -240,41 +243,38 @@ namespace ResurrectionRP_Server.Factions
                 MenuManager.CloseMenu(client);
         }
 
-        public virtual Task OnPlayerPromote(IPlayer client, int rang)
+        public virtual void OnPlayerPromote(IPlayer client, int rang)
         {
-            return Task.CompletedTask;
         }
 
-        public virtual Task OnPlayerServiceEnter(IPlayer client, int rang)
+        public virtual void OnPlayerServiceEnter(IPlayer client, int rang)
         {
-            EventHandlers.Events.InvokeEmergencyCallState(client, this.FactionName, true);
-            return Task.CompletedTask;
+            if (EmCall != null)
+                EventHandlers.Events.InvokeEmergencyCallState(client, FactionName,true);
         }
 
-        public virtual Task OnPlayerServiceQuit(IPlayer client, int rang)
+        public virtual void OnPlayerServiceQuit(IPlayer client, int rang)
         {
-            EventHandlers.Events.InvokeEmergencyCallState(client, this.FactionName, false);
-            return Task.CompletedTask;
+            if (EmCall != null)
+                EventHandlers.Events.InvokeEmergencyCallState(client, FactionName, false);
         }
 
-        public virtual async Task OnPlayerConnected(IPlayer client)
+        public virtual void OnPlayerConnected(IPlayer client)
         {
             if (ServicePlayerList.Contains(client.GetSocialClub()))
             {
                 FactionPlayerList[client.GetSocialClub()].LastPayCheck = DateTime.Now.AddMinutes(PayCheckMinutes);
-                await OnPlayerServiceEnter(client, GetRangPlayer(client));
+                OnPlayerServiceEnter(client, GetRangPlayer(client));
             }
         }
 
         public virtual void OnPlayerDisconnected(IPlayer client)
         {
-            string socialClub = client.GetSocialClub();
-
-            Utils.Utils.Delay(60000 * 10, () =>
+            if (IsOnService(client))
             {
-                if (!GameMode.PlayerList.Any(p => p.GetSocialClub() == socialClub))
-                    ServicePlayerList.Remove(socialClub);
-            });
+                ServicePlayerList.Remove(client.GetSocialClub());
+                OnPlayerServiceQuit(client, GetRangPlayer(client));
+            }
         }
 
         public virtual void OnPlayerEnterColShape(IColshape colshape, IPlayer player)
@@ -314,29 +314,28 @@ namespace ResurrectionRP_Server.Factions
             return Task.CompletedTask;
         }
 
-        public virtual async Task<bool> TryAddIntoFaction(IPlayer client, int rang = 1)
+        public virtual bool TryAddIntoFaction(IPlayer client, int rang = 1)
         {
             bool add = FactionPlayerList.TryAdd(client.GetSocialClub(), new FactionPlayer(client.GetSocialClub(), rang));
+
             if (add)
             {
                 client.SendNotification($"Vous êtes désormais membre de {FactionName}");
                 client.GetPlayerHandler()?.UpdateFull();
                 UpdateInBackground();
-                await PlayerFactionAdded(client);
+                PlayerFactionAdded(client);
             }
             else if (FactionPlayerList.ContainsKey(client.GetSocialClub()))
-            {
                 client.SendNotificationError($"Vous êtes déjà dans la faction {FactionName}");
-            }
+
             return add;
         }
 
-        public virtual Task PlayerFactionAdded(IPlayer client)
+        public virtual void PlayerFactionAdded(IPlayer client)
         {
-            return Task.CompletedTask;
         }
 
-        public virtual async Task PriseService(IPlayer client)
+        public virtual void PriseService(IPlayer client)
         {
             var ph = client.GetPlayerHandler();
 
@@ -347,14 +346,14 @@ namespace ResurrectionRP_Server.Factions
             {
                 client.SendNotificationSuccess("Vous avez quitté votre service");
                 ServicePlayerList.Remove(client.GetSocialClub());
-                await OnPlayerServiceQuit(client, GetRangPlayer(client));
+                OnPlayerServiceQuit(client, GetRangPlayer(client));
             }
             else
             {
                 client.SendNotificationSuccess("Vous avez pris votre service");
-                FactionPlayerList[client.GetSocialClub()].LastPayCheck = (DateTime.Now).AddMinutes(PayCheckMinutes);
+                FactionPlayerList[client.GetSocialClub()].LastPayCheck = DateTime.Now.AddMinutes(PayCheckMinutes);
                 ServicePlayerList.Add(client.GetSocialClub());
-                await OnPlayerServiceEnter(client, GetRangPlayer(client));
+                OnPlayerServiceEnter(client, GetRangPlayer(client));
             }
 
             MenuManager.CloseMenu(client);

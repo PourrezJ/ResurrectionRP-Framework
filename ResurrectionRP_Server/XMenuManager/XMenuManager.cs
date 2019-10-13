@@ -40,24 +40,20 @@ namespace ResurrectionRP_Server.XMenuManager
                         XMenu temp = JsonConvert.DeserializeObject<XMenu>(data);
 
                         if (!string.IsNullOrEmpty(temp.Items[menuIndex]?.InputValue))
-                        {
                             menu.Items[menuIndex].InputValue = temp.Items[menuIndex].InputValue;
-                        }
                     }
 
                     if (menu.Items[menuIndex] != null)
                     {
-                        if (menu.Items[menuIndex].OnMenuItemCallback != null)
-                            menu.Items[menuIndex].OnMenuItemCallback.Invoke(client, menu, menu.Items[menuIndex], menuIndex, "");
+                        menu.Items[menuIndex].OnMenuItemCallback?.Invoke(client, menu, menu.Items[menuIndex], menuIndex, "");
 
-                        else if (menu.Items[menuIndex].OnMenuItemCallbackAsync != null)
+                        if (menu.Items[menuIndex].OnMenuItemCallbackAsync != null)
                             Task.Run(async ()=> await menu.Items[menuIndex].OnMenuItemCallbackAsync.Invoke(client, menu, menu.Items[menuIndex], menuIndex, ""));
 
+                        menu.Callback?.Invoke(client, menu, menu.Items[menuIndex], menuIndex, "");
 
                         if (menu.CallbackAsync != null)
                             Task.Run(async ()=> await menu.CallbackAsync.Invoke(client, menu, menu.Items[menuIndex], menuIndex, ""));
-                        else if (menu.Callback != null)
-                            menu.Callback.Invoke(client, menu, menu.Items[menuIndex], menuIndex, "");
                     }
                 }
             }

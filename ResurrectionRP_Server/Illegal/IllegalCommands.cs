@@ -11,10 +11,10 @@ namespace ResurrectionRP_Server.Illegal
             Chat.RegisterCmd("createweedlabs", CreateWeedLabs);
         }
 
-        private async Task CreateWeedLabs(IPlayer player, string[] args)
+        private void CreateWeedLabs(IPlayer player, string[] args)
         {
             if (IllegalManager.WeedBusiness != null)
-                IllegalManager.WeedBusiness.MakeDoor(new Models.Location(await player.GetPositionAsync(), await player.GetRotationAsync()));
+                IllegalManager.WeedBusiness.MakeDoor(new Models.Location(player.Position, player.Rotation));
         }
     }
 }

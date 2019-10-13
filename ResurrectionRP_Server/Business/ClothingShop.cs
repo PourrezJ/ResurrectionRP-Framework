@@ -201,7 +201,7 @@ namespace ResurrectionRP_Server.Business
                     break;
 
                 case 7:
-                    // item = new ClothItem(ItemID., clothdata.Value.DrawablesList[drawable].Variations[(byte)variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "", icon: "");
+                    item = new ClothItem(ItemID.Necklace, clothdata.Value.DrawablesList[drawable].Variations[variation].Gxt, "", new ClothData(drawable, variation, 0), 0, true, false, false, true, false, 0, classes: "necklace", icon: "necklace");
                     break;
 
                 case 8:
@@ -475,7 +475,7 @@ namespace ResurrectionRP_Server.Business
                     break;
 
                 case "ID_TShirt":
-                    OpenComponentMenuWithoutCat(client, menu, 8, false);
+                    OpenComponentMenu(client, menu, 8);
                     break;
 
                 case "ID_Chaussure":
@@ -652,6 +652,10 @@ namespace ResurrectionRP_Server.Business
                     compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenAccessories : GirlAccessories;
                     break;
 
+                case 8:
+                    compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenUnderShirt : GirlUnderShirt;
+                    break;
+
                 case 11:
                     compoList = MenTops;
                     break;
@@ -792,10 +796,6 @@ namespace ResurrectionRP_Server.Business
             {
                 case 1:
                     compoList = Mask;
-                    break;
-
-                case 8:
-                    compoList = (client.Model == (uint)PedModel.FreemodeMale01) ? MenUnderShirt : GirlUnderShirt;
                     break;
             }
 

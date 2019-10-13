@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Houses
 {
-    public class House
+    public partial class House
     {
         #region Constants
         private const ushort DIMENSION_START = 1000;
@@ -35,11 +35,13 @@ namespace ResurrectionRP_Server.Houses
             private set {
                 if (string.IsNullOrEmpty(value))
                 {
-                    if (Marker != null) Marker.SetColor(Color.FromArgb(80, 255, 0, 0));
+                    if (Marker != null)
+                        Marker.SetColor(Color.FromArgb(80, 255, 0, 0));
                 }
                 else
                 {
-                    if (Marker != null) Marker.SetColor(Color.FromArgb(80, 255, 255, 255));
+                    if (Marker != null)
+                        Marker.SetColor(Color.FromArgb(80, 255, 255, 255));
                 }
 
                 _owner = value;
@@ -169,21 +171,24 @@ namespace ResurrectionRP_Server.Houses
             RemovePlayer(client, true);
         }
 
-        private async Task OnParkingSaveNeeded()
+        private Task OnParkingSaveNeeded()
         {
-            await Save();
+            UpdateInBackground();
+            return Task.CompletedTask;
         }
 
-        private async Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
+        private Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
         {
             vehicle.ParkingName = $"{Name} {ID}";
-            await Save();
+            UpdateInBackground();
+            return Task.CompletedTask;
         }
 
-        private async Task OnVehicleOutParking(IPlayer client, VehicleHandler vehicle, Location location)
+        private Task OnVehicleOutParking(IPlayer client, VehicleHandler vehicle, Location location)
         {
-            await Save();
+            UpdateInBackground();
             client.SetPlayerIntoVehicle(vehicle.Vehicle);
+            return Task.CompletedTask;
         }
         #endregion
 
@@ -203,9 +208,11 @@ namespace ResurrectionRP_Server.Houses
                 Parking.OnVehicleOut += OnVehicleOutParking;
             }
         }
-        public async Task SetOwner(string owner)
+        public void SetOwner(string owner)
         {
-            if (OwnerHandle != null) OwnerHandle.EmitLocked("ResetHouseBlip", ID);
+            if (OwnerHandle != null)
+                OwnerHandle.EmitLocked("ResetHouseBlip", ID);
+
             if (!string.IsNullOrEmpty(owner))
             {
                 Owner = owner;
@@ -217,42 +224,41 @@ namespace ResurrectionRP_Server.Houses
                 SetOwnerHandle(player.Client);
             }
             else
-            {
                 Owner = null;
-            }
 
-            await Save();
+            UpdateInBackground();
         }
 
         public void SetOwnerHandle(IPlayer player)
         {
             OwnerHandle = player;   
+
             if (player != null)
                 player.CreateBlip(411, Position, Name, 1, 69, 255, true);
         }
 
-        public async Task SetName(string new_name)
+        public void SetName(string new_name)
         {
             Name = new_name;
-            await Save();
+            UpdateInBackground();
         }
 
-        public async Task SetLock(bool locked)
+        public void SetLock(bool locked)
         {
             Locked = locked;
-            await Save();
+            UpdateInBackground();
         }
 
-        public async Task SetType(int new_type)
+        public void SetType(int new_type)
         {
             Type = new_type;
-            await Save();
+            UpdateInBackground();
         }
 
-        public async Task SetPrice(int new_price)
+        public void SetPrice(int new_price)
         {
             Price = new_price;
-            await Save();
+            UpdateInBackground();
         }
 
         public bool SetIntoHouse(IPlayer client) 
@@ -261,40 +267,46 @@ namespace ResurrectionRP_Server.Houses
         public bool RemoveFromHouse(IPlayer client) 
             => HouseManager.RemoveClientHouse(client);
 
-        public async Task SendPlayer(IPlayer player)
+        public void SendPlayer(IPlayer player)
         {
-            if (!player.Exists)
-                return;
-
-            if (!SetIntoHouse(player))
-                Alt.Server.LogWarning($"Player {player.GetPlayerHandler().Identite.Name} trying to enter house {ID} but already registered in another house");
-            else
+            AltAsync.Do(() =>
             {
-                await player.SetDimensionAsync((short)(DIMENSION_START + ID));
-                await player.SetPositionAsync(HouseTypes.HouseTypeList[Type].Position.Pos);
+                if (!player.Exists)
+                    return;
 
-                // BUG v801: Set rotation when player in game not working
-                await player.SetHeadingAsync(HouseTypes.HouseTypeList[Type].Position.Rot.Z);
-                // await player.SetRotationAsync(HouseTypes.HouseTypeList[Type].Position.Rot);
-            }
+                if (!SetIntoHouse(player))
+                    Alt.Server.LogWarning($"Player {player.GetPlayerHandler().Identite.Name} trying to enter house {ID} but already registered in another house");
+                else
+                {
+                    player.Dimension = (short)(DIMENSION_START + ID);
+                    player.Position = HouseTypes.HouseTypeList[Type].Position.Pos;
+
+                    // BUG v801: Set rotation when player in game not working
+                    player.SetHeading(HouseTypes.HouseTypeList[Type].Position.Rot.Z);
+                    // player.Rotation = HouseTypes.HouseTypeList[Type].Position.Rot.ConvertRotationToRadian();
+                }
+            }).Wait();
         }
 
         public void RemovePlayer(IPlayer player, bool set_pos = true)
         {
-            if (!player.Exists)
-                return;
-
-            if (!RemoveFromHouse(player))
-                Alt.Server.LogWarning($"Exiting unregistered player {player.GetPlayerHandler().Identite.Name} from house {ID}");
-
-            if (set_pos)
+            AltAsync.Do(() =>
             {
-                player.Position = Position;
-                player.Dimension = GameMode.GlobalDimension;
-            }
+                if (!player.Exists)
+                    return;
+
+                if (!RemoveFromHouse(player))
+                    Alt.Server.LogWarning($"Exiting unregistered player {player.GetPlayerHandler().Identite.Name} from house {ID}");
+
+                if (set_pos)
+                {
+                    player.Position = Position;
+                    player.Dimension = GameMode.GlobalDimension;
+                }
+            }).Wait();
         }
 
-        public async Task RemoveAllPlayers()
+        public void RemoveAllPlayers()
         {
             foreach (IPlayer player in PlayersInside)
             {
@@ -302,23 +314,17 @@ namespace ResurrectionRP_Server.Houses
                     Alt.Server.LogWarning($"Exiting unregistered player {player.GetPlayerHandler().Identite.Name} from house {ID}");
                 else
                 {
-                    await player.SetPositionAsync(Position);
-                    await player.SetDimensionAsync(GameMode.GlobalDimension);
+                    player.Position = Position;
+                    player.Dimension = GameMode.GlobalDimension;
                 }         
             }
         }
 
-        public async Task InsertHouse() => await Database.MongoDB.Insert<House>("houses", this);
-
-        public async Task Save() => await Database.MongoDB.Update(this, "houses", ID);
-
-        public async Task RemoveInDatabase() => await Database.MongoDB.Delete<House>("houses", ID);
-
-        public async Task Destroy()
+        public void Destroy()
         {
             if (Marker != null || ColshapeEnter != null)
             {
-                await RemoveAllPlayers();
+                RemoveAllPlayers();
                 Marker.Destroy();
                 // ColshapeEnter.Remove();
             }

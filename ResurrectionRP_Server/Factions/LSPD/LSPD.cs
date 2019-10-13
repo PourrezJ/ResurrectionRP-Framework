@@ -169,7 +169,8 @@ namespace ResurrectionRP_Server.Factions
             #endregion
 
             Alt.OnClient("CallUrgenceLSPD", CallUrgenceLSPD);
-            
+
+            EmCall = new EmergencyCall(FactionName);
 
             return base.Init();
         }
@@ -184,38 +185,40 @@ namespace ResurrectionRP_Server.Factions
                 OpenAccueilMenu(client);
         }
 
-        public override Task OnPlayerServiceEnter(IPlayer client, int rang)
+        public override void OnPlayerServiceEnter(IPlayer client, int rang)
         {
             // Accès aux docks
-            /*            foreach (var teleport in GameMode.Instance.FactionManager.Dock.Teleports) TODO
-                        {
-                            teleport.Whileliste.Add( client.GetSocialClub());
-                        };*/
-            return Task.CompletedTask;
+            /*
+            foreach (var teleport in GameMode.Instance.FactionManager.Dock.Teleports)
+            {
+                teleport.Whileliste.Add(client.GetSocialClub());
+            };
+            */
+            base.OnPlayerServiceEnter(client, rang);
         }
 
-        public override async Task OnPlayerServiceQuit(IPlayer client, int rang)
+        public override void OnPlayerServiceQuit(IPlayer client, int rang)
         {
             PlayerHandler ph = client.GetPlayerHandler();
 
             if (ph == null)
                 return;
-
+            /*
             var social =  client.GetSocialClub();
 
             // Accès aux docks
-/*            foreach (var teleport in GameMode.Instance.FactionManager.Dock.Teleports) TODO
+            foreach (var teleport in GameMode.Instance.FactionManager.Dock.Teleports) TODO
             {
                 if (teleport.Whileliste.Contains(social))
                     teleport.Whileliste.Remove(social);
-            };*/
+            };
+            */
 
-            await base.OnPlayerServiceQuit(client, rang);
+            base.OnPlayerServiceQuit(client, rang);
         }
 
-        public override Task OnPlayerConnected(IPlayer client)
+        public override void OnPlayerConnected(IPlayer client)
         {
-            return Task.CompletedTask;
         }
 
         public override void OnPlayerEnterColShape(IColshape colshape, IPlayer client)
@@ -281,7 +284,7 @@ namespace ResurrectionRP_Server.Factions
             }*/
         }
 
-        public override async Task PlayerFactionAdded(IPlayer client)
+        public override void PlayerFactionAdded(IPlayer client)
         {
             var ph = client.GetPlayerHandler();
 
@@ -338,7 +341,7 @@ namespace ResurrectionRP_Server.Factions
                 FactionPlayerList[ client.GetSocialClub()].Inventory.AddItem(cloth, 1);
             }
 
-            await base.PlayerFactionAdded(client);
+            base.PlayerFactionAdded(client);
         }
 
         public override Task OnVehicleOut(IPlayer client, VehicleHandler vehicleHandler, Location location)

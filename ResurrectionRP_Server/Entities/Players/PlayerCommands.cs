@@ -33,17 +33,16 @@ namespace ResurrectionRP_Server.Entities.Players
             Chat.RegisterCmd("sobre", Sobre);
         }
 
-        private Task Sobre(IPlayer player, string[] args)
+        private void Sobre(IPlayer player, string[] args)
         {
             var ph = player.GetPlayerHandler();
 
             if (ph == null)
-                return Task.CompletedTask;
+                return;
 
             ph.Alcohol = 0;
             ph.UpdateFull();
             player.SendNotificationSuccess("Commande éffectuer!");
-            return Task.CompletedTask;
         }
 
         private async Task Wipe(IPlayer player, string[] arguments)
@@ -71,44 +70,40 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 if (house.Owner == phWipe.PID)
                 {
-                    await house.SetOwner(string.Empty);
+                    house.SetOwner(string.Empty);
 
                     if (house.Parking != null)
                         house.Parking.ListVehicleStored = new List<ParkedCar>();
 
-                    await house.Save();
+                    house.UpdateInBackground();
                 }
             }
 
-            foreach (KeyValuePair<IVehicle, VehicleHandler> vehicle in VehiclesManager.VehicleHandlerList)
+            IEnumerable<VehicleHandler> vehicles = VehiclesManager.GetAllVehicles().ToArray();
+            
+            foreach (VehicleHandler vehicle in vehicles)
             {
-                if (vehicle.Value.OwnerID == phWipe.PID)
-                    await vehicle.Value.DeleteAsync(true);
-            }
+                if (vehicle.OwnerID != phWipe.PID)
+                    continue;
 
-            List<VehicleHandler> vehicleOwned = new List<VehicleHandler>();
-
-            foreach(var vh in VehiclesManager.GetAllVehicles())
-            {
-                if (vh.OwnerID == phWipe.PID)
-                    vehicleOwned.Add(vh);
-            }
-
-            foreach (Parking parking in Parking.ParkingList)
-            {
-                bool saveNeeded = false;
-
-                foreach (ParkedCar vehicle in parking.ListVehicleStored)
+                foreach (Parking parking in Parking.ParkingList)
                 {
-                    if (vehicleOwned.Exists(p=>p.Plate == vehicle.Plate))
+                    bool saveNeeded = false;
+
+                    foreach (ParkedCar parkedCar in parking.ListVehicleStored)
                     {
-                        parking.ListVehicleStored.Remove(vehicle);
-                        saveNeeded = true;
+                        if (parkedCar.Plate == vehicle.Plate)
+                        {
+                            parking.ListVehicleStored.Remove(parkedCar);
+                            saveNeeded = true;
+                        }
                     }
+
+                    if (saveNeeded)
+                        await parking.OnSaveNeeded();
                 }
 
-                if (saveNeeded)
-                    await parking.OnSaveNeeded.Invoke();
+                await vehicle.DeleteAsync(true);
             }
 
             foreach (var faction in FactionManager.FactionList)
@@ -144,14 +139,14 @@ namespace ResurrectionRP_Server.Entities.Players
                 player.SendChatMessage($"Wipe de {phWipe.Identite.Name} terminé!");
         }
 
-        public Task AddItem(IPlayer player, string[] arguments = null)
+        public void AddItem(IPlayer player, string[] arguments = null)
         {
             try
             {
                 PlayerHandler ph = player.GetPlayerHandler();
 
                 if (ph?.StaffRank < AdminRank.Moderator)
-                    return Task.CompletedTask;
+                    return;
 
                 string command = "";
 
@@ -179,18 +174,16 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 player.SendNotification(ex.ToString());
             }
-
-            return Task.CompletedTask;
         }
 
-        private async Task TpCoord(IPlayer player, string[] args)
+        private void TpCoord(IPlayer player, string[] args)
         {
             try
             {
                 if (player.GetPlayerHandler().StaffRank <= AdminRank.Player)
                     return;
 
-                await player.SetPositionAsync(new Position(float.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
+                player.Position = new Position(float.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2]));
             }
             catch
             {
@@ -198,62 +191,57 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        public Task Cls(IPlayer player, string[] args)
+        public void Cls(IPlayer player, string[] args)
         {
             player.EmitLocked("EmptyChat");
-            return Task.CompletedTask;
         }
 
-        public Task Refuel(IPlayer player, string[] args)
+        public void Refuel(IPlayer player, string[] args)
         {
             if (!player.IsInVehicle)
             {
                 player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
-                return Task.CompletedTask;
+                return;
             }
 
             if (player.Vehicle.GetVehicleHandler() != null)
                 player.Vehicle.GetVehicleHandler().Fuel = player.Vehicle.GetVehicleHandler().FuelMax;
 
             player.DisplaySubtitle("Essence restaurée", 5000);
-            return Task.CompletedTask;
         }
 
-        public Task SetFuel(IPlayer player, string[] args)
+        public void SetFuel(IPlayer player, string[] args)
         {
             if (!player.IsInVehicle)
             {
                 player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
-                return Task.CompletedTask;
+                return;
             }
 
             if (player.Vehicle.GetVehicleHandler() != null && double.TryParse(args[0], out double fuel))
                 player.Vehicle.GetVehicleHandler().Fuel = (float)Math.Min(fuel, player.Vehicle.GetVehicleHandler().FuelMax);
 
             player.SendNotificationSuccess("Quantité d'essence mise à jour");
-            return Task.CompletedTask;
         }
 
-        public Task Repair(IPlayer player, string[] args)
+        public void Repair(IPlayer player, string[] args)
         {
             if (!player.IsInVehicle)
             {
                 player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
-                return Task.CompletedTask;
+                return;
             }
 
             player.Vehicle.GetVehicleHandler().Repair(player);
             player.DisplaySubtitle("Vehicule réparé", 5000);
-            return Task.CompletedTask;
         }
 
-        private Task Cloth(IPlayer player, object[] args)
+        private void Cloth(IPlayer player, object[] args)
         {
             player.SetCloth((Models.ClothSlot)Convert.ToInt32(args[0]), (int)args[1], (int)args[2], (int)args[3]);
-            return Task.CompletedTask;
         }
 
-        public async Task Wheel(IPlayer player, string[] args)
+        public void Wheel(IPlayer player, string[] args)
         {
             if (!player.IsInVehicle)
             {
@@ -264,10 +252,9 @@ namespace ResurrectionRP_Server.Entities.Players
             player.SendChatMessage($"Wheel health: {player.Vehicle.GetWheelHealth(0)}");
             player.SendChatMessage($"Wheel HasTire: {player.Vehicle.DoesWheelHasTire(0)}");
             player.SendChatMessage($"Wheel Burst: {player.Vehicle.IsWheelBurst(0)}");
-            await Task.CompletedTask;
         }
 
-        public async Task DoorState(IPlayer player, string[] args)
+        public void DoorState(IPlayer player, string[] args)
         {
             if (!player.IsInVehicle)
             {
@@ -275,19 +262,18 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
             }
 
-            await player.EmitAsync("SetDoorState", player.Vehicle, int.Parse(args[0]), int.Parse(args[1]), bool.Parse(args[2]));
+            player.EmitLocked("SetDoorState", player.Vehicle, int.Parse(args[0]), int.Parse(args[1]), bool.Parse(args[2]));
         }
 
-        public Task NeonState(IPlayer player, string[] args)
+        public void NeonState(IPlayer player, string[] args)
         {
             if (!player.IsInVehicle)
             {
                 player.DisplaySubtitle("Vous devez être dans un véhicule", 5000);
-                return Task.CompletedTask;
+                return;
             }
 
             player.Vehicle.GetVehicleHandler().NeonState = new Tuple<bool, bool, bool, bool>(bool.Parse(args[0]), bool.Parse(args[0]), bool.Parse(args[0]), bool.Parse(args[0]));
-            return Task.CompletedTask;
         }
     }
 }

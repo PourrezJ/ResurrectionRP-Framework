@@ -19,8 +19,9 @@ namespace ResurrectionRP_Server.Factions
     {
         #region Static fields
         private static readonly double healprice = 1000;
-       
+
         #endregion
+
 
         #region Constructor
         public ONU(string FactionName, FactionType FactionType) : base(FactionName, FactionType)
@@ -70,9 +71,6 @@ namespace ResurrectionRP_Server.Factions
 
             ServicePlayerList = new List<string>();
 
-            Alt.OnClient("ONU_CallUrgenceMedic", ONU_CallUrgenceMedic);
-            Alt.OnClient("ONU_ImAccept", ONU_IAccept);
-            Alt.OnClient("ONU_BlesseRemoveBlip", ONU_BlesseRemoveBlip);
 
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pistol, "Pistol MK2", "", hash: WeaponHash.PistolMk2), 0, 1));
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Carabine, "Special Carbine MK2", "", hash: WeaponHash.SpecialCarbineMk2), 0, 3));
@@ -94,12 +92,13 @@ namespace ResurrectionRP_Server.Factions
             Entities.Peds.Ped npcmedic2 = Entities.Peds.Ped.CreateNPC(PedModel.Scrubs01SFY, new Vector3(-264.5344f, 6314.32f, 32.4364f), 320.3845f);
             npcmedic2.NpcInteractCallBack = OnNPCInteract;
 
+            EmCall = new EmergencyCall(FactionName);
             return base.Init();
         }
         #endregion
 
         #region Event handlers
-        public override async Task OnPlayerPromote(IPlayer client, int rang)
+        public override void OnPlayerPromote(IPlayer client, int rang)
         {
             if (!client.Exists)
                 return;
@@ -156,10 +155,11 @@ namespace ResurrectionRP_Server.Factions
                         break;
                 }
             }
-            await base.OnPlayerPromote(client, rang);
+
+            base.OnPlayerPromote(client, rang);
         }
 
-        public override async Task PlayerFactionAdded(IPlayer client)
+        public override void PlayerFactionAdded(IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -250,7 +250,7 @@ namespace ResurrectionRP_Server.Factions
                 FactionPlayerList[socialClub].Inventory.AddItem(cloth, 1);
             }
 
-            await base.PlayerFactionAdded(client);
+            base.PlayerFactionAdded(client);
         }
 
         public override Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)

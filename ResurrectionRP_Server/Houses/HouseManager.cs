@@ -26,27 +26,53 @@ namespace ResurrectionRP_Server.Houses
         private static ConcurrentDictionary<IPlayer, House> ClientHouse = new ConcurrentDictionary<IPlayer, House>();
         #endregion
 
-        #region Constructor
+        #region Init
         public static void Init()
         {
-            Alt.OnPlayerDead += Alt_OnPlayerDead;
+            Alt.OnPlayerDisconnect += OnPlayerDisconnect;
+            Alt.OnPlayerDead += OnPlayerDead;
 
-            for(int i = 0; i < HouseTypes.HouseTypeList.Count; i++)
+            for (int i = 0; i < HouseTypes.HouseTypeList.Count; i++)
                 Marker.CreateMarker(MarkerType.VerticalCylinder, HouseTypes.HouseTypeList[i].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), null, null);
-
+            
             Utils.Utils.SetInterval(async () =>
             {
                 foreach (var house in Houses)
                 {
-                    await house.Save();
+                    house.UpdateInBackground();
                     await Task.Delay(100);
                 }
             }, (int)TimeSpan.FromMinutes(10).TotalMilliseconds);
         }
         #endregion
 
+        #region Event handlers
+        public static void OnPlayerConnected(IPlayer player)
+        {
+            string social = player.GetSocialClub();
+
+            foreach (House house in Houses.Where(h => h.Owner == social))
+                house.SetOwnerHandle(player);
+        }
+
+        public static void OnPlayerDisconnect(IPlayer player, string reason)
+        {
+            RemovePlayerFromHouseList(player);
+        }
+
+        private static void OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
+        {
+            player.Dimension = GameMode.GlobalDimension;
+            RemovePlayerFromHouseList(player);
+        }
+        #endregion
+
         #region Methods
-        public static bool SetIntoHouse(IPlayer client, House house) => ClientHouse.TryAdd(client, house);
+        public static bool SetIntoHouse(IPlayer client, House house)
+        {
+            Alt.Server.LogInfo($"Set client {client.Id} into house {house.ID}");
+            return ClientHouse.TryAdd(client, house);
+        }
 
         public static bool IsInHouse(IPlayer client) => ClientHouse.ContainsKey(client);
 
@@ -60,7 +86,12 @@ namespace ResurrectionRP_Server.Houses
             return null;
         }
 
-        public static bool RemoveClientHouse(IPlayer client) => ClientHouse.TryRemove(client, out _);
+        public static bool RemoveClientHouse(IPlayer client)
+        {
+            bool result = ClientHouse.TryRemove(client, out House house);
+            Alt.Server.LogInfo($"Remove client {client.Id} from house {house.ID}");
+            return result;
+        }
 
         public static void RemovePlayerFromHouseList(IPlayer player)
         {
@@ -71,8 +102,7 @@ namespace ResurrectionRP_Server.Houses
                 if (house == null)
                     return;
 
-                if (RemoveClientHouse(player))
-                    house.RemovePlayer(player, false);                
+                house.RemovePlayer(player, false);                
             }
         }
         #endregion
@@ -91,6 +121,7 @@ namespace ResurrectionRP_Server.Houses
                     try
                     {
                         var house = housesList[i];
+
                         if (house != null)
                         {
                             house.Init();
@@ -103,7 +134,6 @@ namespace ResurrectionRP_Server.Houses
                     }
                 }
             });
-
 
             Alt.Server.LogInfo($"Loaded {Houses.Count} houses.");
         }
@@ -186,8 +216,8 @@ namespace ResurrectionRP_Server.Houses
                     if (player.HasBankMoney(house.Price, "Achat immobilier."))
                     {
                         GameMode.Instance.Economy.CaissePublique += house.Price;
-                        await house.SetOwner(client.GetPlayerHandler().PID);
-                        await house.SendPlayer(client);
+                        house.SetOwner(client.GetPlayerHandler().PID);
+                        house.SendPlayer(client);
                         MenuManager.CloseMenu(client);
                         client.SendNotificationSuccess("Vous avez acheté ce logement.");
                     }
@@ -196,7 +226,7 @@ namespace ResurrectionRP_Server.Houses
                     break;
 
                 case "ID_Enter":
-                    await house.SendPlayer(client);
+                    house.SendPlayer(client);
                     menu.CloseMenu(client);
                     break;
 
@@ -211,29 +241,29 @@ namespace ResurrectionRP_Server.Houses
                         client.SendNotificationError("Un parking est déjà disponible pour cette maison.");
                     break;
                 case "ID_Delete":
-                    await house.Destroy();
+                    house.Destroy();
                     await house.RemoveInDatabase();
                     client.SendNotificationSuccess("Vous avez supprimé le logement.");
                     break;
                 case "ID_PriceChange":
                     int price = Convert.ToInt32(menuItem.InputValue);
                     house.Price = price;
-                    await house.SetPrice(price);
+                    house.SetPrice(price);
                     client.SendNotificationSuccess("Vous avez changé le prix du logement par " + price);
                     break;
                 case "ID_Change":
                     int type = Convert.ToInt32(menuItem.InputValue);
-                    await house.SetType(type);
+                    house.SetType(type);
                     client.SendNotificationSuccess("Vous avez changé le type du logement par " + type);
                     break;
                 case "ID_RemoveParking":
                     house.Parking.Destroy();
                     house.Parking = null;
-                    await house.Save();
+                    house.UpdateInBackground();
                     client.SendNotificationSuccess("Vous avez supprimé le parking");
                     break;
                 case "ID_ChangeProprio":
-                    await house.SetOwner(menuItem.InputValue);
+                    house.SetOwner(menuItem.InputValue);
                     client.SendNotificationSuccess("Proprio changé.");
                     break;
                 default:
@@ -241,26 +271,12 @@ namespace ResurrectionRP_Server.Houses
             }
         }
 
-        public static void OnPlayerConnected(IPlayer player)
-        {
-            var social = player.GetSocialClub();
-
-            foreach (House house in Houses.Where(h => h.Owner == social))
-                house.SetOwnerHandle(player);
-        }
-
-        private static void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
-        {
-            player.Dimension = GameMode.GlobalDimension;
-            RemovePlayerFromHouseList(player);
-        }
-
-        public static async Task House_Exit()
+        public static void House_Exit()
         {
             foreach(House house in Houses)
             {
-                await house.Save();
-                await house.Destroy();
+                house.UpdateInBackground();
+                house.Destroy();
             }
 
             Houses.Clear();

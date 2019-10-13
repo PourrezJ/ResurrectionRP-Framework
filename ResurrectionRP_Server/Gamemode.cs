@@ -91,13 +91,16 @@ namespace ResurrectionRP_Server
         #region Events
         private void OnServerStop()
         {
-            for (int i = 0; i < PlayerList.Count; i++)
+            AltAsync.Do(() =>
             {
-                if (PlayerList[i] != null && PlayerList[i].Exists)
-                    PlayerList[i].Kick("Server stop");
-            }
+                foreach (IPlayer player in PlayerList.ToArray())
+                {
+                    if (player != null && player.Exists)
+                        player.Kick("Server stop");
+                }
 
-            //await HouseManager.House_Exit();
+                //await HouseManager.House_Exit();
+            });
         }
 
         public void OnStart()
@@ -130,7 +133,8 @@ namespace ResurrectionRP_Server
             PlayerManager.Init();
             PlayerKeyHandler.Init();
             Events.Initialize();
-            VehiclesManager.Init();          
+            VehiclesManager.Init();
+            HouseManager.Init();
             Teleport.TeleportManager.Init();
             Inventory.RPGInventoryManager.Init();
             MenuManager.Init();
@@ -160,7 +164,7 @@ namespace ResurrectionRP_Server
                 //await JobsManager.Init();
                 await HouseManager.LoadAllHouses();
                 
-                Alt.Server.LogColored("~g~Serveur charger!");
+                Alt.Server.LogColored("~g~Serveur chargé!");
                 ServerLoaded = true;
             });
 
@@ -183,7 +187,6 @@ namespace ResurrectionRP_Server
             Utils.Utils.SetInterval(async () => await Restart(), 1000);
             
             Utils.Utils.SetInterval(() => Time.Update(), 1000);           
-            Utils.Utils.SetInterval(() => VehiclesManager.UpdateVehiclesMilageAndFuel(), 1000);
 
             Chat.Initialize();
 
@@ -191,44 +194,44 @@ namespace ResurrectionRP_Server
             {
                 if (player.IsInVehicle)
                 {
-                    Chat.SendChatMessage(player, "X: " + player.Vehicle.Position.X + " Y: " + player.Vehicle.Position.Y + " Z: " + player.Vehicle.Position.Z);
+                    Chat.SendChatMessage(player, "X: " + player.Vehicle.Position.X + " Y: " + player.Vehicle.Position.Y + " Z: " + player.Vehicle.Position.Z + " Dim: " + player.Dimension);
                     Chat.SendChatMessage(player, "RX: " + player.Vehicle.Rotation.Roll + " RY: " + player.Vehicle.Rotation.Pitch + " RZ: " + player.Vehicle.Rotation.Yaw);
                 }
                 else
                 {
-                    Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z);
+                    Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z + " Dim: " + player.Dimension);
                     Chat.SendChatMessage(player, "RX: " + player.Rotation.Roll + " RY: " + player.Rotation.Pitch + " RZ: " + player.Rotation.Yaw);
                 }
-                return Task.CompletedTask;
             });
 
             Chat.RegisterCmd("getCoords", (IPlayer player, string[] args) =>
             {
                 Alt.Server.LogColored($" X: {player.Position.X}  Y: {player.Position.Y} Z: {player.Position.Z} ");
                 Alt.Server.LogColored($" RX: {player.Rotation.Roll}  RY: {player.Rotation.Pitch} RZ: {player.Rotation.Yaw} ");
-                return Task.CompletedTask;
             });
 
             Chat.RegisterCmd("dimension", (IPlayer player, string[] args) =>
             {
                 Alt.Server.LogInfo("My dimension: " + player.Dimension) ;
-                return Task.CompletedTask;
             });
 
             Chat.RegisterCmd("save", (IPlayer player, string[] args) =>
             {
                 player.GetPlayerHandler()?.UpdateFull();
                 player.Vehicle?.GetVehicleHandler()?.UpdateInBackground();
-                return Task.CompletedTask;
             });
 
-            Chat.RegisterCmd("tpto", async (IPlayer player, string[] args) =>
+            Chat.RegisterCmd("tpto", (IPlayer player, string[] args) =>
             {
                 if (player.GetPlayerHandler()?.StaffRank <= 0)
                     return;
                 try
                 {
-                    await player.SetPositionAsync(new Vector3(float.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2])));
+                    float x = Convert.ToSingle(args[0].ToString().Replace('f',' ').Replace(',',' '));
+                    float y = Convert.ToSingle(args[1].ToString().Replace('f', ' ').Replace(',', ' '));
+                    float z = Convert.ToSingle(args[2].ToString().Replace('f', ' ').Replace(',', ' '));
+
+                    await player.SetPositionAsync(new Position(x, y, z));
                 }
                 catch (Exception ex)
                 {

@@ -93,7 +93,21 @@ export default class PhoneManager {
                     return;
                 }
 
-                alt.emitServer("ONU_CallUrgenceMedic");
+                this.ClosePhone();
+                let inputView = new alt.WebView("http://resource/client/cef/userinput/input.html");
+                inputView.focus();
+                alt.showCursor(true);
+                alt.toggleGameControls(false);
+
+                inputView.emit('Input_Data', 999, "");
+
+                inputView.on('Input_Submit', (text) => {
+                    inputView.destroy();
+                    alt.showCursor(false);
+                    alt.toggleGameControls(true);
+                    Interaction.SetCanClose(true);
+                    alt.emitServer("InteractEmergencyCall", "emit", "ONU", ""+text);
+                });
             });
 
             this.browser.on("callPolice", () => {
@@ -114,7 +128,7 @@ export default class PhoneManager {
                     alt.showCursor(false);
                     alt.toggleGameControls(true);
                     Interaction.SetCanClose(true);
-                    alt.emitServer("CallUrgenceLSPD", text);                    
+                    alt.emitServer("InteractEmergencyCall", "emit", "LSPD", ""+text);                   
                 });
             });
 

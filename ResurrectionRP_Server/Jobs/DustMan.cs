@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Numerics;
-using AltV.Net;
+﻿using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Enums;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Services;
 using ResurrectionRP_Server.Utils;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Numerics;
 
 namespace ResurrectionRP_Server.Jobs
 {
@@ -137,30 +137,31 @@ namespace ResurrectionRP_Server.Jobs
             #endregion
 
             Alt.OnServer("DustMan_Callback", DustMan_Callback);
-
+            /*
             Utils.Utils.SetInterval(() =>
             {
-                if (VehicleSpawnLocation != null && VehiclesManager.IsVehicleInSpawn(VehicleSpawnLocation.Pos))
+                AltAsync.Do(() =>
                 {
-                    //var vehs = await MP.Vehicles.GetInRangeAsync(VehicleSpawnLocation.Pos, 4, MP.GlobalDimension);
-                    var vehs = VehicleSpawnLocation.Pos.GetVehiclesInRange(4);
-
-                    if (vehs.Count > 0)
+                    if (VehicleSpawnLocation != null && VehiclesManager.IsVehicleInSpawn(VehicleSpawnLocation.Pos))
                     {
-                        foreach (var veh in vehs)
-                        {
-                            if (!veh.Exists)
-                                return;
+                        //var vehs = await MP.Vehicles.GetInRangeAsync(VehicleSpawnLocation.Pos, 4, MP.GlobalDimension);
+                        var vehs = VehicleSpawnLocation.Pos.GetVehiclesInRange(4);
 
-                            if (veh.Driver == null)
+                        if (vehs.Count > 0)
+                        {
+                            foreach (var veh in vehs)
                             {
-                                veh.Remove();
+                                if (!veh.Exists)
+                                    return;
+
+                                if (veh.Driver == null)
+                                    Task.Run(async () => { await Pound.AddVehicleInPoundAsync(veh.GetVehicleHandler()); });
                             }
                         }
                     }
-                }
+                });
             }, (int)TimeSpan.FromMinutes(2).TotalMilliseconds);
-
+            */
             base.Load();
         }
 

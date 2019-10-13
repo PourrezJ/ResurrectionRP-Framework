@@ -153,8 +153,6 @@ export function initialize() {
     alt.on('FadeIn', (args: number) => game.doScreenFadeIn(args));
     alt.on('FadeOut', (args: number) => game.doScreenFadeOut(args));
 
-    alt.on('SetNotificationMessage', (args: any[]) => SetNotificationPicture(args[0], args[1], args[1], args[2], args[3], args[4], args[5]));
-
     /*
      * Vehicle
     */

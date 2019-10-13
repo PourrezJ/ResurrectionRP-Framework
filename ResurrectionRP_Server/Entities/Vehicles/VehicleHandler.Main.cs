@@ -293,16 +293,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }
 
-        public async Task ApplyDamageAsync()
-        {
-            if (Vehicle != null && await Vehicle.ExistsAsync())
-            {
-                await Vehicle.SetDimensionAsync(-1);
-                await Vehicle.SetDimensionAsync(GameMode.GlobalDimension);
-            }
-        }
-        
-
         public bool LockUnlock(IPlayer client)
         {
             if (!client.Exists)

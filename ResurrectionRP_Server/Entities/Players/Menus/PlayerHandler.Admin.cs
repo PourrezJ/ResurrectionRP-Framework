@@ -41,7 +41,7 @@ namespace ResurrectionRP_Server.Entities.Players
             #region Menu
             Menu mainMenu = new Menu("ID_AdminMenu", "Admin Menu", "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.Garage);
             mainMenu.SubTitle = $"Joueur Selectionné: ~r~{_playerSelected.Identite.Name}";
-            mainMenu.FinalizerAsync += OnFinalize;
+            mainMenu.Finalizer += OnFinalize;
             #endregion
 
             if (StaffRank >= AdminRank.Animator)
@@ -500,14 +500,13 @@ namespace ResurrectionRP_Server.Entities.Players
             #endregion
         }
 
-        private Task OnFinalize(IPlayer client, Menu menu)
+        private void OnFinalize(IPlayer client, Menu menu)
         {
             /*
             if (_playerSelected.Client != null && _playerSelected.Client.Exists)
                 _playerSelected.Client.ResetSharedData("AC_Immunity");
             */
             _playerSelected = null;
-            return Task.CompletedTask;
         }
         #endregion
 

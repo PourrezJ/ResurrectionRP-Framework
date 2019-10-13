@@ -17,6 +17,7 @@ import { VoiceChat } from '../Voice/VoiceChat';
 import { Medical } from '../Medical';
 import { Weedlabs } from '../Env/WeedLabs';
 import { Effects } from './Effects';
+import { EmergencyCall } from '../EmergencyCall';
 import * as veh from '../vehicle/vehicle';
 import * as utils from '../Utils/Utils';
 
@@ -102,6 +103,7 @@ export class Game {
             new DrivingSchool();
             new DustManManager();
             new Medical();
+            new EmergencyCall();
             new Weedlabs();
             new Effects();
 

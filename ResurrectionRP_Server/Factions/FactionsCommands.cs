@@ -17,53 +17,60 @@ namespace ResurrectionRP_Server.Factions
             Chat.RegisterCmd("addsheriff", AddPlayerSheriff);
         }
 
-        public async Task AddPlayerONU(IPlayer client, string[] args)
+        public void AddPlayerONU(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            await FactionManager.Onu.TryAddIntoFaction(client, 4);
+
+            FactionManager.Onu.TryAddIntoFaction(client, 4);
         }
 
-        public async Task AddPlayerLSPD(IPlayer client, string[] args)
+        public void AddPlayerLSPD(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            await FactionManager.Lspd.TryAddIntoFaction(client, 4);
-        }
-        
-        public async Task AddPlayerRebelle(IPlayer client, string[] args)
-        {
-            if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
-                return;
-            await FactionManager.Rebelle.TryAddIntoFaction(client, 3);
+
+            FactionManager.Lspd.TryAddIntoFaction(client, 4);
         }
 
-        public async Task AddPlayerLSCustom(IPlayer client, string[] args)
+        public void AddPlayerRebelle(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            await FactionManager.LSCustom.TryAddIntoFaction(client, 2);
+
+            FactionManager.Rebelle.TryAddIntoFaction(client, 3);
         }
 
-        public async Task AddPlayerGouv(IPlayer client, string[] args)
+        public void AddPlayerLSCustom(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            await FactionManager.Gouvernement.TryAddIntoFaction(client, 7);
+
+            FactionManager.LSCustom.TryAddIntoFaction(client, 2);
         }
-        
-        public async Task AddPlayerDock(IPlayer client, string[] args)
+
+        public void AddPlayerGouv(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            await FactionManager.Dock.TryAddIntoFaction(client, 5);
+
+            FactionManager.Gouvernement.TryAddIntoFaction(client, 7);
         }
-        
-        public async Task AddPlayerSheriff(IPlayer client, string[] args)
+
+        public void AddPlayerDock(IPlayer client, string[] args)
         {
             if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
                 return;
-            await FactionManager.Nordiste.TryAddIntoFaction(client, 6);
+
+            FactionManager.Dock.TryAddIntoFaction(client, 5);
+        }
+
+        public void AddPlayerSheriff(IPlayer client, string[] args)
+        {
+            if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
+                return;
+
+            FactionManager.Nordiste.TryAddIntoFaction(client, 6);
         }
     }
 }

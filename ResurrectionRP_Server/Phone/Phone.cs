@@ -251,22 +251,29 @@ namespace ResurrectionRP_Server.Phone
 
         public bool TryEditContact(IPlayer client, string contactName, string contactNumber, string originalNumber, bool message = true)
         {
-            if (ValidateContact(contactName, contactNumber, true))
+            try
             {
-                if (AddressBook == null || string.IsNullOrEmpty(originalNumber))
-                    return false;
-
-                Address foundAddress = AddressBook.Find(address => address?.phoneNumber == originalNumber);
-
-                if (foundAddress != null && foundAddress.phoneNumber != null && foundAddress.phoneNumber != "")
+                if (ValidateContact(contactName, contactNumber, true))
                 {
-                    RemoveContactFromAddressBook(originalNumber);
-                    AddNameToAddressBook(client, contactName, contactNumber);
+                    if (AddressBook == null || string.IsNullOrEmpty(originalNumber))
+                        return false;
 
-                    client.EmitLocked("ContactEdited");
-                    return true;
+                    Address foundAddress = AddressBook.Find(address => address?.phoneNumber == originalNumber);
+
+                    if (foundAddress != null && foundAddress.phoneNumber != null && foundAddress.phoneNumber != "")
+                    {
+                        RemoveContactFromAddressBook(originalNumber);
+                        AddNameToAddressBook(client, contactName, contactNumber);
+                        client.EmitLocked("ContactEdited");
+                        return true;
+                    }
                 }
             }
+            catch (NullReferenceException)
+            {
+                Alt.Server.LogError($"[Phone.TryEditContact()] NullReferenceException : client: {client}, contactName: {contactName}, contactNumber: {contactNumber}, originalNumber: {originalNumber}, message: {message}");
+            }
+
 
             return false;
         }

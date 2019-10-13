@@ -87,7 +87,7 @@ namespace ResurrectionRP_Server.Streamer
             }      
         }
 
-        public static TextLabel AddEntityTextLabel(string label, Vector3 pos, int font = 1, int r = 255, int g = 255, int b = 255, int a = 255, int drawDistance = 5, int dimension = GameMode.GlobalDimension)
+        public static TextLabel AddEntityTextLabel(string label, Vector3 pos, int font = 2, int r = 255, int g = 255, int b = 255, int a = 128, int drawDistance = 5, int dimension = GameMode.GlobalDimension)
         {
             var data = new TextLabel(label, font, r, g, b, a, EntityNumber++);
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, drawDistance, data.export());

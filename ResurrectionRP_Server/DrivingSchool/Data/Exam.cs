@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.DrivingSchool
             this.id = SchooldId;
             this.Trajectoire = traj;
 
-            AltAsync.OnPlayerEnterVehicle += this.OnEnterVehicle;
+            Alt.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             
         }
         #endregion
@@ -88,7 +88,7 @@ namespace ResurrectionRP_Server.DrivingSchool
             return Task.CompletedTask;
         }
 
-        private async Task OnEnterVehicle(IVehicle vehicle, IPlayer client, byte seat)
+        private void OnPlayerEnterVehicle(IVehicle vehicle, IPlayer client, byte seat)
         {
             if (seat != 1)
                 return;

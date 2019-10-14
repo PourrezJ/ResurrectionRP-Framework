@@ -23,6 +23,7 @@ namespace ResurrectionRP_Server.Illegal
         public static List<IllegalSystem> IllegalList = new List<IllegalSystem>();
 
         public static WeedBusiness WeedBusiness { get; set; }
+        public static BlackMarket BlackMarket { get; set; }
 
         public static async Task OnEnterColshape(IPlayer client, IColshape colshape)
         {
@@ -52,16 +53,20 @@ namespace ResurrectionRP_Server.Illegal
         {
             Alt.Server.LogDebug("--- Start loading all illegal business in database ---");
 
-            var BlackMarket = new BlackMarket();
-            BlackMarket.Init();
-
             var _illagelBusinessesList = await Database.MongoDB.GetCollectionSafe<IllegalSystem>("illegal").AsQueryable().ToListAsync();
             foreach (var _businesses in _illagelBusinessesList)
             {
                 if (_businesses.GetType() == typeof(WeedBusiness))
-                    WeedBusiness = _businesses as WeedBusiness;
+                {
+                    WeedBusiness = (WeedBusiness)_businesses;
+                    WeedBusiness?.Load();
+                }
+                else if (_businesses.GetType() == typeof(BlackMarket))
+                {
+                    BlackMarket = (BlackMarket)_businesses;
+                    BlackMarket?.Load();
+                }
 
-                _businesses.Load();
                 IllegalList.Add(_businesses);
             }
 
@@ -72,6 +77,12 @@ namespace ResurrectionRP_Server.Illegal
                 WeedBusiness.Load();
             }
 
+            if (BlackMarket == null)
+            {
+                BlackMarket = new BlackMarket();
+                await BlackMarket.Insert();
+                BlackMarket.Load();
+            }
 
             Alt.Server.LogDebug($"--- Finish loading all illegal businesses in database: {_illagelBusinessesList.Count} ---");
 
@@ -93,20 +104,22 @@ namespace ResurrectionRP_Server.Illegal
     public class IllegalSystem
     {
         public BsonObjectId _id;
-
+        [BsonIgnore]
         public bool Enabled { get; set; } = false;
 
         public Inventory.Inventory Inventory { get; set; }
 
         public int CurrentPos;
-        public Location[] DealerLocations;
+
         public DateTime NextRefreshDealerPos;
         [BsonRepresentation(BsonType.Int64, AllowOverflow = true)]
         public PedModel DealerPedHash;
 
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
+        [BsonIgnore]
         public Dictionary<ItemID, double> IllegalPrice
             = new Dictionary<ItemID, double>();
+        [BsonIgnore]
+        public Location[] DealerLocations;
 
         [BsonIgnore]
         public Ped DealerPed;
@@ -135,12 +148,6 @@ namespace ResurrectionRP_Server.Illegal
             PlayerHandler player = sender.GetPlayerHandler();
             if (player.IsOnProgress || sender.IsInVehicle)
                 return;
-
-            if (Factions.FactionManager.Lspd.ServicePlayerList.Count < 2)
-            {
-                sender.SendNotificationError("[HRP] Pas assez de miliciens de présent sur le serveur.");
-                return;
-            }
 
             if (IllegalPrice.Count > 0)
             {

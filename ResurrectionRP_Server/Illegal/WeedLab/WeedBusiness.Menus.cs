@@ -3,6 +3,7 @@ using ResurrectionRP_Server.Illegal.WeedLab;
 using ResurrectionRP_Server.Inventory;
 using ResurrectionRP_Server.Models.InventoryData;
 using ResurrectionRP_Server.XMenuManager;
+using System;
 using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Illegal
@@ -76,6 +77,8 @@ namespace ResurrectionRP_Server.Illegal
 
         private void GrowZoneMenuCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
+            Utils.Utils.CheckThread("GrowZoneMenuCallback");
+
             WeedZone zone = (WeedZone)menu.GetData("Zone");
             if (zone == null) return;
 
@@ -91,6 +94,7 @@ namespace ResurrectionRP_Server.Illegal
                     {
                         zone.SeedUsed = SeedType.Skunk;
                         zone.Plant = true;
+                        XMenuManager.XMenuManager.CloseMenu(client);
                     }
                     break;
                 case "ID_SeedPurple":
@@ -98,6 +102,7 @@ namespace ResurrectionRP_Server.Illegal
                     {
                         zone.SeedUsed = SeedType.Purple;
                         zone.Plant = true;
+                        XMenuManager.XMenuManager.CloseMenu(client);
                     }
                     break;
                 case "ID_SeedOrange":
@@ -105,6 +110,7 @@ namespace ResurrectionRP_Server.Illegal
                     {
                         zone.SeedUsed = SeedType.Orange;
                         zone.Plant = true;
+                        XMenuManager.XMenuManager.CloseMenu(client);
                     }
                     break;
                 case "ID_SeedWhite":
@@ -112,6 +118,7 @@ namespace ResurrectionRP_Server.Illegal
                     {
                         zone.SeedUsed = SeedType.WhiteWidow;
                         zone.Plant = true;
+                        XMenuManager.XMenuManager.CloseMenu(client);
                     }
                     break;
                 case "ID_Hydro":
@@ -128,11 +135,20 @@ namespace ResurrectionRP_Server.Illegal
                     break;
                 case "ID_Recolte":
                     Recolte(zone);
+                    XMenuManager.XMenuManager.CloseMenu(client);
                     break;
             }
 
-            LabelRefresh(zone);
-            Task.Run(async () => await Update());
+            try
+            {
+                LabelRefresh(zone);
+                Task.Run(async () => await Update());
+            }
+            catch(Exception ex)
+            {
+                AltV.Net.Alt.Server.LogError(ex.ToString());
+            }
+
 
             if (menuItem.Id == "ID_Tint")
                 menu.OpenXMenu(client);

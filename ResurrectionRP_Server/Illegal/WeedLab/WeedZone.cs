@@ -135,9 +135,7 @@ namespace ResurrectionRP_Server.Illegal.WeedLab
 
         public void OnGrowingZoneEnter(IColshape colshape, IPlayer client)
         {
-            colshape.GetData("id", out int colid);
-            Colshape.GetData("id", out int Colid);
-            if (OnGrowingClientEnter != null && colid == Colid)
+            if (OnGrowingClientEnter != null)
                 OnGrowingClientEnter.Invoke(client, this);
         }
     }

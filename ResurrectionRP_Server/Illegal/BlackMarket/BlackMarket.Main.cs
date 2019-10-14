@@ -4,11 +4,10 @@ using ResurrectionRP_Server.Models;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Text;
 
 namespace ResurrectionRP_Server.Illegal
 {
-    public partial class BlackMarket
+    public partial class BlackMarket : IllegalSystem
     {
         #region Field
         public DateTime NextRefreshMarketPos;
@@ -32,7 +31,7 @@ namespace ResurrectionRP_Server.Illegal
         }
         #endregion
 
-        public void Init()
+        public override void Load()
         {
             if (NextRefreshMarketPos < DateTime.Now || NextRefreshMarketPos == new DateTime())
             {
@@ -52,7 +51,31 @@ namespace ResurrectionRP_Server.Illegal
             Utils.Utils.SetInterval(() =>
             {
                 // Check si milicien dans la zone
+                // GOTO ResetLabs ou ResetDealer
             }, 30000);
+            base.Load();
+        }
+
+        public override void OnPlayerConnected(IPlayer client)
+        {
+            if (WeedLabsOwned.Contains(client.GetSocialClub()))
+            {
+                if (IllegalManager.WeedBusiness.LabEnter != null)
+                    client.CreateBlip(140, IllegalManager.WeedBusiness.LabEnter.Pos, "Laboratoire de Canabis", 1, 25, 255, true);
+            }
+
+            if (WeedDealerOwned.Contains(client.GetSocialClub()))
+            {
+                if (IllegalManager.WeedBusiness.DealerLocations != null)
+                    client.CreateBlip(140, IllegalManager.WeedBusiness.DealerLocations[IllegalManager.WeedBusiness.CurrentPos].Pos, "Dealer de Canabis", 1, 25, 255, true);
+            }
+
+            base.OnPlayerConnected(client);
+        }
+
+        public override void OnPlayerDisconnected(IPlayer client)
+        {
+            base.OnPlayerDisconnected(client);
         }
 
         //public void ResetLabs()

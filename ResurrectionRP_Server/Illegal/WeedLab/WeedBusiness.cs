@@ -24,9 +24,9 @@ namespace ResurrectionRP_Server.Illegal
         #region Private Variables
         private Vector3 InventoryPos = new Vector3(1043.7627f, -3194.756f, -39.16992f);
         private Location InsideBat = new Location(new Vector3(1066.032f, -3183.42f, -39.1635f), new Vector3(0, 0, 85.58551f));
-        private Timer Timer = new Timer(10000);
+        private Timer Timer = new Timer(5000);
 
-        private WeedZone[] WeedZoneList = new WeedZone[9]
+        public WeedZone[] WeedZoneList = new WeedZone[9]
         {
             new WeedZone(0, StateZone.Stage0 , SeedType.Aucune, new Vector3(1053.894f, -3196.052f, -40.16129f)),
             new WeedZone(1, StateZone.Stage0 , SeedType.Aucune, new Vector3(1053.783f, -3189.879f, -40.16138f)),
@@ -104,7 +104,9 @@ namespace ResurrectionRP_Server.Illegal
                 weedzone.OnGrowingChange += OnGrowingChange;
                 weedzone.OnGrowingClientEnter += OnGrowingClientEnter;
 
-                weedzone.Timer = Utils.Utils.SetInterval(() => weedzone.GrowLoop(), 5000);
+                weedzone.Timer = new Timer(5000);
+                weedzone.Timer.Elapsed += (sender, e) => weedzone.GrowLoop();
+                weedzone.Timer.Start();
 
                 weedzone.Colshape.OnPlayerInteractInColshape += ColshapeInteract;
                 weedzone.Colshape.OnPlayerEnterColshape += OnEnterColshape;
@@ -296,7 +298,5 @@ namespace ResurrectionRP_Server.Illegal
             }
         }
         #endregion
-
-   
     }
 }

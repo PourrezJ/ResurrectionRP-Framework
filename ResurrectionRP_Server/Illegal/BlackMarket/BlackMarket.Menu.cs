@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using AltV.Net.Elements.Entities;
+﻿using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Peds;
 
 namespace ResurrectionRP_Server.Illegal
@@ -12,7 +10,7 @@ namespace ResurrectionRP_Server.Illegal
             Menu menu = new Menu("Black_Market", "Black Market");
             menu.ItemSelectCallback = BlackMarketCallBack;
             menu.Add(new MenuItem("Armes & Equipements", "Acheter des armes ou de l'équipements illégale", "ID_Weapons", true, false));
-            if (!WeedLabsOwned.Contains(client.GetSocialClub()))
+            if (!WeedLabsOwned.Contains(client.GetSocialClub()) && IllegalManager.WeedBusiness.LabEnter != null)
                 menu.Add(new MenuItem("Laboratoire Cannabis", "Découvrir la position d'un laboratoire de production de Cannabis", "ID_WeedLab", true, false, "$50000"));
 
             if (!WeedDealerOwned.Contains(client.GetSocialClub()))
@@ -48,11 +46,16 @@ namespace ResurrectionRP_Server.Illegal
         private void BuyWeedLabPos(IPlayer client)
         {
             WeedLabsOwned.Add(client.GetSocialClub());
+
+            if (IllegalManager.WeedBusiness.LabEnter != null)
+                client.CreateBlip(140, IllegalManager.WeedBusiness.LabEnter.Pos, "Laboratoire de Canabis", 1, 25, 255, true);
         }
 
         private void BuyWeedDealerPos(IPlayer client)
         {
             WeedDealerOwned.Add(client.GetSocialClub());
+            if (IllegalManager.WeedBusiness.DealerLocations != null)
+                client.CreateBlip(140, IllegalManager.WeedBusiness.DealerLocations[IllegalManager.WeedBusiness.CurrentPos].Pos, "Dealer de Canabis", 1, 25, 255, true);
         }
 
         public void OpenBlackMarket(IPlayer client, Menu menu)

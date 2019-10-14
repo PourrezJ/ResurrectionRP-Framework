@@ -13,11 +13,8 @@ namespace ResurrectionRP_Server.DrivingSchool
     {
         private List<DrivingSchool> drivingSchools = new List<DrivingSchool>();
 
-        public DrivingSchoolManager()
-        {
-        }
 
-        public void InitAll()
+        public void Load()
         {
             var schooltrajetcar = new List<Ride>()
             {
@@ -39,19 +36,13 @@ namespace ResurrectionRP_Server.DrivingSchool
                 new Ride(){ Position = new Vector3(86.93179f, -1436.302f, 28), Speed = 70 } //15
             };
 
-            var drivingSchool = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 29.29165f), new Models.Location(new Vector3(87.29823f, -1436.695f, 28.59703f), new Vector3(0.03492294f, 0.02653446f, 142.6451f)), Models.LicenseType.Car, 2500, schooltrajetcar, VehicleModel.Asea);
-            // var schoolcar = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 29.29165f), new Models.Location(new Vector3(84.56703f, - 1456.5231f,28.487915f), new Vector3(0.03492294f, 0.02653446f, -2f)), Models.LicenseType.Car, 2500, schooltrajetcar, VehicleModel.Asea);
+            //var drivingSchool = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 29.29165f), new Models.Location(new Vector3(87.29823f, -1436.695f, 28.59703f), new Vector3(0.03492294f, 0.02653446f, 142.6451f)), Models.LicenseType.Car, 2500, schooltrajetcar, VehicleModel.Asea);
+            var drivingSchool = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 28.29165f), new Models.Location(new Vector3(87.29823f, -1436.695f, 28.59703f), new Vector3(0.03492294f, 0.02653446f, 142.6451f)), Models.LicenseType.Car, 2, schooltrajetcar, VehicleModel.Asea);
 
             drivingSchools.Add(drivingSchool);
 
-            foreach (var school in drivingSchools)
-                school.Load();
-
-            AltAsync.OnClient("DrivingSchool_Open", DrivingSchoolManager_Open);
-            AltAsync.OnClient("DrivingSchool_Cancel", DrivingSchool_Cancel);
-            AltAsync.OnServer("DrivingSchool_End", DrivingSchool_End);
         }
-
+/*
         private async Task DrivingSchool_End(object[] args)
         {
             IPlayer client = args[0] as IPlayer;
@@ -90,6 +81,6 @@ namespace ResurrectionRP_Server.DrivingSchool
             }
 
             await Task.CompletedTask;
-        }
+        }*/
     }
 }

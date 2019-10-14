@@ -12,6 +12,8 @@ using System.Collections.Concurrent;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
+using ResurrectionRP_Server.Streamer.Data;
+using ResurrectionRP_Server.Colshape;
 
 namespace ResurrectionRP_Server.DrivingSchool
 {
@@ -19,86 +21,87 @@ namespace ResurrectionRP_Server.DrivingSchool
     {
         #region Fields and properties
         public byte Id { get; }
-        private Vector3 _position;
-        private Location _spawnVeh;
-        private LicenseType _schoolType;
-        private int _price;
-        private List<Ride> _circuit;
-        private VehicleModel _vehicleModel;
-        private Marker _markerId;
-        private Entities.Blips.Blips _blipId;
-        private IColShape _colshape;
-        private ConcurrentDictionary<string, Exam> _clientsInExamen = new ConcurrentDictionary<string, Exam>();
-        private List<IPlayer> _clientsInEchec = new List<IPlayer>();
+        public string SchoolName;
+        private Vector3 EntryPosition;
+        private Location VehicleSpawnLocation;
+        private LicenseType LicenseType;
+        private int Price;
+        private List<Ride> RidePoints;
+        private VehicleModel VehicleModel;
+
+        private Marker EntryMarker;
+        private IColshape EntryColshape;
+        private TextLabel EntryLabel;
+        private Entities.Blips.Blips Blip;
+
+        private ConcurrentDictionary<int, Exam> ConcernedPlayers = new ConcurrentDictionary<int, Exam>();
+
+
+
         #endregion
 
         #region Constructor
         public DrivingSchool(byte id, Vector3 pos, Models.Location spawnVeh, Models.LicenseType licenseType, int price, List<Ride> circuit, VehicleModel vehicleSchool)
         {
             Id = id;
-            _position = pos;
-            _spawnVeh = spawnVeh;
-            _schoolType = licenseType;
-            _price = price;
-            _circuit = circuit;
-            _vehicleModel = vehicleSchool;
-        }
-        #endregion
+            EntryPosition = pos;
+            VehicleSpawnLocation = spawnVeh;
+            LicenseType = licenseType;
+            Price = price;
+            RidePoints = circuit;
+            VehicleModel = vehicleSchool;
 
-        #region Private methods
-        private async Task BeginDrivingExamen(IPlayer client)
-        {
-            var veh = await VehiclesManager.SpawnVehicleAsync(client.GetSocialClub(), (uint)_vehicleModel, _spawnVeh.Pos, _spawnVeh.Rot, plate: "School", spawnVeh: true, locked: false);
-            Exam Examitem = new Exam(client, veh, _circuit, this.Id);
-            //Examitem.endExam = End();
-            _clientsInExamen.GetOrAdd(client.GetSocialClub(), Examitem);
-            client.GetPlayerHandler()?.AddKey(veh, "Auto école");
-            //await client.EmitAsync("BeginDrivingExamen", veh.Vehicle.Id, Circuit, ID);
 
-        }
-        #endregion
-
-        #region Public methods
-        public void Load()
-        {
-            _markerId = Marker.CreateMarker(MarkerType.MarkerTypeCarSymbol, _position, new Vector3(1f, 1f, 1f), Color.FromArgb(150, 5, 168, 0));
-            _colshape = Alt.CreateColShapeCylinder(_position - new Vector3(0, 0, 1), 2, 3);
-            //await MP.Markers.NewAsync(29, Position, new Vector3(), new Vector3(), 1f, Color.FromArgb(150, 5, 168, 0), true);
-            //IColshape colshape = await MP.Colshapes.NewTubeAsync(Position, 1f, 1f);
-            //colshape.SetSharedData("DrivingSchool", ID);
-            Events.OnPlayerEnterColShape += OnPlayerEnterColshape;
-            Events.OnPlayerLeaveColShape += OnPlayerLeaveColshape;
-            string schoolName = string.Empty;
-
-            switch (_schoolType)
+            switch (LicenseType)
             {
                 case LicenseType.Car:
-                    schoolName = "Auto-École";
+                    SchoolName = "Auto-École";
                     break;
 
                 case LicenseType.Air:
-                    schoolName = "École de pilotage";
+                    SchoolName = "École de pilotage";
                     break;
 
                 case LicenseType.Bike:
-                    schoolName = "Moto-École";
+                    SchoolName = "Moto-École";
                     break;
 
                 case LicenseType.Boat:
-                    schoolName = "Bateau-École";
+                    SchoolName = "Bateau-École";
                     break;
             }
 
-            _blipId    = Entities.Blips.BlipsManager.CreateBlip(schoolName, _position, 69, 535, 0.5f);
-            //IBlip blip = await MP.Blips.NewAsync(535, Position, 0.5f, 69, schoolName, 255, 10, true, 0);
+            EntryMarker = Marker.CreateMarker(MarkerType.VerticalCylinder, EntryPosition , new Vector3(1f, 1f, 1f), Color.FromArgb(150, 5, 168, 0));
+            EntryColshape = ColshapeManager.CreateCylinderColshape(EntryPosition, 2, 3);
+            EntryColshape.OnPlayerEnterColshape += EntryColshape_OnPlayerEnterColshape;
+            EntryColshape.OnPlayerLeaveColshape += EntryColshape_OnPlayerLeaveColshape;
+            EntryLabel = Streamer.Streamer.AddEntityTextLabel($"[~o~Auto Ecole~w~]\nPassez votre permis ici", EntryPosition + new Vector3(0,0,1), 2);
+
+
+            Blip = Entities.Blips.BlipsManager.CreateBlip(SchoolName, EntryPosition, 69, 535, 0.5f);
         }
 
-        public bool ClientIsInExamen(IPlayer client) =>
-            _clientsInExamen.ContainsKey(client.GetSocialClub());
+        private void EntryColshape_OnPlayerLeaveColshape(IColshape colshape, IPlayer client) =>
+            MenuManager.CloseMenu(client);
+        
+
+        private void EntryColshape_OnPlayerEnterColshape(IColshape colshape, IPlayer client)
+        {
+            if (!client.Exists || client.IsInVehicle)
+                return;
+            OpenMenuDrivingSchool(client);
+        }
+        #endregion
+
+
+        #region Public methods
+
+        public bool ClientIsInExam(IPlayer client) =>
+            ConcernedPlayers.ContainsKey(client.Id);
 
         public async Task End(IPlayer client, int advert)
         {
-            if (_clientsInExamen.TryRemove(client.GetSocialClub(), out Exam exam))
+            if (ConcernedPlayers.TryRemove(client.Id, out Exam exam))
             {
                 await exam.End();
 
@@ -108,35 +111,50 @@ namespace ResurrectionRP_Server.DrivingSchool
                 else
                 {
                     //await client.SendNotificationPicture($"~g~ Vous réussi votre examen avec {advert} faute(s).", Utils.Enums.CharPicture.CHAR_ANDREAS, false, 0, "Auto-école", "Examinateur");
-                    client.GetPlayerHandler()?.Licenses.Add(new Models.License(_schoolType));
+                    client.GetPlayerHandler()?.Licenses.Add(new Models.License(LicenseType));
                     client.SendNotificationSuccess($"~g~ Vous réussi votre examen avec {advert} faute(s).");
                 }
             }
         }
 
-        public async Task Cancel(IPlayer client)
+        public bool AddConcernedPlayer(IPlayer client, Exam exm)
         {
-            if (_clientsInExamen.TryRemove(client.GetSocialClub(), out Exam exam))
-                await exam.End();
+            if (ConcernedPlayers.ContainsKey(client.Id))
+                return true;
+            if (ConcernedPlayers.TryAdd(client.Id, exm))
+                return true;
+            Alt.Server.LogError("DrivingSchool | Error when trying to add a player from concerned | " + client.GetPlayerHandler().PID);
+            return false;
+        }
+        public bool RemoveConcernedPlayer(IPlayer client, bool AnticipateEnd = false)
+        {
+            if (!ConcernedPlayers.ContainsKey(client.Id))
+                return true;
+            if (ConcernedPlayers.TryRemove(client.Id, out Exam voided))
+            {
+                if(AnticipateEnd)
+                    voided.End();
+                return true;
+            }
+            Alt.Server.LogError("DrivingSchool | Error when trying to remove a player from concerned | " + client.GetPlayerHandler().PID);
+            return false;
+        }
+
+        public void CancelExam(IPlayer client) =>
+            RemoveConcernedPlayer(client, true);
+
+        public void StartExam(IPlayer client)
+        {
+            var veh = VehiclesManager.SpawnVehicle(client.GetSocialClub(), (uint)VehicleModel, VehicleSpawnLocation.Pos, VehicleSpawnLocation.Rot, plate: "SCHOOL", spawnVeh: true, locked: false);
+            Exam Examitem = new Exam(client, veh, this.RidePoints, this.Id);
+            //Examitem.endExam = End();
+            ConcernedPlayers.GetOrAdd(client.Id, Examitem);
+            client.GetPlayerHandler()?.AddKey(veh, "Auto école");
+            //await client.EmitAsync("BeginDrivingExamen", veh.Vehicle.Id, Circuit, ID);
         }
         #endregion
 
         #region Menu
-        public void OnPlayerEnterColshape(IColShape colShape, IPlayer client)
-        {
-            if (colShape != _colshape)
-                return;
-
-            OpenMenuDrivingSchool(client);
-        }
-
-        public void OnPlayerLeaveColshape(IColShape colShape, IPlayer client)
-        {
-            if (colShape != _colshape)
-                return;
-
-            MenuManager.CloseMenu(client);
-        }
 
         public void OpenMenuDrivingSchool(IPlayer client)
         {
@@ -145,63 +163,74 @@ namespace ResurrectionRP_Server.DrivingSchool
 
             if (ph != null) 
             {
-                Menu drivingschoolmenu = new Menu("ID_DrivingShoolMenu", "Auto-école", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
-                drivingschoolmenu.ItemSelectCallbackAsync = DrivingMenuCallBack;
+                Menu drivingschoolmenu = new Menu("ID_DrivingShoolMenu", SchoolName, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
+                drivingschoolmenu.ItemSelectCallback = DrivingMenuCallBack;
 
-                if (ClientIsInExamen(client))
+                if (ClientIsInExam(client))
                 {
-                    client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANTONIA, "Auto-école", "Secrétaire", "Vous êtes déjà en examen! Vous voulez abandonner et rester où est la voiture!?");
-                    drivingschoolmenu.Add(new MenuItem("Abandonner l'examen.", "Permet de recommencer l'examen.", "ID_Cancel", true));
+                    client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANTONIA, SchoolName, "Secrétaire", "Vous êtes déjà en examen! Vous avez le droit d'abandonner.");
+                    drivingschoolmenu.Add(new MenuItem("Abandonner l'examen", "Les gens vous jugent, vous étiez si près du but !", "ID_Cancel", true));
                 }
                 else
                 {
-                    if (!ph.HasLicense(Models.LicenseType.Car) && _schoolType == Models.LicenseType.Car)
-                        drivingschoolmenu.Add(new MenuItem("Permis Voiture", $"Passer le permis voiture pour la somme de ~r~${_price} ~w~prélevée au début de l'examen.", "ID_Car", true, rightLabel: $"${_price}"));
+                    if (!ph.HasLicense(LicenseType) || GameMode.IsDebug)
+                        switch (LicenseType)
+                        {
+                            case LicenseType.Car:
+                                drivingschoolmenu.Add(new MenuItem("Permis Voiture", $"Passer le permis voiture pour la somme de ~r~${Price} ~w~prélevée au début de l'examen.", "ID_Car", true, rightLabel: $"${Price}"));
+                                break;
+                            case LicenseType.Boat:
+                                drivingschoolmenu.Add(new MenuItem("Permis Bateau", $"Passer le permis bateau pour la somme de ~r~${Price} ~w~prélevée au début de l'examen.", "ID_Boat", true, rightLabel: $"${Price}"));
+                                break;
+                            case LicenseType.Bike:
+                                drivingschoolmenu.Add(new MenuItem("Permis Moto", $"Passer le permis moto pour la somme de ~r~${Price} ~w~prélevée au début de l'examen.", "ID_Bike", true, rightLabel: $"${Price}"));
+                                break;
+                            case LicenseType.Air:
+                                drivingschoolmenu.Add(new MenuItem("Permis Avion", $"Passer le permis avion pour la somme de ~r~${Price} ~w~prélevée au début de l'examen.", "ID_Air", true, rightLabel: $"${Price}"));
+                                break;
+                        }
                     else
-                    {
-                        client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANTONIA, "Auto-école", "Secrétaire", "MAIS VOUS AVEZ DEJA VOTRE PERMIS ?!");
-                        return;
-                    }
+                        client.DisplayHelp("Vous avez déjà votre license ici, inutile de revenir.", 10000);
                 }
 
                 drivingschoolmenu.OpenMenu(client);
             }
         }
 
-        private async Task DrivingMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void DrivingMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            MenuManager.CloseMenu(client);
             Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
 
             if (ph == null)
                 return;
 
-            if (menuItem.Id == "ID_Cancel")
+            switch(menuItem.Id)
             {
-                if (ClientIsInExamen(client))
-                {
-                    await Cancel(client);
-                    client.EmitLocked("EndDrivingExamen");
-
-                    if (ph != null)
-                        ph.AddMoney(_price);
-                }
-            }
-            else if (menuItem.Id == "ID_Car")
-            {
-                if (!Entities.Vehicles.VehiclesManager.IsVehicleInSpawn(_spawnVeh, 2))
-                {
-                    if (ph.HasMoney(_price))
+                case "ID_Cancel":
+                    if (!ClientIsInExam(client))
+                        break;
+                    CancelExam(client);
+                    client.DisplayHelp("Vous avez annulé votre examen...", 10000);
+                    break;
+                case "ID_Car":
+                    if(VehiclesManager.IsVehicleInSpawn(VehicleSpawnLocation, 4))
                     {
-                        client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANDREAS, "Auto-école", "Examinateur", "Votre examen de conduite commence! Vous avez le droit à ~r~5 erreurs~w~.");
-                        await BeginDrivingExamen(client);
+                        client.DisplayHelp("Un véhicule bloque la sortie du véhicule!", 10000);
+                        break;
                     }
+                    if (ph.HasBankMoney(Price, "Paiement License " + SchoolName))
+                        StartExam(client);
                     else
-                        client.SendNotificationError("Vous n'avez pas assez d'argent sur vous.");
-                }
-                else
-                    client.SendNotificationError("Un véhicule gêne la sorti du garage.");
+                        client.DisplayHelp("Vous n'avez pas assez d'argent en banque pour ça.", 10000);
+                    break;
+                case "ID_Bike":
+                case "ID_Boat":
+                case "ID_Air":
+                    client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_AMANDA, SchoolName, "Pas possible", "Le gouvernement n'a pas encore mis en place cela! ");
+                    MenuManager.CloseMenu(client);
+                    return;
             }
+            MenuManager.CloseMenu(client);
         }
         #endregion
     }

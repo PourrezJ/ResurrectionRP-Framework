@@ -16,8 +16,7 @@ namespace ResurrectionRP_Server.Business
     public class TattoosStore : Business
     {
         #region Main
-        [BsonIgnore]
-        public PlayerHandler ClientSelected;
+        private PlayerHandler _clientSelected;
 
         public TattoosStore(string businnessName, Models.Location location, uint blipSprite, int inventoryMax, PedModel pedhash = 0, string owner = null) : base(businnessName, location, blipSprite, inventoryMax, pedhash, owner)
         {
@@ -31,7 +30,7 @@ namespace ResurrectionRP_Server.Business
 
         public override void OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
         {
-            if (!( IsOwner(client) ||  this.IsEmployee(client)))
+            if (!(IsOwner(client) || IsEmployee(client)))
             {
                 client.SendNotificationError("Vous n'êtes pas autorisé à tatouer!");
                 return;
@@ -51,7 +50,7 @@ namespace ResurrectionRP_Server.Business
 
             if (_playerlist.Count > 0)
             {
-                ClientSelected = null;
+                _clientSelected = null;
 
                 if ( IsOwner(client))
                     mainmenu.Add(new MenuItem("Gérer les finances", "", "ID_TakeMoney", true, rightLabel: $"${BankAccount.Balance}"));
@@ -94,22 +93,22 @@ namespace ResurrectionRP_Server.Business
                 var selected = listItem.SelectedItem;
                 var name = listItem.Items[selected];
 
-                ClientSelected = PlayerManager.GetPlayerByName(name.ToString());
+                _clientSelected = PlayerManager.GetPlayerByName(name.ToString());
 
-                if (ClientSelected == null)
+                if (_clientSelected == null)
                 {
                     client.SendNotificationError("Joueur inconnu");
                     menu.CloseMenu(client);
                 }
                 else
                 {
-                    if (ClientSelected.Client == client)
+                    if (_clientSelected.Client == client)
                     {
                         ChoiseBones(client, menuItem.Id);
                         return;
                     }
 
-                    AcceptMenu accept = AcceptMenu.OpenMenu(ClientSelected.Client, "", "Voulez-vous vous faire tatouer?", banner: Banner.Tattoos2);
+                    AcceptMenu accept = AcceptMenu.OpenMenu(_clientSelected.Client, "", "Voulez-vous vous faire tatouer?", banner: Banner.Tattoos2);
                     accept.AcceptMenuCallBack = (IPlayer tatouer, bool responce) =>
                     {
                         if (responce)
@@ -135,23 +134,23 @@ namespace ResurrectionRP_Server.Business
 
                 Tattoo Tattoo = (Tattoo)menuItem.GetData("Tattoo");
 
-                if (ClientSelected == null)
+                if (_clientSelected == null)
                 {
                     client.SendNotificationError("inconnu.");
                     return;
                 }
 
-                if (!ClientSelected.Client.Exists)
+                if (!_clientSelected.Client.Exists)
                     return;
 
-                uint selectedTattoo = Alt.Hash((ClientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
+                uint selectedTattoo = Alt.Hash((_clientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
 
-                if (ClientSelected.Character.HasDecoration(selectedTattoo))
+                if (_clientSelected.Character.HasDecoration(selectedTattoo))
                 {
-                    Decoration decoration = ClientSelected.Character.Decorations.FirstOrDefault(d => d.Overlay == selectedTattoo);
-                    ClientSelected.Character.Decorations.Remove(decoration);
+                    Decoration decoration = _clientSelected.Character.Decorations.FirstOrDefault(d => d.Overlay == selectedTattoo);
+                    _clientSelected.Character.Decorations.Remove(decoration);
                     ResetTattoos();
-                    ClientSelected.UpdateInBackground();
+                    _clientSelected.UpdateInBackground();
                     UpdateInBackground();
                     client.SendNotificationSuccess("Vous avez retiré le tatouage");
                 }
@@ -160,9 +159,9 @@ namespace ResurrectionRP_Server.Business
                     if (BankAccount.GetBankMoney(Tattoo.Price, $"Tatouage par {BusinnessName}"))
                     {
                         uint collection = Alt.Hash(Tattoo.Collection);
-                        uint overlay = (ClientSelected.Character.Gender == 0) ? Alt.Hash(Tattoo.HashNameMale) : Alt.Hash(Tattoo.HashNameFemale);
-                        ClientSelected.Character.Decorations.Add(new Decoration(collection, overlay));
-                        ClientSelected.UpdateInBackground();
+                        uint overlay = (_clientSelected.Character.Gender == 0) ? Alt.Hash(Tattoo.HashNameMale) : Alt.Hash(Tattoo.HashNameFemale);
+                        _clientSelected.Character.Decorations.Add(new Decoration(collection, overlay));
+                        _clientSelected.UpdateInBackground();
                         UpdateInBackground();
                         client.SendNotificationSuccess("Vous avez appliqué le tatouage");
                     }
@@ -185,14 +184,14 @@ namespace ResurrectionRP_Server.Business
 
             foreach (Tattoo Tattoo in TattooList)
             {
-                uint overlay = Alt.Hash((ClientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
+                uint overlay = Alt.Hash((_clientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
 
                 if (overlay == 0)
                     continue;
 
                 MenuItem item = new MenuItem(Tattoo.LocalizedName, "", "", true);
 
-                if (ClientSelected.Character.HasDecoration(overlay))
+                if (_clientSelected.Character.HasDecoration(overlay))
                     item.RightBadge = BadgeStyle.Makeup;
                 else
                     item.RightLabel = $"${Tattoo.Price}";
@@ -207,27 +206,27 @@ namespace ResurrectionRP_Server.Business
 
         private void TattooChoiseIndex(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
         {
-            if (ClientSelected != null)
+            if (_clientSelected != null)
             {
                 Tattoo Tattoo = menuItem.GetData("Tattoo");
                 uint collection = Alt.Hash(Tattoo.Collection);
-                uint overlay = Alt.Hash((ClientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
+                uint overlay = Alt.Hash((_clientSelected.Character.Gender == 0) ? Tattoo.HashNameMale : Tattoo.HashNameFemale);
                 ResetTattoos();
 
-                if (!ClientSelected.Character.HasDecoration(overlay))
-                    ClientSelected.Client.SetDecoration(collection, overlay);
+                if (!_clientSelected.Character.HasDecoration(overlay))
+                    _clientSelected.Client.SetDecoration(collection, overlay);
             }
         }
 
         private void ResetTattoos()
         {
-            if (ClientSelected == null || !ClientSelected.Client.Exists)
+            if (_clientSelected == null || !_clientSelected.Client.Exists)
                 return;
 
-            ClientSelected.Client.ClearDecorations();
+            _clientSelected.Client.ClearDecorations();
 
-            foreach (Decoration decoration in ClientSelected.Character.Decorations)
-                ClientSelected.Client.SetDecoration(decoration.Collection, decoration.Overlay);
+            foreach (Decoration decoration in _clientSelected.Character.Decorations)
+                _clientSelected.Client.SetDecoration(decoration.Collection, decoration.Overlay);
         }
         #endregion
 

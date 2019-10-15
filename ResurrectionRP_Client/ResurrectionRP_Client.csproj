@@ -60,10 +60,10 @@
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
-    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
+    <TypeScriptModuleKind>ES6</TypeScriptModuleKind>
     <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
     <TypeScriptOutFile />
-    <TypeScriptOutDir />
+    <TypeScriptOutDir>bin\</TypeScriptOutDir>
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptSourceMap>False</TypeScriptSourceMap>

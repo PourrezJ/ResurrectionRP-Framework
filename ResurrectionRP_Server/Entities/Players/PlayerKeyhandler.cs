@@ -499,39 +499,39 @@ namespace ResurrectionRP_Server.Entities.Players
             switch (key)
             {
                 case ConsoleKey.NumPad1:
-                    if (ph.AnimSettings[0] != null) client.PlayAnimation(ph.AnimSettings[0].AnimDict, ph.AnimSettings[0].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    if (ph.AnimSettings[0] != null) client.PlayAnimation(ph.AnimSettings[0].AnimDict, ph.AnimSettings[0].AnimName, 8, -1, 5000, (AnimationFlags)49);
                     break;
 
                 case ConsoleKey.NumPad2:
-                    if (ph.AnimSettings[1] != null) client.PlayAnimation(ph.AnimSettings[1].AnimDict, ph.AnimSettings[1].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    if (ph.AnimSettings[1] != null) client.PlayAnimation(ph.AnimSettings[1].AnimDict, ph.AnimSettings[1].AnimName, 8, -1, 5000, (AnimationFlags)49);
                     break;
 
                 case ConsoleKey.NumPad3:
-                    if (ph.AnimSettings[2] != null) client.PlayAnimation(ph.AnimSettings[2].AnimDict, ph.AnimSettings[2].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    if (ph.AnimSettings[2] != null) client.PlayAnimation(ph.AnimSettings[2].AnimDict, ph.AnimSettings[2].AnimName, 8, -1, 5000, (AnimationFlags)49);
                     break;
 
                 case ConsoleKey.NumPad4:
-                    if (ph.AnimSettings[3] != null) client.PlayAnimation(ph.AnimSettings[3].AnimDict, ph.AnimSettings[3].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    if (ph.AnimSettings[3] != null) client.PlayAnimation(ph.AnimSettings[3].AnimDict, ph.AnimSettings[3].AnimName, 8, -1, 5000, (AnimationFlags)49);
                     break;
 
                 case ConsoleKey.NumPad5:
-                    if (ph.AnimSettings[4] != null) client.PlayAnimation(ph.AnimSettings[4].AnimDict, ph.AnimSettings[4].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    if (ph.AnimSettings[4] != null) client.PlayAnimation(ph.AnimSettings[4].AnimDict, ph.AnimSettings[4].AnimName, 8, -1, 5000, (AnimationFlags)49);
                     break;
 
                 case ConsoleKey.NumPad6:
-                    if (ph.AnimSettings[5] != null) client.PlayAnimation(ph.AnimSettings[5].AnimDict, ph.AnimSettings[5].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    if (ph.AnimSettings[5] != null) client.PlayAnimation(ph.AnimSettings[5].AnimDict, ph.AnimSettings[5].AnimName, 8, -1, 5000, (AnimationFlags)49);
                     break;
 
                 case ConsoleKey.NumPad7:
-                    if (ph.AnimSettings[6] != null) client.PlayAnimation(ph.AnimSettings[6].AnimDict, ph.AnimSettings[6].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    if (ph.AnimSettings[6] != null) client.PlayAnimation(ph.AnimSettings[6].AnimDict, ph.AnimSettings[6].AnimName, 8, -1, 5000, (AnimationFlags)49);
                     break;
 
                 case ConsoleKey.NumPad8:
-                    if (ph.AnimSettings[7] != null) client.PlayAnimation(ph.AnimSettings[7].AnimDict, ph.AnimSettings[7].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    if (ph.AnimSettings[7] != null) client.PlayAnimation(ph.AnimSettings[7].AnimDict, ph.AnimSettings[7].AnimName, 8, -1, 5000, (AnimationFlags)49);
                     break;
 
                 case ConsoleKey.NumPad9:
-                    if (ph.AnimSettings[8] != null) client.PlayAnimation(ph.AnimSettings[8].AnimDict, ph.AnimSettings[8].AnimName, 8, -1, -1, (AnimationFlags)49);
+                    if (ph.AnimSettings[8] != null) client.PlayAnimation(ph.AnimSettings[8].AnimDict, ph.AnimSettings[8].AnimName, 8, -1, 5000, (AnimationFlags)49);
                     break;
             }
         }

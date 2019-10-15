@@ -1,15 +1,9 @@
-﻿using AltV.Net.Async;
-using AltV.Net.Data;
+﻿using AltV.Net.Data;
+using AltV.Net.Enums;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Players;
-using ResurrectionRP_Server.Factions;
-using ResurrectionRP_Server.Houses;
-using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Models;
-using ResurrectionRP_Server.Society;
 using ResurrectionRP_Server.Utils.Enums;
-using System;
-using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using VehicleInfoLoader.Data;
@@ -22,6 +16,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             Chat.RegisterCmd("vehicleinfo", VehicleInfo);
             Chat.RegisterCmd("vehiclespawn", VehicleSpawn);
+            Chat.RegisterCmd("vehicle", Vehicle);
         }
 
         private async Task VehicleInfo(IPlayer player, string[] args)
@@ -127,6 +122,50 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             vehicle.SpawnVehicle();
             player.SendNotificationSuccess("Véhicule spawn");
+        }
+
+        private void Vehicle(IPlayer player, string[] args)
+        {
+            if (player == null || !player.Exists)
+                return;
+
+            PlayerHandler ph = player.GetPlayerHandler();
+
+            if (ph == null || player.GetPlayerHandler().StaffRank <= AdminRank.Player)
+                return;
+
+            if (args == null || args.Length == 0)
+            {
+                player.SendNotificationError("Vous devez indiquer le hash du véhicule");
+                return;
+            }
+
+            if (!uint.TryParse(args[0].ToString(), out uint hash))
+            {
+                player.SendNotificationError("Hash invalide");
+                return;
+            }
+
+            VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get(hash);
+
+            if (manifest == null)
+            {
+                player.SendNotificationError($"véhicule inconnu : {hash}");
+                return;
+            }
+
+            Rotation rot = player.Rotation;
+            VehicleHandler vehicle = VehiclesManager.SpawnVehicle(player.GetSocialClub(), hash, player.Position, new Rotation(rot.Pitch, rot.Roll, -rot.Yaw), fuel: 100, fuelMax: 100, spawnVeh: true);
+
+            if (vehicle != null)
+            {
+                vehicle.LockState = VehicleLockState.Unlocked;
+                player.SetPlayerIntoVehicle(vehicle.Vehicle);
+                ph.ListVehicleKey.Add(new VehicleKey(manifest.DisplayName, vehicle.Plate));
+                //LogManager.Log($"~r~[ADMIN]~w~ {client.Name} a spawn le véhicule {_vehs.Model} {_vehs.Plate}");
+            }
+            else
+                player.SendNotificationError("Il y a une erreur avec le véhicule demandé.");
         }
     }
 }

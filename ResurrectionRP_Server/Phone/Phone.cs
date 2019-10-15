@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.Phone
         #region Gestion des messages
 
         public void SendSMS(IPlayer client, string receiver, string message)
-        { 
+        {
             try
             {
                 Task.Run(async () => {
@@ -111,7 +111,7 @@ namespace ResurrectionRP_Server.Phone
             if (_client == null)
                 return;
 
-            if (! _client.Exists)
+            if (!_client.Exists)
                 return;
 
             string contactName = GetNameForNumber(phoneNumber);
@@ -132,12 +132,12 @@ namespace ResurrectionRP_Server.Phone
 
                 if (recever != null && recever.Exists)
                     recever.PlaySoundFromEntity(_client, -1, "MP_5_SECOND_TIMER", "HUD_FRONTEND_DEFAULT_SOUNDSET");
-            }      
+            }
         }
 
         public void GetMessages(IPlayer client, string phoneNumber)
         {
-            Task.Run(async() =>
+            Task.Run(async () =>
             {
                 Conversation checkConv = await PhoneManager.FindOrCreateConversation(PhoneNumber, phoneNumber, false);
                 //checkConv.messages.Reverse();
@@ -200,10 +200,10 @@ namespace ResurrectionRP_Server.Phone
             var calledPlayer = GetClientWithPhoneNumber(phoneNumber);
             if (calledPlayer != null)
             {
-                 calledPlayer.ResetData("InToPhoneCommunication");
-                 player.ResetData("InToPhoneCommunication");
-                 calledPlayer.EmitLocked("CanceledCall");
-                 player.EmitLocked("CanceledCall");
+                calledPlayer.ResetData("InToPhoneCommunication");
+                player.ResetData("InToPhoneCommunication");
+                calledPlayer.EmitLocked("CanceledCall");
+                player.EmitLocked("CanceledCall");
             }
         }
 
@@ -240,7 +240,7 @@ namespace ResurrectionRP_Server.Phone
                     return true;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Alt.Server.LogError(ex.ToString());
             }
@@ -258,7 +258,7 @@ namespace ResurrectionRP_Server.Phone
                     if (AddressBook == null || string.IsNullOrEmpty(originalNumber))
                         return false;
 
-                    Address foundAddress = AddressBook.Find(address => address?.phoneNumber == originalNumber);
+                    Address foundAddress = AddressBook.Find(address => address.phoneNumber == originalNumber);
 
                     if (foundAddress != null && foundAddress.phoneNumber != null && foundAddress.phoneNumber != "")
                     {
@@ -273,7 +273,6 @@ namespace ResurrectionRP_Server.Phone
             {
                 Alt.Server.LogError($"[Phone.TryEditContact()] NullReferenceException : client: {client}, contactName: {contactName}, contactNumber: {contactNumber}, originalNumber: {originalNumber}, message: {message}");
             }
-
 
             return false;
         }
@@ -326,7 +325,7 @@ namespace ResurrectionRP_Server.Phone
             {
                 Address a = AddressBook.ElementAt(i);
 
-                if (a.phoneNumber.Equals(number))
+                if (a.phoneNumber != null && a.phoneNumber.Equals(number))
                 {
                     indexToRemove = i;
                     break;
@@ -337,7 +336,7 @@ namespace ResurrectionRP_Server.Phone
             {
                 AddressBook.RemoveAt(indexToRemove);
                 var client = GetClientWithPhoneNumber(PhoneNumber);
-                client?.EmitLocked("ContactEdited");
+                client.EmitLocked("ContactEdited");
                 return true;
             }
 
@@ -352,7 +351,7 @@ namespace ResurrectionRP_Server.Phone
                 return;
             }
 
-            List<Address> contacts = AddressBook.GetRange(1, AddressBook.Count - 1).OrderBy(c => c?.contactName).ToList();
+            List<Address> contacts = AddressBook.GetRange(1, AddressBook.Count - 1).FindAll(a => a.phoneNumber != null).OrderBy(c => c.contactName).ToList();
             contacts.Insert(0, AddressBook[0]);
             client.EmitLocked("ContactReturned", JsonConvert.SerializeObject(contacts));
         }
@@ -386,29 +385,20 @@ namespace ResurrectionRP_Server.Phone
         #region Static Methods
         public static void AddPhoneInList(IPlayer client, Phone phone)
         {
-                if (PhoneManager.PhoneClientList.ContainsKey(client))
-                {
-                    if (!PhoneManager.PhoneClientList[client].Exists(p => p?.PhoneNumber == phone?.PhoneNumber))
-                    {
-                        PhoneManager.PhoneClientList[client].Add(phone);
-                    }
-                }
-                else
-                {
-                    PhoneManager.PhoneClientList.TryAdd(client, new List<Phone>() { phone });
-                }
+            if (PhoneManager.PhoneClientList.ContainsKey(client) && !PhoneManager.PhoneClientList[client].Exists(p => p.PhoneNumber == phone.PhoneNumber))
+                PhoneManager.PhoneClientList[client].Add(phone);
+            else
+                PhoneManager.PhoneClientList.TryAdd(client, new List<Phone>() { phone });
         }
 
-        public static void RemovePhoneInList(IPlayer client, Phone phonee)
+        public static void RemovePhoneInList(IPlayer client, Phone phone)
         {
-            if (PhoneManager.PhoneClientList.ContainsKey(client))
+            if (PhoneManager.PhoneClientList.ContainsKey(client) && PhoneManager.PhoneClientList[client].Exists(p => p.PhoneNumber == phone.PhoneNumber))
             {
-                if (PhoneManager.PhoneClientList[client].Exists(p => p.PhoneNumber == phonee.PhoneNumber))
-                {
-                    var id = PhoneManager.PhoneClientList[client].FindIndex(p => p.PhoneNumber == phonee.PhoneNumber);
-                    if (id != -1)
-                        PhoneManager.PhoneClientList[client].RemoveAt(id);
-                }
+                int id = PhoneManager.PhoneClientList[client].FindIndex(p => p.PhoneNumber == phone.PhoneNumber);
+
+                if (id != -1)
+                    PhoneManager.PhoneClientList[client].RemoveAt(id);
             }
         }
 
@@ -417,10 +407,9 @@ namespace ResurrectionRP_Server.Phone
             foreach (var phones in PhoneManager.PhoneClientList)
             {
                 if (phones.Value.Exists(f => f.PhoneNumber == phoneNumber))
-                {
                     return phones.Key;
-                }
             }
+
             return null;
         }
 
@@ -429,9 +418,7 @@ namespace ResurrectionRP_Server.Phone
             foreach (var phones in PhoneManager.PhoneClientList)
             {
                 if (phones.Value.Exists(f => f.PhoneNumber == phoneNumber))
-                {
                     return phones.Value.Find(p => p.PhoneNumber == phoneNumber);
-                }
             }
 
             return null;

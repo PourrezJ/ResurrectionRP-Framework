@@ -25,24 +25,16 @@ namespace ResurrectionRP_Server.Colshape
         [HandleProcessCorruptedStateExceptions, SecurityCritical]
         public override bool IsEntityInside(IEntity entity)
         {
-            try
+            lock (entity)
             {
-                lock (entity)
-                {
-                    if (!entity.Exists)
-                        return false;
-                    else if (entity.Dimension != Dimension)
-                        return false;
-                    else if (entity.Position.Z < Position.Z || entity.Position.Z > Position.Z + Height)
-                        return false;
+                if (!entity.Exists)
+                    return false;
+                else if (entity.Dimension != Dimension)
+                    return false;
+                else if (entity.Position.Z < Position.Z || entity.Position.Z > Position.Z + Height)
+                    return false;
 
-                    return IsPositionInside(entity.Position);
-                }
-            }
-            catch(AccessViolationException)
-            {
-                Alt.Server.LogError($"CylinderColshape.IsEntityInside() - AccessViolationException with entity {entity.Id}");
-                return false;
+                return IsPositionInside(entity.Position);
             }
         }
 

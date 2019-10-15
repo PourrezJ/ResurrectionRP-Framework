@@ -131,12 +131,14 @@ namespace ResurrectionRP_Server.Colshape
                                 {
                                     OnPlayerLeaveColshape?.Invoke(colshape, (IPlayer)entity);
                                     ((IPlayer)entity).EmitLocked("OnPlayerLeaveColshape", colshape.Id);
+
                                     if (GameMode.IsDebug)
                                         Alt.Log($"[Colshape {colshape.Id}] Player {entity.Id} leaving, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count - _entitiesToRemove.Count}");
                                 }
                                 else if (entity.Type == BaseObjectType.Vehicle)
                                 {
                                     OnVehicleLeaveColshape?.Invoke(colshape, (IVehicle)entity);
+
                                     if (GameMode.IsDebug)
                                         Alt.Log($"[Colshape {colshape.Id}] Vehicle {entity.Id} leaving, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count - _entitiesToRemove.Count}");
                                 }
@@ -168,6 +170,7 @@ namespace ResurrectionRP_Server.Colshape
                             colshape.AddEntity(player);
                             OnPlayerEnterColshape?.Invoke(colshape, player);
                             player.EmitLocked("OnPlayerEnterColshape", colshape.Id);
+
                             if (GameMode.IsDebug)
                                 Alt.Log($"[Colshape {colshape.Id}] Player {player.Id} entering, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
                         }
@@ -188,6 +191,7 @@ namespace ResurrectionRP_Server.Colshape
                         {
                             colshape.AddEntity(vehicle);
                             OnVehicleEnterColshape?.Invoke(colshape, vehicle);
+
                             if (GameMode.IsDebug)
                                 Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} entering, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
                         }

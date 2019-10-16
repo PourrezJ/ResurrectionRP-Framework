@@ -159,8 +159,10 @@ namespace ResurrectionRP_Server
                 await Factions.FactionManager.InitAllFactions();
                 await Loader.BusinessesManager.LoadAllBusinesses();         
                 await Society.SocietyManager.LoadAllSociety();
-                if (IsDebug)
-                    await IllegalManager.InitAll();
+
+                // if (IsDebug)
+                //     await IllegalManager.InitAll();
+
                 //await JobsManager.Init();
                 await HouseManager.LoadAllHouses();
                 

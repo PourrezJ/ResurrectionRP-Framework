@@ -27,6 +27,7 @@ namespace ResurrectionRP_Server.DrivingSchool
 
         public int avert = 0;
         public int id = 0;
+
         #endregion
 
         #region Constructor
@@ -38,36 +39,35 @@ namespace ResurrectionRP_Server.DrivingSchool
             this.Trajectoire = traj;
 
             Alt.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
-            
         }
         #endregion
 
         #region Methods
         private void Colshape_OnPlayerEnterColshape(IColshape colshape, IPlayer client)
         {
+            if (colshape.GetData("DrivingSchool_ID", out int ID) && ID != CurrentCheckpoint)
+                return;
+
+            colshape.OnPlayerEnterColshape -= Colshape_OnPlayerEnterColshape;
+            Trajectoire[CurrentCheckpoint].Colshape.OnPlayerEnterColshape += Colshape_OnPlayerEnterColshape;
+
             lock (colshape)
             {
                 this.NextTraj();
             }
         }
 
-        private void NextTraj()
+        public void NextTraj()
         {
-            if (this.colshape != null)
-                ColshapeManager.DeleteColshape(this.colshape);
-
-
             this.CurrentCheckpoint++;
-            if(this.CurrentCheckpoint == this.Trajectoire.Count )
+            if (this.CurrentCheckpoint == this.Trajectoire.Count )
             {
                 this.Player.Emit("DriveSchool_CreateCP");
                 endTraj();
                 return;
             }
 
-            this.colshape = ColshapeManager.CreateCylinderColshape(this.Trajectoire[this.CurrentCheckpoint].Position, 3, 6);
-            this.colshape.OnPlayerEnterColshape += Colshape_OnPlayerEnterColshape;
-            this.Player.Emit("DriveSchool_CreateCP", JsonConvert.SerializeObject( this.Trajectoire[this.CurrentCheckpoint].Position));
+            this.Player.Emit("DriveSchool_CreateCP", JsonConvert.SerializeObject( this.Trajectoire[this.CurrentCheckpoint].Position), this.Trajectoire[this.CurrentCheckpoint].Speed);
 
         }
 

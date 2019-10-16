@@ -144,7 +144,7 @@ namespace ResurrectionRP_Server
             Phone.PhoneManager.Init();
 
             Economy = new Economy.Economy();
-            //DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
+            DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
             if (Time == null)
@@ -159,8 +159,8 @@ namespace ResurrectionRP_Server
                 await Factions.FactionManager.InitAllFactions();
                 await Loader.BusinessesManager.LoadAllBusinesses();         
                 await Society.SocietyManager.LoadAllSociety();
-                if (IsDebug)
-                    await IllegalManager.InitAll();
+/*                if (IsDebug)
+                    await IllegalManager.InitAll();*/
                 //await JobsManager.Init();
                 await HouseManager.LoadAllHouses();
                 
@@ -171,7 +171,7 @@ namespace ResurrectionRP_Server
             
             Pound.Init();
             Loader.CarDealerLoaders.LoadAllCardealer();
-            // DrivingSchoolManager.InitAll();
+            DrivingSchoolManager.Load();
             Loader.ClothingLoader.LoadAllCloth();
             Loader.TattooLoader.TattooLoader.LoadAllTattoo();
             Loader.VehicleRentLoaders.LoadAllVehicleRent();

@@ -228,7 +228,20 @@ namespace ResurrectionRP_Server
                 if (player.GetPlayerHandler()?.StaffRank <= 0)
                     return;
 
-                player.Position = (new Position(Convert.ToSingle(args[0]), Convert.ToSingle(args[1]), Convert.ToSingle(args[2])));
+                float x, y, z = 0;
+
+                if (args == null || args.Length < 3)
+                {
+                    player.SendNotificationError("Syntaxe : /tpto X Y Z");
+                    return;
+                }
+                else if (!float.TryParse(args[0].ToString(), out x) || !float.TryParse(args[1].ToString(), out y) || !float.TryParse(args[2].ToString(), out z))
+                {
+                    player.SendNotificationError("Paramètre(s) invalide(s)");
+                    return;
+                }
+
+                player.Position = new Position(x, y, z);
             });
         }
 

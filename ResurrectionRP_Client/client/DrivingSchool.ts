@@ -18,14 +18,17 @@ export class DrivingSchool {
     private veh: alt.Vehicle;
     private lastCheck: number;
     private advert: number;
+    private speed: number;
     private Checkpoint: any;
+    private Ticker: any;
 
     constructor() {
         alt.onServer("DrivingSchool_End", () => { this.begin = false; });
 
-        alt.onServer("DriveSchool_CreateCP", (poss: string) => {
+        alt.onServer("DriveSchool_CreateCP", (poss: string, maxspeed: number) => {
             var pos = JSON.parse(poss);
-
+            if (maxspeed > 20)
+                this.speed = maxspeed;
             if (!this.begin)
                 this.begin = true;
 
@@ -33,6 +36,7 @@ export class DrivingSchool {
                 this.Checkpoint = undefined;
                 this.begin = false;
                 game.setWaypointOff();
+                alt.clearEveryTick(this.Ticker);
 
             }
             else {
@@ -40,7 +44,7 @@ export class DrivingSchool {
                 game.setNewWaypoint(pos.X, pos.Y)
             }
         });
-        alt.everyTick(this.onTick);
+        this.Ticker = alt.everyTick(this.onTick);
     }
 
     public onTick = () => {
@@ -74,12 +78,13 @@ export class DrivingSchool {
                 undefined,
                 true
             );
-        if (this.lastCheck + 7000 > Date.now())
+        if (this.lastCheck + 4000 > Date.now())
             return;
         this.lastCheck = Date.now();
         if (alt.Player.local.vehicle == null)
             return;
         var veh = alt.Player.local.vehicle;
-        alt.emitServer("DrivingSchool_Checker", Math.ceil(veh.speed * (veh.speed / 20) *2));
+        if (this.speed < Math.ceil(veh.speed * 3.6))
+            alt.emitServer("DrivingSchool_Avert");
     }
 }

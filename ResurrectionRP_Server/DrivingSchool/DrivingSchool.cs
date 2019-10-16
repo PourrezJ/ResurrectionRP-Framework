@@ -77,8 +77,38 @@ namespace ResurrectionRP_Server.DrivingSchool
             EntryColshape.OnPlayerLeaveColshape += EntryColshape_OnPlayerLeaveColshape;
             EntryLabel = Streamer.Streamer.AddEntityTextLabel($"[~o~Auto Ecole~w~]\nPassez votre permis ici", EntryPosition + new Vector3(0,0,1), 2);
 
+            var i = 0;
+            RidePoints.ForEach((Ride p) => {
+                p.Colshape = ColshapeManager.CreateCylinderColshape(p.Position, 5, 10);
+                p.Colshape.SetData("DrivingSchool_ID", i++);
+                p.Colshape.OnPlayerEnterColshape += Colshape_OnPlayerEnterColshape;
+            });
+
+            Alt.OnClient("DrivingSchool_Avert", (IPlayer client, object[] args) =>
+            {
+                if (!client.Exists)
+                    return;
+                if (!ConcernedPlayers.ContainsKey(client.Id))
+                    return;
+                ConcernedPlayers[client.Id].avert++;
+                client.DisplayHelp($"Vous allez bien trop vite, ralentissez ({RidePoints[ ConcernedPlayers[client.Id].CurrentCheckpoint ].Speed})", 10000);
+            });
+
 
             Blip = Entities.Blips.BlipsManager.CreateBlip(SchoolName, EntryPosition, 69, 535, 0.5f);
+        }
+
+        private void Colshape_OnPlayerEnterColshape(IColshape colshape, IPlayer client)
+        {
+            if (!ConcernedPlayers.ContainsKey(client.Id))
+                return;
+            colshape.GetData("DrivingSchool_ID", out int result);
+            if ( result != ConcernedPlayers[client.Id].CurrentCheckpoint)
+                return;
+            ConcernedPlayers[client.Id].NextTraj();
+
+            if (ConcernedPlayers[client.Id].CurrentCheckpoint == RidePoints.Count)
+                End(client, ConcernedPlayers[client.Id].avert);
         }
 
         private void EntryColshape_OnPlayerLeaveColshape(IColshape colshape, IPlayer client) =>
@@ -170,6 +200,7 @@ namespace ResurrectionRP_Server.DrivingSchool
                 {
                     client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANTONIA, SchoolName, "Secrétaire", "Vous êtes déjà en examen! Vous avez le droit d'abandonner.");
                     drivingschoolmenu.Add(new MenuItem("Abandonner l'examen", "Les gens vous jugent, vous étiez si près du but !", "ID_Cancel", true));
+                    client.Emit("DriveSchool_CreateCP"); // pour annuler le CP & les checkers 
                 }
                 else
                 {

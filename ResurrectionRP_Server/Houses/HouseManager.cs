@@ -86,6 +86,11 @@ namespace ResurrectionRP_Server.Houses
             return null;
         }
 
+        public static IEnumerable<IPlayer> GetHousePlayers(House house)
+        {
+            return ClientHouse.Where(ch => ch.Value == house).Select(ch => ch.Key);
+        }
+
         public static bool RemoveClientHouse(IPlayer client)
         {
             bool result = ClientHouse.TryRemove(client, out House house);
@@ -231,7 +236,7 @@ namespace ResurrectionRP_Server.Houses
                     break;
 
                 case "ID_Sonner":
-                    foreach (IPlayer clientInside in house.PlayersInside)
+                    foreach (IPlayer clientInside in GetHousePlayers(house))
                         clientInside.SendNotification("Quelqu'un sonne à la porte.");
                     break;
                 case "ID_AddParking":

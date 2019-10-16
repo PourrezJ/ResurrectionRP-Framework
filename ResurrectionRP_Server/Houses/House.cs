@@ -65,10 +65,6 @@ namespace ResurrectionRP_Server.Houses
         private IColshape ColshapeEnter;
         private IColshape ColshapeOut;
         private IPlayer OwnerHandle;
-
-        // misc
-        [JsonIgnore, BsonIgnore]
-        public List<IPlayer> PlayersInside = new List<IPlayer>();
         #endregion
 
         #region Constructor
@@ -120,8 +116,6 @@ namespace ResurrectionRP_Server.Houses
 
             if (Inventory.InventoryList.Length != Inventory.MaxSlot)
                 Array.Resize(ref Inventory.InventoryList, Inventory.MaxSlot);
-
-            PlayersInside = new List<IPlayer>();
         }
         #endregion
 
@@ -308,7 +302,7 @@ namespace ResurrectionRP_Server.Houses
 
         public void RemoveAllPlayers()
         {
-            foreach (IPlayer player in PlayersInside)
+            foreach (IPlayer player in HouseManager.GetHousePlayers(this))
             {
                 if (!RemoveFromHouse(player))
                     Alt.Server.LogWarning($"Exiting unregistered player {player.GetPlayerHandler().Identite.Name} from house {ID}");

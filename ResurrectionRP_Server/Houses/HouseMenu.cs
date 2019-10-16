@@ -48,17 +48,17 @@ namespace ResurrectionRP_Server.Houses
             {
                 List<object> _playerlist = new List<object>();
 
-                foreach (IPlayer player in house.PlayersInside)
+                foreach (IPlayer player in HouseManager.GetHousePlayers(house))
                 {
                     if (player == client)
                         continue;
+
                     _playerlist.Add(player.GetPlayerHandler()?.Identite.Name);
                 }
                     
-                _playerlist.Remove(ph.Identite.Name);
                 if (_playerlist.Count > 0)
                 {
-                    ListItem _playerSelected = new ListItem("Vendre la maison à:", "Choix de la cible", "playerSelected", _playerlist, 0);
+                    ListItem _playerSelected = new ListItem("Vendre la maison à :", "Choix de la cible", "playerSelected", _playerlist, 0);
                     _playerSelected.ExecuteCallback = true;
                     houseMenu._menu.Add(_playerSelected);
                 }

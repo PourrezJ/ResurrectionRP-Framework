@@ -109,7 +109,6 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 House house = HouseManager.GetHouse(player);
                 ph.Location = new Location(house.Position, new Vector3());
-                house.PlayersInside.Remove(player);
             }
             else
                 ph.Location = new Location(player.Position, player.Rotation);
@@ -221,7 +220,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                   Whitelist whitelist = await Whitelist.GetWhitelistFromAPI(socialclub);
+                    Whitelist whitelist = await Whitelist.GetWhitelistFromAPI(socialclub);
 
                     if (whitelist != null && whitelist.Whitelisted)
                     {

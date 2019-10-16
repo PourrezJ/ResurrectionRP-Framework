@@ -30,12 +30,19 @@ namespace ResurrectionRP_Server
         #region Private static methods
         private static void InvokeCmd(IPlayer player, string cmd, string[] args)
         {
-            if (_cmdHandlers.ContainsKey(cmd))
-                _cmdHandlers[cmd](player, args);
-            else if (_cmdAsyncHandlers.ContainsKey(cmd))
-                Task.Run(async () => { await _cmdAsyncHandlers[cmd](player, args); });
-            else
-                Send(player, $"{{FF0000}} Unknown command /{cmd}");
+            try
+            {
+                if (_cmdHandlers.ContainsKey(cmd))
+                    _cmdHandlers[cmd](player, args);
+                else if (_cmdAsyncHandlers.ContainsKey(cmd))
+                    Task.Run(async () => { await _cmdAsyncHandlers[cmd](player, args); });
+                else
+                    Send(player, $"{{FF0000}} Unknown command /{cmd}");
+            }
+            catch (Exception ex)
+            {
+                Alt.Server.LogError($"[Chat.InvokeCmd()] Exception in command /{cmd} - {ex}");
+            }
         }
 
         private static void OnChatMessage(IPlayer player, object[] args)

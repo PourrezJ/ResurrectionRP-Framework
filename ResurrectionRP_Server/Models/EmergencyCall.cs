@@ -169,24 +169,32 @@ namespace ResurrectionRP_Server.Models
 
         private void Events_OnPlayerReleaseEmergencyCall(IPlayer client, int callid)
         {
-            if (!ConcernedPlayers.ContainsKey(client.Id) && !InMissionPlayers.ContainsKey(client.Id))
-                return;
-
-            if (Calls.TryGetValue(callid, out Call call) && call == null)
+            try
             {
-                Alt.Server.LogError("EmergencyCall | Events_OnPlayerReleaseEmergencyCall | Trying to release a call that do not exists");
-                return;
+                if (!ConcernedPlayers.ContainsKey(client.Id) && !InMissionPlayers.ContainsKey(client.Id))
+                    return;
+
+                if (Calls.TryGetValue(callid, out Call call) && call == null)
+                {
+                    Alt.Server.LogError("EmergencyCall | Events_OnPlayerReleaseEmergencyCall | Trying to release a call that do not exists");
+                    return;
+                }
+
+                if (call.TakenBy != client)
+                    return;
+
+                ReleaseCall(call);
+
+                if (!Calls.TryRemove(call.Id, out _))
+                    Alt.Server.LogError("EmergencyCall | Erreur lors de la suppression d'un call | Events_OnPlayerReleaseEmergencyCall");
+
+                if (InMissionPlayers.ContainsKey(client.Id))
+                    InMissionPlayers.Remove(client.Id, out _);
             }
-
-            if (call.TakenBy != client)
-                return; 
-
-            ReleaseCall(call);
-            if (!Calls.TryRemove(call.Id, out Call voided))
-                Alt.Server.LogError("EmergencyCall | Erreur lors de la suppression d'un call | Events_OnPlayerReleaseEmergencyCall");
-
-            if (InMissionPlayers.ContainsKey(client.Id))
-                InMissionPlayers.Remove(client.Id, out IPlayer voidedd);
+            catch (Exception ex)
+            {
+                Alt.Server.LogError($"[EmergencyCall.Events_OnPlayerReleaseEmergencyCall()] client: {client.Id}, callid: {callid} - {ex}");
+            }
         }
 
         private void Events_OnPlayerEmitEmergencyCall(IPlayer client, string factionName, System.Numerics.Vector3 position, string reason)

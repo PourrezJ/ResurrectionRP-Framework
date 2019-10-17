@@ -1,9 +1,10 @@
 ﻿var channel = null;
 var favoris = [];
 
-function loadFavoris(frequencesList, chan) {
+function initialize(frequencesList, chan) {
     favoris = frequencesList;
     channel = chan;
+
     if (channel !== null) {
         $('.frequence').show();
         $('#channelFrequence').html(channel + 1);
@@ -16,13 +17,13 @@ function onOffRadio() {
         channel = 0;
         $('.frequence').show();
         alt.emit("RadioOnOff", true);
-    }
-    else {
+    } else {
         channel = null;
         $('.frequence').hide();
         alt.emit("RadioOnOff", false);
     }
-    $('#channelFrequence').html(channel+1);
+
+    $('#channelFrequence').html(channel + 1);
     $('#inputFrequence').val(favoris[channel]);
 }
 
@@ -32,14 +33,20 @@ function changeChannel(up) {
             channel++;
         else
             channel = 0;
-    }
-    else {
+    } else {
         if (channel > 0)
             channel--;
         else
             channel = 5;
     }
-    $('#channelFrequence').html(channel+1);
+
+    $('#channelFrequence').html(channel + 1);
+    $('#inputFrequence').val(favoris[channel]);
+}
+
+function setChannel(chan) {
+    channel = chan;
+    $('#channelFrequence').html(channel + 1);
     $('#inputFrequence').val(favoris[channel]);
 }
 
@@ -49,7 +56,7 @@ function upFrequence() {
 
     changeChannel(true);
     frequence = $('#inputFrequence').val();
-    alt.emit("ChangeFrequence", channel);
+    alt.emit("ChangeChannel", channel);
 }
 
 function downFrequence() {
@@ -58,7 +65,7 @@ function downFrequence() {
 
     changeChannel(false);
     frequence = $('#inputFrequence').val();
-    alt.emit("ChangeFrequence", channel);
+    alt.emit("ChangeChannel", channel);
 }
 
 function changeFrequence() {
@@ -111,9 +118,10 @@ function muteRadio() {
 
 $(() => {
     if ('alt' in window) {
-        alt.on('loadFavoris', loadFavoris);
+        alt.on('initialize', initialize);
         alt.on('hide', hide);
         alt.on('unhide', unhide);
-        alt.emit('GetFavoris');
+        alt.on('setChannel', setChannel);
+        alt.emit('initialize');
     }
 });

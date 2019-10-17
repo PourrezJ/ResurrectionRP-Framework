@@ -19,7 +19,7 @@ namespace ResurrectionRP_Server.Radio
         public RadioModes Statut = RadioModes.OFF;
         #endregion
 
-        public int CurrentFrequence = 0;
+        public int CurrentChannel = 0;
         public double[] Favoris = new double[6]
         {
             55.2,
@@ -45,10 +45,11 @@ namespace ResurrectionRP_Server.Radio
         public void OpenRadio(IPlayer client)
         {
             Owner = client;
+
             if (Favoris == null)
                 return;
 
-            Owner.EmitLocked("OpenRadio", JsonConvert.SerializeObject(Favoris), CurrentFrequence, (int)Statut, Volume);
+            Owner.EmitLocked("OpenRadio", JsonConvert.SerializeObject(Favoris), CurrentChannel, (int)Statut, Volume);
         }
 
         public void CloseRadio(IPlayer client)
@@ -98,6 +99,6 @@ namespace ResurrectionRP_Server.Radio
             Favoris[channel] = frequence;
         }
 
-        public double GetCurrentFrequence() => Favoris[CurrentFrequence];
+        public double GetCurrentFrequence() => Favoris[CurrentChannel];
     }
 }

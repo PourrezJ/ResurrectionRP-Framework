@@ -30,29 +30,31 @@ namespace SaltyServer
 
         public static void Init()
         {
-            Voice.ServerUniqueIdentifier = Config.GetSetting<string>("ServerUniqueIdentifier");
-            Voice.RequiredUpdateBranch = Config.GetSetting<string>("RequiredUpdateBranch");
-            Voice.MinimumPluginVersion = Config.GetSetting<string>("MinimumPluginVersion");
-            Voice.SoundPack = Config.GetSetting<string>("SoundPack");
-            Voice.IngameChannel = Config.GetSetting<string>("IngameChannel");
-            Voice.IngameChannelPassword = Config.GetSetting<string>("IngameChannelPassword");
+            ServerUniqueIdentifier = Config.GetSetting<string>("ServerUniqueIdentifier");
+            RequiredUpdateBranch = Config.GetSetting<string>("RequiredUpdateBranch");
+            MinimumPluginVersion = Config.GetSetting<string>("MinimumPluginVersion");
+            SoundPack = Config.GetSetting<string>("SoundPack");
+            IngameChannel = Config.GetSetting<string>("IngameChannel");
+            IngameChannelPassword = Config.GetSetting<string>("IngameChannelPassword");
 
+            Alt.OnPlayerDisconnect += OnPlayerDisconnect;
             Alt.OnClient(SaltyShared.Event.Voice_RejectedVersion, OnRejectedVersion);
             Alt.OnClient(SaltyShared.Event.Voice_TalkingOnRadio, OnPlayerTalkingOnRadio);
             Alt.OnClient(SaltyShared.Event.Voice_IsTalking, OnPlayerTalking);
         }
 
-        public static void OnPlayerDisconnected(IPlayer client)
+        public static void OnPlayerDisconnect(IPlayer client, string reason)
         {
-            Voice.RemovePlayerRadioChannel(client);
+            RemovePlayerRadioChannel(client);
 
             if (!client.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName))
                 return;
 
-            foreach (IPlayer cl in Alt.GetAllPlayers())
+            foreach (IPlayer cl in Alt.GetAllPlayers().ToArray())
             {
                 if (!cl.Exists)
                     continue;
+
                 cl.EmitLocked(SaltyShared.Event.Player_Disconnected, tsName);
             }
         }
@@ -65,13 +67,13 @@ namespace SaltyServer
             string updateBranch = args[0].ToString();
             string version = args[1].ToString();
 
-            if (String.IsNullOrWhiteSpace(Voice.RequiredUpdateBranch) && String.IsNullOrWhiteSpace(Voice.MinimumPluginVersion))
+            if (string.IsNullOrWhiteSpace(RequiredUpdateBranch) && string.IsNullOrWhiteSpace(MinimumPluginVersion))
                 return;
 
-            if (!String.IsNullOrWhiteSpace(Voice.RequiredUpdateBranch) && updateBranch != Voice.RequiredUpdateBranch)
-                client.SendNotification($"[Salty Chat] Required update branch: {Voice.RequiredUpdateBranch} | Your update branch: {updateBranch}");
+            if (!string.IsNullOrWhiteSpace(RequiredUpdateBranch) && updateBranch != RequiredUpdateBranch)
+                client.SendNotification($"[Salty Chat] Required update branch: {RequiredUpdateBranch} | Your update branch: {updateBranch}");
             else
-                client.SendNotification($"[Salty Chat] Required version: {Voice.MinimumPluginVersion} | Your version: {version}");
+                client.SendNotification($"[Salty Chat] Required version: {MinimumPluginVersion} | Your version: {version}");
 
             client.Kick("SaltyChat version");
         }
@@ -99,27 +101,19 @@ namespace SaltyServer
 
             string radioChannel = args[0].ToString();
             bool isSending = (bool)args[1];
-            Voice.SetPlayerSendingOnRadioChannel(client, radioChannel, isSending);
+            SetPlayerSendingOnRadioChannel(client, radioChannel, isSending);
         }
 
-        public static void OnSetRadioChannel(IPlayer client, string radioChannel)
+        public static void SetRadioChannel(IPlayer client, string radioChannel)
         {
-            if (String.IsNullOrWhiteSpace(radioChannel))
+            if (string.IsNullOrEmpty(radioChannel))
                 return;
 
-            Voice.RemovePlayerRadioChannel(client);
-            Voice.AddPlayerRadioChannel(client, radioChannel);
+            RemovePlayerRadioChannel(client);
+            AddPlayerRadioChannel(client, radioChannel);
 
             client.EmitLocked(SaltyShared.Event.Voice_SetRadioChannel, radioChannel);
         }
-
-        public static void OnLeaveRadioChannel(IPlayer client)
-        {
-            Voice.RemovePlayerRadioChannel(client);
-
-            client.EmitLocked(SaltyShared.Event.Voice_SetRadioChannel, String.Empty);
-        }
-
         #endregion
 
         #region Methods
@@ -130,9 +124,7 @@ namespace SaltyServer
                 name = Guid.NewGuid().ToString().Replace("-", "");
 
                 if (name.Length > 30)
-                {
                     name = name.Remove(29, name.Length - 30);
-                }
             }
             while (TsNames.Any(p => p == name));
 
@@ -146,7 +138,7 @@ namespace SaltyServer
         {
             List<string> radioChannels = new List<string>();
 
-            foreach (KeyValuePair<string, List<IPlayer>> radioChannel in Voice.RadioChannels)
+            foreach (KeyValuePair<string, List<IPlayer>> radioChannel in RadioChannels)
             {
                 if (radioChannel.Value.Contains(client))
                     radioChannels.Add(radioChannel.Key);
@@ -162,18 +154,14 @@ namespace SaltyServer
         /// <param name="radioChannel"></param>
         public static void AddPlayerRadioChannel(IPlayer client, string radioChannel)
         {
-            if (Voice.RadioChannels.ContainsKey(radioChannel) && Voice.RadioChannels[radioChannel].Contains(client))
-            {
+            if (RadioChannels.ContainsKey(radioChannel) && RadioChannels[radioChannel].Contains(client))
                 return;
-            }
-            else if (Voice.RadioChannels.ContainsKey(radioChannel))
-            {
-                Voice.RadioChannels[radioChannel].Add(client);
-            }
+            else if (RadioChannels.ContainsKey(radioChannel))
+                RadioChannels[radioChannel].Add(client);
             else
             {
-                Voice.RadioChannels.TryAdd(radioChannel, new List<IPlayer> { client });
-                Voice.PlayersTalkingOnRadioChannels.TryAdd(radioChannel, new List<IPlayer>());
+                RadioChannels.TryAdd(radioChannel, new List<IPlayer> { client });
+                PlayersTalkingOnRadioChannels.TryAdd(radioChannel, new List<IPlayer>());
             }
         }
 
@@ -183,10 +171,8 @@ namespace SaltyServer
         /// <param name="client"></param>
         public static void RemovePlayerRadioChannel(IPlayer client)
         {
-            foreach (string radioChannel in Voice.GetRadioChannels(client))
-            {
-                Voice.RemovePlayerRadioChannel(client, radioChannel);
-            }
+            foreach (string radioChannel in GetRadioChannels(client))
+                RemovePlayerRadioChannel(client, radioChannel);
         }
 
         /// <summary>
@@ -196,51 +182,51 @@ namespace SaltyServer
         /// <param name="radioChannel"></param>
         public static void RemovePlayerRadioChannel(IPlayer client, string radioChannel)
         {
-            if (Voice.PlayersTalkingOnRadioChannels.ContainsKey(radioChannel) && Voice.PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
+            if (PlayersTalkingOnRadioChannels.ContainsKey(radioChannel) && PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
             {
-                Voice.PlayersTalkingOnRadioChannels[radioChannel].Remove(client);
+                PlayersTalkingOnRadioChannels[radioChannel].Remove(client);
 
-                if (Voice.PlayersTalkingOnRadioChannels[radioChannel].Count == 0)
-                    Voice.PlayersTalkingOnRadioChannels.Remove(radioChannel, out List<IPlayer> value);
+                if (PlayersTalkingOnRadioChannels[radioChannel].Count == 0)
+                    PlayersTalkingOnRadioChannels.Remove(radioChannel, out _);
 
                 if (client.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName))
                 {
-                    foreach (IPlayer radioClient in Voice.RadioChannels[radioChannel])
+                    foreach (IPlayer radioClient in RadioChannels[radioChannel])
                         radioClient.EmitLocked(SaltyShared.Event.Voice_TalkingOnRadio, tsName, false);
                 }
             }
 
-            if (Voice.RadioChannels.ContainsKey(radioChannel) && Voice.RadioChannels[radioChannel].Contains(client))
+            if (RadioChannels.ContainsKey(radioChannel) && RadioChannels[radioChannel].Contains(client))
             {
-                Voice.RadioChannels[radioChannel].Remove(client);
+                RadioChannels[radioChannel].Remove(client);
 
-                if (Voice.RadioChannels[radioChannel].Count == 0)
+                if (RadioChannels[radioChannel].Count == 0)
                 {
-                    Voice.RadioChannels.Remove(radioChannel, out List<IPlayer> value);
-                    Voice.PlayersTalkingOnRadioChannels.Remove(radioChannel, out List<IPlayer> tsName);
+                    RadioChannels.Remove(radioChannel, out List<IPlayer> value);
+                    PlayersTalkingOnRadioChannels.Remove(radioChannel, out List<IPlayer> tsName);
                 }
             }
         }
 
         public static void SetPlayerSendingOnRadioChannel(IPlayer client, string radioChannel, bool isSending)
         {
-            if (!Voice.RadioChannels.ContainsKey(radioChannel) || !Voice.RadioChannels[radioChannel].Contains(client) || !client.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName))
+            if (!RadioChannels.ContainsKey(radioChannel) || !RadioChannels[radioChannel].Contains(client) || !client.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName))
                 return;
 
             try
             {
-                if (isSending && !Voice.PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
+                if (isSending && !PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
                 {
-                    Voice.PlayersTalkingOnRadioChannels[radioChannel].Add(client);
+                    PlayersTalkingOnRadioChannels[radioChannel].Add(client);
 
-                    foreach (IPlayer radioClient in Voice.RadioChannels[radioChannel])
+                    foreach (IPlayer radioClient in RadioChannels[radioChannel])
                         radioClient.EmitLocked(SaltyShared.Event.Voice_TalkingOnRadio, tsName, true, radioChannel);
                 }
-                else if (!isSending && Voice.PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
+                else if (!isSending && PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
                 {
-                    Voice.PlayersTalkingOnRadioChannels[radioChannel].Remove(client);
+                    PlayersTalkingOnRadioChannels[radioChannel].Remove(client);
 
-                    foreach (IPlayer radioClient in Voice.RadioChannels[radioChannel])
+                    foreach (IPlayer radioClient in RadioChannels[radioChannel])
                         radioClient.EmitLocked(SaltyShared.Event.Voice_TalkingOnRadio, tsName, false, radioChannel);
                 }
             }

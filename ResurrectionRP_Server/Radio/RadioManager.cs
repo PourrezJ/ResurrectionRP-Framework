@@ -12,7 +12,7 @@ namespace ResurrectionRP_Server.Radio
     public static class RadioManager
     {
         #region Private static properties
-        private static ConcurrentDictionary<IPlayer, Radio> _clientMenus = new ConcurrentDictionary<IPlayer, Radio>();
+        private static ConcurrentDictionary<IPlayer, Radio> _clientRadios = new ConcurrentDictionary<IPlayer, Radio>();
         #endregion
 
         public static void Init()
@@ -22,20 +22,21 @@ namespace ResurrectionRP_Server.Radio
         public static void Close(IPlayer client)
         {
             Radio radio;
-            if (_clientMenus.TryGetValue(client, out radio))
+
+            if (_clientRadios.TryGetValue(client, out radio))
                 radio.CloseRadio(client);
         }
 
         public static bool OpenRadio(IPlayer client, Radio radio)
         {
-            Radio oldRadio;
-            _clientMenus.TryRemove(client, out oldRadio);
+            _clientRadios.TryRemove(client, out _);
 
-            if (_clientMenus.TryAdd(client, radio))
+            if (_clientRadios.TryAdd(client, radio))
             {
                 radio.OpenRadio(client);
                 return true;
             }
+
             return false;
         }
 
@@ -45,13 +46,13 @@ namespace ResurrectionRP_Server.Radio
                 return;
 
             var player = client;
-
             var ph = player.GetPlayerHandler();
+
             if (ph == null)
                 return;
 
             Radio radio;
-            _clientMenus.TryGetValue(player, out radio);
+            _clientRadios.TryGetValue(player, out radio);
 
             if (radio == null)
                 return;
@@ -63,29 +64,16 @@ namespace ResurrectionRP_Server.Radio
                     break;
 
                 case "OnOff":
-                    try
-                    {
-                        radio.Statut = ((bool)args[1]) ? RadioModes.LISTENING : RadioModes.OFF;
-                        if (radio.Statut == RadioModes.OFF)
-                        {
-                            Voice.RemovePlayerRadioChannel(player);
-                        }
-                        else
-                        {
-                            Voice.OnSetRadioChannel(player, radio.GetCurrentFrequence().ToString());
-                            Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
+                    radio.Statut = ((bool)args[1]) ? RadioModes.LISTENING : RadioModes.OFF;
 
-                        Alt.Server.LogError(ex.ToString());
-                    }
+                    if (radio.Statut == RadioModes.OFF)
+                        Voice.RemovePlayerRadioChannel(player);
+                    else
+                        Voice.SetRadioChannel(player, radio.GetCurrentFrequence().ToString());
                     break;
 
-
                 case "Close":     
-                    if(_clientMenus.TryRemove(player, out radio))
+                    if(_clientRadios.TryRemove(player, out radio))
                         radio.CloseRadio(player);
                     break;
 
@@ -95,11 +83,11 @@ namespace ResurrectionRP_Server.Radio
                         if (args[2] == null)
                             return;
 
-                        if (double.TryParse(args[2].ToString(),  NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double frequence)){
-
+                        if (double.TryParse(args[2].ToString(),  NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double frequence))
+                        {
                             radio.SaveFrequeceRadio(Convert.ToInt32(args[1]), frequence);
-                            player.GetPlayerHandler()?.UpdateFull();
-                            Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
+                            Voice.SetRadioChannel(player, radio.GetCurrentFrequence().ToString());
+                            player.GetPlayerHandler().UpdateFull();
                         }
                     }
                     catch(Exception ex)
@@ -109,15 +97,16 @@ namespace ResurrectionRP_Server.Radio
                     }
                     break;
 
-                case "ChangeFrequence":
-                    radio.CurrentFrequence = int.Parse(args[1].ToString());
-                    Voice.SetPlayerSendingOnRadioChannel(player, radio.GetCurrentFrequence().ToString(), false);
+                case "ChangeChannel":
+                    radio.CurrentChannel = int.Parse(args[1].ToString());
+                    Voice.SetRadioChannel(player, radio.GetCurrentFrequence().ToString());
                     break;
+
                 case "ChangeVolume":
                     radio.Volume = int.Parse(args[1].ToString());
                     break;
+
                 default:
-                    Alt.Server.LogError("RadioManager RadioChange Hm args[0] is not valid... problem in client side ? args 0 mmust be the event name");
                     break;
             }
         }

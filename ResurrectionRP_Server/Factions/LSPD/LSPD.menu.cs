@@ -191,7 +191,6 @@ namespace ResurrectionRP_Server.Factions
 
             var motif = new MenuItem("Motif personnalisé", "Entrez le motif de votre amende", "ID_MotifCustom", executeCallback: true);
             motif.SetInput("Rentrer le motif de l'amende", 99, InputType.Text);
-            //motif.OnMenuItemCallback = InvoiceCallBack;
             motifMenu.Add(motif);
 
             var prix = new MenuItem("Prix personnalisé", "Entrez le prix de l'amende", "ID_PrixCustom", executeCallback: true);
@@ -199,7 +198,6 @@ namespace ResurrectionRP_Server.Factions
             motifMenu.Add(prix);
 
             //client.Call("Display_subtitle", "Entrez le motif de l'amende.", 5000);
-
 
             foreach (Motif item in MotifList)
             {
@@ -210,7 +208,7 @@ namespace ResurrectionRP_Server.Factions
                 motifMenu.Add(ui);
             }
 
-
+            XMenuManager.XMenuManager.CloseMenu(client);
             motifMenu.OpenMenu(client);
 
             //var motif = new MenuItem("Motif", "Sélectionner le motif", "ID_Motif", executeCallback: true);

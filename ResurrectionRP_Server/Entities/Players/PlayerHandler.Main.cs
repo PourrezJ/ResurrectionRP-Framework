@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using SaltyServer;
 using ResurrectionRP_Server.Entities.Players.Data;
 using ResurrectionRP_Server.Utils;
+using ResurrectionRP_Server.Models.InventoryData;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -734,6 +735,17 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 ListVehicleKey.Remove(_key);
             }
+        }
+        #endregion
+
+        #region inventory
+        public Inventory.Inventory HasItemInAnyInventory(ItemID item)
+        {
+            if (BagInventory.HasItemID(item))
+                return BagInventory;
+            if (PocketInventory.HasItemID(item))
+                return PocketInventory;
+            return null;
         }
         #endregion
 

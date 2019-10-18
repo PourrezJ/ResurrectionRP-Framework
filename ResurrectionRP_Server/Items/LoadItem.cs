@@ -55,16 +55,9 @@ namespace ResurrectionRP_Server.Items
 
                     // new Eat(ItemID.Nouille, "Des Nouilles Chinoises", "Une boite de nouille", 1 , true, true, true, food:15, isDockable:true, itemPrice:11.2),
 
-                    new Unusable(ItemID.CharbonBrute, "Minerai de Charbon brute", "", 2),
-                    new Unusable(ItemID.CharbonTraite, "Sac de Charbon", "", 1),
-                    new Unusable(ItemID.MineraiFer, "Minerai de Fer", "", 2),
-                    new Unusable(ItemID.PepiteOr, "Pépite d'or", "", 1),
-                    new Unusable(ItemID.Pioche, "Une pioche", "", 2),
                     new Unusable(ItemID.PetrolBrute, "Pétrole brute", "", 2, icon:"petrol-brut"),
                     new Unusable(ItemID.Petrol, "Pétrole Raffiné", "Pas sûre qu'il soit aussi éfficase que la mirabelle.", 1, icon:"petrol"),
                     new Unusable(ItemID.GrappeRaisin, "Grappe de raisin", "Une grappe de raisin vert", 2, icon:"grapes"),
-                    new Unusable(ItemID.MineraiCuivre, "Minerai de Cuivre", "Un morceau de roche", 2),
-                    new Unusable(ItemID.Cuivre, "Bobine de Cuivre", "Une bobine de Cuivre.", 1),
                     new Unusable(ItemID.Sable, "Sable", "Du sable qui sent la pisse de chat.", 2),
                     new Unusable(ItemID.Bouteille, "Bouteille en Verre Brute", "Une bouteille en verre vide.", 1, icon:"bouteille-verre"),
                     new Unusable(ItemID.BouteilleTraite, "Bouteille en Verre Stérilisé", "Une bouteille en verre vide stérile.", 1, icon:"bouteille-verre", isDockable: true, itemPrice: 268),
@@ -150,6 +143,17 @@ namespace ResurrectionRP_Server.Items
                     new LockPick(ItemID.LockPick, "Kit de crochetage", "", 1, true, false, true, true),
 
                    // new Unusable(ItemID.Microphone, "Micro de scène", "Un micro made in china")
+
+
+                   // Relative to Miners Farm
+                   
+                    new Unusable(ItemID.CharbonBrute, "Minerai de Charbon brute", "", 2),
+                    new Unusable(ItemID.CharbonTraite, "Sac de Charbon", "", 1),
+                    new Unusable(ItemID.MineraiFer, "Minerai de Fer", "", 2),
+                    new Unusable(ItemID.PepiteOr, "Pépite d'or", "", 1),
+                    new Unusable(ItemID.Pioche, "Une pioche", "", 2, icon: "pickaxe", isDockable: true, itemPrice: 75),
+                    new Unusable(ItemID.MineraiCuivre, "Minerai de Cuivre", "Un morceau de roche", 2),
+                    new Unusable(ItemID.Cuivre, "Bobine de Cuivre", "Une bobine de Cuivre.", 1, icon: "bobine-cuivre"),
             };
         }
     }

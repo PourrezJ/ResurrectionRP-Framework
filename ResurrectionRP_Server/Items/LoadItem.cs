@@ -147,11 +147,11 @@ namespace ResurrectionRP_Server.Items
 
                    // Relative to Miners Farm
                    
+                    new Pickaxe(ItemID.Pioche, "Pioche", "Pioche basique", 2, icon: "pickaxe", isDockable: true, itemPrice: 75),
                     new Unusable(ItemID.CharbonBrute, "Minerai de Charbon brute", "", 2),
                     new Unusable(ItemID.CharbonTraite, "Sac de Charbon", "", 1),
                     new Unusable(ItemID.MineraiFer, "Minerai de Fer", "", 2),
                     new Unusable(ItemID.PepiteOr, "Pépite d'or", "", 1),
-                    new Unusable(ItemID.Pioche, "Une pioche", "", 2, icon: "pickaxe", isDockable: true, itemPrice: 75),
                     new Unusable(ItemID.MineraiCuivre, "Minerai de Cuivre", "Un morceau de roche", 2),
                     new Unusable(ItemID.Cuivre, "Bobine de Cuivre", "Une bobine de Cuivre.", 1, icon: "bobine-cuivre"),
             };

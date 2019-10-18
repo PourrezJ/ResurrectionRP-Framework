@@ -10,6 +10,7 @@ using ClothData = ResurrectionRP_Server.Models.ClothData;
 using ItemID = ResurrectionRP_Server.Models.InventoryData.ItemID;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Utils.Enums;
+using System.Numerics;
 
 namespace ResurrectionRP_Server.Inventory
 {
@@ -807,6 +808,11 @@ namespace ResurrectionRP_Server.Inventory
                                     case ItemID.Taser:
                                         client.RemoveAllWeapons();
                                         break;
+                                    case ItemID.Pioche:
+                                        menu.Outfit.prop.DetachAttach();
+                                        menu.Outfit.prop.Destroy();
+                                        menu.Outfit.prop = null;
+                                        break;
                                 }
 
                                 player.Clothing.UpdatePlayerClothing();
@@ -928,6 +934,11 @@ namespace ResurrectionRP_Server.Inventory
                                         {
                                             client.GiveWeapon((uint)weaponItem.Hash, 99999, true);
                                         }
+                                        break;
+                                    case ItemID.Pioche:
+
+                                        menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_pickaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
+                                        menu.Outfit.prop.SetAttachToEntity(client, "PH_R_Hand", new Vector3(), new Vector3(-50, 0, 0));
                                         break;
                                 }
 

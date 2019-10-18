@@ -5,6 +5,7 @@ using System.Linq;
 using AltV.Net;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Models.InventoryData;
 
 namespace ResurrectionRP_Server.Inventory
 {
@@ -20,6 +21,8 @@ namespace ResurrectionRP_Server.Inventory
         public static string[] OutfitClasses = { "glasses", "cap", "necklace", "mask", "earring", "jacket", "watch", "shirt", "bracelet", "pants", "gloves", "shoes", "kevlar", "backpack", "phone", "radio", "weapon", "weapon" };
 
         public Models.ItemStack[] Slots = new Models.ItemStack[18];
+
+        public Entities.Objects.WorldObject prop = null;
 
         public OutfitInventory()
         {
@@ -76,6 +79,9 @@ namespace ResurrectionRP_Server.Inventory
             }
             return -1;
         }
+
+        public Models.ItemStack HasItemEquip(ItemID item) =>
+            Slots.FirstOrDefault((p) => (p?.Item.id == item));
 
         public Models.ItemStack[] FindAllItemWithType(Models.InventoryData.ItemID itemID)
         {

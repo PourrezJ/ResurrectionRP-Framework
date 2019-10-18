@@ -1,4 +1,5 @@
-﻿using AltV.Net.Elements.Entities;
+﻿
+using AltV.Net.Elements.Entities;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Models.InventoryData;
 using System;
@@ -11,7 +12,7 @@ using System.Numerics;
 
 namespace ResurrectionRP_Server.Models
 {
-    [BsonKnownTypes(typeof(Items.Alcohol), typeof(Items.Axe), typeof(Items.BuildingItem), typeof(ClothItem), typeof(Items.CrateTools), typeof(Items.Defibrilator), typeof(Items.Eat) ,typeof(Items.GasJerrycan), typeof(Items.HandCuff), typeof(Items.HealItem),
+    [BsonKnownTypes(typeof(Items.Alcohol), typeof(Items.Axe), typeof(Items.Pickaxe), typeof(Items.BuildingItem), typeof(ClothItem), typeof(Items.CrateTools), typeof(Items.Defibrilator), typeof(Items.Eat) ,typeof(Items.GasJerrycan), typeof(Items.HandCuff), typeof(Items.HealItem),
         typeof(Items.IdentityCard), typeof(Items.MaskItem), typeof(Items.PhoneItem), typeof(Items.RadioItem), typeof(Items.BagItem), typeof(Items.Unusable), typeof(Items.Weapons), typeof(Items.SeedItem), typeof(Items.LockPick))]
     public class Item : ICloneable
     {

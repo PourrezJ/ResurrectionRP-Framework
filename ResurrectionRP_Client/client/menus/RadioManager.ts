@@ -49,7 +49,7 @@ export class RadioManager {
             });
 
             this.view.on('SaveFrequence', (channel: number, frequence: number) => {
-                alt.emitServer('RadioManager', 'ChangeChannel', channel, frequence);
+                alt.emitServer('RadioManager', 'SaveFrequence', channel, frequence);
             });
 
             this.view.on('volumeUP', () => {

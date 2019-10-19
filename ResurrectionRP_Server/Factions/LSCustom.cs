@@ -91,7 +91,7 @@ namespace ResurrectionRP_Server.Factions
             ShopLocation = new Vector3(-350.74286f, -125.74945f, 38.002197f);
 
             // Items SHOP
-            ItemShop.Add(new FactionShopItem(new LockPick(ItemID.LockPick, "Kit De Crochetage", "", 0.2, true, false, true, true), 5000, 1));
+            // ItemShop.Add(new FactionShopItem(new LockPick(ItemID.LockPick, "Kit De Crochetage", "", 0.2, true, false, true, true), 5000, 1));
             ItemShop.Add(new FactionShopItem(new CrateTools(ItemID.CrateTool, "Caisse a outil", "De marque Facom", 1, true, false, true, true), 15000, 1));
 
             return base.Init();

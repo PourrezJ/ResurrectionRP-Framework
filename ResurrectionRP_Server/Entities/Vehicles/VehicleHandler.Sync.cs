@@ -366,18 +366,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             set
             {
                 _doors = value;
-                
-                if (Vehicle != null && Vehicle.Exists)
+
+                AltAsync.Do(() =>
                 {
-                    AltAsync.Do(() =>
+                    if (Vehicle != null && Vehicle.Exists)
                     {
                         for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
                         {
                             if (Vehicle.GetDoorState(i) != (byte)_doors[i])
                                 Vehicle.SetDoorState(i, (byte)_doors[i]);
                         }
-                    });
-                }
+                    }
+                });
             }
         }
 

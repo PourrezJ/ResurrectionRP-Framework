@@ -1,20 +1,19 @@
 ﻿app.controller("MessagesCtrl", function ($scope) {
     $scope.conversations = [];
 
+    $(() => {
+        if ('alt' in window) {
+            alt.on("loadConversations", loadConversations);
+            alt.emit("getConversations");
+        }
+    });
+
     window.addEventListener("ConversationsReturned", ev => {
         $scope.$apply(function () {
             //console.log(ev.detail);
             $scope.conversations = JSON.parse(ev.detail);
         });
     });
-});
-
-$(() => {
-    if ('alt' in window) {
-        alt.on("loadConversations", loadConversations);
-        alt.on("loadMessages", loadMessages);
-        alt.emit("getConversations");
-    }
 });
 
 function loadConversations(conversations) {
@@ -53,6 +52,7 @@ app.controller("MessageViewCtrl", function ($scope) {
     };
 
     $(function () {
+        alt.on("loadMessages", loadMessages);
         alt.emit("getMessages", $scope.conversationId, $scope.receiverNumber);
     });
     
@@ -74,7 +74,7 @@ app.controller("MsgOptionsCtrl", function ($scope) {
     $scope.contactNumber = urlParams.get("contactNumber");
     $scope.conversationId = urlParams.get("convId");
 
-    if ($scope.contactName != "" && $scope.contactName != null) {
+    if ($scope.contactName !== "" && $scope.contactName !== null) {
         $scope.knownContact = true;
     } else {
         $scope.knownContact = false;

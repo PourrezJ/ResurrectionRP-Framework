@@ -94,7 +94,6 @@ namespace ResurrectionRP_Server.Items
                     new Unusable(ItemID.Plastic, "Matière Polymère", "", 4),
 
                     new BuildingItem(ItemID.Building, "barriere", "", 1, modelhash:1072616162),
-                    new Axe(ItemID.Hache, "Hache", "Permet de couper du bois", 1, icon:"pickaxe"),
 
                     new ClothItem(ItemID.TShirt, "TShirt Blanc", "Un tshirt qui sent la sueur", new ClothData(1, 0, 0), 0, true, false, false, true, false, 0, classes:"shirt", icon:"shirt"),
 
@@ -106,7 +105,7 @@ namespace ResurrectionRP_Server.Items
                     new Weapons(ItemID.Weapon, "Batte", "", 3, hash: WeaponHash.Bat, isDockable: true, itemPrice: 2520),
                     new Weapons(ItemID.Weapon, "Pied de biche", "", 3, hash: WeaponHash.Crowbar, isDockable: true, itemPrice: 3150),
                     new Weapons(ItemID.Weapon, "Club de golf", "", 3, hash: WeaponHash.GolfClub, isDockable: true, itemPrice: 3150),
-                    new Weapons(ItemID.Weapon, "Marteau", "", 3, hash: WeaponHash.Hammer, isDockable: true, itemPrice: 3150),
+                    new Weapons(ItemID.Weapon, "Marteau (arme)", "", 3, hash: WeaponHash.Hammer, isDockable: true, itemPrice: 3150),
                     new Weapons(ItemID.Weapon, "Hachette", "", 3, hash: WeaponHash.Hatchet, isDockable: true, itemPrice: 3780),
                     new Weapons(ItemID.Weapon, "Poing américain", "", 3, hash: WeaponHash.KnuckleDuster, isDockable: true, itemPrice: 1785),
                     new Weapons(ItemID.Knife, "Couteau", "", 2, hash: WeaponHash.Knife, isDockable: true, itemPrice: 2940),
@@ -147,13 +146,18 @@ namespace ResurrectionRP_Server.Items
 
                    // Relative to Miners Farm
                    
-                    new Pickaxe(ItemID.Pioche, "Pioche", "Pioche basique", 2, icon: "pickaxe", isDockable: true, itemPrice: 75),
+                    new Pickaxe(ItemID.Pioche, "Pioche", "Pioche basique", 2, icon: "pickaxe", isDockable: true, itemPrice: 150),
+                    new Pickaxe(ItemID.MarteauPiqueur, "Marteau Piqueur", "Marteau piqueur", 15, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 2500, icon: "marteau-piqueur", miningrate: 5),
+                    new Pickaxe(ItemID.Marteau, "Marteau (Outil)", "Fond le cuivre", 3, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 150, icon: "marteau", miningrate: 5),
+
                     new Unusable(ItemID.CharbonBrute, "Minerai de Charbon brute", "", 2),
                     new Unusable(ItemID.CharbonTraite, "Sac de Charbon", "", 1),
                     new Unusable(ItemID.MineraiFer, "Minerai de Fer", "", 2),
                     new Unusable(ItemID.PepiteOr, "Pépite d'or", "", 1),
+
                     new Unusable(ItemID.MineraiCuivre, "Minerai de Cuivre", "Un morceau de roche", 2),
-                    new Unusable(ItemID.Cuivre, "Bobine de Cuivre", "Une bobine de Cuivre.", 1, icon: "bobine-cuivre"),
+                    new Unusable(ItemID.CuivreFondu, "Cuivre fondu", "A besoin d'être matellé", 2),
+                    new Unusable(ItemID.Cuivre, "Cuivre", "Du bon cuivre de gitan", 1, icon: "bobine-cuivre"),
             };
         }
     }

@@ -22,6 +22,7 @@ namespace ResurrectionRP_Server.Inventory
 
         public Models.ItemStack[] Slots = new Models.ItemStack[18];
 
+        [BsonIgnore]
         public Entities.Objects.WorldObject prop = null;
 
         public OutfitInventory()
@@ -33,6 +34,11 @@ namespace ResurrectionRP_Server.Inventory
         {
             if (Delete(GetSlotIndexUseStack(itemStack), quantite))
                 return true;
+            if (prop != null)
+            {
+                prop.Destroy();
+                prop = null;
+            }
             return false;
         }
 
@@ -69,6 +75,16 @@ namespace ResurrectionRP_Server.Inventory
                 return false;
             }
         }
+
+        public void DestroyProp()
+        {
+            if (prop != null)
+            {
+                prop.Destroy();
+                prop = null;
+            }
+        }
+
 
         public int GetSlotIndexUseStack(Models.ItemStack stack)
         {

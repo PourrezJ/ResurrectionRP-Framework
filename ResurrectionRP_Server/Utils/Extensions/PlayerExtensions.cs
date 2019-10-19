@@ -42,10 +42,10 @@ namespace ResurrectionRP_Server
         public static void SetWaypoint(this IPlayer client, Vector3 pos, bool overrideOld = true) => 
             client.EmitLocked("SetWaypoint", pos.X, pos.Y, overrideOld);
 
-        public static void DisplayHelp(this IPlayer client, string text, int timeMs) =>
+        public static void DisplayHelp(this IPlayer client, string text, int timeMs = 10000) =>
             client.EmitLocked("Display_Help", text, timeMs);
 
-        public static void DisplaySubtitle(this IPlayer client, string text, int timeMs) =>
+        public static void DisplaySubtitle(this IPlayer client, string text, int timeMs = 10000) =>
             client.EmitLocked("Display_subtitle", text, timeMs);
 
         public static PlayerHandler GetPlayerHandler(this IPlayer client)
@@ -340,6 +340,10 @@ namespace ResurrectionRP_Server
         {
             client.EmitLocked("TaskStartScenarioAtPosition", scenarioName, position.X, position.Y, position.Z, heading, duration, sittingScenario, teleport);
         }
+
+        public static void TaskAdvancedPlayAnimation(this IPlayer client, string animDict, string animName,Vector3 position, Vector3 rotation, float speed, float speedMultiplier, int duration, int flag, int animTime) =>
+            client.EmitLocked("TaskAdvancedPlayAnimation", animDict, animName, position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z, speed, speedMultiplier, duration, flag, animTime);
+
 
         public static void SetHeading(this IPlayer client, float heading)
         {

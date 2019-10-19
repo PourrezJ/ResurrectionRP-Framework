@@ -793,7 +793,6 @@ namespace ResurrectionRP_Server.Inventory
                                     case ItemID.BattleAxe:
                                     case ItemID.CombatPistol:
                                     case ItemID.Flashlight:
-                                    case ItemID.Hache:
                                     case ItemID.HeavyPistol:
                                     case ItemID.Knife:
                                     case ItemID.Machete:
@@ -809,9 +808,10 @@ namespace ResurrectionRP_Server.Inventory
                                         client.RemoveAllWeapons();
                                         break;
                                     case ItemID.Pioche:
-                                        menu.Outfit.prop.DetachAttach();
-                                        menu.Outfit.prop.Destroy();
-                                        menu.Outfit.prop = null;
+                                    case ItemID.Hache:
+                                    case ItemID.MarteauPiqueur:
+                                        menu.Outfit.DestroyProp();
+                                        client.StopAnimation();
                                         break;
                                 }
 
@@ -916,7 +916,6 @@ namespace ResurrectionRP_Server.Inventory
                                     case ItemID.BattleAxe:
                                     case ItemID.CombatPistol:
                                     case ItemID.Flashlight:
-                                    case ItemID.Hache:
                                     case ItemID.HeavyPistol:
                                     case ItemID.Knife:
                                     case ItemID.Machete:
@@ -936,9 +935,16 @@ namespace ResurrectionRP_Server.Inventory
                                         }
                                         break;
                                     case ItemID.Pioche:
-
                                         menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_pickaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
-                                        menu.Outfit.prop.SetAttachToEntity(client, "PH_R_Hand", new Vector3(), new Vector3(-50, 0, 0));
+                                        menu.Outfit.prop.SetAttachToEntity(client, "PH_R_Hand", new Vector3(0.1f,-0.1f,-0.02f), new Vector3(80, 0, 170));
+                                        break;
+                                    case ItemID.Hache:
+                                        menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_fireaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
+                                        menu.Outfit.prop.SetAttachToEntity(client, "PH_R_Hand", new Vector3(0.1f, -0.1f, -0.02f), new Vector3(80, 0, 170));
+                                        break;
+                                    case ItemID.MarteauPiqueur:
+                                        menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_jackham"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
+                                        (item as Items.Pickaxe).MarteauPiqueurSetWalkingStyle(client, menu.Outfit.prop);
                                         break;
                                 }
 

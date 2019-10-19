@@ -7,7 +7,6 @@ using System.Globalization;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.EventHandlers;
@@ -32,9 +31,6 @@ namespace ResurrectionRP_Server
 
         [BsonIgnore]
         public static GameMode Instance { get; private set; }
-
-        [BsonIgnore]
-        public static bool IsLinux { get; private set; }
 
         [BsonIgnore]
         public static bool IsDebug { get; private set; } = true;
@@ -125,7 +121,6 @@ namespace ResurrectionRP_Server
             Alt.OnPlayerDisconnect += OnPlayerDisconnected;
             Alt.OnConsoleCommand += Alt_OnConsoleCommand;
  
-            IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             Alt.Server.LogColored("~g~Création des controlleurs...");
             Streamer.Streamer.Init();
             ColshapeManager.Init();

@@ -83,9 +83,9 @@ namespace ResurrectionRP_Server.Radio
                         if (args[2] == null)
                             return;
 
-                        if (double.TryParse(args[2].ToString(),  NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double frequence))
+                        if (double.TryParse(args[2].ToString(), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double frequence))
                         {
-                            radio.SaveFrequeceRadio(Convert.ToInt32(args[1]), frequence);
+                            radio.SaveFrequenceRadio(Convert.ToInt32(args[1]), frequence);
                             Voice.SetRadioChannel(player, radio.GetCurrentFrequence().ToString());
                             player.GetPlayerHandler().UpdateFull();
                         }

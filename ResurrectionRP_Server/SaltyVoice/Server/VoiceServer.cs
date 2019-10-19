@@ -101,7 +101,7 @@ namespace SaltyServer
 
             string radioChannel = args[0].ToString();
             bool isSending = (bool)args[1];
-            SetPlayerSendingOnRadioChannel(client, radioChannel, isSending);
+            PlayerTalkingOnRadioChannel(client, radioChannel, isSending);
         }
 
         public static void SetRadioChannel(IPlayer client, string radioChannel)
@@ -111,7 +111,6 @@ namespace SaltyServer
 
             RemovePlayerRadioChannel(client);
             AddPlayerRadioChannel(client, radioChannel);
-
             client.EmitLocked(SaltyShared.Event.Voice_SetRadioChannel, radioChannel);
         }
         #endregion
@@ -154,15 +153,12 @@ namespace SaltyServer
         /// <param name="radioChannel"></param>
         public static void AddPlayerRadioChannel(IPlayer client, string radioChannel)
         {
-            if (RadioChannels.ContainsKey(radioChannel) && RadioChannels[radioChannel].Contains(client))
-                return;
-            else if (RadioChannels.ContainsKey(radioChannel))
-                RadioChannels[radioChannel].Add(client);
-            else
-            {
+            if (!RadioChannels.ContainsKey(radioChannel))
                 RadioChannels.TryAdd(radioChannel, new List<IPlayer> { client });
-                PlayersTalkingOnRadioChannels.TryAdd(radioChannel, new List<IPlayer>());
-            }
+            else if (!RadioChannels[radioChannel].Contains(client))
+                RadioChannels[radioChannel].Add(client);
+
+            PlayersTalkingOnRadioChannels.TryAdd(radioChannel, new List<IPlayer>());
         }
 
         /// <summary>
@@ -208,21 +204,21 @@ namespace SaltyServer
             }
         }
 
-        public static void SetPlayerSendingOnRadioChannel(IPlayer client, string radioChannel, bool isSending)
+        public static void PlayerTalkingOnRadioChannel(IPlayer client, string radioChannel, bool isTalking)
         {
             if (!RadioChannels.ContainsKey(radioChannel) || !RadioChannels[radioChannel].Contains(client) || !client.GetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, out object tsName))
                 return;
 
             try
             {
-                if (isSending && !PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
+                if (isTalking && !PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
                 {
                     PlayersTalkingOnRadioChannels[radioChannel].Add(client);
 
                     foreach (IPlayer radioClient in RadioChannels[radioChannel])
                         radioClient.EmitLocked(SaltyShared.Event.Voice_TalkingOnRadio, tsName, true, radioChannel);
                 }
-                else if (!isSending && PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
+                else if (!isTalking && PlayersTalkingOnRadioChannels[radioChannel].Contains(client))
                 {
                     PlayersTalkingOnRadioChannels[radioChannel].Remove(client);
 

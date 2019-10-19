@@ -133,6 +133,8 @@ namespace ResurrectionRP_Server.Farms
         public int ItemPrice { get; set; }
 
         public bool Enabled { get; set; } = true;
+        [JsonIgnore]
+        public bool NewFarm { get; set; } = false;
 
         #region Timers
         public ConcurrentDictionary<IPlayer, System.Timers.Timer> FarmTimers = new ConcurrentDictionary<IPlayer, System.Timers.Timer>();

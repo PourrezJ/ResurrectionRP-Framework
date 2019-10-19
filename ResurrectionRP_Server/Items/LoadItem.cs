@@ -148,7 +148,7 @@ namespace ResurrectionRP_Server.Items
                    
                     new Pickaxe(ItemID.Pioche, "Pioche", "Pioche basique", 2, icon: "pickaxe", isDockable: true, itemPrice: 150),
                     new Pickaxe(ItemID.MarteauPiqueur, "Marteau Piqueur", "Marteau piqueur", 15, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 2500, icon: "marteau-piqueur", miningrate: 5),
-                    new Pickaxe(ItemID.Marteau, "Marteau (Outil)", "Fond le cuivre", 3, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 150, icon: "marteau", miningrate: 5),
+                    new Pickaxe(ItemID.Marteau, "Marteau (Outil)", "Fond le cuivre", 3, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 150, icon: "marteau", miningrate: 1),
 
                     new Unusable(ItemID.CharbonBrute, "Minerai de Charbon brute", "", 2),
                     new Unusable(ItemID.CharbonTraite, "Sac de Charbon", "", 1),

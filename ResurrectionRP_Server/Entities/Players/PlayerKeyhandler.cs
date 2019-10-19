@@ -250,7 +250,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     Farm farm = FarmManager.PlayerInFarmZone(client);
 
-                    if (farm != null)
+                    if (farm != null && !farm.NewFarm)
                     {
                         farm.StartFarming(client);
                         return;

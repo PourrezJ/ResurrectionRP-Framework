@@ -9,6 +9,7 @@ using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Utils;
 using System;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -93,7 +94,8 @@ namespace ResurrectionRP_Server
 
         public override void OnTick()
         {
-            FPSCounter.OnTick();
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) 
+                FPSCounter.OnTick();
             ColshapeManager.OnTick();
             VehiclesManager.OnTick();
             base.OnTick();

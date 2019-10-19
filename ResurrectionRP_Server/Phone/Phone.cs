@@ -71,8 +71,8 @@ namespace ResurrectionRP_Server.Phone
             try
             {
                 Task.Run(async () => {
-                    Conversation conv1 = await PhoneManager.FindOrCreateConversation(this.PhoneNumber, receiver);
-                    Conversation conv2 = await PhoneManager.FindOrCreateConversation(receiver, this.PhoneNumber);
+                    Conversation conv1 = await PhoneManager.FindOrCreateConversation(PhoneNumber, receiver);
+                    Conversation conv2 = await PhoneManager.FindOrCreateConversation(receiver, PhoneNumber);
 
                     conv1.messages.Add(new SMS() { content = message, isOwn = true, sentAt = DateTime.Now });
                     conv2.messages.Add(new SMS() { content = message, isOwn = false, sentAt = DateTime.Now });
@@ -84,7 +84,7 @@ namespace ResurrectionRP_Server.Phone
                     GetMessages(client, receiver);
                 });
 
-                IPlayer _client = GetClientWithPhoneNumber(this.PhoneNumber);
+                IPlayer _client = GetClientWithPhoneNumber(PhoneNumber);
 
                 if (_client != null)
                 {
@@ -96,17 +96,17 @@ namespace ResurrectionRP_Server.Phone
                 Phone _phone = GetPhoneWithPhoneNumber(receiver);
 
                 if (_phone != null)
-                    _phone.NewSMS(this.PhoneNumber);
+                    _phone.NewSMS(PhoneNumber);
             }
             catch (Exception ex)
             {
-                Alt.Server.LogError(this.PhoneNumber + " " + receiver + ex);
+                Alt.Server.LogError(PhoneNumber + " " + receiver + ex);
             }
         }
 
         public void NewSMS(string phoneNumber)
         {
-            IPlayer _client = GetClientWithPhoneNumber(this.PhoneNumber);
+            IPlayer _client = GetClientWithPhoneNumber(PhoneNumber);
 
             if (_client == null)
                 return;
@@ -139,10 +139,10 @@ namespace ResurrectionRP_Server.Phone
         {
             Task.Run(async () =>
             {
-                Conversation checkConv = await PhoneManager.FindOrCreateConversation(PhoneNumber, phoneNumber, false);
-                //checkConv.messages.Reverse();
-                if (checkConv != null)
-                    await client.EmitAsync("MessagesReturned", JsonConvert.SerializeObject(checkConv));
+                Conversation conversation = await PhoneManager.FindOrCreateConversation(PhoneNumber, phoneNumber, false);
+
+                if (conversation != null)
+                    await client.EmitAsync("MessagesReturned", JsonConvert.SerializeObject(conversation));
             });
         }
 
@@ -152,6 +152,7 @@ namespace ResurrectionRP_Server.Phone
         public void InitiateCall(IPlayer client, string phoneNumber)
         {
             IPlayer _client = GetClientWithPhoneNumber(phoneNumber);
+
             if (_client != null)
             {
                 bool incommunication = false;
@@ -159,16 +160,14 @@ namespace ResurrectionRP_Server.Phone
 
                 if (!incommunication)
                 {
-                    string contactName = this.GetNameForNumber(phoneNumber);
+                    string contactName = GetNameForNumber(phoneNumber);
                     client.EmitLocked("initiatedCall", phoneNumber, contactName);
 
                     var phoneDistant = GetPhoneWithPhoneNumber(phoneNumber);
                     string callerName = phoneDistant.GetNameForNumber(PhoneNumber);
 
-                    if (PhoneManager.HasOpenPhone(client, out Phone phone))
-                    {
+                    if (PhoneManager.HasOpenPhone(client, out _))
                         PhoneManager.OpenPhone(_client, phoneDistant, true, PhoneNumber, callerName);
-                    }
                 }
                 else
                 {
@@ -177,9 +176,7 @@ namespace ResurrectionRP_Server.Phone
                 }
             }
             else
-            {
                 client.SendNotificationError("Le contact n'est actuellement pas disponible");
-            }
         }
 
         public void StartCall(IPlayer client, string phoneNumber)
@@ -198,6 +195,7 @@ namespace ResurrectionRP_Server.Phone
         public void CancelCall(IPlayer player, string phoneNumber)
         {
             var calledPlayer = GetClientWithPhoneNumber(phoneNumber);
+
             if (calledPlayer != null)
             {
                 calledPlayer.ResetData("InToPhoneCommunication");
@@ -364,17 +362,19 @@ namespace ResurrectionRP_Server.Phone
             Task.Run(async () =>
             {
                 var list = await Database.MongoDB.GetCollectionSafe<Conversation>("conversations").Find(p => p.sender == PhoneNumber).ToListAsync();
+
                 await AltAsync.Do(() =>
                 {
                     if (list.Count > 0)
                     {
                         list.OrderByDescending(x => x.lastMessageDate);
+
                         foreach (Conversation conv in list)
                         {
-                            Address _adress = this.AddressBook.Find(p => p.phoneNumber == conv.receiver);
-
+                            Address _adress = AddressBook.Find(p => p.phoneNumber == conv.receiver);
                             conv.receiverName = (_adress != null) ? _adress.contactName : conv.receiver;
                         };
+
                         client.EmitLocked("ConversationsReturnedV2", JsonConvert.SerializeObject(list));
                     }
                 });

@@ -94,8 +94,9 @@ namespace ResurrectionRP_Server
 
         public override void OnTick()
         {
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) 
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) 
                 FPSCounter.OnTick();
+
             ColshapeManager.OnTick();
             VehiclesManager.OnTick();
             base.OnTick();

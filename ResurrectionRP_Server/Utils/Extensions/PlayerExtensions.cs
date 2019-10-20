@@ -395,7 +395,7 @@ namespace ResurrectionRP_Server
                 foreach (var medecin in Factions.FactionManager.Onu?.GetEmployeeOnline())
                 {
                     if (medecin.Exists)
-                        medecin.EmitLocked("ONU_BlesseEnd", client.Id);
+                        medecin.EmitLocked("ONU_BlesseEnd", (int)client.Id);
                 }
             }
         }
@@ -409,6 +409,7 @@ namespace ResurrectionRP_Server
             await client.ResurrectAsync(health);
 
             var dead = PlayerManager.DeadPlayers.Find(p => p.Victime == client);
+
             if (dead != null)
                 dead.Remove();
 
@@ -417,7 +418,7 @@ namespace ResurrectionRP_Server
                 foreach (var medecin in Factions.FactionManager.Onu?.GetEmployeeOnline())
                 {
                     if (await medecin.ExistsAsync())
-                        medecin.EmitLocked("ONU_BlesseEnd", client.Id);
+                        medecin.EmitLocked("ONU_BlesseEnd", (int)client.Id);
                 }
             }
         }

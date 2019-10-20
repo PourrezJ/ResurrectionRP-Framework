@@ -26,6 +26,7 @@ namespace ResurrectionRP_Server.Farms
     {
         private Farm Farm;
         public Vector3 Position;
+        public float Heading;
         public Item ReturnedItem;
         public float DoubleLuck = 0.0f; // Un randomint sera fait pour savoir si on veut 2 minerais
         public IColshape Colshape;
@@ -34,7 +35,7 @@ namespace ResurrectionRP_Server.Farms
         public InteractionPointTypes Type;
         public string InteractionName;
 
-        public InteractionPoint(Farm farm, Vector3 position, Vector3 rotation, Item returnedItem, List<Item> items, InteractionPointTypes interactionPoint, string interactionName, float doubleLuck)
+        public InteractionPoint(Farm farm, Vector3 position, float heading, Item returnedItem, List<Item> items, InteractionPointTypes interactionPoint, string interactionName, float doubleLuck)
         {
             Position = position;
             ReturnedItem = returnedItem;
@@ -43,9 +44,10 @@ namespace ResurrectionRP_Server.Farms
             Type = interactionPoint;
             InteractionName = interactionName;
             Farm = farm;
+            Heading = heading;
             Init();
         }
-        public InteractionPoint(Farm farm, Vector3 position, Vector3 rotation,Item returnedItem, Item item, InteractionPointTypes interactionPoint, string interactionName, float doubleLuck)
+        public InteractionPoint(Farm farm, Vector3 position, float heading,Item returnedItem, Item item, InteractionPointTypes interactionPoint, string interactionName, float doubleLuck)
         {
             Position = position;
             ReturnedItem = returnedItem;
@@ -54,6 +56,7 @@ namespace ResurrectionRP_Server.Farms
             Type = interactionPoint;
             InteractionName = interactionName;
             Farm = farm;
+            Heading = heading;
             Init();
         }
 
@@ -162,16 +165,13 @@ namespace ResurrectionRP_Server.Farms
     class Cuivre : Farm
     {
         private static int UsureOutil = 1;
-        [JsonIgnore]
-        private IColshape Process_Colshape { get; set; } = null;
-        [JsonIgnore]
-        private Marker Process_Marker { get; set; } = null;
+
         [JsonIgnore]
         public List<InteractionPoint> FarmPoints { get; set; } = new List<InteractionPoint>();
         [JsonIgnore]
-        public List<InteractionPoint> ForgePoints { get; set; } = new List<InteractionPoint>();
+        public List<InteractionPoint> DoubleProcessPoints { get; set; } = new List<InteractionPoint>();
         [JsonIgnore]
-        public List<InteractionPoint> FonduPoints { get; set; } = new List<InteractionPoint>();
+        public List<InteractionPoint> ProcessPoints { get; set; } = new List<InteractionPoint>();
         public Cuivre()
         {
             NewFarm = true;
@@ -192,7 +192,7 @@ namespace ResurrectionRP_Server.Farms
             Harvest_Position.Add(new Vector3(2997.679f, 2758.425f, 42.34139f));
             Harvest_Position.Add(new Vector3(2946.29f, 2733.697f, 44.75487f));
             Harvest_Position.ForEach((position) =>
-                FarmPoints.Add( new InteractionPoint(this, position, new Vector3(), Inventory.Inventory.ItemByID(ItemID.MineraiCuivre), new List<Item> { Inventory.Inventory.ItemByID(ItemID.Pioche), Inventory.Inventory.ItemByID(ItemID.MarteauPiqueur) }, InteractionPointTypes.Farm, "miner", 0))
+                FarmPoints.Add( new InteractionPoint(this, position, 0, Inventory.Inventory.ItemByID(ItemID.MineraiCuivre), new List<Item> { Inventory.Inventory.ItemByID(ItemID.Pioche), Inventory.Inventory.ItemByID(ItemID.MarteauPiqueur) }, InteractionPointTypes.Farm, "miner", 0))
             );
             Harvest_Range = 100f;
 
@@ -202,14 +202,14 @@ namespace ResurrectionRP_Server.Farms
                 new Vector3(1096.5231f, -1994.2946f, 29.364136f),
                 new Vector3(1089.956f, -1991.011f, 28.976562f)
             }.ForEach((position) =>
-                ForgePoints.Add(new InteractionPoint(this, position, new Vector3(0, 0, -2.3f), Inventory.Inventory.ItemByID(ItemID.Cuivre), Inventory.Inventory.ItemByID(ItemID.Marteau), InteractionPointTypes.DoubleProcess, "forger", 0.0f))
+                DoubleProcessPoints.Add(new InteractionPoint(this, position, 90, Inventory.Inventory.ItemByID(ItemID.Cuivre), Inventory.Inventory.ItemByID(ItemID.Marteau), InteractionPointTypes.DoubleProcess, "forger", 0.0f))
             );
 
             new List<Vector3>
             {
                 new Vector3(1086f, -2001.493f, 31.382f)
             }.ForEach((position) =>
-                FonduPoints.Add(new InteractionPoint(this, new Vector3(1086f, -2001.493f, 31.382f), new Vector3(0, 0, -2.3f), Inventory.Inventory.ItemByID(ItemID.CuivreFondu), Inventory.Inventory.ItemByID(ItemID.Marteau), InteractionPointTypes.Process, "fondre", 0.0f))
+                ProcessPoints.Add(new InteractionPoint(this, new Vector3(1086f, -2001.493f, 31.382f), -2.3f, Inventory.Inventory.ItemByID(ItemID.CuivreFondu), Inventory.Inventory.ItemByID(ItemID.Marteau), InteractionPointTypes.Process, "fondre", 0.0f))
             );
             
             Selling_PosRot = new Location(new Vector3(-788.2813f, 5868.633f, 6.3809814f), new Vector3(0, 0, -11.52882f));
@@ -343,7 +343,12 @@ namespace ResurrectionRP_Server.Farms
                     client.DisplayHelp("Vous n'avez plus de cuivre sur vous à fondre!");
                     return;
                 }
-                client.TaskStartScenarioAtPosition("WORLD_HUMAN_HAMMERING", client.Position.ConvertToVector3(), 0, 5000, false, false);
+
+                DoubleProcessPoints.ForEach((p) =>
+                   {
+                       if( p.Position.DistanceTo2D(client.Position.ConvertToVector3()) < 2)
+                           client.TaskStartScenarioAtPosition("WORLD_HUMAN_HAMMERING", p.Position, p.Heading, Process_Time, false, false);
+                   });
 
                 ProcessTimers[client] = Utils.Utils.SetInterval(() =>
                 {

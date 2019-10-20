@@ -64,7 +64,7 @@ namespace ResurrectionRP_Server.Radio
             if (Statut == RadioModes.LISTENING)
             {
                 Statut = RadioModes.SPEAKING;
-                SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), true); 
+                SaltyServer.Voice.PlayerTalkingOnRadioChannel(client, GetCurrentFrequence().ToString(), true); 
 
                 client.PlayAnimation("random@arrests", "generic_radio_chatter", 4, -8, -1, (AnimationFlags)49);
             }
@@ -76,7 +76,7 @@ namespace ResurrectionRP_Server.Radio
             if (Statut == RadioModes.SPEAKING || Statut == RadioModes.LISTENING)
             {
                 Statut = RadioModes.LISTENING;
-                SaltyServer.Voice.SetPlayerSendingOnRadioChannel(client, GetCurrentFrequence().ToString(), false);
+                SaltyServer.Voice.PlayerTalkingOnRadioChannel(client, GetCurrentFrequence().ToString(), false);
 
                 var ph = client.GetPlayerHandler();
 
@@ -94,7 +94,7 @@ namespace ResurrectionRP_Server.Radio
             SaltyServer.Voice.RemovePlayerRadioChannel(client);
         }
 
-        public void SaveFrequeceRadio(int channel, double frequence)
+        public void SaveFrequenceRadio(int channel, double frequence)
         { 
             Favoris[channel] = frequence;
         }

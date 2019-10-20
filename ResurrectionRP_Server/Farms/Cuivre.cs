@@ -222,63 +222,11 @@ namespace ResurrectionRP_Server.Farms
             Process_QuantityNeeded = 2;
             Process_Time = 5000;
 
+            DoubleProcess_Time = 5;
+
             ItemIDBrute = ItemID.MineraiCuivre;
             ItemIDProcess = ItemID.CuivreFondu;
             ItemPrice = 92;
-        }
-
-        private void Process_Colshape_OnPlayerInteractInColshape(IColshape colshape, IPlayer client)
-        {
-            if (!client.Exists || client.IsInVehicle | client.IsInRagdoll || !Process_Checker(client))
-                return;
-
-            if (GameMode.IsDebug)
-                Alt.Server.LogInfo($"Player {client.GetPlayerHandler()?.PID} is now process at Copper");
-            StartProcessing(client);
-        }
-
-        private void Process_Colshape_OnPlayerEnterColshape(IColshape colshape, IPlayer client)
-        {
-            try
-            {
-                Process_Checker(client);
-            }
-            catch (System.Exception ex)
-            {
-
-                Alt.Server.LogError("Cuivre Process OnPlayerEnterColshape: " + ex.Data);
-            }
-        }
-
-        private bool Process_Checker(IPlayer client)
-        {
-            PlayerHandler _client = client.GetPlayerHandler();
-            Inventory.Inventory inventory = _client.HasItemInAnyInventory(ItemID.MineraiCuivre);
-            Inventory.Inventory inventory_marteau = _client.HasItemInAnyInventory(ItemID.Marteau);
-            ItemStack marteauStack = _client.OutfitInventory.HasItemEquip(ItemID.Marteau);
-            Pickaxe marteau = marteauStack?.Item as Pickaxe;
-
-            if (client.IsInVehicle)
-                client.DisplayHelp("Vous ne pouvez faire être ici avec un véhicule!", 5000);
-            else if (inventory_marteau == null && marteau == null)
-                client.DisplayHelp("Vous devez avoir un marteau pour fondre du cuivre!");
-            else if (inventory_marteau != null && marteau == null)
-                client.DisplayHelp("Equipez votre marteau pour travailler.");
-            else if (inventory == null)
-                client.DisplayHelp("Vous ne pouvez pas fondre du vent, il faut du cuivre!", 5000);
-            else if (inventory.CountItem(ItemID.MineraiCuivre) < Process_QuantityNeeded)
-                client.DisplayHelp("Il vous faut plus de cuivre! (2 Minimum)", 10000);
-            else if (marteau != null && marteau.Health <= 0)
-            {
-                _client.OutfitInventory.Delete(marteauStack, 1);
-                client.DisplayHelp("Votre marteau s'est cassée, vous êtes bon pour en racheter une !", 10000);
-            }
-            else
-            {
-                client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour commencer à fondre", 5000);
-                return true;
-            }
-            return false;
         }
 
         public override void StartFarming(IPlayer client)
@@ -348,26 +296,62 @@ namespace ResurrectionRP_Server.Farms
         {
             try
             {
-                Alt.Server.LogInfo("Start process");
                 PlayerHandler player = client.GetPlayerHandler();
                 Item item = Inventory.Inventory.ItemByID(ItemIDProcess);
                 Pickaxe _item = (Pickaxe)(player.OutfitInventory.HasItemEquip(ItemID.Marteau)?.Item);
 
-                if(player.BagInventory.CountItem(ItemID.MineraiCuivre) < Process_QuantityNeeded && player.PocketInventory.CountItem(ItemID.MineraiCuivre) < Process_QuantityNeeded)
+                if(player.BagInventory.CountItem(ItemID.MineraiCuivre) < Process_QuantityNeeded* _item.MiningRate && player.PocketInventory.CountItem(ItemID.MineraiCuivre) < Process_QuantityNeeded* _item.MiningRate)
                 {
                     client.DisplayHelp("Vous n'avez plus de cuivre sur vous à fondre!");
                     return;
                 }
 
                 client.TaskAdvancedPlayAnimation("anim@heists@load_box", "load_box_1_box_a", new Vector3(1086f, -2001.493f, 31.382f), new Vector3(0, 0, 0), 1, 1, 15000, 1, 5000);
+                DoubleProcessTimers[client] = Utils.Utils.SetInterval(() =>
+                {
+                    if (!client.Exists)
+                        return;
+                    if (player.DeleteAllItem(ItemIDBrute, Process_QuantityNeeded * _item.MiningRate))
+                    {
+                        client.DisplaySubtitle($"Vous avez fondu ~r~ {_item.MiningRate} {item.name}", 5000);
+                        player.AddItem(item, _item.MiningRate);
+                        player.UpdateFull();
+                    }
+
+                    DoubleProcessTimers[client].Stop();
+                    DoubleProcessTimers[client].Close();
+                    DoubleProcessTimers.TryRemove(client, out _);
+                }, (int)(DoubleProcess_Time / _item.Speed));
+            }
+            catch (System.Exception ex)
+            {
+
+                Alt.Server.LogError("Copper Farm | StartProcessing | " + ex.Data);
+            }
+
+        }
+
+        public override void StartDoubleProcessing(IPlayer client)
+        {
+            try
+            {
+                PlayerHandler player = client.GetPlayerHandler();
+                Item item = Inventory.Inventory.ItemByID(ItemID.Cuivre);
+                Pickaxe _item = (Pickaxe)(player.OutfitInventory.HasItemEquip(ItemID.Marteau)?.Item);
+                if (player.BagInventory.CountItem(ItemID.CuivreFondu) < _item.MiningRate && player.PocketInventory.CountItem(ItemID.CuivreFondu) < _item.MiningRate)
+                {
+                    client.DisplayHelp("Vous n'avez plus de cuivre sur vous à fondre!");
+                    return;
+                }
+                client.TaskStartScenarioAtPosition("WORLD_HUMAN_HAMMERING", client.Position.ConvertToVector3(), 0, 5000, false, false);
 
                 ProcessTimers[client] = Utils.Utils.SetInterval(() =>
                 {
                     if (!client.Exists)
                         return;
-                    if (player.DeleteAllItem(ItemIDBrute, Process_QuantityNeeded))
+                    if (player.DeleteAllItem(ItemID.CuivreFondu, _item.MiningRate))
                     {
-                        client.DisplaySubtitle($"Vous avez fondu ~r~ {_item.MiningRate} {item.name}", 5000);
+                        client.DisplaySubtitle($"Vous avez forgé ~r~ {_item.MiningRate} {item.name}", 5000);
                         player.AddItem(item, _item.MiningRate);
                         player.UpdateFull();
                     }
@@ -380,7 +364,7 @@ namespace ResurrectionRP_Server.Farms
             catch (System.Exception ex)
             {
 
-                Alt.Server.LogError("Copper Farm | StartProcessing | " + ex.Data);
+                Alt.Server.LogError("Copper Farm | StartDoubleProcess | " + ex.Data);
             }
 
         }

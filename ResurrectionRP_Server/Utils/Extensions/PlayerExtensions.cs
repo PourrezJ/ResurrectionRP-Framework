@@ -387,6 +387,7 @@ namespace ResurrectionRP_Server
             client.Resurrect(health);
 
             var dead = PlayerManager.DeadPlayers.Find(p => p.Victime == client);
+
             if (dead != null)
                 dead.Remove();
 

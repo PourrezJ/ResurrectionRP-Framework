@@ -17,8 +17,6 @@ let Trailer: number = null;
 let speedoState: boolean = false;
 let hudHidden: boolean = false;
 
-let bikes = [0x43779C54, 0x1ABA13B5, 0xCE23D3BF, 0xF4E1AA15, 0x4339CD69, 0xB67597EC, 0xE823FB48];
-
 export function initialize() {
     alt.onServer('OnPlayerEnterVehicle', onPlayerEnterVehicle);
     alt.onServer('SetDoorState', setDoorState);
@@ -38,7 +36,23 @@ export function initialize() {
 
     alt.onServer('vehicleFix', (vehicle: alt.Vehicle) => {
         game.setVehicleFixed(vehicle.scriptID);
-    })
+    });
+
+    alt.onServer('windowState', (window: number) => {
+        chat.pushMessage('[Client] IsWindowDamaged: ' + !game.isVehicleWindowIntact(alt.Player.local.vehicle.scriptID, window));
+    });
+
+    alt.onServer('smashWindow', (window: number) => {
+        game.smashVehicleWindow(alt.Player.local.vehicle.scriptID, window);
+    });
+
+    alt.onServer('fixWindow', (window: number) => {
+        game.fixVehicleWindow(alt.Player.local.vehicle.scriptID, window);
+    });
+
+    alt.onServer('countVehicles', (window: number) => {
+        chat.pushMessage('Vehicles: ' + alt.Vehicle.all.length);
+    });
 
     alt.on('gameEntityCreate', (entity: alt.Entity) => {
 

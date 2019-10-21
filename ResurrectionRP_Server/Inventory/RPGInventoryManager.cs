@@ -955,7 +955,7 @@ namespace ResurrectionRP_Server.Inventory
             if (!client.Exists)
                 return;
 
-            if (args.Length != 7)
+            if (args.Length < 7)
                 return;
 
             string inventoryType = Convert.ToString(args[0]);
@@ -984,9 +984,9 @@ namespace ResurrectionRP_Server.Inventory
                         break;
                 }
 
-                if (inv != null)
+                try
                 {
-                    if (inv.InventoryList[oldSlot] != null && (oldCount == inv.InventoryList[oldSlot].Quantity && oldCount - splitCount == newCount))
+                    if (inv != null && inv.InventoryList[oldSlot] != null && oldCount == inv.InventoryList[oldSlot].Quantity && oldCount - splitCount == newCount)
                     {
                         inv.InventoryList[oldSlot].Quantity -= splitCount;
 
@@ -994,14 +994,17 @@ namespace ResurrectionRP_Server.Inventory
                         cloneItem.Quantity = splitCount;
 
                         inv.InventoryList[newSlot] = cloneItem;
-                        client.GetPlayerHandler()?.UpdateFull();
+                        client.GetPlayerHandler().UpdateFull();
                     }
+                }
+                catch (Exception ex)
+                {
+                    Alt.Server.LogError($"[RPGInventoryManager.RPGInventory_SplitItemInventory_SRV()] inventoryType: {inventoryType}, itemID: {itemID}, newSlot: {newSlot}, oldSlot: {oldSlot}, oldCount: {oldCount}, newCount: {newCount}, splitCount: {splitCount}, inv.InventoryList.Length: {inv.InventoryList.Length} - {ex}");
                 }
             }
 
             new RPGInventoryMenu(menu.Inventory, menu.Outfit, menu.Bag, menu.Distant).OpenMenu(client);
         }
-
         #endregion
 
         #region Price

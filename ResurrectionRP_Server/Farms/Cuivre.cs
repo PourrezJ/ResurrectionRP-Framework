@@ -9,6 +9,7 @@ using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
 using ResurrectionRP_Server.Utils.Enums;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text.Json.Serialization;
@@ -71,7 +72,7 @@ namespace ResurrectionRP_Server.Farms
 
         private void Colshape_OnPlayerInteractInColshape(IColshape colshape, AltV.Net.Elements.Entities.IPlayer client)
         {
-            if (Farm.FarmTimers.ContainsKey(client) || Farm.ProcessTimers.ContainsKey(client) || Farm.DoubleProcessTimers.ContainsKey(client))
+            if (Farm.FarmTimers.ContainsKey(client) || (Farm as Cuivre).WorkingPlayers.ContainsKey(client.Id) || Farm.DoubleProcessTimers.ContainsKey(client))
                 return;
             try
             {
@@ -83,7 +84,7 @@ namespace ResurrectionRP_Server.Farms
                     if (client.IsInVehicle)
                         client.DisplayHelp("Vous ne pouvez faire être ici avec un véhicule!", 5000);
                     else if (item == null && ToolNeeded.IndexOf(_item) != ToolNeeded.Count -1)
-                        client.DisplayHelp($"Vous devez avoir un outil pour {InteractionName} !", 10000);
+                        client.DisplayHelp($"Vous devez avoir un(e) {_item.name} pour {InteractionName} !", 10000);
                     else if ((item != null && item.Item.type == "pickaxe" && (item.Item as Pickaxe).Health <= 0))
                     {
                         _client.OutfitInventory.Delete(item, 1);
@@ -91,7 +92,6 @@ namespace ResurrectionRP_Server.Farms
                     }
                     else if (item != null)
                     {
-                        client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour commencer à " + InteractionName, 5000);
 
                         switch(Type)
                         {
@@ -139,7 +139,7 @@ namespace ResurrectionRP_Server.Farms
                     else if (inventory != null && item == null)
                         client.DisplayHelp("Vous devez équiper votre outil pour commencer!", 5000);
                     else if (item == null && ToolNeeded.IndexOf(_item) != ToolNeeded.Count -1)
-                        client.DisplayHelp($"Vous devez avoir un outil pour {InteractionName} !", 10000);
+                        client.DisplayHelp($"Vous devez avoir un(e) {_item.name} pour {InteractionName} !", 10000);
                     else if ((item != null && item.Item.type == "pickaxe" && (item.Item as Pickaxe).Health <= 0))
                     {
                         _client.OutfitInventory.Delete(item, 1);
@@ -172,6 +172,8 @@ namespace ResurrectionRP_Server.Farms
         public List<InteractionPoint> DoubleProcessPoints { get; set; } = new List<InteractionPoint>();
         [JsonIgnore]
         public List<InteractionPoint> ProcessPoints { get; set; } = new List<InteractionPoint>();
+        [JsonIgnore]
+        public ConcurrentDictionary<int, IPlayer> WorkingPlayers { get; set; } = new ConcurrentDictionary<int, IPlayer>();
         public Cuivre()
         {
             NewFarm = true;
@@ -222,10 +224,10 @@ namespace ResurrectionRP_Server.Farms
             Process_QuantityNeeded = 2;
             Process_Time = 5000;
 
-            DoubleProcess_Time = 5;
+            DoubleProcess_Time = 5000;
 
             ItemIDBrute = ItemID.MineraiCuivre;
-            ItemIDProcess = ItemID.CuivreFondu;
+            ItemIDProcess = ItemID.Cuivre;
             ItemPrice = 92;
         }
 
@@ -294,34 +296,37 @@ namespace ResurrectionRP_Server.Farms
 
         public override void StartProcessing(IPlayer client)
         {
+
             try
             {
+                WorkingPlayers.TryAdd(client.Id, client);
                 PlayerHandler player = client.GetPlayerHandler();
-                Item item = Inventory.Inventory.ItemByID(ItemIDProcess);
+                Item item = Inventory.Inventory.ItemByID(ItemID.CuivreFondu);
                 Pickaxe _item = (Pickaxe)(player.OutfitInventory.HasItemEquip(ItemID.Marteau)?.Item);
 
-                if(player.BagInventory.CountItem(ItemID.MineraiCuivre) < Process_QuantityNeeded* _item.MiningRate && player.PocketInventory.CountItem(ItemID.MineraiCuivre) < Process_QuantityNeeded* _item.MiningRate)
+                if (player.BagInventory.CountItem(ItemID.MineraiCuivre) < Process_QuantityNeeded* _item.MiningRate && player.PocketInventory.CountItem(ItemID.MineraiCuivre) < Process_QuantityNeeded* _item.MiningRate)
                 {
                     client.DisplayHelp("Vous n'avez plus de cuivre sur vous à fondre!");
                     return;
                 }
 
                 client.TaskAdvancedPlayAnimation("anim@heists@load_box", "load_box_1_box_a", new Vector3(1086f, -2001.493f, 31.382f), new Vector3(0, 0, 0), 1, 1, 15000, 1, 5000);
-                DoubleProcessTimers[client] = Utils.Utils.SetInterval(() =>
+                client.Freeze(true);
+                Utils.Utils.Delay((int)(DoubleProcess_Time / _item.Speed), () =>
                 {
+
                     if (!client.Exists)
                         return;
                     if (player.DeleteAllItem(ItemIDBrute, Process_QuantityNeeded * _item.MiningRate))
                     {
+                        client.Freeze(false);
                         client.DisplaySubtitle($"Vous avez fondu ~r~ {_item.MiningRate} {item.name}", 5000);
+                        WorkingPlayers.TryRemove(client.Id, out IPlayer voided);
                         player.AddItem(item, _item.MiningRate);
+                        client.StopAnimation();
                         player.UpdateFull();
                     }
-
-                    DoubleProcessTimers[client].Stop();
-                    DoubleProcessTimers[client].Close();
-                    DoubleProcessTimers.TryRemove(client, out _);
-                }, (int)(DoubleProcess_Time / _item.Speed));
+                });
             }
             catch (System.Exception ex)
             {
@@ -350,14 +355,16 @@ namespace ResurrectionRP_Server.Farms
                            client.TaskStartScenarioAtPosition("WORLD_HUMAN_HAMMERING", p.Position, p.Heading, Process_Time, false, false);
                    });
 
-                ProcessTimers[client] = Utils.Utils.SetInterval(() =>
+                DoubleProcessTimers[client] = Utils.Utils.SetInterval(() =>
                 {
                     if (!client.Exists)
                         return;
                     if (player.DeleteAllItem(ItemID.CuivreFondu, _item.MiningRate))
                     {
                         client.DisplaySubtitle($"Vous avez forgé ~r~ {_item.MiningRate} {item.name}", 5000);
+                        client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour recommencer", 5000);
                         player.AddItem(item, _item.MiningRate);
+                        client.StopAnimation();
                         player.UpdateFull();
                     }
 

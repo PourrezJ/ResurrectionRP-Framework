@@ -158,6 +158,8 @@ namespace ResurrectionRP_Server.Items
                     new Unusable(ItemID.MineraiCuivre, "Minerai de Cuivre", "Un morceau de roche", 2),
                     new Unusable(ItemID.CuivreFondu, "Cuivre fondu", "A besoin d'être matellé", 2),
                     new Unusable(ItemID.Cuivre, "Cuivre", "Du bon cuivre de gitan", 1, icon: "bobine-cuivre"),
+
+
             };
         }
     }

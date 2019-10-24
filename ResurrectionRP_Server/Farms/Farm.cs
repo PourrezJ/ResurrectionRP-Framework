@@ -136,6 +136,9 @@ namespace ResurrectionRP_Server.Farms
         [JsonIgnore]
         public bool NewFarm { get; set; } = false;
 
+        [JsonIgnore]
+        public ConcurrentDictionary<int, IPlayer> WorkingPlayers { get; set; } = new ConcurrentDictionary<int, IPlayer>();
+
         #region Timers
         public ConcurrentDictionary<IPlayer, System.Timers.Timer> FarmTimers = new ConcurrentDictionary<IPlayer, System.Timers.Timer>();
         public ConcurrentDictionary<IPlayer, System.Timers.Timer> ProcessTimers = new ConcurrentDictionary<IPlayer, System.Timers.Timer>();

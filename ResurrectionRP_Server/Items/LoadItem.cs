@@ -150,10 +150,13 @@ namespace ResurrectionRP_Server.Items
                     new Pickaxe(ItemID.MarteauPiqueur, "Marteau Piqueur", "Marteau piqueur", 15, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 2500, icon: "marteau-piqueur", miningrate: 5),
                     new Pickaxe(ItemID.Marteau, "Marteau (Outil)", "Fond le cuivre", 3, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 150, icon: "marteau", miningrate: 1),
 
+                    new Unusable(ItemID.DetecteurMetaux, "Detecteur de Metaux", "Utile pour detecter l'or !", 5, false, false, false, true, true, 5000),
+
                     new Unusable(ItemID.CharbonBrute, "Minerai de Charbon brute", "", 2),
                     new Unusable(ItemID.CharbonTraite, "Sac de Charbon", "", 1),
                     new Unusable(ItemID.MineraiFer, "Minerai de Fer", "", 2),
-                    new Unusable(ItemID.PepiteOr, "Pépite d'or", "", 1),
+
+                    new Unusable(ItemID.PepiteOr, "Pépite d'or", "", 1, isUsable: false, isStackable: true, isDropable: true),
 
                     new Unusable(ItemID.MineraiCuivre, "Minerai de Cuivre", "Un morceau de roche", 2),
                     new Unusable(ItemID.CuivreFondu, "Cuivre fondu", "A besoin d'être matellé", 2),

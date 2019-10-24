@@ -155,6 +155,7 @@ namespace ResurrectionRP_Server.Models.InventoryData
         Serflex,
         MarteauPiqueur,
         Marteau,
-        CuivreFondu
+        CuivreFondu,
+        DetecteurMetaux
     }
 }

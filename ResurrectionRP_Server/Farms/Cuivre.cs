@@ -20,12 +20,6 @@ namespace ResurrectionRP_Server.Farms
     {
         private static int UsureOutil = 1;
 
-        [JsonIgnore]
-        public List<InteractionPoint> FarmPoints { get; set; } = new List<InteractionPoint>();
-        [JsonIgnore]
-        public List<InteractionPoint> DoubleProcessPoints { get; set; } = new List<InteractionPoint>();
-        [JsonIgnore]
-        public List<InteractionPoint> ProcessPoints { get; set; } = new List<InteractionPoint>();
         public Cuivre()
         {
             NewFarm = true;
@@ -46,7 +40,7 @@ namespace ResurrectionRP_Server.Farms
             Harvest_Position.Add(new Vector3(2997.679f, 2758.425f, 42.34139f));
             Harvest_Position.Add(new Vector3(2946.29f, 2733.697f, 44.75487f));
             Harvest_Position.ForEach((position) =>
-                FarmPoints.Add( new InteractionPoint(this, position, 0, Inventory.Inventory.ItemByID(ItemID.MineraiCuivre), new List<Item> { Inventory.Inventory.ItemByID(ItemID.Pioche), Inventory.Inventory.ItemByID(ItemID.MarteauPiqueur) }, InteractionPointTypes.Farm, "miner", 0))
+                FarmPoints.Add( new InteractionPoint(this, position, 0,  new List<Item> { Inventory.Inventory.ItemByID(ItemID.Pioche), Inventory.Inventory.ItemByID(ItemID.MarteauPiqueur) }, InteractionPointTypes.Farm, "miner", 0))
             );
             Harvest_Range = 100f;
 
@@ -56,14 +50,14 @@ namespace ResurrectionRP_Server.Farms
                 new Vector3(1096.5231f, -1994.2946f, 29.364136f),
                 new Vector3(1089.956f, -1991.011f, 28.976562f)
             }.ForEach((position) =>
-                DoubleProcessPoints.Add(new InteractionPoint(this, position, 90, Inventory.Inventory.ItemByID(ItemID.Cuivre), Inventory.Inventory.ItemByID(ItemID.Marteau), InteractionPointTypes.DoubleProcess, "forger", 0.0f))
+                DoubleProcessPoints.Add(new InteractionPoint(this, position, 90,  Inventory.Inventory.ItemByID(ItemID.Marteau), InteractionPointTypes.DoubleProcess, "forger", 0.0f))
             );
 
             new List<Vector3>
             {
                 new Vector3(1086f, -2001.493f, 31.382f)
             }.ForEach((position) =>
-                ProcessPoints.Add(new InteractionPoint(this, new Vector3(1086f, -2001.493f, 31.382f), -2.3f, Inventory.Inventory.ItemByID(ItemID.CuivreFondu), Inventory.Inventory.ItemByID(ItemID.Marteau), InteractionPointTypes.Process, "fondre", 0.0f))
+                ProcessPoints.Add(new InteractionPoint(this, new Vector3(1086f, -2001.493f, 31.382f), -2.3f,  Inventory.Inventory.ItemByID(ItemID.Marteau), InteractionPointTypes.Process, "fondre", 0.0f))
             );
             
             Selling_PosRot = new Location(new Vector3(605.719f, -3073.165f, 8.069f), new Vector3(0, 0, -11.52882f));
@@ -164,7 +158,7 @@ namespace ResurrectionRP_Server.Farms
 
                 client.TaskAdvancedPlayAnimation("anim@heists@load_box", "load_box_1_box_a", new Vector3(1086f, -2001.493f, 31.382f), new Vector3(0, 0, 0), 1, 1, 15000, 1, 5000);
                 client.Freeze(true);
-                Utils.Utils.Delay((int)(DoubleProcess_Time / _item.Speed), () =>
+                Utils.Utils.Delay((int)(Process_Time / _item.Speed), () =>
                 {
 
                     if (!client.Exists)
@@ -207,12 +201,14 @@ namespace ResurrectionRP_Server.Farms
                            client.TaskStartScenarioAtPosition("WORLD_HUMAN_HAMMERING", p.Position, p.Heading, Process_Time, false, false);
                    });
 
-                DoubleProcessTimers[client] = Utils.Utils.SetInterval(() =>
-                {
+                WorkingPlayers.TryAdd(client.Id, client);
+                Utils.Utils.Delay((int)(DoubleProcess_Time / _item.Speed), () =>
+                { 
                     if (!client.Exists)
                         return;
                     if (player.DeleteAllItem(ItemID.CuivreFondu, _item.MiningRate))
                     {
+                        WorkingPlayers.TryRemove(client.Id, out IPlayer pp);
                         client.DisplaySubtitle($"Vous avez forgé ~r~ {_item.MiningRate} {item.name}", 5000);
                         client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour recommencer", 5000);
                         player.AddItem(item, _item.MiningRate);
@@ -223,7 +219,7 @@ namespace ResurrectionRP_Server.Farms
                     ProcessTimers[client].Stop();
                     ProcessTimers[client].Close();
                     ProcessTimers.TryRemove(client, out _);
-                }, (int)(Process_Time / _item.Speed));
+                });
             }
             catch (System.Exception ex)
             {

@@ -31,10 +31,9 @@ namespace ResurrectionRP_Server.Farms
         public InteractionPointTypes Type;
         public string InteractionName;
 
-        public InteractionPoint(Farm farm, Vector3 position, float heading, Item returnedItem, List<Item> items, InteractionPointTypes interactionPoint, string interactionName, float doubleLuck)
+        public InteractionPoint(Farm farm, Vector3 position, float heading, List<Item> items, InteractionPointTypes interactionPoint, string interactionName, float doubleLuck)
         {
             Position = position;
-            ReturnedItem = returnedItem;
             DoubleLuck = doubleLuck;
             ToolNeeded = items;
             Type = interactionPoint;
@@ -43,10 +42,9 @@ namespace ResurrectionRP_Server.Farms
             Heading = heading;
             Init();
         }
-        public InteractionPoint(Farm farm, Vector3 position, float heading, Item returnedItem, Item item, InteractionPointTypes interactionPoint, string interactionName, float doubleLuck)
+        public InteractionPoint(Farm farm, Vector3 position, float heading, Item item, InteractionPointTypes interactionPoint, string interactionName, float doubleLuck)
         {
             Position = position;
-            ReturnedItem = returnedItem;
             DoubleLuck = doubleLuck;
             ToolNeeded = new List<Item> { item };
             Type = interactionPoint;

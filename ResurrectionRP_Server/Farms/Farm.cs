@@ -136,8 +136,19 @@ namespace ResurrectionRP_Server.Farms
         [JsonIgnore]
         public bool NewFarm { get; set; } = false;
 
+
+
+        // NEW FARM SYSTEM
         [JsonIgnore]
         public ConcurrentDictionary<int, IPlayer> WorkingPlayers { get; set; } = new ConcurrentDictionary<int, IPlayer>();
+
+
+        [JsonIgnore]
+        public List<InteractionPoint> FarmPoints { get; set; } = new List<InteractionPoint>();
+        [JsonIgnore]
+        public List<InteractionPoint> DoubleProcessPoints { get; set; } = new List<InteractionPoint>();
+        [JsonIgnore]
+        public List<InteractionPoint> ProcessPoints { get; set; } = new List<InteractionPoint>();
 
         #region Timers
         public ConcurrentDictionary<IPlayer, System.Timers.Timer> FarmTimers = new ConcurrentDictionary<IPlayer, System.Timers.Timer>();
@@ -167,30 +178,33 @@ namespace ResurrectionRP_Server.Farms
             #region Process
             if (Process_PosRot != null)
             {
-                Process_Blip = BlipsManager.CreateBlip(Process_Name, Process_PosRot.Pos, (byte)BlipColor, Process_BlipSprite);
-
                 Process_Ped = Ped.CreateNPC(Process_PedHash, Process_PosRot.Pos, (int)Process_PosRot.Rot.Z);
                 Process_Ped.NpcInteractCallBack += (IPlayer client, Ped npc) => { StartProcessing(client); return; };
             }
 
+            if(Process_BlipSprite != 0)
+                Process_Blip = BlipsManager.CreateBlip(Process_Name, Process_PosRot.Pos, (byte)BlipColor, Process_BlipSprite);
+
             if (DoubleProcess_PosRot != null)
             {
-                DoubleProcess_Blip = BlipsManager.CreateBlip(DoubleProcess_Name, DoubleProcess_PosRot.Pos, (byte)BlipColor, DoubleProcess_BlipSprite);
-
                 DoubleProcess_Ped = Ped.CreateNPC(DoubleProcess_PedHash, DoubleProcess_PosRot.Pos, (int)DoubleProcess_PosRot.Rot.Z);
                 DoubleProcess_Ped.NpcInteractCallBack += ((IPlayer client, Ped npc) => { StartDoubleProcessing(client); });
             }
+
+            if(DoubleProcess_BlipSprite != 0)
+                DoubleProcess_Blip = BlipsManager.CreateBlip(DoubleProcess_Name, DoubleProcess_PosRot.Pos, (byte)BlipColor, DoubleProcess_BlipSprite);
 
             #endregion
 
             #region Selling
             if (Selling_PosRot != null)
             {
-                Selling_Blip = BlipsManager.CreateBlip(Selling_Name, Selling_PosRot.Pos, (int)BlipColor, Selling_BlipSprite);
 
                 Selling_Ped = Ped.CreateNPC(Selling_PedHash, Selling_PosRot.Pos, (int)Selling_PosRot.Rot.Z);
                 Selling_Ped.NpcInteractCallBack += (IPlayer client, Ped npc) => { StartSelling(client); return; };
             }
+            if(Selling_BlipSprite != 0)
+                Selling_Blip = BlipsManager.CreateBlip(Selling_Name, Selling_PosRot.Pos, (int)BlipColor, Selling_BlipSprite);
             #endregion
         }
         #endregion
@@ -410,12 +424,12 @@ namespace ResurrectionRP_Server.Farms
             });
         }
 
-        public virtual void StartDoubleProcessing(IPlayer sender)
+        public virtual void StartDoubleProcessing(IPlayer client)
         {
-            if (sender == null || !sender.Exists || sender.IsInVehicle)
+            if (client == null || !client.Exists || client.IsInVehicle)
                 return;
 
-            PlayerHandler player = sender.GetPlayerHandler();
+            PlayerHandler player = client.GetPlayerHandler();
 
             if (player == null || player.IsOnProgress)
                 return;
@@ -435,59 +449,59 @@ namespace ResurrectionRP_Server.Farms
                 return;
             }
 
-            MenuManager.CloseMenu(sender);
+            MenuManager.CloseMenu(client);
 
             player.IsOnProgress = true;
-            sender.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s) ~w~& ~r~{_itemNoTraite2.name}(s)", 5000);
+            client.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s) ~w~& ~r~{_itemNoTraite2.name}(s)", 5000);
             bool exit = false;
             var i = 0;
 
-            DoubleProcessTimers[sender] = Utils.Utils.SetInterval(() =>
+            DoubleProcessTimers[client] = Utils.Utils.SetInterval(() =>
             {
-                if (!sender.Exists)
+                if (!client.Exists)
                     return;
 
-                if (sender.IsInVehicle)
+                if (client.IsInVehicle)
                 {
-                    sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous ne pouvez pas traiter depuis le véhicule.", 5000);
+                    client.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous ne pouvez pas traiter depuis le véhicule.", 5000);
                     exit = true;
                 }
-                else if (sender.Position.Distance(DoubleProcess_Ped.Position) > 15f)
+                else if (client.Position.Distance(DoubleProcess_Ped.Position) > 15f)
                 {
-                    sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous devez rester dans la zone.", 5000);
+                    client.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous devez rester dans la zone.", 5000);
                     exit = true;
                 }
 
                 if (exit)
                 {
-                    if (DoubleProcessTimers[sender] != null)
+                    if (DoubleProcessTimers[client] != null)
                     {
-                        DoubleProcessTimers[sender].Stop();
-                        DoubleProcessTimers[sender] = null;
+                        DoubleProcessTimers[client].Stop();
+                        DoubleProcessTimers[client] = null;
                     }
                     player.UpdateFull();
                     player.IsOnProgress = false;
                     return;
                 }
 
-                sender.DisplaySubtitle($"~r~Traitement en cours: ~s~+1 {_itemTraite.name}", 5000);
+                client.DisplaySubtitle($"~r~Traitement en cours: ~s~+1 {_itemTraite.name}", 5000);
 
                 if (player.DeleteAllItem(ItemIDBrute, 1) && player.DeleteAllItem(ItemIDBrute2, 1))
                 {
-                    sender.DisplaySubtitle($"~r~Traitement en cours: ~s~+1 {_itemTraite.name}", 5000);
+                    client.DisplaySubtitle($"~r~Traitement en cours: ~s~+1 {_itemTraite.name}", 5000);
                     player.AddItem(_itemTraite, 1);
                     i++;
                 }
                 else
                 {
-                    sender.DisplaySubtitle($"Traitement terminé: Vous avez traité ~r~ {i} {_itemTraite.name}(s)", 15000);
+                    client.DisplaySubtitle($"Traitement terminé: Vous avez traité ~r~ {i} {_itemTraite.name}(s)", 15000);
                     exit = true;
                     player.UpdateFull();
                     player.IsOnProgress = false;
-                    if (DoubleProcessTimers[sender] != null)
+                    if (DoubleProcessTimers[client] != null)
                     {
-                        DoubleProcessTimers[sender].Stop();
-                        DoubleProcessTimers[sender] = null;
+                        DoubleProcessTimers[client].Stop();
+                        DoubleProcessTimers[client] = null;
                     }
                     return;
                 }

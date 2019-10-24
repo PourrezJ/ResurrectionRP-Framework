@@ -36,6 +36,9 @@ namespace ResurrectionRP_Server
         public static bool IsDebug { get; private set; } = true;
 
         [BsonIgnore]
+        public static bool IsDevServer { get; private set; } = false;
+
+        [BsonIgnore]
         public bool ServerLoaded = false;
 
         public static float StreamDistance { get; private set; } = 500;
@@ -102,6 +105,7 @@ namespace ResurrectionRP_Server
         public void OnStart()
         {
             IsDebug = Config.GetSetting<bool>("Debug");
+            IsDevServer = Config.GetSetting<bool>("DevServer");
             PlayerManager.StartBankMoney = Config.GetSetting<int>("BankMoneyStart");
             PlayerManager.StartMoney = Config.GetSetting<int>("MoneyStart");
 
@@ -181,7 +185,9 @@ namespace ResurrectionRP_Server
 
             Utils.Utils.SetInterval(async () => await Save(), 15000);
             Utils.Utils.SetInterval(async () => await Factions.FactionManager.Update(), 60000);
-            Utils.Utils.SetInterval(async () => await Restart(), 1000);
+
+            if (!IsDevServer)
+                Utils.Utils.SetInterval(async () => await Restart(), 1000);
             
             Utils.Utils.SetInterval(() => Time.Update(), 1000);           
 

@@ -28,7 +28,6 @@ namespace ResurrectionRP_Server.Farms
             Selling_Name = "Revendeur de cuivre";
 
             Harvest_BlipSprite = 85;
-            Process_BlipSprite = 499;
             Selling_BlipSprite = 500;
 
             Harvest_Time = 5000;
@@ -66,7 +65,7 @@ namespace ResurrectionRP_Server.Farms
             BlipColor = Entities.Blips.BlipColor.Complexion;
 
 
-            Process_Blip = BlipsManager.CreateBlip(Process_Name, new Vector3(1086f, -2001.493f, 31.382f), (byte)BlipColor, Process_BlipSprite);
+            Process_Blip = BlipsManager.CreateBlip(Process_Name, new Vector3(1086f, -2001.493f, 31.382f), (byte)BlipColor, 499);
             Process_QuantityNeeded = 2;
             Process_Time = 5000;
 

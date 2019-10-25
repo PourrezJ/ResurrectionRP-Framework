@@ -24,6 +24,10 @@ namespace ResurrectionRP_Server.Farms
             Process_Name = null;
             Selling_Name = null;
 
+            Harvest_BlipSprite = 0;
+            Process_BlipSprite = 0;
+            Selling_BlipSprite = 0;
+
             Harvest_Time = 5000;
             Harvest_Position.Add(new Vector3(-545.525f, 1982.322f, 127.052f));
             Harvest_Position.Add(new Vector3(-533.938f, 1903.403f, 123.091f));

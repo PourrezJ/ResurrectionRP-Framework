@@ -65,7 +65,7 @@ namespace ResurrectionRP_Server.Farms
 
         private void Colshape_OnPlayerInteractInColshape(IColshape colshape, AltV.Net.Elements.Entities.IPlayer client)
         {
-            if (Farm.FarmTimers.ContainsKey(client) || (Farm as Cuivre).WorkingPlayers.ContainsKey(client.Id) || Farm.DoubleProcessTimers.ContainsKey(client))
+            if (Farm.FarmTimers.ContainsKey(client) || (Farm).WorkingPlayers.ContainsKey(client.Id) || Farm.DoubleProcessTimers.ContainsKey(client))
                 return;
             try
             {
@@ -76,7 +76,7 @@ namespace ResurrectionRP_Server.Farms
 
                     if (client.IsInVehicle)
                         client.DisplayHelp("Vous ne pouvez faire être ici avec un véhicule!", 5000);
-                    else if (item == null && ToolNeeded.IndexOf(_item) != ToolNeeded.Count - 1)
+                    else if (item == null && ToolNeeded.IndexOf(_item) == ToolNeeded.Count - 1)
                         client.DisplayHelp($"Vous devez avoir un(e) {_item.name} pour {InteractionName} !", 10000);
                     else if ((item != null && item.Item.type == "pickaxe" && (item.Item as Pickaxe).Health <= 0))
                     {
@@ -127,11 +127,12 @@ namespace ResurrectionRP_Server.Farms
                     Inventory.Inventory inventory = _client.HasItemInAnyInventory(_item.id);
                     Models.ItemStack item = _client.OutfitInventory.HasItemEquip(_item.id);
 
+
                     if (client.IsInVehicle)
                         client.DisplayHelp("Vous ne pouvez faire être ici avec un véhicule!", 5000);
                     else if (inventory != null && item == null)
                         client.DisplayHelp("Vous devez équiper votre outil pour commencer!", 5000);
-                    else if (item == null && ToolNeeded.IndexOf(_item) != ToolNeeded.Count - 1)
+                    else if (item == null && ToolNeeded.IndexOf(_item) == ToolNeeded.Count - 1)
                         client.DisplayHelp($"Vous devez avoir un(e) {_item.name} pour {InteractionName} !", 10000);
                     else if ((item != null && item.Item.type == "pickaxe" && (item.Item as Pickaxe).Health <= 0))
                     {

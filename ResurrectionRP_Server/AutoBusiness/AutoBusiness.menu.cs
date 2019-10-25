@@ -130,7 +130,7 @@ namespace ResurrectionRP_Server.AutoBusiness
                     {
                         _client.AddMoney((double)price);
                         _client.DeleteOneItemWithID(item.id);
-                        client.DisplayHelp($"Vous avez acheté {item.name}, \nvous en avez {_client.CountItem(item.id)} désormais");
+                        client.DisplayHelp($"Vous avez vendu {item.name}, \nvous en avez {_client.CountItem(item.id)} désormais");
                         client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_DAVE, "Bijouterie", "Bonne journée!", "Content de faire affaire avec vous, revenez vite!");
                     } else
                         client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_DAVE, "Bijouterie", "Arnaqueur", "Vous n'avez rien à vendre ! Vous tentez de m'avoir ?");

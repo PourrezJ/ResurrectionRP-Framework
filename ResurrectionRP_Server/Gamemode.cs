@@ -21,6 +21,7 @@ using AltV.Net.Data;
 using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Services;
 using ResurrectionRP_Server.Illegal;
+using ResurrectionRP_Server.AutoBusiness;
 
 namespace ResurrectionRP_Server
 {
@@ -177,6 +178,7 @@ namespace ResurrectionRP_Server
             Loader.TattooLoader.TattooLoader.LoadAllTattoo();
             Loader.VehicleRentLoaders.LoadAllVehicleRent();
             FarmManager.InitAll();
+            AutoBusinessManager.InitAll();
             Weather.WeatherManager.InitWeather();
             Phone.PhoneManager.Init();
             Jobs.JobsManager.Init();

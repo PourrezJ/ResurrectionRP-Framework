@@ -156,6 +156,8 @@ namespace ResurrectionRP_Server.Models.InventoryData
         MarteauPiqueur,
         Marteau,
         CuivreFondu,
-        DetecteurMetaux
+        DetecteurMetaux,
+        LingotOr,
+        SacArgent
     }
 }

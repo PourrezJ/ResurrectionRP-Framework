@@ -157,6 +157,8 @@ namespace ResurrectionRP_Server.Items
                     new Unusable(ItemID.MineraiFer, "Minerai de Fer", "", 2),
 
                     new Unusable(ItemID.PepiteOr, "Pépite d'or", "", 1, isUsable: false, isStackable: true, isDropable: true),
+                    new Unusable(ItemID.LingotOr, "Lingot d'or", "", 2, isStackable: true),
+                    new Unusable(ItemID.SacArgent, "Sac d'argent", "", 1, isStackable: true),
 
                     new Unusable(ItemID.MineraiCuivre, "Minerai de Cuivre", "Un morceau de roche", 2),
                     new Unusable(ItemID.CuivreFondu, "Cuivre fondu", "A besoin d'être matellé", 2),

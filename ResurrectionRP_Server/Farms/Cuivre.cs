@@ -166,6 +166,7 @@ namespace ResurrectionRP_Server.Farms
                     {
                         client.Freeze(false);
                         client.DisplaySubtitle($"Vous avez fondu ~r~ {_item.MiningRate} {item.name}", 5000);
+                        client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour recommencer", 5000);
                         WorkingPlayers.TryRemove(client.Id, out IPlayer voided);
                         player.AddItem(item, _item.MiningRate);
                         client.StopAnimation();
@@ -214,10 +215,6 @@ namespace ResurrectionRP_Server.Farms
                         client.StopAnimation();
                         player.UpdateFull();
                     }
-
-                    ProcessTimers[client].Stop();
-                    ProcessTimers[client].Close();
-                    ProcessTimers.TryRemove(client, out _);
                 });
             }
             catch (System.Exception ex)

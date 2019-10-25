@@ -20,13 +20,13 @@ namespace ResurrectionRP_Server.AutoBusiness
             blipSprite = 617;
             blipColor = Entities.Blips.BlipColor.LightPurple;
 
-
+            int price = 20000 + new Random().Next(-15, 15) * 200;
             sellItems.TryAdd(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.PepiteOr), 10000 + new Random().Next(-15, 15) * 100);
-            sellItems.TryAdd(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.LingotOr), 20000 + new Random().Next(-15, 15) * 200);
+            sellItems.TryAdd(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.LingotOr), price);
 
             // PEPITE ( 10k +- 15% ) | LINGOT 20k +- 15% |
 
-            buyItems.TryAdd(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.LingotOr), 20000 + new Random().Next(-15, 15) * 200);
+            buyItems.TryAdd(Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.LingotOr), price);
             // LINGO 20k +- 15%
             tradeItems.TryAdd(
                     new ItemStack( Inventory.Inventory.ItemByID(Models.InventoryData.ItemID.SacArgent), 20 ),

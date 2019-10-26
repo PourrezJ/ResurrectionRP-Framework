@@ -46,7 +46,8 @@ namespace ResurrectionRP_Server.Farms
         {
             Position = position;
             DoubleLuck = doubleLuck;
-            ToolNeeded = new List<Item> { item };
+            ToolNeeded = new List<Item>();
+            ToolNeeded.Add(item);
             Type = interactionPoint;
             InteractionName = interactionName;
             Farm = farm;
@@ -71,40 +72,49 @@ namespace ResurrectionRP_Server.Farms
             {
                 ToolNeeded.ForEach((_item) =>
                 {
-                    PlayerHandler _client = client.GetPlayerHandler();
-                    Models.ItemStack item = _client.OutfitInventory.HasItemEquip(_item.id);
-
-                    if (client.IsInVehicle)
-                        client.DisplayHelp("Vous ne pouvez faire être ici avec un véhicule!", 5000);
-                    else if (item == null && ToolNeeded.IndexOf(_item) == ToolNeeded.Count - 1)
-                        client.DisplayHelp($"Vous devez avoir un(e) {_item.name} pour {InteractionName} !", 10000);
-                    else if ((item != null && item.Item.type == "pickaxe" && (item.Item as Pickaxe).Health <= 0))
-                    {
-                        _client.OutfitInventory.Delete(item, 1);
-                        client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);
-                    }
-                    else if (item != null)
+                    try
                     {
 
-                        switch (Type)
+                        PlayerHandler _client = client.GetPlayerHandler();
+                        Models.ItemStack item = _client.OutfitInventory.HasItemEquip(_item.id);
+
+                        if (client.IsInVehicle)
+                            client.DisplayHelp("Vous ne pouvez faire être ici avec un véhicule!", 5000);
+                        else if (item == null && ToolNeeded.IndexOf(_item) == ToolNeeded.Count - 1)
+                            client.DisplayHelp($"Vous devez avoir un(e) {_item.name} pour {InteractionName} !", 10000);
+                        else if ((item != null && item.Item.type == "pickaxe" && (item.Item as Pickaxe).Health <= 0))
                         {
-                            case InteractionPointTypes.Farm:
-                                Farm?.StartFarming(client);
-                                break;
-                            case InteractionPointTypes.DoubleProcess:
-                                Farm?.StartDoubleProcessing(client);
-                                break;
-                            case InteractionPointTypes.Process:
-                                Farm?.StartProcessing(client);
-                                break;
-                            case InteractionPointTypes.Sell:
-                                Farm?.StartSelling(client);
-                                break;
-                            default:
-                                Alt.Server.LogError("Problem, an unknwn Interactin type in InteractionPoints! ");
-                                break;
+                            _client.OutfitInventory.Delete(item, 1);
+                            client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);
                         }
-                        return;
+                        else if (item != null)
+                        {
+
+                            switch (Type)
+                            {
+                                case InteractionPointTypes.Farm:
+                                    Farm?.StartFarming(client);
+                                    return;
+                                case InteractionPointTypes.DoubleProcess:
+                                    Farm?.StartDoubleProcessing(client);
+                                    return;
+                                case InteractionPointTypes.Process:
+                                    Farm?.StartProcessing(client);
+                                    return;
+                                case InteractionPointTypes.Sell:
+                                    Farm?.StartSelling(client);
+                                    return;
+                                default:
+                                    Alt.Server.LogError("Problem, an unknwn Interactin type in InteractionPoints! ");
+                                    return;
+                            }
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Alt.Server.LogError("Interaction Point Interact Colshape Internal : " + ex.Data);
                     }
                 });
 
@@ -112,7 +122,7 @@ namespace ResurrectionRP_Server.Farms
             catch (System.Exception ex)
             {
 
-                Alt.Server.LogError("Cuivre farming interact colshape: " + ex.Data);
+                Alt.Server.LogError("Interaction Point Interact Colshape: " + ex.Data);
             }
         }
 
@@ -150,7 +160,7 @@ namespace ResurrectionRP_Server.Farms
             catch (System.Exception ex)
             {
 
-                Alt.Server.LogError("Cuivre farming enter colshape: " + ex.Data);
+                Alt.Server.LogError("InteractionPoint  enter colshape: " + ex.Data);
             }
 
         }

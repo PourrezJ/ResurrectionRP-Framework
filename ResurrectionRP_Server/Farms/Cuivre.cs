@@ -117,25 +117,24 @@ namespace ResurrectionRP_Server.Farms
             else
                 Alt.Server.LogError("Cuivre - StartFarming - Can't farm no more item wtf");
 
-
-            FarmTimers[client] = Utils.Utils.SetInterval(() =>
+            WorkingPlayers.TryAdd(client.Id, client);
+            Utils.Utils.Delay((int)(Harvest_Time / usedItem.Speed), () =>
             {
+
                 if (!client.Exists)
                     return;
 
                 if (player.AddItem(item, usedItem.MiningRate))
-                
-                    client.DisplaySubtitle($"Vous avez miné ~r~ {usedItem.MiningRate} {item.name}", 5000);
-                 else
-                
-                    client.DisplayHelp("Plus de place dans votre inventaire!");
-                
-                player.UpdateFull();
-                FarmTimers[client].Stop();
-                FarmTimers[client].Close();
-                FarmTimers.TryRemove(client, out _);
 
-            },(int) (Harvest_Time / usedItem.Speed));
+                    client.DisplaySubtitle($"Vous avez miné ~r~ {usedItem.MiningRate} {item.name}", 5000);
+                else
+
+                    client.DisplayHelp("Plus de place dans votre inventaire!");
+
+                if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
+                    Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Cuivre.cs)");
+            });
+
 
         }
 
@@ -167,10 +166,12 @@ namespace ResurrectionRP_Server.Farms
                         client.Freeze(false);
                         client.DisplaySubtitle($"Vous avez fondu ~r~ {_item.MiningRate} {item.name}", 5000);
                         client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour recommencer", 5000);
-                        WorkingPlayers.TryRemove(client.Id, out IPlayer voided);
                         player.AddItem(item, _item.MiningRate);
                         client.StopAnimation();
                         player.UpdateFull();
+
+                        if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
+                            Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Cuivre.cs)");
                     }
                 });
             }
@@ -208,12 +209,15 @@ namespace ResurrectionRP_Server.Farms
                         return;
                     if (player.DeleteAllItem(ItemID.CuivreFondu, _item.MiningRate))
                     {
-                        WorkingPlayers.TryRemove(client.Id, out IPlayer pp);
                         client.DisplaySubtitle($"Vous avez forgé ~r~ {_item.MiningRate} {item.name}", 5000);
                         client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour recommencer", 5000);
                         player.AddItem(item, _item.MiningRate);
                         client.StopAnimation();
                         player.UpdateFull();
+
+
+                        if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
+                            Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Cuivre.cs)");
                     }
                 });
             }

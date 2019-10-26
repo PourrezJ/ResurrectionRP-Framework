@@ -89,7 +89,10 @@ namespace ResurrectionRP_Server.AutoBusiness
             Item item = null;
             int price = -1;
             PlayerHandler _client = client.GetPlayerHandler();
-            switch(menuItem.Id)
+
+            MenuManager.CloseMenu(client);
+
+            switch (menuItem.Id)
             {
                 case "ID_Buy":
                     OpenBuyMenu(client);

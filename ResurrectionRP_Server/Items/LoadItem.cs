@@ -144,8 +144,10 @@ namespace ResurrectionRP_Server.Items
                    // new Unusable(ItemID.Microphone, "Micro de scène", "Un micro made in china")
 
 
-                   // Relative to Miners Farm
+                   // Relative to Miners FarmTGa
                    
+                    new WeaponAxe(ItemID.Hache, "Hache", "Pour couper du bois", 1, icon: "pickaxe"),
+
                     new Tool(ItemID.Pioche, "Pioche", "Pioche basique", 2, icon: "pickaxe", isDockable: true, itemPrice: 150),
                     new Tool(ItemID.MarteauPiqueur, "Marteau Piqueur", "Marteau piqueur", 15, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 2500, icon: "marteau-piqueur", miningrate: 5),
                     new Tool(ItemID.Marteau, "Marteau (Outil)", "Fond le cuivre", 3, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 150, icon: "marteau", miningrate: 1),

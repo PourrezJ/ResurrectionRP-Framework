@@ -77,7 +77,7 @@ namespace ResurrectionRP_Server.Farms
         {
             if (client.IsInVehicle)
             {
-                client.DisplayHelp("Vous ne pouvez faire être ici avec un véhicule!", 5000);
+                client.DisplayHelp("Vous ne pouvez être ici avec un véhicule!", 5000);
                 return;
             }
 
@@ -133,7 +133,7 @@ namespace ResurrectionRP_Server.Farms
             }
             catch (System.Exception ex)
             {
-                Alt.Server.LogError("Interaction Point Interact Colshape: " + ex.Data);
+                Alt.Server.LogError("InteractionPoint interact Colshape: " + ex.Data);
             }
         }
 
@@ -179,7 +179,7 @@ namespace ResurrectionRP_Server.Farms
             }
             catch (Exception ex)
             {
-                Alt.Server.LogError("InteractionPoint  enter colshape: " + ex.Data);
+                Alt.Server.LogError("InteractionPoint enter colshape: " + ex.Data);
             }
         }
         #endregion

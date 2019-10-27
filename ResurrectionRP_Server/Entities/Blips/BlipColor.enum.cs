@@ -23,7 +23,10 @@ namespace ResurrectionRP_Server.Entities.Blips
         Mamba = 14,
         Orange = 47,
         Grey = 55,
-        Black = 85
+        Black = 85,
+
+        LightPurple = 27,
+        PastelPurple = 50
 
     }
 }

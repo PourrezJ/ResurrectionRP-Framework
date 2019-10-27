@@ -14,6 +14,10 @@ export function initialize() {
         game.taskStartScenarioAtPosition(alt.Player.local.scriptID, scenarioName, x, y, z, heading, duration, sittingScenario, teleport);
     }); 
 
+    alt.onServer('TaskAdvancedPlayAnimation', (animDict: string, animName: string, posX: number, posY: number, posZ: number, rotX: number, rotY: number, rotZ: number, speed: number, speedMultiplier: number, duration: number, flag: number, animTime: number) => {
+        alt.log("TaskAdvancedPlayAnimation");
+        game.taskPlayAnimAdvanced(alt.Player.local.scriptID, animDict, animName, posX, posY, posZ, rotX, rotY, rotZ, speed, speedMultiplier, duration, flag, animTime, 15000,15000);
+    });
     alt.onServer('StopAnimation', () => {
         game.clearPedTasks(alt.Player.local.scriptID);
         game.clearPedSecondaryTask(alt.Player.local.scriptID);

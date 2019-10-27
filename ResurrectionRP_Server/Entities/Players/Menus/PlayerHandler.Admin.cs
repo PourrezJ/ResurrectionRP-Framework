@@ -3,6 +3,7 @@ using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Services;
 using ResurrectionRP_Server.Utils;
@@ -493,6 +494,12 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 mainMenu.Add(deletevehitem);
                 #endregion
+
+                #region addItem
+                var addItem = new MenuItem("Donner un objet", "", "", true);
+                addItem.OnMenuItemCallback = GiveItemMenu;
+                mainMenu.Add(addItem);
+                #endregion
             }
 
             #region Fin
@@ -540,6 +547,48 @@ namespace ResurrectionRP_Server.Entities.Players
             }
 
             secondMenu.OpenMenu(Client);
+        }
+
+        private void GiveItemMenu(IPlayer client, Menu oldMenu, IMenuItem oldMenuItem, int itemIndex)
+        {
+            PlayerHandler targetClient = _playerSelected;
+            if (client == null || !client.Exists)
+                return;
+
+            Menu menu = new Menu("ID_AdminGiveItem", "Donner à un joueur", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
+            menu.ItemSelectCallback = (IPlayer Player, Menu itemMenu, IMenuItem menuItem, int itemMenuIndex) => {
+                try
+                {
+                    
+                    Item model = menuItem.GetData("Item");
+                    if (targetClient.InventoryIsFull( model.weight ))
+                    {
+                        client.DisplayHelp("L'inventaire du joueur est plein !");
+                        return;
+                    }
+                    targetClient.AddItem(model, 1);
+                    targetClient.Client.DisplayHelp("On vous a donné " + model.name + "\nVous en avez " + targetClient.CountItem(model.id) + " désormais");
+                    client.DisplayHelp("On vous a donné " + model.name + "\nVous en avez " + targetClient.CountItem(model.id) + " désormais");
+                }
+                catch (Exception ex)
+                {
+
+                    Alt.Server.LogError("GiveItemAdmin | Error on parsing string to int |" + ex.Data);
+                }
+            };
+
+
+            foreach (Models.Item item in LoadItem.ItemsList)
+            {
+                MenuItem listItem = new MenuItem(item.name, "", item.id.ToString(), true, rightLabel: "1");
+                listItem.SetData("Item", item);
+                menu.Add(listItem);
+            }
+
+
+            menu.Add(new MenuItem("~g~Valider", "", "Validate", true));
+
+            menu.OpenMenu(client);
         }
 
         private void ChoisePlayerCallback(IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex)

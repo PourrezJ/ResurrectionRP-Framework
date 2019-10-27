@@ -10,6 +10,7 @@ using ClothData = ResurrectionRP_Server.Models.ClothData;
 using ItemID = ResurrectionRP_Server.Models.InventoryData.ItemID;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Utils.Enums;
+using System.Numerics;
 
 namespace ResurrectionRP_Server.Inventory
 {
@@ -97,7 +98,7 @@ namespace ResurrectionRP_Server.Inventory
 
             RPGInventoryMenu menu = null;
 
-           // ItemID itemID = (ItemID)Convert.ToInt32(args[0]);
+            // ItemID itemID = (ItemID)Convert.ToInt32(args[0]);
             string targetInventory = Convert.ToString(args[1]);
             int itemSlot = Convert.ToInt32(args[2]);
 
@@ -137,7 +138,7 @@ namespace ResurrectionRP_Server.Inventory
                     return;
 
                 string inventoryType = Convert.ToString(args[0]);
-               // ItemID itemID = (ItemID)Convert.ToInt32(args[1]);
+                // ItemID itemID = (ItemID)Convert.ToInt32(args[1]);
                 int slot = Convert.ToInt32(args[2]);
                 int quantity = Convert.ToInt32(args[3]);
 
@@ -792,7 +793,6 @@ namespace ResurrectionRP_Server.Inventory
                                     case ItemID.BattleAxe:
                                     case ItemID.CombatPistol:
                                     case ItemID.Flashlight:
-                                    case ItemID.Hache:
                                     case ItemID.HeavyPistol:
                                     case ItemID.Knife:
                                     case ItemID.Machete:
@@ -806,6 +806,12 @@ namespace ResurrectionRP_Server.Inventory
                                     case ItemID.Pump:
                                     case ItemID.Taser:
                                         client.RemoveAllWeapons();
+                                        break;
+                                    case ItemID.Pioche:
+                                    case ItemID.Hache:
+                                    case ItemID.MarteauPiqueur:
+                                        menu.Outfit.DestroyProp();
+                                        client.StopAnimation();
                                         break;
                                 }
 
@@ -910,7 +916,6 @@ namespace ResurrectionRP_Server.Inventory
                                     case ItemID.BattleAxe:
                                     case ItemID.CombatPistol:
                                     case ItemID.Flashlight:
-                                    case ItemID.Hache:
                                     case ItemID.HeavyPistol:
                                     case ItemID.Knife:
                                     case ItemID.Machete:
@@ -928,6 +933,18 @@ namespace ResurrectionRP_Server.Inventory
                                         {
                                             client.GiveWeapon((uint)weaponItem.Hash, 99999, true);
                                         }
+                                        break;
+                                    case ItemID.Pioche:
+                                        menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_pickaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
+                                        menu.Outfit.prop.SetAttachToEntity(client, "PH_R_Hand", new Vector3(0.1f, -0.1f, -0.02f), new Vector3(80, 0, 170));
+                                        break;
+                                    case ItemID.Hache:
+                                        menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_fireaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
+                                        menu.Outfit.prop.SetAttachToEntity(client, "PH_R_Hand", new Vector3(0.1f, -0.1f, -0.02f), new Vector3(80, 0, 170));
+                                        break;
+                                    case ItemID.MarteauPiqueur:
+                                        menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_jackham"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
+                                        (item as Items.Pickaxe).JackHammerSetWalkingStyle(client, menu.Outfit.prop);
                                         break;
                                 }
 

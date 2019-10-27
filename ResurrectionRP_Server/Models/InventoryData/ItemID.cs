@@ -152,6 +152,12 @@ namespace ResurrectionRP_Server.Models.InventoryData
         BouquetFleur,
         Bague,
         LockPick,
-        Serflex
+        Serflex,
+        MarteauPiqueur,
+        Marteau,
+        CuivreFondu,
+        DetecteurMetaux,
+        LingotOr,
+        SacArgent
     }
 }

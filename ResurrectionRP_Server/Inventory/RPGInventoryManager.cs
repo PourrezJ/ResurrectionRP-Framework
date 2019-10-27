@@ -944,7 +944,7 @@ namespace ResurrectionRP_Server.Inventory
                                         break;
                                     case ItemID.MarteauPiqueur:
                                         menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_jackham"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
-                                        (item as Items.Pickaxe).JackHammerSetWalkingStyle(client, menu.Outfit.prop);
+                                        (item as Items.Tool).JackHammerSetWalkingStyle(client, menu.Outfit.prop);
                                         break;
                                 }
 

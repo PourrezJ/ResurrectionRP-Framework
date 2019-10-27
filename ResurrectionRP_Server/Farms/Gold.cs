@@ -54,7 +54,7 @@ namespace ResurrectionRP_Server.Farms
                 Alt.Server.LogInfo($"Player {client.GetPlayerHandler()?.PID} is now farming at Gold");
 
             PlayerHandler player = client.GetPlayerHandler();
-            Pickaxe _item = (Pickaxe)(player.OutfitInventory.HasItemEquip(ItemID.Pioche)?.Item);
+            Tool _item = (Tool)(player.OutfitInventory.HasItemEquip(ItemID.Pioche)?.Item);
 
 
 

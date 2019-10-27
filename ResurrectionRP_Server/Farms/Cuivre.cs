@@ -82,8 +82,9 @@ namespace ResurrectionRP_Server.Farms
                 return;
 
             if (GameMode.IsDebug)
+            {
                 Alt.Server.LogInfo($"Player {client.GetPlayerHandler()?.PID} is now farming at Copper");
-
+            }
             PlayerHandler player = client.GetPlayerHandler();
             Item item = Inventory.Inventory.ItemByID(ItemIDBrute);
             Pickaxe _item = (Pickaxe)(player.OutfitInventory.HasItemEquip(ItemID.Pioche)?.Item);
@@ -140,22 +141,27 @@ namespace ResurrectionRP_Server.Farms
 
         public override void StartProcessing(IPlayer client)
         {
-
+            if (GameMode.IsDebug)
+            {
+                Alt.Server.LogInfo($"Player {client.GetPlayerHandler()?.PID} is now processing at Copper");
+                Alt.Server.LogInfo("Is player in working " + WorkingPlayers.ContainsKey(client.Id));
+            }
             try
             {
-                WorkingPlayers.TryAdd(client.Id, client);
                 PlayerHandler player = client.GetPlayerHandler();
                 Item item = Inventory.Inventory.ItemByID(ItemID.CuivreFondu);
                 Pickaxe _item = (Pickaxe)(player.OutfitInventory.HasItemEquip(ItemID.Marteau)?.Item);
-
                 if (player.BagInventory.CountItem(ItemID.MineraiCuivre) < Process_QuantityNeeded* _item.MiningRate && player.PocketInventory.CountItem(ItemID.MineraiCuivre) < Process_QuantityNeeded* _item.MiningRate)
                 {
                     client.DisplayHelp("Vous n'avez plus de cuivre sur vous à fondre!");
                     return;
                 }
 
+
+                if (!WorkingPlayers.TryAdd(client.Id, client))
+                    Alt.Server.LogError("Error to add player in working players");
+
                 client.TaskAdvancedPlayAnimation("anim@heists@load_box", "load_box_1_box_a", new Vector3(1086f, -2001.493f, 31.382f), new Vector3(0, 0, 0), 1, 1, 15000, 1, 5000);
-                client.Freeze(true);
                 Utils.Utils.Delay((int)(Process_Time / _item.Speed), () =>
                 {
 
@@ -169,10 +175,13 @@ namespace ResurrectionRP_Server.Farms
                         player.AddItem(item, _item.MiningRate);
                         client.StopAnimation();
                         player.UpdateFull();
-
-                        if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
-                            Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Cuivre.cs)");
                     }
+                    else
+                        Alt.Server.LogError("Cuivre.cs | Error when trying to remove items from Processing |");
+
+
+                    if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
+                        Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Cuivre.cs)");
                 });
             }
             catch (System.Exception ex)
@@ -185,6 +194,11 @@ namespace ResurrectionRP_Server.Farms
 
         public override void StartDoubleProcessing(IPlayer client)
         {
+            if (GameMode.IsDebug)
+            {
+                Alt.Server.LogInfo($"Player {client.GetPlayerHandler()?.PID} is now double processing at Copper");
+                Alt.Server.LogInfo("Is player in working " + WorkingPlayers.ContainsKey(client.Id));
+            }
             try
             {
                 PlayerHandler player = client.GetPlayerHandler();
@@ -218,6 +232,9 @@ namespace ResurrectionRP_Server.Farms
 
                         if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
                             Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Cuivre.cs)");
+                    } else
+                    {
+                        Alt.Server.LogError("Eror on double process at copper ");
                     }
                 });
             }

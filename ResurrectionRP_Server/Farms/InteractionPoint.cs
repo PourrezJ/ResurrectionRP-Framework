@@ -66,58 +66,59 @@ namespace ResurrectionRP_Server.Farms
 
         private void Colshape_OnPlayerInteractInColshape(IColshape colshape, AltV.Net.Elements.Entities.IPlayer client)
         {
+            if (client.IsInVehicle)
+            {
+                client.DisplayHelp("Vous ne pouvez faire être ici avec un véhicule!", 5000);
+                return;
+            }
             if (Farm.FarmTimers.ContainsKey(client) || (Farm).WorkingPlayers.ContainsKey(client.Id) || Farm.DoubleProcessTimers.ContainsKey(client))
                 return;
             try
             {
-                ToolNeeded.ForEach((_item) =>
+                foreach (Item _item in ToolNeeded)
                 {
-                    try
+                    PlayerHandler _client = client.GetPlayerHandler();
+                    Inventory.Inventory inventory = _client.HasItemInAnyInventory(_item.id);
+                    Models.ItemStack item = _client.OutfitInventory.HasItemEquip(_item.id);
+                    if (item != null)
                     {
-
-                        PlayerHandler _client = client.GetPlayerHandler();
-                        Models.ItemStack item = _client.OutfitInventory.HasItemEquip(_item.id);
-
-                        if (client.IsInVehicle)
-                            client.DisplayHelp("Vous ne pouvez faire être ici avec un véhicule!", 5000);
-                        else if (item == null && ToolNeeded.IndexOf(_item) == ToolNeeded.Count - 1)
-                            client.DisplayHelp($"Vous devez avoir un(e) {_item.name} pour {InteractionName} !", 10000);
-                        else if ((item != null && item.Item.type == "pickaxe" && (item.Item as Pickaxe).Health <= 0))
+                        if (item.Item.type == "pickaxe" && (item.Item as Pickaxe).Health <= 0)
                         {
                             _client.OutfitInventory.Delete(item, 1);
                             client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);
+                            return;
                         }
-                        else if (item != null)
+                        switch (Type)
                         {
-
-                            switch (Type)
-                            {
-                                case InteractionPointTypes.Farm:
-                                    Farm?.StartFarming(client);
-                                    return;
-                                case InteractionPointTypes.DoubleProcess:
-                                    Farm?.StartDoubleProcessing(client);
-                                    return;
-                                case InteractionPointTypes.Process:
-                                    Farm?.StartProcessing(client);
-                                    return;
-                                case InteractionPointTypes.Sell:
-                                    Farm?.StartSelling(client);
-                                    return;
-                                default:
-                                    Alt.Server.LogError("Problem, an unknwn Interactin type in InteractionPoints! ");
-                                    return;
-                            }
+                            case InteractionPointTypes.Farm:
+                                Farm?.StartFarming(client);
+                                return;
+                            case InteractionPointTypes.DoubleProcess:
+                                Farm?.StartDoubleProcessing(client);
+                                return;
+                            case InteractionPointTypes.Process:
+                                Farm?.StartProcessing(client);
+                                return;
+                            case InteractionPointTypes.Sell:
+                                Farm?.StartSelling(client);
+                                return;
+                            default:
+                                Alt.Server.LogError("Problem, an unknwn Interactin type in InteractionPoints! ");
+                                return;
                         }
-
                     }
-                    catch (Exception ex)
+
+                    if (inventory != null && item == null)
                     {
-
-                        Alt.Server.LogError("Interaction Point Interact Colshape Internal : " + ex.Data);
+                        client.DisplayHelp("Vous devez équiper votre outil pour commencer!", 5000);
                     }
-                });
+                    else if (item == null && ToolNeeded.IndexOf(_item) == ToolNeeded.Count - 1)
+                    {
+                        client.DisplayHelp($"Vous devez avoir un(e) {ToolNeeded[0].name} pour {InteractionName} !", 10000);
+                        return;
+                    }
 
+                }
             }
             catch (System.Exception ex)
             {
@@ -128,33 +129,42 @@ namespace ResurrectionRP_Server.Farms
 
         private void Colshape_OnPlayerEnterColshape(IColshape colshape, AltV.Net.Elements.Entities.IPlayer client)
         {
-
+            if (client.IsInVehicle)
+            {
+                client.DisplayHelp("Vous ne pouvez faire être ici avec un véhicule!", 5000);
+                return;
+            }
             try
             {
-                ToolNeeded.ForEach((_item) =>
+                foreach(Item _item in ToolNeeded) 
                 {
                     PlayerHandler _client = client.GetPlayerHandler();
                     Inventory.Inventory inventory = _client.HasItemInAnyInventory(_item.id);
                     Models.ItemStack item = _client.OutfitInventory.HasItemEquip(_item.id);
-
-
-                    if (client.IsInVehicle)
-                        client.DisplayHelp("Vous ne pouvez faire être ici avec un véhicule!", 5000);
-                    else if (inventory != null && item == null)
-                        client.DisplayHelp("Vous devez équiper votre outil pour commencer!", 5000);
-                    else if (item == null && ToolNeeded.IndexOf(_item) == ToolNeeded.Count - 1)
-                        client.DisplayHelp($"Vous devez avoir un(e) {_item.name} pour {InteractionName} !", 10000);
-                    else if ((item != null && item.Item.type == "pickaxe" && (item.Item as Pickaxe).Health <= 0))
+                    if(item != null)
                     {
-                        _client.OutfitInventory.Delete(item, 1);
-                        client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);
-                    }
-                    else if (item != null)
-                    {
+                        if ( item.Item.type == "pickaxe" && (item.Item as Pickaxe).Health <= 0)
+                        {
+                            _client.OutfitInventory.Delete(item, 1);
+                            client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);
+                            return;
+                        }
+
                         client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour commencer à " + InteractionName, 5000);
                         return;
                     }
-                });
+
+
+                    if (inventory != null && item == null)
+                    {
+                        client.DisplayHelp("Vous devez équiper votre outil pour commencer!", 5000);
+                    }
+                    else if (item == null && ToolNeeded.IndexOf(_item) == ToolNeeded.Count - 1)
+                    {
+                        client.DisplayHelp($"Vous devez avoir un(e) {ToolNeeded[0].name} pour {InteractionName} !", 10000);
+                        return;
+                    }
+                };
 
             }
             catch (System.Exception ex)

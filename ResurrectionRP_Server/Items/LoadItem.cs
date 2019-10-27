@@ -55,16 +55,9 @@ namespace ResurrectionRP_Server.Items
 
                     // new Eat(ItemID.Nouille, "Des Nouilles Chinoises", "Une boite de nouille", 1 , true, true, true, food:15, isDockable:true, itemPrice:11.2),
 
-                    new Unusable(ItemID.CharbonBrute, "Minerai de Charbon brute", "", 2),
-                    new Unusable(ItemID.CharbonTraite, "Sac de Charbon", "", 1),
-                    new Unusable(ItemID.MineraiFer, "Minerai de Fer", "", 2),
-                    new Unusable(ItemID.PepiteOr, "Pépite d'or", "", 1),
-                    new Unusable(ItemID.Pioche, "Une pioche", "", 2),
                     new Unusable(ItemID.PetrolBrute, "Pétrole brute", "", 2, icon:"petrol-brut"),
                     new Unusable(ItemID.Petrol, "Pétrole Raffiné", "Pas sûre qu'il soit aussi éfficase que la mirabelle.", 1, icon:"petrol"),
                     new Unusable(ItemID.GrappeRaisin, "Grappe de raisin", "Une grappe de raisin vert", 2, icon:"grapes"),
-                    new Unusable(ItemID.MineraiCuivre, "Minerai de Cuivre", "Un morceau de roche", 2),
-                    new Unusable(ItemID.Cuivre, "Bobine de Cuivre", "Une bobine de Cuivre.", 1),
                     new Unusable(ItemID.Sable, "Sable", "Du sable qui sent la pisse de chat.", 2),
                     new Unusable(ItemID.Bouteille, "Bouteille en Verre Brute", "Une bouteille en verre vide.", 1, icon:"bouteille-verre"),
                     new Unusable(ItemID.BouteilleTraite, "Bouteille en Verre Stérilisé", "Une bouteille en verre vide stérile.", 1, icon:"bouteille-verre", isDockable: true, itemPrice: 268),
@@ -101,7 +94,6 @@ namespace ResurrectionRP_Server.Items
                     new Unusable(ItemID.Plastic, "Matière Polymère", "", 4),
 
                     new BuildingItem(ItemID.Building, "barriere", "", 1, modelhash:1072616162),
-                    new Axe(ItemID.Hache, "Hache", "Permet de couper du bois", 1, icon:"pickaxe"),
 
                     new ClothItem(ItemID.TShirt, "TShirt Blanc", "Un tshirt qui sent la sueur", new ClothData(1, 0, 0), 0, true, false, false, true, false, 0, classes:"shirt", icon:"shirt"),
 
@@ -113,7 +105,7 @@ namespace ResurrectionRP_Server.Items
                     new Weapons(ItemID.Weapon, "Batte", "", 3, hash: WeaponHash.Bat, isDockable: true, itemPrice: 2520),
                     new Weapons(ItemID.Weapon, "Pied de biche", "", 3, hash: WeaponHash.Crowbar, isDockable: true, itemPrice: 3150),
                     new Weapons(ItemID.Weapon, "Club de golf", "", 3, hash: WeaponHash.GolfClub, isDockable: true, itemPrice: 3150),
-                    new Weapons(ItemID.Weapon, "Marteau", "", 3, hash: WeaponHash.Hammer, isDockable: true, itemPrice: 3150),
+                    new Weapons(ItemID.Weapon, "Marteau (arme)", "", 3, hash: WeaponHash.Hammer, isDockable: true, itemPrice: 3150),
                     new Weapons(ItemID.Weapon, "Hachette", "", 3, hash: WeaponHash.Hatchet, isDockable: true, itemPrice: 3780),
                     new Weapons(ItemID.Weapon, "Poing américain", "", 3, hash: WeaponHash.KnuckleDuster, isDockable: true, itemPrice: 1785),
                     new Weapons(ItemID.Knife, "Couteau", "", 2, hash: WeaponHash.Knife, isDockable: true, itemPrice: 2940),
@@ -150,6 +142,29 @@ namespace ResurrectionRP_Server.Items
                     new LockPick(ItemID.LockPick, "Kit de crochetage", "", 1, true, false, true, true),
 
                    // new Unusable(ItemID.Microphone, "Micro de scène", "Un micro made in china")
+
+
+                   // Relative to Miners Farm
+                   
+                    new Tool(ItemID.Pioche, "Pioche", "Pioche basique", 2, icon: "pickaxe", isDockable: true, itemPrice: 150),
+                    new Tool(ItemID.MarteauPiqueur, "Marteau Piqueur", "Marteau piqueur", 15, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 2500, icon: "marteau-piqueur", miningrate: 5),
+                    new Tool(ItemID.Marteau, "Marteau (Outil)", "Fond le cuivre", 3, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 150, icon: "marteau", miningrate: 1),
+
+                    new Unusable(ItemID.DetecteurMetaux, "Detecteur de Metaux", "Utile pour detecter l'or !", 5, false, false, false, true, true, 5000, icon: "metal_detector"),
+
+                    new Unusable(ItemID.CharbonBrute, "Minerai de Charbon brute", "", 2, icon: "charbon_brute"),
+                    new Unusable(ItemID.CharbonTraite, "Sac de Charbon", "", 1, icon: "sac_de_charbon"),
+                    new Unusable(ItemID.MineraiFer, "Minerai de Fer", "", 2, icon: "minerai_fer"),
+
+                    new Unusable(ItemID.PepiteOr, "Pépite d'or", "", 1, isUsable: false, isStackable: true, isDropable: true),
+                    new Unusable(ItemID.LingotOr, "Lingot d'or", "", 2, isStackable: true, icon: "lingot_or"),
+                    new Unusable(ItemID.SacArgent, "Sac d'argent", "", 1, isStackable: true, icon: "sac_argent"),
+
+                    new Unusable(ItemID.MineraiCuivre, "Minerai de Cuivre", "Un morceau de roche", 2, icon: "minerai_fer"),
+                    new Unusable(ItemID.CuivreFondu, "Cuivre fondu", "A besoin d'être matellé", 2),
+                    new Unusable(ItemID.Cuivre, "Cuivre", "Du bon cuivre de gitan", 1, icon: "cuivre"),
+
+
             };
         }
     }

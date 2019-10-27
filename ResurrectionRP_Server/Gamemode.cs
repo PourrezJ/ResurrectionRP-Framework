@@ -21,6 +21,7 @@ using AltV.Net.Data;
 using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Services;
 using ResurrectionRP_Server.Illegal;
+using ResurrectionRP_Server.AutoBusiness;
 
 namespace ResurrectionRP_Server
 {
@@ -34,6 +35,9 @@ namespace ResurrectionRP_Server
 
         [BsonIgnore]
         public static bool IsDebug { get; private set; } = true;
+
+        [BsonIgnore]
+        public static bool IsDevServer { get; private set; } = false;
 
         [BsonIgnore]
         public bool ServerLoaded = false;
@@ -102,6 +106,7 @@ namespace ResurrectionRP_Server
         public void OnStart()
         {
             IsDebug = Config.GetSetting<bool>("Debug");
+            IsDevServer = Config.GetSetting<bool>("DevServer");
             PlayerManager.StartBankMoney = Config.GetSetting<int>("BankMoneyStart");
             PlayerManager.StartMoney = Config.GetSetting<int>("MoneyStart");
 
@@ -173,6 +178,7 @@ namespace ResurrectionRP_Server
             Loader.TattooLoader.TattooLoader.LoadAllTattoo();
             Loader.VehicleRentLoaders.LoadAllVehicleRent();
             FarmManager.InitAll();
+            AutoBusinessManager.InitAll();
             Weather.WeatherManager.InitWeather();
             Phone.PhoneManager.Init();
             Jobs.JobsManager.Init();
@@ -181,7 +187,9 @@ namespace ResurrectionRP_Server
 
             Utils.Utils.SetInterval(async () => await Save(), 15000);
             Utils.Utils.SetInterval(async () => await Factions.FactionManager.Update(), 60000);
-            Utils.Utils.SetInterval(async () => await Restart(), 1000);
+
+            if (!IsDevServer)
+                Utils.Utils.SetInterval(async () => await Restart(), 1000);
             
             Utils.Utils.SetInterval(() => Time.Update(), 1000);           
 

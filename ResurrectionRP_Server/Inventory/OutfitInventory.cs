@@ -5,6 +5,7 @@ using System.Linq;
 using AltV.Net;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Models.InventoryData;
 
 namespace ResurrectionRP_Server.Inventory
 {
@@ -21,6 +22,9 @@ namespace ResurrectionRP_Server.Inventory
 
         public Models.ItemStack[] Slots = new Models.ItemStack[18];
 
+        [BsonIgnore]
+        public Entities.Objects.WorldObject prop = null;
+
         public OutfitInventory()
         {
 
@@ -30,6 +34,11 @@ namespace ResurrectionRP_Server.Inventory
         {
             if (Delete(GetSlotIndexUseStack(itemStack), quantite))
                 return true;
+            if (prop != null)
+            {
+                prop.Destroy();
+                prop = null;
+            }
             return false;
         }
 
@@ -67,6 +76,16 @@ namespace ResurrectionRP_Server.Inventory
             }
         }
 
+        public void DestroyProp()
+        {
+            if (prop != null)
+            {
+                prop.Destroy();
+                prop = null;
+            }
+        }
+
+
         public int GetSlotIndexUseStack(Models.ItemStack stack)
         {
             for (int i = 0; i < Slots.Length; i++)
@@ -76,6 +95,9 @@ namespace ResurrectionRP_Server.Inventory
             }
             return -1;
         }
+
+        public Models.ItemStack HasItemEquip(ItemID item) =>
+            Slots.FirstOrDefault((p) => (p?.Item.id == item));
 
         public Models.ItemStack[] FindAllItemWithType(Models.InventoryData.ItemID itemID)
         {

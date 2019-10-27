@@ -8,12 +8,12 @@ using System.Numerics;
 
 namespace ResurrectionRP_Server.Items
 {
-    class Pickaxe : Item
+    class Tool : Item
     {
         public float Health = 1000;
         public float Speed = 1.0f;
         public int MiningRate = 1;
-        public Pickaxe(Models.InventoryData.ItemID id, string name, string description, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = false, bool isDropable = true, bool isDockable = false, int itemPrice = 0, string type = "pickaxe", string icon = "pickaxe", string classes = "weapon", int miningrate = 1, float speed = 1.0f, int health = 1000) : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
+        public Tool(Models.InventoryData.ItemID id, string name, string description, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = false, bool isDropable = true, bool isDockable = false, int itemPrice = 0, string type = "tool", string icon = "pickaxe", string classes = "weapon", int miningrate = 1, float speed = 1.0f, int health = 1000) : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
         {
             Health = health;
             Speed = speed;

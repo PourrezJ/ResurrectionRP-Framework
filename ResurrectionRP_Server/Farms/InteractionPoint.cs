@@ -82,7 +82,7 @@ namespace ResurrectionRP_Server.Farms
                     Models.ItemStack item = _client.OutfitInventory.HasItemEquip(_item.id);
                     if (item != null)
                     {
-                        if (item.Item.type == "pickaxe" && (item.Item as Pickaxe).Health <= 0)
+                        if (item.Item.type == "tool" && (item.Item as Tool).Health <= 0)
                         {
                             _client.OutfitInventory.Delete(item, 1);
                             client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);
@@ -143,7 +143,7 @@ namespace ResurrectionRP_Server.Farms
                     Models.ItemStack item = _client.OutfitInventory.HasItemEquip(_item.id);
                     if(item != null)
                     {
-                        if ( item.Item.type == "pickaxe" && (item.Item as Pickaxe).Health <= 0)
+                        if (item.Item.type == "tool"  && (item.Item as Tool).Health <= 0)
                         {
                             _client.OutfitInventory.Delete(item, 1);
                             client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);

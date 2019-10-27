@@ -87,9 +87,9 @@ namespace ResurrectionRP_Server.Farms
             }
             PlayerHandler player = client.GetPlayerHandler();
             Item item = Inventory.Inventory.ItemByID(ItemIDBrute);
-            Pickaxe _item = (Pickaxe)(player.OutfitInventory.HasItemEquip(ItemID.Pioche)?.Item);
-            Pickaxe _itembis = (Pickaxe)(player.OutfitInventory.HasItemEquip(ItemID.MarteauPiqueur)?.Item);
-            Pickaxe usedItem = (_item == null) ? _itembis : _item;
+            Tool _item = (Tool)(player.OutfitInventory.HasItemEquip(ItemID.Pioche)?.Item);
+            Tool _itembis = (Tool)(player.OutfitInventory.HasItemEquip(ItemID.MarteauPiqueur)?.Item);
+            Tool usedItem = (_item == null) ? _itembis : _item;
 
 
 
@@ -150,7 +150,7 @@ namespace ResurrectionRP_Server.Farms
             {
                 PlayerHandler player = client.GetPlayerHandler();
                 Item item = Inventory.Inventory.ItemByID(ItemID.CuivreFondu);
-                Pickaxe _item = (Pickaxe)(player.OutfitInventory.HasItemEquip(ItemID.Marteau)?.Item);
+                Tool _item = (Tool)(player.OutfitInventory.HasItemEquip(ItemID.Marteau)?.Item);
                 if (player.BagInventory.CountItem(ItemID.MineraiCuivre) < Process_QuantityNeeded* _item.MiningRate && player.PocketInventory.CountItem(ItemID.MineraiCuivre) < Process_QuantityNeeded* _item.MiningRate)
                 {
                     client.DisplayHelp("Vous n'avez plus de cuivre sur vous à fondre!");
@@ -203,7 +203,7 @@ namespace ResurrectionRP_Server.Farms
             {
                 PlayerHandler player = client.GetPlayerHandler();
                 Item item = Inventory.Inventory.ItemByID(ItemID.Cuivre);
-                Pickaxe _item = (Pickaxe)(player.OutfitInventory.HasItemEquip(ItemID.Marteau)?.Item);
+                Tool _item = (Tool)(player.OutfitInventory.HasItemEquip(ItemID.Marteau)?.Item);
                 if (player.BagInventory.CountItem(ItemID.CuivreFondu) < _item.MiningRate && player.PocketInventory.CountItem(ItemID.CuivreFondu) < _item.MiningRate)
                 {
                     client.DisplayHelp("Vous n'avez plus de cuivre sur vous à fondre!");

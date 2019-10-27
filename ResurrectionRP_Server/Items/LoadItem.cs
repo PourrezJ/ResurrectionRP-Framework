@@ -146,23 +146,23 @@ namespace ResurrectionRP_Server.Items
 
                    // Relative to Miners Farm
                    
-                    new Pickaxe(ItemID.Pioche, "Pioche", "Pioche basique", 2, icon: "pickaxe", isDockable: true, itemPrice: 150),
-                    new Pickaxe(ItemID.MarteauPiqueur, "Marteau Piqueur", "Marteau piqueur", 15, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 2500, icon: "marteau-piqueur", miningrate: 5),
-                    new Pickaxe(ItemID.Marteau, "Marteau (Outil)", "Fond le cuivre", 3, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 150, icon: "marteau", miningrate: 1),
+                    new Tool(ItemID.Pioche, "Pioche", "Pioche basique", 2, icon: "pickaxe", isDockable: true, itemPrice: 150),
+                    new Tool(ItemID.MarteauPiqueur, "Marteau Piqueur", "Marteau piqueur", 15, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 2500, icon: "marteau-piqueur", miningrate: 5),
+                    new Tool(ItemID.Marteau, "Marteau (Outil)", "Fond le cuivre", 3, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 150, icon: "marteau", miningrate: 1),
 
-                    new Unusable(ItemID.DetecteurMetaux, "Detecteur de Metaux", "Utile pour detecter l'or !", 5, false, false, false, true, true, 5000),
+                    new Unusable(ItemID.DetecteurMetaux, "Detecteur de Metaux", "Utile pour detecter l'or !", 5, false, false, false, true, true, 5000, icon: "metal_detector"),
 
-                    new Unusable(ItemID.CharbonBrute, "Minerai de Charbon brute", "", 2),
-                    new Unusable(ItemID.CharbonTraite, "Sac de Charbon", "", 1),
-                    new Unusable(ItemID.MineraiFer, "Minerai de Fer", "", 2),
+                    new Unusable(ItemID.CharbonBrute, "Minerai de Charbon brute", "", 2, icon: "charbon_brute"),
+                    new Unusable(ItemID.CharbonTraite, "Sac de Charbon", "", 1, icon: "sac_de_charbon"),
+                    new Unusable(ItemID.MineraiFer, "Minerai de Fer", "", 2, icon: "minerai_fer"),
 
                     new Unusable(ItemID.PepiteOr, "Pépite d'or", "", 1, isUsable: false, isStackable: true, isDropable: true),
-                    new Unusable(ItemID.LingotOr, "Lingot d'or", "", 2, isStackable: true),
-                    new Unusable(ItemID.SacArgent, "Sac d'argent", "", 1, isStackable: true),
+                    new Unusable(ItemID.LingotOr, "Lingot d'or", "", 2, isStackable: true, icon: "lingot_or"),
+                    new Unusable(ItemID.SacArgent, "Sac d'argent", "", 1, isStackable: true, icon: "sac_argent"),
 
-                    new Unusable(ItemID.MineraiCuivre, "Minerai de Cuivre", "Un morceau de roche", 2),
+                    new Unusable(ItemID.MineraiCuivre, "Minerai de Cuivre", "Un morceau de roche", 2, icon: "minerai_fer"),
                     new Unusable(ItemID.CuivreFondu, "Cuivre fondu", "A besoin d'être matellé", 2),
-                    new Unusable(ItemID.Cuivre, "Cuivre", "Du bon cuivre de gitan", 1, icon: "bobine-cuivre"),
+                    new Unusable(ItemID.Cuivre, "Cuivre", "Du bon cuivre de gitan", 1, icon: "cuivre"),
 
 
             };

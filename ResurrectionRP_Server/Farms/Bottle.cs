@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace ResurrectionRP_Server.Farms
 {
-    public class Bottle : Farm
+/*    public class Bottle : Farm
     {
         public Bottle()
         {
@@ -30,5 +30,5 @@ namespace ResurrectionRP_Server.Farms
             ItemIDProcess = ItemID.BouteilleTraite;
             ItemPrice = 248;
         }
-    }
+    }*/
 }

@@ -158,6 +158,9 @@ namespace ResurrectionRP_Server.Models.InventoryData
         CuivreFondu,
         DetecteurMetaux,
         LingotOr,
-        SacArgent
+        SacArgent,
+        Pelle,
+        Seau,
+        Soufflet
     }
 }

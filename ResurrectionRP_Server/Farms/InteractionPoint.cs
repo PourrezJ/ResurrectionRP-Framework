@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using AltV.Net;
+using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Players;
@@ -54,6 +55,17 @@ namespace ResurrectionRP_Server.Farms
             Heading = heading;
             Init();
         }
+        public InteractionPoint(Farm farm, Vector3 position, float heading, InteractionPointTypes interactionPoint, string interactionName, float doubleLuck)
+        {
+            Position = position;
+            DoubleLuck = doubleLuck;
+            ToolNeeded = new List<Item>();
+            Type = interactionPoint;
+            InteractionName = interactionName;
+            Farm = farm;
+            Heading = heading;
+            Init();
+        }
 
         private void Init()
         {
@@ -73,6 +85,8 @@ namespace ResurrectionRP_Server.Farms
             }
             if (Farm.FarmTimers.ContainsKey(client) || (Farm).WorkingPlayers.ContainsKey(client.Id) || Farm.DoubleProcessTimers.ContainsKey(client))
                 return;
+            if (ToolNeeded.Count == 0)
+                LaunchToFarm(client);
             try
             {
                 foreach (Item _item in ToolNeeded)
@@ -88,24 +102,7 @@ namespace ResurrectionRP_Server.Farms
                             client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);
                             return;
                         }
-                        switch (Type)
-                        {
-                            case InteractionPointTypes.Farm:
-                                Farm?.StartFarming(client);
-                                return;
-                            case InteractionPointTypes.DoubleProcess:
-                                Farm?.StartDoubleProcessing(client);
-                                return;
-                            case InteractionPointTypes.Process:
-                                Farm?.StartProcessing(client);
-                                return;
-                            case InteractionPointTypes.Sell:
-                                Farm?.StartSelling(client);
-                                return;
-                            default:
-                                Alt.Server.LogError("Problem, an unknwn Interactin type in InteractionPoints! ");
-                                return;
-                        }
+                        LaunchToFarm(client);
                     }
 
                     if (inventory != null && item == null)
@@ -134,6 +131,9 @@ namespace ResurrectionRP_Server.Farms
                 client.DisplayHelp("Vous ne pouvez faire être ici avec un véhicule!", 5000);
                 return;
             }
+            if(ToolNeeded.Count == 0) 
+                client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour commencer à " + InteractionName, 5000);
+
             try
             {
                 foreach(Item _item in ToolNeeded) 
@@ -173,6 +173,33 @@ namespace ResurrectionRP_Server.Farms
                 Alt.Server.LogError("InteractionPoint  enter colshape: " + ex.Data);
             }
 
+        }
+
+        private void LaunchToFarm(IPlayer client)
+        {
+            PlayerHandler _client = client.GetPlayerHandler();
+            switch (Type)
+            {
+                case InteractionPointTypes.Farm:
+                    Alt.Server.LogInfo("InteractionPoint | " + _client.PID + " a commence a farm " + Farm.Harvest_Name);
+                    Farm?.StartFarming(client);
+                    return;
+                case InteractionPointTypes.DoubleProcess:
+                    Alt.Server.LogInfo("InteractionPoint | " + _client.PID + " a commence a double process " + Farm.DoubleProcess_Name);
+                    Farm?.StartDoubleProcessing(client);
+                    return;
+                case InteractionPointTypes.Process:
+                    Alt.Server.LogInfo("InteractionPoint | " + _client.PID + " a commence a process " + Farm.Process_Name);
+                    Farm?.StartProcessing(client);
+                    return;
+                case InteractionPointTypes.Sell:
+                    Alt.Server.LogInfo("InteractionPoint | " + _client.PID + " a commence a vendre " + Farm.Selling_Name);
+                    Farm?.StartSelling(client);
+                    return;
+                default:
+                    Alt.Server.LogError("Problem, an unknwn Interactin type in InteractionPoints! ");
+                    return;
+            }
         }
     }
 

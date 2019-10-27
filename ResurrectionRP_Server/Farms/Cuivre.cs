@@ -56,7 +56,7 @@ namespace ResurrectionRP_Server.Farms
             {
                 new Vector3(1086f, -2001.493f, 31.382f)
             }.ForEach((position) =>
-                ProcessPoints.Add(new InteractionPoint(this, new Vector3(1086f, -2001.493f, 31.382f), -2.3f,  Inventory.Inventory.ItemByID(ItemID.Marteau), InteractionPointTypes.Process, "fondre", 0.0f))
+                ProcessPoints.Add(new InteractionPoint(this, position, -2.3f,  Inventory.Inventory.ItemByID(ItemID.Marteau), InteractionPointTypes.Process, "fondre", 0.0f))
             );
             
             Selling_PosRot = new Location(new Vector3(605.719f, -3073.165f, 8.069f), new Vector3(0, 0, -11.52882f));
@@ -81,10 +81,6 @@ namespace ResurrectionRP_Server.Farms
             if (client == null || !client.Exists)
                 return;
 
-            if (GameMode.IsDebug)
-            {
-                Alt.Server.LogInfo($"Player {client.GetPlayerHandler()?.PID} is now farming at Copper");
-            }
             PlayerHandler player = client.GetPlayerHandler();
             Item item = Inventory.Inventory.ItemByID(ItemIDBrute);
             Tool _item = (Tool)(player.OutfitInventory.HasItemEquip(ItemID.Pioche)?.Item);
@@ -141,11 +137,6 @@ namespace ResurrectionRP_Server.Farms
 
         public override void StartProcessing(IPlayer client)
         {
-            if (GameMode.IsDebug)
-            {
-                Alt.Server.LogInfo($"Player {client.GetPlayerHandler()?.PID} is now processing at Copper");
-                Alt.Server.LogInfo("Is player in working " + WorkingPlayers.ContainsKey(client.Id));
-            }
             try
             {
                 PlayerHandler player = client.GetPlayerHandler();
@@ -167,7 +158,7 @@ namespace ResurrectionRP_Server.Farms
 
                     if (!client.Exists)
                         return;
-                    if (player.DeleteAllItem(ItemIDBrute, Process_QuantityNeeded * _item.MiningRate))
+                    if (player.DeleteAllItem(ItemIDBrute, (Process_QuantityNeeded * _item.MiningRate)))
                     {
                         client.Freeze(false);
                         client.DisplaySubtitle($"Vous avez fondu ~r~ {_item.MiningRate} {item.name}", 5000);
@@ -194,11 +185,6 @@ namespace ResurrectionRP_Server.Farms
 
         public override void StartDoubleProcessing(IPlayer client)
         {
-            if (GameMode.IsDebug)
-            {
-                Alt.Server.LogInfo($"Player {client.GetPlayerHandler()?.PID} is now double processing at Copper");
-                Alt.Server.LogInfo("Is player in working " + WorkingPlayers.ContainsKey(client.Id));
-            }
             try
             {
                 PlayerHandler player = client.GetPlayerHandler();

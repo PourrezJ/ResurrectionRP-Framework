@@ -10,7 +10,7 @@ namespace ResurrectionRP_Server.AutoBusiness
 
         public Bijouterie()
         {
-            name = "Bijoutie Khartier";
+            name = "Bijouterie Khartier";
             desc = " Bijouterie juive";
             
             pedPosition = new System.Numerics.Vector3(-1463.18f, -179.364f ,48.817f);

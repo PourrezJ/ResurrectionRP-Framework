@@ -13,7 +13,6 @@ using System.Numerics;
 
 namespace ResurrectionRP_Server.Farms
 {
-
     public enum InteractionPointTypes
     {
         Farm,
@@ -21,17 +20,19 @@ namespace ResurrectionRP_Server.Farms
         DoubleProcess,
         Sell
     }
+
     public class InteractionPoint
     {
         #region Fields
         private Farm Farm;
+
         public Vector3 Position;
         public float Heading;
         public IColshape Colshape;
-
         public List<Item> ToolNeeded;
         public InteractionPointTypes Type;
         public string InteractionName;
+        #endregion
 
         public ConcurrentDictionary<double, Item> soldItems = new ConcurrentDictionary<double, Item>();
         public PedModel PedModel;
@@ -112,9 +113,10 @@ namespace ResurrectionRP_Server.Farms
         {
             if (client.IsInVehicle)
             {
-                client.DisplayHelp("Vous ne pouvez faire être ici avec un véhicule!", 5000);
+                client.DisplayHelp("Vous ne pouvez être ici avec un véhicule!", 5000);
                 return;
             }
+
             if (Farm.FarmTimers.ContainsKey(client) || (Farm).WorkingPlayers.ContainsKey(client.Id) || Farm.DoubleProcessTimers.ContainsKey(client))
                 return;
             if (ToolNeeded.Count == 0)
@@ -149,7 +151,6 @@ namespace ResurrectionRP_Server.Farms
             }
             catch (System.Exception ex)
             {
-
                 Alt.Server.LogError("InteractionPoint interact Colshape: " + ex.Data);
             }
         }
@@ -176,7 +177,7 @@ namespace ResurrectionRP_Server.Farms
                     {
                         if (item.Item.type == "tool" && (item.Item as Tool).Health <= 0)
                         {
-                            _client.OutfitInventory.Delete(item, 1);
+                            ph.OutfitInventory.Delete(itemStack, 1);
                             client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);
                             return;
                         }
@@ -196,12 +197,11 @@ namespace ResurrectionRP_Server.Farms
                 };
 
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
 
                 Alt.Server.LogError("InteractionPoint enter colshape: " + ex.Data);
             }
-
         }
         #endregion
 
@@ -252,5 +252,4 @@ namespace ResurrectionRP_Server.Farms
         }
         #endregion
     }
-
 }

@@ -147,12 +147,12 @@ namespace ResurrectionRP_Server.Entities.Players
                 if (weapon != 2725352035)
                 {
                     player.Emit("ONU_PlayerDeath", weapon);
-
                     DeadPlayers.Add(new DeadPlayer(player, killer, weapon));
                 }
                 else
                 {
                     player.SendNotification($"Ne va pas vers la lumière, tu vas te relever.");
+
                     Utils.Utils.SetInterval(() =>
                     {
                         if (player.Exists)

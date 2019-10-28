@@ -88,7 +88,6 @@ namespace ResurrectionRP_Server.Items
                     new Alcohol(ItemID.Vine, "Une Bouteille de Vin", "Une bouteille de Vin.", 1, true, true,true, icon:"vin"),
                     new Alcohol(ItemID.Vine, "Martini", "Une bouteille de Vin.", 1, true, true,true, icon:"whisky"),
                     new Alcohol(ItemID.Vine, "Alcool de serpent", "", 1, true, true,true, icon:"vin", isDockable: true, itemPrice: 98, alcohol:1),
-                    new Alcohol(ItemID.Rhum , "Rhum", "Tous les chemins mènent au Rhum", 1 , true, true, true, drink:20, timer:120000, isDockable: false, itemPrice: 140, icon: "rum", alcohol:0.5),
 
 
                     new Unusable(ItemID.Plastic, "Matière Polymère", "", 4),
@@ -121,7 +120,6 @@ namespace ResurrectionRP_Server.Items
                     new Weapons(ItemID.Weapon, "Katana", "", 3, hash: WeaponHash.Bottle, isDockable: true, itemPrice: 3100),
                     new Weapons(ItemID.Weapon, "Lampe Torche", "", 1, hash: WeaponHash.Flashlight, isDockable: true, itemPrice: 250),
 
-                    new HealItem(ItemID.RhumLiquide, "Rhum Liquide", "Déinfecte et sert de carburant.",1,true,true,true, life:0, icon:"bandage"),
                     new Unusable(ItemID.Canneasurcre, "Canne a sucre", "", 2),
 
                     new Unusable(ItemID.BouquetFleur, "Bouquet de fleur", "", 1, isDockable: true, itemPrice: 100),
@@ -141,16 +139,18 @@ namespace ResurrectionRP_Server.Items
 
                     new LockPick(ItemID.LockPick, "Kit de crochetage", "", 1, true, false, true, true),
 
-                   // new Unusable(ItemID.Microphone, "Micro de scène", "Un micro made in china")
+                // new Unusable(ItemID.Microphone, "Micro de scène", "Un micro made in china")
 
+                    #region Farms
 
-                   // Relative to Miners FarmTGa
-                    
                     new Axe(ItemID.Hache, "Hache", "Pour couper du bois", 1, icon: "pickaxe"),
+                #region Minage
+                    
 
                     new Tool(ItemID.Pioche, "Pioche", "Pioche basique", 2, icon: "pickaxe", isDockable: true, itemPrice: 150),
                     new Tool(ItemID.MarteauPiqueur, "Marteau Piqueur", "Marteau piqueur", 15, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 2500, icon: "marteau-piqueur", miningrate: 5),
                     new Tool(ItemID.Marteau, "Marteau (Outil)", "Fond le cuivre", 3, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 150, icon: "marteau", miningrate: 1),
+
                     new Tool(ItemID.Pelle, "Pelle","Permet de creuser", 2, isDockable: true, itemPrice: 150, miningrate: 1, icon: "pelle"),
                     new Tool(ItemID.Soufflet, "Soufflet", "Permet de souffler le verre", 5, itemPrice: 150, isDockable: true, icon: "unknown-item"),
 
@@ -170,6 +170,23 @@ namespace ResurrectionRP_Server.Items
                     new Unusable(ItemID.Cuivre, "Cuivre", "Du bon cuivre de gitan", 1, icon: "cuivre"),
 
 
+                #endregion
+                #region Rhum 
+                    
+
+                    new Tool(ItemID.OutilCouteau, "Couteau (Outil)", "Permet de couper des choses", 1, miningrate: 1),
+                    new Tool(ItemID.OutilMachette, "Machette (Outil)", "Pour couper du bois", 1, miningrate: 5),
+                    new Alcohol(ItemID.Rhum , "Rhum", "Tous les chemins mènent au Rhum", 1 , true, true, true, drink:20, timer:120000, isDockable: false, itemPrice: 140, icon: "rum", alcohol:0.5),
+                    new Alcohol(ItemID.RhumApple , "Rhum arrangé pomme", "Tous les chemins mènent au Rhum", 1 , true, true, true, drink:20, timer:120000, isDockable: false, itemPrice: 140, icon: "rum", alcohol:0.5),
+                    new Alcohol(ItemID.RhumRaisin, "Rhum arrangé raisin", "Tous les chemins mènent au Rhum", 1 , true, true, true, drink:20, timer:120000, isDockable: false, itemPrice: 140, icon: "rum", alcohol:0.5),
+                    new HealItem(ItemID.RhumLiquide, "Rhum Liquide", "Déinfecte et sert de carburant.",1,true,true,true, life:0, icon:"bandage"),
+
+                    new Unusable(ItemID.Melasse, "Mélasse", "Est utilisé pour faire du Rhum", 1, isStackable: true),
+                    new Unusable(ItemID.MelasseApple, "Mélasse arrangé pomme", "Est utilisé pour faire du Rhum", 1, isStackable: true),
+                    new Unusable(ItemID.MelasseRaisin, "Mélasse arrangé raisin", "Est utilisé pour faire du Rhum", 1, isStackable: true),
+
+                #endregion
+                #endregion
             };
         }
     }

@@ -155,7 +155,7 @@ namespace ResurrectionRP_Server
             {
                 await BanManager.Init();
                 await VehiclesManager.LoadAllVehicles();
-                await Loader.CarParkLoader.LoadAllCarPark();  
+                await Loader.CarParkLoader.LoadAllCarParks();  
                 await Factions.FactionManager.InitAllFactions();
                 await Loader.BusinessesManager.LoadAllBusinesses();         
                 await Society.SocietyManager.LoadAllSociety();

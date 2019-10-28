@@ -191,7 +191,6 @@ namespace ResurrectionRP_Server.Farms
                         return;
                     }
 
-
                     if (inventory != null && itemStack == null)
                         client.DisplayHelp("Vous devez équiper votre outil pour commencer!", 5000);
                     else if (itemStack == null && ToolNeeded.IndexOf(item) == ToolNeeded.Count - 1)

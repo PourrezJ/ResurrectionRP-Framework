@@ -90,60 +90,55 @@ namespace ResurrectionRP_Server.Farms
             ItemPrice = 92;
         }
 
-        public override void StartFarming(IPlayer client)
+        public override void StartFarmingNew(IPlayer client, Item item, string anim_dict = null, string anim_anim = null, string scenario = null)
         {
             if (client == null || !client.Exists)
                 return;
 
             PlayerHandler player = client.GetPlayerHandler();
-            Item item = Inventory.Inventory.ItemByID(ItemIDBrute);
-            Tool _item = (Tool)(player.OutfitInventory.HasItemEquip(ItemID.Pioche)?.Item);
-            Tool _itembis = (Tool)(player.OutfitInventory.HasItemEquip(ItemID.MarteauPiqueur)?.Item);
-            Tool usedItem = (_item == null) ? _itembis : _item;
+            Item endItem = Inventory.Inventory.ItemByID(ItemIDBrute);
+            Tool usedItem = item as Tool;
 
 
 
             if (player == null || player.IsOnProgress)
                 return;
-            if (player.InventoryIsFull(item.weight))
+            if (player.InventoryIsFull(endItem.weight))
             {
                 client.DisplayHelp("Votre inventaire est déjà plein.", 10000);
                 return;
             }
-            if (_item == null && _itembis == null)
+            if (usedItem == null)
                 return;
-
-            if (_item != null)
+            Alt.Server.LogInfo(usedItem.name);
+            if (usedItem.name == "Pioche")
             {
-                _item.SetPickaxeAnimation(client, (int)(Harvest_Time / _item.Speed));
-                client.DisplayHelp($"Durabilité: {_item.Health - UsureOutil}\nMinerais récoltés: {_item.MiningRate}\nVitesse: {_item.Speed}" , 5000);
-                _item.Health -= UsureOutil;
-            }
-            else if (_itembis != null)
-            {
-                _itembis.SetJackHammerAnimation(client, (int)(Harvest_Time / _itembis.Speed));
-                client.DisplayHelp($"Durabilité: {_itembis.Health - UsureOutil}\nMinerais récoltés: 5\nVitesse: {_itembis.Speed}", 5000);
-                _itembis.Health -= UsureOutil;
+                usedItem.SetPickaxeAnimation(client, (int)(Harvest_Time / usedItem.Speed));
+                client.DisplayHelp($"Durabilité: {usedItem.Health - UsureOutil}\nMinerais récoltés: {usedItem.MiningRate}\nVitesse: {usedItem.Speed}" , 5000);
+                usedItem.Health -= UsureOutil;
             }
             else
-                Alt.Server.LogError("Cuivre - StartFarming - Can't farm no more item wtf");
+            {
+                usedItem.SetJackHammerAnimation(client, (int)(Harvest_Time / usedItem.Speed));
+                client.DisplayHelp($"Durabilité: {usedItem.Health - UsureOutil}\nMinerais récoltés: 5\nVitesse: {usedItem.Speed}", 5000);
+                usedItem.Health -= UsureOutil;
+            }
 
-            WorkingPlayers.TryAdd(client.Id, client);
+            player.IsOnProgress = true;
             Utils.Utils.Delay((int)(Harvest_Time / usedItem.Speed), () =>
             {
 
                 if (!client.Exists)
                     return;
 
-                if (player.AddItem(item, usedItem.MiningRate))
+                if (player.AddItem(endItem, usedItem.MiningRate))
 
-                    client.DisplaySubtitle($"Vous avez miné ~r~ {usedItem.MiningRate} {item.name}", 5000);
+                    client.DisplaySubtitle($"Vous avez miné ~r~ {usedItem.MiningRate} {endItem.name}", 5000);
                 else
 
                     client.DisplayHelp("Plus de place dans votre inventaire!");
+                player.IsOnProgress = false;
 
-                if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
-                    Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Cuivre.cs)");
             });
 
 
@@ -162,9 +157,8 @@ namespace ResurrectionRP_Server.Farms
                     return;
                 }
 
+                player.IsOnProgress = true;
 
-                if (!WorkingPlayers.TryAdd(client.Id, client))
-                    Alt.Server.LogError("Error to add player in working players");
 
                 client.TaskAdvancedPlayAnimation("anim@heists@load_box", "load_box_1_box_a", new Vector3(1086f, -2001.493f, 31.382f), new Vector3(0, 0, 0), 1, 1, 15000, 1, 5000);
                 Utils.Utils.Delay((int)(Process_Time / _item.Speed), () =>
@@ -184,9 +178,8 @@ namespace ResurrectionRP_Server.Farms
                     else
                         Alt.Server.LogError("Cuivre.cs | Error when trying to remove items from Processing |");
 
+                    player.IsOnProgress = false;
 
-                    if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
-                        Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Cuivre.cs)");
                 });
             }
             catch (System.Exception ex)
@@ -215,8 +208,8 @@ namespace ResurrectionRP_Server.Farms
                        if( p.Position.DistanceTo2D(client.Position.ConvertToVector3()) < 2)
                            client.TaskStartScenarioAtPosition("WORLD_HUMAN_HAMMERING", p.Position, p.Heading, Process_Time, false, false);
                    });
+                player.IsOnProgress = true;
 
-                WorkingPlayers.TryAdd(client.Id, client);
                 Utils.Utils.Delay((int)(DoubleProcess_Time / _item.Speed), () =>
                 { 
                     if (!client.Exists)
@@ -228,14 +221,10 @@ namespace ResurrectionRP_Server.Farms
                         player.AddItem(item, _item.MiningRate);
                         client.StopAnimation();
                         player.UpdateFull();
-
-
-                        if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
-                            Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Cuivre.cs)");
                     } else
-                    {
                         Alt.Server.LogError("Eror on double process at copper ");
-                    }
+                    
+                        player.IsOnProgress = false;
                 });
             }
             catch (System.Exception ex)

@@ -114,7 +114,8 @@ namespace ResurrectionRP_Server.Farms
             else
                 Alt.Server.LogError("Sand - StartFarming - Can't farm no more item wtf");
 
-            WorkingPlayers.TryAdd(client.Id, client);
+            player.IsOnProgress = true;
+
             Utils.Utils.Delay((int)(Harvest_Time / _item.Speed), () =>
             {
 
@@ -129,9 +130,8 @@ namespace ResurrectionRP_Server.Farms
                 else
 
                     client.DisplayHelp("Plus de place dans votre inventaire!");
+                player.IsOnProgress = false;
 
-                if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
-                    Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Cuivre.cs)");
             });
 
         }
@@ -158,8 +158,8 @@ namespace ResurrectionRP_Server.Farms
                         client.TaskStartScenarioAtPosition("WORLD_HUMAN_WELDING", p.Position, p.Heading, Process_Time, false, false);
                 });
 
-                if (!WorkingPlayers.TryAdd(client.Id, client))
-                    Alt.Server.LogError("Error to add player in working players");
+                player.IsOnProgress = true;
+
 
                 Utils.Utils.Delay((int)(Process_Time / _item.Speed), () =>
                 {
@@ -178,9 +178,8 @@ namespace ResurrectionRP_Server.Farms
                     else
                         Alt.Server.LogError("Sable.cs | Error when trying to remove items from Processing |");
 
+                    player.IsOnProgress = false;
 
-                    if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
-                        Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Sable.cs)");
                 });
             }
             catch (System.Exception ex)
@@ -203,7 +202,8 @@ namespace ResurrectionRP_Server.Farms
                 }
 
                 client.PlayAnimation("amb@prop_human_parking_meter@male@idle_a", "idle_a", 8, -1, 5000, (Utils.Enums.AnimationFlags)49);
-                WorkingPlayers.TryAdd(client.Id, client);
+                player.IsOnProgress = true;
+
                 Utils.Utils.Delay((int)(DoubleProcess_Time), () =>
                 {
                     if (!client.Exists)
@@ -215,15 +215,10 @@ namespace ResurrectionRP_Server.Farms
                         player.AddItem(item, 1);
                         client.StopAnimation();
                         player.UpdateFull();
-
-
-                        if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
-                            Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Sable.cs)");
                     }
                     else
-                    {
                         Alt.Server.LogError("Eror on double process at Sable ");
-                    }
+                    player.IsOnProgress = false;
                 });
             }
             catch (System.Exception ex)

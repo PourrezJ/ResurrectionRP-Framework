@@ -9,6 +9,7 @@ using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Blips;
 using ResurrectionRP_Server.Entities.Peds;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
 using System;
@@ -140,10 +141,8 @@ namespace ResurrectionRP_Server.Farms
 
 
         // NEW FARM SYSTEM
-        [JsonIgnore]
-        public ConcurrentDictionary<int, IPlayer> WorkingPlayers { get; set; } = new ConcurrentDictionary<int, IPlayer>();
 
-
+        #region new farm system
         [JsonIgnore]
         public List<InteractionPoint> FarmPoints { get; set; } = new List<InteractionPoint>();
         [JsonIgnore]
@@ -152,6 +151,11 @@ namespace ResurrectionRP_Server.Farms
         public List<InteractionPoint> ProcessPoints { get; set; } = new List<InteractionPoint>();
         [JsonIgnore]
         public List<InteractionPoint> SellingPoints { get; set; } = new List<InteractionPoint>();
+
+        private int UsureOutil = 1;
+
+
+        #endregion
 
         #region Timers
         public ConcurrentDictionary<IPlayer, System.Timers.Timer> FarmTimers = new ConcurrentDictionary<IPlayer, System.Timers.Timer>();
@@ -307,6 +311,57 @@ namespace ResurrectionRP_Server.Farms
             }, Harvest_Time);
         }
 
+        public virtual void StartFarmingNew(IPlayer client, Item sentItem, string anim_dict = null, string anim_anim = null, string scenario = null)
+        {
+            if (client == null || !client.Exists)
+                return;
+
+            PlayerHandler player = client.GetPlayerHandler();
+            Item endItem = Inventory.Inventory.ItemByID(ItemIDBrute);
+            Tool tool = sentItem as Tool;
+            if (player == null || player.IsOnProgress)
+                return;
+            if (player.InventoryIsFull(endItem.weight))
+            {
+                client.DisplayHelp("Votre inventaire est déjà plein.", 10000);
+                return;
+            }
+
+            if (tool == null)
+                return;
+
+            client.DisplayHelp($"Durabilité: {tool.Health - UsureOutil}\n{endItem.name} récoltées: {tool.MiningRate}\nVitesse: {tool.Speed}", 5000);
+            tool.Health -= UsureOutil;
+            player.IsOnProgress = true;
+            if (anim_anim != "" & anim_dict != "")
+                client.PlayAnimation(anim_dict, anim_anim, 8, -1, Harvest_Time, (Utils.Enums.AnimationFlags)1);
+
+            if(scenario != "")
+
+                FarmPoints.ForEach((p) =>
+                {
+                    if (p.Position.DistanceTo2D(client.Position.ConvertToVector3()) < 2)
+                        client.TaskStartScenarioAtPosition(scenario, p.Position, p.Heading, Process_Time, false, false);
+                });
+
+            Utils.Utils.Delay((int)(Harvest_Time / tool.Speed), () =>
+            {
+
+                if (!client.Exists)
+                    return;
+
+                if (player.AddItem(endItem, tool.MiningRate))
+                {
+                    client.DisplaySubtitle($"Vous avez récolté ~r~ {tool.MiningRate} {endItem.name}", 5000);
+                    client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour recommencer", 5000);
+                }
+                else
+
+                    client.DisplayHelp("Plus de place dans votre inventaire!");
+                player.IsOnProgress = false;
+
+            });
+        }
         public virtual void StartProcessing(IPlayer sender)
         {
             if (sender == null || !sender.Exists || sender.IsInVehicle)
@@ -447,7 +502,7 @@ namespace ResurrectionRP_Server.Farms
 
 
             MenuManager.CloseMenu(client);
-            WorkingPlayers.TryAdd(client.Id, client);
+            player.IsOnProgress = true;
 
             Utils.Utils.Delay(Selling_Time * itemcount, () =>
             {
@@ -465,13 +520,11 @@ namespace ResurrectionRP_Server.Farms
                     client.SendNotificationError("Inconnu.");
 
 
-                if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
-                    Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Sable.cs)");
-
                 player.IsOnProgress = false;
                 player.UpdateFull();
             });
         }
+
 
         public virtual void StartDoubleProcessing(IPlayer client)
         {

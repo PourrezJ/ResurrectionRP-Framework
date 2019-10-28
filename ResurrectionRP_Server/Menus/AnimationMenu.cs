@@ -107,7 +107,7 @@ namespace ResurrectionRP_Server.Menus
                     anim.AnimName.ToLower();
                     anim.AnimDict.ToLower();
                     ph.AnimSettings[_keySelected] = anim;
-                    client.PlayAnimation(anim.AnimDict, anim.AnimName, 8, -1, 5000, (AnimationFlags)49);
+                    client.PlayAnimation(anim.AnimDict, anim.AnimName, 8, -1, 5000, (AnimationFlags)1);
                 }  
             }
         }

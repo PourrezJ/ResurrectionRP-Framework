@@ -38,53 +38,54 @@ namespace ResurrectionRP_Server.Farms
             Harvest_Position.Add(new Vector3(-472.789f, 2089.373f, 120.067f));
             Harvest_Position.Add(new Vector3(-424.038f, 2064.779f, 120.047f));
             Harvest_Position.ForEach((position) =>
-                FarmPoints.Add(new InteractionPoint(this, position, 0, Inventory.Inventory.ItemByID(ItemID.Pioche), InteractionPointTypes.Farm, "miner"))
+                FarmPoints.Add(new InteractionPoint(this, position, 0, Inventory.Inventory.ItemByID(ItemID.Pioche), InteractionPointTypes.Farm, "miner", "melee@large_wpn@streamed_core", "ground_attack_on_spot"))
             );
             Harvest_Range = 100f;
             
         }
 
-
-        public override void StartFarming(IPlayer client)
+        public override void StartFarmingNew(IPlayer client, Item sentItem, string anim_dict = null, string anim_anim = null, string scenario = null)
         {
             if (client == null || !client.Exists)
                 return;
 
-            if (GameMode.IsDebug)
-                Alt.Server.LogInfo($"Player {client.GetPlayerHandler()?.PID} is now farming at Gold");
-
             PlayerHandler player = client.GetPlayerHandler();
-            Tool _item = (Tool)(player.OutfitInventory.HasItemEquip(ItemID.Pioche)?.Item);
-
-
-
+            Tool tool = sentItem as Tool;
             if (player == null || player.IsOnProgress)
                 return;
-            if (player.InventoryIsFull(2))
+            if (tool == null)
+                return;
+
+            client.DisplayHelp($"Durabilité: {tool.Health - UsureOutil}\nMinerais récoltées: {tool.MiningRate}\nVitesse: {tool.Speed}", 5000);
+            tool.Health -= UsureOutil;
+            player.IsOnProgress = true;
+            if (anim_anim != "" & anim_dict != "")
+                client.PlayAnimation(anim_dict, anim_anim, 8, -1, Harvest_Time, (Utils.Enums.AnimationFlags)1);
+
+            if (scenario != "")
+
+                FarmPoints.ForEach((p) =>
+                {
+                    if (p.Position.DistanceTo2D(client.Position.ConvertToVector3()) < 2)
+                        client.TaskStartScenarioAtPosition(scenario, p.Position, p.Heading, Process_Time, false, false);
+                });
+
+            Utils.Utils.Delay((int)(Harvest_Time / tool.Speed), () =>
             {
-                client.DisplayHelp("Votre inventaire est déjà plein.", 10000);
-                return;
-            }
-            if (_item == null)
-                return;
 
-            _item.SetPickaxeAnimation(client, (int)(Harvest_Time / _item.Speed));
-            client.DisplayHelp($"Durabilité: {_item.Health - UsureOutil}\nMinerai récolté: {1}\nVitesse: {_item.Speed}", 5000);
-            _item.Health -= UsureOutil;
-
-            WorkingPlayers[client.Id] = client;
-            Utils.Utils.Delay((int)(Harvest_Time / _item.Speed), () => {
-                Item item = (client.GetPlayerHandler().HasItemID(ItemID.DetecteurMetaux)) ? this.RadomizedItem(5, 53) : this.RadomizedItem(1, 49);
+                Item endItem = (client.GetPlayerHandler().HasItemID(ItemID.DetecteurMetaux)) ? this.RadomizedItem(5, 53) : this.RadomizedItem(1, 49);
                 if (!client.Exists)
                     return;
 
-                if (player.AddItem(item, 1))
+                if (player.AddItem(endItem, tool.MiningRate))
                 {
-                    client.DisplaySubtitle($"Vous avez miné ~r~ {1} {item.name}", 5000);
-                    WorkingPlayers.TryRemove(client.Id, out IPlayer voided);
+                    client.DisplaySubtitle($"Vous avez récolté ~r~ {tool.MiningRate} {endItem.name}", 5000);
+                    client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour recommencer", 5000);
                 }
                 else
+
                     client.DisplayHelp("Plus de place dans votre inventaire!");
+                player.IsOnProgress = false;
 
             });
         }

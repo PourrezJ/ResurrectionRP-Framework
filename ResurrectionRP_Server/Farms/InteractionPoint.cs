@@ -7,6 +7,7 @@ using ResurrectionRP_Server.Entities.Peds;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Models;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Numerics;
@@ -32,14 +33,17 @@ namespace ResurrectionRP_Server.Farms
         public List<Item> ToolNeeded;
         public InteractionPointTypes Type;
         public string InteractionName;
-        #endregion
+
+        public string Anim_dict = null;
+        public string Anim_anim = null;
+        public string Scenario = null;
 
         public ConcurrentDictionary<double, Item> soldItems = new ConcurrentDictionary<double, Item>();
         public PedModel PedModel;
         #endregion
 
         #region Constructor
-        public InteractionPoint(Farm farm, Vector3 position, float heading, List<Item> items, InteractionPointTypes interactionPoint, string interactionName)
+        public InteractionPoint(Farm farm, Vector3 position, float heading, List<Item> items, InteractionPointTypes interactionPoint, string interactionName, string anim_dict = "", string anim_anim = "", string scenario = "")
         {
             Position = position;
             ToolNeeded = items;
@@ -47,9 +51,12 @@ namespace ResurrectionRP_Server.Farms
             InteractionName = interactionName;
             Farm = farm;
             Heading = heading;
+            Anim_dict = anim_dict;
+            Anim_anim = anim_anim;
+            Scenario = scenario ?? null;
             Init();
         }
-        public InteractionPoint(Farm farm, Vector3 position, float heading, Item item, InteractionPointTypes interactionPoint, string interactionName)
+        public InteractionPoint(Farm farm, Vector3 position, float heading, Item item, InteractionPointTypes interactionPoint, string interactionName, string anim_dict = "", string anim_anim = "", string scenario = "")
         {
             Position = position;
             ToolNeeded = new List<Item>();
@@ -58,9 +65,12 @@ namespace ResurrectionRP_Server.Farms
             InteractionName = interactionName;
             Farm = farm;
             Heading = heading;
+            Anim_dict = anim_dict;
+            Anim_anim = anim_anim;
+            Scenario = scenario ?? null;
             Init();
         }
-        public InteractionPoint(Farm farm, Vector3 position, float heading, InteractionPointTypes interactionPoint, string interactionName)
+        public InteractionPoint(Farm farm, Vector3 position, float heading, InteractionPointTypes interactionPoint, string interactionName, string anim_dict = "", string anim_anim = "", string scenario = "")
         {
             Position = position;
             ToolNeeded = new List<Item>();
@@ -68,9 +78,12 @@ namespace ResurrectionRP_Server.Farms
             InteractionName = interactionName;
             Farm = farm;
             Heading = heading;
+            Anim_dict = anim_dict;
+            Anim_anim = anim_anim;
+            Scenario = scenario ?? null;
             Init();
         }
-        public InteractionPoint(Farm farm, Vector3 position, float heading, PedModel pedmodel,ConcurrentDictionary<double, Item> items, InteractionPointTypes interactionPoint, string interactionName)
+        public InteractionPoint(Farm farm, Vector3 position, float heading, PedModel pedmodel,ConcurrentDictionary<double, Item> items, InteractionPointTypes interactionPoint, string interactionName, string anim_dict = "", string anim_anim = "", string scenario = "")
         {
             if(interactionPoint != InteractionPointTypes.Sell)
             {
@@ -86,9 +99,13 @@ namespace ResurrectionRP_Server.Farms
             Farm = farm;
             Heading = heading;
             PedModel = pedmodel;
+            Anim_dict = anim_dict;
+            Anim_anim = anim_anim;
+            Scenario = scenario;
             Init();
         }
         #endregion
+
         #region Init
         private void Init()
         {
@@ -117,7 +134,7 @@ namespace ResurrectionRP_Server.Farms
                 return;
             }
 
-            if (Farm.FarmTimers.ContainsKey(client) || (Farm).WorkingPlayers.ContainsKey(client.Id) || Farm.DoubleProcessTimers.ContainsKey(client))
+            if (client.GetPlayerHandler().IsOnProgress)
                 return;
             if (ToolNeeded.Count == 0)
                 LaunchToFarm(client);
@@ -136,9 +153,10 @@ namespace ResurrectionRP_Server.Farms
                             client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);
                             return;
                         }
-                        LaunchToFarm(client);
+                        LaunchToFarm(client, 0, _item);
+                        return;
                     }
-
+                    
                     if (inventory != null && item == null)
                         client.DisplayHelp("Vous devez équiper votre outil pour commencer!", 5000);
                     else if (item == null && ToolNeeded.IndexOf(_item) == ToolNeeded.Count - 1)
@@ -169,13 +187,13 @@ namespace ResurrectionRP_Server.Farms
             {
                 foreach (Item _item in ToolNeeded)
                 {
-                    PlayerHandler _client = client.GetPlayerHandler();
-                    Inventory.Inventory inventory = _client.HasItemInAnyInventory(_item.id);
-                    ItemStack item = _client.OutfitInventory.HasItemEquip(_item.id);
+                    PlayerHandler ph = client.GetPlayerHandler();
+                    Inventory.Inventory inventory = ph.HasItemInAnyInventory(_item.id);
+                    ItemStack itemStack = ph.OutfitInventory.HasItemEquip(_item.id);
 
-                    if (item != null)
+                    if (itemStack != null)
                     {
-                        if (item.Item.type == "tool" && (item.Item as Tool).Health <= 0)
+                        if (itemStack.Item.type == "tool" && (itemStack.Item as Tool).Health <= 0)
                         {
                             ph.OutfitInventory.Delete(itemStack, 1);
                             client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);
@@ -187,9 +205,9 @@ namespace ResurrectionRP_Server.Farms
                     }
 
 
-                    if (inventory != null && item == null)
+                    if (inventory != null && itemStack == null)
                         client.DisplayHelp("Vous devez équiper votre outil pour commencer!", 5000);
-                    else if (item == null && ToolNeeded.IndexOf(_item) == ToolNeeded.Count - 1)
+                    else if (itemStack == null && ToolNeeded.IndexOf(_item) == ToolNeeded.Count - 1)
                     {
                         client.DisplayHelp($"Vous devez avoir un(e) {ToolNeeded[0].name} pour {InteractionName} !", 10000);
                         return;
@@ -213,7 +231,10 @@ namespace ResurrectionRP_Server.Farms
             {
                 case InteractionPointTypes.Farm:
                     Alt.Server.LogInfo("InteractionPoint | " + _client.PID + " a commence a farm " + Farm.Harvest_Name);
-                    Farm?.StartFarming(client);
+                    if (item == null)
+                        Farm?.StartFarming(client);
+                    else
+                        Farm?.StartFarmingNew(client, item, Anim_dict, Anim_anim, Scenario);
                     return;
                 case InteractionPointTypes.DoubleProcess:
                     Alt.Server.LogInfo("InteractionPoint | " + _client.PID + " a commence a double process " + Farm.DoubleProcess_Name);

@@ -500,6 +500,41 @@ namespace ResurrectionRP_Server.Entities.Players
                 addItem.OnMenuItemCallback = GiveItemMenu;
                 mainMenu.Add(addItem);
                 #endregion
+
+                #region Duplicate clé 
+
+                spawnPerm = new MenuItem("Donner une clé", "Donne une clé de véhicule, avec la plaque.", "ID_Generatekey", true);
+                spawnPerm.SetInput("", 30, InputType.Text);
+                spawnPerm.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                {
+                    try
+                    {
+                        string name = menuItem.InputValue;
+
+                        if (string.IsNullOrEmpty(name))
+                            return;
+
+
+                        VehicleHandler vehicle = VehiclesManager.VehicleHandlerList.FirstOrDefault( (p) => p.Value.Plate.ToUpper() == name.ToUpper()).Value;
+
+                        if (vehicle == null)
+                        {
+                            client.SendNotificationError($"véhicule inconnu : {name}");
+                            return;
+                        }
+                        _playerSelected.AddKey(vehicle, "Clé de " + vehicle.VehicleManifest.Name);
+                        _playerSelected.Client.DisplayHelp("Un admin vous a donné:\n" + "Clé de " + vehicle.VehicleManifest.Name);
+                        client.DisplayHelp("Vous avez donné:\n" + "Clé de " + vehicle.VehicleManifest.Name);
+                        
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Alt.Server.LogError($"ADMIN CREATE KEY PERSISTANT: {ex}");
+                    }
+                };
+                mainMenu.Add(spawnPerm);
+                #endregion
             }
 
             #region Fin

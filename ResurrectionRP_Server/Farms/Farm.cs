@@ -125,7 +125,7 @@ namespace ResurrectionRP_Server.Farms
         [JsonIgnore]
         public Location Selling_PosRot { get; set; }
         public PedModel Selling_PedHash { get; set; }
-        public int Selling_Time { get; set; } = 1000; // time to ms between to resource take
+        public int Selling_Time { get; set; } = 5000; // time to ms between to resource take
 
         public BlipColor BlipColor { get; set; }
         public ItemID ItemIDBrute { get; set; }
@@ -150,6 +150,8 @@ namespace ResurrectionRP_Server.Farms
         public List<InteractionPoint> DoubleProcessPoints { get; set; } = new List<InteractionPoint>();
         [JsonIgnore]
         public List<InteractionPoint> ProcessPoints { get; set; } = new List<InteractionPoint>();
+        [JsonIgnore]
+        public List<InteractionPoint> SellingPoints { get; set; } = new List<InteractionPoint>();
 
         #region Timers
         public ConcurrentDictionary<IPlayer, System.Timers.Timer> FarmTimers = new ConcurrentDictionary<IPlayer, System.Timers.Timer>();
@@ -419,6 +421,52 @@ namespace ResurrectionRP_Server.Farms
                 }
                 else
                     sender.SendNotificationError("Inconnu.");
+
+                player.IsOnProgress = false;
+                player.UpdateFull();
+            });
+        }
+
+        public virtual void StartSellingNew(IPlayer client, double price, Item item)
+        {
+            if (client == null || !client.Exists || client.IsInVehicle)
+                return;
+
+            PlayerHandler player = client.GetPlayerHandler();
+
+            if (player == null || player.IsOnProgress)
+                return;
+
+            if (player.CountItem(item.id) <= 0)
+            {
+                client.DisplaySubtitle("~r~ERREUR ~s~Vous n'avez rien à vendre", 5000);
+                return;
+            }
+            int itemcount = player.CountItem(item);
+            client.DisplaySubtitle($"Vous vendez {itemcount} ~r~{item.name}(s)", Selling_Time * itemcount);
+
+
+            MenuManager.CloseMenu(client);
+            WorkingPlayers.TryAdd(client.Id, client);
+
+            Utils.Utils.Delay(Selling_Time * itemcount, () =>
+            {
+                if (!client.Exists)
+                    return;
+
+                if (player.DeleteAllItem(item.id, itemcount))
+                {
+                    double gettaxe = Economy.Economy.CalculPriceTaxe((price * itemcount), GameMode.Instance.Economy.Taxe_Exportation);
+                    player.AddMoney((price * itemcount) - gettaxe);
+                    GameMode.Instance.Economy.CaissePublique += gettaxe;
+                    client.DisplaySubtitle($"~r~{itemcount} ~w~{item.name}(s) $~r~{(price * itemcount) - gettaxe} ~w~taxe:$~r~{gettaxe}.", 15000);
+                }
+                else
+                    client.SendNotificationError("Inconnu.");
+
+
+                if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
+                    Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Sable.cs)");
 
                 player.IsOnProgress = false;
                 player.UpdateFull();

@@ -28,7 +28,6 @@ namespace ResurrectionRP_Server.Farms
             Selling_Name = "Revendeur de cuivre";
 
             Harvest_BlipSprite = 85;
-            Selling_BlipSprite = 500;
 
             Harvest_Time = 5000;
             Harvest_BlipPosition = new Vector3(2964.211f, 2817.4153f, 42.759766f);
@@ -39,7 +38,7 @@ namespace ResurrectionRP_Server.Farms
             Harvest_Position.Add(new Vector3(2997.679f, 2758.425f, 42.34139f));
             Harvest_Position.Add(new Vector3(2946.29f, 2733.697f, 44.75487f));
             Harvest_Position.ForEach((position) =>
-                FarmPoints.Add( new InteractionPoint(this, position, 0,  new List<Item> { Inventory.Inventory.ItemByID(ItemID.Pioche), Inventory.Inventory.ItemByID(ItemID.MarteauPiqueur) }, InteractionPointTypes.Farm, "miner", 0))
+                FarmPoints.Add( new InteractionPoint(this, position, 0,  new List<Item> { Inventory.Inventory.ItemByID(ItemID.Pioche), Inventory.Inventory.ItemByID(ItemID.MarteauPiqueur) }, InteractionPointTypes.Farm, "miner"))
             );
             Harvest_Range = 100f;
 
@@ -49,23 +48,38 @@ namespace ResurrectionRP_Server.Farms
                 new Vector3(1096.5231f, -1994.2946f, 29.364136f),
                 new Vector3(1089.956f, -1991.011f, 28.976562f)
             }.ForEach((position) =>
-                DoubleProcessPoints.Add(new InteractionPoint(this, position, 90,  Inventory.Inventory.ItemByID(ItemID.Marteau), InteractionPointTypes.DoubleProcess, "forger", 0.0f))
+                DoubleProcessPoints.Add(new InteractionPoint(this, position, 90,  Inventory.Inventory.ItemByID(ItemID.Marteau), InteractionPointTypes.DoubleProcess, "forger"))
             );
 
             new List<Vector3>
             {
                 new Vector3(1086f, -2001.493f, 31.382f)
             }.ForEach((position) =>
-                ProcessPoints.Add(new InteractionPoint(this, new Vector3(1086f, -2001.493f, 31.382f), -2.3f,  Inventory.Inventory.ItemByID(ItemID.Marteau), InteractionPointTypes.Process, "fondre", 0.0f))
+                ProcessPoints.Add(new InteractionPoint(this, position, -2.3f,  Inventory.Inventory.ItemByID(ItemID.Marteau), InteractionPointTypes.Process, "fondre"))
             );
-            
-            Selling_PosRot = new Location(new Vector3(605.719f, -3073.165f, 8.069f), new Vector3(0, 0, -11.52882f));
-            Selling_PedHash = AltV.Net.Enums.PedModel.Cntrybar01SMM;
+
+
+            ConcurrentDictionary<double, Item> eligiblelist = new ConcurrentDictionary<double, Item>();
+            eligiblelist.TryAdd(92, Inventory.Inventory.ItemByID(ItemID.Cuivre));
+
+            new List<Vector3>
+            {
+               new Vector3(605.719f, -3073.165f, 6.069f)
+            }.ForEach((position) =>
+
+               SellingPoints.Add(new InteractionPoint(this, position, -11.52f, AltV.Net.Enums.PedModel.Cntrybar01SMM, eligiblelist, InteractionPointTypes.Sell, "vendre"))
+           );
+
+
+
+/*            Selling_PosRot = new Location(new Vector3(605.719f, -3073.165f, 6.069f), new Vector3(0, 0, -11.52882f));
+            Selling_PedHash = AltV.Net.Enums.PedModel.Cntrybar01SMM;*/
 
             BlipColor = Entities.Blips.BlipColor.Complexion;
 
 
             Process_Blip = BlipsManager.CreateBlip(Process_Name, new Vector3(1086f, -2001.493f, 31.382f), (byte)BlipColor, 499);
+            Selling_Blip = BlipsManager.CreateBlip(Selling_Name, new Vector3(605.719f, -3073.165f, 6.069f), (byte)BlipColor, 500);
             Process_QuantityNeeded = 2;
             Process_Time = 5000;
 
@@ -81,10 +95,6 @@ namespace ResurrectionRP_Server.Farms
             if (client == null || !client.Exists)
                 return;
 
-            if (GameMode.IsDebug)
-            {
-                Alt.Server.LogInfo($"Player {client.GetPlayerHandler()?.PID} is now farming at Copper");
-            }
             PlayerHandler player = client.GetPlayerHandler();
             Item item = Inventory.Inventory.ItemByID(ItemIDBrute);
             Tool _item = (Tool)(player.OutfitInventory.HasItemEquip(ItemID.Pioche)?.Item);
@@ -141,11 +151,6 @@ namespace ResurrectionRP_Server.Farms
 
         public override void StartProcessing(IPlayer client)
         {
-            if (GameMode.IsDebug)
-            {
-                Alt.Server.LogInfo($"Player {client.GetPlayerHandler()?.PID} is now processing at Copper");
-                Alt.Server.LogInfo("Is player in working " + WorkingPlayers.ContainsKey(client.Id));
-            }
             try
             {
                 PlayerHandler player = client.GetPlayerHandler();
@@ -167,7 +172,7 @@ namespace ResurrectionRP_Server.Farms
 
                     if (!client.Exists)
                         return;
-                    if (player.DeleteAllItem(ItemIDBrute, Process_QuantityNeeded * _item.MiningRate))
+                    if (player.DeleteAllItem(ItemIDBrute, (Process_QuantityNeeded * _item.MiningRate)))
                     {
                         client.Freeze(false);
                         client.DisplaySubtitle($"Vous avez fondu ~r~ {_item.MiningRate} {item.name}", 5000);
@@ -194,11 +199,6 @@ namespace ResurrectionRP_Server.Farms
 
         public override void StartDoubleProcessing(IPlayer client)
         {
-            if (GameMode.IsDebug)
-            {
-                Alt.Server.LogInfo($"Player {client.GetPlayerHandler()?.PID} is now double processing at Copper");
-                Alt.Server.LogInfo("Is player in working " + WorkingPlayers.ContainsKey(client.Id));
-            }
             try
             {
                 PlayerHandler player = client.GetPlayerHandler();
@@ -206,7 +206,7 @@ namespace ResurrectionRP_Server.Farms
                 Tool _item = (Tool)(player.OutfitInventory.HasItemEquip(ItemID.Marteau)?.Item);
                 if (player.BagInventory.CountItem(ItemID.CuivreFondu) < _item.MiningRate && player.PocketInventory.CountItem(ItemID.CuivreFondu) < _item.MiningRate)
                 {
-                    client.DisplayHelp("Vous n'avez plus de cuivre sur vous à fondre!");
+                    client.DisplayHelp("Vous n'avez plus de cuivre sur vous à forger!");
                     return;
                 }
 

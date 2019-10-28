@@ -38,7 +38,8 @@ namespace ResurrectionRP_Server.Farms
 
             new List<Vector3>
             {
-                new Vector3(2942.045f, 4626.106f, 48.721f)
+                new Vector3(2942.045f, 4626.106f, 48.721f),
+                new Vector3(2937.887f, 4620.325f, 48.721f)
             }.ForEach((position) =>
                 ProcessPoints.Add(new InteractionPoint(this, position, -2.3f, Inventory.Inventory.ItemByID(ItemID.Soufflet), InteractionPointTypes.Process, "souffler", 0.0f))
             );
@@ -46,12 +47,14 @@ namespace ResurrectionRP_Server.Farms
             new List<Vector3>
             {
                 new Vector3(360.063f, 3405.598f , 36.404f),
+                new Vector3(358.274f, 3409.92f, 36.404f),
+                new Vector3(363.619f, 3403.789f, 36.404f),
             }.ForEach((position) =>
                 DoubleProcessPoints.Add(new InteractionPoint(this, position, 90, InteractionPointTypes.DoubleProcess, "stériliser", 0.0f))
             );
 
 
-            Selling_PosRot = new Location(new Vector3(270.2509f, -3075.726f, 5.774549f), new Vector3(0, 0, 215.7791f));
+            Selling_PosRot = new Location(new Vector3(498.319f, -627.77f, 24.751f), new Vector3(0, 0, 215.7791f));
             Selling_PedHash = AltV.Net.Enums.PedModel.BoatStaff01F;
 
             Harvest_Range = 50f;
@@ -139,6 +142,13 @@ namespace ResurrectionRP_Server.Farms
                 }
 
 
+
+                DoubleProcessPoints.ForEach((p) =>
+                {
+                    if (p.Position.DistanceTo2D(client.Position.ConvertToVector3()) < 2)
+                        client.TaskStartScenarioAtPosition("WORLD_HUMAN_WELDING", p.Position, p.Heading, Process_Time, false, false);
+                });
+
                 if (!WorkingPlayers.TryAdd(client.Id, client))
                     Alt.Server.LogError("Error to add player in working players");
 
@@ -183,12 +193,7 @@ namespace ResurrectionRP_Server.Farms
                     return;
                 }
 
-                DoubleProcessPoints.ForEach((p) =>
-                {
-                    if (p.Position.DistanceTo2D(client.Position.ConvertToVector3()) < 2)
-                        client.TaskStartScenarioAtPosition("WORLD_HUMAN_HAMMERING", p.Position, p.Heading, Process_Time, false, false);
-                });
-
+                client.PlayAnimation("amb@prop_human_parking_meter@male@idle_a", "idle_a", 8, -1, 5000, (Utils.Enums.AnimationFlags)49);
                 WorkingPlayers.TryAdd(client.Id, client);
                 Utils.Utils.Delay((int)(DoubleProcess_Time), () =>
                 {
@@ -218,6 +223,56 @@ namespace ResurrectionRP_Server.Farms
                 Alt.Server.LogError("Sable Farm | StartDoubleProcess | " + ex.Data);
             }
 
+        }
+
+        public override void StartSelling(IPlayer client)
+        {
+            if (client == null || !client.Exists || client.IsInVehicle)
+                return;
+
+            PlayerHandler player = client.GetPlayerHandler();
+
+            if (player == null || player.IsOnProgress)
+                return;
+
+            Item _itemBuy = player.HasItemID(ItemID.Bouteille) ? Inventory.Inventory.ItemByID(ItemID.Bouteille) : Inventory.Inventory.ItemByID(ItemID.BouteilleTraite);
+
+            if (!player.HasItemID(ItemID.BouteilleTraite) && !player.HasItemID(ItemID.Bouteille))
+            {
+                client.DisplaySubtitle("~r~ERREUR ~s~Vous n'avez rien à vendre", 5000);
+                return;
+            }
+            int price = _itemBuy.id == ItemID.Bouteille ? 98 : 410;
+            client.DisplaySubtitle($"Vous commencez à vendre vos ~r~{_itemBuy.name}(s)", 5000);
+
+            WorkingPlayers.TryAdd(client.Id, client);
+
+            MenuManager.CloseMenu(client);
+            int itemcount = player.CountItem(_itemBuy);
+
+
+            Utils.Utils.Delay(Selling_Time * itemcount, () =>
+            {
+                if (!client.Exists)
+                    return;
+
+                if (player.DeleteAllItem(_itemBuy.id, itemcount))
+                {
+                    double gettaxe = Economy.Economy.CalculPriceTaxe((price * itemcount), GameMode.Instance.Economy.Taxe_Exportation);
+                    player.AddMoney((price * itemcount) - gettaxe);
+                    GameMode.Instance.Economy.CaissePublique += gettaxe;
+                    client.DisplaySubtitle($"~r~{itemcount} ~w~{_itemBuy.name}(s) $~r~{(price * itemcount) - gettaxe} ~w~taxe:$~r~{gettaxe}.", 15000);
+                }
+                else
+                    client.SendNotificationError("Inconnu.");
+
+
+                if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
+                    Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Sable.cs)");
+
+                player.IsOnProgress = false;
+                player.UpdateFull();
+            });
         }
     }
 }

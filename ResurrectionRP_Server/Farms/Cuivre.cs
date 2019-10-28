@@ -59,7 +59,7 @@ namespace ResurrectionRP_Server.Farms
                 ProcessPoints.Add(new InteractionPoint(this, position, -2.3f,  Inventory.Inventory.ItemByID(ItemID.Marteau), InteractionPointTypes.Process, "fondre", 0.0f))
             );
             
-            Selling_PosRot = new Location(new Vector3(605.719f, -3073.165f, 8.069f), new Vector3(0, 0, -11.52882f));
+            Selling_PosRot = new Location(new Vector3(605.719f, -3073.165f, 6.069f), new Vector3(0, 0, -11.52882f));
             Selling_PedHash = AltV.Net.Enums.PedModel.Cntrybar01SMM;
 
             BlipColor = Entities.Blips.BlipColor.Complexion;
@@ -192,7 +192,7 @@ namespace ResurrectionRP_Server.Farms
                 Tool _item = (Tool)(player.OutfitInventory.HasItemEquip(ItemID.Marteau)?.Item);
                 if (player.BagInventory.CountItem(ItemID.CuivreFondu) < _item.MiningRate && player.PocketInventory.CountItem(ItemID.CuivreFondu) < _item.MiningRate)
                 {
-                    client.DisplayHelp("Vous n'avez plus de cuivre sur vous à fondre!");
+                    client.DisplayHelp("Vous n'avez plus de cuivre sur vous à forger!");
                     return;
                 }
 

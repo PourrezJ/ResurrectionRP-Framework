@@ -71,7 +71,9 @@ namespace ResurrectionRP_Server.Farms
 
             new List<Vector3>
             {
-                new Vector3(-617.969f, -1628.808f, 33.025f),
+                new Vector3(-617.969f, -1628.808f, 32.5f),
+                new Vector3(-610.651f, -1629.208f, 32.5f),
+                new Vector3(-614.732f, -1632.952f, 32.5f)
             }.ForEach((position) =>
                 DoubleProcessPoints.Add(new InteractionPoint(this, position, 90, InteractionPointTypes.DoubleProcess, "mettre en bouteille"))
             );
@@ -84,8 +86,6 @@ namespace ResurrectionRP_Server.Farms
             new List<Vector3>
             {
                 new Vector3(-1137.303f, -1251.585f, 7.084f),
-                new Vector3(-610.651f, -1629.208f, 33.011f),
-                new Vector3(-614.732f, -1632.952f, 33.011f)
             }.ForEach((position) =>
 
                SellingPoints.Add(new InteractionPoint(this, position, 285, AltV.Net.Enums.PedModel.Beach03AMY, eligiblelist, InteractionPointTypes.Sell, "vendre"))

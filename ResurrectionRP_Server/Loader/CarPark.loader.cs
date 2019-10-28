@@ -15,11 +15,12 @@ namespace ResurrectionRP_Server.Loader
         public Models.Location Spawn1;
         public Models.Location Spawn2;
     }
+
     class CarParkLoader
     {
         private static string _basePath = $"parkings{Path.DirectorySeparatorChar}";
 
-        public static async Task LoadAllCarPark()
+        public static async Task LoadAllCarParks()
         {
             Alt.Server.LogColored("~w~----- ~b~ Parkings ~w~| Loading all parking ... ------");
 

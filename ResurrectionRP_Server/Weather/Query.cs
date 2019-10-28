@@ -42,21 +42,29 @@ namespace OpenWeatherAPI
         public Query(string apiKey, string queryStr)
         {
             JObject jsonData = JObject.Parse(new System.Net.WebClient().DownloadString(string.Format("http://api.openweathermap.org/data/2.5/weather?appid={0}&q={1}", apiKey, queryStr)));
+
             if (jsonData.SelectToken("cod").ToString() == "200")
             {
                 validRequest = true;
                 coord = new Coord(jsonData.SelectToken("coord"));
+
                 foreach (JToken weather in jsonData.SelectToken("weather"))
                     weathers.Add(new Weather(weather));
+
                 baseStr = jsonData.SelectToken("base").ToString();
                 main = new Main(jsonData.SelectToken("main"));
+
                 if (jsonData.SelectToken("visibility") != null)
                     visibility = double.Parse(jsonData.SelectToken("visibility").ToString());
+
                 wind = new Wind(jsonData.SelectToken("wind"));
+
                 if (jsonData.SelectToken("raid") != null)
                     rain = new Rain(jsonData.SelectToken("rain"));
+
                 if (jsonData.SelectToken("snow") != null)
                     snow = new Snow(jsonData.SelectToken("snow"));
+
                 clouds = new Clouds(jsonData.SelectToken("clouds"));
                 sys = new Sys(jsonData.SelectToken("sys"));
                 id = int.Parse(jsonData.SelectToken("id").ToString());
@@ -64,9 +72,7 @@ namespace OpenWeatherAPI
                 cod = int.Parse(jsonData.SelectToken("cod").ToString());
             }
             else
-            {
                 validRequest = false;
-            }
         }
     }
 }

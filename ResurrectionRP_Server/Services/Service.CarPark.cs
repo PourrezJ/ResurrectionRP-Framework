@@ -1,14 +1,13 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Entities.Vehicles;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using AltV.Net;
-using AltV.Net.Elements.Entities;
-using ResurrectionRP_Server.Models;
-using VehicleHandler = ResurrectionRP_Server.Entities.Vehicles.VehicleHandler;
 
 namespace ResurrectionRP_Server.Services
 {
@@ -35,16 +34,16 @@ namespace ResurrectionRP_Server.Services
                 Parking.OnVehicleStored += OnVehicleStored;
                 Parking.OnVehicleOut += OnVehicleOut;
 
-                List<ParkedCar> _poundList = Parking.ListVehicleStored.FindAll(veh => DateTime.Now > veh.ParkTime.AddMonths(1));
+                List<ParkedCar> poundList = Parking.ListVehicleStored.FindAll(veh => DateTime.Now > veh.ParkTime.AddMonths(1));
 
-                foreach(ParkedCar ve in _poundList.ToList())
+                foreach(ParkedCar ve in poundList)
                 {
                     ve.ParkTime = DateTime.Now;
-                    Parking.RemoveVehicle(Entities.Vehicles.VehiclesManager.GetVehicleHandler(ve.Plate));
-                    await Pound.AddVehicleInPoundAsync(Entities.Vehicles.VehiclesManager.GetVehicleHandler(ve.Plate));
+                    Parking.RemoveVehicle(VehiclesManager.GetVehicleHandler(ve.Plate));
+                    await Pound.AddVehicleInPoundAsync(VehiclesManager.GetVehicleHandler(ve.Plate));
                 }
 
-                if (_poundList.Count != 0)
+                if (poundList.Count != 0)
                     await Update();
             }
         }
@@ -100,12 +99,12 @@ namespace ResurrectionRP_Server.Services
 
         public static async Task<CarPark> CreateCarPark(int ID, string name, Vector3 borne, Models.Location spawn1, Models.Location spawn2)
         {
-            var _carpark = new CarPark();
-            _carpark.ID = ID;
-            _carpark.Parking = new Models.Parking(borne, spawn1, spawn2, name, maxVehicles: 2100, hidden: false);
-            await _carpark.Insert();
-            await _carpark.Init();
-            return _carpark;
+            CarPark carPark = new CarPark();
+            carPark.ID = ID;
+            carPark.Parking = new Models.Parking(borne, spawn1, spawn2, name, maxVehicles: 2100, hidden: false);
+            await carPark.Insert();
+            await carPark.Init();
+            return carPark;
         }
         #endregion
     }

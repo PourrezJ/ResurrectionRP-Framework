@@ -38,7 +38,7 @@ namespace ResurrectionRP_Server.Farms
             Harvest_Position.Add(new Vector3(-472.789f, 2089.373f, 120.067f));
             Harvest_Position.Add(new Vector3(-424.038f, 2064.779f, 120.047f));
             Harvest_Position.ForEach((position) =>
-                FarmPoints.Add(new InteractionPoint(this, position, 0, Inventory.Inventory.ItemByID(ItemID.Pioche), InteractionPointTypes.Farm, "miner", 0))
+                FarmPoints.Add(new InteractionPoint(this, position, 0, Inventory.Inventory.ItemByID(ItemID.Pioche), InteractionPointTypes.Farm, "miner"))
             );
             Harvest_Range = 100f;
             

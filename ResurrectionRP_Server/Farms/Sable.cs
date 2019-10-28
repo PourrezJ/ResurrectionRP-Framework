@@ -5,6 +5,7 @@ using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -22,7 +23,6 @@ namespace ResurrectionRP_Server.Farms
             Selling_Name = "Revendeur de bouteilles";
 
             Harvest_BlipSprite = 85;
-            Selling_BlipSprite = 500;
 
             Harvest_BlipPosition = new Vector3(-788.2813f, 5868.633f, 6.380f);
             Harvest_Position.Add(new Vector3(-756.78f, 5876.49f, 8.8f));
@@ -32,7 +32,7 @@ namespace ResurrectionRP_Server.Farms
             Harvest_Position.Add(new Vector3(-772.354f, 5867.396f, 8.084f));
             Harvest_Position.Add(new Vector3(-751.615f, 5868.162f, 9.774f));
             Harvest_Position.ForEach((position) =>
-                FarmPoints.Add(new InteractionPoint(this, position, 0, Inventory.Inventory.ItemByID(ItemID.Pelle), InteractionPointTypes.Farm, "creuser", 0))
+                FarmPoints.Add(new InteractionPoint(this, position, 0, Inventory.Inventory.ItemByID(ItemID.Pelle), InteractionPointTypes.Farm, "creuser"))
             );
 
 
@@ -41,7 +41,7 @@ namespace ResurrectionRP_Server.Farms
                 new Vector3(2942.045f, 4626.106f, 48.721f),
                 new Vector3(2937.887f, 4620.325f, 48.721f)
             }.ForEach((position) =>
-                ProcessPoints.Add(new InteractionPoint(this, position, -2.3f, Inventory.Inventory.ItemByID(ItemID.Soufflet), InteractionPointTypes.Process, "souffler", 0.0f))
+                ProcessPoints.Add(new InteractionPoint(this, position, -2.3f, Inventory.Inventory.ItemByID(ItemID.Soufflet), InteractionPointTypes.Process, "souffler"))
             );
 
             new List<Vector3>
@@ -50,22 +50,31 @@ namespace ResurrectionRP_Server.Farms
                 new Vector3(358.274f, 3409.92f, 36.404f),
                 new Vector3(363.619f, 3403.789f, 36.404f),
             }.ForEach((position) =>
-                DoubleProcessPoints.Add(new InteractionPoint(this, position, 90, InteractionPointTypes.DoubleProcess, "stériliser", 0.0f))
+                DoubleProcessPoints.Add(new InteractionPoint(this, position, 90, InteractionPointTypes.DoubleProcess, "stériliser"))
             );
 
+            ConcurrentDictionary<double, Item> eligiblelist = new ConcurrentDictionary<double, Item>();
+            eligiblelist.TryAdd(98, Inventory.Inventory.ItemByID(ItemID.Bouteille));
+            eligiblelist.TryAdd(410, Inventory.Inventory.ItemByID(ItemID.BouteilleTraite));
 
-            Selling_PosRot = new Location(new Vector3(498.319f, -627.77f, 24.751f), new Vector3(0, 0, 215.7791f));
-            Selling_PedHash = AltV.Net.Enums.PedModel.BoatStaff01F;
+            new List<Vector3>
+            {
+                new Vector3(498.319f, -627.77f, 24.751f)
+            }.ForEach((position) =>
+
+               SellingPoints.Add(new InteractionPoint(this, position, 215, AltV.Net.Enums.PedModel.BoatStaff01F, eligiblelist, InteractionPointTypes.Sell, "vendre"))
+           );
+
 
             Harvest_Range = 50f;
 
             BlipColor = Entities.Blips.BlipColor.Yellow;
             Process_Blip = BlipsManager.CreateBlip(Process_Name, new Vector3(2942.045f, 4626.106f, 48.721f), BlipColor, 499);
             DoubleProcess_Blip = BlipsManager.CreateBlip(DoubleProcess_Name, new Vector3(360.063f, 3405.598f, 36.404f), BlipColor, 499);
+            Selling_Blip = BlipsManager.CreateBlip(Selling_Name, new Vector3(498.319f, -627.77f, 24.751f), BlipColor, 500);
 
             ItemIDBrute = ItemID.Sable;
             ItemIDProcess = ItemID.Bouteille;
-            ItemPrice = 98;
 
             Process_QuantityNeeded = 2;
 
@@ -225,54 +234,5 @@ namespace ResurrectionRP_Server.Farms
 
         }
 
-        public override void StartSelling(IPlayer client)
-        {
-            if (client == null || !client.Exists || client.IsInVehicle)
-                return;
-
-            PlayerHandler player = client.GetPlayerHandler();
-
-            if (player == null || player.IsOnProgress)
-                return;
-
-            Item _itemBuy = player.HasItemID(ItemID.Bouteille) ? Inventory.Inventory.ItemByID(ItemID.Bouteille) : Inventory.Inventory.ItemByID(ItemID.BouteilleTraite);
-
-            if (!player.HasItemID(ItemID.BouteilleTraite) && !player.HasItemID(ItemID.Bouteille))
-            {
-                client.DisplaySubtitle("~r~ERREUR ~s~Vous n'avez rien à vendre", 5000);
-                return;
-            }
-            int price = _itemBuy.id == ItemID.Bouteille ? 98 : 410;
-            client.DisplaySubtitle($"Vous commencez à vendre vos ~r~{_itemBuy.name}(s)", 5000);
-
-            WorkingPlayers.TryAdd(client.Id, client);
-
-            MenuManager.CloseMenu(client);
-            int itemcount = player.CountItem(_itemBuy);
-
-
-            Utils.Utils.Delay(Selling_Time * itemcount, () =>
-            {
-                if (!client.Exists)
-                    return;
-
-                if (player.DeleteAllItem(_itemBuy.id, itemcount))
-                {
-                    double gettaxe = Economy.Economy.CalculPriceTaxe((price * itemcount), GameMode.Instance.Economy.Taxe_Exportation);
-                    player.AddMoney((price * itemcount) - gettaxe);
-                    GameMode.Instance.Economy.CaissePublique += gettaxe;
-                    client.DisplaySubtitle($"~r~{itemcount} ~w~{_itemBuy.name}(s) $~r~{(price * itemcount) - gettaxe} ~w~taxe:$~r~{gettaxe}.", 15000);
-                }
-                else
-                    client.SendNotificationError("Inconnu.");
-
-
-                if (!WorkingPlayers.TryRemove(client.Id, out IPlayer voided))
-                    Alt.Server.LogError("Can't remove player " + client.GetPlayerHandler().PID + " WTF (Sable.cs)");
-
-                player.IsOnProgress = false;
-                player.UpdateFull();
-            });
-        }
     }
 }

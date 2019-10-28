@@ -136,7 +136,7 @@ namespace ResurrectionRP_Server.Farms
                 client.DisplayHelp("Vous ne pouvez être ici avec un véhicule!", 5000);
                 return;
             }
-            else if (_farm.FarmTimers.ContainsKey(client) || (_farm).WorkingPlayers.ContainsKey(client.Id) || _farm.DoubleProcessTimers.ContainsKey(client))
+            else if (_farm.FarmTimers.ContainsKey(client) || _farm.DoubleProcessTimers.ContainsKey(client))
                 return;
 
             if (client.GetPlayerHandler().IsOnProgress)
@@ -194,8 +194,8 @@ namespace ResurrectionRP_Server.Farms
                 foreach (Item item in ToolNeeded)
                 {
                     PlayerHandler ph = client.GetPlayerHandler();
-                    Inventory.Inventory inventory = ph.HasItemInAnyInventory(_item.id);
-                    ItemStack itemStack = ph.OutfitInventory.HasItemEquip(_item.id);
+                    Inventory.Inventory inventory = ph.HasItemInAnyInventory(item.id);
+                    ItemStack itemStack = ph.OutfitInventory.HasItemEquip(item.id);
 
                     if (itemStack != null)
                     {
@@ -213,7 +213,7 @@ namespace ResurrectionRP_Server.Farms
 
                     if (inventory != null && itemStack == null)
                         client.DisplayHelp("Vous devez équiper votre outil pour commencer!", 5000);
-                    else if (itemStack == null && ToolNeeded.IndexOf(_item) == ToolNeeded.Count - 1)
+                    else if (itemStack == null && ToolNeeded.IndexOf(item) == ToolNeeded.Count - 1)
                     {
                         client.DisplayHelp($"Vous devez avoir un(e) {ToolNeeded[0].name} pour {InteractionName} !", 10000);
                         return;
@@ -235,11 +235,11 @@ namespace ResurrectionRP_Server.Farms
             switch (Type)
             {
                 case InteractionPointTypes.Farm:
-                    Alt.Server.LogInfo("InteractionPoint | " + _client.PID + " a commence a farm " + Farm.Harvest_Name);
+                    Alt.Server.LogInfo("InteractionPoint | " + ph.PID + " a commence a farm " + _farm.Harvest_Name);
                     if (item == null)
-                        Farm?.StartFarming(client);
+                        _farm?.StartFarming(client);
                     else
-                        Farm?.StartFarmingNew(client, item, Anim_dict, Anim_anim, Scenario);
+                        _farm?.StartFarmingNew(client, item, Anim_dict, Anim_anim, Scenario);
                     return;
                 case InteractionPointTypes.DoubleProcess:
                     Alt.Server.LogInfo("InteractionPoint | " + ph.PID + " a commence a double process " + _farm.DoubleProcess_Name);

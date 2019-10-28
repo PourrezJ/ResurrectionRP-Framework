@@ -7,34 +7,22 @@ namespace VehicleInfoLoader.Data
     {
         public IEnumerable<int> ModTypes
         {
-            get
-            {
-                return ModList?.Keys ?? Enumerable.Empty<int>();
-            }
+            get { return ModList?.Keys ?? Enumerable.Empty<int>(); }
         }
 
         public IEnumerable<int> LiveryIds
         {
-            get
-            {
-                return HasLiveries() == false ? Enumerable.Empty<int>() : LiveryList.GetLiveryIds();
-            }
+            get { return HasLiveries() == false ? Enumerable.Empty<int>() : LiveryList.GetLiveryIds(); }
         }
 
         public IEnumerable<Livery> Liveries
         {
-            get
-            {
-                return HasLiveries() == false ? Enumerable.Empty<Livery>() : LiveryList.GetLiveries();
-            }
+            get { return HasLiveries() == false ? Enumerable.Empty<Livery>() : LiveryList.GetLiveries(); }
         }
 
         public int LiveryCount
         {
-            get
-            {
-                return LiveryList == null ? 0 : LiveryList.Amount;
-            }
+            get { return LiveryList == null ? 0 : LiveryList.Amount; }
         }
 
         public bool HasLiveries()
@@ -60,9 +48,7 @@ namespace VehicleInfoLoader.Data
         public VehicleMod GetMod(int type, int mod)
         {
             if (HasMod(type, mod) == false)
-            {
                 return null;
-            }
 
             return GetModType(type).Mod(mod);
         }
@@ -70,9 +56,7 @@ namespace VehicleInfoLoader.Data
         public VehicleModType GetModType(int type)
         {
             if (HasModType(type) == false)
-            {
                 return null;
-            }
 
             return ModList[type];
         }
@@ -80,23 +64,21 @@ namespace VehicleInfoLoader.Data
         public IEnumerable<int> GetModIds(int type)
         {
             var modType = GetModType(type);
+
             if (modType == null)
-            {
                 return Enumerable.Empty<int>();
-            }
 
             return modType.GetModIds();
         }
 
-        public IEnumerable<VehicleMod> Mods(int type)
+        public IReadOnlyDictionary<int, VehicleMod> Mods(int type)
         {
             var modType = GetModType(type);
-            if (modType == null)
-            {
-                return Enumerable.Empty<VehicleMod>();
-            }
 
-            return modType.GetMods();
+            if (modType == null)
+                return new Dictionary<int, VehicleMod>();
+
+            return modType.Mods();
         }
 
         public Dictionary<int, Dictionary<int, string>> ValidMods()
@@ -112,9 +94,7 @@ namespace VehicleInfoLoader.Data
         public Livery Livery(int id)
         {
             if (LiveryList == null)
-            {
                 return null;
-            }
 
             return LiveryList.GetLivery(id);
         }

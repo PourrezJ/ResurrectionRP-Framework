@@ -402,7 +402,7 @@ namespace ResurrectionRP_Server.Society.Societies
             menu.IndexChangeCallback = ModPreview;
             menu.Finalizer = Finalizer;
 
-            var mods = manifest.Mods(_modType);
+            var mods = manifest.Mods(_modType).OrderBy(m => m.Key).Select(m => m.Value);
             var perfdata = Data.GetPerformanceData(_modType).Value;
             vh.Mods.TryGetValue(_modType, out byte valueInstalled);
 
@@ -581,7 +581,7 @@ namespace ResurrectionRP_Server.Society.Societies
             menu.ItemSelectCallback = DesignChoiceCallback;
             menu.Finalizer = Finalizer;
 
-            IEnumerable<VehicleMod> mods = manifest.Mods(_modType);
+            var mods = manifest.Mods(_modType).OrderBy(m => m.Key).Select(m => m.Value);
             vh.Mods.TryGetValue(_modType, out byte valueInstalled);
 
             for (int i = 0; i < mods.Count(); i++)
@@ -893,12 +893,12 @@ namespace ResurrectionRP_Server.Society.Societies
                 }
 
                 vh.Mods.AddOrUpdate(_modType, selected, (key, oldvalue) => selected);
-
-                if (_modType != 69)
+                
+                if (_modType == 69)
                     vh.WindowTint = Utils.Utils.GetWindowTint(selected);
                 else
                     VehicleBench.SetMod(_modType, selected);
-
+                    
                 vh.UpdateInBackground(false);
                 string str = $"Vous avez installé {modName}";
 

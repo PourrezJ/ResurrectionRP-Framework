@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Numerics;
-using System.Threading.Tasks;
 using VehicleInfoLoader.Data;
 
 public enum GarageType
@@ -162,8 +161,6 @@ namespace ResurrectionRP_Server.Society.Societies
         private int _red;
         private int _green;
         private int _blue;
-
-        protected Door GarageDoor;
         #endregion
 
         #region Protected properties

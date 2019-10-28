@@ -13,18 +13,15 @@ namespace ResurrectionRP_Server.Society.Societies
 {
     public class BlackStreetNation : Society
     {
+        #region Constructor
         public BlackStreetNation(string societyName, Vector3 servicePos, uint blipSprite, int blipColor, string owner = null, Inventory.Inventory inventory = null, Parking parking = null) : base(societyName, servicePos, blipSprite, blipColor, owner, inventory, parking)
         {
         }
+        #endregion
 
-        public Door PorteDevant1 { get; set; }
-        public Door PorteDevant2 { get; set; }
-
+        #region Init
         public override void Init()
         {
-            PorteDevant1 = Door.CreateDoor(3478499199, new Vector3(-1387.809f, -586.5994f, 30.21479f), true);
-            PorteDevant2 = Door.CreateDoor(2182616413, new Vector3(-1388.825f, -587.3669f, 30.2216f), true);
-
             List<TeleportEtage> etages = new List<TeleportEtage>()
             {
                 new TeleportEtage() { Name = "Bar", Location = new Location(new Vector3(-1385.479f, -606.451f, 30.31957f), new Vector3(0, 0, 130.858f))},
@@ -33,39 +30,16 @@ namespace ResurrectionRP_Server.Society.Societies
 
             Teleport.Teleport.CreateTeleport(new Location(new Vector3(-1386.159f, -627.3551f, 30.81957f), new Vector3(0, 0, 309.1539f)), etages, new Vector3(1, 1, 0.2f), menutitle: "Porte");
 
-            PorteDevant1.Interact = OpenDoor;
-            PorteDevant2.Interact = OpenDoor;
+            Doors = new List<Door>()
+            {
+                Door.CreateDoor(3478499199, new Vector3(-1387.809f, -586.5994f, 30.21479f), true),
+                Door.CreateDoor(2182616413, new Vector3(-1388.825f, -587.3669f, 30.2216f), true)
+            };
 
-            ServicePos = new Vector3(-1390.743f, -600.2302f, 30.31958f);
+            foreach (Door door in Doors)
+                door.Interact = OpenDoor;
 
             base.Init();
-        }
-
-        #region Doors
-        private void OpenDoor(IPlayer client, Door door)
-        {
-            if (this.IsEmployee(client) || Owner == client.GetSocialClub())
-            {
-                XMenu xmenu = new XMenu("ID_Door");
-                xmenu.SetData("Door", door);
-
-                XMenuItem item = new XMenuItem($"{((door.Locked) ? "Ouvrir" : "Fermer")} la porte", "", icon: (door.Locked) ? XMenuItemIcons.DOOR_CLOSED_SOLID : XMenuItemIcons.DOOR_OPEN_SOLID);
-                item.OnMenuItemCallback = OnDoorCall;
-                xmenu.Add(item);
-
-                xmenu.OpenXMenu(client);
-            }
-        }
-
-        private static void OnDoorCall(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
-        {
-            Door door = menu.GetData("Door");
-            if (door != null)
-            {
-                door.SetDoorLockState(!door.Locked);
-            }
-
-            XMenuManager.XMenuManager.CloseMenu(client);
         }
         #endregion
     }

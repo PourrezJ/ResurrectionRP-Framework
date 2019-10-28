@@ -1,10 +1,10 @@
-﻿using AltV.Net;
-using AltV.Net.Elements.Entities;
+﻿using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Colshape;
+using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Models;
@@ -12,7 +12,9 @@ using ResurrectionRP_Server.Society.Societies;
 using ResurrectionRP_Server.Society.Societies.Bennys;
 using ResurrectionRP_Server.Society.Societies.WildCustom;
 using ResurrectionRP_Server.Society.Societies.WhiteWereWolf;
-using ResurrectionRP_Server.Entities;
+using ResurrectionRP_Server.Utils;
+using ResurrectionRP_Server.Utils.Enums;
+using ResurrectionRP_Server.XMenuManager;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
@@ -45,22 +47,34 @@ namespace ResurrectionRP_Server.Society
         public ConcurrentDictionary<string, string> InService = new ConcurrentDictionary<string, string>();
 
         public string SocietyName { get; set; }
+
         public Vector3 ServicePos { get; set; }
+
         public bool Resell { get; private set; }
+
         public int ResellPrice { get; private set; } = 150000;
+
         public uint BlipSprite { get; private set; }
+
         public string Owner { get; private set; } // Social Club du proprio
+
         public int BlipColor { get; private set; }
+
         public int MaxEmployee { get; private set; } = 15;
+
         public Inventory.Inventory Inventory { get; private set; } = null;
+
         public Parking Parking { get; set; }
+
+        public BankAccount BankAccount { get; set; }
+
+        protected List<Door> Doors { get; set; }
 
         [BsonIgnore]
         public IColshape ServiceColshape;
+
         [BsonIgnore]
         public Marker Marker;
-
-        public BankAccount BankAccount;
         #endregion
 
         #region Constructor
@@ -162,6 +176,38 @@ namespace ResurrectionRP_Server.Society
             vehicle.ParkingName = SocietyName;
             UpdateInBackground();
             return Task.CompletedTask;
+        }
+        #endregion
+
+        #region Doors
+        protected void OpenDoor(IPlayer client, Door door)
+        {
+            PlayerHandler ph = client.GetPlayerHandler();
+
+            if (ph == null)
+                return;
+
+            if (IsEmployee(client) || ph.StaffRank > AdminRank.Moderator)
+            {
+                XMenu xmenu = new XMenu("ID_Door");
+                xmenu.SetData("Door", door);
+
+                XMenuItem item = new XMenuItem($"{(door.Locked ? "Ouvrir" : "Fermer")} la porte", "", icon: door.Locked ? XMenuItemIcons.DOOR_CLOSED_SOLID : XMenuItemIcons.DOOR_OPEN_SOLID);
+                item.OnMenuItemCallback = OnDoorCall;
+                xmenu.Add(item);
+
+                xmenu.OpenXMenu(client);
+            }
+        }
+
+        private static void OnDoorCall(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        {
+            Door door = menu.GetData("Door");
+
+            if (door != null)
+                door.SetDoorLockState(!door.Locked);
+
+            XMenuManager.XMenuManager.CloseMenu(client);
         }
         #endregion
 

@@ -96,7 +96,6 @@ namespace ResurrectionRP_Server.Models.InventoryData
         Tacos = 89,
         RagoutRenard = 90,
         BrochetteEcureuil = 91,
-        Rhum = 92,
         Mirabelle = 93,
         CombatPistol = 94,
         Colt1911 = 95,
@@ -153,14 +152,27 @@ namespace ResurrectionRP_Server.Models.InventoryData
         Bague,
         LockPick,
         Serflex,
+
         MarteauPiqueur,
         Marteau,
+
         CuivreFondu,
         DetecteurMetaux,
         LingotOr,
         SacArgent,
         Pelle,
         Seau,
-        Soufflet
+        Soufflet,
+        OutilCouteau,
+        OutilMachette,
+
+        Melasse,
+        MelasseApple,
+        MelasseRaisin,
+
+        Rhum,
+        RhumApple,
+        RhumRaisin
+
     }
 }

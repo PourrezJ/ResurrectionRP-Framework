@@ -225,6 +225,24 @@ namespace ResurrectionRP_Server
                 player.GetPlayerHandler()?.UpdateFull();
                 player.Vehicle?.GetVehicleHandler()?.UpdateInBackground();
             });
+            Chat.RegisterCmd("anim", (IPlayer player, string[] args) =>
+            {
+                if (player.GetPlayerHandler()?.StaffRank <= 0)
+                    return;
+
+
+                if (args == null || args.Length < 2)
+                {
+                    player.SendNotificationError("Syntaxe : /anim Dict Anim");
+                    return;
+                }
+                else
+                {
+                    
+                    player.PlayAnimation(args[0], args[1], 8, -1, 5000, (Utils.Enums.AnimationFlags)1);
+                }
+
+            });
 
             Chat.RegisterCmd("tpto", (IPlayer player, string[] args) =>
             {

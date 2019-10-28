@@ -13,6 +13,7 @@ namespace ResurrectionRP_Server.Utils
 {
     public class Door
     {
+        #region Fields and properties
         public static List<Door> DoorList = new List<Door>();
 
         public int ID;
@@ -27,8 +28,9 @@ namespace ResurrectionRP_Server.Utils
 
         [JsonIgnore]
         public InteractDelegate Interact { get; set; }
-        
+        #endregion
 
+        #region Methods
         public static Door CreateDoor(uint hash, Vector3 position, bool locked = false, bool hide = false)
         {
             var door = new Door()
@@ -39,6 +41,7 @@ namespace ResurrectionRP_Server.Utils
                 Locked = locked,
                 Hide = hide
             };
+
             door.TextLabel = Streamer.Streamer.AddEntityTextLabel($"Porte: {((door.Locked) ? "Verrouillée" : "Deverrouillée")}", door.Position, 1, drawDistance:2);
             DoorList.Add(door);
             door.SetDoorLockState(locked);
@@ -49,7 +52,6 @@ namespace ResurrectionRP_Server.Utils
         {
             Locked = lockStatut;
             Streamer.Streamer.UpdateEntityTextLabel(this.TextLabel.id, $"Porte: {((Locked) ? "Verrouillée" : "Deverrouillée")}");
-
             Alt.EmitAllClients("SetDoorLockState", ID, Locked);
         }
 
@@ -57,5 +59,6 @@ namespace ResurrectionRP_Server.Utils
         {
             client.Emit("SetAllDoorStatut", JsonConvert.SerializeObject(DoorList));
         }
+        #endregion
     }
 }

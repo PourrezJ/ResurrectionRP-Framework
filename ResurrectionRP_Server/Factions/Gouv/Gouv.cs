@@ -234,10 +234,9 @@ namespace ResurrectionRP_Server.Factions
         private static void OnDoorCall(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             Door door = menu.GetData("Door");
+
             if (door != null)
-            {
                 door.SetDoorLockState(!door.Locked);
-            }
 
             XMenuManager.XMenuManager.CloseMenu(client);
         }

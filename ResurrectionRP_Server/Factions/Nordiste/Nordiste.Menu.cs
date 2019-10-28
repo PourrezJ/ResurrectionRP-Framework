@@ -38,10 +38,9 @@ namespace ResurrectionRP_Server.Factions
                 return;
 
             Door door = menu.GetData("Door");
+
             if (door != null)
-            {
                 door.SetDoorLockState(!door.Locked);
-            }
 
             XMenuManager.XMenuManager.CloseMenu(client);
         }

@@ -22,7 +22,7 @@ export class Survival {
         Survival.Thirst = thirst;
 
         this._RefreshHunger = Date.now() + 1000 * 60 * 3;
-        this._RefreshThirst = Date.now() + 1000 * 60 * 3;
+        this._RefreshThirst = Date.now() + 1000 * 60 * 3 * 2;
 
         alt.on("UpdateHungerThirst", this.UpdateHungerThirst);
         alt.onServer("UpdateHungerThirst", this.UpdateHungerThirst);

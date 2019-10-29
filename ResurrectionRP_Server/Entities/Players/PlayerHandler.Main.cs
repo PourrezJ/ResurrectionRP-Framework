@@ -87,8 +87,8 @@ namespace ResurrectionRP_Server.Entities.Players
         public OutfitInventory OutfitInventory { get; set; } = new Inventory.OutfitInventory();
         public double Money { get; private set; }
         public Bank.BankAccount BankAccount { get; set; }
-        public int Hunger { get; set; }
-        public int Thirst { get; set; }
+        public int Hunger { get; set; } = 100;
+        public int Thirst { get; set; } = 100;
 
         public double Alcohol = 0;
         public bool Jailed { get; private set; } = false;

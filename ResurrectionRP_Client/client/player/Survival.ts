@@ -21,8 +21,8 @@ export class Survival {
         Survival.Hunger = hunger;
         Survival.Thirst = thirst;
 
-        this._RefreshHunger = Date.now() + 1000 * 60 * 3;
-        this._RefreshThirst = Date.now() + 1000 * 60 * 3 * 2;
+        this._RefreshHunger = Date.now() + (1000 * 60 * 3) ;
+        this._RefreshThirst = Date.now() +( 1000 * 60 * 3 /2 ) ;
 
         alt.on("UpdateHungerThirst", this.UpdateHungerThirst);
         alt.onServer("UpdateHungerThirst", this.UpdateHungerThirst);
@@ -40,7 +40,7 @@ export class Survival {
                     this._RefreshHunger = Date.now();
 
                 } else {
-                    this._RefreshHunger = Date.now() + 1000 * 60 * 3;
+                    this._RefreshHunger = Date.now() + 1000 * 60 * 3 ;
                 }
                 alt.emitServer("UpdateHungerThirst", Survival.Hunger, Survival.Thirst);
             }
@@ -57,7 +57,7 @@ export class Survival {
                     this._RefreshThirst = Date.now();
 
                 } else {
-                    this._RefreshThirst = Date.now() + 1000 * 60 * 3;
+                    this._RefreshThirst = Date.now() + 1000 * 60 * 3 / 2 ;
                 }
                 alt.emitServer("UpdateHungerThirst", Survival.Hunger, Survival.Thirst);
             }

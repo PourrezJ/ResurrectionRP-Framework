@@ -37,12 +37,11 @@ export class Survival {
                         alt.emit("Display_Help", "Vous êtes mort de faim!", 10000);
                         Survival.Hunger = 100;
                     }
-                    this._RefreshHunger = Date.now();
+                    this._RefreshHunger = Date.now() + 1000 * 60 * 3;
 
                 } else {
                     this._RefreshHunger = Date.now() + 1000 * 60 * 3 ;
                 }
-                alt.emitServer("UpdateHungerThirst", Survival.Hunger, Survival.Thirst);
             }
 
             if (this.RefreshThirst < Date.now()) {
@@ -54,7 +53,7 @@ export class Survival {
                         alt.emit("Display_Help", "Vous êtes mort de faim!", 10000);
                         Survival.Thirst = 100;
                     }
-                    this._RefreshThirst = Date.now();
+                    this._RefreshThirst = Date.now() + 1000 * 60 * 3 / 2;
 
                 } else {
                     this._RefreshThirst = Date.now() + 1000 * 60 * 3 / 2 ;

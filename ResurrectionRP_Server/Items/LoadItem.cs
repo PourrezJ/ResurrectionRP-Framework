@@ -49,9 +49,8 @@ namespace ResurrectionRP_Server.Items
                     new Eat(ItemID.Grappa, "Grappa", "Je suis rital et je le reste ... ", 1 , true, true, true, drink:20),
                     new Eat(ItemID.Apple , "Pomme", "Une pomme verte et juteuse, oh y'a un trou dedans", 2 , true, true, true, food:5, icon:"apple"),
                     new Eat(ItemID.AppleJuice , "Jus de pomme", "mi pisse, mi pomme", 1 , true, true, true, food:5, drink:5),
-                    new Eat(ItemID.GrapeJuice , "Jus de raisin", "mi pisse, mi raisin", 1 , true, true, true, food:5, drink:5),
                     new Eat(ItemID.Pain , "Pain", "Du pain rassis", 1 , true, true, true, food:5),
-                    new Eat(ItemID.Raisin, "Raisin", "Du raisin vert comestible", 0.005, true, true,true, food: 2, drink:2, icon:"grapes"),
+                    new Eat(ItemID.Raisin, "Raisin", "Du raisin vert comestible", 2, true, true,true, food: 2, drink:2, icon:"grapes"),
 
                     // new Eat(ItemID.Nouille, "Des Nouilles Chinoises", "Une boite de nouille", 1 , true, true, true, food:15, isDockable:true, itemPrice:11.2),
 
@@ -185,6 +184,10 @@ namespace ResurrectionRP_Server.Items
                     new Unusable(ItemID.MelasseApple, "Mélasse arrangé pomme", "Est utilisé pour faire du Rhum", 1, isStackable: true),
                     new Unusable(ItemID.MelasseRaisin, "Mélasse arrangé raisin", "Est utilisé pour faire du Rhum", 1, isStackable: true),
 
+                    new Unusable(ItemID.Filet, "Filet", "Permet de ramasser divers choses", 2, isDockable: true, isStackable: false, itemPrice: 150),
+
+                    new Eat(ItemID.GrapeJuice , "Jus de raisin", "mi pisse, mi raisin", 1 , true, true, true, food:5, drink:5),
+                    new Unusable(ItemID.RaisinLiquide, "Raisin liquéfié", "Bah c'est du liquide, imbuvable", 1),
                 #endregion
                 #endregion
             };

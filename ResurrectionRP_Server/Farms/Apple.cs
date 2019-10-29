@@ -1,6 +1,11 @@
-﻿using AltV.Net.Enums;
+﻿using AltV.Net.Elements.Entities;
+using AltV.Net.Enums;
+using ResurrectionRP_Server.Entities.Blips;
+using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace ResurrectionRP_Server.Farms
@@ -9,12 +14,8 @@ namespace ResurrectionRP_Server.Farms
     {
         public Apple()
         {
-            Harvest_Name = "Champ de pommes";
-            Selling_Name = "Étalage maraîcher";
 
-            Harvest_BlipSprite = 85;
-            Selling_BlipSprite = 500;
-
+/*
             Harvest_BlipPosition = new Vector3(349.9534f, 6517.268f, 28.60002f);
             Harvest_Range = 3;
             Harvest_Position.Add(new Vector3(377.5282f, 6506.09f, 27.9903f));
@@ -52,7 +53,93 @@ namespace ResurrectionRP_Server.Farms
             ItemIDBrute = ItemID.Apple;
             ItemPrice = 18;
 
-            Debug = true;
+            Debug = true;*/
+
+
+            NewFarm = true;
+            Harvest_Name = "Champ de pommes";
+            Selling_Name = "Etalage maraîcher";
+
+            Harvest_BlipSprite = 85;
+
+            Harvest_Time = 5000;
+            Harvest_BlipPosition = new Vector3(343.902f, 6512.63f, 28.961f);
+            Harvest_Position.Add(new Vector3(341.159f, 6506.343f, 28.752f));
+            Harvest_Position.Add(new Vector3(331.773f, 6506.49f, 28.49f));
+            Harvest_Position.Add(new Vector3(330.556f, 6517.06f, 28.972f));
+            Harvest_Position.Add(new Vector3(337.988f, 6517, 28.941f));
+            Harvest_Position.Add(new Vector3(346.106f, 6516.956f, 28.893f));
+            Harvest_Position.Add(new Vector3(354.81f, 6516.291f, 28.249f));
+            Harvest_Position.ForEach((position) =>
+                FarmPoints.Add(new InteractionPoint(this, position, 0, InteractionPointTypes.Farm, "ramasser des pommes"))
+            );
+            Harvest_Range = 100f;
+
+
+            ConcurrentDictionary<double, Item> eligiblelist = new ConcurrentDictionary<double, Item>();
+            eligiblelist.TryAdd(18, Inventory.Inventory.ItemByID(ItemID.Apple));
+
+            SellingPoints.Add(new InteractionPoint(this, new Vector3(-1043.343f, 5327.187f, 44.553f), -11.52f, AltV.Net.Enums.PedModel.ShopKeep01, eligiblelist, InteractionPointTypes.Sell, "vendre"));
+
+
+
+            /*            Selling_PosRot = new Location(new Vector3(605.719f, -3073.165f, 6.069f), new Vector3(0, 0, -11.52882f));
+                        Selling_PedHash = AltV.Net.Enums.PedModel.Cntrybar01SMM;*/
+
+            BlipColor = Entities.Blips.BlipColor.LightGreen;
+
+            Selling_Blip = BlipsManager.CreateBlip(Selling_Name, new Vector3(-1043.343f, 5327.187f, 44.553f), (byte)BlipColor, 500);
+
+            ItemIDProcess = ItemID.Apple;
+            ItemIDBrute = ItemID.Apple;
+            ItemPrice = 18;
+        }
+
+        public override void StartFarming(IPlayer client)
+        {
+
+            if (client == null || !client.Exists)
+                return;
+
+            PlayerHandler player = client.GetPlayerHandler();
+
+
+            if (player == null || player.IsOnProgress)
+                return;
+
+            Item endItem = Inventory.Inventory.ItemByID(ItemIDBrute);
+            Item tool = player.HasItemID(ItemID.Filet) ? Inventory.Inventory.ItemByID(ItemID.Filet) : null ;
+
+
+            if (player.InventoryIsFull(endItem.weight))
+            {
+                client.DisplayHelp("Votre inventaire est déjà plein.", 10000);
+                return;
+            }
+
+            client.DisplayHelp("Vous commencez à récolter...", Harvest_Time);
+
+            player.IsOnProgress = true;
+
+            client.PlayAnimation("amb@world_human_gardener_plant@female@base", "base_female", 8, -1, Harvest_Time, (Utils.Enums.AnimationFlags)1);
+
+            Utils.Utils.Delay( (int)Harvest_Time, () =>
+            {
+
+                if (!client.Exists)
+                    return;
+
+                if (player.AddItem(endItem, tool != null ? 3 : 1))
+                {
+                    client.DisplaySubtitle($"Vous avez récolté ~r~ {(tool != null ? 3 : 1)} {endItem.name}", 5000);
+                    client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour recommencer", 5000);
+                }
+                else
+
+                    client.DisplayHelp("Plus de place dans votre inventaire!");
+                player.IsOnProgress = false;
+
+            });
         }
     }
 }

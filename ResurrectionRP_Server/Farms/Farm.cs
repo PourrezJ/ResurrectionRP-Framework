@@ -311,28 +311,39 @@ namespace ResurrectionRP_Server.Farms
             }, Harvest_Time);
         }
 
-        public virtual void StartFarmingNew(IPlayer client, Item sentItem, string anim_dict = null, string anim_anim = null, string scenario = null)
+        public virtual void StartFarmingNew(IPlayer client, Item sentItem = null, string anim_dict = null, string anim_anim = null, string scenario = null)
         {
             if (client == null || !client.Exists)
                 return;
 
             PlayerHandler player = client.GetPlayerHandler();
-            Item endItem = Inventory.Inventory.ItemByID(ItemIDBrute);
-            Tool tool = sentItem as Tool;
+
+
             if (player == null || player.IsOnProgress)
                 return;
+
+            Item endItem = Inventory.Inventory.ItemByID(ItemIDBrute);
+            Tool tool = null;
+
+            if (sentItem != null)
+                tool = sentItem as Tool;
+
             if (player.InventoryIsFull(endItem.weight))
             {
                 client.DisplayHelp("Votre inventaire est déjà plein.", 10000);
                 return;
             }
 
-            if (tool == null)
-                return;
+            if (tool != null)
+            {
+                client.DisplayHelp($"Durabilité: {tool.Health - UsureOutil}\n{endItem.name} récoltées: {tool.MiningRate}\nVitesse: {tool.Speed}", 5000);
+                tool.Health -= UsureOutil;
+            }
+            else
+                client.DisplayHelp("Vous commencez à récolter...", Harvest_Time);
 
-            client.DisplayHelp($"Durabilité: {tool.Health - UsureOutil}\n{endItem.name} récoltées: {tool.MiningRate}\nVitesse: {tool.Speed}", 5000);
-            tool.Health -= UsureOutil;
             player.IsOnProgress = true;
+
             if (anim_anim != "" & anim_dict != "")
                 client.PlayAnimation(anim_dict, anim_anim, 8, -1, Harvest_Time, (Utils.Enums.AnimationFlags)1);
 
@@ -344,15 +355,15 @@ namespace ResurrectionRP_Server.Farms
                         client.TaskStartScenarioAtPosition(scenario, p.Position, p.Heading, Process_Time, false, false);
                 });
 
-            Utils.Utils.Delay((int)(Harvest_Time / tool.Speed), () =>
+            Utils.Utils.Delay((tool != null) ? (int)(Harvest_Time / tool.Speed) : (int)Harvest_Time , () =>
             {
 
                 if (!client.Exists)
                     return;
 
-                if (player.AddItem(endItem, tool.MiningRate))
+                if (player.AddItem(endItem, tool != null ? tool.MiningRate : 1))
                 {
-                    client.DisplaySubtitle($"Vous avez récolté ~r~ {tool.MiningRate} {endItem.name}", 5000);
+                    client.DisplaySubtitle($"Vous avez récolté ~r~ {(tool != null ? tool.MiningRate : 1 )} {endItem.name}", 5000);
                     client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour recommencer", 5000);
                 }
                 else

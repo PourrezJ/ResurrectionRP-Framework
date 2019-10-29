@@ -187,7 +187,7 @@ namespace ResurrectionRP_Server.Society
             if (ph == null)
                 return;
 
-            if (IsEmployee(client) || ph.StaffRank > AdminRank.Moderator)
+            if (IsEmployee(client) || ph.StaffRank >= AdminRank.Moderator)
             {
                 XMenu xmenu = new XMenu("ID_Door");
                 xmenu.SetData("Door", door);

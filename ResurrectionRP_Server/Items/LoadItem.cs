@@ -185,6 +185,8 @@ namespace ResurrectionRP_Server.Items
                     new Unusable(ItemID.MelasseApple, "Mélasse arrangé pomme", "Est utilisé pour faire du Rhum", 1, isStackable: true),
                     new Unusable(ItemID.MelasseRaisin, "Mélasse arrangé raisin", "Est utilisé pour faire du Rhum", 1, isStackable: true),
 
+                    new Unusable(ItemID.Filet, "Filet", "Permet de ramasser divers choses", 2, isDockable: true, isStackable: false, itemPrice: 150),
+
                 #endregion
                 #endregion
             };

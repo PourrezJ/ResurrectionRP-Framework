@@ -172,7 +172,9 @@ namespace ResurrectionRP_Server.Models.InventoryData
 
         Rhum,
         RhumApple,
-        RhumRaisin
+        RhumRaisin,
+
+        Filet
 
     }
 }

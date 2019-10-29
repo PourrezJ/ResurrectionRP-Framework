@@ -221,7 +221,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (Client.Model != ((Character.Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01))
                         Client.Model = (Character.Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01;
 
-                    Alt.Server.LogInfo($"[HUNGER] {PID} : Init Player hunger ({Hunger}) thirst({Thirst})");
+                    Alt.Server.LogInfo($"[PlayerHandler.LoadPlayer()] {PID} : Init Player hunger ({Hunger}) thirst({Thirst})");
                     Client.Emit
                     (
                         Events.PlayerInitialised,
@@ -359,8 +359,8 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             Thirst = (thirst == -1) ? Thirst : thirst;
             Hunger = (hunger == -1) ? Hunger : hunger;
-            UpdateFull();
-            Alt.Server.LogInfo($"[HUNGER] {PID} new update hunger ({Thirst}) thirst({Hunger})");
+            //UpdateFull();
+            Alt.Server.LogInfo($"[PlayerHandler.UpdateHungerThirst()] {PID} new update hunger ({Hunger}) thirst({Thirst})");
             if (Client != null && Client.Exists)
                 Client.EmitLocked("UpdateHungerThirst", Hunger, Thirst);
 

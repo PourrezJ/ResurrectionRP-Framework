@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
             Alt.OnClient("ExitGame", (IPlayer client, object[] args) => client.Kick("Exit"));
 
-            //Alt.OnClient("UpdateHungerThirst", UpdateHungerThirst);
+            Alt.OnClient("UpdateHungerThirst", (IPlayer client, object[] args) => client.GetPlayerHandler().UpdateHungerThirst(Convert.ToInt32(args[0]), Convert.ToInt32(""+args[1]) ));
 
             AltAsync.OnClient("IWantToDie", IWantToDie);
 

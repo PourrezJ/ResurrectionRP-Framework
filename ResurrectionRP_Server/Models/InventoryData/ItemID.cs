@@ -174,7 +174,10 @@ namespace ResurrectionRP_Server.Models.InventoryData
         RhumApple,
         RhumRaisin,
 
-        Filet
+        Filet,
+
+        JusRaisin,
+        RaisinLiquide
 
     }
 }

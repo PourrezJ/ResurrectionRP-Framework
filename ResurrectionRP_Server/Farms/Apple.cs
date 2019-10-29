@@ -58,7 +58,7 @@ namespace ResurrectionRP_Server.Farms
 
             NewFarm = true;
             Harvest_Name = "Champ de pommes";
-            Selling_Name = "Étalage maraîcher";
+            Selling_Name = "Etalage maraîcher";
 
             Harvest_BlipSprite = 85;
 
@@ -86,9 +86,9 @@ namespace ResurrectionRP_Server.Farms
             /*            Selling_PosRot = new Location(new Vector3(605.719f, -3073.165f, 6.069f), new Vector3(0, 0, -11.52882f));
                         Selling_PedHash = AltV.Net.Enums.PedModel.Cntrybar01SMM;*/
 
-            BlipColor = Entities.Blips.BlipColor.WineRed;
+            BlipColor = Entities.Blips.BlipColor.LightGreen;
 
-            Selling_Blip = BlipsManager.CreateBlip(Selling_Name, new Vector3(605.719f, -3073.165f, 6.069f), (byte)BlipColor, 500);
+            Selling_Blip = BlipsManager.CreateBlip(Selling_Name, new Vector3(-1043.343f, 5327.187f, 44.553f), (byte)BlipColor, 500);
 
             ItemIDProcess = ItemID.Apple;
             ItemIDBrute = ItemID.Apple;

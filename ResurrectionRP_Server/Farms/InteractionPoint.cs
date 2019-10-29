@@ -34,6 +34,8 @@ namespace ResurrectionRP_Server.Farms
         public InteractionPointTypes Type;
         public string InteractionName;
 
+        public bool NoNeedInSlot = false;
+
         public string Anim_dict = null;
         public string Anim_anim = null;
         public string Scenario = null;
@@ -43,7 +45,7 @@ namespace ResurrectionRP_Server.Farms
         #endregion
 
         #region Constructor
-        public InteractionPoint(Farm farm, Vector3 position, float heading, List<Item> items, InteractionPointTypes interactionPoint, string interactionName, string anim_dict = "", string anim_anim = "", string scenario = "")
+        public InteractionPoint(Farm farm, Vector3 position, float heading, List<Item> items, InteractionPointTypes interactionPoint, string interactionName, string anim_dict = "", string anim_anim = "", string scenario = "", bool noNeedInSlot = false)
         {
             Position = position;
             ToolNeeded = items;
@@ -51,12 +53,13 @@ namespace ResurrectionRP_Server.Farms
             InteractionName = interactionName;
             _farm = farm;
             Heading = heading;
+            NoNeedInSlot = noNeedInSlot;
             Anim_dict = anim_dict;
             Anim_anim = anim_anim;
             Scenario = scenario ?? null;
             Init();
         }
-        public InteractionPoint(Farm farm, Vector3 position, float heading, Item item, InteractionPointTypes interactionPoint, string interactionName, string anim_dict = "", string anim_anim = "", string scenario = "")
+        public InteractionPoint(Farm farm, Vector3 position, float heading, Item item, InteractionPointTypes interactionPoint, string interactionName, string anim_dict = "", string anim_anim = "", string scenario = "", bool noNeedInSlot = false)
 
         {
             Position = position;
@@ -66,13 +69,14 @@ namespace ResurrectionRP_Server.Farms
             InteractionName = interactionName;
             _farm = farm;
             Heading = heading;
+            NoNeedInSlot = noNeedInSlot;
             Anim_dict = anim_dict;
             Anim_anim = anim_anim;
             Scenario = scenario ?? null;
             Init();
         }
 
-        public InteractionPoint(Farm farm, Vector3 position, float heading, InteractionPointTypes interactionPoint, string interactionName, string anim_dict = "", string anim_anim = "", string scenario = "")
+        public InteractionPoint(Farm farm, Vector3 position, float heading, InteractionPointTypes interactionPoint, string interactionName, string anim_dict = "", string anim_anim = "", string scenario = "", bool noNeedInSlot = false)
         {
             Position = position;
             ToolNeeded = new List<Item>();
@@ -80,12 +84,13 @@ namespace ResurrectionRP_Server.Farms
             InteractionName = interactionName;
             _farm = farm;
             Heading = heading;
+            NoNeedInSlot = noNeedInSlot;
             Anim_dict = anim_dict;
             Anim_anim = anim_anim;
             Scenario = scenario ?? null;
             Init();
         }
-        public InteractionPoint(Farm farm, Vector3 position, float heading, PedModel pedmodel,ConcurrentDictionary<double, Item> items, InteractionPointTypes interactionPoint, string interactionName, string anim_dict = "", string anim_anim = "", string scenario = "")
+        public InteractionPoint(Farm farm, Vector3 position, float heading, PedModel pedmodel,ConcurrentDictionary<double, Item> items, InteractionPointTypes interactionPoint, string interactionName, string anim_dict = "", string anim_anim = "", string scenario = "", bool noNeedInSlot = false)
 
         {
             if(interactionPoint != InteractionPointTypes.Sell)
@@ -146,26 +151,26 @@ namespace ResurrectionRP_Server.Farms
 
             try
             {
-                foreach (Item _item in ToolNeeded)
+                foreach (Item tool in ToolNeeded)
                 {
-                    PlayerHandler _client = client.GetPlayerHandler();
-                    Inventory.Inventory inventory = _client.HasItemInAnyInventory(_item.id);
-                    ItemStack item = _client.OutfitInventory.HasItemEquip(_item.id);
-                    if (item != null)
+                    PlayerHandler ph = client.GetPlayerHandler();
+                    Inventory.Inventory inventory = ph.HasItemInAnyInventory(tool.id);
+                    ItemStack itemStack = ph.OutfitInventory.HasItemEquip(tool.id);
+                    if (itemStack != null || NoNeedInSlot && ph.HasItemID(tool.id))
                     {
-                        if (item.Item.type == "tool" && (item.Item as Tool).Health <= 0)
+                        if (itemStack != null && itemStack.Item.type == "tool" && (itemStack.Item as Tool).Health <= 0)
                         {
-                            _client.OutfitInventory.Delete(item, 1);
+                            ph.OutfitInventory.Delete(itemStack, 1);
                             client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);
                             return;
                         }
-                        LaunchToFarm(client, 0, _item);
+                        LaunchToFarm(client, 0, tool);
                         return;
                     }
                     
-                    if (inventory != null && item == null)
+                    if (inventory != null && itemStack == null)
                         client.DisplayHelp("Vous devez équiper votre outil pour commencer!", 5000);
-                    else if (item == null && ToolNeeded.IndexOf(_item) == ToolNeeded.Count - 1)
+                    else if (itemStack == null && ToolNeeded.IndexOf(tool) == ToolNeeded.Count - 1)
                     {
                         client.DisplayHelp($"Vous devez avoir un(e) {ToolNeeded[0].name} pour {InteractionName} !", 10000);
                         return;
@@ -196,10 +201,11 @@ namespace ResurrectionRP_Server.Farms
                     PlayerHandler ph = client.GetPlayerHandler();
                     Inventory.Inventory inventory = ph.HasItemInAnyInventory(item.id);
                     ItemStack itemStack = ph.OutfitInventory.HasItemEquip(item.id);
+                    
 
-                    if (itemStack != null)
+                    if (itemStack != null || NoNeedInSlot && ph.HasItemID(item.id))
                     {
-                        if (itemStack.Item.type == "tool" && (itemStack.Item as Tool).Health <= 0)
+                        if (itemStack != null && itemStack.Item.type == "tool" && (itemStack.Item as Tool).Health <= 0)
                         {
                             ph.OutfitInventory.Delete(itemStack, 1);
                             client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);

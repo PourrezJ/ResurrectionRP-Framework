@@ -13,15 +13,14 @@ namespace ResurrectionRP_Server
         public Menu.MenuListCallbackAsync ListItemChangeCallback { get; set; }
         #endregion
 
-        #region Constructor
+        #region Constructors
         public ListItem(string text, string description, string id, int itemsMax, int selectedItem, bool executeCallback = false, bool executeCallbackListChange = false) : base(text, description, id)
         {
             Type = MenuItemType.ListItem;
-
             Items = new List<object>();
 
-            for (int a = 0; a < itemsMax; a++)
-                Items.Add(a);
+            for (int i = 0; i < itemsMax; i++)
+                Items.Add(i.ToString());
 
             SelectedItem = selectedItem;
             ExecuteCallback = executeCallback;

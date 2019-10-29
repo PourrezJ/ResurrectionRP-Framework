@@ -394,13 +394,11 @@ function saveData() {
         var menuItem = menuData.Items[i];
 
         if (menuItem.Type == 1) {
-            data[menuItem.Id] = menuItem.Checked;
+            data[i] = menuItem.Checked;
         } else if (menuItem.Type == 3) {
-            data[menuItem.Id] = new Object();
-            data[menuItem.Id]['Index'] = menuItem.SelectedItem;
-            data[menuItem.Id]['Value'] = menuItem.Items[menuItem.SelectedItem];
+            data[i] = menuItem.SelectedItem;
         } else if (menuItem.InputMaxLength > 0 && menuItem.InputValue != undefined && menuItem.InputValue.length > 0) {
-            data[menuItem.Id] = menuItem.InputValue;
+            data[i] = menuItem.InputValue;
         }
     }
 

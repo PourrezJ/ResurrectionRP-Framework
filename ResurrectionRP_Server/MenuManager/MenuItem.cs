@@ -7,18 +7,13 @@ namespace ResurrectionRP_Server
 {
     public class MenuItem : IMenuItem
     {
-        #region Private fields
-        private Dictionary<string, object> _data;
-        #endregion
-
-        #region Events
+        #region Delegates
         public delegate Task OnMenuItemCallBackDelegateAsync(IPlayer client, Menu menu = null, IMenuItem menuItem = null, int itemIndex = 0);
         public delegate void OnMenuItemCallBackDelegate(IPlayer client, Menu menu = null, IMenuItem menuItem = null, int itemIndex = 0);
+        #endregion
 
-        [JsonIgnore]
-        public OnMenuItemCallBackDelegateAsync OnMenuItemCallbackAsync { get; set; } = null;
-        [JsonIgnore]
-        public OnMenuItemCallBackDelegate OnMenuItemCallback { get; set; } = null;
+        #region Private fields
+        private Dictionary<string, object> _data;
         #endregion
 
         #region Public properties
@@ -35,6 +30,13 @@ namespace ResurrectionRP_Server
         public byte? InputMaxLength { get; set; }
         public InputType? InputType { get; set; }
         public bool? InputErrorResetValue { get; set; }
+        #endregion
+
+        #region Events
+        [JsonIgnore]
+        public OnMenuItemCallBackDelegateAsync OnMenuItemCallbackAsync { get; set; } = null;
+        [JsonIgnore]
+        public OnMenuItemCallBackDelegate OnMenuItemCallback { get; set; } = null;
         #endregion
 
         #region Constructor

@@ -72,19 +72,16 @@ namespace ResurrectionRP_Server
                 bool forced = (bool)args[1];
                 dynamic data = JsonConvert.DeserializeObject(args[2].ToString());
 
-                foreach (MenuItem menuItem in menu.Items)
+                for (int i = 0; i < menu.Items.Count; i++)
                 {
-                    try
-                    {
-                        if (menuItem.Type == MenuItemType.CheckboxItem)
-                            ((CheckboxItem)menuItem).Checked = data[menuItem.Id];
-                        else if (menuItem.Type == MenuItemType.ListItem)
-                            ((ListItem)menuItem).SelectedItem = data[menuItem.Id]["Index"];
-                        else if (menuItem.InputMaxLength > 0)
-                            menuItem.InputValue = data[menuItem.Id];
-                    }
-                    catch (Exception)
-                    { }
+                    MenuItem menuItem = menu.Items[i];
+
+                    if (menuItem.Type == MenuItemType.CheckboxItem)
+                        ((CheckboxItem)menuItem).Checked = data[i.ToString()];
+                    else if (menuItem.Type == MenuItemType.ListItem)
+                        ((ListItem)menuItem).SelectedItem = data[i.ToString()];
+                    else if (menuItem.InputMaxLength > 0)
+                        menuItem.InputValue = data[i.ToString()];
                 }
 
                 try

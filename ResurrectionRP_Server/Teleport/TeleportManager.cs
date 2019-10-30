@@ -7,6 +7,7 @@ using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AltV.Net;
 
 namespace ResurrectionRP_Server.Teleport
 {
@@ -153,12 +154,20 @@ namespace ResurrectionRP_Server.Teleport
 
             Location etage = menuItem.GetData("Location");
             client.RequestCollisionAtCoords(etage.Pos);
+            Alt.Server.LogInfo("Fadeout");
+            client.Emit("FadeOut", 1000);
 
-            client.Position = etage.Pos;
 
-            // BUG v801: Set rotation when player in game not working
-            client.SetHeading(etage.Rot.Z);
-            // client.Rotation = etage.Rot;
+            Utils.Utils.Delay(2000, () =>
+                 {
+
+                     client.Position = etage.Pos;
+
+                    // BUG v801: Set rotation when player in game not working
+                    client.SetHeading(etage.Rot.Z);
+                    // client.Rotation = etage.Rot;
+                    client.Emit("FadeIn", 1000);
+                 });
         }
 
         public static Teleport GetTeleport(int id) => Teleports.Find(t => t.ID == id);

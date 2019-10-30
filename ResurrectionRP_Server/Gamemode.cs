@@ -202,7 +202,7 @@ namespace ResurrectionRP_Server
                         return;
                     playerHandler.UpdateHungerThirst((Hunger) ? playerHandler.Hunger - 1 : playerHandler.Hunger, playerHandler.Thirst - 1);
                 }
-            }, 1000 * 60 * 3 / 2 / 5);
+            }, 1000 * 60 * 3 / 2 );
                 
             Chat.Initialize();
 

@@ -362,7 +362,6 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             Thirst = (thirst == -1) ? Thirst : thirst;
             Hunger = (hunger == -1) ? Hunger : hunger;
-            Alt.Server.LogInfo($"[PlayerHandler.UpdateHungerThirst()] {PID} update hunger ({Hunger}) thirst({Thirst})");
             if((Hunger <= 0 || Thirst <= 0 ) && !IsInComa)
             {
                 SetHealth( (ushort) (Client.Health - 25) );

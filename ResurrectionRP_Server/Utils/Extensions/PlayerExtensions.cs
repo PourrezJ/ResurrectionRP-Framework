@@ -417,6 +417,11 @@ namespace ResurrectionRP_Server
 
             if (dead != null)
                 dead.Remove();
+            if (client.GetPlayerHandler().IsInComa)
+            {
+                client.Emit("Player_SetOutOfComa");
+                client.GetPlayerHandler().IsInComa = false;
+            }
 
             if (Factions.FactionManager.Onu != null && Factions.FactionManager.Onu.ServicePlayerList?.Count > 0)
             {

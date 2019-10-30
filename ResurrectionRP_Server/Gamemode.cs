@@ -191,8 +191,19 @@ namespace ResurrectionRP_Server
             if (!IsDevServer)
                 Utils.Utils.SetInterval(async () => await Restart(), 1000);
             
-            Utils.Utils.SetInterval(() => Time.Update(), 1000);           
+            Utils.Utils.SetInterval(() => Time.Update(), 1000);
 
+            bool Hunger = false;
+            Utils.Utils.SetInterval( () => {
+                Hunger = !Hunger;
+                foreach (PlayerHandler playerHandler in PlayerManager.GetPlayersList())
+                {
+                    if (playerHandler.Client == null || !playerHandler.Client.Exists)
+                        return;
+                    playerHandler.UpdateHungerThirst((Hunger) ? playerHandler.Hunger - 1 : playerHandler.Hunger, playerHandler.Thirst - 1);
+                }
+            }, 1000 * 60 * 3 / 2 / 5);
+                
             Chat.Initialize();
 
             Chat.RegisterCmd("coords", (IPlayer player, string[] args) =>

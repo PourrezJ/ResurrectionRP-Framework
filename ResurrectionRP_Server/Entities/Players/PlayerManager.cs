@@ -48,7 +48,9 @@ namespace ResurrectionRP_Server.Entities.Players
             AltAsync.OnClient("LogPlayer", LogPlayer);
             AltAsync.OnClient("MakePlayer", MakePlayer);
             AltAsync.OnClient("SendLogin", SendLogin );         
-            AltAsync.OnClient("Events_PlayerJoin", Events_PlayerJoin);   
+            AltAsync.OnClient("Events_PlayerJoin", Events_PlayerJoin);
+
+            Alt.OnClient("Player_SetInComa", (IPlayer client, object[] args) => client.GetPlayerHandler().IsInComa = true);
 
             Alt.OnClient("ExitGame", (IPlayer client, object[] args) => client.Kick("Exit"));
 
@@ -350,6 +352,7 @@ namespace ResurrectionRP_Server.Entities.Players
         private static async Task IWantToDie(IPlayer client, object[] args)
         {
             await client.ReviveAsync(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
+            client.GetPlayerHandler().UpdateHungerThirst(50, 50);
             client.GetPlayerHandler()?.UpdateFull();
         }
 

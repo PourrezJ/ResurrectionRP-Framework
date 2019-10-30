@@ -9,19 +9,25 @@ class Train {
     public Handle: number;
     public Type: number;
     public CurrentPos: alt.Vector3;
+    public Name: string;
     public YouOwn: boolean = false;
 
-    constructor(id: number, type: number, currentPos: alt.Vector3) {
+    constructor(id: number, type: number, currentPos: alt.Vector3, name: string) {
         this.NetworkID = id;
         this.CurrentPos = currentPos;
         this.Type = type;
+        this.Name = name;
 
         this.Handle = game.createMissionTrain(this.Type, this.CurrentPos.x as number, this.CurrentPos.y as number, this.CurrentPos.z as number, true);
         game.setEntityAsMissionEntity(this.Handle, true, true);
-        game.addBlipForEntity(this.Handle);
 
-        if (!game.hasModelLoaded(game.getHashKey("s_m_m_lsmetro_01")))
-            alt.loadModel(game.getHashKey("s_m_m_lsmetro_01"));
+        let blip = game.addBlipForEntity(this.Handle);
+        game.setBlipColour(blip, 62);
+        game.setBlipSprite(blip, 532);
+        game.setBlipAsShortRange(blip, true);
+        game.beginTextCommandSetBlipName("STRING");
+        game.addTextComponentSubstringPlayerName(this.Name);
+        game.endTextCommandSetBlipName(blip);
 
         game.createPedInsideVehicle(this.Handle, 26, game.getHashKey("s_m_m_lsmetro_01"), -1, false, true);
 
@@ -68,9 +74,12 @@ export async function initialize()
         if (!game.hasModelLoaded(game.getHashKey("tankercar")))
             await utils.loadModelAsync(game.getHashKey("tankercar"));
 
+        if (!game.hasModelLoaded(game.getHashKey("s_m_m_lsmetro_01")))
+            await utils.loadModelAsync(game.getHashKey("s_m_m_lsmetro_01"));
+
         let trainList = JSON.parse(strtrainList);
         trainList.forEach((data) => {
-            new Train(data.NetworkID, data.Type, new alt.Vector3(data.CurrentPos.X, data.CurrentPos.Y, data.CurrentPos.Z));
+            new Train(data.NetworkID, data.Type, new alt.Vector3(data.CurrentPos.X, data.CurrentPos.Y, data.CurrentPos.Z), data.Name);
         });
     });
 

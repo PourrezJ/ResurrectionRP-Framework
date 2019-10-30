@@ -17,9 +17,9 @@ namespace ResurrectionRP_Server.Entities.Worlds
         public static void LoadTrains()
         {
             Alt.OnClient("TrainManager_PosUpdate", PosUpdate);
-            TrainsList.Add(new Train(15, new Vector3(1838.104f, 3528.820f, 38.384f)));
-            TrainsList.Add(new Train(24, new Vector3(40.2f, -1201.3f, 31.0f))); // metro
-            // TrainsList.Add(new Train(24, new Vector3(-618.0f, -1476.8f, 16.2f))); // metro
+            TrainsList.Add(new Train(15, new Vector3(1838.104f, 3528.820f, 38.384f), "Train de transport de fret", 0));
+            TrainsList.Add(new Train(24, new Vector3(40.2f, -1201.3f, 31.0f), "Metro", 0)); // metro
+            TrainsList.Add(new Train(24, new Vector3(-618.0f, -1476.8f, 16.2f), "Metro", 0)); // metro
             TrainLoaded = true;
         }
 
@@ -32,8 +32,8 @@ namespace ResurrectionRP_Server.Entities.Worlds
             player.EmitLocked("LoadsAllTrains", JsonConvert.SerializeObject(TrainsList));
 
             // Check si ping élevé
-            //if (player.Ping > 45)
-            //    return;
+            if (player.Ping > 60)
+                return;
 
             // Attribution d'un train qui ne serai pas déjà gérer par un joueur
             foreach (Train train in TrainsList)
@@ -110,15 +110,18 @@ namespace ResurrectionRP_Server.Entities.Worlds
         public Vector3 CurrentPos;
         public byte Type;
         public int Speed;
+        public string Name;
 
         [JsonIgnore]
         public IPlayer Owner;
 
-        public Train(byte type, Vector3 currentPos)
+        public Train(byte type, Vector3 currentPos, string name, int speed)
         {
             NetworkID = TrainManager.TrainsList.Count + 1;
             Type = type;
             CurrentPos = currentPos;
+            Speed = speed;
+            Name = name;
         }
     }
 }

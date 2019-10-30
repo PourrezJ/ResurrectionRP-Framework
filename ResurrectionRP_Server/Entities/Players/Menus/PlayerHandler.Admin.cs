@@ -523,7 +523,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                     catch (Exception ex)
                     {
-                        Alt.Server.LogError($"ADMIN CREATE KEY PERSISTANT: {ex}");
+                        Alt.Server.LogError($"World Time Change All: {ex}");
                     }
                 };
                 mainMenu.Add(spawnPerm);
@@ -551,7 +551,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                     catch (Exception ex)
                     {
-                        Alt.Server.LogError($"ADMIN CREATE KEY PERSISTANT: {ex}");
+                        Alt.Server.LogError($"World Time Change Local: {ex}");
                     }
                 };
                 mainMenu.Add(spawnPerm);

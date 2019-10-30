@@ -44,15 +44,33 @@ namespace ResurrectionRP_Server.Phone
 
                 if (_ClientPhoneMenu.TryAdd(client, phone))
                 {
-                    phone.props = Entities.Objects.WorldObject.CreateObject("prop_npc_phone_02", client.Position, new Vector3(), false, false);
-                    phone.props.SetAttachToEntity(client, "PH_L_Hand", new AltV.Net.Data.Position(), new AltV.Net.Data.Rotation());
+/*                    phone.props = Entities.Objects.WorldObject.CreateObject("prop_npc_phone_02", client.Position, new Vector3(), false, false);
+                    phone.props.SetAttachToEntity(client, "PH_L_Hand", new AltV.Net.Data.Position(), new AltV.Net.Data.Rotation());*/
 
-                     if (!phone.props.Exists)
+/*                    var attach = new Models.Attachment()
+                    {
+                        Bone = "PH_R_Hand",
+                        PositionOffset = new Vector3(0.04f,0,-0.03f),
+                        RotationOffset = new Vector3(80,0,-80),
+                        Type = (int)Streamer.Data.EntityType.Ped,
+                        RemoteID = client.Id
+                    };*/
+                    var attach = new Models.Attachment()
+                    {
+                        Bone = "PH_R_Hand_PHONE",
+                        PositionOffset = new Vector3(),
+                        RotationOffset = new Vector3(),
+                        Type = (int)Streamer.Data.EntityType.Ped,
+                        RemoteID = client.Id
+                    };
+                    phone.props= Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_npc_phone_02"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
+
+                    if (!phone.props.Exists)
                          return false;
      
 
                     client.PlayAnimation((client.IsInVehicle) ? "cellphone@in_car@ds" : (client.Model == Alt.Hash("mp_f_freemode_01")) ? "cellphone@female" : "cellphone@", "cellphone_text_read_base", 3, -1, -1, (AnimationFlags.AllowPlayerControl | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.Loop | AnimationFlags.SecondaryTask));
-                    phone.props.SetAttachToEntity(client, "PH_R_Hand", new Vector3(), new Vector3());
+
                     long newMessagesCount = GetNewMessagesOnConversationsCount(phone.PhoneNumber);
                     client.Emit("OpenPhone", newMessagesCount, JsonConvert.SerializeObject(phone.Settings), incomingCall, contactNumber, contactName);
                     //client.EmitLocked("ShowCursor", true);
@@ -208,7 +226,7 @@ namespace ResurrectionRP_Server.Phone
                 {
                     AltAsync.Do(() =>
                     {
-                        if (value.props.Exists)
+                        if (value.props != null)
                             value.props.Destroy();
                     });
                 });

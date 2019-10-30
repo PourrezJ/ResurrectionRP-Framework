@@ -477,10 +477,9 @@ namespace ResurrectionRP_Server.Inventory
                                 case ItemID.Carabine:
                                 case ItemID.Matraque:
                                 case ItemID.Bat:
-                                case ItemID.BattleAxe:
                                 case ItemID.CombatPistol:
                                 case ItemID.Flashlight:
-                                case ItemID.Hache:
+                                case ItemID.BattleAxe:
                                 case ItemID.HeavyPistol:
                                 case ItemID.Knife:
                                 case ItemID.Machete:
@@ -494,6 +493,14 @@ namespace ResurrectionRP_Server.Inventory
                                 case ItemID.Pump:
                                 case ItemID.Taser:
                                     client.RemoveAllWeapons();
+                                    break;
+                                case ItemID.Hache:
+                                case ItemID.Pioche:
+                                case ItemID.Marteau:
+                                case ItemID.MarteauPiqueur:
+                                case ItemID.Pelle:
+                                    menu.Outfit.DestroyProp();
+                                    client.StopAnimation();
                                     break;
                             }
 
@@ -713,6 +720,7 @@ namespace ResurrectionRP_Server.Inventory
 
                             #region Clothing 
                             // Remove
+                            Models.Attachment attach = null;
                             if (oldRPGInv == InventoryTypes.Outfit)
                             {
                                 switch (item.id)
@@ -808,8 +816,10 @@ namespace ResurrectionRP_Server.Inventory
                                         client.RemoveAllWeapons();
                                         break;
                                     case ItemID.Pioche:
-                                    case ItemID.Hache:
+                                    case ItemID.Marteau:
                                     case ItemID.MarteauPiqueur:
+                                    case ItemID.Hache:
+                                    case ItemID.Pelle:
                                         menu.Outfit.DestroyProp();
                                         client.StopAnimation();
                                         break;
@@ -935,16 +945,47 @@ namespace ResurrectionRP_Server.Inventory
                                         }
                                         break;
                                     case ItemID.Pioche:
-                                        menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_pickaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
-                                        menu.Outfit.prop.SetAttachToEntity(client, "PH_R_Hand", new Vector3(0.1f, -0.1f, -0.02f), new Vector3(80, 0, 170));
+
+                                        attach = new Models.Attachment()
+                                        {
+                                            Bone = "PH_R_Hand",
+                                            PositionOffset = new Vector3(0.1f, -0.1f, -0.02f),
+                                            RotationOffset = new Vector3(80, 0, 170),
+                                            Type = (int)Streamer.Data.EntityType.Ped,
+                                            RemoteID = client.Id
+                                        };
+                                        menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_pickaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
                                         break;
                                     case ItemID.Hache:
-                                        menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_fireaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
-                                        menu.Outfit.prop.SetAttachToEntity(client, "PH_R_Hand", new Vector3(0.1f, -0.1f, -0.02f), new Vector3(80, 0, 170));
+                                        attach = new Models.Attachment()
+                                        {
+                                            Bone = "PH_R_Hand",
+                                            PositionOffset = new Vector3(0.1f, -0.1f, -0.02f),
+                                            RotationOffset = new Vector3(80, 0, 180),
+                                            Type = (int)Streamer.Data.EntityType.Ped,
+                                            RemoteID = client.Id
+                                        };
+                                        menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_fireaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
+
                                         break;
                                     case ItemID.MarteauPiqueur:
                                         menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_jackham"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
                                         (item as Items.Tool).JackHammerSetWalkingStyle(client, menu.Outfit.prop);
+                                        break;
+
+                                    case ItemID.Pelle:
+                                        break;
+                                    case ItemID.Marteau:
+                                        attach = new Models.Attachment()
+                                        {
+                                            Bone = "PH_R_Hand",
+                                            PositionOffset = new Vector3(0.1f, 0.1f,0),
+                                            RotationOffset = new Vector3(80, 0, 180),
+                                            Type = (int)Streamer.Data.EntityType.Ped,
+                                            RemoteID = client.Id
+                                        };
+                                        menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_mallet"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
+
                                         break;
                                 }
 

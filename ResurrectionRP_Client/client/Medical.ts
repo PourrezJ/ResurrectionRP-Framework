@@ -11,11 +11,15 @@ export class Medical {
     public static deathMessage: string;
     public static RequestedTimeMedic: Date;
     public static everyTick: number;
+    public static IsInComa = false;
+    public static ComaTime = Date.now();
 
     constructor()
     {
         alt.on('keydown', this.KeyHandler);
         Medical.everyTick = alt.everyTick(this.OnTick);
+
+        alt.on("Player_SetOutOfComa", () => Medical.IsInComa = false)
 
         Medical.scaleForm = new Scaleforms("mp_big_message_freemode");
         Medical.RequestedTimeMedic = new Date();
@@ -42,6 +46,8 @@ export class Medical {
                 alt.emitServer("InteractEmergencyCall", "emit", "ONU", "Appel d'un témoin, une personne inconsciente");
             } else if (key == 'R'.charCodeAt(0)) {
                 alt.log("i want a die");
+                Medical.ComaTime = Date.now() + 10000;
+                Medical.IsInComa = false;
                 alt.emitServer("IWantToDie");
             }
         }
@@ -53,6 +59,10 @@ export class Medical {
     private OnTick() {
         if (game.isPlayerDead(0))
         {
+            if (!Medical.IsInComa && Medical.ComaTime < Date.now()) {
+                alt.emitServer("Player_SetInComa");
+                Medical.IsInComa = true;
+            }
             if (Date.now() >= Medical.RequestedTimeMedic.getTime())
                 Medical.deathMessage = "Appuyer sur ~g~Y~w~ pour utiliser l'appel d'urgence ou ~r~R~w~ pour en finir :(";
             else

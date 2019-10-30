@@ -98,6 +98,9 @@ namespace ResurrectionRP_Server.Entities.Players
 
         [BsonIgnore]
         public bool IsSitting = false;
+
+        [BsonIgnore]
+        public bool IsInComa = false;
         /*
         private ushort _health = 200;
         public ushort Health
@@ -362,8 +365,10 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             Thirst = (thirst == -1) ? Thirst : thirst;
             Hunger = (hunger == -1) ? Hunger : hunger;
-            //UpdateFull();
-            Alt.Server.LogInfo($"[PlayerHandler.UpdateHungerThirst()] {PID} new update hunger ({Hunger}) thirst({Thirst})");
+            if((Hunger <= 0 || Thirst <= 0 ) && !IsInComa)
+            {
+                SetHealth( (ushort) (Client.Health - 25) );
+            }
             if (Client != null && Client.Exists)
                 Client.EmitLocked("UpdateHungerThirst", Hunger, Thirst);
 

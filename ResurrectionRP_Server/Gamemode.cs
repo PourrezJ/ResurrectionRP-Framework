@@ -22,6 +22,7 @@ using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Services;
 using ResurrectionRP_Server.Illegal;
 using ResurrectionRP_Server.AutoBusiness;
+using ResurrectionRP_Server.Entities.Worlds;
 
 namespace ResurrectionRP_Server
 {
@@ -182,6 +183,7 @@ namespace ResurrectionRP_Server
             Weather.WeatherManager.InitWeather();
             Phone.PhoneManager.Init();
             Jobs.JobsManager.Init();
+            TrainManager.LoadTrains();
 
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 

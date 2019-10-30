@@ -502,6 +502,62 @@ namespace ResurrectionRP_Server.Entities.Players
                 mainMenu.Add(addItem);
                 #endregion
 
+                #region Time Change All
+                spawnPerm = new MenuItem("Changer l'heure All", "Exemple de format valide 16:00", "ID_SetTime", true);
+                spawnPerm.SetInput("", 30, InputType.Text);
+                spawnPerm.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                {
+                    try
+                    {
+                        string name = menuItem.InputValue;
+
+                        if (string.IsNullOrEmpty(name))
+                            return;
+
+
+                        string[] time = name.Split(':');
+
+                        GameMode.Instance.Time.Hours = Convert.ToInt32(time[0]);
+                        GameMode.Instance.Time.Minutes = Convert.ToInt32(time[1]);
+
+                        Alt.EmitAllClients("SetTime", GameMode.Instance.Time.Hours, GameMode.Instance.Time.Minutes);
+                    }
+                    catch (Exception ex)
+                    {
+                        Alt.Server.LogError($"World Time Change All: {ex}");
+                    }
+                };
+                mainMenu.Add(spawnPerm);
+                #endregion
+
+                #region Time Change Local
+                spawnPerm = new MenuItem("Changer l'heure Local", "Exemple de format valide 16:00", "ID_SetTime", true);
+                spawnPerm.SetInput("", 30, InputType.Text);
+                spawnPerm.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                {
+                    try
+                    {
+                        string name = menuItem.InputValue;
+
+                        if (string.IsNullOrEmpty(name))
+                            return;
+
+
+                        string[] time = name.Split(':');
+
+                        GameMode.Instance.Time.Hours = Convert.ToInt32(time[0]);
+                        GameMode.Instance.Time.Minutes = Convert.ToInt32(time[1]);
+
+                        client.Emit("SetTime", GameMode.Instance.Time.Hours, GameMode.Instance.Time.Minutes);
+                    }
+                    catch (Exception ex)
+                    {
+                        Alt.Server.LogError($"World Time Change Local: {ex}");
+                    }
+                };
+                mainMenu.Add(spawnPerm);
+                #endregion
+
                 #region Duplicate clé 
 
                 spawnPerm = new MenuItem("Donner une clé", "Donne une clé de véhicule, avec la plaque.", "ID_Generatekey", true);

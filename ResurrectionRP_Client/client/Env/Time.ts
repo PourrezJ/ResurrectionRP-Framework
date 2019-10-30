@@ -1,4 +1,5 @@
-﻿import * as game from 'natives';
+﻿import * as alt from 'alt';
+import * as game from 'natives';
 
 export class Time {
 
@@ -15,6 +16,11 @@ export class Time {
         this.Seconds = Seconds;
         game.pauseClock(true);
         game.setClockTime(this.Hours, this.Minutes, this.Seconds);
+
+        alt.onServer("SetTime", (hour: number, minute: number) => {
+            this.Hours = hour;
+            this.Minutes = minute;
+        });
     }
 
     public OnTick() {

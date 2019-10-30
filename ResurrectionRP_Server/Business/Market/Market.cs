@@ -52,7 +52,6 @@ namespace ResurrectionRP_Server.Business
             Inventory.MaxSlot = 40;
             Inventory.MaxSize = 750;
             MaxEmployee = 5;
-            base.Init();
             MarketsList.Add(this);
         }
         #endregion

@@ -213,7 +213,9 @@ namespace ResurrectionRP_Server.Entities.Players
                         }
                     }
                 }
-                
+
+                TrainManager.OnPlayerConnected(client);
+
                 await AltAsync.Do( () =>
                 {
                     IP = Client.Ip;
@@ -271,8 +273,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     Door.OnPlayerConnected(client);
                     Houses.HouseManager.OnPlayerConnected(client);
                     Illegal.IllegalManager.OnPlayerConnected(client);
-                    Factions.FactionManager.OnPlayerConnected(client);
-                    TrainManager.OnPlayerConnected(client);
+                    Factions.FactionManager.OnPlayerConnected(client); 
                 });
                 
                 await Task.Delay(600);

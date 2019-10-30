@@ -78,7 +78,7 @@ const init = async () => {
         login.init();
         xtreamMenu.init();
         nightClub.initialize();
-        trains.initialize();
+        await trains.initialize();
         new LSPDManager();
         new Notify();
         new NetworkingEntityClient();

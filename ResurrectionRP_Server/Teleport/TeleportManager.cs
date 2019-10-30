@@ -154,7 +154,6 @@ namespace ResurrectionRP_Server.Teleport
 
             Location etage = menuItem.GetData("Location");
             client.RequestCollisionAtCoords(etage.Pos);
-            Alt.Server.LogInfo("Fadeout");
             client.Emit("FadeOut", 1000);
 
 

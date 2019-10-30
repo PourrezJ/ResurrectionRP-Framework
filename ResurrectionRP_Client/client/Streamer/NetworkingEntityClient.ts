@@ -4,6 +4,7 @@ import * as utils from '../Utils/Utils';
 import * as textlabel from './Entities/TextLabel';
 import * as enums from '../Utils/Enums/Enums';
 import Ped from './Entities/Ped';
+import * as chat from '../chat/chat';
 
 export class NetworkingEntityClient {
 
@@ -195,7 +196,7 @@ export class NetworkingEntityClient {
 
     onStreamIn = async (entity: any) => {
         switch (entity.data.entityType.intValue) {
-            case 0:
+            case 0: // ped
                 await utils.loadModelAsync(entity.data.model.uintValue);
                 this.streamPed(
                     entity.id,
@@ -206,7 +207,7 @@ export class NetworkingEntityClient {
                     entity.data.heading.doubleValue
                 );
                 break;
-            case 1:
+            case 1: // Static objec
                 alt.log("loading object");
                 await utils.loadModelAsync(game.getHashKey(entity.data.model.stringValue));
                 let object = await this.streamObject(
@@ -217,13 +218,12 @@ export class NetworkingEntityClient {
                     entity.position.z,
                     entity.data.freeze.boolValue
                 );
-
                 if (JSON.parse(entity.data.attach.stringValue) != null)
                     this.objectAttach(entity.id, JSON.parse(entity.data.attach.stringValue));
 
 
                 break;
-            case 2:
+            case 2: // Text label
                 await this.streamTextLabel(
                     entity.id,
                     entity.data.text.stringValue,
@@ -234,7 +234,7 @@ export class NetworkingEntityClient {
                     { r: entity.data.r.intValue, g: entity.data.g.intValue, b: entity.data.b.intValue, a: entity.data.a.intValue }
                 );
                 break;
-            case 3:
+            case 3: // marker
                 await this.streamMarker(
                     entity.id,
                     entity.data.type.intValue,
@@ -267,7 +267,7 @@ export class NetworkingEntityClient {
         let entityId : number = null;
 
         if (NetworkingEntityClient.EntityList[id] == undefined)
-            entityId = game.createObject(model, x, y, z, false, true, false);
+            entityId = game.createObject(model, x, y , z  , true, true, true);
         else
             entityId = NetworkingEntityClient.EntityList[id];
 
@@ -291,13 +291,15 @@ export class NetworkingEntityClient {
                         break;
 
                     case "PH_R_Hand":
-                        boneID = enums.Bone.PH_R_Hand;
+                        boneID = 57005;
                         break;
+                    case "PH_R_Hand_PHONE":
+                        boneID = enums.Bone.PH_R_Hand;
                 }
 
                 var bone = game.getPedBoneIndex(player.scriptID, boneID);
                 alt.log(`attach: ${player.scriptID} ${enums.Bone[attach.Bone]} ${ NetworkingEntityClient.EntityList[entityId] }`)
-                game.attachEntityToEntity(NetworkingEntityClient.EntityList[entityId], player.scriptID, bone, attach.PositionOffset.X, attach.PositionOffset.Y, attach.PositionOffset.Z, attach.RotationOffset.X, attach.RotationOffset.Y, attach.RotationOffset.Z, true, false, false, false, 0, true);
+                game.attachEntityToEntity(NetworkingEntityClient.EntityList[entityId], player.scriptID, bone, attach.PositionOffset.X, attach.PositionOffset.Y, attach.PositionOffset.Z, attach.RotationOffset.X, attach.RotationOffset.Y, attach.RotationOffset.Z, true, true, false, true , 0, true);
                 break;
 
             case 5:

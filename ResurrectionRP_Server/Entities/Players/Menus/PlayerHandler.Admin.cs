@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using VehicleInfoLoader.Data;
 
@@ -535,6 +536,59 @@ namespace ResurrectionRP_Server.Entities.Players
                 };
                 mainMenu.Add(spawnPerm);
                 #endregion
+
+
+                #region Remove a car
+
+                spawnPerm = new MenuItem("Supprimer un véhicule (Nécéssite plaque)", "Supprimer un véhicule DEFINiTIVEMENT en utilsant sa plaque", "ID_PermDeleteWithPlate", true);
+                spawnPerm.SetInput("", 30, InputType.Text);
+                spawnPerm.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                {
+                    try
+                    {
+                        string name = menuItem.InputValue;
+
+                        if (string.IsNullOrEmpty(name))
+                            return;
+
+
+                        VehicleHandler vehicle = VehiclesManager.VehicleHandlerList.FirstOrDefault( (p) => p.Value.Plate.ToUpper() == name.ToUpper()).Value;
+
+
+                        if (vehicle == null)
+                            client.DisplayHelp("Le véhicule n'existe pas!");
+                        else if (await vehicle.DeleteAsync(true))
+                            client.DisplayHelp($"Le véhicule {vehicle.VehicleManifest.DisplayName} a été supprimé en base de donnée.");
+                        else
+                            client.DisplayHelp("Le véhicule n'a pas pu être supprimé, une erreur en base donnée peut-être :x");
+                    }
+                    catch (Exception ex)
+                    {
+                        Alt.Server.LogError($"(PlayerHandler.Admin.OpenMenuAdmin) {ex}");
+                    }
+                };
+                mainMenu.Add(spawnPerm);
+                #endregion
+                #region Get Vehicle Infos
+
+                spawnPerm = new MenuItem("Information Véhicule (Nécéssite plaque)", "Récupère les informations d'un véhicule", "ID_VehicleInfo", true);
+                spawnPerm.SetInput("", 30, InputType.Text);
+                spawnPerm.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                {
+                    await VehicleCommands.VehicleInfo(client, new[] {  menuItem.InputValue });
+                };
+                mainMenu.Add(spawnPerm);
+                #endregion
+
+                #region DEBUG CreateObject
+                if (GameMode.IsDebug)
+                {
+                    spawnPerm = new MenuItem("DEBUG: Object Hand", "Tester les objets dans sa main", "ID_ObjectHand", true);
+                    spawnPerm.SetInput("", 30, InputType.Text);
+                    spawnPerm.OnMenuItemCallback = DEBUG_ObjectHand;
+                    mainMenu.Add(spawnPerm);
+                }
+                #endregion
             }
 
             #region Fin
@@ -624,6 +678,43 @@ namespace ResurrectionRP_Server.Entities.Players
             menu.Add(new MenuItem("~g~Valider", "", "Validate", true));
 
             menu.OpenMenu(client);
+        }
+
+        private void DEBUG_ObjectHand(IPlayer Client, Menu Menu, IMenuItem MenuItem, int ItemIndex)
+        {
+            string name = MenuItem.InputValue;
+
+            if (string.IsNullOrEmpty(name))
+                return;
+            Client.Emit("DEBUG_createObject", Alt.Hash(name));
+
+            Menu.ClearItems();
+
+            Menu.SubTitle = "Gestion de l'objet";
+            Menu.BackCloseMenu = true;
+
+            MenuItem item = null;
+
+            for(int i = 0; i <6; i++)
+            {
+                string axe = (i <= 2 ? (i == 2) ? "Z" : (i == 1 ? "X" : "Y") : (i == 5) ? "Z" : (i == 3 ? "X" : "Y"));
+                string add = (i <= 2) ? "Ajouter" : "Enlever";
+                item = new MenuItem(add +  " 0.01 "+axe, "0: X 1: Y 2: Z", "ID_add"+axe, true);
+                item.OnMenuItemCallback = (IPlayer Player, Menu itemMenu, IMenuItem menuItem, int itemMenuIndex) => Player.Emit($"DEBUG_update{axe}Object", (add == "Ajouter") ? 0.01 : -0.01);
+                Menu.Add(item);
+            }
+            
+            for(int i = 0; i <6; i++)
+            {
+                string axe = (i <= 2 ? (i == 2) ? "RZ" : (i == 1 ? "RX" : "RY") : (i == 5) ? "RZ" : (i == 3 ? "RX" : "RY"));
+                string add = (i <= 2) ? "Ajouter" : "Enlever";
+                item = new MenuItem(add +  " 1 "+axe, "0: X 1: Y 2: Z", "ID_add"+axe, true);
+                item.OnMenuItemCallback = (IPlayer Player, Menu itemMenu, IMenuItem menuItem, int itemMenuIndex) => Player.Emit($"DEBUG_update{axe}Object", (add == "Ajouter") ? 1 : -1);
+                Menu.Add(item);
+            }
+
+
+            Menu.OpenMenu(Client);
         }
 
         private void ChoisePlayerCallback(IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex)

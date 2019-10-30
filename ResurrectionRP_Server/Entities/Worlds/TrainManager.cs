@@ -16,11 +16,12 @@ namespace ResurrectionRP_Server.Entities.Worlds
 
         public static void LoadTrains()
         {
-            Alt.OnClient("TrainManager_PosUpdate", PosUpdate);
-            TrainsList.Add(new Train(15, new Vector3(1838.104f, 3528.820f, 38.384f), "Train de transport de fret", 0));
-            TrainsList.Add(new Train(24, new Vector3(40.2f, -1201.3f, 31.0f), "Metro", 0)); // metro
-            TrainsList.Add(new Train(24, new Vector3(-618.0f, -1476.8f, 16.2f), "Metro", 0)); // metro
+            TrainsList.Add(new Train((byte)Utils.Utils.RandomNumber(0, 22), new Vector3(1838.104f, 3528.820f, 38.384f), "Train", 0));
+            TrainsList.Add(new Train(24, new Vector3(40.2f, -1201.3f, 31.0f), "Métro", 0)); // metro
+            TrainsList.Add(new Train(24, new Vector3(-618.0f, -1476.8f, 16.2f), "Métro", 0)); // metro
             TrainLoaded = true;
+
+            Alt.OnClient("TrainManager_PosUpdate", PosUpdate);
         }
 
         public static void OnPlayerConnected(IPlayer player)

@@ -11,6 +11,7 @@ class Train {
     public CurrentPos: alt.Vector3;
     public Name: string;
     public YouOwn: boolean = false;
+    public PedHandle: number;
 
     constructor(id: number, type: number, currentPos: alt.Vector3, name: string) {
         this.NetworkID = id;
@@ -20,6 +21,8 @@ class Train {
 
         this.Handle = game.createMissionTrain(this.Type, this.CurrentPos.x as number, this.CurrentPos.y as number, this.CurrentPos.z as number, true);
         game.setEntityAsMissionEntity(this.Handle, true, true);
+        game.setEntityProofs(this.Handle, true, true, true, true, true, false, false, false)
+        game.setVehicleCanBeUsedByFleeingPeds(this.Handle, true);
 
         let blip = game.addBlipForEntity(this.Handle);
         game.setBlipColour(blip, 62);
@@ -29,8 +32,13 @@ class Train {
         game.addTextComponentSubstringPlayerName(this.Name);
         game.endTextCommandSetBlipName(blip);
 
-        game.createPedInsideVehicle(this.Handle, 26, game.getHashKey("s_m_m_lsmetro_01"), -1, false, true);
+        this.PedHandle = game.createPedInsideVehicle(this.Handle, 26, game.getHashKey("s_m_m_lsmetro_01"), -1, false, true);
 
+        game.setBlockingOfNonTemporaryEvents(this.PedHandle, true);
+        game.setPedFleeAttributes(this.PedHandle, 0, false);
+        game.setEntityInvincible(this.PedHandle, true);
+        game.setEntityAsMissionEntity(this.PedHandle, true, true);
+        
         alt.setInterval(() => {
             this.CurrentPos = game.getEntityCoords(this.Handle, true);
             if (this.YouOwn) {
@@ -115,4 +123,11 @@ export async function initialize()
         if (utils.Distance(currentPos, pos) > 1.2)
             game.setMissionTrainCoords(train.Handle, pos.x as number, pos.y as number, pos.z as number);
     }); 
+
+    alt.on('disconnect', () => {
+        trains.forEach((train) => {
+            game.deleteMissionTrain(train.Handle);
+            game.deleteEntity(train.PedHandle);
+        });
+    });
 }

@@ -16,6 +16,7 @@ using SaltyServer;
 using ResurrectionRP_Server.Entities.Players.Data;
 using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.Models.InventoryData;
+using ResurrectionRP_Server.Entities.Worlds;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -271,6 +272,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     Houses.HouseManager.OnPlayerConnected(client);
                     Illegal.IllegalManager.OnPlayerConnected(client);
                     Factions.FactionManager.OnPlayerConnected(client);
+                    TrainManager.OnPlayerConnected(client);
                 });
                 
                 await Task.Delay(600);

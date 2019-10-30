@@ -6,6 +6,7 @@ import * as xtreamMenu from './menus/xtreamMenu/xtreamMenuManager';
 import * as utils from './Utils/utils';
 import * as login from './login/Login';
 import * as nightClub from './Env/NightClub';
+import * as trains from './Env/Trains';
 import * as PlayerCustomization from './player/PlayerCustomization';
 import { Game } from './player/Game';
 import { OpenCharCreator } from './Creator/Creator';
@@ -77,6 +78,7 @@ const init = async () => {
         login.init();
         xtreamMenu.init();
         nightClub.initialize();
+        trains.initialize();
         new LSPDManager();
         new Notify();
         new NetworkingEntityClient();

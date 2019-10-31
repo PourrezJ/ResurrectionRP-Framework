@@ -22,6 +22,7 @@ using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Services;
 using ResurrectionRP_Server.Illegal;
 using ResurrectionRP_Server.AutoBusiness;
+using ResurrectionRP_Server.Entities.Worlds;
 
 namespace ResurrectionRP_Server
 {
@@ -141,7 +142,6 @@ namespace ResurrectionRP_Server
             XMenuManager.XMenuManager.Init();
             RadioManager.Init();
             Weather.WeatherManager.InitWeather();
-            Phone.PhoneManager.Init();
 
             Economy = new Economy.Economy();
             DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
@@ -182,6 +182,7 @@ namespace ResurrectionRP_Server
             Weather.WeatherManager.InitWeather();
             Phone.PhoneManager.Init();
             Jobs.JobsManager.Init();
+            TrainManager.LoadTrains();
 
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
@@ -191,8 +192,19 @@ namespace ResurrectionRP_Server
             if (!IsDevServer)
                 Utils.Utils.SetInterval(async () => await Restart(), 1000);
             
-            Utils.Utils.SetInterval(() => Time.Update(), 1000);           
+            Utils.Utils.SetInterval(() => Time.Update(), 1000);
 
+            bool Hunger = false;
+            Utils.Utils.SetInterval( () => {
+                Hunger = !Hunger;
+                foreach (PlayerHandler playerHandler in PlayerManager.GetPlayersList())
+                {
+                    if (playerHandler.Client == null || !playerHandler.Client.Exists)
+                        return;
+                    playerHandler.UpdateHungerThirst((Hunger) ? playerHandler.Hunger - 1 : playerHandler.Hunger, playerHandler.Thirst - 1);
+                }
+            }, 1000 * 60 * 3 / 2 );
+                
             Chat.Initialize();
 
             Chat.RegisterCmd("coords", (IPlayer player, string[] args) =>

@@ -11,6 +11,7 @@ using ItemID = ResurrectionRP_Server.Models.InventoryData.ItemID;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Utils.Enums;
 using System.Numerics;
+using ResurrectionRP_Server.Entities.Players;
 
 namespace ResurrectionRP_Server.Inventory
 {
@@ -87,8 +88,351 @@ namespace ResurrectionRP_Server.Inventory
         }
         #endregion
 
-        #region Use
-        private static void RPGInventory_UseItem(IPlayer client, object[] args)
+        #region Add Physical
+        public static void RPGInventory_SetPlayerProps(IPlayer client, Models.Item item)
+        {
+            PlayerHandler player = client.GetPlayerHandler();
+            _clientMenus.TryGetValue(client, out RPGInventoryMenu menu);
+            Models.Attachment attach;
+            ClothItem cloth = item as ClothItem;
+            Items.Weapons weapons = (item) as Items.Weapons;
+            if(cloth != null) // CLOTHING STUFF
+            {
+                try
+                {
+                    switch (item.id)
+                    {
+                        case ItemID.Glasses: // glasses
+                            player.Clothing.Glasses = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                            break;
+
+                        case ItemID.Hats: // hair
+                            player.Clothing.Hats = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                            break;
+
+                        case ItemID.Necklace: // necklace
+                            player.Clothing.Accessory = cloth.Clothing;
+                            break;
+
+                        case ItemID.Mask: // mask
+                            player.Clothing.Mask = cloth.Clothing;
+                            break;
+
+                        case ItemID.Ears: // earring
+                            player.Clothing.Ears = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                            break;
+
+                        case ItemID.Jacket: // jacket
+                            player.Clothing.Tops = cloth.Clothing;
+
+                            int torso = 0;
+
+                            if (player.Character.Gender == 0)
+                                torso = Loader.ClothingLoader.ClothingsMaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
+                            else
+                                torso = Loader.ClothingLoader.ClothingsFemaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
+
+                            player.Clothing.Torso = new ClothData((byte)torso, 0, 0);
+                            break;
+
+                        case ItemID.Watch: // watch
+                            player.Clothing.Watches = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                            break;
+
+                        case ItemID.TShirt: // shirt
+                            player.Clothing.Undershirt = cloth.Clothing;
+                            break;
+
+                        case ItemID.Bracelet: // bracelet
+                            player.Clothing.Bracelets = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                            break;
+
+                        case ItemID.Pant: // pants
+                            player.Clothing.Legs = cloth.Clothing;
+                            break;
+
+                        case ItemID.Glove: // gloves
+                            player.Clothing.Glasses = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
+                            break;
+
+                        case ItemID.Shoes: // shoes
+                            player.Clothing.Feet = cloth.Clothing;
+                            break;
+
+                        case ItemID.Kevlar: // kevlar
+                            player.Clothing.BodyArmor = cloth.Clothing;
+                            break;
+                    }
+                }
+                catch (Exception ex )
+                {
+                    Alt.Server.LogError("[RPGInventorymanager.RPGInventory_SetPlayerProps] Clothing " + ex.Message);
+                }
+
+            } else if(weapons != null)
+            {
+                try
+                {
+                    switch (weapons.id)
+                    {
+                        case ItemID.Weapon:
+                        case ItemID.LampeTorche:
+                        case ItemID.Carabine:
+                        case ItemID.Matraque:
+                        case ItemID.Bat:
+                        case ItemID.BattleAxe:
+                        case ItemID.CombatPistol:
+                        case ItemID.Flashlight:
+                        case ItemID.HeavyPistol:
+                        case ItemID.Knife:
+                        case ItemID.Machete:
+                        case ItemID.Musket:
+                        case ItemID.SNSPistol:
+                        case ItemID.Colt6Coup:
+                        case ItemID.Colt1911:
+                        case ItemID.Magnum357:
+                        case ItemID.Pistol50:
+                        case ItemID.Pistol:
+                        case ItemID.Pump:
+                        case ItemID.Taser:
+                            if (GameMode.IsDebug)
+                                Alt.Server.LogInfo("[RPGInventoryManager.RPGInventory_SetPlayerProps()] Giving a weapon (" + weapons.name + ") to " + client.GetPlayerHandler().PID);
+
+                            client.GiveWeapon((uint)weapons.Hash, 99999, true);
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Alt.Server.LogError("[RPGInventorymanager.RPGInventory_SetPlayerProps] Weapons " + ex.Message) ;
+                }
+            } else
+            {
+                try
+                {
+                    switch (item.id)
+                    {
+                        case ItemID.Bag: // backpack
+                            var backpack = (item) as Items.BagItem;
+                            if (backpack != null && backpack.InventoryBag != null)
+                            {
+                                player.BagInventory = backpack.InventoryBag;
+                                player.Clothing.Bags = backpack.Clothing;
+                                player.BagInventory =  backpack.InventoryBag;
+                                
+                            }
+                            break;
+
+                        case ItemID.Phone:
+                            var phoneItem = (item) as Items.PhoneItem;
+                            if (phoneItem != null && phoneItem.PhoneHandler != null)
+                                player.PhoneSelected = phoneItem.PhoneHandler;
+                            break;
+
+                        case ItemID.Radio:
+                            var radioItem = (item) as Items.RadioItem;
+                            if (radioItem != null)
+                                player.RadioSelected = radioItem.Radio;
+                            break;
+                        case ItemID.Pioche:
+                            if (menu.Outfit.prop != null)
+                                menu.Outfit.DestroyProp();
+                            attach = new Models.Attachment()
+                            {
+                                Bone = "PH_R_Hand",
+                                PositionOffset = new Vector3(0.1f, -0.1f, -0.02f),
+                                RotationOffset = new Vector3(80, 0, 170),
+                                Type = (int)Streamer.Data.EntityType.Ped,
+                                RemoteID = client.Id
+                            };
+                            menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_pickaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
+                            break;
+                        case ItemID.Hache:
+                            if (menu.Outfit.prop != null)
+                                menu.Outfit.DestroyProp();
+                            attach = new Models.Attachment()
+                            {
+                                Bone = "PH_R_Hand",
+                                PositionOffset = new Vector3(0.1f, -0.1f, -0.02f),
+                                RotationOffset = new Vector3(80, 0, 180),
+                                Type = (int)Streamer.Data.EntityType.Ped,
+                                RemoteID = client.Id
+                            };
+                            menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_fireaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
+
+                            break;
+                        case ItemID.MarteauPiqueur:
+                            if (menu.Outfit.prop != null)
+                                menu.Outfit.DestroyProp();
+                            menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_jackham"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
+                            (item as Items.Tool).JackHammerSetWalkingStyle(client, menu.Outfit.prop);
+                            break;
+
+                        case ItemID.Pelle:
+                            if (menu.Outfit.prop != null)
+                                menu.Outfit.DestroyProp();
+                            break;
+                        case ItemID.Marteau:
+                            if (menu.Outfit.prop != null)
+                                menu.Outfit.DestroyProp();
+                            attach = new Models.Attachment()
+                            {
+                                Bone = "PH_R_Hand",
+                                PositionOffset = new Vector3(0.1f, 0.1f, 0),
+                                RotationOffset = new Vector3(80, 0, 180),
+                                Type = (int)Streamer.Data.EntityType.Ped,
+                                RemoteID = client.Id
+                            };
+                            menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_mallet"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
+                            break;
+                        case ItemID.CrateTool:
+                            if (menu.Outfit.prop != null)
+                                menu.Outfit.DestroyProp();
+                            attach = new Models.Attachment()
+                            {
+                                Bone = "PH_R_Hand",
+                                PositionOffset = new Vector3(0, 0, 0),
+                                RotationOffset = new Vector3(90, 0, 0),
+                                Type = (int)Streamer.Data.EntityType.Ped,
+                                RemoteID = client.Id
+                            };
+                            menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("gr_prop_gr_tool_box_01a"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Alt.Server.LogError("[RPGInventorymanager.RPGInventory_SetPlayerProps] Others " + ex.Message);
+                }
+            }
+
+            player.Clothing.UpdatePlayerClothing();
+            
+           
+        }
+        #endregion
+        #region Remove physical
+        public static void RPGInventory_DeletePlayerProps(IPlayer client, Models.Item item)
+        {
+            PlayerHandler ph = client.GetPlayerHandler();
+            _clientMenus.TryGetValue(client, out RPGInventoryMenu menu);
+
+            ClothItem cloth = item as ClothItem;
+            Items.Weapons weapons = (item) as Items.Weapons;
+            if(cloth != null)
+            {
+                switch(item.id)
+                {
+                    case ItemID.Glasses: // glasses
+                        ph.Clothing.Glasses = (ph.Character.Gender == 0) ? new PropData(14, 0) : new PropData(13, 0);
+                        break;
+
+                    case ItemID.Hats: // hair
+                        ph.Clothing.Hats = (ph.Character.Gender == 0) ? new PropData(121, 0) : new PropData(120, 0);
+                        break;
+
+                    case ItemID.Necklace: // necklace
+                        ph.Clothing.Accessory = new ClothData();
+                        break;
+
+                    case ItemID.Mask: // mask
+                        ph.Clothing.Mask = new ClothData();
+                        break;
+
+                    case ItemID.Ears: // earring
+                        ph.Clothing.Ears = (ph.Character.Gender == 0) ? new PropData(33, 0) : new PropData(12, 0);
+                        break;
+
+                    case ItemID.Jacket: // jacket
+                        ph.Clothing.Torso = new ClothData(15, 0, 0);
+                        ph.Clothing.Tops = new ClothData(15, 0, 0);
+                        break;
+
+                    case ItemID.Watch: // watch
+                        ph.Clothing.Watches = (ph.Character.Gender == 0) ? new PropData(2, 0) : new PropData(1, 0);
+                        break;
+
+                    case ItemID.TShirt: // shirt
+                        ph.Clothing.Undershirt = (ph.Character.Gender == 0) ? new ClothData(57, 0, 0) : new ClothData(34, 0, 0);
+                        break;
+
+                    case ItemID.Bracelet: // bracelet
+                        ph.Clothing.Bracelets = new PropData(15, 0);
+                        break;
+
+                    case ItemID.Pant: // pants
+                        ph.Clothing.Legs = (ph.Character.Gender == 0) ? new ClothData(14, 0, 0) : new ClothData(15, 0, 0);
+                        break;
+
+                    case ItemID.Glove: // gloves
+                        ph.Clothing.Glasses = (ph.Character.Gender == 0) ? new PropData(6, 0) : new PropData(5, 0);
+                        break;
+
+                    case ItemID.Shoes: // shoes
+                        ph.Clothing.Feet = (ph.Character.Gender == 0) ? new ClothData(34, 0, 0) : new ClothData(35, 0, 0);
+                        break;
+
+                    case ItemID.Kevlar: // kevlar
+                        ph.Clothing.BodyArmor = new ClothData(0, 0, 0);
+                        break;
+                }
+            } else if(weapons != null)
+            {
+                switch(item.id)
+                {
+                    case ItemID.Weapon:
+                    case ItemID.LampeTorche:
+                    case ItemID.Carabine:
+                    case ItemID.Matraque:
+                    case ItemID.Bat:
+                    case ItemID.BattleAxe:
+                    case ItemID.CombatPistol:
+                    case ItemID.Flashlight:
+                    case ItemID.HeavyPistol:
+                    case ItemID.Knife:
+                    case ItemID.Machete:
+                    case ItemID.Musket:
+                    case ItemID.SNSPistol:
+                    case ItemID.Colt6Coup:
+                    case ItemID.Colt1911:
+                    case ItemID.Magnum357:
+                    case ItemID.Pistol50:
+                    case ItemID.Pistol:
+                    case ItemID.Pump:
+                    case ItemID.Taser:
+                        client.RemoveAllWeapons();
+                        break;
+                }
+            } else
+            {
+                switch (item.id)
+                {
+
+                    case ItemID.Bag: // backpack
+                        ph.Clothing.Bags = new ClothData();
+                        ph.BagInventory = null;
+                        menu.Bag = null;
+                        menu.BagItems = null;
+                        //await menu.CloseMenu(sender);
+                        break;
+
+                    case ItemID.Hache:
+                    case ItemID.Pioche:
+                    case ItemID.Marteau:
+                    case ItemID.MarteauPiqueur:
+                    case ItemID.Pelle:
+                    case ItemID.CrateTool:
+                        menu.Outfit.DestroyProp();
+                        client.StopAnimation();
+                        break;
+                }
+            }
+            ph.Clothing.UpdatePlayerClothing();
+        }
+        #endregion
+
+            #region Use
+            private static void RPGInventory_UseItem(IPlayer client, object[] args)
         {
             if (!client.Exists)
                 return;
@@ -217,94 +561,7 @@ namespace ResurrectionRP_Server.Inventory
                                 else
                                     invItem.quantity = invItem.stack.Quantity;
                             }
-
-                            switch (invItem.id)
-                            {
-                                case ItemID.Glasses: // glasses
-                                    ph.Clothing.Glasses = (ph.Character.Gender == 0) ? new PropData(14, 0) : new PropData(13, 0);
-                                    break;
-
-                                case ItemID.Hats: // hair
-                                    ph.Clothing.Hats = (ph.Character.Gender == 0) ? new PropData(121, 0) : new PropData(120, 0);
-                                    break;
-
-                                case ItemID.Necklace: // necklace
-                                    ph.Clothing.Accessory = new ClothData();
-                                    break;
-
-                                case ItemID.Mask: // mask
-                                    ph.Clothing.Mask = new ClothData();
-                                    break;
-
-                                case ItemID.Ears: // earring
-                                    ph.Clothing.Ears = (ph.Character.Gender == 0) ? new PropData(33, 0) : new PropData(12, 0);
-                                    break;
-
-                                case ItemID.Jacket: // jacket
-                                    ph.Clothing.Torso = new ClothData(15, 0, 0);
-                                    ph.Clothing.Tops = new ClothData(15, 0, 0);
-                                    break;
-
-                                case ItemID.Watch: // watch
-                                    ph.Clothing.Watches = (ph.Character.Gender == 0) ? new PropData(2, 0) : new PropData(1, 0);
-                                    break;
-
-                                case ItemID.TShirt: // shirt
-                                    ph.Clothing.Undershirt = (ph.Character.Gender == 0) ? new ClothData(57, 0, 0) : new ClothData(34, 0, 0);
-                                    break;
-
-                                case ItemID.Bracelet: // bracelet
-                                    ph.Clothing.Bracelets = new PropData(15, 0);
-                                    break;
-
-                                case ItemID.Pant: // pants
-                                    ph.Clothing.Legs = (ph.Character.Gender == 0) ? new ClothData(14, 0, 0) : new ClothData(15, 0, 0);
-                                    break;
-
-                                case ItemID.Glove: // gloves
-                                    ph.Clothing.Glasses = (ph.Character.Gender == 0) ? new PropData(6, 0) : new PropData(5, 0);
-                                    break;
-
-                                case ItemID.Shoes: // shoes
-                                    ph.Clothing.Feet = (ph.Character.Gender == 0) ? new ClothData(34, 0, 0) : new ClothData(35, 0, 0);
-                                    break;
-
-                                case ItemID.Kevlar: // kevlar
-                                    ph.Clothing.BodyArmor = new ClothData(0, 0, 0);
-                                    break;
-
-                                case ItemID.Bag: // backpack
-                                    ph.Clothing.Bags = new ClothData();
-                                    ph.BagInventory = null;
-                                    menu.Bag = null;
-                                    menu.BagItems = null;
-                                    //await menu.CloseMenu(sender);
-                                    break;
-
-                                case ItemID.Weapon:
-                                case ItemID.LampeTorche:
-                                case ItemID.Carabine:
-                                case ItemID.Matraque:
-                                case ItemID.Bat:
-                                case ItemID.BattleAxe:
-                                case ItemID.CombatPistol:
-                                case ItemID.Flashlight:
-                                case ItemID.Hache:
-                                case ItemID.HeavyPistol:
-                                case ItemID.Knife:
-                                case ItemID.Machete:
-                                case ItemID.Musket:
-                                case ItemID.SNSPistol:
-                                case ItemID.Colt6Coup:
-                                case ItemID.Colt1911:
-                                case ItemID.Magnum357:
-                                case ItemID.Pistol50:
-                                case ItemID.Pistol:
-                                case ItemID.Pump:
-                                case ItemID.Taser:
-                                    client.RemoveAllWeapons();
-                                    break;
-                            }
+                            RPGInventory_DeletePlayerProps(client, invItem.stack.Item);
 
                             ph.Clothing.UpdatePlayerClothing();
                             break;
@@ -407,95 +664,7 @@ namespace ResurrectionRP_Server.Inventory
                                 phDistant.Client.SendNotification($"On vous a donné {quantity} {invItem.stack.Item.name}");
                                 ph.DeleteItem(slot, inventoryType, quantity);
                             }
-
-
-                            switch (invItem.id)
-                            {
-                                case ItemID.Glasses: // glasses
-                                    ph.Clothing.Glasses = (ph.Character.Gender == 0) ? new PropData(14, 0) : new PropData(13, 0);
-                                    break;
-
-                                case ItemID.Hats: // hair
-                                    ph.Clothing.Hats = (ph.Character.Gender == 0) ? new PropData(121, 0) : new PropData(120, 0);
-                                    break;
-
-                                case ItemID.Necklace: // necklace
-                                    ph.Clothing.Accessory = new ClothData();
-                                    break;
-
-                                case ItemID.Mask: // mask
-                                    ph.Clothing.Mask = new ClothData();
-                                    break;
-
-                                case ItemID.Ears: // earring
-                                    ph.Clothing.Ears = (ph.Character.Gender == 0) ? new PropData(33, 0) : new PropData(12, 0);
-                                    break;
-
-                                case ItemID.Jacket: // jacket
-                                    ph.Clothing.Torso = new ClothData(15, 0, 0);
-                                    ph.Clothing.Tops = new ClothData(15, 0, 0);
-                                    break;
-
-                                case ItemID.Watch: // watch
-                                    ph.Clothing.Watches = (ph.Character.Gender == 0) ? new PropData(2, 0) : new PropData(1, 0);
-                                    break;
-
-                                case ItemID.TShirt: // shirt
-                                    ph.Clothing.Undershirt = (ph.Character.Gender == 0) ? new ClothData(57, 0, 0) : new ClothData(34, 0, 0);
-                                    break;
-
-                                case ItemID.Bracelet: // bracelet
-                                    ph.Clothing.Bracelets = new PropData(15, 0);
-                                    break;
-
-                                case ItemID.Pant: // pants
-                                    ph.Clothing.Legs = (ph.Character.Gender == 0) ? new ClothData(14, 0, 0) : new ClothData(15, 0, 0);
-                                    break;
-
-                                case ItemID.Glove: // gloves
-                                    ph.Clothing.Glasses = (ph.Character.Gender == 0) ? new PropData(6, 0) : new PropData(5, 0);
-                                    break;
-
-                                case ItemID.Shoes: // shoes
-                                    ph.Clothing.Feet = (ph.Character.Gender == 0) ? new ClothData(34, 0, 0) : new ClothData(35, 0, 0);
-                                    break;
-
-                                case ItemID.Kevlar: // kevlar
-                                    ph.Clothing.BodyArmor = new ClothData(0, 0, 0);
-                                    break;
-
-                                case ItemID.Bag: // backpack
-                                    ph.Clothing.Bags = new ClothData();
-                                    ph.BagInventory = null;
-                                    menu.Bag = null;
-                                    menu.BagItems = null;
-                                    //await menu.CloseMenu(sender);
-                                    break;
-
-                                case ItemID.Weapon:
-                                case ItemID.LampeTorche:
-                                case ItemID.Carabine:
-                                case ItemID.Matraque:
-                                case ItemID.Bat:
-                                case ItemID.BattleAxe:
-                                case ItemID.CombatPistol:
-                                case ItemID.Flashlight:
-                                case ItemID.Hache:
-                                case ItemID.HeavyPistol:
-                                case ItemID.Knife:
-                                case ItemID.Machete:
-                                case ItemID.Musket:
-                                case ItemID.SNSPistol:
-                                case ItemID.Colt6Coup:
-                                case ItemID.Colt1911:
-                                case ItemID.Magnum357:
-                                case ItemID.Pistol50:
-                                case ItemID.Pistol:
-                                case ItemID.Pump:
-                                case ItemID.Taser:
-                                    client.RemoveAllWeapons();
-                                    break;
-                            }
+                            RPGInventory_SetPlayerProps(client, invItem.stack.Item);
 
                             ph.Clothing.UpdatePlayerClothing();
 
@@ -713,109 +882,11 @@ namespace ResurrectionRP_Server.Inventory
 
                             #region Clothing 
                             // Remove
+                            Models.Attachment attach = null;
                             if (oldRPGInv == InventoryTypes.Outfit)
                             {
-                                switch (item.id)
-                                {
-                                    case ItemID.Glasses: // glasses
-                                        player.Clothing.Glasses = (player.Character.Gender == 0) ? new PropData(14, 0) : new PropData(13, 0);
-                                        break;
-
-                                    case ItemID.Hats: // hair
-                                        player.Clothing.Hats = (player.Character.Gender == 0) ? new PropData(121, 0) : new PropData(120, 0);
-                                        break;
-
-                                    case ItemID.Necklace: // necklace
-                                        player.Clothing.Accessory = new ClothData();
-                                        break;
-
-                                    case ItemID.Mask: // mask
-                                        player.Clothing.Mask = new ClothData();
-                                        break;
-
-                                    case ItemID.Ears: // earring
-                                        player.Clothing.Ears = (player.Character.Gender == 0) ? new PropData(33, 0) : new PropData(12, 0);
-                                        break;
-
-                                    case ItemID.Jacket: // jacket
-                                        player.Clothing.Torso = new ClothData(15, 0, 0);
-                                        player.Clothing.Tops = new ClothData(15, 0, 0);
-                                        break;
-
-                                    case ItemID.Watch: // watch
-                                        player.Clothing.Watches = (player.Character.Gender == 0) ? new PropData(2, 0) : new PropData(1, 0);
-                                        break;
-
-                                    case ItemID.TShirt: // shirt
-                                        player.Clothing.Undershirt = (player.Character.Gender == 0) ? new ClothData(57, 0, 0) : new ClothData(34, 0, 0);
-                                        break;
-
-                                    case ItemID.Bracelet: // bracelet
-                                        player.Clothing.Bracelets = new PropData(15, 0);
-                                        break;
-
-                                    case ItemID.Pant: // pants
-                                        player.Clothing.Legs = (player.Character.Gender == 0) ? new ClothData(14, 0, 0) : new ClothData(15, 0, 0);
-                                        break;
-
-                                    case ItemID.Glove: // gloves
-                                        player.Clothing.Glasses = (player.Character.Gender == 0) ? new PropData(6, 0) : new PropData(5, 0);
-                                        break;
-
-                                    case ItemID.Shoes: // shoes
-                                        player.Clothing.Feet = (player.Character.Gender == 0) ? new ClothData(34, 0, 0) : new ClothData(35, 0, 0);
-                                        break;
-
-                                    case ItemID.Kevlar: // kevlar
-                                        player.Clothing.BodyArmor = new ClothData(0, 0, 0);
-                                        break;
-
-                                    case ItemID.Bag: // backpack
-                                        player.Clothing.Bags = new ClothData();
-                                        player.BagInventory = null;
-                                        menu.Bag = null;
-                                        //await menu.CloseMenu(sender);
-                                        break;
-
-                                    case ItemID.Phone:
-                                        player.PhoneSelected = null;
-                                        break;
-
-                                    case ItemID.Radio:
-                                        player.RadioSelected = null;
-                                        break;
-
-                                    case ItemID.Weapon:
-                                    case ItemID.LampeTorche:
-                                    case ItemID.Carabine:
-                                    case ItemID.Matraque:
-                                    case ItemID.Bat:
-                                    case ItemID.BattleAxe:
-                                    case ItemID.CombatPistol:
-                                    case ItemID.Flashlight:
-                                    case ItemID.HeavyPistol:
-                                    case ItemID.Knife:
-                                    case ItemID.Machete:
-                                    case ItemID.Musket:
-                                    case ItemID.SNSPistol:
-                                    case ItemID.Colt6Coup:
-                                    case ItemID.Colt1911:
-                                    case ItemID.Magnum357:
-                                    case ItemID.Pistol50:
-                                    case ItemID.Pistol:
-                                    case ItemID.Pump:
-                                    case ItemID.Taser:
-                                        client.RemoveAllWeapons();
-                                        break;
-                                    case ItemID.Pioche:
-                                    case ItemID.Hache:
-                                    case ItemID.MarteauPiqueur:
-                                        menu.Outfit.DestroyProp();
-                                        client.StopAnimation();
-                                        break;
-                                }
-
-                                player.Clothing.UpdatePlayerClothing();
+                                RPGInventory_DeletePlayerProps(client, item);
+                                
                                 menu.Outfit.Slots[oldslotID] = null;
                             }
                             // Equip
@@ -823,132 +894,8 @@ namespace ResurrectionRP_Server.Inventory
                             {
                                 var cloth = item as ClothItem;
 
-                                switch (item.id)
-                                {
-                                    case ItemID.Glasses: // glasses
-                                        player.Clothing.Glasses = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
-                                        break;
+                                RPGInventory_SetPlayerProps(client, item);
 
-                                    case ItemID.Hats: // hair
-                                        player.Clothing.Hats = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
-                                        break;
-
-                                    case ItemID.Necklace: // necklace
-                                        player.Clothing.Accessory = cloth.Clothing;
-                                        break;
-
-                                    case ItemID.Mask: // mask
-                                        player.Clothing.Mask = cloth.Clothing;
-                                        break;
-
-                                    case ItemID.Ears: // earring
-                                        player.Clothing.Ears = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
-                                        break;
-
-                                    case ItemID.Jacket: // jacket
-                                        player.Clothing.Tops = cloth.Clothing;
-
-                                        int torso = 0;
-
-                                        if (player.Character.Gender == 0)
-                                            torso = Loader.ClothingLoader.ClothingsMaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
-                                        else
-                                            torso = Loader.ClothingLoader.ClothingsFemaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
-
-                                        player.Clothing.Torso = new ClothData((byte)torso, 0, 0);
-                                        break;
-
-                                    case ItemID.Watch: // watch
-                                        player.Clothing.Watches = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
-                                        break;
-
-                                    case ItemID.TShirt: // shirt
-                                        player.Clothing.Undershirt = cloth.Clothing;
-                                        break;
-
-                                    case ItemID.Bracelet: // bracelet
-                                        player.Clothing.Bracelets = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
-                                        break;
-
-                                    case ItemID.Pant: // pants
-                                        player.Clothing.Legs = cloth.Clothing;
-                                        break;
-
-                                    case ItemID.Glove: // gloves
-                                        player.Clothing.Glasses = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
-                                        break;
-
-                                    case ItemID.Shoes: // shoes
-                                        player.Clothing.Feet = cloth.Clothing;
-                                        break;
-
-                                    case ItemID.Kevlar: // kevlar
-                                        player.Clothing.BodyArmor = cloth.Clothing;
-                                        break;
-
-                                    case ItemID.Bag: // backpack
-                                        var backpack = (item) as Items.BagItem;
-                                        if (backpack != null)
-                                        {
-                                            player.BagInventory = backpack.InventoryBag;
-                                            player.Clothing.Bags = backpack.Clothing;
-                                            menu.Bag = backpack.InventoryBag;
-                                        }
-                                        break;
-
-                                    case ItemID.Phone:
-                                        var phoneItem = (item) as Items.PhoneItem;
-                                        if (phoneItem != null)
-                                            player.PhoneSelected = phoneItem.PhoneHandler;
-                                        break;
-
-                                    case ItemID.Radio:
-                                        var radioItem = (item) as Items.RadioItem;
-                                        if (radioItem != null)
-                                            player.RadioSelected = radioItem.Radio;
-                                        break;
-
-                                    case ItemID.Weapon:
-                                    case ItemID.LampeTorche:
-                                    case ItemID.Carabine:
-                                    case ItemID.Matraque:
-                                    case ItemID.Bat:
-                                    case ItemID.BattleAxe:
-                                    case ItemID.CombatPistol:
-                                    case ItemID.Flashlight:
-                                    case ItemID.HeavyPistol:
-                                    case ItemID.Knife:
-                                    case ItemID.Machete:
-                                    case ItemID.Musket:
-                                    case ItemID.SNSPistol:
-                                    case ItemID.Colt6Coup:
-                                    case ItemID.Colt1911:
-                                    case ItemID.Magnum357:
-                                    case ItemID.Pistol50:
-                                    case ItemID.Pistol:
-                                    case ItemID.Pump:
-                                    case ItemID.Taser:
-                                        var weaponItem = (item) as Items.Weapons;
-                                        if (weaponItem != null)
-                                        {
-                                            client.GiveWeapon((uint)weaponItem.Hash, 99999, true);
-                                        }
-                                        break;
-                                    case ItemID.Pioche:
-                                        menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_pickaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
-                                        menu.Outfit.prop.SetAttachToEntity(client, "PH_R_Hand", new Vector3(0.1f, -0.1f, -0.02f), new Vector3(80, 0, 170));
-                                        break;
-                                    case ItemID.Hache:
-                                        menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_fireaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
-                                        menu.Outfit.prop.SetAttachToEntity(client, "PH_R_Hand", new Vector3(0.1f, -0.1f, -0.02f), new Vector3(80, 0, 170));
-                                        break;
-                                    case ItemID.MarteauPiqueur:
-                                        menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_jackham"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
-                                        (item as Items.Tool).JackHammerSetWalkingStyle(client, menu.Outfit.prop);
-                                        break;
-                                }
-
-                                player.Clothing.UpdatePlayerClothing();
                             }
                             #endregion
                         }

@@ -71,10 +71,19 @@ namespace ResurrectionRP_Server.Items
         public void AnimateEatDrink(IPlayer client, Entities.Players.PlayerHandler ph, string props, Vector3 position, Vector3 rotation)
         {
             //obj = await ObjectHandlerManager.CreateObject(MP.Utility.Joaat(props), await client.GetPositionAsync(), await client.GetRotationAsync());
-
+/*
             Object = Entities.Objects.WorldObject.CreateObject(props, client.Position, new Vector3(), true);
-            Object.SetAttachToEntity(client, "PH_L_Hand", position, rotation);
+            Object.SetAttachToEntity(client, "PH_L_Hand", position, rotation);*/
 
+            var attach = new Attachment()
+            {
+                Bone = "PH_L_Hand",
+                PositionOffset = position,
+                RotationOffset = rotation,
+                Type = (int)Streamer.Data.EntityType.Ped,
+                RemoteID = client.Id
+            };
+            Object = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash(props), client.Position.ConvertToVector3(), new Vector3(), attach, false);
             if (Food > 0)
             {
                 client.PlayAnimation("mp_player_inteat@burger", "mp_player_int_eat_burger", 8, -1, -1, (AnimationFlags)49);

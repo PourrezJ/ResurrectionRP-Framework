@@ -110,7 +110,6 @@ namespace ResurrectionRP_Server.Farms
             }
             if (usedItem == null)
                 return;
-            Alt.Server.LogInfo(usedItem.name);
             if (usedItem.name == "Pioche")
             {
                 usedItem.SetPickaxeAnimation(client, (int)(Harvest_Time / usedItem.Speed));

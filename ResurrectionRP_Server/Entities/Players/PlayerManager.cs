@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Entities.Players.Data;
 using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Entities.Worlds;
 using ResurrectionRP_Server.Factions;
 using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Illegal;
@@ -48,7 +49,9 @@ namespace ResurrectionRP_Server.Entities.Players
             AltAsync.OnClient("LogPlayer", LogPlayer);
             AltAsync.OnClient("MakePlayer", MakePlayer);
             AltAsync.OnClient("SendLogin", SendLogin );         
-            AltAsync.OnClient("Events_PlayerJoin", Events_PlayerJoin);   
+            AltAsync.OnClient("Events_PlayerJoin", Events_PlayerJoin);
+
+            Alt.OnClient("Player_SetInComa", (IPlayer client, object[] args) => client.GetPlayerHandler().IsInComa = true);
 
             Alt.OnClient("ExitGame", (IPlayer client, object[] args) => client.Kick("Exit"));
 
@@ -91,6 +94,7 @@ namespace ResurrectionRP_Server.Entities.Players
             ph.IsOnline = false;
             MenuManager.OnPlayerDisconnect(player);
             FactionManager.OnPlayerDisconnected(player);
+            TrainManager.OnPlayerDisconnected(player);
 
             if (Phone.PhoneManager.PhoneClientList.ContainsKey(player))
                 Phone.PhoneManager.PhoneClientList.TryRemove(player, out List<Phone.Phone> phoneList);
@@ -350,6 +354,7 @@ namespace ResurrectionRP_Server.Entities.Players
         private static async Task IWantToDie(IPlayer client, object[] args)
         {
             await client.ReviveAsync(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
+            client.GetPlayerHandler().UpdateHungerThirst(50, 50);
             client.GetPlayerHandler()?.UpdateFull();
         }
 

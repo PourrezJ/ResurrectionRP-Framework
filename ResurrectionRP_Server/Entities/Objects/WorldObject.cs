@@ -59,6 +59,18 @@ namespace ResurrectionRP_Server.Entities.Objects
             Dimension = dimension;
             Datas = new ConcurrentDictionary<string, object>();
         }
+        public WorldObject(int model, Position position, Rotation rotation, int entityId, Models.Attachment attachment = null, bool freeze = false, short dimension = GameMode.GlobalDimension)
+        {
+            Exists = false;
+            Model = model;
+            ID = entityId;
+            Freeze = freeze;
+            Position = position;
+            Rotation = rotation;
+            Dimension = dimension;
+            Attachment = attachment;
+            Datas = new ConcurrentDictionary<string, object>();
+        }
 
         public bool SetAttachToEntity(IEntity target, string bone, Position positionOffset, Rotation rotationOffset)
         {
@@ -106,6 +118,24 @@ namespace ResurrectionRP_Server.Entities.Objects
                 position.ConvertToPosition(),
                 rotation.ConvertToEntityRotation(),
                 Streamer.Streamer.EntityNumber++,
+                freeze,
+                dimension
+            );
+
+            ListObject.TryAdd(resuobject.ID, resuobject);
+            Streamer.Streamer.AddEntityObject(resuobject);
+            resuobject.Exists = true;
+            return resuobject;
+        }
+        public static WorldObject CreateObject(int model, Vector3 position, Vector3 rotation, Models.Attachment attachment = null, bool freeze = false, bool dynamic = false, short dimension = GameMode.GlobalDimension)
+        {
+            var resuobject = new WorldObject
+            (
+                model,
+                position.ConvertToPosition(),
+                rotation.ConvertToEntityRotation(),
+                Streamer.Streamer.EntityNumber++,
+                attachment,
                 freeze,
                 dimension
             );

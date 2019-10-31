@@ -164,7 +164,7 @@ namespace ResurrectionRP_Server.Farms
                             client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);
                             return;
                         }
-                        LaunchToFarm(client, 0, tool);
+                        LaunchToFarm(client, 0, itemStack.Item);
                         return;
                     }
                     

@@ -80,7 +80,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                                 Defibrilator defribrilator = defibrilators[InventoryTypes.Pocket][0].Item as Defibrilator;
                                 if (defribrilator.Usage >= 3)
                                 {
-                                    client.SendNotification("Le défibrillateur est décharger.");
+                                    client.SendNotification("Le défibrillateur est déchargé.");
                                     ph.PocketInventory.Delete(defibrilators[InventoryTypes.Pocket][0], 1);
                                 }
                             }
@@ -89,7 +89,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                                 Defibrilator defribrilator = defibrilators[InventoryTypes.Bag][0].Item as Defibrilator;
                                 if (defribrilator.Usage >= 3)
                                 {
-                                    client.SendNotification("Le défibrillateur est décharger.");
+                                    client.SendNotification("Le défibrillateur est déchargé.");
                                     ph.BagInventory.Delete(defibrilators[InventoryTypes.Bag][0], 1);
                                 }
                             }

@@ -19,7 +19,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             Chat.RegisterCmd("vehicle", Vehicle);
         }
 
-        private async Task VehicleInfo(IPlayer player, string[] args)
+        public static async Task VehicleInfo(IPlayer player, string[] args)
         {
             if (player == null || !player.Exists)
                 return;

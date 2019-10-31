@@ -16,6 +16,7 @@ using SaltyServer;
 using ResurrectionRP_Server.Entities.Players.Data;
 using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.Models.InventoryData;
+using ResurrectionRP_Server.Entities.Worlds;
 
 namespace ResurrectionRP_Server.Entities.Players
 {
@@ -97,6 +98,9 @@ namespace ResurrectionRP_Server.Entities.Players
 
         [BsonIgnore]
         public bool IsSitting = false;
+
+        [BsonIgnore]
+        public bool IsInComa = false;
         /*
         private ushort _health = 200;
         public ushort Health
@@ -175,6 +179,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Load
         public async Task LoadPlayer(IPlayer client, bool firstspawn = false)
         {
+            client.Emit("FadeOut", 500);
             Client = client;
             client.SetData("PlayerHandler", this);
 
@@ -198,7 +203,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     AddMoney(PlayerManager.StartMoney);
                     Location = GameMode.FirstSpawn;
                 }
-                
+
                 var inventoriesPhones = GetStacksItems(Models.InventoryData.ItemID.Phone);
 
                 if (inventoriesPhones.Count > 0)
@@ -212,7 +217,9 @@ namespace ResurrectionRP_Server.Entities.Players
                         }
                     }
                 }
-                
+
+                TrainManager.OnPlayerConnected(client);
+
                 await AltAsync.Do( () =>
                 {
                     IP = Client.Ip;
@@ -238,7 +245,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         Location.Pos.ConvertToVector3Serialized()
                     );
 
-                    Client.Spawn(Location.Pos, 500);
+                    Client.Spawn(Location.Pos, 0);
 
                     Character.ApplyCharacter(Client);
                     Client.Dimension = GameMode.GlobalDimension;
@@ -259,10 +266,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     Client.SetSyncedMetaData("Crounch", PlayerSync.Crounch);
 
                     Client.Emit(SaltyShared.Event.Voice_Initialize, Voice.ServerUniqueIdentifier, Voice.RequiredUpdateBranch, Voice.MinimumPluginVersion, Voice.SoundPack, Voice.IngameChannel, Voice.IngameChannelPassword);
-                    Client.Emit("FadeIn", 3000);
+                    Utils.Utils.Delay(1000, () => Client.Emit("FadeIn", 3000));
 
                     UpdateClothing();
-
                     if (PlayerSync.IsCuff)
                         SetCuff(true);
 
@@ -270,7 +276,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     Door.OnPlayerConnected(client);
                     Houses.HouseManager.OnPlayerConnected(client);
                     Illegal.IllegalManager.OnPlayerConnected(client);
-                    Factions.FactionManager.OnPlayerConnected(client);
+                    Factions.FactionManager.OnPlayerConnected(client); 
                 });
                 
                 await Task.Delay(600);
@@ -359,8 +365,10 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             Thirst = (thirst == -1) ? Thirst : thirst;
             Hunger = (hunger == -1) ? Hunger : hunger;
-            //UpdateFull();
-            Alt.Server.LogInfo($"[PlayerHandler.UpdateHungerThirst()] {PID} new update hunger ({Hunger}) thirst({Thirst})");
+            if((Hunger <= 0 || Thirst <= 0 ) && !IsInComa)
+            {
+                SetHealth( (ushort) (Client.Health - 25) );
+            }
             if (Client != null && Client.Exists)
                 Client.EmitLocked("UpdateHungerThirst", Hunger, Thirst);
 
@@ -527,6 +535,11 @@ namespace ResurrectionRP_Server.Entities.Players
                                 else
                                     RadioSelected = null;
                             }
+                            break;
+                        case 16:
+                        case 17:
+                            if(clothSlot != null && clothSlot.Item != null)
+                                RPGInventoryManager.RPGInventory_SetPlayerProps(Client, clothSlot.Item);
                             break;
                     }
                 }

@@ -9,6 +9,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Items;
+using ResurrectionRP_Server.Colshape;
 
 namespace ResurrectionRP_Server.Farms
 {
@@ -41,7 +42,21 @@ namespace ResurrectionRP_Server.Farms
                 FarmPoints.Add(new InteractionPoint(this, position, 0, Inventory.Inventory.ItemByID(ItemID.Pioche), InteractionPointTypes.Farm, "miner", "melee@large_wpn@streamed_core", "ground_attack_on_spot"))
             );
             Harvest_Range = 100f;
-            
+
+            // ANTI NOOB: Les joueurs ne peuvent plus entrer dans la mine d'or avec un véhicule.
+            var antinoob = ColshapeManager.CreateCylinderColshape(new Vector3(-595.2263f, 2085.837f, 130.1125f), 10, 5 );
+            antinoob.OnPlayerEnterColshape += Antinoob_OnPlayerEnterColshape;
+            antinoob.OnPlayerLeaveColshape += Antinoob_OnPlayerEnterColshape;
+        }
+
+        private void Antinoob_OnPlayerEnterColshape(IColshape colshape, IPlayer client)
+        {
+            if (client.IsInVehicle)
+            {
+                client.Emit("SetPlayerOutOfVehicle", false);
+                client.DisplayHelp("Soyez pas fou, la mine s'effondrerait si vous rentriez en véhicule.");
+                Alt.Server.LogInfo("[Gold.Antinoob_OnPlayerEnterColshape()] Le joueur " + client.GetPlayerHandler().PID + " a tenté de rentrer avec un véhicule dans la mine d'or");
+            }
         }
 
         public override void StartFarmingNew(IPlayer client, Item sentItem, string anim_dict = null, string anim_anim = null, string scenario = null)

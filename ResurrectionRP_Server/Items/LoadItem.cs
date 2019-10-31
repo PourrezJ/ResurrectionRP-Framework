@@ -74,7 +74,7 @@ namespace ResurrectionRP_Server.Items
                     new HandCuff(ItemID.Handcuff, "Paire de Menottes", "", 1, icon:"menotte"),
                     new HandCuff(ItemID.Handcuff, "Serflex", "", 1, icon:"menotte", isDockable: true, itemPrice: 50),
 
-                    new CrateTools(ItemID.CrateTool, "Caisse a outil", "", 5, icon:"caissetool"),
+                    new CrateTools(ItemID.CrateTool, "Caisse à outil", "Utile pour réparer une voiture", 5, icon:"caissetool"),
 
                     new Alcohol(ItemID.Sake, "Du Sake", "BANNZAIII!!!!!", 1, true, true,true, drink:15, isDockable: true, itemPrice: 98, icon:"sake", alcohol:1),
                     new Alcohol(ItemID.Champagne, "Champagne", "Juste si tu es riche", 1 , true, true, true, drink:20, icon:"champagne", isDockable: true, itemPrice: 392, alcohol:0.1),

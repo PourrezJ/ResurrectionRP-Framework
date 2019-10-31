@@ -159,7 +159,6 @@ namespace ResurrectionRP_Server.Teleport
 
             Utils.Utils.Delay(2000, () =>
                  {
-
                      client.Position = etage.Pos;
 
                     // BUG v801: Set rotation when player in game not working

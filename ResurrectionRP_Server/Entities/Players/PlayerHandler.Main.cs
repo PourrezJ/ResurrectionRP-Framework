@@ -179,6 +179,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Load
         public async Task LoadPlayer(IPlayer client, bool firstspawn = false)
         {
+            client.Emit("FadeOut", 500);
             Client = client;
             client.SetData("PlayerHandler", this);
 
@@ -202,7 +203,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     AddMoney(PlayerManager.StartMoney);
                     Location = GameMode.FirstSpawn;
                 }
-                
+
                 var inventoriesPhones = GetStacksItems(Models.InventoryData.ItemID.Phone);
 
                 if (inventoriesPhones.Count > 0)
@@ -244,7 +245,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         Location.Pos.ConvertToVector3Serialized()
                     );
 
-                    Client.Spawn(Location.Pos, 500);
+                    Client.Spawn(Location.Pos, 0);
 
                     Character.ApplyCharacter(Client);
                     Client.Dimension = GameMode.GlobalDimension;
@@ -265,10 +266,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     Client.SetSyncedMetaData("Crounch", PlayerSync.Crounch);
 
                     Client.Emit(SaltyShared.Event.Voice_Initialize, Voice.ServerUniqueIdentifier, Voice.RequiredUpdateBranch, Voice.MinimumPluginVersion, Voice.SoundPack, Voice.IngameChannel, Voice.IngameChannelPassword);
-                    Client.Emit("FadeIn", 3000);
+                    Utils.Utils.Delay(1000, () => Client.Emit("FadeIn", 3000));
 
                     UpdateClothing();
-
                     if (PlayerSync.IsCuff)
                         SetCuff(true);
 
@@ -535,6 +535,11 @@ namespace ResurrectionRP_Server.Entities.Players
                                 else
                                     RadioSelected = null;
                             }
+                            break;
+                        case 16:
+                        case 17:
+                            if(clothSlot != null && clothSlot.Item != null)
+                                RPGInventoryManager.RPGInventory_SetPlayerProps(Client, clothSlot.Item);
                             break;
                     }
                 }

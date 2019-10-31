@@ -34,11 +34,7 @@ namespace ResurrectionRP_Server.Inventory
         {
             if (Delete(GetSlotIndexUseStack(itemStack), quantite))
                 return true;
-            if (prop != null)
-            {
-                prop.Destroy();
-                prop = null;
-            }
+            DestroyProp();
             return false;
         }
 
@@ -52,6 +48,7 @@ namespace ResurrectionRP_Server.Inventory
                 if (itemStack == null)
                     return false;
 
+                DestroyProp();
                 if (Delete(GetSlotIndexUseStack(itemStack), quantite))
                     return true;
             }
@@ -62,6 +59,7 @@ namespace ResurrectionRP_Server.Inventory
         {
             try
             {
+                DestroyProp();
                 var itemStack = Slots[itemSlot];
                 if (itemStack.Quantity > quantite)
                     itemStack.Quantity -= quantite;

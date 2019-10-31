@@ -142,7 +142,6 @@ namespace ResurrectionRP_Server
             XMenuManager.XMenuManager.Init();
             RadioManager.Init();
             Weather.WeatherManager.InitWeather();
-            Phone.PhoneManager.Init();
 
             Economy = new Economy.Economy();
             DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();

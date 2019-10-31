@@ -19,12 +19,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 {
     public partial class VehicleHandler
     {
-        private PlayerHandler PlayerHandler;
+        private PlayerHandler _playerHandler;
+
         public void OpenXtremMenu(IPlayer client)
         {
-            PlayerHandler = client.GetPlayerHandler();
+            if (client == null || !client.Exists)
+                return;
 
-            if (PlayerHandler == null || Vehicle == null)
+            _playerHandler = client.GetPlayerHandler();
+
+            if (_playerHandler == null || Vehicle == null)
                 return;
 
             XMenu xmenu = new XMenu("VehiculeMenu");
@@ -58,24 +62,24 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 }
                 else if (Vehicle.GetData("RentShop", out data))
                     xmenu.Add(new XMenuItem("Louer", $"Louer le véhicule pour le prix de ${ data.VehicleInfo.Price}", "ID_Rent", XMenuItemIcons.MONEY_BILL_SOLID, false));
-                else if (PlayerHandler.ListVehicleKey.Exists(key => key.Plate == Plate))
+                else if (_playerHandler.ListVehicleKey.Exists(key => key.Plate == Plate))
                     xmenu.Add(LockState == VehicleLockState.Locked ? new XMenuItem("Déverrouiller", "Déverrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_OPEN_SOLID, false)
                         : new XMenuItem("Verrouiller", "Vérrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_SOLID, false));
             }
 
-            if ((LockState == VehicleLockState.Unlocked || PlayerHandler.ListVehicleKey.Exists(key => key.Plate == Plate)) && Inventory != null)
+            if ((LockState == VehicleLockState.Unlocked || _playerHandler.ListVehicleKey.Exists(key => key.Plate == Plate)) && Inventory != null)
                 xmenu.Add(new XMenuItem("Inventaire", "Ouvre l'inventaire du véhicule", "ID_OpenInventory", XMenuItemIcons.SUITCASE_SOLID, false));
             
-            if(Vehicle.GetVehicleHandler().hasTrailer)
+            if (hasTrailer)
                 xmenu.Add(new XMenuItem("Remorque", "Détacher la remorque", "ID_DetachTrailer", XMenuItemIcons.TRAIN_SOLID, false));
 
             if (OwnerID == client.GetSocialClub() && !SpawnVeh)
                 xmenu.Add(new XMenuItem("Donner le véhicule", "", "ID_give", XMenuItemIcons.HAND_HOLDING_SOLID, true));
 
-            if (PlayerHandler.StaffRank >= AdminRank.Helper)
+            if (_playerHandler.StaffRank >= AdminRank.Helper)
                 xmenu.Add(new XMenuItem("Supprimer le véhicule PERM", "", "ID_delete", XMenuItemIcons.DELETE, true));
             
-            var lockPicks = PlayerHandler.GetStacksItems(ItemID.LockPick);
+            var lockPicks = _playerHandler.GetStacksItems(ItemID.LockPick);
 
             if (lockPicks.Count > 0)
                 xmenu.Add(new XMenuItem("Crocheter le véhicule", "", "ID_lockpick", XMenuItemIcons.SCREWDRIVER_SOLID, true));
@@ -83,8 +87,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (FactionManager.IsLSCustom(client) || FactionManager.IsLspd(client) || FactionManager.IsMedic(client) || FactionManager.IsNordiste(client))
                 xmenu.Add(new XMenuItem("Faction", "", "ID_Faction", XMenuItemIcons.ID_BADGE_SOLID, false));
 
-
-            if (Vehicle != null && Array.IndexOf(Farms.Petrol.allowedTrailers, (VehicleModel)Vehicle.Model) != -1)
+            if (Array.IndexOf(Farms.Petrol.allowedTrailers, (VehicleModel)Vehicle.Model) != -1)
                 xmenu.Add(new XMenuItem("Voir le litrage de la citerne", "", "ID_citerne", XMenuItemIcons.GAS_PUMP_SOLID, true));
 
             xmenu.OpenXMenu(client);
@@ -143,7 +146,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     }
 
                     XMenuManager.XMenuManager.CloseMenu(client);
-                    var inv = new RPGInventoryMenu(PlayerHandler.PocketInventory, PlayerHandler.OutfitInventory, PlayerHandler.BagInventory, Inventory);
+                    var inv = new RPGInventoryMenu(_playerHandler.PocketInventory, _playerHandler.OutfitInventory, _playerHandler.BagInventory, Inventory);
                     inv.OnOpen = (IPlayer c, RPGInventoryMenu m) =>
                     {
                         Inventory.Locked = true;
@@ -151,8 +154,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                     inv.OnMove = (IPlayer c, RPGInventoryMenu m) =>
                     {
-                        if (PlayerHandler != null)
-                            PlayerHandler.UpdateFull();
+                        if (_playerHandler != null)
+                            _playerHandler.UpdateFull();
 
                         UpdateInBackground();
                     };

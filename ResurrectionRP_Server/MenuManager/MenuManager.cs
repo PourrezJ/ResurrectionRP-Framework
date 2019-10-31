@@ -76,12 +76,17 @@ namespace ResurrectionRP_Server
                 {
                     MenuItem menuItem = menu.Items[i];
 
-                    if (menuItem.Type == MenuItemType.CheckboxItem)
-                        ((CheckboxItem)menuItem).Checked = data[i.ToString()];
-                    else if (menuItem.Type == MenuItemType.ListItem)
-                        ((ListItem)menuItem).SelectedItem = data[i.ToString()];
-                    else if (menuItem.InputMaxLength > 0)
-                        menuItem.InputValue = data[i.ToString()];
+                    try
+                    {
+                        if (menuItem.Type == MenuItemType.CheckboxItem)
+                            ((CheckboxItem)menuItem).Checked = data[i.ToString()];
+                        else if (menuItem.Type == MenuItemType.ListItem)
+                            ((ListItem)menuItem).SelectedItem = data[i.ToString()];
+                        else if (menuItem.InputMaxLength > 0)
+                            menuItem.InputValue = data[i.ToString()];
+                    }
+                    catch (Exception)
+                    { }
                 }
 
                 try
@@ -95,13 +100,13 @@ namespace ResurrectionRP_Server
                         return;
 
                     if (menu.ItemSelectCallbackAsync != null)
-                        Task.Run(async ()=> { await menu.ItemSelectCallbackAsync(player, menu, menuItem, itemIndex); });
-                    
+                        Task.Run(async () => { await menu.ItemSelectCallbackAsync(player, menu, menuItem, itemIndex); });
+
                     menu.ItemSelectCallback?.Invoke(player, menu, menuItem, itemIndex);
 
                     if (menuItem.OnMenuItemCallbackAsync != null)
-                        Task.Run(async ()=> { await menuItem.OnMenuItemCallbackAsync(player, menu, menuItem, itemIndex); });
-                    
+                        Task.Run(async () => { await menuItem.OnMenuItemCallbackAsync(player, menu, menuItem, itemIndex); });
+
                     menuItem.OnMenuItemCallback?.Invoke(player, menu, menuItem, itemIndex);
                 }
                 catch (Exception ex)

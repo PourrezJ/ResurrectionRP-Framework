@@ -30,7 +30,7 @@ namespace ResurrectionRP_Server.Farms
             Selling_BlipSprite = 0;
 
             Harvest_Time = 5000;
-            Harvest_Position.Add(new Vector3(-545.525f, 1982.322f, 127.052f));s'effonde'
+            Harvest_Position.Add(new Vector3(-545.525f, 1982.322f, 127.052f));
             Harvest_Position.Add(new Vector3(-533.938f, 1903.403f, 123.091f));
             Harvest_Position.Add(new Vector3(-564.635f, 1886.305f, 123.035f));
             Harvest_Position.Add(new Vector3(-481.573f, 1895.112f, 119.686f));
@@ -46,7 +46,8 @@ namespace ResurrectionRP_Server.Farms
             // ANTI NOOB: Les joueurs ne peuvent plus entrer dans la mine d'or avec un véhicule.
             var antinoob = ColshapeManager.CreateCylinderColshape(new Vector3(-595.2263f, 2085.837f, 130.1125f), 10, 5 );
             antinoob.OnPlayerEnterColshape += Antinoob_OnPlayerEnterColshape;
-            antinoob.OnPlayerLeaveColshape += Antinoob_OnPlayerEnterColshape;        }
+            antinoob.OnPlayerLeaveColshape += Antinoob_OnPlayerEnterColshape;
+        }
 
         private void Antinoob_OnPlayerEnterColshape(IColshape colshape, IPlayer client)
         {

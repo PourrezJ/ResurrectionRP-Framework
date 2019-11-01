@@ -97,7 +97,8 @@ namespace ResurrectionRP_Server.Phone
 
             phone.PhoneNumber = phoneNumber;
             phone.AddressBook.Add(new Address() { contactName = "Votre Numéro", phoneNumber = phone.PhoneNumber });
-
+            if(GameMode.IsDebug)
+                Alt.Server.LogInfo("[PhoneManager.Generatephone()] Generate new phone number: " + phoneNumber);
             return phone;
         }
 

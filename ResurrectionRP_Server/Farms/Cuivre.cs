@@ -97,18 +97,17 @@ namespace ResurrectionRP_Server.Farms
 
             PlayerHandler player = client.GetPlayerHandler();
             Item endItem = Inventory.Inventory.ItemByID(ItemIDBrute);
-            Tool usedItem = item as Tool;
 
 
 
-            if (player == null || player.IsOnProgress)
+            if(player == null || player.IsOnProgress)
                 return;
             if (player.InventoryIsFull(endItem.weight))
             {
                 client.DisplayHelp("Votre inventaire est déjà plein.", 10000);
                 return;
             }
-            if (usedItem == null)
+            if (!(item is Tool usedItem))
                 return;
             if (usedItem.name == "Pioche")
             {

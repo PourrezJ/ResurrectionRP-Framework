@@ -467,10 +467,9 @@ namespace ResurrectionRP_Server.Entities.Players
                 case 1:
                     if (ph.OutfitInventory.Slots[16] != null)
                     {
-                        var weaponItem = (ph.OutfitInventory.Slots[16].Item) as Items.Weapons;
-                        if (weaponItem != null)
+                        if((ph.OutfitInventory.Slots[16].Item) as Items.Weapons != null)
                         {
-                            client.GiveWeapon((uint)weaponItem.Hash, 99999, true);
+                            client.GiveWeapon((uint) ((ph.OutfitInventory.Slots[16].Item) as Items.Weapons).Hash, 99999, true);
                         }
                     }
                     else client.RemoveAllWeapons();
@@ -479,10 +478,8 @@ namespace ResurrectionRP_Server.Entities.Players
                 case 2:
                     if (ph.OutfitInventory.Slots[17] != null)
                     {
-                        var weaponItem = (ph.OutfitInventory.Slots[17].Item) as Items.Weapons;
-                        if (weaponItem != null)
-                        {
-                            client.GiveWeapon((uint)weaponItem.Hash, 99999, true);
+                        if((ph.OutfitInventory.Slots[17].Item) is Items.Weapons weaponItem) {
+                            client.GiveWeapon((uint) weaponItem.Hash, 99999, true);
                         }
                     }
                     else client.RemoveAllWeapons();

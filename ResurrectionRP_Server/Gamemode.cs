@@ -128,6 +128,7 @@ namespace ResurrectionRP_Server
             Alt.OnConsoleCommand += Alt_OnConsoleCommand;
  
             Alt.Server.LogColored("~g~Création des controlleurs...");
+            //Utils.TopServer.Vote.InitVotePlugin();
             Streamer.Streamer.Init();
             ColshapeManager.Init();
             Voice.Init();

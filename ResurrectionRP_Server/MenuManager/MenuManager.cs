@@ -72,18 +72,16 @@ namespace ResurrectionRP_Server
                 bool forced = (bool)args[1];
                 dynamic data = JsonConvert.DeserializeObject(args[2].ToString());
 
-                for (int i = 0; i < menu.Items.Count; i++)
+                foreach (MenuItem menuItem in menu.Items)
                 {
-                    MenuItem menuItem = menu.Items[i];
-
                     try
                     {
                         if (menuItem.Type == MenuItemType.CheckboxItem)
-                            ((CheckboxItem)menuItem).Checked = data[i.ToString()];
+                            ((CheckboxItem)menuItem).Checked = data[menuItem.Id];
                         else if (menuItem.Type == MenuItemType.ListItem)
-                            ((ListItem)menuItem).SelectedItem = data[i.ToString()];
+                            ((ListItem)menuItem).SelectedItem = data[menuItem.Id]["Index"];
                         else if (menuItem.InputMaxLength > 0)
-                            menuItem.InputValue = data[i.ToString()];
+                            menuItem.InputValue = data[menuItem.Id];
                     }
                     catch (Exception)
                     { }
@@ -128,7 +126,7 @@ namespace ResurrectionRP_Server
                 int index = Convert.ToInt32(args[0]);
 
                 if (menu.IndexChangeCallbackAsync != null)
-                    Task.Run(async ()=> { await menu.IndexChangeCallbackAsync(player, menu, index, menu.Items[index]); });
+                    Task.Run(async () => { await menu.IndexChangeCallbackAsync(player, menu, index, menu.Items[index]); });
 
                 menu.IndexChangeCallback?.Invoke(player, menu, index, menu.Items[index]);
             }
@@ -160,7 +158,7 @@ namespace ResurrectionRP_Server
             if (menu != null)
             {
                 if (menu.FinalizerAsync != null)
-                    Task.Run(async ()=> await menu.FinalizerAsync(player, menu));
+                    Task.Run(async () => await menu.FinalizerAsync(player, menu));
 
                 menu.Finalizer?.Invoke(player, menu);
                 _clientMenus.TryRemove(player, out _);

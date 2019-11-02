@@ -20,7 +20,7 @@ import { Effects } from './Effects';
 import { EmergencyCall } from '../EmergencyCall';
 import * as veh from '../vehicle/vehicle';
 import * as utils from '../Utils/Utils';
-import ObjectTool from '../Debug/ObjectTool';
+//import ObjectTool from '../Debug/ObjectTool';
 
 export class Game {
     //region Static Var   
@@ -107,8 +107,8 @@ export class Game {
             new EmergencyCall();
             new Weedlabs();
             new Effects();
-            if (isDebug)
-                new ObjectTool();
+            //if (isDebug)
+            //    new ObjectTool();
 
             game.setAudioFlag('LoadMPData', true);
             game.setAudioFlag('DisableFlightMusic', true);
@@ -275,10 +275,10 @@ export class Game {
                 if (alt.Player.local.vehicle != null) {
                     ui.DrawText2d("Essence: " + Math.round(100 * veh.getFuel()) / 100 + "/" + veh.getMaxFuel() + " Consommation: " + Math.round(1000 * veh.getFuelConsumption()) / 1000, 0.5, 0.10, 0.3, 4, 255, 255, 255, 180, true, true, 99);
                 }
-                if (ObjectTool.Object != undefined) {
-                    ui.DrawText2d("DEBUG OBJECT X: " + Math.round(ObjectTool.x * 1000) / 1000 + " Y: " + Math.round(1000 * ObjectTool.y) / 1000 + " Z: " + Math.round(1000 * ObjectTool.z) / 1000, 0.5, 0.12, 0.3, 4, 255, 255, 255, 180, true, true, 99);
-                    ui.DrawText2d("DEBUG OBJECT RX: " + Math.round(ObjectTool.rx * 1000) / 1000 + " RY: " + Math.round(1000 * ObjectTool.ry) / 1000 + " RZ: " + Math.round(1000 * ObjectTool.rz) / 1000, 0.5, 0.14, 0.3, 4, 255, 255, 255, 180, true, true, 99);
-                }
+                //if (ObjectTool.Object != undefined) {
+                //    ui.DrawText2d("DEBUG OBJECT X: " + Math.round(ObjectTool.x * 1000) / 1000 + " Y: " + Math.round(1000 * ObjectTool.y) / 1000 + " Z: " + Math.round(1000 * ObjectTool.z) / 1000, 0.5, 0.12, 0.3, 4, 255, 255, 255, 180, true, true, 99);
+                //    ui.DrawText2d("DEBUG OBJECT RX: " + Math.round(ObjectTool.rx * 1000) / 1000 + " RY: " + Math.round(1000 * ObjectTool.ry) / 1000 + " RZ: " + Math.round(1000 * ObjectTool.rz) / 1000, 0.5, 0.14, 0.3, 4, 255, 255, 255, 180, true, true, 99);
+                //}
             }
             this.disableSeatShuffle();
             this._Time.OnTick();

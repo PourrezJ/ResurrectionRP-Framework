@@ -154,21 +154,29 @@ namespace ResurrectionRP_Server
             Alt.Server.LogColored("~g~Initialisations des controlleurs...");
             Task.Run(async () =>
             {
-                await BanManager.Init();
-                await VehiclesManager.LoadAllVehicles();
-                await Loader.CarParkLoader.LoadAllCarParks();  
-                await Factions.FactionManager.InitAllFactions();
-                await Loader.BusinessesManager.LoadAllBusinesses();         
-                await Society.SocietyManager.LoadAllSociety();
+                try
+                {
+                    await BanManager.Init();
+                    await VehiclesManager.LoadAllVehicles();
+                    await Loader.CarParkLoader.LoadAllCarParks();
+                    await Factions.FactionManager.InitAllFactions();
+                    await Loader.BusinessesManager.LoadAllBusinesses();
+                    await Society.SocietyManager.LoadAllSociety();
 
-                // if (IsDebug)
-                //     await IllegalManager.InitAll();
+                    // if (IsDebug)
+                    //     await IllegalManager.InitAll();
 
-                //await JobsManager.Init();
-                await HouseManager.LoadAllHouses();
-                
-                Alt.Server.LogColored("~g~Serveur chargé!");
-                ServerLoaded = true;
+                    //await JobsManager.Init();
+                    await HouseManager.LoadAllHouses();
+
+                    Alt.Server.LogColored("~g~Serveur chargé!");
+                    ServerLoaded = true;
+                }
+                catch (Exception ex)
+                {
+                    Alt.Server.LogError(ex.ToString());
+
+                }
             });
 
             

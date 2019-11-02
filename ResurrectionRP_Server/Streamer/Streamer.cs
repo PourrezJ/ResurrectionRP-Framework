@@ -1,19 +1,15 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
-using AltV.Net.Async;
 using AltV.Net.NetworkingEntity;
 using AltV.Net.NetworkingEntity.Elements.Entities;
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
-using System.Threading.Tasks;
 using System.Numerics;
-using System.Text;
 using Newtonsoft.Json;
 using WorldObject = ResurrectionRP_Server.Entities.Objects.WorldObject;
 using TextLabel = ResurrectionRP_Server.Streamer.Data.TextLabel;
 using Blips = ResurrectionRP_Server.Entities.Blips.Blips;
-using AltV.Net.Data;
 
 namespace ResurrectionRP_Server.Streamer
 {

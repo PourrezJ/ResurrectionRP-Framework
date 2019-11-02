@@ -6,9 +6,22 @@ using System.Threading.Tasks;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
+using AltV.Net.NetworkingEntity.Elements.Entities;
 
 namespace ResurrectionRP_Server.Entities.Peds
 {
+    public struct WalkToData
+    {
+        public int Speed;
+        public Vector3 Pos;
+
+        public WalkToData(int speed, Vector3 pos)
+        {
+            Speed = speed;
+            Pos = pos;
+        }
+    }
+
     public class Ped
     {
         public static List<Ped> NPCList = new List<Ped>();
@@ -65,6 +78,15 @@ namespace ResurrectionRP_Server.Entities.Peds
             data["entityType"] = (int)Streamer.Data.EntityType.Ped;
             data["id"] = this.ID;
             return data;
+        }
+
+        public void WalkTo(Vector3 pos)
+        {
+            if (Streamer.Streamer.ListEntities.ContainsKey(ID))
+            {
+                INetworkingEntity oitem = Streamer.Streamer.ListEntities[ID];
+                oitem.SetData("WalkTo", new WalkToData(1, pos));
+            }
         }
 
         public static Ped GetNPCbyID(int id)

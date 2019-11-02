@@ -174,6 +174,9 @@ export class NetworkingEntityClient {
             game.setEntityCoordsNoOffset(obj, entity.position.x, entity.position.y, entity.position.z, false, false, false);
             game.setEntityRotation(obj, entity.data.rotation.x, entity.data.rotation.y, entity.data.rotation.z, 0, false);
             game.placeObjectOnGroundProperly(obj);
+
+
+            alt.log(JSON.stringify(data));
         }
     }
 

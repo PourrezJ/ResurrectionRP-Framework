@@ -41,6 +41,11 @@ namespace ResurrectionRP_Server.Items
                          ph.UpdateHungerThirst(-1, 100);
                     else
                         ph.UpdateHungerThirst(-1, ph.Thirst + Drink);
+
+                    if(Drink > 0)
+                        ph.UpdateStat(Entities.Players.Stats.FoodDrunk, 1);
+                    if(Food > 0)
+                        ph.UpdateStat(Entities.Players.Stats.FoodEaten, 1);
                 }
 
                 switch (id)

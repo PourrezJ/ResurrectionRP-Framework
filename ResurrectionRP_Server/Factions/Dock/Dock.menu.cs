@@ -1,7 +1,6 @@
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Utils;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 
 namespace ResurrectionRP_Server.Factions
@@ -15,16 +14,18 @@ namespace ResurrectionRP_Server.Factions
         #region Importation menu
         public virtual void OpenImportationMenu(IPlayer client, List<DockItemData> importItems)
         {
-            if (client == null || !client.Exists)
+            if(client == null || !client.Exists) {
                 return;
+            }
 
-            Menu menu = new Menu("ID_Importation", "Importation", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
-            menu.ItemSelectCallback = ImportationMenuCallback;
-            menu.IndexChangeCallback = ItemChangeCallback;
-            menu.Finalizer = MenuFinalizer;
-
-            foreach (DockItemData item in importItems)
+            Menu menu = new Menu("ID_Importation", "Importation", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true)
             {
+                ItemSelectCallback = ImportationMenuCallback,
+                IndexChangeCallback = ItemChangeCallback,
+                Finalizer = MenuFinalizer
+            };
+
+            foreach(DockItemData item in importItems) {
                 MenuItem listItem = new MenuItem(item.Name, "", item.ItemID.ToString(), true, rightLabel: "0");
                 listItem.SetInput("", 3, InputType.UNumber);
                 listItem.InputSetRightLabel = true;
@@ -35,33 +36,32 @@ namespace ResurrectionRP_Server.Factions
             menu.Add(new MenuItem("~g~Valider", "", "Validate", true));
 
             menu.OpenMenu(client);
-            client.Emit("InitDockOrder", ((DockItemData)menu.Items[0].GetData("DockItem")).Price);
+            client.Emit("InitDockOrder", ((DockItemData) menu.Items[0].GetData("DockItem")).Price);
         }
 
         private void ImportationMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            if (menuItem.Id == "Validate")
-            {
+            if(menuItem.Id == "Validate") {
                 Dictionary<DockItemData, int> importItems = new Dictionary<DockItemData, int>();
 
-                foreach (MenuItem item in menu.Items)
-                {
-                    if (item.HasData("DockItem"))
-                    {
+                foreach(MenuItem item in menu.Items) {
+                    if(item.HasData("DockItem")) {
                         DockItemData dockItem = item.GetData("DockItem");
 
-                        if (int.TryParse(item.InputValue, out int quantity) && quantity > 0)
+                        if(int.TryParse(item.InputValue, out int quantity) && quantity > 0) {
                             importItems.Add(dockItem, quantity);
+                        }
                     }
                 }
 
                 bool validation = Dock_CommandeValidate(client, menu, importItems);
 
-                if (validation)
+                if(validation) {
                     menu.CloseMenu(client);
-            }
-            else
+                }
+            } else {
                 ItemChangeCallback(client, menu, itemIndex, menuItem);
+            }
         }
 
         private void ItemChangeCallback(IPlayer client, Menu menu, int itemIndex, IMenuItem menuItem)
@@ -69,13 +69,13 @@ namespace ResurrectionRP_Server.Factions
             double itemPrice = 0;
             double itemTotal = 0;
 
-            if (menuItem.HasData("DockItem"))
-            {
+            if(menuItem.HasData("DockItem")) {
                 DockItemData dockItem = menuItem.GetData("DockItem");
                 itemPrice = dockItem.Price;
 
-                if (int.TryParse(menuItem.InputValue, out int quantity))
+                if(int.TryParse(menuItem.InputValue, out int quantity)) {
                     itemTotal = itemPrice * quantity;
+                }
             }
 
             _orderPrice = CalculateOrderTotal(menu);
@@ -93,10 +93,8 @@ namespace ResurrectionRP_Server.Factions
         {
             double orderTotal = 0;
 
-            foreach (MenuItem item in menu.Items)
-            {
-                if (item.HasData("DockItem") && int.TryParse(item.InputValue, out int quantity))
-                {
+            foreach(MenuItem item in menu.Items) {
+                if(item.HasData("DockItem") && int.TryParse(item.InputValue, out int quantity)) {
                     DockItemData dockItem = item.GetData("DockItem");
                     orderTotal += dockItem.Price * quantity;
                 }

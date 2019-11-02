@@ -94,14 +94,10 @@ namespace ResurrectionRP_Server.Inventory
             PlayerHandler player = client.GetPlayerHandler();
             _clientMenus.TryGetValue(client, out RPGInventoryMenu menu);
             Models.Attachment attach;
-            ClothItem cloth = item as ClothItem;
-            Items.Weapons weapons = (item) as Items.Weapons;
-            if(cloth != null) // CLOTHING STUFF
+            if(item is ClothItem cloth) // CLOTHING STUFF
             {
-                try
-                {
-                    switch (item.id)
-                    {
+                try {
+                    switch(item.id) {
                         case ItemID.Glasses: // glasses
                             player.Clothing.Glasses = new PropData(cloth.Clothing.Drawable, cloth.Clothing.Texture);
                             break;
@@ -127,12 +123,12 @@ namespace ResurrectionRP_Server.Inventory
 
                             int torso = 0;
 
-                            if (player.Character.Gender == 0)
+                            if(player.Character.Gender == 0)
                                 torso = Loader.ClothingLoader.ClothingsMaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
                             else
                                 torso = Loader.ClothingLoader.ClothingsFemaleTopsList.DrawablesList[cloth.Clothing.Drawable].Torso[0];
 
-                            player.Clothing.Torso = new ClothData((byte)torso, 0, 0);
+                            player.Clothing.Torso = new ClothData((byte) torso, 0, 0);
                             break;
 
                         case ItemID.Watch: // watch
@@ -163,18 +159,13 @@ namespace ResurrectionRP_Server.Inventory
                             player.Clothing.BodyArmor = cloth.Clothing;
                             break;
                     }
-                }
-                catch (Exception ex )
-                {
+                } catch(Exception ex) {
                     Alt.Server.LogError("[RPGInventorymanager.RPGInventory_SetPlayerProps] Clothing " + ex.Message);
                 }
 
-            } else if(weapons != null)
-            {
-                try
-                {
-                    switch (weapons.id)
-                    {
+            } else if((item) is Items.Weapons weapons) {
+                try {
+                    switch(weapons.id) {
                         case ItemID.Weapon:
                         case ItemID.LampeTorche:
                         case ItemID.Carabine:
@@ -195,113 +186,104 @@ namespace ResurrectionRP_Server.Inventory
                         case ItemID.Pistol:
                         case ItemID.Pump:
                         case ItemID.Taser:
-                            if (GameMode.IsDebug)
+                            if(GameMode.IsDebug)
                                 Alt.Server.LogInfo("[RPGInventoryManager.RPGInventory_SetPlayerProps()] Giving a weapon (" + weapons.name + ") to " + client.GetPlayerHandler().PID);
 
-                            client.GiveWeapon((uint)weapons.Hash, 99999, true);
+                            client.GiveWeapon((uint) weapons.Hash, 99999, true);
                             break;
                     }
+                } catch(Exception ex) {
+                    Alt.Server.LogError("[RPGInventorymanager.RPGInventory_SetPlayerProps] Weapons " + ex.Message);
                 }
-                catch (Exception ex)
-                {
-                    Alt.Server.LogError("[RPGInventorymanager.RPGInventory_SetPlayerProps] Weapons " + ex.Message) ;
-                }
-            } else
-            {
-                try
-                {
-                    switch (item.id)
-                    {
+            } else {
+                try {
+                    switch(item.id) {
                         case ItemID.Bag: // backpack
-                            var backpack = (item) as Items.BagItem;
-                            if (backpack != null && backpack.InventoryBag != null)
-                            {
+                            if((item) is Items.BagItem backpack && backpack.InventoryBag != null) {
                                 player.BagInventory = backpack.InventoryBag;
                                 player.Clothing.Bags = backpack.Clothing;
-                                player.BagInventory =  backpack.InventoryBag;
-                                
+                                player.BagInventory = backpack.InventoryBag;
+
                             }
                             break;
 
                         case ItemID.Phone:
-                            var phoneItem = (item) as Items.PhoneItem;
-                            if (phoneItem != null && phoneItem.PhoneHandler != null)
+                            if((item) is Items.PhoneItem phoneItem && phoneItem.PhoneHandler != null) {
                                 player.PhoneSelected = phoneItem.PhoneHandler;
+                            }
                             break;
 
                         case ItemID.Radio:
-                            var radioItem = (item) as Items.RadioItem;
-                            if (radioItem != null)
+                            if((item) is Items.RadioItem radioItem)
                                 player.RadioSelected = radioItem.Radio;
                             break;
-                        case ItemID.Pioche:
-                            if (menu.Outfit.prop != null)
+                            //V2 - Outfit Inventory n'est initié qu'à une première interaction joueur avec l'inventaire
+/*                        case ItemID.Pioche:
+                            if(menu.Outfit.prop != null)
                                 menu.Outfit.DestroyProp();
                             attach = new Models.Attachment()
                             {
                                 Bone = "PH_R_Hand",
                                 PositionOffset = new Vector3(0.1f, -0.1f, -0.02f),
                                 RotationOffset = new Vector3(80, 0, 170),
-                                Type = (int)Streamer.Data.EntityType.Ped,
+                                Type = (int) Streamer.Data.EntityType.Ped,
                                 RemoteID = client.Id
                             };
-                            menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_pickaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
+                            menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int) Alt.Hash("prop_tool_pickaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
                             break;
                         case ItemID.Hache:
-                            if (menu.Outfit.prop != null)
+                            if(menu.Outfit.prop != null)
                                 menu.Outfit.DestroyProp();
                             attach = new Models.Attachment()
                             {
                                 Bone = "PH_R_Hand",
                                 PositionOffset = new Vector3(0.1f, -0.1f, -0.02f),
                                 RotationOffset = new Vector3(80, 0, 180),
-                                Type = (int)Streamer.Data.EntityType.Ped,
+                                Type = (int) Streamer.Data.EntityType.Ped,
                                 RemoteID = client.Id
                             };
-                            menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_fireaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
+                            menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int) Alt.Hash("prop_tool_fireaxe"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
 
                             break;
                         case ItemID.MarteauPiqueur:
-                            if (menu.Outfit.prop != null)
+                            if(menu.Outfit.prop != null)
                                 menu.Outfit.DestroyProp();
-                            menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_jackham"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
+                            menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int) Alt.Hash("prop_tool_jackham"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), false);
                             (item as Items.Tool).JackHammerSetWalkingStyle(client, menu.Outfit.prop);
                             break;
 
                         case ItemID.Pelle:
-                            if (menu.Outfit.prop != null)
+                            if(menu.Outfit.prop != null)
                                 menu.Outfit.DestroyProp();
                             break;
                         case ItemID.Marteau:
-                            if (menu.Outfit.prop != null)
+                            if(menu.Outfit.prop != null)
                                 menu.Outfit.DestroyProp();
                             attach = new Models.Attachment()
                             {
                                 Bone = "PH_R_Hand",
                                 PositionOffset = new Vector3(0.1f, 0.1f, 0),
                                 RotationOffset = new Vector3(80, 0, 180),
-                                Type = (int)Streamer.Data.EntityType.Ped,
+                                Type = (int) Streamer.Data.EntityType.Ped,
                                 RemoteID = client.Id
                             };
-                            menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("prop_tool_mallet"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
+                            menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int) Alt.Hash("prop_tool_mallet"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
                             break;
                         case ItemID.CrateTool:
-                            if (menu.Outfit.prop != null)
+                            if(menu.Outfit.prop != null)
                                 menu.Outfit.DestroyProp();
                             attach = new Models.Attachment()
                             {
                                 Bone = "PH_R_Hand",
                                 PositionOffset = new Vector3(0, 0, 0),
                                 RotationOffset = new Vector3(90, 0, 0),
-                                Type = (int)Streamer.Data.EntityType.Ped,
+                                Type = (int) Streamer.Data.EntityType.Ped,
                                 RemoteID = client.Id
                             };
-                            menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash("gr_prop_gr_tool_box_01a"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
-                            break;
+                            menu.Outfit.prop = Entities.Objects.WorldObject.CreateObject((int) Alt.Hash("gr_prop_gr_tool_box_01a"), client.Position.ConvertToVector3(), new System.Numerics.Vector3(), attach, false);
+                            break;*/
                     }
-                }
-                catch (Exception ex)
-                {
+                } catch(Exception ex) {
                     Alt.Server.LogError("[RPGInventorymanager.RPGInventory_SetPlayerProps] Others " + ex.Message);
                 }
             }
@@ -317,12 +299,8 @@ namespace ResurrectionRP_Server.Inventory
             PlayerHandler ph = client.GetPlayerHandler();
             _clientMenus.TryGetValue(client, out RPGInventoryMenu menu);
 
-            ClothItem cloth = item as ClothItem;
-            Items.Weapons weapons = (item) as Items.Weapons;
-            if(cloth != null)
-            {
-                switch(item.id)
-                {
+            if(item is ClothItem cloth) {
+                switch(item.id) {
                     case ItemID.Glasses: // glasses
                         ph.Clothing.Glasses = (ph.Character.Gender == 0) ? new PropData(14, 0) : new PropData(13, 0);
                         break;
@@ -376,10 +354,8 @@ namespace ResurrectionRP_Server.Inventory
                         ph.Clothing.BodyArmor = new ClothData(0, 0, 0);
                         break;
                 }
-            } else if(weapons != null)
-            {
-                switch(item.id)
-                {
+            } else if((item) is Items.Weapons weapons) {
+                switch(item.id) {
                     case ItemID.Weapon:
                     case ItemID.LampeTorche:
                     case ItemID.Carabine:
@@ -403,11 +379,13 @@ namespace ResurrectionRP_Server.Inventory
                         client.RemoveAllWeapons();
                         break;
                 }
-            } else
-            {
-                switch (item.id)
-                {
-
+            } else {
+                switch(item.id) {
+                    case ItemID.Phone:
+                        if((item) is Items.PhoneItem phoneItem && phoneItem.PhoneHandler != null) {
+                            ph.PhoneSelected = null;
+                        }
+                        break;
                     case ItemID.Bag: // backpack
                         ph.Clothing.Bags = new ClothData();
                         ph.BagInventory = null;
@@ -1028,11 +1006,13 @@ namespace ResurrectionRP_Server.Inventory
 
             if (menu.Bag != null)
             {
-                menu.BagItems = new RPGInventory();
-                menu.BagItems.CurrentSize = menu.Bag.CurrentSize();
-                menu.BagItems.MaxSize = menu.Bag.MaxSize;
-                menu.BagItems.Slots = menu.Bag.MaxSlot;
-                menu.BagItems.RPGInventoryItems = new List<RPGInventoryItem>();
+                menu.BagItems = new RPGInventory
+                {
+                    CurrentSize = menu.Bag.CurrentSize(),
+                    MaxSize = menu.Bag.MaxSize,
+                    Slots = menu.Bag.MaxSlot,
+                    RPGInventoryItems = new List<RPGInventoryItem>()
+                };
 
                 for (int i = 0; i < menu.Bag.InventoryList.Length; i++)
                 {
@@ -1051,12 +1031,14 @@ namespace ResurrectionRP_Server.Inventory
                 if (menu.DistantItems != null)
                     market = menu.DistantItems.IsMarket;
 
-                menu.DistantItems = new RPGInventory();
-                menu.DistantItems.CurrentSize = menu.Distant.CurrentSize();
-                menu.DistantItems.MaxSize = menu.Distant.MaxSize;
-                menu.DistantItems.Slots = menu.Distant.MaxSlot;
-                menu.DistantItems.RPGInventoryItems = new List<RPGInventoryItem>();
-                menu.DistantItems.IsMarket = market;
+                menu.DistantItems = new RPGInventory
+                {
+                    CurrentSize = menu.Distant.CurrentSize(),
+                    MaxSize = menu.Distant.MaxSize,
+                    Slots = menu.Distant.MaxSlot,
+                    RPGInventoryItems = new List<RPGInventoryItem>(),
+                    IsMarket = market
+                };
 
                 for (int i = 0; i < menu.Distant.InventoryList.Length; i++)
                 {
@@ -1067,9 +1049,11 @@ namespace ResurrectionRP_Server.Inventory
 
             if (menu.Outfit != null)
             {
-                menu.OutfitItems = new RPGInventoryOutfit();
-                menu.OutfitItems.NamedSlots = new RPGOutfitSlots[18];
-                menu.OutfitItems.RPGInventoryItems = new List<RPGInventoryItem>();
+                menu.OutfitItems = new RPGInventoryOutfit
+                {
+                    NamedSlots = new RPGOutfitSlots[18],
+                    RPGInventoryItems = new List<RPGInventoryItem>()
+                };
                 for (int i = 0; i < menu.Outfit.Slots.Length; i++)
                 {
                     if (menu.Outfit.Slots[i] != null)

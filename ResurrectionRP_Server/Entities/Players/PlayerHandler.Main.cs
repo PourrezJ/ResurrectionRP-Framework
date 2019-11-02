@@ -218,7 +218,10 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                 }
 
-                TrainManager.OnPlayerConnected(client);
+                if(Stats == null)
+                    Stats = new ConcurrentDictionary<string, dynamic>();
+
+                //TrainManager.OnPlayerConnected(client);
 
                 await AltAsync.Do( () =>
                 {

@@ -65,10 +65,9 @@ namespace ResurrectionRP_Server.Farms
                 return;
 
             PlayerHandler player = client.GetPlayerHandler();
-            Tool tool = sentItem as Tool;
-            if (player == null || player.IsOnProgress)
+            if(player == null || player.IsOnProgress)
                 return;
-            if (tool == null)
+            if (!(sentItem is Tool tool))
                 return;
 
             client.DisplayHelp($"Durabilité: {tool.Health - UsureOutil}\nMinerais récoltées: {tool.MiningRate}\nVitesse: {tool.Speed}", 5000);

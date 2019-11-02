@@ -98,7 +98,15 @@ namespace ResurrectionRP_Server.Inventory
 
         public bool AddItem(Item item, int quantity)
         {
-            return AddItem(item, quantity, out int slot);
+            if(item.isStackable)
+                return AddItem(item, quantity, out int slot);
+            else {
+                for(int i = 0; i < quantity; i++) {
+                    if(!AddItem(item, 1, out int slots))
+                        return false;
+                }
+                return true;
+            }
         }
 
         public bool AddItem(Item item, int quantity, out int slot)

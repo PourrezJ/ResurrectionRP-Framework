@@ -63,8 +63,10 @@ namespace ResurrectionRP_Server.Farms
 
         {
             Position = position;
-            ToolNeeded = new List<Item>();
-            ToolNeeded.Add(item);
+            ToolNeeded = new List<Item>
+            {
+                item
+            };
             Type = interactionPoint;
             InteractionName = interactionName;
             _farm = farm;
@@ -162,6 +164,7 @@ namespace ResurrectionRP_Server.Farms
                         {
                             ph.OutfitInventory.Delete(itemStack, 1);
                             client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);
+                            ph.UpdateStat(Stats.ToolBroken, 1);
                             return;
                         }
                         LaunchToFarm(client, 0, itemStack.Item);
@@ -209,6 +212,7 @@ namespace ResurrectionRP_Server.Farms
                         {
                             ph.OutfitInventory.Delete(itemStack, 1);
                             client.DisplayHelp("Votre outil s'est cassé, vous êtes bon pour en racheter un !", 10000);
+                            ph.UpdateStat(Stats.ToolBroken, 1);
                             return;
                         }
 
@@ -237,7 +241,7 @@ namespace ResurrectionRP_Server.Farms
         private void LaunchToFarm(IPlayer client, double price = 0, Item item = null)
         {
             PlayerHandler ph = client.GetPlayerHandler();
-
+            ph.UpdateStat(Stats.ToolUses, 1);
             switch (Type)
             {
                 case InteractionPointTypes.Farm:

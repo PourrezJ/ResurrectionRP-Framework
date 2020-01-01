@@ -1,10 +1,8 @@
 ﻿using AltV.Net.Elements.Entities;
 using AltV.Net;
-using AltV.Net.Async;
 using AltV.Net.Enums;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Vehicles;
-using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils;
 using System.Collections.Generic;
@@ -84,7 +82,7 @@ namespace ResurrectionRP_Server.DrivingSchool
                 p.Colshape.OnPlayerEnterColshape += Colshape_OnPlayerEnterColshape;
             });
 
-            Alt.OnClient("DrivingSchool_Avert", (IPlayer client, object[] args) =>
+            Alt.OnClient("DrivingSchool_Avert", (IPlayer client) =>
             {
                 if (!client.Exists)
                     return;
@@ -108,7 +106,7 @@ namespace ResurrectionRP_Server.DrivingSchool
             ConcernedPlayers[client.Id].NextTraj();
 
             if (ConcernedPlayers[client.Id].CurrentCheckpoint == RidePoints.Count)
-                End(client, ConcernedPlayers[client.Id].avert);
+                Task.Run(()=>End(client, ConcernedPlayers[client.Id].avert));
         }
 
         private void EntryColshape_OnPlayerLeaveColshape(IColshape colshape, IPlayer client) =>
@@ -122,7 +120,6 @@ namespace ResurrectionRP_Server.DrivingSchool
             OpenMenuDrivingSchool(client);
         }
         #endregion
-
 
         #region Public methods
 

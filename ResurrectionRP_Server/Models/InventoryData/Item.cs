@@ -91,8 +91,7 @@ namespace ResurrectionRP_Server.Models
             if (inventory.Delete(slot, quantite))
             {
                 var position = c.GetPosition();
-                var dimension = c.Dimension;
-                ResuPickup pickup = ResuPickup.CreatePickup("prop_money_bag_01", this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), dimension); 
+                ResuPickup pickup = ResuPickup.CreatePickup("prop_money_bag_01", this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (short)c.Dimension); 
                 pickup.OnTakePickup += OnPickup;
 
                 return true;
@@ -109,8 +108,7 @@ namespace ResurrectionRP_Server.Models
             if (inventory.Delete(slot, quantite))
             {
                 var position = c.GetPosition();
-                var dimension = c.Dimension;
-                ResuPickup resu = ResuPickup.CreatePickup("prop_money_bag_01", this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), dimension); 
+                ResuPickup resu = ResuPickup.CreatePickup("prop_money_bag_01", this, quantite, new Vector3(position.X, position.Y, position.Z - 1), false, TimeSpan.FromMinutes(1), (short)c.Dimension); 
                 resu.OnTakePickup += OnPickup;
 
                 return true;

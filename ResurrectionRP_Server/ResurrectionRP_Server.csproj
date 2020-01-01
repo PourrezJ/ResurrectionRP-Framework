@@ -18,8 +18,8 @@
 
 
   <ItemGroup>
-    <PackageReference Include="AltV.Net" Version="1.16.4-beta" />
-    <PackageReference Include="AltV.Net.Async" Version="1.16.1-beta" />
+    <PackageReference Include="AltV.Net" Version="1.18.7" />
+    <PackageReference Include="AltV.Net.Async" Version="1.18.1" />
     <PackageReference Include="AltV.Net.NetworkingEntity" Version="1.4.3-dev-preview" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.0.0" />
@@ -33,9 +33,11 @@
   <ItemGroup>
     <Reference Include="AltV.Net.NetworkingEntity">
       <HintPath>..\Other\AltV.Net.NetworkingEntity.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="WordPressPCL">
       <HintPath>..\Other\Server\WordPressPCL.dll</HintPath>
+      <Private>false</Private>
     </Reference>
   </ItemGroup>
 

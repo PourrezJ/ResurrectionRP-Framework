@@ -46,18 +46,11 @@ namespace ResurrectionRP_Server.Entities.Players
             new IllegalCommands();
             new Society.Commands();
 
-            AltAsync.OnClient("LogPlayer", LogPlayer);
-            AltAsync.OnClient("MakePlayer", MakePlayer);
-            AltAsync.OnClient("SendLogin", SendLogin );         
-            AltAsync.OnClient("Events_PlayerJoin", Events_PlayerJoin);
+            Alt.OnClient("Player_SetInComa", (IPlayer client) => client.GetPlayerHandler().IsInComa = true); // peut être mieux?
 
-            Alt.OnClient("Player_SetInComa", (IPlayer client, object[] args) => client.GetPlayerHandler().IsInComa = true);
+            Alt.OnClient("ExitGame", (IPlayer client) => client.Kick("Exit"));
 
-            Alt.OnClient("ExitGame", (IPlayer client, object[] args) => client.Kick("Exit"));
-
-            Alt.OnClient("UpdateHungerThirst", (IPlayer client, object[] args) => client.GetPlayerHandler().UpdateHungerThirst(Convert.ToInt32(args[0]), Convert.ToInt32(""+args[1]) ));
-
-            AltAsync.OnClient("IWantToDie", IWantToDie);
+            //Alt.OnClient("UpdateHungerThirst", (IPlayer client, object[] args) => client.GetPlayerHandler().UpdateHungerThirst(Convert.ToInt32(args[0]), Convert.ToInt32(""+args[1]) ));
 
             Utils.Utils.SetInterval(() =>
             {
@@ -168,6 +161,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
+        [AsyncClientEvent("Events_PlayerJoin")]
         public static async Task Events_PlayerJoin(IPlayer player, object[] args)
         {
             if (!await player.ExistsAsync())
@@ -264,6 +258,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region RemoteEvents
+        [ClientEvent("MakePlayer")]
         private static async Task MakePlayer(IPlayer client, object[] args)
         {
             if (!client.Exists)
@@ -285,6 +280,7 @@ namespace ResurrectionRP_Server.Entities.Players
             await ph.LoadPlayer(client, true);
         }
 
+        [AsyncClientEvent("SendLogin")]
         private static async Task SendLogin(IPlayer client, object[] args)
         {
             if (!client.Exists)
@@ -315,7 +311,8 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        private static async Task LogPlayer(IPlayer client, object[] args)
+        [AsyncClientEvent("LogPlayer")]
+        private static async Task LogPlayer(IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -351,7 +348,8 @@ namespace ResurrectionRP_Server.Entities.Players
         public static async Task<PlayerHandler> GetPlayerHandlerDatabase(string socialClub) =>
             await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == socialClub.ToLower()).FirstOrDefaultAsync();
 
-        private static async Task IWantToDie(IPlayer client, object[] args)
+        [AsyncClientEvent("IWantToDie")]
+        private static async Task IWantToDie(IPlayer client)
         {
             await client.ReviveAsync(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
             client.GetPlayerHandler().UpdateHungerThirst(50, 50);

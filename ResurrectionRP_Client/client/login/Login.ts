@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as chat from '../chat/chat'
 import * as camera from '../Models/Camera';
@@ -37,7 +37,7 @@ export function init() {
             var _cam = cameras[getRandomInt(5)];
             _cam.SetActiveCamera(true);
 
-            browser = new alt.WebView('http://resource/client/cef/login/index.html')
+            browser = new alt.WebView('http://resource/client/cef/login/index.html', true);
             browser.emit('callEvent', social);
             browser.focus();
 

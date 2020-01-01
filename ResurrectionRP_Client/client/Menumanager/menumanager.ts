@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as NativeUI from '../NativeUIMenu/NativeUI.js';
 import * as chat from '../chat/chat';
 import * as game from 'natives';
@@ -205,7 +205,7 @@ export default () => {
                 inputIndex = index;
                 inputItem = item;
 
-                inputView = new alt.WebView("http://resource/client/cef/userinput/input.html");
+                inputView = new alt.WebView("http://resource/client/cef/userinput/input.html", true);
                 inputView.focus();
                 alt.showCursor(true);
                 alt.toggleGameControls(false);

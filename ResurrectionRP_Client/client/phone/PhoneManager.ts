@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as utils from '../Utils/Utils';
 import * as voice from '../Voice/VoiceChat';
@@ -28,9 +28,9 @@ export default class PhoneManager {
                 this.ClosePhone();
 
             if (incomingCall)
-                this.browser = new alt.WebView(`http://resource/client/cef/phone/oncall.html?incomingCall=true&number=${contactNumber}&name=${contactName}`);
+                this.browser = new alt.WebView(`http://resource/client/cef/phone/oncall.html?incomingCall=true&number=${contactNumber}&name=${contactName}`, true);
             else
-                this.browser = new alt.WebView(`http://resource/client/cef/phone/home.html?newMessages=${idk0}&phoneSettings=${idk1}`);
+                this.browser = new alt.WebView(`http://resource/client/cef/phone/home.html?newMessages=${idk0}&phoneSettings=${idk1}`, true);
 
             alt.showCursor(true);
 
@@ -94,7 +94,7 @@ export default class PhoneManager {
                 }
 
                 this.ClosePhone();
-                let inputView = new alt.WebView("http://resource/client/cef/userinput/input.html");
+                let inputView = new alt.WebView("http://resource/client/cef/userinput/input.html", true);
                 inputView.focus();
                 alt.showCursor(true);
                 alt.toggleGameControls(false);
@@ -116,7 +116,7 @@ export default class PhoneManager {
                 }
 
                 this.ClosePhone();
-                let inputView = new alt.WebView("http://resource/client/cef/userinput/input.html");
+                let inputView = new alt.WebView("http://resource/client/cef/userinput/input.html", true);
                 inputView.focus();
                 alt.showCursor(true);
                 alt.toggleGameControls(false);

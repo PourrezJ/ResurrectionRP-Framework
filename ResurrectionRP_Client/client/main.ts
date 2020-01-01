@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as chat from './chat/chat';
 import * as speedometer from './vehicle/vehicle';
@@ -90,7 +90,7 @@ const init = async () => {
 
         alt.log("Connection avec le social club: " + game.scGetNickname());
 
-        alt.emitServer("Events_PlayerJoin", game.scGetNickname(), JSON.stringify(alt.discordInfo()));
+        alt.emitServer("Events_PlayerJoin", game.scGetNickname(), JSON.stringify(alt.Discord.currentUser));
     }
     catch (Exception) {
         alt.logError(`Failed to load scripts.\nMessage: ${Exception.Message}`);

@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as chat from '../chat/chat';
 import { Camera } from '../Models/Camera';
@@ -48,7 +48,7 @@ export function OpenCharCreator() {
         game.setPedHeadBlendData(alt.Player.local.scriptID, 0, 0, 0, 0, 0, 0, 0, 0, 0, false);
         game.freezeEntityPosition(alt.Player.local.scriptID, true);
 
-        view = new alt.WebView("http://resource/client/cef/charcreator/index.html");
+        view = new alt.WebView("http://resource/client/cef/charcreator/index.html", true);
         view.focus();
 
         alt.toggleGameControls(false);

@@ -23,7 +23,7 @@ import UIMenuCheckboxItem from "./items/UIMenuCheckboxItem.js";
 import UIMenuListItem from "./items/UIMenuListItem.js";
 import UIMenuSliderItem from "./items/UIMenuSliderItem.js";
 
-import * as alt from 'alt';
+import * as alt from 'alt-client';
 import * as game from 'natives';
 
 export default class NativeUI {

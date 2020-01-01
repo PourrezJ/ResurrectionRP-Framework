@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 
 export class InputBox
@@ -13,7 +13,7 @@ export class InputBox
         inputMaxLength = inputMaxLength;
         inputValue = inputValue;
 
-        this.inputView = new alt.WebView("http://resource/client/cef/userinput/input.html");
+        this.inputView = new alt.WebView("http://resource/client/cef/userinput/input.html", true);
         this.inputView.focus();
 
         alt.emit('canClose', false);

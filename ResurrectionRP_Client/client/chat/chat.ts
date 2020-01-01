@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as enums from '../Utils/Enums/Enums';
 
@@ -6,7 +6,7 @@ let loaded = false;
 let opened = false;
 let hidden = false;
 let buffer = new Array<string>();
-let view = new alt.WebView('http://resource/client/cef/chat/index.html');
+let view = new alt.WebView('http://resource/client/cef/chat/index.html', true);
 
 function addMessage(text: string): void {
     view.emit('addString', text);

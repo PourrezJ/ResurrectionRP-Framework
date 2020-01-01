@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 
 // https://github.com/combowomb0/altv-notification-system
@@ -9,7 +9,7 @@ export class Notify {
         };
     constructor() {
 
-        this.notify.view = new alt.WebView('http://resource/client/cef/notify/index.html');
+        this.notify.view = new alt.WebView('http://resource/client/cef/notify/index.html', true);
         this.notify.view.on('notify:loaded', () => {
             this.notify.isLoaded = true;
         });

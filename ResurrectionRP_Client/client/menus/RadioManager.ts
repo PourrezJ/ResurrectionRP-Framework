@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as chat from '../chat/chat';
 import * as utils from '../Utils/Utils';
@@ -27,7 +27,7 @@ export class RadioManager {
             this.muted = false;
 
             if (this.view == null) {
-                this.view = new alt.WebView("http://resource/client/cef/radio/index.html");
+                this.view = new alt.WebView("http://resource/client/cef/radio/index.html", true);
             } else {
                 this.view.emit('unhide');
             }

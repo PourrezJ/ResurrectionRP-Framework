@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as chat from '../../chat/chat';
 
@@ -43,7 +43,7 @@ export class RPGInventoryManager {
         if (this.view == null) {
             alt.log("debug inventaire: ouverture de l'inventaire.");
             // création du webview
-            this.view = new alt.WebView("http://resource/client/cef/inventory/index.html");
+            this.view = new alt.WebView("http://resource/client/cef/inventory/index.html", true);
 
             this.view.focus();
             alt.showCursor(true);

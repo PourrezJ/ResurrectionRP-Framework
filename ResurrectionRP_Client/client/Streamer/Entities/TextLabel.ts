@@ -3,7 +3,7 @@
 export function drawTextLabel(text: string, posx: number, posy: number, posz: number, font: number, colorR: number, colorG: number, colorB: number, colorA: number)
 {
     const [bol, _x, _y] = game.getScreenCoordFromWorldCoord(posx, posy, posz, 0, 0);
-    const camCord = game.getGameplayCamCoords();
+    const camCord = game.getFinalRenderedCamCoord();
     const dist = game.getDistanceBetweenCoords(camCord.x, camCord.y, camCord.z, posx, posy, posz, true);
 
     let scale = (4.00001 / dist) * 0.5

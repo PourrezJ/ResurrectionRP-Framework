@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 
 enum CameraMoveType {
@@ -24,7 +24,7 @@ export class Camera {
         game.setCamActive(this.Handle, active);
         game.renderScriptCams(active, false, 0, true, false, 0)
         if (active)
-            game.setFocusArea(this.Pos.x, this.Pos.y, this.Pos.z, 100, 100, 1000);
+            game.setFocusPosAndVel(this.Pos.x, this.Pos.y, this.Pos.z, 100, 100, 1000);
         else
             game.clearFocus();
     }

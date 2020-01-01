@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as chat from '../chat/chat';
 
@@ -7,7 +7,7 @@ let fuelMax = 100;
 let fuelCur = 100;
 let fuelConsum = 5.5;
 var CurrentMilage = 0.0;
-let speedoWindow = new alt.WebView('http://resource/client/cef/speedometer/speedometer.html');
+let speedoWindow = new alt.WebView('http://resource/client/cef/speedometer/speedometer.html', true);
 let lastSent = Date.now();
 let keepEngineOn: boolean = true;
 let enginePreviousState: boolean;
@@ -70,7 +70,7 @@ export function initialize() {
                 alt.setTimeout(() => {
                     let sirenSound: boolean = entity.getSyncedMeta("SirenDisabled");
 
-                    game.setDisableVehicleSirenSound(vehId, (sirenSound == null) ? false : sirenSound)
+                    game.setVehicleHasMutedSirens(vehId, (sirenSound == null) ? false : sirenSound)
 
                     let freezed: boolean = entity.getSyncedMeta("IsFreezed");
                     game.freezeEntityPosition(vehId, (freezed == null) ? false : freezed);
@@ -91,7 +91,7 @@ export function initialize() {
                     game.setVehicleNeonLightsColour(vehId, r, g, b);
 
                     let torque: number = entity.getSyncedMeta("torqueMultiplicator");
-                    game.setVehicleEngineTorqueMultiplier(vehId, torque);
+                    game.setVehicleCheatPowerIncrease(vehId, torque);
 
                     let power: number = entity.getSyncedMeta("powerMultiplicator");
                     // game.setVehicleEnginePowerMultiplier(vehId, power);
@@ -109,7 +109,7 @@ export function initialize() {
         if (game.isEntityAVehicle(entity.scriptID)) {
             switch (key) {
                 case 'SirenDisabled':
-                    game.setDisableVehicleSirenSound(entity.scriptID, value);
+                    game.setVehicleHasMutedSirens(entity.scriptID, value);
                     break;
 
                 case 'IsFreezed':
@@ -134,7 +134,7 @@ export function initialize() {
                     break;
 
                 case 'torqueMultiplicator':
-                    game.setVehicleEngineTorqueMultiplier(entity.scriptID, value);
+                    game.setVehicleCheatPowerIncrease(entity.scriptID, value);
                     break;
 
                 case 'powerMultiplicator':

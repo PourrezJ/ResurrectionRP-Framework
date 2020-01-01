@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as enums from '../Utils/Enums/Enums';
 import * as veh from '../vehicle/vehicle';

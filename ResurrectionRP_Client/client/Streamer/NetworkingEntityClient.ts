@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as utils from '../Utils/Utils';
 import * as textlabel from './Entities/TextLabel';
@@ -18,7 +18,7 @@ export class NetworkingEntityClient {
 
     constructor() {
         alt.log("Chargement controleur du streamer ...");
-        this.webview = new alt.WebView("http://resource/client/Streamer/index.html");
+        this.webview = new alt.WebView("http://resource/client/Streamer/index.html", true);
         this.defaultToken = true;
         this.defaultWebView = true;
         this.streamedInEntities = {};

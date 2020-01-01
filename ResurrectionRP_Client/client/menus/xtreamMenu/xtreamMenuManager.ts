@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 
 let xmenuData = null;
 let browser: alt.WebView = null;
@@ -20,7 +20,7 @@ function XMenuManager_OpenMenu(menu) {
     alt.toggleGameControls(false);
     alt.showCursor(true);
 
-    browser = new alt.WebView('http://resource/client/cef/xtrem/playerMenu.html?params=' + menu);
+    browser = new alt.WebView('http://resource/client/cef/xtrem/playerMenu.html?params=' + menu, true);
     browser.focus();
 
     browser.on('XMenuManager_Callback', XMenuManager_Callback);
@@ -52,7 +52,7 @@ function XMenuManager_Callback(index) {
         browser.isVisible = false;
         browser.unfocus();
 
-        inputView = new alt.WebView("http://resource/client/cef/userinput/input.html");
+        inputView = new alt.WebView("http://resource/client/cef/userinput/input.html", true);
         inputView.focus();
         alt.toggleGameControls(false);
 

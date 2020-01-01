@@ -18,11 +18,12 @@ namespace ResurrectionRP_Server
         #region Constructor
         public static void Init()
         {
-            Alt.OnClient("MenuManager_ExecuteCallback", MenuManager_ExecuteCallbacks);
-            Alt.OnClient("MenuManager_IndexChanged", MenuManager_IndexChanged);
-            Alt.OnClient("MenuManager_ListChanged", MenuManager_ListChanged);
-            Alt.OnClient("MenuManager_BackKey", MenuManager_BackKey);
-            Alt.OnClient("MenuManager_ClosedMenu", MenuManager_ClosedMenu);
+            Alt.OnClient<IPlayer, int, bool, string>("MenuManager_ExecuteCallback", MenuManager_ExecuteCallbacks);
+            Alt.OnClient<IPlayer, int>("MenuManager_IndexChanged", MenuManager_IndexChanged);
+            Alt.OnClient<IPlayer, int, int>("MenuManager_ListChanged", MenuManager_ListChanged);
+            Alt.OnClient<IPlayer, int, int>("MenuManager_ListChanged", MenuManager_ListChanged);
+            Alt.OnClient<IPlayer>("MenuManager_BackKey", MenuManager_BackKey);
+            Alt.OnClient<IPlayer>("MenuManager_ClosedMenu", MenuManager_ClosedMenu);
         }
 
         #endregion
@@ -35,7 +36,7 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Private API triggers
-        public static void MenuManager_BackKey(IPlayer player, object[] args)
+        public static void MenuManager_BackKey(IPlayer player)
         {
             if (!player.Exists)
                 return;
@@ -59,7 +60,7 @@ namespace ResurrectionRP_Server
             }
         }
 
-        private static void MenuManager_ExecuteCallbacks(IPlayer player, object[] args)
+        private static void MenuManager_ExecuteCallbacks(IPlayer player, int itemIndex, bool forced, string datastr)
         {
             if (!player.Exists)
                 return;
@@ -68,9 +69,7 @@ namespace ResurrectionRP_Server
 
             if (menu != null)
             {
-                int itemIndex = Convert.ToInt32(args[0]);
-                bool forced = (bool)args[1];
-                dynamic data = JsonConvert.DeserializeObject(args[2].ToString());
+                dynamic data = JsonConvert.DeserializeObject(datastr);
 
                 foreach (MenuItem menuItem in menu.Items)
                 {
@@ -114,7 +113,7 @@ namespace ResurrectionRP_Server
             }
         }
 
-        public static void MenuManager_IndexChanged(IPlayer player, object[] args)
+        public static void MenuManager_IndexChanged(IPlayer player, int index)
         {
             if (!player.Exists)
                 return;
@@ -123,8 +122,6 @@ namespace ResurrectionRP_Server
 
             if (menu != null)
             {
-                int index = Convert.ToInt32(args[0]);
-
                 if (menu.IndexChangeCallbackAsync != null)
                     Task.Run(async () => { await menu.IndexChangeCallbackAsync(player, menu, index, menu.Items[index]); });
 
@@ -132,7 +129,7 @@ namespace ResurrectionRP_Server
             }
         }
 
-        public static void MenuManager_ListChanged(IPlayer player, object[] args)
+        public static void MenuManager_ListChanged(IPlayer player, int unk1, int unk2)
         {
             if (!player.Exists)
                 return;
@@ -142,13 +139,13 @@ namespace ResurrectionRP_Server
             if (menu != null)
             {
                 if (menu.ListItemChangeCallbackAsync != null)
-                    Task.Run(async () => { await menu.ListItemChangeCallbackAsync(player, menu, (ListItem)menu.Items[Convert.ToInt32(args[0])], Convert.ToInt32(args[1])); });
+                    Task.Run(async () => { await menu.ListItemChangeCallbackAsync(player, menu, (ListItem)menu.Items[unk1], unk2); });
 
-                menu.ListItemChangeCallback?.Invoke(player, menu, (ListItem)menu.Items[Convert.ToInt32(args[0])], Convert.ToInt32(args[1]));
+                menu.ListItemChangeCallback?.Invoke(player, menu, (ListItem)menu.Items[unk1], unk2);
             }
         }
 
-        public static void MenuManager_ClosedMenu(IPlayer player, object[] args)
+        public static void MenuManager_ClosedMenu(IPlayer player)
         {
             if (!player.Exists)
                 return;

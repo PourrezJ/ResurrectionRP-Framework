@@ -1,4 +1,4 @@
-import * as alt from 'alt';
+import * as alt from 'alt-client';
 import * as game from 'natives';
 import Raycast, * as raycast from '../Utils/Raycast';
 import * as chat from '../chat/chat';

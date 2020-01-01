@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as ui from '../Helpers/UiHelper';
 import * as veh from '../vehicle/vehicle';
@@ -27,7 +27,7 @@ export class Hud {
 
     constructor(money: number) {
         this._money = Math.round(money);
-        this.Browser = new alt.WebView("http://resource/client/cef/hud/index.html");
+        this.Browser = new alt.WebView("http://resource/client/cef/hud/index.html", true);
 
         alt.on('hideHud', (value: boolean) => {
             this.setHide(value);

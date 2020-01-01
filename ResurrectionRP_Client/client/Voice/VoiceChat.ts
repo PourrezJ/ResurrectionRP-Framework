@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as Utils from '../Utils/utils';
 
@@ -43,7 +43,7 @@ export class VoiceChat
             VoiceChat.deadplayers = [];
 
             if (VoiceChat.view == null) {
-                VoiceChat.view = new alt.WebView("http://resource/client/cef/voice/index.html");
+                VoiceChat.view = new alt.WebView("http://resource/client/cef/voice/index.html", true);
             }
 
             VoiceChat.view.on('SaltyChat_OnConnected', () => {

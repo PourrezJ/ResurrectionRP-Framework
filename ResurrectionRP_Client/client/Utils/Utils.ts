@@ -1,5 +1,5 @@
 ﻿
-import * as alt from 'alt';
+import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as enums from '../Utils/Enums/Enums';
 
@@ -39,10 +39,10 @@ export function initialize() {
     });
 
     alt.onServer('ShowNotification', (imageName, headerMsg, detailsMsg, message) => {
-        game.setNotificationTextEntry('STRING');
+        game.beginTextCommandThefeedPost('STRING');
         game.addTextComponentSubstringPlayerName(message);
-        game.setNotificationMessageClanTag(imageName.toUpperCase(), imageName.toUpperCase(), false, 4, headerMsg, detailsMsg, 1.0, '');
-        game.drawNotification(false, false);
+        game.endTextCommandThefeedPostMessagetextWithCrewTag(imageName.toUpperCase(), imageName.toUpperCase(), false, 4, headerMsg, detailsMsg, 1.0, '');
+        game.endTextCommandThefeedPostTicker(false, false);
     });
 
 
@@ -127,27 +127,27 @@ export function initialize() {
     });
 
     alt.onServer('ShowNotification', (text) => {
-        game.setNotificationTextEntry("STRING");
+        game.beginTextCommandThefeedPost("STRING");
         game.addTextComponentSubstringPlayerName(text);
-        game.drawNotification(true, false);
+        game.endTextCommandThefeedPostTicker(true, false);
     });
 
-    alt.on('SET_NOTIFICATION_BACKGROUND_COLOR', (args: any[]) => game.setNotificationBackgroundColor(parseInt(args[0])))
+    alt.on('SET_NOTIFICATION_BACKGROUND_COLOR', (args: any[]) => game.thefeedSetNextPostBackgroundColor(parseInt(args[0])))
 
     alt.onServer("SetNotificationMessage", (img, sender, subject, message) =>
     {
-        game.setNotificationTextEntry("STRING");
+        game.beginTextCommandThefeedPost("STRING");
         game.addTextComponentSubstringPlayerName(message);
-        game.setNotificationMessage2(img.toUpperCase(), img.toUpperCase(), false, 4, sender, subject);
-        game.drawNotification(false, false);
+        game.endTextCommandThefeedPostMessagetext(img.toUpperCase(), img.toUpperCase(), false, 4, sender, subject);
+        game.endTextCommandThefeedPostTicker(false, false);
     });
 
     alt.on("SetNotificationMessage", (img, sender, subject, message) =>
     {
-        game.setNotificationTextEntry("STRING");
+        game.beginTextCommandThefeedPost("STRING");
         game.addTextComponentSubstringPlayerName(message);
-        game.setNotificationMessage2(img.toUpperCase(), img.toUpperCase(), false, 4, sender, subject);
-        game.drawNotification(false, false);
+        game.endTextCommandThefeedPostMessagetext(img.toUpperCase(), img.toUpperCase(), false, 4, sender, subject);
+        game.endTextCommandThefeedPostTicker(false, false);
     });
 
     alt.on('RemoveLoadingPrompt', () => game.busyspinnerOff());
@@ -161,14 +161,14 @@ export function initialize() {
      * Vehicle
     */
     alt.onServer('VehicleSetSirenSound', (vehicle: alt.Vehicle, status: boolean) => {
-        game.setDisableVehicleSirenSound(vehicle.scriptID, status);
+        game.setVehicleHasMutedSirens(vehicle.scriptID, status);
     });
 
     function SetNotificationPicture(message: string, dict: string, img: string, flash: boolean, iconType: number, sender: string, subject: string) {
-        game.setNotificationTextEntry("STRING");
+        game.beginTextCommandThefeedPost("STRING");
         game.addTextComponentSubstringPlayerName(message);
-        game.setNotificationMessage2(dict, img, flash, iconType, sender, subject);
-        game.drawNotification(true, false);
+        game.endTextCommandThefeedPostMessagetext(dict, img, flash, iconType, sender, subject);
+        game.endTextCommandThefeedPostTicker(true, false);
     }
 
     function RequestScaleForm(scaleformId: string) {
@@ -310,7 +310,7 @@ export function initialize() {
 
         // Turn off Screen Fades
         game.doScreenFadeIn(1);
-        game.transitionFromBlurred(1);
+        game.triggerScreenblurFadeOut(1);
     });
 
     
@@ -516,8 +516,7 @@ export async function ForceGroundZ(v: alt.Vector3) {
         temp = game.getGroundZFor3dCoord(x, y, 1000, zcoord, true, false);
         zcoord = temp[1];
     }
-    v.z = zcoord + 1;
-    return v;
+    return new alt.Vector3(v.x, v.y, zcoord + 1);
 }
 
 export function loadModelAsync(model) {

@@ -5,7 +5,6 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Driver;
 using Newtonsoft.Json;
-using ResurrectionRP_Server.Bank;
 using ResurrectionRP_Server.Entities.Players.Data;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Entities.Worlds;
@@ -46,11 +45,15 @@ namespace ResurrectionRP_Server.Entities.Players
             new IllegalCommands();
             new Society.Commands();
 
+            
+            AltAsync.OnClient<IPlayer>("LogPlayer", LogPlayer);
+            AltAsync.OnClient<IPlayer, string, string>("MakePlayer", MakePlayer);
+            AltAsync.OnClient <IPlayer, string>("SendLogin", SendLogin);
+            AltAsync.OnClient<IPlayer>("IWantToDie", IWantToDie);
+            AltAsync.OnClient<IPlayer, string, string>("Events_PlayerJoin", Events_PlayerJoin);
+
             Alt.OnClient("Player_SetInComa", (IPlayer client) => client.GetPlayerHandler().IsInComa = true); // peut être mieux?
-
             Alt.OnClient("ExitGame", (IPlayer client) => client.Kick("Exit"));
-
-            //Alt.OnClient("UpdateHungerThirst", (IPlayer client, object[] args) => client.GetPlayerHandler().UpdateHungerThirst(Convert.ToInt32(args[0]), Convert.ToInt32(""+args[1]) ));
 
             Utils.Utils.SetInterval(() =>
             {
@@ -161,14 +164,13 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        [AsyncClientEvent("Events_PlayerJoin")]
-        public static async Task Events_PlayerJoin(IPlayer player, object[] args)
+        public static async void Events_PlayerJoin(IPlayer player, string socialclub, string discordData)
         {
             if (!await player.ExistsAsync())
                 return;
 
-            string socialclub = args[0].ToString();
-            DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(args[1].ToString());
+            //string socialclub = args[0].ToString();
+            //DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(args[1].ToString());
             string playerIp = string.Empty;
 
             lock (player)
@@ -227,7 +229,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             if (DateTime.Now > whitelist.EndBanTime)
                             {
                                 whitelist.IsBan = false;
-                                player.EmitLocked("OpenLogin", args[0]);
+                                player.EmitLocked("OpenLogin", socialclub);
                                 return;
                             }
 
@@ -258,8 +260,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region RemoteEvents
-        [ClientEvent("MakePlayer")]
-        private static async Task MakePlayer(IPlayer client, object[] args)
+        private static async void MakePlayer(IPlayer client, string charData, string identite)
         {
             if (!client.Exists)
                 return;
@@ -267,9 +268,9 @@ namespace ResurrectionRP_Server.Entities.Players
 
             try
             {
-                ph.Character = JsonConvert.DeserializeObject<Models.PlayerCustomization>((string)args[0]);
+                ph.Character = JsonConvert.DeserializeObject<Models.PlayerCustomization>(charData);
                 ph.Clothing = new Clothings(client);
-                ph.Identite = JsonConvert.DeserializeObject<Models.Identite>( (string)args[1], new JsonSerializerSettings { DateParseHandling = DateParseHandling.DateTime } );
+                ph.Identite = JsonConvert.DeserializeObject<Models.Identite>(identite, new JsonSerializerSettings { DateParseHandling = DateParseHandling.DateTime } );
             } catch ( Exception ex) {
                 Alt.Server.LogWarning("Character Creator Error | " + ex.Data);
                 await client.KickAsync("Character Creator Error");
@@ -280,15 +281,14 @@ namespace ResurrectionRP_Server.Entities.Players
             await ph.LoadPlayer(client, true);
         }
 
-        [AsyncClientEvent("SendLogin")]
-        private static async Task SendLogin(IPlayer client, object[] args)
+        private static async void SendLogin(IPlayer client, string datastr)
         {
             if (!client.Exists)
                 return;
 
             var definition = new { login = "", password = "", socialClub = "" };
 
-            var data = JsonConvert.DeserializeAnonymousType(args[0].ToString(), definition);
+            var data = JsonConvert.DeserializeAnonymousType(datastr, definition);
             var wpclient = new WordPressClient("https://resurrectionrp.fr/wp-json/");
             wpclient.AuthMethod = AuthMethod.JWT;
 
@@ -311,8 +311,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        [AsyncClientEvent("LogPlayer")]
-        private static async Task LogPlayer(IPlayer client)
+        private static async void LogPlayer(IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -348,12 +347,14 @@ namespace ResurrectionRP_Server.Entities.Players
         public static async Task<PlayerHandler> GetPlayerHandlerDatabase(string socialClub) =>
             await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == socialClub.ToLower()).FirstOrDefaultAsync();
 
-        [AsyncClientEvent("IWantToDie")]
-        private static async Task IWantToDie(IPlayer client)
+        private static async void IWantToDie(IPlayer client)
         {
             await client.ReviveAsync(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
-            client.GetPlayerHandler().UpdateHungerThirst(50, 50);
-            client.GetPlayerHandler()?.UpdateFull();
+
+            var ph = client.GetPlayerHandler();
+
+            ph.UpdateHungerThirst(50, 50);
+            ph.UpdateFull();
         }
 
         public static PlayerHandler GetPlayerBySCN(string socialClubName)

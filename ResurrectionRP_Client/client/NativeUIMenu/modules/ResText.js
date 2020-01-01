@@ -3,7 +3,7 @@ import Point from "../utils/Point.js";
 import Size from "../utils/Size.js";
 import Text from "../modules/Text.js";
 import { Screen } from "../utils/Screen.js";
-import * as alt from 'alt';
+import * as alt from 'alt-client';
 import * as game from 'natives';
 
 export var Alignment;

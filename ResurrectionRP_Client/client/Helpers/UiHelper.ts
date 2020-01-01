@@ -1,4 +1,4 @@
-﻿import * as alt from 'alt';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import Scaleforms from '../Helpers/Scaleform';
 
@@ -11,48 +11,48 @@ export function SendNotification(msg, flash, textCol = -1, bgCol = -1, flashCol 
     if (textCol > -1)
         game.setColourOfNextTextComponent(4160189315227336364) // 0x39BBF623FC803EAC to int
     if (bgCol > -1)
-        game.setNotificationBackgroundColor(10588202547000613000) // 0x92F0DA1E27DB96DC
+        game.thefeedSetNextPostBackgroundColor(10588202547000613000) // 0x92F0DA1E27DB96DC
 
     if (flash) {
         if (flashCol == null)
             flashCol = [77, 77, 77, 255]
-        game.setNotificationFlashColor(flashCol[0], flashCol[1], flashCol[2], flashCol[3])
+        game.thefeedSetAnimpostfxColor(flashCol[0], flashCol[1], flashCol[2], flashCol[3])
 
     }
 
-    game.setNotificationTextEntry("STRING");
+    game.beginTextCommandThefeedPost("STRING");
     game.addTextComponentSubstringTextLabel(msg);
-    game.drawNotification(false, true);
+    game.endTextCommandThefeedPostTicker(false, true);
 }
 
 export function SendPicNotification(title, sender, msg, notifPic, icon = 0, flash = false, textCol = -1, bgCol = -1, flashCol = null) {
     if (textCol > -1)
         game.setColourOfNextTextComponent(4160189315227336364) // 0x39BBF623FC803EAC to int
     if (bgCol > -1)
-        game.setNotificationBackgroundColor(10588202547000613000) // 0x92F0DA1E27DB96DC
+        game.thefeedSetNextPostBackgroundColor(10588202547000613000) // 0x92F0DA1E27DB96DC
 
     if (flash) {
         if (flashCol == null)
             flashCol = [77, 77, 77, 255]
-        game.setNotificationFlashColor(flashCol[0], flashCol[1], flashCol[2], flashCol[3])
+        game.thefeedSetAnimpostfxColor(flashCol[0], flashCol[1], flashCol[2], flashCol[3])
 
     }
 
-    game.setNotificationTextEntry("CELL_EMAIL_BCON");
-    game.setNotificationTextEntry(msg);
+    game.beginTextCommandThefeedPost("CELL_EMAIL_BCON");
+    game.beginTextCommandThefeedPost(msg);
 
-    game.setNotificationMessage2(notifPic, notifPic, flash, icon, title, sender)
-    game.drawNotification(false, true);
+    game.endTextCommandThefeedPostMessagetext(notifPic, notifPic, flash, icon, title, sender)
+    game.endTextCommandThefeedPostTicker(false, true);
 
 }
 
 export function SetNotificationPicture(message: string, dict: string, img: string, flash: boolean, iconType: number, sender: string, subject: string) {
-    game.setNotificationTextEntry("STRING");
+    game.beginTextCommandThefeedPost("STRING");
     game.addTextComponentSubstringPlayerName(message);
 
     //game.setNotificationMessage2(dict, img, flash, iconType, sender, subject);
-    game.setNotificationMessageClanTag(img.toUpperCase(), img.toUpperCase(), false, 4, subject, sender, 1.0, '');
-    game.drawNotification(false, false);
+    game.endTextCommandThefeedPostMessagetextWithCrewTag(img.toUpperCase(), img.toUpperCase(), false, 4, subject, sender, 1.0, '');
+    game.endTextCommandThefeedPostTicker(false, false);
 
 }
 

@@ -158,9 +158,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
 
             // BUG v792 : NeonState and NeonColor not working properly
-            // if (NeonColor != null && NeonColor != Color.Empty)
-            //     vehicle.NeonColor = NeonColor;
-            // vehicle.SetNeonActive(NeonState.Item1, NeonState.Item2, NeonState.Item3, NeonState.Item4);
+            if (NeonColor != null && NeonColor != Color.Empty)
+                Vehicle.NeonColor = NeonColor;
+            Vehicle.SetNeonActive(NeonState.Item1, NeonState.Item2, NeonState.Item3, NeonState.Item4);
             Vehicle.SetSyncedMetaData("NeonColor", NeonColor.ToArgb());
             Vehicle.SetSyncedMetaData("NeonState", NeonState.Item1);
 
@@ -170,7 +170,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             Vehicle.EngineHealth = EngineHealth;
             Vehicle.BodyHealth = BodyHealth;
             Vehicle.RadioStation = RadioStation;
-
+            
             if (Wheels == null)
             {
                 Wheel[] wheels = new Wheel[Vehicle.WheelsCount];
@@ -187,7 +187,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 Vehicle.SetWheelHealth(i, Wheels[i].Health);
                 Vehicle.SetWheelHasTire(i, Wheels[i].HasTire);
             }
-
+            
             for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
                 Vehicle.SetDoorState(i, (byte)Doors[i]);
 

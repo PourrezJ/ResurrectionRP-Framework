@@ -31,6 +31,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         public float Health;
         public bool Burst;
         public bool HasTire;
+
+        public Wheel(float health = 100, bool burst = false, bool hasTire = true)
+        {
+            Health = health;
+            Burst = burst;
+            HasTire = hasTire;
+        }
     }
 }
 

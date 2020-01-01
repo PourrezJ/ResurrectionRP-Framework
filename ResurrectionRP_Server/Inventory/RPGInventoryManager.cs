@@ -293,6 +293,7 @@ namespace ResurrectionRP_Server.Inventory
            
         }
         #endregion
+
         #region Remove physical
         public static void RPGInventory_DeletePlayerProps(IPlayer client, Models.Item item)
         {

@@ -33,11 +33,11 @@
   <ItemGroup>
     <Reference Include="AltV.Net.NetworkingEntity">
       <HintPath>..\Other\AltV.Net.NetworkingEntity.dll</HintPath>
-      <Private>false</Private>
+      <Private>true</Private>
     </Reference>
     <Reference Include="WordPressPCL">
       <HintPath>..\Other\Server\WordPressPCL.dll</HintPath>
-      <Private>false</Private>
+      <Private>true</Private>
     </Reference>
   </ItemGroup>
 

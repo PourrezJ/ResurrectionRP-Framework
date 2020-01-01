@@ -375,11 +375,13 @@ namespace ResurrectionRP_Server.Entities.Players
                 #region Ban
                 var banitem = new MenuItem("Ban le joueur", "", "", true);
                 banitem.SetInput("", 99, InputType.Text);
-                banitem.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                banitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
-                    if (string.IsNullOrEmpty(menuItem.InputValue)) return;
+                    if (string.IsNullOrEmpty(menuItem.InputValue)) 
+                        return;
+
                     client.SendNotificationSuccess($"Vous venez de ban {_playerSelected.Identite.Name}.");
-                    await BanManager.BanPlayer(_playerSelected.Client, menuItem.InputValue, new DateTime(2031, 1, 1));
+                    BanManager.BanPlayer(_playerSelected.Client, menuItem.InputValue, new DateTime(2031, 1, 1));
                     // TODO ajouter contacte API
                 };
                 mainMenu.Add(banitem);
@@ -431,9 +433,9 @@ namespace ResurrectionRP_Server.Entities.Players
                 #region Revive
                 var resuitem = new MenuItem("Réanimer le joueur", "", "", true)
                 {
-                    OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                    OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                     {
-                        await _playerSelected.Client.ReviveAsync();
+                        _playerSelected.Client.Revive();
                     }
                 };
                 mainMenu.Add(resuitem);
@@ -442,7 +444,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 #region Spawn Perm
                 var spawnPerm = new MenuItem("Spawn véhicule", "Spawn un véhicule avec le nom rentré.", "ID_SpawnVehPerm", true);
                 spawnPerm.SetInput("", 30, InputType.Text);
-                spawnPerm.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                spawnPerm.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
                     try
                     {
@@ -467,7 +469,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         {
                             vehicle.LockState = VehicleLockState.Unlocked;
                             _playerSelected.Client.SetPlayerIntoVehicle(vehicle.Vehicle);
-                            await vehicle.InsertVehicle();
+                            vehicle.InsertVehicle();
                             _playerSelected.ListVehicleKey.Add(new VehicleKey(manifest.DisplayName, vehicle.Plate));
                             //LogManager.Log($"~r~[ADMIN]~w~ {client.Name} a spawn le véhicule {_vehs.Model} {_vehs.Plate}");
                         }
@@ -485,16 +487,18 @@ namespace ResurrectionRP_Server.Entities.Players
                 #region Delete Vehicle Perm
                 var deletepermvehitem = new MenuItem("Supprimer le véhicule (PERM).", "~r~ATTENTION CECI LE RETIRE DE LA BASE DE DONNÉES!", "", true)
                 {
-                    OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                    OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                     {
-                        VehicleHandler vehicle = (await client.GetNearestVehicleAsync(5)).GetVehicleHandler();
-
-                        if(vehicle == null)
-                            client.SendNotificationError("Aucun véhicule a proximité");
-                        else if(await vehicle.DeleteAsync(true))
-                            client.SendNotificationSuccess($"Véhicule ~r~{vehicle.Plate}~w~ supprimé...");
-                        else
-                            client.SendNotificationError($"Erreur de suppression du véhicule");
+                        VehicleHandler vehicle = (client.GetNearestVehicle(5))?.GetVehicleHandler();
+                        Task.Run(async () =>
+                        {
+                            if (vehicle == null)
+                                client.SendNotificationError("Aucun véhicule a proximité");
+                            else if (await vehicle.DeleteAsync(true))
+                                client.SendNotificationSuccess($"Véhicule ~r~{vehicle.Plate}~w~ supprimé...");
+                            else
+                                client.SendNotificationError($"Erreur de suppression du véhicule");
+                        });
                     }
                 };
 
@@ -504,23 +508,25 @@ namespace ResurrectionRP_Server.Entities.Players
                 #region Delete Vehicle
                 var deletevehitem = new MenuItem("Supprimer le véhicule.", "", "", true)
                 {
-                    OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                    OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                     {
-                        VehicleHandler vehicle = (await client.GetNearestVehicleAsync(5))?.GetVehicleHandler();
-
-                        if(vehicle == null)
-                            client.SendNotificationError("Aucun véhicule a proximité");
-                        else if(await vehicle.DeleteAsync(false))
-                            client.SendNotificationSuccess($"Véhicule ~r~{vehicle.Plate}~w~ supprimé...");
-                        else
-                            client.SendNotificationError($"Erreur de suppression du véhicule");
+                        VehicleHandler vehicle = (client.GetNearestVehicle(5))?.GetVehicleHandler();
+                        Task.Run(async () =>
+                        {
+                            if (vehicle == null)
+                                client.SendNotificationError("Aucun véhicule a proximité");
+                            else if (await vehicle.DeleteAsync(false))
+                                client.SendNotificationSuccess($"Véhicule ~r~{vehicle.Plate}~w~ supprimé...");
+                            else
+                                client.SendNotificationError($"Erreur de suppression du véhicule");
+                        });
                     }
                 };
 
                 mainMenu.Add(deletevehitem);
                 #endregion
 
-                #region addItem
+                #region AddItem
                 var addItem = new MenuItem("Donner un objet", "", "", true)
                 {
                     OnMenuItemCallback = GiveItemMenu
@@ -588,7 +594,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 spawnPerm = new MenuItem("Donner une clé", "Donne une clé de véhicule, avec la plaque.", "ID_Generatekey", true);
                 spawnPerm.SetInput("", 30, InputType.Text);
-                spawnPerm.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                spawnPerm.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
                     try
                     {
@@ -624,7 +630,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 spawnPerm = new MenuItem("Supprimer un véhicule (Nécéssite plaque)", "Supprimer un véhicule DEFINiTIVEMENT en utilsant sa plaque", "ID_PermDeleteWithPlate", true);
                 spawnPerm.SetInput("", 30, InputType.Text);
-                spawnPerm.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                spawnPerm.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
                     try
                     {
@@ -636,13 +642,15 @@ namespace ResurrectionRP_Server.Entities.Players
 
                         VehicleHandler vehicle = VehiclesManager.VehicleHandlerList.FirstOrDefault( (p) => p.Value.Plate.ToUpper() == name.ToUpper()).Value;
 
-
-                        if (vehicle == null)
-                            client.DisplayHelp("Le véhicule n'existe pas!");
-                        else if (await vehicle.DeleteAsync(true))
-                            client.DisplayHelp($"Le véhicule {vehicle.VehicleManifest.DisplayName} a été supprimé en base de donnée.");
-                        else
-                            client.DisplayHelp("Le véhicule n'a pas pu être supprimé, une erreur en base donnée peut-être :x");
+                        Task.Run(async () =>
+                        {
+                            if (vehicle == null)
+                                client.DisplayHelp("Le véhicule n'existe pas!");
+                            else if (await vehicle.DeleteAsync(true))
+                                client.DisplayHelp($"Le véhicule {vehicle.VehicleManifest.DisplayName} a été supprimé en base de donnée.");
+                            else
+                                client.DisplayHelp("Le véhicule n'a pas pu être supprimé, une erreur en base donnée peut-être :x");
+                        });
                     }
                     catch (Exception ex)
                     {
@@ -655,9 +663,9 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 spawnPerm = new MenuItem("Information Véhicule (Nécéssite plaque)", "Récupère les informations d'un véhicule", "ID_VehicleInfo", true);
                 spawnPerm.SetInput("", 30, InputType.Text);
-                spawnPerm.OnMenuItemCallbackAsync = async (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                spawnPerm.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
-                    await VehicleCommands.VehicleInfo(client, new[] {  menuItem.InputValue });
+                    Task.Run(async ()=> await VehicleCommands.VehicleInfo(client, new[] {  menuItem.InputValue }));
                 };
                 mainMenu.Add(spawnPerm);
                 #endregion

@@ -64,51 +64,42 @@ namespace ResurrectionRP_Server
             if (!player.Exists)
                 return;
 
-            _clientMenus.TryGetValue(player, out Menu menu);
-
-            if (menu != null)
+            if (_clientMenus.TryGetValue(player, out Menu menu))
             {
                 dynamic data = JsonConvert.DeserializeObject(datastr);
 
-                foreach (MenuItem menuItem in menu.Items)
-                {
-                    try
-                    {
-                        if (menuItem.Type == MenuItemType.CheckboxItem)
-                            ((CheckboxItem)menuItem).Checked = data[menuItem.Id];
-                        else if (menuItem.Type == MenuItemType.ListItem)
-                            ((ListItem)menuItem).SelectedItem = data[menuItem.Id]["Index"];
-                        else if (menuItem.InputMaxLength > 0)
-                            menuItem.InputValue = data[menuItem.Id];
-                    }
-                    catch (Exception)
-                    { }
-                }
 
-                try
+                for (int i = 0; i < menu.Items.Count; i++)
                 {
-                    if (itemIndex >= menu.Items.Count)
-                        return;
-
-                    MenuItem menuItem = menu.Items[itemIndex];
+                    MenuItem menuItem = menu.Items[i];
 
                     if (menuItem == null)
-                        return;
+                        continue;
 
-                    if (menu.ItemSelectCallbackAsync != null)
-                        Task.Run(async () => { await menu.ItemSelectCallbackAsync(player, menu, menuItem, itemIndex); });
+                    if (string.IsNullOrEmpty(menuItem.Id))
+                        continue;
 
-                    menu.ItemSelectCallback?.Invoke(player, menu, menuItem, itemIndex);
-
-                    if (menuItem.OnMenuItemCallbackAsync != null)
-                        Task.Run(async () => { await menuItem.OnMenuItemCallbackAsync(player, menu, menuItem, itemIndex); });
-
-                    menuItem.OnMenuItemCallback?.Invoke(player, menu, menuItem, itemIndex);
+                    if (menuItem.Type == MenuItemType.CheckboxItem)
+                        ((CheckboxItem)menuItem).Checked = data[i.ToString()];
+                    else if (menuItem.Type == MenuItemType.ListItem)
+                        ((ListItem)menuItem).SelectedItem = data[i.ToString()];
+                    else if (menuItem.InputMaxLength > 0)
+                        menuItem.InputValue = data[i.ToString()];
                 }
-                catch (Exception ex)
-                {
-                    Alt.Server.LogError(ex.ToString());
-                }
+
+                if (itemIndex >= menu.Items.Count)
+                    return;
+
+                MenuItem item = menu.Items[itemIndex];
+
+                if (item == null)
+                    return;
+
+                //if (menu.ItemSelectCallbackAsync != null)
+                //    Task.Run(async () => { await menu.ItemSelectCallbackAsync(player, menu, menuItem, itemIndex); });
+
+                menu.ItemSelectCallback?.Invoke(player, menu, item, itemIndex);
+                item.OnMenuItemCallback?.Invoke(player, menu, item, itemIndex);
             }
         }
 

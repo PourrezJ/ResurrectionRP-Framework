@@ -57,7 +57,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     client.SendNotificationSuccess($"Vous venez de ban {TargetHandler.Identite.Name}.");
                     TargetClient.SendNotification($"Ban raison: {menuItem.InputValue}");
                     await Task.Delay(100);
-                    await Models.BanManager.BanPlayer(TargetClient, menuItem.InputValue, new DateTime(2031, 1, 1));
+                    Models.BanManager.BanPlayer(TargetClient, menuItem.InputValue, new DateTime(2031, 1, 1));
                     break;
 
                 case "ID_Give":

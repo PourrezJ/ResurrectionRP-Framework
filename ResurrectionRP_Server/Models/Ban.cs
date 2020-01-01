@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server.Models
             }
         }
         
-        public static async Task BanPlayer(IPlayer player, string reason, DateTime endtime)
+        public static void BanPlayer(IPlayer player, string reason, DateTime endtime)
         {
             var players = Entities.Players.PlayerHandler.PlayerHandlerList.ToList();
 
@@ -60,11 +60,9 @@ namespace ResurrectionRP_Server.Models
 
                 BanList.Add(ban);
                 Alt.Server.LogColored($"~c~Ban du joueur {player.GetSocialClub()} pour la raison: {reason}");
-                await Database.MongoDB.Insert("ban", ban);
-                await player.KickAsync(reason);
-                await Task.Delay(100);
+                player.Kick(reason);
+                Task.Run(async () => await Database.MongoDB.Insert("ban", ban));
             }
-
         } 
     }
 }

@@ -266,7 +266,7 @@ namespace ResurrectionRP_Server.Factions
                 if (IsRecruteur(client) || staffRank >= AdminRank.Moderator)
                 {
                     MenuItem gestion = new MenuItem($"Gestion des membres", "", "ID_gestionMember", true);
-                    gestion.OnMenuItemCallbackAsync = GestionMember;
+                    gestion.OnMenuItemCallback = GestionMember;
                     menu.Add(gestion);
                 }
 
@@ -275,7 +275,7 @@ namespace ResurrectionRP_Server.Factions
                 menu.Add(vestiaire);
 
                 var demission = new MenuItem("Démissioner", "", "ID_demissioner", executeCallback: true);
-                demission.OnMenuItemCallbackAsync = GestionMemberCallback;
+                demission.OnMenuItemCallback = GestionMemberCallback;
                 demission.SetData("playerId", client.GetSocialClub());
                 menu.Add(demission);
                 menu.OpenMenu(client);
@@ -357,12 +357,12 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Members
-        private async Task GestionMember(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void GestionMember(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             menu.ClearItems();
             menu.BackCloseMenu = false;
             menu.SubTitle = "Gestion des membres";
-            menu.ItemSelectCallbackAsync = GestionMemberCallback;
+            menu.ItemSelectCallback = GestionMemberCallback;
 
             MenuItem ajouter = new MenuItem("Ajouter un employé", "", "add_employe", executeCallback: true);
             ajouter.Description = "Mettez le prénom puis le nom de famille pour l'ajouter.";
@@ -373,17 +373,20 @@ namespace ResurrectionRP_Server.Factions
 
             if (FactionPlayerList.Count > 0)
             {
-                foreach (var employe in FactionPlayerList)
+                Task.Run(async () =>
                 {
-                    var identite = await Identite.GetOfflineIdentite(employe.Key);
-                    menu.Add(new MenuItem(identite == null ? employe.Key : identite.Name, "", "delete_employe", executeCallback: true));
-                }
-            }
+                    foreach (var employe in FactionPlayerList)
+                    {
+                        var identite = await Identite.GetOfflineIdentite(employe.Key);
+                        menu.Add(new MenuItem(identite == null ? employe.Key : identite.Name, "", "delete_employe", executeCallback: true));
+                    }
+                    menu.OpenMenu(client);
+                });
 
-            menu.OpenMenu(client);
+            }
         }
 
-        private async Task GestionMemberCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void GestionMemberCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
@@ -426,32 +429,34 @@ namespace ResurrectionRP_Server.Factions
                 foreach(var playerID in FactionPlayerList)
                 {
                     PlayerHandler ph = PlayerManager.GetPlayerBySCN(playerID.Key);
-
-                    if (ph != null && ph.Identite.Name == menuItem.Text)
+                    Task.Run(async () =>
                     {
-                        if (ServicePlayerList.Contains(playerID.Key))
-                            PriseService(ph.Client);
-
-                        if (FactionPlayerList.TryRemove(playerID.Key, out FactionPlayer value))
+                        if (ph != null && ph.Identite.Name == menuItem.Text)
                         {
-                            client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
-                            PriseServiceMenu(client);
-                            UpdateInBackground();
-                        }
+                            if (ServicePlayerList.Contains(playerID.Key))
+                                PriseService(ph.Client);
 
-                        return;
-                    }
-                    else if ((await Identite.GetOfflineIdentite(playerID.Key)).Name == menuItem.Text)
-                    {
-                        if (FactionPlayerList.TryRemove(playerID.Key, out FactionPlayer value))
+                            if (FactionPlayerList.TryRemove(playerID.Key, out FactionPlayer value))
+                            {
+                                client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
+                                PriseServiceMenu(client);
+                                UpdateInBackground();
+                            }
+
+                            return;
+                        }
+                        else if ((await Identite.GetOfflineIdentite(playerID.Key)).Name == menuItem.Text)
                         {
-                            client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
-                            PriseServiceMenu(client);
-                            UpdateInBackground();
-                        }
+                            if (FactionPlayerList.TryRemove(playerID.Key, out FactionPlayer value))
+                            {
+                                client.SendNotificationSuccess(menuItem.Text + " est renvoyé.");
+                                PriseServiceMenu(client);
+                                UpdateInBackground();
+                            }
 
-                        return;
-                    }
+                            return;
+                        }
+                    });
                 }
             }
             else if(menuItem.Id == "ID_demissioner")
@@ -564,7 +569,7 @@ namespace ResurrectionRP_Server.Factions
             Menu menu = new Menu("ID_ParkingMenu", "Parking", subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, backCloseMenu: true);
             menu.SetData("ConcessType", type);
             menu.SetData("Faction_Location", location); 
-            menu.ItemSelectCallbackAsync = ConcessCallBack;
+            menu.ItemSelectCallback = ConcessCallBack;
 
             if (client.IsInVehicle)
                 menu.Add(new MenuItem("Ranger le véhicule", "", "ID_StoreVehicle", true));
@@ -577,7 +582,7 @@ namespace ResurrectionRP_Server.Factions
             menu.OpenMenu(client);
         }
 
-        private async Task ConcessCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void ConcessCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
@@ -603,9 +608,9 @@ namespace ResurrectionRP_Server.Factions
                             if (Parking != null)
                             {
                                 if (type == ConcessType.Helico)
-                                    await Parking.StoreVehicle(client, client.Vehicle, HeliportLocation);
+                                    Parking.StoreVehicle(client, client.Vehicle, HeliportLocation);
                                 else
-                                    await Parking.StoreVehicle(client, client.Vehicle);
+                                    Parking.StoreVehicle(client, client.Vehicle);
                             }
 
                             menu.CloseMenu(client);
@@ -629,7 +634,7 @@ namespace ResurrectionRP_Server.Factions
                         menu.Id = "ID_ConcessMenuChoise";
                         menu.Title = "Concessionnaire";
                         menu.SubTitle = "Quel véhicule souhaitez-vous acheter :";
-                        menu.ItemSelectCallbackAsync = ConcessCallBack;
+                        menu.ItemSelectCallback = ConcessCallBack;
 
                         foreach (FactionVehicle veh in VehicleAllowed)
                         {
@@ -682,9 +687,11 @@ namespace ResurrectionRP_Server.Factions
                 if (BankAccount.GetBankMoney(fv.Price, $"Achat véhicule {vhname} par {ph.Identite.Name}"))
                 {
                     VehicleHandler vh = VehiclesManager.SpawnVehicle(client.GetSocialClub(), (uint)fv.Hash, location.Pos, location.Rot, inventory: new Inventory.Inventory(fv.Weight, fv.MaxSlot), primaryColor: fv.PrimaryColor, secondaryColor: fv.SecondaryColor);
-                    await vh.InsertVehicle();
                     client.SetPlayerIntoVehicle(vh.Vehicle);
-                    await OnVehicleOut(client, vh);
+                    vh.InsertVehicle();
+
+
+                    OnVehicleOut(client, vh);
                     ph.ListVehicleKey.Add(new VehicleKey(vhname, vh.Plate));
                     ph.UpdateFull();
                     MenuManager.CloseMenu(client);

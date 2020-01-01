@@ -106,7 +106,7 @@ namespace ResurrectionRP_Server.Bank
 
             #region Transfert
             var transfertItem = new MenuItem("Transférer", executeCallback: true);
-            transfertItem.OnMenuItemCallbackAsync += OnTransfertItem;
+            transfertItem.OnMenuItemCallback += OnTransfertItem;
             _bankMenu.Add(transfertItem);
             #endregion
 
@@ -209,10 +209,9 @@ namespace ResurrectionRP_Server.Bank
                 menu.CloseMenu(client);
         }
 
-        private Task OnTransfertItem(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void OnTransfertItem(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             client.SendNotificationError("Pas encore implanté, S00N!");
-            return Task.CompletedTask;
         }
         #endregion
     }

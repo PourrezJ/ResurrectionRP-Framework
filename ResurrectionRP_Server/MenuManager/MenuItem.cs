@@ -8,7 +8,6 @@ namespace ResurrectionRP_Server
     public class MenuItem : IMenuItem
     {
         #region Delegates
-        public delegate Task OnMenuItemCallBackDelegateAsync(IPlayer client, Menu menu = null, IMenuItem menuItem = null, int itemIndex = 0);
         public delegate void OnMenuItemCallBackDelegate(IPlayer client, Menu menu = null, IMenuItem menuItem = null, int itemIndex = 0);
         #endregion
 
@@ -33,8 +32,6 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Events
-        [JsonIgnore]
-        public OnMenuItemCallBackDelegateAsync OnMenuItemCallbackAsync { get; set; } = null;
         [JsonIgnore]
         public OnMenuItemCallBackDelegate OnMenuItemCallback { get; set; } = null;
         #endregion

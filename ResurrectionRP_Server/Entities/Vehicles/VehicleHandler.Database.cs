@@ -17,19 +17,22 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Methods
-        public async Task InsertVehicle()
+        public void InsertVehicle()
         {
-            try
+            Task.Run(async () =>
             {
-                if (SpawnVeh)
-                    return;
+                try
+                {
+                    if (SpawnVeh)
+                        return;
 
-                await Database.MongoDB.Insert("vehicles", this);
-            }
-            catch (BsonException be)
-            {
-                Alt.Server.LogError(be.Message);
-            }
+                    await Database.MongoDB.Insert("vehicles", this);
+                }
+                catch (BsonException be)
+                {
+                    Alt.Server.LogError(be.Message);
+                }
+            });
         }
 
         public void UpdateInBackground(bool updateLastUse = true, bool immediatePropertiesUpdate = false)

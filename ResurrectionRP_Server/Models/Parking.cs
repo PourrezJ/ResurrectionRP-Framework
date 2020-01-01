@@ -208,13 +208,13 @@ namespace ResurrectionRP_Server.Models
             return number;
         }
 
-        private async Task StoreVehicle(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void StoreVehicle(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            await StoreVehicle(client, client.Vehicle);
+            Task.Run(()=> StoreVehicle(client, client.Vehicle));
             menu.CloseMenu(client);
         }
 
-        private async Task GetVehicle(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void GetVehicle(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             try
             {
@@ -226,7 +226,7 @@ namespace ResurrectionRP_Server.Models
                     if (!VehiclesManager.IsVehicleInSpawn(menu.GetData("Location")))
                     {
                         Spawn = menu.GetData("Location");
-                        await veh.SpawnVehicleAsync(Spawn);
+                        veh.SpawnVehicle(Spawn);
                     }
                 }
                 else
@@ -235,12 +235,12 @@ namespace ResurrectionRP_Server.Models
                     if (!VehiclesManager.IsVehicleInSpawn(Spawn1.Pos))
                     {
                         Spawn = Spawn1;
-                        await veh.SpawnVehicleAsync(Spawn1);
+                        veh.SpawnVehicle(Spawn1);
                     }
                     else if (Spawn2 != null && !VehiclesManager.IsVehicleInSpawn(Spawn2.Pos))
                     {
                         Spawn = Spawn2;
-                        await veh.SpawnVehicleAsync(Spawn2);
+                        veh.SpawnVehicle(Spawn2);
                     }
                     else
                     {
@@ -254,7 +254,7 @@ namespace ResurrectionRP_Server.Models
                 RemoveVehicle(veh); // retrait du véhicule dans la liste
 
                 if (OnVehicleOut != null)
-                    await OnVehicleOut.Invoke(client, veh, Spawn); // callback (ex carpark)
+                    Task.Run(()=> OnVehicleOut.Invoke(client, veh, Spawn)); // callback (ex carpark)
 
                 veh.UpdateInBackground();
                 MenuManager.CloseMenu(client);
@@ -287,7 +287,7 @@ namespace ResurrectionRP_Server.Models
             ParkingList.Add(this);
         }
 
-        public void OpenParkingMenu(IPlayer client, string title = "", string description = "", bool canGetAllVehicle = false, Location location = null, int vehicleType = -1, Menu menu = null, Menu.MenuCallbackAsync menuCallback = null)
+        public void OpenParkingMenu(IPlayer client, string title = "", string description = "", bool canGetAllVehicle = false, Location location = null, int vehicleType = -1, Menu menu = null, Menu.MenuCallback menuCallback = null)
         {
             if (!client.Exists)
                 return;
@@ -309,7 +309,7 @@ namespace ResurrectionRP_Server.Models
             {
                 menu.ClearItems();
                 menu.BackCloseMenu = false;
-                menu.ItemSelectCallbackAsync = menuCallback;
+                menu.ItemSelectCallback = menuCallback;
             }
 
             if (client.IsInVehicle && client.Seat == 1) // I store my vehicle
@@ -337,7 +337,7 @@ namespace ResurrectionRP_Server.Models
                 }
                 
                 var item = new MenuItem("Ranger votre voiture", "", "ID_StoreVehicle", true, rightLabel: $"{((Price > 0) ? "$" + Price.ToString() : "")}");
-                item.OnMenuItemCallbackAsync = StoreVehicle;
+                item.OnMenuItemCallback = StoreVehicle;
                 menu.Add(item);
             }
             else // I want my vehicle
@@ -383,7 +383,7 @@ namespace ResurrectionRP_Server.Models
 
                             MenuItem item = new MenuItem(string.IsNullOrEmpty(veh.VehicleManifest.LocalizedName) ? veh.VehicleManifest.DisplayName : veh.VehicleManifest.LocalizedName, _description, "", true, rightLabel: veh.Plate);
                             item.SetData("Vehicle", veh);
-                            item.OnMenuItemCallbackAsync = GetVehicle;
+                            item.OnMenuItemCallback = GetVehicle;
                             menu.Add(item);
                         }
                         catch(Exception ex)
@@ -403,7 +403,7 @@ namespace ResurrectionRP_Server.Models
             menu.OpenMenu(client);
         }
 
-        public async Task StoreVehicle(IPlayer client, IVehicle vh, Location location = null)
+        public void StoreVehicle(IPlayer client, IVehicle vh, Location location = null)
         {
             if (vh == null)
                 return;
@@ -445,10 +445,10 @@ namespace ResurrectionRP_Server.Models
                     veh.UpdateMilageAndFuel();
 
                     if (OnVehicleStored != null)
-                        await OnVehicleStored.Invoke(client, veh); // call event for success storage
+                        Task.Run(() => OnVehicleStored.Invoke(client, veh)); // call event for success storage
 
                     veh.UpdateInBackground(true, true);
-                    await veh.DeleteAsync(false);
+                    Task.Run(()=> veh.DeleteAsync(false));
                 }
                 else
                     Alt.Server.LogError("GetHandlerByVehicle fuck is null this shit! mother fucker!");

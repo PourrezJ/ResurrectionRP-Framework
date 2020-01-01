@@ -47,21 +47,19 @@ namespace ResurrectionRP_Server.Factions
         public void Load(bool empty = false)
         {
             if (GameMode.IsDebug)
-                Entities.Marker.CreateMarker(Entities.MarkerType.VerticalCylinder,RackPos ,new Vector3(2,2,1), Color.FromArgb(80, 255, 255, 255) );
+                Entities.Marker.CreateMarker(Entities.MarkerType.VerticalCylinder, RackPos, new Vector3(2, 2, 1), Color.FromArgb(80, 255, 255, 255));
             if (!empty && InventoryBox != null)
             {
-                InventoryBox.Spawn(); 
+                InventoryBox.Spawn();
             }
             else if (!empty && InventoryBox == null)
             {
                 InventoryBox = InventoryBox.CreateInventoryBox(RackName, BoxLocation, new Inventory.Inventory(500, 20));
             }
-
-            if (InventoryBox.Obj != null)
+            if (InventoryBox != null && InventoryBox.Obj != null && RackName != null)
             {
                 InventoryBox.Obj.SetData("RackName", RackName);
             }
-
             RefreshLabel();
             Colshape = ColshapeManager.CreateCylinderColshape(RackPos, 3, 6);
             Colshape.OnPlayerEnterColshape += OnPlayerEnterColShape;

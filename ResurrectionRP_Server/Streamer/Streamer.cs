@@ -23,28 +23,13 @@ namespace ResurrectionRP_Server.Streamer
 
         public static void Init()
         {
-            try
+            AltNetworking.Configure(options =>
             {
-                AltNetworking.Configure(options =>
-                {
-                    if (!string.IsNullOrEmpty(Config.GetSetting<string>("StreamerIP")))
-                        options.Ip = Config.GetSetting<string>("StreamerIP");
+                if (!string.IsNullOrEmpty(Config.GetSetting<string>("StreamerIP")))
+                    options.Ip = Config.GetSetting<string>("StreamerIP");
 
-                    options.Port = 46429;
-                });
-
-                AltNetworking.OnEntityStreamIn = (entity, client) =>
-                {
-                };
-
-                AltNetworking.OnEntityStreamOut = (entity, client) =>
-                {
-                };
-            }
-            catch(Exception ex)
-            {
-                Alt.Server.LogError(ex.ToString());
-            }
+                options.Port = 46429;
+            });
         }
 
         public static int AddEntityPed(Entities.Peds.Ped ped, int dimension = GameMode.GlobalDimension)

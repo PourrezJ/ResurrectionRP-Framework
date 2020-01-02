@@ -94,15 +94,20 @@ namespace ResurrectionRP_Server
         {
             AltAsync.Do(() =>
             {
+                /*
                 foreach (IPlayer player in PlayerList.ToArray())
                 {
                     if (player != null && player.Exists)
                         player.Kick("Server stop");
+                }*/
+
+                foreach(var veh in Alt.GetAllVehicles())
+                {
+                    veh.Remove();
                 }
 
-
                 //await HouseManager.House_Exit();
-            });
+            }).Wait();
         }
 
         public void OnStart()
@@ -164,9 +169,7 @@ namespace ResurrectionRP_Server
                     await Loader.BusinessesManager.LoadAllBusinesses();
                     await Society.SocietyManager.LoadAllSociety();
 
-                    // if (IsDebug)
-                    //     await IllegalManager.InitAll();
-
+                    await IllegalManager.InitAll();
                     //await JobsManager.Init();
                     await HouseManager.LoadAllHouses();
 

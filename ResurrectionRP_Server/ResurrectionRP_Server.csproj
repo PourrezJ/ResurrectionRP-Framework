@@ -18,23 +18,16 @@
 
 
   <ItemGroup>
-    <PackageReference Include="AltV.Net" Version="1.18.7" />
-    <PackageReference Include="AltV.Net.Async" Version="1.18.1" />
-    <PackageReference Include="AltV.Net.NetworkingEntity" Version="1.4.3-dev-preview" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.0.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.9.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="VIEApps.Components.Utility" Version="10.3.1910.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.10.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="VIEApps.Components.Utility" Version="10.3.2001.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="AltV.Net.NetworkingEntity">
-      <HintPath>..\Other\AltV.Net.NetworkingEntity.dll</HintPath>
-      <Private>true</Private>
-    </Reference>
     <Reference Include="WordPressPCL">
       <HintPath>..\Other\Server\WordPressPCL.dll</HintPath>
       <Private>true</Private>
@@ -49,6 +42,12 @@
 
   <ItemGroup>
     <Folder Include="DrivingSchool\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\coreclr-module\api\AltV.Net.Async\AltV.Net.Async.csproj" />
+    <ProjectReference Include="..\coreclr-module\api\AltV.Net.NetworkingEntity\AltV.Net.NetworkingEntity.csproj" />
+    <ProjectReference Include="..\coreclr-module\api\AltV.Net\AltV.Net.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

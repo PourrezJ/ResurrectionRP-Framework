@@ -80,8 +80,7 @@ const init = async () => {
         nightClub.initialize();
         await trains.initialize();
         new LSPDManager();
-        new Notify();
-        new NetworkingEntityClient();
+        new Notify();       
         new Admin();
         menuManager();
         CustomEvents.initialize();
@@ -99,6 +98,8 @@ const init = async () => {
         alt.logError(`Erreur! Essayez de vous reconnecter. Si le problème se reproduit, veuillez contacter un helpers.`);
     }
 };
+
+new NetworkingEntityClient();
 init();
 
 

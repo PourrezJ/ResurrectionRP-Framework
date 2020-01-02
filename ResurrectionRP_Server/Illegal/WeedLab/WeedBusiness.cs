@@ -5,6 +5,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities;
+using ResurrectionRP_Server.Entities.Blips;
 using ResurrectionRP_Server.Illegal.WeedLab;
 using ResurrectionRP_Server.Illegal.WeedLab.Data;
 using ResurrectionRP_Server.Models;
@@ -67,6 +68,12 @@ namespace ResurrectionRP_Server.Illegal
 
             if (LabEnter == null)
                 LabEnter = new Location(new Vector3(), new Vector3());
+
+
+            if (GameMode.IsDebug)
+            {
+                BlipsManager.CreateBlip("Labo-weed", LabEnter.Pos, BlipColor.Black, (int)BlipType.Gallery, 1, true);
+            }
 
             DealerLocations = new Location[]
             {

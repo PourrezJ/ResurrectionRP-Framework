@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Entities.Blips;
 using ResurrectionRP_Server.Entities.Peds;
 using ResurrectionRP_Server.Models;
 using System;
@@ -18,6 +19,7 @@ namespace ResurrectionRP_Server.Illegal
             new Location(new Vector3(-156.0022f, 925.74f, 235.65006f), new Vector3(0,0,0))
         };
 
+        [MongoDB.Bson.Serialization.Attributes.BsonIgnore]
         public Ped BlackMPed { get; private set; }
 
         public List<string> WeedLabsOwned = new List<string>();
@@ -46,6 +48,11 @@ namespace ResurrectionRP_Server.Illegal
                 BlackMPed = Ped.CreateNPC(AltV.Net.Enums.PedModel.WeaponExpertMale01, loc.Pos, loc.Rot.Z, GameMode.GlobalDimension);
                 AltV.Net.Alt.Server.LogInfo($"Current Black Market pos: {loc.Pos.X} {loc.Pos.Y} {loc.Pos.Z}");
                 BlackMPed.NpcInteractCallBack += OnBlackMInteract;
+
+                if (GameMode.IsDebug)
+                {
+                    BlipsManager.CreateBlip("Black Market", loc.Pos, BlipColor.Black, (int)BlipType.Ped, 1, true);
+                }
             }
 
             Utils.Utils.SetInterval(() =>
@@ -53,7 +60,6 @@ namespace ResurrectionRP_Server.Illegal
                 // Check si milicien dans la zone
                 // GOTO ResetLabs ou ResetDealer
             }, 30000);
-            base.Load();
         }
 
         public override void OnPlayerConnected(IPlayer client)

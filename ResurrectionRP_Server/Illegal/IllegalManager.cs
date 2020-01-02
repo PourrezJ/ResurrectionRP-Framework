@@ -100,7 +100,7 @@ namespace ResurrectionRP_Server.Illegal
         }
     }
 
-    [BsonKnownTypes(typeof(WeedBusiness))]
+    [BsonKnownTypes(typeof(BlackMarket), typeof(WeedBusiness))]
     public class IllegalSystem
     {
         public BsonObjectId _id;
@@ -133,7 +133,7 @@ namespace ResurrectionRP_Server.Illegal
                 Task.Run(async()=> await Update());
             }
 
-            if (DealerLocations.Length > 0)
+            if (DealerLocations != null && DealerLocations.Length > 0)
             {
                 var loc = DealerLocations[CurrentPos];
 

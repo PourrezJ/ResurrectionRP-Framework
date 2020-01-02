@@ -179,7 +179,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Load
         public async Task LoadPlayer(IPlayer client, bool firstspawn = false)
         {
-            client.Emit("FadeOut", 500);
+            await client.EmitAsync("FadeOut", 500);
             Client = client;
             client.SetData("PlayerHandler", this);
 

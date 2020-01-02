@@ -325,10 +325,10 @@ namespace ResurrectionRP_Server.Entities.Players
 
             lock (client)
                 socialClubId = client.SocialClubId;
-
+            
             if (socialClubId == 0)
                 await client.KickAsync("Vous n'êtes pas connecté correctement, redémarrez.");
-
+            
             if (await client.PlayerHandlerExist())
             {
                 await client.EmitAsync("FadeOut",0);

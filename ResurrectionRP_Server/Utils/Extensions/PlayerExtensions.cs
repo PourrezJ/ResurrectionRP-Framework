@@ -368,7 +368,7 @@ namespace ResurrectionRP_Server
 
         public static async Task<bool> PlayerHandlerExist(this IPlayer player)
         {
-            if (!player.Exists)
+            if (!await player.ExistsAsync())
                 return false;
             try
             {

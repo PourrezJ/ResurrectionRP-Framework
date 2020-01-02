@@ -22,7 +22,7 @@ export class NetworkingEntityClient {
         this.defaultToken = true;
         this.defaultWebView = true;
         this.streamedInEntities = {};
-
+        
         alt.everyTick(() => {
             NetworkingEntityClient.EntityList.forEach((item, index) => {
                 if (item != null && item.Text != null) {

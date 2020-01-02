@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Linq;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
@@ -10,7 +9,6 @@ using ClothData = ResurrectionRP_Server.Models.ClothData;
 using ItemID = ResurrectionRP_Server.Models.InventoryData.ItemID;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Utils.Enums;
-using System.Numerics;
 using ResurrectionRP_Server.Entities.Players;
 
 namespace ResurrectionRP_Server.Inventory
@@ -18,20 +16,19 @@ namespace ResurrectionRP_Server.Inventory
     public static class RPGInventoryManager
     {
         #region Private static properties
-        private static ConcurrentDictionary<IPlayer, RPGInventoryMenu> _clientMenus = new ConcurrentDictionary<IPlayer, RPGInventoryMenu>();
+        private static Dictionary<IPlayer, RPGInventoryMenu> _clientMenus = new Dictionary<IPlayer, RPGInventoryMenu>();
         #endregion
 
         #region Init
         public static void Init()
         {
-            Alt.OnClient("RPGInventory_UseItem", RPGInventory_UseItem);
-            Alt.OnClient("RPGInventory_DropItem", RPGInventory_DropItem);
-            Alt.OnClient("RPGInventory_GiveItem", RPGInventory_GiveItem);
-            Alt.OnClient("RPGInventory_ClosedMenu_SRV", RPGInventory_ClosedMenu_SRV);
-            Alt.OnClient("RPGInventory_PriceItemInventory_SRV", RPGInventory_PriceItemInventory_SRV);
-
-            Alt.OnClient("RPGInventory_SplitItemInventory_SRV", RPGInventory_SplitItemInventory_SRV);
-            Alt.OnClient("RPGInventory_SwitchItemInventory_SRV", RPGInventory_SwitchItemInventory_SRV);
+            Alt.OnClient<IPlayer, string, int>("RPGInventory_UseItem", RPGInventory_UseItem);
+            Alt.OnClient<IPlayer, string , int, int>("RPGInventory_DropItem", RPGInventory_DropItem);
+            Alt.OnClient<IPlayer, string, int, int, int>("RPGInventory_GiveItem", RPGInventory_GiveItem);
+            Alt.OnClient<IPlayer>("RPGInventory_ClosedMenu_SRV", RPGInventory_ClosedMenu_SRV);
+            Alt.OnClient<IPlayer, string, int, int, int>("RPGInventory_PriceItemInventory_SRV", RPGInventory_PriceItemInventory_SRV);
+            Alt.OnClient<IPlayer, string, int, int, int, int, int, int>("RPGInventory_SplitItemInventory_SRV", RPGInventory_SplitItemInventory_SRV);
+            Alt.OnClient<IPlayer, string, string, int, int, int>("RPGInventory_SwitchItemInventory_SRV", RPGInventory_SwitchItemInventory_SRV);
         }
         #endregion
 
@@ -47,15 +44,18 @@ namespace ResurrectionRP_Server.Inventory
         public static void CloseMenu(IPlayer client, RPGInventoryMenu oldmenu = null)
         {
             RPGInventoryMenu menu = null;
-            if (oldmenu != null || _clientMenus.TryRemove(client, out menu))
+            lock (_clientMenus)
             {
-                if (menu != null)
-                    menu.OnClose?.Invoke(client, menu);
+                if (oldmenu != null || _clientMenus.Remove(client, out menu))
+                {
+                    if (menu != null)
+                        menu.OnClose?.Invoke(client, menu);
 
-                if (!client.Exists)
-                    return;
+                    if (!client.Exists)
+                        return;
 
-                client.EmitLocked("InventoryManager_CloseMenu");
+                    client.EmitLocked("InventoryManager_CloseMenu");
+                }
             }
         }
 
@@ -72,16 +72,19 @@ namespace ResurrectionRP_Server.Inventory
 
         public static bool OpenMenu(IPlayer client, RPGInventoryMenu menu)
         {
-            _clientMenus.TryRemove(client, out _);
-
-            if (_clientMenus.TryAdd(client, menu))
+            lock (_clientMenus)
             {
-                client.EmitLocked("InventoryManager_OpenMenu",
-                    JsonConvert.SerializeObject(menu.PocketsItems),
-                    JsonConvert.SerializeObject(menu.BagItems),
-                    JsonConvert.SerializeObject(menu.DistantItems),
-                    JsonConvert.SerializeObject(menu.OutfitItems),
-                    (menu.DistantPlayer == null) ? false : true);
+                _clientMenus.Remove(client);
+
+                if (_clientMenus.TryAdd(client, menu))
+                {
+                    client.EmitLocked("InventoryManager_OpenMenu",
+                        JsonConvert.SerializeObject(menu.PocketsItems),
+                        JsonConvert.SerializeObject(menu.BagItems),
+                        JsonConvert.SerializeObject(menu.DistantItems),
+                        JsonConvert.SerializeObject(menu.OutfitItems),
+                        (menu.DistantPlayer == null) ? false : true);
+                }
             }
 
             return false;
@@ -92,7 +95,6 @@ namespace ResurrectionRP_Server.Inventory
         public static void RPGInventory_SetPlayerProps(IPlayer client, Models.Item item)
         {
             PlayerHandler player = client.GetPlayerHandler();
-            _clientMenus.TryGetValue(client, out RPGInventoryMenu menu);
             Models.Attachment attach;
             if(item is ClothItem cloth) // CLOTHING STUFF
             {
@@ -410,61 +412,49 @@ namespace ResurrectionRP_Server.Inventory
         }
         #endregion
 
-            #region Use
-            private static void RPGInventory_UseItem(IPlayer client, object[] args)
+        #region Use
+        private static void RPGInventory_UseItem(IPlayer client, string targetInventory, int itemSlot)
         {
             if (!client.Exists)
                 return;
 
-            if (args.Length != 3)
-                return;
-
             RPGInventoryMenu menu = null;
 
-            // ItemID itemID = (ItemID)Convert.ToInt32(args[0]);
-            string targetInventory = Convert.ToString(args[1]);
-            int itemSlot = Convert.ToInt32(args[2]);
-
-            if (_clientMenus.TryGetValue(client, out menu))
+            lock (_clientMenus)
             {
-                Models.ItemStack itemStack = null;
-
-                switch (targetInventory)
+                if (_clientMenus.TryGetValue(client, out menu))
                 {
-                    case InventoryTypes.Pocket:
-                        itemStack = menu.Inventory.InventoryList[itemSlot];
-                        break;
+                    Models.ItemStack itemStack = null;
 
-                    case InventoryTypes.Bag:
-                        itemStack = menu.Bag.InventoryList[itemSlot];
-                        break;
+                    switch (targetInventory)
+                    {
+                        case InventoryTypes.Pocket:
+                            itemStack = menu.Inventory.InventoryList[itemSlot];
+                            break;
 
-                    case InventoryTypes.Distant:
-                        itemStack = menu.Distant.InventoryList[itemSlot];
-                        break;
+                        case InventoryTypes.Bag:
+                            itemStack = menu.Bag.InventoryList[itemSlot];
+                            break;
+
+                        case InventoryTypes.Distant:
+                            itemStack = menu.Distant.InventoryList[itemSlot];
+                            break;
+                    }
+
+                    if (itemStack != null && itemStack.Item != null)
+                        itemStack.Item.Use(client, targetInventory, itemSlot);
+
+                    Refresh(client, menu);
                 }
-
-                if (itemStack != null && itemStack.Item != null)
-                    itemStack.Item.Use(client, targetInventory, itemSlot);
-
-                Refresh(client, menu);
             }
         }
         #endregion
 
         #region Drop
-        private static void RPGInventory_DropItem(IPlayer client, object[] args)
+        private static void RPGInventory_DropItem(IPlayer client, string inventoryType, int slot, int quantity)
         {
             try
             {
-                if (args.Length != 4)
-                    return;
-
-                string inventoryType = Convert.ToString(args[0]);
-                // ItemID itemID = (ItemID)Convert.ToInt32(args[1]);
-                int slot = Convert.ToInt32(args[2]);
-                int quantity = Convert.ToInt32(args[3]);
-
                 if (quantity == 0)
                     return;
 
@@ -477,78 +467,80 @@ namespace ResurrectionRP_Server.Inventory
 
                 RPGInventoryMenu menu = null;
                 RPGInventoryItem invItem = null;
-
-                if (_clientMenus.TryGetValue(client, out menu))
+                lock (_clientMenus)
                 {
-                    switch (inventoryType)
+                    if (_clientMenus.TryGetValue(client, out menu))
                     {
-                        case InventoryTypes.Pocket:
-                            invItem = menu.PocketsItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+                        switch (inventoryType)
+                        {
+                            case InventoryTypes.Pocket:
+                                invItem = menu.PocketsItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
 
-                            if (invItem == null)
-                                return;
+                                if (invItem == null)
+                                    return;
 
-                            if (invItem.stack.Item.Drop(client, quantity, slot, menu.Inventory))
-                            {
-                                if (invItem.stack.Quantity == 0)
-                                    menu.PocketsItems.RPGInventoryItems.Remove(invItem);
-                                else
-                                    invItem.quantity = invItem.stack.Quantity;
-                            }
+                                if (invItem.stack.Item.Drop(client, quantity, slot, menu.Inventory))
+                                {
+                                    if (invItem.stack.Quantity == 0)
+                                        menu.PocketsItems.RPGInventoryItems.Remove(invItem);
+                                    else
+                                        invItem.quantity = invItem.stack.Quantity;
+                                }
 
-                            break;
-                        case InventoryTypes.Bag:
-                            invItem = menu.BagItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+                                break;
+                            case InventoryTypes.Bag:
+                                invItem = menu.BagItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
 
-                            if (invItem == null)
-                                return;
+                                if (invItem == null)
+                                    return;
 
-                            if (invItem.stack.Item.Drop(client, quantity, slot, menu.Bag))
-                            {
-                                if (invItem.stack.Quantity == 0)
-                                    menu.PocketsItems.RPGInventoryItems.Remove(invItem);
-                                else
-                                    invItem.quantity = invItem.stack.Quantity;
-                            }
+                                if (invItem.stack.Item.Drop(client, quantity, slot, menu.Bag))
+                                {
+                                    if (invItem.stack.Quantity == 0)
+                                        menu.PocketsItems.RPGInventoryItems.Remove(invItem);
+                                    else
+                                        invItem.quantity = invItem.stack.Quantity;
+                                }
 
-                            break;
-                        case InventoryTypes.Distant:
-                            invItem = menu.DistantItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+                                break;
+                            case InventoryTypes.Distant:
+                                invItem = menu.DistantItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
 
-                            if (invItem == null)
-                                return;
+                                if (invItem == null)
+                                    return;
 
-                            if (invItem.stack.Item.Drop(client, quantity, slot, menu.Distant))
-                            {
-                                if (invItem.stack.Quantity == 0)
-                                    menu.PocketsItems.RPGInventoryItems.Remove(invItem);
-                                else
-                                    invItem.quantity = invItem.stack.Quantity;
-                            }
+                                if (invItem.stack.Item.Drop(client, quantity, slot, menu.Distant))
+                                {
+                                    if (invItem.stack.Quantity == 0)
+                                        menu.PocketsItems.RPGInventoryItems.Remove(invItem);
+                                    else
+                                        invItem.quantity = invItem.stack.Quantity;
+                                }
 
-                            break;
-                        case InventoryTypes.Outfit:
-                            invItem = menu.OutfitItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+                                break;
+                            case InventoryTypes.Outfit:
+                                invItem = menu.OutfitItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
 
-                            if (invItem == null)
-                                return;
+                                if (invItem == null)
+                                    return;
 
-                            if (invItem.stack.Item.Drop(client, quantity, slot, menu.Outfit))
-                            {
-                                if (invItem.stack.Quantity == 0)
-                                    menu.PocketsItems.RPGInventoryItems.Remove(invItem);
-                                else
-                                    invItem.quantity = invItem.stack.Quantity;
-                            }
-                            RPGInventory_DeletePlayerProps(client, invItem.stack.Item);
+                                if (invItem.stack.Item.Drop(client, quantity, slot, menu.Outfit))
+                                {
+                                    if (invItem.stack.Quantity == 0)
+                                        menu.PocketsItems.RPGInventoryItems.Remove(invItem);
+                                    else
+                                        invItem.quantity = invItem.stack.Quantity;
+                                }
+                                RPGInventory_DeletePlayerProps(client, invItem.stack.Item);
 
-                            ph.Clothing.UpdatePlayerClothing();
-                            break;
+                                ph.Clothing.UpdatePlayerClothing();
+                                break;
+                        }
+
+                        // Temporary solution to save inventory after object drop. Doesn't update inventory when dropping from distant inventory.
+                        ph.UpdateFull();
+                        Refresh(client, menu);
                     }
-
-                    // Temporary solution to save inventory after object drop. Doesn't update inventory when dropping from distant inventory.
-                    ph.UpdateFull();
-                    Refresh(client, menu);
                 }
             }
             catch (Exception ex)
@@ -560,18 +552,10 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Give
-        private static void RPGInventory_GiveItem(IPlayer client, object[] args)
+        private static void RPGInventory_GiveItem(IPlayer client, string inventoryType, int itemID, int slot, int quantity)
         {
             try
             {
-                if (args.Length != 4)
-                    return;
-
-                string inventoryType = Convert.ToString(args[0]);
-                int itemID = Convert.ToInt32(args[1]);
-                int slot = Convert.ToInt32(args[2]);
-                int quantity = Convert.ToInt32(args[3]);
-
                 if (quantity == 0)
                     return;
 
@@ -584,77 +568,79 @@ namespace ResurrectionRP_Server.Inventory
 
                 RPGInventoryMenu menu = null;
                 RPGInventoryItem invItem = null;
-                _clientMenus.TryGetValue(client, out menu);
 
-                if (menu != null)
+                lock(_clientMenus)
                 {
-                    if (menu.DistantPlayer == null)
-                        return;
-
-                    if (!menu.DistantPlayer.Exists)
-                        return;
-
-                    var phDistant = menu.DistantPlayer.GetPlayerHandler();
-
-                    if (phDistant == null)
-                        return;
-
-                    switch (inventoryType)
+                    if (_clientMenus.TryGetValue(client, out menu))
                     {
-                        case InventoryTypes.Pocket:
-                            invItem = menu.PocketsItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
-                            if (invItem == null)
-                                return;
+                        if (menu.DistantPlayer == null)
+                            return;
 
-                            if (phDistant.AddItem(invItem.stack.Item, quantity))
-                            {
-                                phDistant.Client.SendNotification($"On vous a donné {quantity} {invItem.stack.Item.name}");
-                                ph.DeleteItem(slot, inventoryType, quantity);
-                            }
+                        if (!menu.DistantPlayer.Exists)
+                            return;
 
-                            break;
-                        case InventoryTypes.Bag:
-                            invItem = menu.BagItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
-                            if (invItem == null)
-                                return;
-                            if (phDistant.AddItem(invItem.stack.Item, quantity))
-                            {
-                                phDistant.Client.SendNotification($"On vous a donné {quantity} {invItem.stack.Item.name}");
-                                ph.DeleteItem(slot, inventoryType, quantity);
-                            }
+                        var phDistant = menu.DistantPlayer.GetPlayerHandler();
 
-                            break;
-                        case InventoryTypes.Distant:
-                            invItem = menu.DistantItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
-                            if (invItem == null)
-                                return;
-                            if (phDistant.AddItem(invItem.stack.Item, quantity))
-                            {
-                                phDistant.Client.SendNotification($"On vous a donné {quantity} {invItem.stack.Item.name}");
-                                ph.DeleteItem(slot, inventoryType, quantity);
-                            }
-                            break;
-                        case InventoryTypes.Outfit:
-                            invItem = menu.OutfitItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
-                            if (invItem == null)
-                                return;
-                            if (phDistant.AddItem(invItem.stack.Item, quantity))
-                            {
-                                phDistant.Client.SendNotification($"On vous a donné {quantity} {invItem.stack.Item.name}");
-                                ph.DeleteItem(slot, inventoryType, quantity);
-                            }
-                            RPGInventory_SetPlayerProps(client, invItem.stack.Item);
+                        if (phDistant == null)
+                            return;
 
-                            ph.Clothing.UpdatePlayerClothing();
+                        switch (inventoryType)
+                        {
+                            case InventoryTypes.Pocket:
+                                invItem = menu.PocketsItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+                                if (invItem == null)
+                                    return;
 
-                            break;
+                                if (phDistant.AddItem(invItem.stack.Item, quantity))
+                                {
+                                    phDistant.Client.SendNotification($"On vous a donné {quantity} {invItem.stack.Item.name}");
+                                    ph.DeleteItem(slot, inventoryType, quantity);
+                                }
+
+                                break;
+                            case InventoryTypes.Bag:
+                                invItem = menu.BagItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+                                if (invItem == null)
+                                    return;
+                                if (phDistant.AddItem(invItem.stack.Item, quantity))
+                                {
+                                    phDistant.Client.SendNotification($"On vous a donné {quantity} {invItem.stack.Item.name}");
+                                    ph.DeleteItem(slot, inventoryType, quantity);
+                                }
+
+                                break;
+                            case InventoryTypes.Distant:
+                                invItem = menu.DistantItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+                                if (invItem == null)
+                                    return;
+                                if (phDistant.AddItem(invItem.stack.Item, quantity))
+                                {
+                                    phDistant.Client.SendNotification($"On vous a donné {quantity} {invItem.stack.Item.name}");
+                                    ph.DeleteItem(slot, inventoryType, quantity);
+                                }
+                                break;
+                            case InventoryTypes.Outfit:
+                                invItem = menu.OutfitItems.RPGInventoryItems.Find(s => s.inventorySlot == slot);
+                                if (invItem == null)
+                                    return;
+                                if (phDistant.AddItem(invItem.stack.Item, quantity))
+                                {
+                                    phDistant.Client.SendNotification($"On vous a donné {quantity} {invItem.stack.Item.name}");
+                                    ph.DeleteItem(slot, inventoryType, quantity);
+                                }
+                                RPGInventory_SetPlayerProps(client, invItem.stack.Item);
+
+                                ph.Clothing.UpdatePlayerClothing();
+
+                                break;
+                        }
+
+                        // Temporary solution to save inventory after object drop
+                        ph.UpdateFull();
+                        phDistant.UpdateFull();
+                        Refresh(client, menu);
                     }
-
-                    // Temporary solution to save inventory after object drop
-                    ph.UpdateFull();
-                    phDistant.UpdateFull();
-                    Refresh(client, menu);
-                }
+                }      
             }
             catch (Exception ex)
             {
@@ -664,333 +650,313 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Switch
-        private static void RPGInventory_SwitchItemInventory_SRV(IPlayer client, object[] args)
+        private static void RPGInventory_SwitchItemInventory_SRV(IPlayer client, string targetRPGInv, string oldRPGInv, int itemID, int slotID, int oldslotID)
         {
             try
             {
-                if (args.Length != 5)
-                    return;
-
-                string targetRPGInv = Convert.ToString(args[0]);
-                string oldRPGInv = Convert.ToString(args[1]);
-                int itemID = Convert.ToInt32(args[2]);
-                int slotID = Convert.ToInt32(args[3]);
-                int oldslotID = Convert.ToInt32(args[4]);
-
-                RPGInventoryMenu menu = null;
-                _clientMenus.TryGetValue(client, out menu);
-
-                if (menu != null)
+                lock (_clientMenus)
                 {
-                    Inventory oldInventory = null;
+                    RPGInventoryMenu menu = null;
 
-
-
-                    switch (oldRPGInv) // OLD Inventory
+                    if (_clientMenus.TryGetValue(client, out menu))
                     {
-                        case InventoryTypes.Pocket:
-                            oldInventory = menu.Inventory;
-                            break;
-                        case InventoryTypes.Bag:
-                            oldInventory = menu.Bag;
-                            break;
-                        case InventoryTypes.Distant:
-                            oldInventory = menu.Distant;
-                            break;
-                    }
+                        Inventory oldInventory = null;
 
-                    Models.ItemStack stack = null;
-                    Models.Item item = null;
 
-                    Entities.Players.PlayerHandler player = client.GetPlayerHandler();
-                    if (player == null)
-                        return;
 
-                    if (oldInventory != null)
-                    {
-                        if (oldInventory.InventoryList[oldslotID] != null)
+                        switch (oldRPGInv) // OLD Inventory
                         {
-                            stack = oldInventory.InventoryList[oldslotID];
-                            item = stack?.Item;
+                            case InventoryTypes.Pocket:
+                                oldInventory = menu.Inventory;
+                                break;
+                            case InventoryTypes.Bag:
+                                oldInventory = menu.Bag;
+                                break;
+                            case InventoryTypes.Distant:
+                                oldInventory = menu.Distant;
+                                break;
                         }
-                    }
-                    else
-                    {
-                        if (oldRPGInv == InventoryTypes.Outfit)
+
+                        Models.ItemStack stack = null;
+                        Models.Item item = null;
+
+                        Entities.Players.PlayerHandler player = client.GetPlayerHandler();
+                        if (player == null)
+                            return;
+
+                        if (oldInventory != null)
                         {
-                            stack = menu.Outfit.Slots[oldslotID];
-                            item = stack?.Item;
-                        }
-                    }
-
-                    if (item != null)
-                    {
-                        if (oldRPGInv == targetRPGInv) // Changement de slots
-                        {
-                            if (oldInventory == null) // Changement de slots dans le outfit?! 
-                                return;
-
-                            //stack.SlotIndex = slotID;
-                            if (oldInventory.InventoryList[slotID] != null)
+                            if (oldInventory.InventoryList[oldslotID] != null)
                             {
-                                if (oldInventory.InventoryList[slotID].Item.id == item.id)
-                                {
-                                    oldInventory.InventoryList[slotID].Quantity += stack.Quantity;
-                                }
-                            }
-                            else
-                            {
-                                oldInventory.InventoryList[slotID] = stack;
-                            }
-
-                            oldInventory.InventoryList[oldslotID] = null;
-
-                            switch (oldRPGInv) // OLD Inventory
-                            {
-                                case InventoryTypes.Pocket:
-                                    menu.Inventory = oldInventory;
-                                    break;
-                                case InventoryTypes.Bag:
-                                    menu.Bag = oldInventory;
-                                    break;
-                                case InventoryTypes.Distant:
-                                    menu.Distant = oldInventory;
-                                    break;
+                                stack = oldInventory.InventoryList[oldslotID];
+                                item = stack?.Item;
                             }
                         }
                         else
                         {
-                            if (stack.Item.id == ItemID.Bag && targetRPGInv != InventoryTypes.Outfit)
+                            if (oldRPGInv == InventoryTypes.Outfit)
                             {
-                                var backpack = item as Items.BagItem;
+                                stack = menu.Outfit.Slots[oldslotID];
+                                item = stack?.Item;
+                            }
+                        }
 
-                                if (!backpack.InventoryBag.IsEmpty())
-                                {
-                                    menu.CloseMenu(client);
-                                    client.SendNotificationError("Votre sac n'est pas vide!");
+                        if (item != null)
+                        {
+                            if (oldRPGInv == targetRPGInv) // Changement de slots
+                            {
+                                if (oldInventory == null) // Changement de slots dans le outfit?! 
                                     return;
+
+                                //stack.SlotIndex = slotID;
+                                if (oldInventory.InventoryList[slotID] != null)
+                                {
+                                    if (oldInventory.InventoryList[slotID].Item.id == item.id)
+                                    {
+                                        oldInventory.InventoryList[slotID].Quantity += stack.Quantity;
+                                    }
+                                }
+                                else
+                                {
+                                    oldInventory.InventoryList[slotID] = stack;
+                                }
+
+                                oldInventory.InventoryList[oldslotID] = null;
+
+                                switch (oldRPGInv) // OLD Inventory
+                                {
+                                    case InventoryTypes.Pocket:
+                                        menu.Inventory = oldInventory;
+                                        break;
+                                    case InventoryTypes.Bag:
+                                        menu.Bag = oldInventory;
+                                        break;
+                                    case InventoryTypes.Distant:
+                                        menu.Distant = oldInventory;
+                                        break;
                                 }
                             }
-
-                            switch (targetRPGInv) // NEW Inventory
+                            else
                             {
-                                case InventoryTypes.Pocket:
-                                    if (!menu.Inventory.IsFull(stack.Quantity * stack.Item.weight)) // vérification si y'a de la place
+                                if (stack.Item.id == ItemID.Bag && targetRPGInv != InventoryTypes.Outfit)
+                                {
+                                    var backpack = item as Items.BagItem;
+
+                                    if (!backpack.InventoryBag.IsEmpty())
                                     {
-                                        if (menu.Inventory.InventoryList[slotID] != null)
+                                        menu.CloseMenu(client);
+                                        client.SendNotificationError("Votre sac n'est pas vide!");
+                                        return;
+                                    }
+                                }
+
+                                switch (targetRPGInv) // NEW Inventory
+                                {
+                                    case InventoryTypes.Pocket:
+                                        if (!menu.Inventory.IsFull(stack.Quantity * stack.Item.weight)) // vérification si y'a de la place
                                         {
-                                            if (menu.Inventory.InventoryList[slotID].Item.id == stack.Item.id)
+                                            if (menu.Inventory.InventoryList[slotID] != null)
                                             {
-                                                menu.Inventory.InventoryList[slotID].Quantity += stack.Quantity;
+                                                if (menu.Inventory.InventoryList[slotID].Item.id == stack.Item.id)
+                                                {
+                                                    menu.Inventory.InventoryList[slotID].Quantity += stack.Quantity;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                menu.Inventory.InventoryList[slotID] = stack;
                                             }
                                         }
                                         else
                                         {
-                                            menu.Inventory.InventoryList[slotID] = stack;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
-                                        return;
-                                    }
-
-                                    break;
-
-                                case InventoryTypes.Bag:
-                                    if (!menu.Bag.IsFull(stack.Quantity * stack.Item.weight)) // vérification si y'a de la place
-                                    {
-                                        if (stack.Item.id == ItemID.Bag)
-                                        {
-                                            menu.CloseMenu(client);
-                                            client.SendNotificationError("Euh ... non!");
+                                            client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
                                             return;
                                         }
 
-                                        if (menu.Bag.InventoryList[slotID] != null)
+                                        break;
+
+                                    case InventoryTypes.Bag:
+                                        if (!menu.Bag.IsFull(stack.Quantity * stack.Item.weight)) // vérification si y'a de la place
                                         {
-                                            if (menu.Bag.InventoryList[slotID].Item.id == stack.Item.id)
+                                            if (stack.Item.id == ItemID.Bag)
                                             {
-                                                menu.Bag.InventoryList[slotID].Quantity += stack.Quantity;
+                                                menu.CloseMenu(client);
+                                                client.SendNotificationError("Euh ... non!");
+                                                return;
+                                            }
+
+                                            if (menu.Bag.InventoryList[slotID] != null)
+                                            {
+                                                if (menu.Bag.InventoryList[slotID].Item.id == stack.Item.id)
+                                                {
+                                                    menu.Bag.InventoryList[slotID].Quantity += stack.Quantity;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                menu.Bag.InventoryList[slotID] = stack;
                                             }
                                         }
                                         else
                                         {
-                                            menu.Bag.InventoryList[slotID] = stack;
+                                            client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
+                                            return;
                                         }
-                                    }
-                                    else
-                                    {
-                                        client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
-                                        return;
-                                    }
 
-                                    break;
+                                        break;
 
-                                case InventoryTypes.Distant:
-                                    if (!menu.Distant.IsFull(stack.Quantity * stack.Item.weight)) // vérification si y'a de la place
-                                    {
-                                        if (menu.Distant.InventoryList[slotID] != null)
+                                    case InventoryTypes.Distant:
+                                        if (!menu.Distant.IsFull(stack.Quantity * stack.Item.weight)) // vérification si y'a de la place
                                         {
-                                            if (menu.Distant.InventoryList[slotID].Item.id == stack.Item.id)
+                                            if (menu.Distant.InventoryList[slotID] != null)
                                             {
-                                                menu.Distant.InventoryList[slotID].Quantity += stack.Quantity;
+                                                if (menu.Distant.InventoryList[slotID].Item.id == stack.Item.id)
+                                                {
+                                                    menu.Distant.InventoryList[slotID].Quantity += stack.Quantity;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                menu.Distant.InventoryList[slotID] = stack;
                                             }
                                         }
                                         else
                                         {
-                                            menu.Distant.InventoryList[slotID] = stack;
+                                            client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
+                                            return;
                                         }
-                                    }
-                                    else
-                                    {
-                                        client.SendNotificationError("Vous n'avez pas assez de place pour faire ça");
-                                        return;
-                                    }
 
-                                    break;
+                                        break;
 
-                                case InventoryTypes.Outfit:
-                                    menu.Outfit.Slots[slotID] = stack;
+                                    case InventoryTypes.Outfit:
+                                        menu.Outfit.Slots[slotID] = stack;
 
-                                    break;
+                                        break;
+                                }
+
+                                if (oldInventory != null)
+                                    oldInventory.InventoryList[oldslotID] = null;
+
+                                #region Clothing 
+                                // Remove
+                                Models.Attachment attach = null;
+                                if (oldRPGInv == InventoryTypes.Outfit)
+                                {
+                                    RPGInventory_DeletePlayerProps(client, item);
+
+                                    menu.Outfit.Slots[oldslotID] = null;
+                                }
+                                // Equip
+                                else if (targetRPGInv == InventoryTypes.Outfit)
+                                {
+                                    var cloth = item as ClothItem;
+
+                                    RPGInventory_SetPlayerProps(client, item);
+
+                                }
+                                #endregion
                             }
-
-                            if (oldInventory != null)
-                                oldInventory.InventoryList[oldslotID] = null;
-
-                            #region Clothing 
-                            // Remove
-                            Models.Attachment attach = null;
-                            if (oldRPGInv == InventoryTypes.Outfit)
-                            {
-                                RPGInventory_DeletePlayerProps(client, item);
-                                
-                                menu.Outfit.Slots[oldslotID] = null;
-                            }
-                            // Equip
-                            else if (targetRPGInv == InventoryTypes.Outfit)
-                            {
-                                var cloth = item as ClothItem;
-
-                                RPGInventory_SetPlayerProps(client, item);
-
-                            }
-                            #endregion
                         }
-                    }
 
-                    menu.OnMove?.Invoke(client, menu);
-                    Refresh(client, menu);
-                    player.UpdateFull();
+                        menu.OnMove?.Invoke(client, menu);
+                        Refresh(client, menu);
+                        player.UpdateFull();
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Alt.Server.LogError($"RPGInventory_SwitchItemInventory_SRV lenght: {args.Length}" + ex);
+                Alt.Server.LogError($"RPGInventory_SwitchItemInventory_SRV " + ex);
             }
         }
         #endregion
 
         #region Split
-        private static void RPGInventory_SplitItemInventory_SRV(IPlayer client, object[] args)
+        private static void RPGInventory_SplitItemInventory_SRV(IPlayer client, string inventoryType, int itemID, int newSlot, int oldSlot, int oldCount, int newCount, int splitCount)
         {
             if (!client.Exists)
                 return;
 
-            if (args.Length < 7)
-                return;
-
-            string inventoryType = Convert.ToString(args[0]);
-            int itemID = Convert.ToInt32(args[1]);
-            int newSlot = Convert.ToInt32(args[2]);
-            int oldSlot = Convert.ToInt32(args[3]);
-            int oldCount = Convert.ToInt32(args[4]);
-            int newCount = Convert.ToInt32(args[5]);
-            int splitCount = Convert.ToInt32(args[6]);
-
-            RPGInventoryMenu menu;
-            Inventory inv = null;
-
-            if (_clientMenus.TryGetValue(client, out menu))
+            lock (_clientMenus)
             {
-                switch (inventoryType)
-                {
-                    case InventoryTypes.Pocket:
-                        inv = menu.Inventory;
-                        break;
-                    case InventoryTypes.Bag:
-                        inv = menu.Bag;
-                        break;
-                    case InventoryTypes.Distant:
-                        inv = menu.Distant;
-                        break;
-                }
+                RPGInventoryMenu menu;
+                Inventory inv = null;
 
-                try
+                if (_clientMenus.TryGetValue(client, out menu))
                 {
-                    if (inv != null && inv.InventoryList[oldSlot] != null && oldCount == inv.InventoryList[oldSlot].Quantity && oldCount - splitCount == newCount)
+                    switch (inventoryType)
                     {
-                        inv.InventoryList[oldSlot].Quantity -= splitCount;
-
-                        var cloneItem = (Models.ItemStack)inv.InventoryList[oldSlot].Clone();
-                        cloneItem.Quantity = splitCount;
-
-                        inv.InventoryList[newSlot] = cloneItem;
-                        client.GetPlayerHandler().UpdateFull();
+                        case InventoryTypes.Pocket:
+                            inv = menu.Inventory;
+                            break;
+                        case InventoryTypes.Bag:
+                            inv = menu.Bag;
+                            break;
+                        case InventoryTypes.Distant:
+                            inv = menu.Distant;
+                            break;
                     }
-                }
-                catch (Exception ex)
-                {
-                    Alt.Server.LogError($"[RPGInventoryManager.RPGInventory_SplitItemInventory_SRV()] inventoryType: {inventoryType}, itemID: {itemID}, newSlot: {newSlot}, oldSlot: {oldSlot}, oldCount: {oldCount}, newCount: {newCount}, splitCount: {splitCount}, inv.InventoryList.Length: {inv.InventoryList.Length} - {ex}");
+
+                    try
+                    {
+                        if (inv != null && inv.InventoryList[oldSlot] != null && oldCount == inv.InventoryList[oldSlot].Quantity && oldCount - splitCount == newCount)
+                        {
+                            inv.InventoryList[oldSlot].Quantity -= splitCount;
+
+                            var cloneItem = (Models.ItemStack)inv.InventoryList[oldSlot].Clone();
+                            cloneItem.Quantity = splitCount;
+
+                            inv.InventoryList[newSlot] = cloneItem;
+                            client.GetPlayerHandler().UpdateFull();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Alt.Server.LogError($"[RPGInventoryManager.RPGInventory_SplitItemInventory_SRV()] inventoryType: {inventoryType}, itemID: {itemID}, newSlot: {newSlot}, oldSlot: {oldSlot}, oldCount: {oldCount}, newCount: {newCount}, splitCount: {splitCount}, inv.InventoryList.Length: {inv.InventoryList.Length} - {ex}");
+                    }
+
+                    new RPGInventoryMenu(menu.Inventory, menu.Outfit, menu.Bag, menu.Distant).OpenMenu(client);
+
                 }
             }
-
-            new RPGInventoryMenu(menu.Inventory, menu.Outfit, menu.Bag, menu.Distant).OpenMenu(client);
         }
         #endregion
 
         #region Price
-        private static void RPGInventory_PriceItemInventory_SRV(IPlayer client, object[] args)
+        private static void RPGInventory_PriceItemInventory_SRV(IPlayer client, string inventoryType, int itemID, int slot, int price)
         {
             if (!client.Exists)
                 return;
 
-            if (args.Length != 4)
-                return;
-
-            string inventoryType = Convert.ToString(args[0]);
-            int itemID = Convert.ToInt32(args[1]);
-            int slot = Convert.ToInt32(args[2]);
-            int price = Convert.ToInt32(args[3]);
-
-            RPGInventoryMenu menu;
-            Inventory inv = null;
-
-            if (_clientMenus.TryGetValue(client, out menu))
+            lock(_clientMenus)
             {
-                switch (inventoryType)
+                RPGInventoryMenu menu;
+                Inventory inv = null;
+                if (_clientMenus.TryGetValue(client, out menu))
                 {
-                    case InventoryTypes.Pocket:
-                        inv = menu.Inventory;
-                        break;
-                    case InventoryTypes.Bag:
-                        inv = menu.Bag;
-                        break;
-                    case InventoryTypes.Distant:
-                        inv = menu.Distant;
-                        break;
-                }
-
-                if (inv != null)
-                {
-                    if (inv.InventoryList[slot] != null)
+                    switch (inventoryType)
                     {
-                        inv.InventoryList[slot].Price = price;
-                        menu.PriceChange?.Invoke(client, menu, inv.InventoryList[slot], price);
+                        case InventoryTypes.Pocket:
+                            inv = menu.Inventory;
+                            break;
+                        case InventoryTypes.Bag:
+                            inv = menu.Bag;
+                            break;
+                        case InventoryTypes.Distant:
+                            inv = menu.Distant;
+                            break;
+                    }
+
+                    if (inv != null)
+                    {
+                        if (inv.InventoryList[slot] != null)
+                        {
+                            inv.InventoryList[slot].Price = price;
+                            menu.PriceChange?.Invoke(client, menu, inv.InventoryList[slot], price);
+                        }
                     }
                 }
-            }
+            }           
         }
         #endregion
 
@@ -1080,15 +1046,16 @@ namespace ResurrectionRP_Server.Inventory
         #endregion
 
         #region Close
-        private static void RPGInventory_ClosedMenu_SRV(IPlayer client, object[] args)
+        private static void RPGInventory_ClosedMenu_SRV(IPlayer client)
         {
             if (!client.Exists)
                 return;
 
-            var player = client;
-
-            if (_clientMenus.TryRemove(player, out RPGInventoryMenu menu))
-                menu.OnClose?.Invoke(player, menu);
+            lock (_clientMenus)
+            {
+                if (_clientMenus.Remove(client, out RPGInventoryMenu menu))
+                    menu.OnClose?.Invoke(client, menu);
+            }
         }
         #endregion
     }

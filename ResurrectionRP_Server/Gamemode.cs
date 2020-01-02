@@ -100,6 +100,7 @@ namespace ResurrectionRP_Server
                         player.Kick("Server stop");
                 }
 
+
                 //await HouseManager.House_Exit();
             });
         }

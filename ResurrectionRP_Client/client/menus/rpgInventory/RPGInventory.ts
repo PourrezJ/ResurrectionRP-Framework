@@ -55,7 +55,7 @@ export class RPGInventoryManager {
                     return;
                 }
 
-                alt.emitServer("RPGInventory_UseItem", arg1, arg2, arg3);
+                alt.emitServer("RPGInventory_UseItem", /*arg1,*/ arg2, arg3);
             });
 
             this.view.on('inventoryDropItem', (arg1: any, arg2: any, arg3: any, arg4: any) => {
@@ -63,7 +63,7 @@ export class RPGInventoryManager {
                     return;
                 }
 
-                alt.emitServer("RPGInventory_DropItem", arg1, arg2, arg3, arg4);
+                alt.emitServer("RPGInventory_DropItem", arg1, /*arg2,*/ arg3, arg4);
             });
 
             this.view.on('inventoryChangeItemPrice', (arg1: any, arg2: any, arg3: any, arg4: any) => {

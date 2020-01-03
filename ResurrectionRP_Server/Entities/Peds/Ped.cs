@@ -44,27 +44,38 @@ namespace ResurrectionRP_Server.Entities.Peds
 
         public int ID { get; private set; }
         public PedModel Model;
-        public short Dimension;
         public Vector3 Position;
         public float Rotation;
-        [JsonIgnore]
-        public IPlayer Owner;
 
-        [JsonIgnore]
+        private IPlayer owner;
+        public IPlayer Owner
+        {
+            get => owner;
+            set
+            {
+                owner = value;
+
+                if (Streamer.Streamer.ListEntities.ContainsKey(ID))
+                {
+                    INetworkingEntity oitem = Streamer.Streamer.ListEntities[ID];
+                    oitem?.SetData("ownerid", ((value != null) ? Owner.Id : -1));
+                }
+            }
+        }
+
         public Dictionary<dynamic, dynamic> Variable = new Dictionary<dynamic, dynamic>();
 
-        public static Ped CreateNPC(PedModel pedHash, Vector3 startPosition, float facingAngle, short dimension = GameMode.GlobalDimension)
+        public static Ped CreateNPC(PedModel pedHash, Vector3 startPosition, float facingAngle, short dimension = GameMode.GlobalDimension, IPlayer owner = null)
         {
             var ped = new Ped()
-            {
-                ID = Streamer.Streamer.EntityNumber++,
+            {              
                 Model = pedHash,
                 Position = startPosition,
                 Rotation = facingAngle,
-                Dimension = dimension
+                Owner = owner
             };
 
-            Streamer.Streamer.AddEntityPed(ped);
+            ped.ID = Streamer.Streamer.AddEntityPed(ped, dimension);
 
             NPCList.Add(ped);
             return ped;
@@ -77,7 +88,18 @@ namespace ResurrectionRP_Server.Entities.Peds
             data["heading"] = this.Rotation;
             data["entityType"] = (int)Streamer.Data.EntityType.Ped;
             data["id"] = this.ID;
+            data["ownerid"] = (Owner == null) ? -1 : Owner.Id;
+            data["taskWanderStandard"] = false;
             return data;
+        }
+
+        public void TaskWanderStandard(bool free)
+        {
+            if (Streamer.Streamer.ListEntities.ContainsKey(ID))
+            {
+                INetworkingEntity oitem = Streamer.Streamer.ListEntities[ID];
+                oitem.SetData("taskWanderStandard", free);
+            }
         }
 
         public void WalkTo(Vector3 pos)
@@ -89,9 +111,6 @@ namespace ResurrectionRP_Server.Entities.Peds
             }
         }
 
-        public static Ped GetNPCbyID(int id)
-        {
-            return NPCList.Find(x => x.ID == id) ?? null;
-        }
+        public static Ped GetNPCbyID(int id) => NPCList.Find(x => x.ID == id) ?? null;
     }
 }

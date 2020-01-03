@@ -33,11 +33,11 @@ namespace ResurrectionRP_Server.Illegal
                     OpenBlackMarket(client, menu);
                     break;
 
-                case "ID_Weedlab":
+                case "ID_WeedLab":
                     BuyWeedLabPos(client);
                     break;
 
-                case "ID_WeadDealer":
+                case "ID_WeedDealer":
                     BuyWeedDealerPos(client);
                     break;
             }
@@ -45,17 +45,28 @@ namespace ResurrectionRP_Server.Illegal
 
         private void BuyWeedLabPos(IPlayer client)
         {
-            WeedLabsOwned.Add(client.GetSocialClub());
+            var social = client.GetSocialClub();
+            if (WeedLabsOwned.Contains(social))
+                return;
 
+            WeedLabsOwned.Add(social);
+            client.SendNotificationSuccess("Ok check ta carte, je t'ai mis la position.");
             if (IllegalManager.WeedBusiness.LabEnter != null)
                 client.CreateBlip(140, IllegalManager.WeedBusiness.LabEnter.Pos, "Laboratoire de Canabis", 1, 25, 255, true);
+            MenuManager.CloseMenu(client);
         }
 
         private void BuyWeedDealerPos(IPlayer client)
         {
-            WeedDealerOwned.Add(client.GetSocialClub());
+            var social = client.GetSocialClub();
+            if (WeedDealerOwned.Contains(social))
+                return;
+
+            WeedDealerOwned.Add(social);
+            client.SendNotificationSuccess("Ok check ta carte, je t'ai mis la position.");
             if (IllegalManager.WeedBusiness.DealerLocations != null)
                 client.CreateBlip(140, IllegalManager.WeedBusiness.DealerLocations[IllegalManager.WeedBusiness.CurrentPos].Pos, "Dealer de Canabis", 1, 25, 255, true);
+            MenuManager.CloseMenu(client);
         }
 
         public void OpenBlackMarket(IPlayer client, Menu menu)

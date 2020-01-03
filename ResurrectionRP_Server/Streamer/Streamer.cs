@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using WorldObject = ResurrectionRP_Server.Entities.Objects.WorldObject;
 using TextLabel = ResurrectionRP_Server.Streamer.Data.TextLabel;
 using Blips = ResurrectionRP_Server.Entities.Blips.Blips;
+using ResurrectionRP_Server.Entities.Peds;
 
 namespace ResurrectionRP_Server.Streamer
 {
@@ -30,6 +31,40 @@ namespace ResurrectionRP_Server.Streamer
 
                 options.Port = 46429;
             });
+
+            AltNetworking.OnEntityStreamIn = OnEntityStreamIn;
+            AltNetworking.OnEntityStreamOut = OnEntityStreamOut;
+
+            Alt.OnClient<IPlayer, int>("OwnPed", OwnPed);
+        }
+
+        private static void OnEntityStreamIn(INetworkingEntity entity, INetworkingClient client)
+        {
+            /*
+            Ped ped = Ped.GetNPCbyID((int)entity.Id);
+            if (ped != null)
+            {
+                if (ped.Owner == null)
+                {
+                    var player = TokenToPlayer(client.Token);
+                    if (player != null)
+                    {
+                        lock (player)
+                        {
+                            ped.TaskWanderStandard(true);
+                        }
+                    }
+                }
+            }*/
+        }
+
+        private static void OnEntityStreamOut(INetworkingEntity entity, INetworkingClient client)
+        {
+            Ped ped = Ped.GetNPCbyID((int)entity.Id);
+            if (ped != null)
+            {
+                if (ped.Owner != null) ped.Owner = null;
+            }
         }
 
         public static int AddEntityPed(Entities.Peds.Ped ped, int dimension = GameMode.GlobalDimension)
@@ -127,6 +162,33 @@ namespace ResurrectionRP_Server.Streamer
                     return;
                 player.Emit("createStaticEntity", item.Value);
             }
+        }
+
+        private static void OwnPed(IPlayer client, int id)
+        {
+            Ped ped = Ped.GetNPCbyID(id);
+
+            if (ped != null) 
+                ped.Owner = client;
+
+            if (ListEntities.ContainsKey(id))
+            {
+            }
+        }
+
+        public static IPlayer TokenToPlayer(string token)
+        {
+            var players = Alt.GetAllPlayers();
+
+            lock (players)
+            {
+                foreach (var player in players)
+                {
+                    if (player.TryGetNetworkingClient(out INetworkingClient netclient) && netclient.Token == token)
+                        return player;
+                }
+            }
+            return null;
         }
     }
 }

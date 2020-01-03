@@ -42,15 +42,21 @@ export class NetworkingEntityClient {
                         item.Color.b,
                         item.Color.a, false, false, 0, false, undefined, undefined, false)
                 }
+                    /*
+                else if (item.data.entityType.intValue) {
+                    if (item.data.taskWanderStandard.boolValue && ) {
+
+                    }
+                }*/
             });
         });
 
         alt.on("disconnect", this.unloadStream.bind(this));
 
-        alt.onServer('createStaticEntity', this.createStaticEntity.bind(this));
+        alt.onServer("createStaticEntity", this.createStaticEntity.bind(this));
         alt.onServer("deleteStaticEntity", this.deleteStaticEntity.bind(this));
         alt.onServer("setStaticEntityBlipRoute", this.setStaticEntityBlipRoute.bind(this));
-        alt.onServer("deleteObject", this.deleteObject.bind(this));
+        alt.onServer("deleteObject", this.deleteObject.bind(this));     
 
         alt.on("interactWithPickableObject", this.interactPickup);
 
@@ -163,8 +169,15 @@ export class NetworkingEntityClient {
             }
         }, 10);
 
+        if (entity.data.entityType.intValue == 0) {
+            let id = NetworkingEntityClient.EntityList[entity.id];
 
-        if (entity.data.entityType.intValue == 1) {
+            if (entity.data.taskWanderStandard.boolValue) {
+                game.taskWanderStandard(id, 10, 10);
+                game.freezeEntityPosition(id, false);
+            }
+        }
+        else if (entity.data.entityType.intValue == 1) {
             let obj = NetworkingEntityClient.EntityList[entity.id];
 
             if (entity.data.attach.stringValue != null && game.isEntityAttached(obj)) {
@@ -174,9 +187,6 @@ export class NetworkingEntityClient {
             game.setEntityCoordsNoOffset(obj, entity.position.x, entity.position.y, entity.position.z, false, false, false);
             game.setEntityRotation(obj, entity.data.rotation.x, entity.data.rotation.y, entity.data.rotation.z, 0, false);
             game.placeObjectOnGroundProperly(obj);
-
-
-            alt.log(JSON.stringify(data));
         }
     }
 
@@ -201,7 +211,7 @@ export class NetworkingEntityClient {
         switch (entity.data.entityType.intValue) {
             case 0: // ped
                 await utils.loadModelAsync(entity.data.model.uintValue);
-                this.streamPed(
+                let ped = await this.streamPed(
                     entity.id,
                     entity.data.model.uintValue,
                     entity.position.x,
@@ -209,9 +219,15 @@ export class NetworkingEntityClient {
                     entity.position.z,
                     entity.data.heading.doubleValue
                 );
+
+                if (entity.data.taskWanderStandard.boolValue) {
+                    game.taskWanderStandard(ped, 10, 10);
+                }
+
                 break;
+
+
             case 1: // Static objec
-                alt.log("loading object");
                 await utils.loadModelAsync(game.getHashKey(entity.data.model.stringValue));
                 let object = await this.streamObject(
                     entity.id,
@@ -223,9 +239,9 @@ export class NetworkingEntityClient {
                 );
                 if (JSON.parse(entity.data.attach.stringValue) != null)
                     this.objectAttach(entity.id, JSON.parse(entity.data.attach.stringValue));
-
-
                 break;
+
+
             case 2: // Text label
                 await this.streamTextLabel(
                     entity.id,
@@ -237,6 +253,8 @@ export class NetworkingEntityClient {
                     { r: entity.data.r.intValue, g: entity.data.g.intValue, b: entity.data.b.intValue, a: entity.data.a.intValue }
                 );
                 break;
+
+
             case 3: // marker
                 await this.streamMarker(
                     entity.id,
@@ -263,7 +281,9 @@ export class NetworkingEntityClient {
     private streamPed = async (id: number, model: any, x: number, y: number, z: number, heading: number) => {
         var ped = new Ped(id, model, new alt.Vector3(x, y, z), heading);
         ped.Freeze(true);
+
         NetworkingEntityClient.EntityList[id] = ped.Handle;
+        return ped.Handle;
     }
 
     private streamObject = (id: number, model: any, x: number, y: number, z: number, freeze: boolean) : number  => {
@@ -273,8 +293,6 @@ export class NetworkingEntityClient {
             entityId = game.createObject(model, x, y , z  , true, true, true);
         else
             entityId = NetworkingEntityClient.EntityList[id];
-
-        alt.log(`streamObject: ${entityId} ${model} ${x} ${y} ${z}`);
 
         game.freezeEntityPosition(entityId, freeze);
         NetworkingEntityClient.EntityList[id] = entityId;

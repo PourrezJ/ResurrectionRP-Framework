@@ -6,6 +6,7 @@ using System.Numerics;
 using System;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
+using ResurrectionRP_Server.Entities.Vehicles;
 
 namespace ResurrectionRP_Server.Business
 {
@@ -90,16 +91,16 @@ namespace ResurrectionRP_Server.Business
 
             if (client.IsInVehicle )
             {
-                if (!client.Vehicle.GetVehicleHandler().hasTrailer)
+                if (!client.Vehicle.hasTrailer)
                     return;
                 if (Array.IndexOf(allowedTrailers, client.Vehicle.GetVehicleHandler().Trailer.Model) == -1)
                 {
                     client.DisplayHelp("La remorque n'est pas homologuée pour remplir la station!", 10000);
                     return;
                 }
-                IVehicle fueltruck = (IVehicle) client.Vehicle.GetVehicleHandler().Trailer;
+                VehicleHandler fueltruck = client.Vehicle.Trailer;
                 // Si il posséde du carburant raffiné
-                if (fueltruck.GetVehicleHandler().OilTank.Traite > 0 )
+                if (fueltruck.VehicleData.OilTank.Traite > 0 )
                 {
                     Menu RefuelMenu = new Menu("ID_RefuelMenu", "Station Service", "", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
                     RefuelMenu.ItemSelectCallback = RefuelMenuCallBack;

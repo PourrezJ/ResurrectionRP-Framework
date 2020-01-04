@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
-    public partial class VehicleHandler
+    public partial class VehicleHandler : Vehicle
     {
         #region Fields
         private DateTime _lastUpdateRequest;

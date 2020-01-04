@@ -17,7 +17,7 @@ using ResurrectionRP_Server.Utils;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
-    public partial class VehicleHandler
+    public partial class VehicleHandler : Vehicle
     {
         private PlayerHandler _playerHandler;
 
@@ -28,7 +28,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             _playerHandler = client.GetPlayerHandler();
 
-            if (_playerHandler == null || Vehicle == null)
+            if (_playerHandler == null)
                 return;
 
             XMenu xmenu = new XMenu("VehiculeMenu");

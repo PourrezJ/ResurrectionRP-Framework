@@ -10,14 +10,14 @@ namespace ResurrectionRP_Server.Entities.Players
 
         #region Update Stat Methods 
         public int UpdateStat(Stats stat, int data) =>
-            Stats.AddOrUpdate(stat.ToString(), data, (key, value) => { return value + data; });
+            Stats.AddOrUpdate(stat.ToString(), data, (key, value) => value + data);
         public double UpdateStat(Stats stat, double data) =>
-            Stats.AddOrUpdate(stat.ToString(), data, (key, value) => { return value + data; });
+            Stats.AddOrUpdate(stat.ToString(), data, (key, value) => value + data);
 
         public int UpdateStat(Stats stat, float data) =>
-                Stats.AddOrUpdate(stat.ToString(), data, (key, value) => { return value + data; });
+                Stats.AddOrUpdate(stat.ToString(), data, (key, value) => value + data);
         public int UpdateStat(Stats stat, string data) =>
-                Stats.AddOrUpdate(stat.ToString(), data, (key, value) => { return data; });
+                Stats.AddOrUpdate(stat.ToString(), data, (key, value) => data);
         #endregion
 
     }

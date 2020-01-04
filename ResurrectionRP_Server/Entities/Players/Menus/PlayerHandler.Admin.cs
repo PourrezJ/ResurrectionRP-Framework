@@ -30,7 +30,7 @@ namespace ResurrectionRP_Server.Entities.Players
         public void OpenAdminMenu(PlayerHandler playerSelected = null)
         {
             #region Verification
-            if (StaffRank < AdminRank.Animator)
+            if (StaffRank < StaffRank.Animator)
                 return;
 
             if (_playerSelected == null && playerSelected == null)
@@ -50,7 +50,7 @@ namespace ResurrectionRP_Server.Entities.Players
             mainMenu.Finalizer += OnFinalize;
             #endregion
 
-            if (StaffRank >= AdminRank.Animator)
+            if (StaffRank >= StaffRank.Animator)
             {
                 #region Ped
                 var peditem = new MenuItem("Prendre l'apparence d'un ped", "", "ID_Ped", true);
@@ -137,7 +137,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 #endregion
             }
 
-            if (StaffRank >= AdminRank.Helper)
+            if (StaffRank >= StaffRank.Helper)
             {
                 #region Message Global
                 var globalAnnonce = new MenuItem("Message Global", "", "ID_Global", true);
@@ -199,7 +199,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 #endregion
             }
 
-            if (StaffRank >= AdminRank.Moderator)
+            if (StaffRank >= StaffRank.Moderator)
             {
                 #region Choix du joueur
                 var pchoise = new MenuItem("Choix du Joueur", "", "", true)
@@ -210,20 +210,20 @@ namespace ResurrectionRP_Server.Entities.Players
                 #endregion
 
                 #region StaffRank
-                if (StaffRank >= AdminRank.Developer)
+                if (StaffRank >= StaffRank.Developer)
                 {
                     List<object> _adminlistrang = new List<object>();
-                    foreach (int value in Enum.GetValues(typeof(AdminRank)))
+                    foreach (int value in Enum.GetValues(typeof(StaffRank)))
                     {
                         if ((int)StaffRank > value)
-                            _adminlistrang.Add(((AdminRank)value).ToString());
+                            _adminlistrang.Add(((StaffRank)value).ToString());
                     }
 
                     var staffrank = new ListItem("Staff Rang:", "Choix du rang à donner", "ID_Rang", _adminlistrang, (int) StaffRank, true)
                     {
                         OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                         {
-                            AdminRank rang = (AdminRank) ((ListItem) menu.Items["ID_Rang"]).SelectedItem;
+                            StaffRank rang = (StaffRank) ((ListItem) menu.Items["ID_Rang"]).SelectedItem;
                             _playerSelected.StaffRank = rang;
                             _playerSelected.Client.SendNotification($"Vous êtes désormais {rang}");
                             client.SendNotification($"Vous avez mis au rang: {rang} {_playerSelected.Identite.Name}");

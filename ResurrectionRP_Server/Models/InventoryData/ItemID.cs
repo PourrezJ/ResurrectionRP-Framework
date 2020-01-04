@@ -20,7 +20,7 @@ namespace ResurrectionRP_Server.Models.InventoryData
         Jerrycan = 14,
         JambonBeurre = 15,
         Poulet = 16,
-        Water = 17,
+        WaterBottle = 17,
         Coffee = 18,
         Donuts = 19,
         Sprunk = 20,

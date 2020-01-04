@@ -27,7 +27,7 @@ namespace ResurrectionRP_Server.Houses
                 int price = Convert.ToInt32(arguments[1]);
                 var position = await player.GetPositionAsync();
 
-                if (player.GetPlayerHandler()?.StaffRank < AdminRank.Moderator)
+                if (player.GetPlayerHandler()?.StaffRank < StaffRank.Moderator)
                 {
                     player.SendChatMessage("~r~ERROR: ~w~Only admins can use this command.");
                     return;

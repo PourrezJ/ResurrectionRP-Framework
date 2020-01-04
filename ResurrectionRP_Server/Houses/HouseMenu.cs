@@ -44,7 +44,7 @@ namespace ResurrectionRP_Server.Houses
             if (ph == null)
                 return;
 
-            if (ph.StaffRank >= AdminRank.Moderator || houseMenu._house.Owner.ToLower() == (client.GetSocialClub()).ToLower())
+            if (ph.StaffRank >= StaffRank.Moderator || houseMenu._house.Owner.ToLower() == (client.GetSocialClub()).ToLower())
             {
                 List<object> _playerlist = new List<object>();
 

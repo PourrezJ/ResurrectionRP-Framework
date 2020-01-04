@@ -121,7 +121,10 @@ namespace ResurrectionRP_Server.Bank
             return _accountNumber;
         }
 
-        public void Clear() => Balance = 0;
+        public void Clear() {
+            Balance = 0;
+            History = new List<BankAccountHistory>();
+        }
 
         private static string GenerateString() =>
             $"{new Random().Next(1000000, 9999999)}";

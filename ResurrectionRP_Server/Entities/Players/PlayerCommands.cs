@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 var ph = player.GetPlayerHandler();
 
-                if (ph.StaffRank <= AdminRank.Moderator)
+                if (ph.StaffRank <= StaffRank.Moderator)
                     return;
 
                 var socialclub = arguments[0].ToString().ToLower();
@@ -154,7 +154,7 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 PlayerHandler ph = player.GetPlayerHandler();
 
-                if (ph?.StaffRank < AdminRank.Moderator)
+                if (ph?.StaffRank < StaffRank.Moderator)
                     return;
 
                 string command = "";
@@ -189,7 +189,7 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             try
             {
-                if (player.GetPlayerHandler().StaffRank <= AdminRank.Player)
+                if (player.GetPlayerHandler().StaffRank <= StaffRank.Player)
                     return;
 
                 player.Position = new Position(float.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2]));
@@ -247,7 +247,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         private void Cloth(IPlayer player, object[] args)
         {
-            player.SetCloth((Models.ClothSlot)Convert.ToInt32(args[0]), (int)args[1], (int)args[2], (int)args[3]);
+            player.SetCloth((ClothSlot)Convert.ToInt32(args[0]), (int)args[1], (int)args[2], (int)args[3]);
         }
 
         public void Wheel(IPlayer player, string[] args)

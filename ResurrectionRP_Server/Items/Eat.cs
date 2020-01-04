@@ -62,7 +62,7 @@ namespace ResurrectionRP_Server.Items
                         AnimateEatDrink(client, ph, "prop_donut_01", new Vector3(), new Vector3());
                         break;
 
-                    case Models.InventoryData.ItemID.Water:
+                    case Models.InventoryData.ItemID.WaterBottle:
                         AnimateEatDrink(client, ph, "prop_ld_flow_bottle", new Vector3(), new Vector3());
                         break;
 

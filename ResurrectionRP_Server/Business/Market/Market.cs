@@ -4,6 +4,8 @@ using ResurrectionRP_Server.Colshape;
 using System.Collections.Generic;
 using System.Numerics;
 using System;
+using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Models.InventoryData;
 
 namespace ResurrectionRP_Server.Business
 {
@@ -11,6 +13,12 @@ namespace ResurrectionRP_Server.Business
     {
         #region Static fields
         public static List<Market> MarketsList = new List<Market>();
+
+        private static ItemID[] itemsWithoutOwner = new ItemID[]
+        {
+            ItemID.WaterBottle,
+
+        };
         #endregion
 
         #region Fields

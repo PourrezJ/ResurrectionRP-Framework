@@ -144,7 +144,7 @@ namespace ResurrectionRP_Server.Houses
                 return;
 
             if (Owner == player.GetSocialClub())
-                Parking.OpenParkingMenu(player, "", (player.GetPlayerHandler()?.StaffRank > AdminRank.Player) ? $"Logement {ID.ToString()}" : "Choisissez une option :", true);
+                Parking.OpenParkingMenu(player, "", (player.GetPlayerHandler()?.StaffRank > StaffRank.Player) ? $"Logement {ID.ToString()}" : "Choisissez une option :", true);
             else
                 player.SendNotificationError("Vous n'êtes pas autorisé à utiliser ce parking.");
         }

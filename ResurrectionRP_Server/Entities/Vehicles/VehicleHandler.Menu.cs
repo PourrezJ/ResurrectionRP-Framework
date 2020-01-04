@@ -76,7 +76,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (OwnerID == client.GetSocialClub() && !SpawnVeh)
                 xmenu.Add(new XMenuItem("Donner le véhicule", "", "ID_give", XMenuItemIcons.HAND_HOLDING_SOLID, true));
 
-            if (_playerHandler.StaffRank >= AdminRank.Helper)
+            if (_playerHandler.StaffRank >= StaffRank.Helper)
                 xmenu.Add(new XMenuItem("Supprimer le véhicule PERM", "", "ID_delete", XMenuItemIcons.DELETE, true));
             
             var lockPicks = _playerHandler.GetStacksItems(ItemID.LockPick);

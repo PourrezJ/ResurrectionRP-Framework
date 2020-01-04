@@ -18,7 +18,7 @@ namespace ResurrectionRP_Server.Entities.Players
             var menu = new XMenu("ID_Admin");
             menu.CallbackAsync += XtreamCallBack;
 
-            if (StaffRank >= Utils.Enums.AdminRank.Moderator)
+            if (StaffRank >= Utils.Enums.StaffRank.Moderator)
             {
                 var kick = new XMenuItem("Kick", "", "ID_Kick", XMenuItemIcons.REPORT);
                 kick.SetInput("", 99, InputType.Text);

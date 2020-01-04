@@ -34,8 +34,6 @@ namespace ResurrectionRP_Server.Streamer
 
             AltNetworking.OnEntityStreamIn = OnEntityStreamIn;
             AltNetworking.OnEntityStreamOut = OnEntityStreamOut;
-
-            Alt.OnClient<IPlayer, int>("OwnPed", OwnPed);
         }
 
         private static void OnEntityStreamIn(INetworkingEntity entity, INetworkingClient client)
@@ -67,7 +65,7 @@ namespace ResurrectionRP_Server.Streamer
             }
         }
 
-        public static int AddEntityPed(Entities.Peds.Ped ped, int dimension = GameMode.GlobalDimension)
+        public static int AddEntityPed(Ped ped, int dimension = GameMode.GlobalDimension)
         {
             INetworkingEntity item = AltNetworking.CreateEntity(ped.Position.ConvertToEntityPosition(), dimension, GameMode.StreamDistance, ped.Export());
             ListEntities.TryAdd(EntityNumber, item);

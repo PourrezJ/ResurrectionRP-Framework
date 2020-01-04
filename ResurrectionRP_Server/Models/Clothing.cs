@@ -31,6 +31,7 @@ namespace ResurrectionRP_Server.Models
             Texture = texture;
         }
     }
+    
     public enum ClothSlot
     {
         Mask = 1,
@@ -45,6 +46,7 @@ namespace ResurrectionRP_Server.Models
         Decals = 10,
         Tops = 11
     }
+
     public enum PropSlot
     {
         Hats = 0,

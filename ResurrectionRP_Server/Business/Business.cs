@@ -79,9 +79,6 @@ namespace ResurrectionRP_Server.Business
 
             Blip = Entities.Blips.BlipsManager.CreateBlip(BusinnessName, Location.Pos, (Owner == null || OnSale) ? 35 : 2, (int)BlipSprite);
 
-            if (Employees == null)
-                Employees = new Dictionary<string, string>();
-
             BankAccount.Owner = this;
             Loader.BusinessesManager.BusinessesList.Add(this);
         }
@@ -102,7 +99,7 @@ namespace ResurrectionRP_Server.Business
         public bool IsOwner(IPlayer client)
             => client.GetSocialClub() == Owner;
 
-        public static bool CanIHaveABusiness(string owner) => (Loader.BusinessesManager.BusinessesList.Find(x => x.Owner == owner) == null || (PlayerManager.GetPlayerBySCN(owner)).StaffRank >= AdminRank.Moderator) ? true : false;
+        public static bool CanIHaveABusiness(string owner) => (Loader.BusinessesManager.BusinessesList.Find(x => x.Owner == owner) == null || (PlayerManager.GetPlayerBySCN(owner)).StaffRank >= StaffRank.Moderator) ? true : false;
         #endregion
 
         #region Events

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ResurrectionRP_Server.Items;
+using ResurrectionRP_Server.Models.InventoryData;
+using System.Collections.Generic;
 
 namespace ResurrectionRP_Server.Models
 {
@@ -6,11 +8,18 @@ namespace ResurrectionRP_Server.Models
     {
         public Item Item { get; set; }
         public int Quantity { get; set; }
-        public int Price { get; set; }
+        public double Price { get; set; }
 
         public Dictionary<string, dynamic> Variables = new Dictionary<string, dynamic>();
 
-        public ItemStack(Item item, int quantity, int price = 0)
+        public ItemStack(ItemID item, int quantity, double price = 0)
+        {
+            this.Item = Inventory.Inventory.ItemByID(item);
+            this.Quantity = quantity;
+            this.Price = price;
+        }
+
+        public ItemStack(Item item, int quantity, double price = 0)
         {
             this.Item = item;
             this.Quantity = quantity;

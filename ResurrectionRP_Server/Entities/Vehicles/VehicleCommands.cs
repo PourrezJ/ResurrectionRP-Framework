@@ -26,7 +26,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             PlayerHandler ph = player.GetPlayerHandler();
 
-            if (ph == null || player.GetPlayerHandler().StaffRank < AdminRank.Moderator)
+            if (ph == null || player.GetPlayerHandler().StaffRank < StaffRank.Moderator)
                 return;
 
             if (args == null || args.Length == 0)
@@ -82,7 +82,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             PlayerHandler ph = player.GetPlayerHandler();
 
-            if (ph == null || player.GetPlayerHandler().StaffRank <= AdminRank.Player)
+            if (ph == null || player.GetPlayerHandler().StaffRank <= StaffRank.Player)
                 return;
 
             if (args == null || args.Length == 0)
@@ -131,7 +131,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             PlayerHandler ph = player.GetPlayerHandler();
 
-            if (ph == null || player.GetPlayerHandler().StaffRank <= AdminRank.Player)
+            if (ph == null || player.GetPlayerHandler().StaffRank <= StaffRank.Player)
                 return;
 
             if (args == null || args.Length == 0)

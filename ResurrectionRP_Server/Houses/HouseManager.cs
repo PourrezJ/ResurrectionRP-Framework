@@ -156,7 +156,7 @@ namespace ResurrectionRP_Server.Houses
             menu.SubTitle = (house.Locked) ? "La porte est ~r~fermée" : "La porte est ~g~ouverte";
 
             // MODO ONLY
-            if (player.GetPlayerHandler()?.StaffRank >= AdminRank.Moderator)
+            if (player.GetPlayerHandler()?.StaffRank >= StaffRank.Moderator)
             {
                 menu.SubTitle = $"Propriétaire: {((house.Owner != null) ? house.Owner : "Aucun")}";
 

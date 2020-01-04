@@ -13,6 +13,7 @@ using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Utils;
 using System.Drawing;
 using ResurrectionRP_Server.Colshape;
+using ResurrectionRP_Server.Utils.Enums;
 
 namespace ResurrectionRP_Server.Business
 {
@@ -237,7 +238,7 @@ namespace ResurrectionRP_Server.Business
         #region Admin menu
         public override async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
         {
-            if (client.GetPlayerHandler().StaffRank >= Utils.Enums.AdminRank.Moderator)
+            if (client.GetPlayerHandler().StaffRank >= Utils.Enums.StaffRank.Moderator)
             {
                 menu.ItemSelectCallbackAsync += AdminMenuCallback;
                 menu.Add(new MenuItem("~r~Gérer les catégories en vente", "", "ID_Components", true));

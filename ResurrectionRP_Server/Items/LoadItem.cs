@@ -10,8 +10,8 @@ namespace ResurrectionRP_Server.Items
 {
     class LoadItem
     {
-        private static List<Models.Item> items;
-        public static List<Models.Item> ItemsList
+        private static List<Item> items;
+        public static List<Item> ItemsList
         {
             get
             {
@@ -22,6 +22,16 @@ namespace ResurrectionRP_Server.Items
                 }
                 return items;
             }
+        }
+
+        public static Item GetItemWithID(ItemID itemID)
+        {
+            var item = ItemsList.Find(i => i.id == itemID) ?? null;
+
+            if (item == null)
+                return null;
+
+            return item.CloneItem();
         }
 
         private static List<Item> LoadItemList()
@@ -43,7 +53,7 @@ namespace ResurrectionRP_Server.Items
                     new Eat(ItemID.Chocolat, "Chocolat", "Belge fourré …", 1 , true, true, true, food:15, icon:"chocolate", isDockable:true, itemPrice:12),
                     new Eat(ItemID.Tacos , "Tacos ", "Sans gluten", 1 , true, true, true, food:30, icon:"tacos", isDockable:true, itemPrice:12),
                     new Eat(ItemID.Coffee, "Un Café", "Du café soluble dégueulasse.", 1 , true, true,true, drink:15, icon:"coffee", isDockable:true, itemPrice:12),
-                    new Eat(ItemID.Water, "Bouteille Eau", "Eau potable?.", 1 , true, true, true, drink:20, icon:"water", isDockable: true, itemPrice: 20),
+                    new Eat(ItemID.WaterBottle, "Bouteille Eau", "Eau potable?.", 1 , true, true, true, drink:20, icon:"water", isDockable: true, itemPrice: 20),
                     new Eat(ItemID.Sprunk, "Canette de Sprunk", "Peut-être radioactif...", 1 , true, true, true, drink:15, icon:"sprunk", isDockable: true, itemPrice: 12),
                     new Eat(ItemID.Ramen, "Ramen", "Des nouilles chinoise en gros ...", 1 , true, true, true, food:15),
                     new Eat(ItemID.Grappa, "Grappa", "Je suis rital et je le reste ... ", 1 , true, true, true, drink:20),

@@ -31,7 +31,7 @@ namespace ResurrectionRP_Server.Society
             Menu menu = new Menu("ID_SocietyMainMenu", SocietyName, "Administration de la société", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
             menu.ItemSelectCallbackAsync += SocietyMainMenuCallback;
 
-            if (Owner != null && (client.GetPlayerHandler().StaffRank >= AdminRank.Moderator || FactionManager.IsGouv(client)))
+            if (Owner != null && (client.GetPlayerHandler().StaffRank >= StaffRank.Moderator || FactionManager.IsGouv(client)))
             {
                 var identite = await Identite.GetOfflineIdentite(Owner);
 
@@ -46,7 +46,7 @@ namespace ResurrectionRP_Server.Society
                 }
             }
 
-            if (client.GetPlayerHandler()?.StaffRank > AdminRank.Player)
+            if (client.GetPlayerHandler()?.StaffRank > StaffRank.Player)
             {
                 MenuItem item = new MenuItem("Changer de propriétaire", "", "pproprio", executeCallback: true);
                 item.SetInput("Social Club Name", 60, InputType.Text);

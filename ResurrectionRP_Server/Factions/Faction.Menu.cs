@@ -248,14 +248,14 @@ namespace ResurrectionRP_Server.Factions
                 var staffRank = client.GetPlayerHandler()?.StaffRank;
 
                 // If is Owner ...
-                if (CanTakeMoney(client) || staffRank >= AdminRank.Moderator)
+                if (CanTakeMoney(client) || staffRank >= StaffRank.Moderator)
                 {
                     MenuItem getmoney = new MenuItem($"Gérer les finances", $"Caisse de la faction: ${BankAccount.Balance}", "ID_money", true);
                     getmoney.OnMenuItemCallback = FinanceMenu;
                     menu.Add(getmoney);
                 }
 
-                if (CanDepositMoney(client) || staffRank >= AdminRank.Moderator)
+                if (CanDepositMoney(client) || staffRank >= StaffRank.Moderator)
                 {
                     MenuItem depot = new MenuItem("Déposer de l'argent dans les caisses", "", "ID_Depot", true);
                     depot.SetInput("", 10, InputType.UNumber, true);
@@ -263,7 +263,7 @@ namespace ResurrectionRP_Server.Factions
                     menu.Add(depot);
                 }
 
-                if (IsRecruteur(client) || staffRank >= AdminRank.Moderator)
+                if (IsRecruteur(client) || staffRank >= StaffRank.Moderator)
                 {
                     MenuItem gestion = new MenuItem($"Gestion des membres", "", "ID_gestionMember", true);
                     gestion.OnMenuItemCallback = GestionMember;

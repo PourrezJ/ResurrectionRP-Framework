@@ -11,11 +11,21 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Numerics;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Utils.Enums;
 
 namespace ResurrectionRP_Server
 {
     public static class PlayerExtensions
     {
+        public static StaffRank GetStaffRank(this IPlayer player)
+        {
+            var ph = GetPlayerHandler(player);
+            if (ph != null)
+                return ph.StaffRank;
+
+            return StaffRank.Player;
+        }
+
         public static string GetSocialClub(this IPlayer player)
         {
             if (player.GetData("SocialClub", out string data))
@@ -24,7 +34,7 @@ namespace ResurrectionRP_Server
             return string.Empty;
         }
 
-        public static void SetCloth(this IPlayer client, ClothSlot level, int drawable, int texture, int palette)
+        public static void SetCloth(this IPlayer client, Models.ClothSlot level, int drawable, int texture, int palette)
         {
             client.EmitLocked("ComponentVariation", (int)level, drawable, texture, palette);
         }

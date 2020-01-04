@@ -206,7 +206,7 @@ namespace ResurrectionRP_Server.Business
         #region Admin menu
         public override async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
         {
-            if (client.GetPlayerHandler().StaffRank >= Utils.Enums.AdminRank.Moderator)
+            if (client.GetPlayerHandler().StaffRank >= Utils.Enums.StaffRank.Moderator)
             {
                 menu.ItemSelectCallbackAsync += AdminMenuCallback;
                 menu.Add(new MenuItem("~r~Gérer les catégories en vente", "", "ID_Components", true));

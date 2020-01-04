@@ -46,7 +46,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 xmenu.Add(new XMenuItem("Embarquer", "Embarquer la personne", "ID_PutIntoCar", XMenuItemIcons.DIRECTIONS_CAR, false));
             }
 
-            if (StaffRank >= Utils.Enums.AdminRank.Moderator)
+            if (StaffRank >= Utils.Enums.StaffRank.Moderator)
                 xmenu.Add(new XMenuItem("ADMIN", $"{TargetHandler.PID} {TargetHandler.Identite.Name}", "ID_Admin", XMenuItemIcons.SETTINGS, false));
 
             if (FactionManager.IsLSCustom(Client) || FactionManager.IsLspd(Client) || FactionManager.IsMedic(Client) || FactionManager.IsNordiste(Client) || FactionManager.IsDock(Client))

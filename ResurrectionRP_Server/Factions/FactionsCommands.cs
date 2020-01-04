@@ -19,7 +19,7 @@ namespace ResurrectionRP_Server.Factions
 
         public void AddPlayerONU(IPlayer client, string[] args)
         {
-            if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
+            if (client.GetPlayerHandler().StaffRank <= StaffRank.Player)
                 return;
 
             FactionManager.Onu.TryAddIntoFaction(client, 4);
@@ -27,7 +27,7 @@ namespace ResurrectionRP_Server.Factions
 
         public void AddPlayerLSPD(IPlayer client, string[] args)
         {
-            if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
+            if (client.GetPlayerHandler().StaffRank <= StaffRank.Player)
                 return;
 
             FactionManager.Lspd.TryAddIntoFaction(client, 4);
@@ -35,7 +35,7 @@ namespace ResurrectionRP_Server.Factions
 
         public void AddPlayerRebelle(IPlayer client, string[] args)
         {
-            if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
+            if (client.GetPlayerHandler().StaffRank <= StaffRank.Player)
                 return;
 
             FactionManager.Rebelle.TryAddIntoFaction(client, 3);
@@ -43,7 +43,7 @@ namespace ResurrectionRP_Server.Factions
 
         public void AddPlayerLSCustom(IPlayer client, string[] args)
         {
-            if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
+            if (client.GetPlayerHandler().StaffRank <= StaffRank.Player)
                 return;
 
             FactionManager.LSCustom.TryAddIntoFaction(client, 2);
@@ -51,7 +51,7 @@ namespace ResurrectionRP_Server.Factions
 
         public void AddPlayerGouv(IPlayer client, string[] args)
         {
-            if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
+            if (client.GetPlayerHandler().StaffRank <= StaffRank.Player)
                 return;
 
             FactionManager.Gouvernement.TryAddIntoFaction(client, 7);
@@ -59,7 +59,7 @@ namespace ResurrectionRP_Server.Factions
 
         public void AddPlayerDock(IPlayer client, string[] args)
         {
-            if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
+            if (client.GetPlayerHandler().StaffRank <= StaffRank.Player)
                 return;
 
             FactionManager.Dock.TryAddIntoFaction(client, 5);
@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.Factions
 
         public void AddPlayerSheriff(IPlayer client, string[] args)
         {
-            if (client.GetPlayerHandler().StaffRank <= AdminRank.Player)
+            if (client.GetPlayerHandler().StaffRank <= StaffRank.Player)
                 return;
 
             FactionManager.Nordiste.TryAddIntoFaction(client, 6);

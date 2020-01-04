@@ -33,7 +33,7 @@ namespace ResurrectionRP_Server.Business
             if (Owner ==  client.GetSocialClub())
                 menu.Add(new MenuItem("Gestion des employés", "", id: "ID_AddStaff", executeCallback: true));
 
-            if (Owner != null && (client.GetPlayerHandler().StaffRank >= Utils.Enums.AdminRank.Moderator || Factions.FactionManager.IsGouv(client)))
+            if (Owner != null && (client.GetPlayerHandler().StaffRank >= Utils.Enums.StaffRank.Moderator || Factions.FactionManager.IsGouv(client)))
             {
                 var old = (await Models.Identite.GetOfflineIdentite(Owner));
                 var identite = "No Owner";
@@ -47,7 +47,7 @@ namespace ResurrectionRP_Server.Business
                 menu.Add(new MenuItem("~r~Retirer le propriétaire", "Remet en vente le commerce", "ID_ClearAdmin", true));
             }
 
-            if (client.GetPlayerHandler().StaffRank >= Utils.Enums.AdminRank.Moderator)
+            if (client.GetPlayerHandler().StaffRank >= Utils.Enums.StaffRank.Moderator)
                 menu.Add(new MenuItem("~r~Supprimer le commerce", "Supprimer le commerce", "ID_DeleteAdmin", true));
 
             menu.Add(new MenuItem("Fermer", "", "ID_Close", true));

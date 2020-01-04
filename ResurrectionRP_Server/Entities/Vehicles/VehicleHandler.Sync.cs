@@ -19,7 +19,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 {
     public partial class VehicleHandler
     {
-        #region constants
+        #region Constants
         const double FUEL_FACTOR = 3.75;
         #endregion
 

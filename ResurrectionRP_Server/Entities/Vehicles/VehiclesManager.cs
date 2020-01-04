@@ -186,6 +186,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Database
+        /*
         public static async Task LoadAllVehicles()
         {
             Alt.Server.LogInfo("--- Start loading all vehicles in database ---");
@@ -211,6 +212,33 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         }
                     }
                 });
+            }
+
+            Alt.Server.LogInfo($"--- Finish loading all vehicles in database: {_vehicleHandlers.Count} ---");
+        }*/
+
+        public static void LoadAllVehicles()
+        {
+            Alt.Server.LogInfo("--- Start loading all vehicles in database ---");
+            var vehicles = Database.MongoDB.GetCollectionSafe<VehicleHandler>("vehicles").AsQueryable();
+
+            if (GameMode.Instance.AutoPound)
+            {
+                //GameMode.Instance.PoundManager.PoundVehicleList.AddRange(vehicleList);
+                Task.Run(()=> GameMode.Instance.Save());
+            }
+            else
+            {
+                foreach (VehicleHandler vehicle in vehicles.ToList())
+                {
+                    if (_vehicleHandlers.TryAdd(vehicle.Plate, vehicle))
+                    {
+                        if (vehicle.IsParked || vehicle.IsInPound)
+                            continue;
+
+                        vehicle.SpawnVehicle();
+                    }
+                }
             }
 
             Alt.Server.LogInfo($"--- Finish loading all vehicles in database: {_vehicleHandlers.Count} ---");

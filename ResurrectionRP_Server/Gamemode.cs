@@ -158,12 +158,14 @@ namespace ResurrectionRP_Server
                 Time = new Time();
 
             Alt.Server.LogColored("~g~Initialisations des controlleurs...");
+
+            VehiclesManager.LoadAllVehicles();
+
             Task.Run(async () =>
             {
                 try
                 {
-                    await BanManager.Init();
-                    await VehiclesManager.LoadAllVehicles();
+                    await BanManager.Init();  
                     await Loader.CarParkLoader.LoadAllCarParks();
                     await Factions.FactionManager.InitAllFactions();
                     await Loader.BusinessesManager.LoadAllBusinesses();

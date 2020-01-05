@@ -59,9 +59,9 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
             if (manifest != null)
             {
                 place.VehicleHandler = VehiclesManager.SpawnVehicle("", place.VehicleInfo.VehicleHash, place.Location.Pos, place.Location.Rot.ConvertRotationToRadian(), color1, color2, spawnVeh: true, freeze: true, inventory: new Inventory.Inventory(place.VehicleInfo.InventoryWeight, 20));
-                place.VehicleHandler.Vehicle.SetData("RentShop", place);
-                place.VehicleHandler.Vehicle.Freeze(true);
-                place.VehicleHandler.Vehicle.Invincible(true);
+                place.VehicleHandler.SetData("RentShop", place);
+                place.VehicleHandler.Freeze(true);
+                place.VehicleHandler.Invincible(true);
                 string str = $"{manifest.DisplayName} \n" +
                 $"Prix $ {place.VehicleInfo.Price} \n" +
                 $"Coffre: {place.VehicleInfo.InventoryWeight} \n" +
@@ -77,12 +77,12 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
         {
             vehicleplace.TextLabelId.Destroy();
             var veh = vehicleplace.VehicleHandler;
-            veh.Vehicle.SetSyncedMetaData("VehicleRent", DateTime.Now.ToString());
-            veh.Vehicle.Freeze(false);
-            veh.Vehicle.Invincible(false);
+            veh.SetSyncedMetaData("VehicleRent", DateTime.Now.ToString());
+            veh.Freeze(false);
+            veh.Invincible(false);
             vehicleplace.VehicleHandler.SpawnVeh = true;
             vehicleplace.VehicleHandler.SetOwner(ph);
-            vehicleplace.VehicleHandler.Vehicle.ResetData("RentShop");
+            vehicleplace.VehicleHandler.ResetData("RentShop");
             veh.LockState = AltV.Net.Enums.VehicleLockState.Unlocked;
             ph.ListVehicleKey.Add(VehicleKey.GenerateVehicleKey(vehicleplace.VehicleHandler));
             ph.Client.SendNotificationSuccess($"Vous avez loué un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");
@@ -90,7 +90,7 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
 
             Utils.Utils.SetInterval(() =>
             {
-                if (!veh.Vehicle.Exists)
+                if (!veh.Exists)
                     return;
 
                 Task.Run(async ()=> await veh.DeleteAsync());

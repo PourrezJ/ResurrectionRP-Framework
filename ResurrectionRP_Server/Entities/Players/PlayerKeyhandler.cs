@@ -306,9 +306,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (client.Seat != 1)
                         return;
 
-                    vh.SirenSound = !vh.SirenSound;
+                    vh.VehicleData.SirenSound = !vh.VehicleData.SirenSound;
 
-                    vehicle.SetSyncedMetaData("SirenDisabled", vh.SirenSound);
+                    vehicle.SetSyncedMetaData("SirenDisabled", vh.VehicleData.SirenSound);
 
                     break;
 

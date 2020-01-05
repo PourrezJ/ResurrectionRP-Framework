@@ -167,24 +167,27 @@ namespace ResurrectionRP_Server
 
         public static IVehicle GetNearestVehicle(this IPlayer client)
         {
-            var vehs = VehiclesManager.GetAllVehiclesInGame();
-
+            var vehs = Alt.GetAllVehicles();
             IVehicle endup = null;
             var position = client.GetPosition();
             Vector3 pos = new Vector3(position.X, position.Y, position.Z);
 
-            foreach (IVehicle veh in vehs)
+            lock (vehs)
             {
-                if (!veh.Exists)
-                    continue;
-                if (endup == null && veh != client.Vehicle)
-                    endup = veh;
 
-                var vehpos = veh.GetPosition();
-                var enduppos = endup.GetPosition();
+                foreach (IVehicle veh in vehs)
+                {
+                    if (!veh.Exists)
+                        continue;
+                    if (endup == null && veh != client.Vehicle)
+                        endup = veh;
 
-                if (pos.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= pos.DistanceTo2D(new Vector3(enduppos.X, enduppos.Y, enduppos.Z)) && veh != client.Vehicle)
-                    endup = veh;
+                    var vehpos = veh.GetPosition();
+                    var enduppos = endup.GetPosition();
+
+                    if (pos.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= pos.DistanceTo2D(new Vector3(enduppos.X, enduppos.Y, enduppos.Z)) && veh != client.Vehicle)
+                        endup = veh;
+                }
             }
 
             return endup;

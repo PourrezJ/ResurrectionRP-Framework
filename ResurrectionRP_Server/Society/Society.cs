@@ -160,20 +160,20 @@ namespace ResurrectionRP_Server.Society
 
         public void OnVehicleEnterParking(VehicleHandler vehicle, Parking parking)
         {
-            OpenParkingMenu(vehicle?.Vehicle?.Driver);
+            OpenParkingMenu(vehicle.Driver);
         }
 
         public virtual Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
         {
-            vehicle.Vehicle.Rotation = location.Rot.ConvertRotationToRadian();
-            client.SetPlayerIntoVehicle(vehicle.Vehicle);
+            vehicle.Rotation = location.Rot.ConvertRotationToRadian();
+            client.SetPlayerIntoVehicle(vehicle);
             UpdateInBackground();
             return Task.CompletedTask;
         }
 
         public virtual Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
         {
-            vehicle.ParkingName = SocietyName;
+            vehicle.VehicleData.ParkingName = SocietyName;
             UpdateInBackground();
             return Task.CompletedTask;
         }

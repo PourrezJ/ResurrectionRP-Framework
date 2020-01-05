@@ -121,8 +121,8 @@ namespace ResurrectionRP_Server.Entities.Players
                         if (vehicle != null)
                         {
                             vehicle.LockState = VehicleLockState.Unlocked;
-                            _playerSelected.Client.SetPlayerIntoVehicle(vehicle.Vehicle);
-                            _playerSelected.ListVehicleKey.Add(new VehicleKey(manifest.DisplayName, vehicle.Plate));
+                            _playerSelected.Client.SetPlayerIntoVehicle(vehicle);
+                            _playerSelected.ListVehicleKey.Add(new VehicleKey(manifest.DisplayName, vehicle.NumberplateText));
                             //LogManager.Log($"~r~[ADMIN]~w~ {client.Name} a spawn le véhicule {_vehs.Model} {_vehs.Plate}");
                         }
                         else
@@ -189,7 +189,7 @@ namespace ResurrectionRP_Server.Entities.Players
                                 return;
                             }
 
-                            client.SendNotification($"Véhicule ~r~{vehFourriere.Plate} ~w~ mis en fourrière...");
+                            client.SendNotification($"Véhicule ~r~{vehFourriere.VehicleData.Plate} ~w~ mis en fourrière...");
                             Task.Run(async () => await Pound.AddVehicleInPoundAsync(vehFourriere));
                         }
                     }
@@ -468,9 +468,9 @@ namespace ResurrectionRP_Server.Entities.Players
                         if (vehicle != null)
                         {
                             vehicle.LockState = VehicleLockState.Unlocked;
-                            _playerSelected.Client.SetPlayerIntoVehicle(vehicle.Vehicle);
-                            vehicle.InsertVehicle();
-                            _playerSelected.ListVehicleKey.Add(new VehicleKey(manifest.DisplayName, vehicle.Plate));
+                            _playerSelected.Client.SetPlayerIntoVehicle(vehicle);
+                            vehicle.VehicleData.InsertVehicle();
+                            _playerSelected.ListVehicleKey.Add(new VehicleKey(manifest.DisplayName, vehicle.NumberplateText));
                             //LogManager.Log($"~r~[ADMIN]~w~ {client.Name} a spawn le véhicule {_vehs.Model} {_vehs.Plate}");
                         }
                         else
@@ -495,7 +495,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             if (vehicle == null)
                                 client.SendNotificationError("Aucun véhicule a proximité");
                             else if (await vehicle.DeleteAsync(true))
-                                client.SendNotificationSuccess($"Véhicule ~r~{vehicle.Plate}~w~ supprimé...");
+                                client.SendNotificationSuccess($"Véhicule ~r~{vehicle.VehicleData.Plate}~w~ supprimé...");
                             else
                                 client.SendNotificationError($"Erreur de suppression du véhicule");
                         });
@@ -516,7 +516,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             if (vehicle == null)
                                 client.SendNotificationError("Aucun véhicule a proximité");
                             else if (await vehicle.DeleteAsync(false))
-                                client.SendNotificationSuccess($"Véhicule ~r~{vehicle.Plate}~w~ supprimé...");
+                                client.SendNotificationSuccess($"Véhicule ~r~{vehicle.VehicleData.Plate}~w~ supprimé...");
                             else
                                 client.SendNotificationError($"Erreur de suppression du véhicule");
                         });
@@ -604,7 +604,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             return;
 
 
-                        VehicleHandler vehicle = VehiclesManager.VehicleHandlerList.FirstOrDefault( (p) => p.Value.Plate.ToUpper() == name.ToUpper()).Value;
+                        VehicleHandler vehicle = VehiclesManager.GetVehicleByPlate(name)?.GetVehicleHandler();
 
                         if (vehicle == null)
                         {
@@ -640,7 +640,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             return;
 
 
-                        VehicleHandler vehicle = VehiclesManager.VehicleHandlerList.FirstOrDefault( (p) => p.Value.Plate.ToUpper() == name.ToUpper()).Value;
+                        VehicleHandler vehicle = VehiclesManager.GetVehicleByPlate(name)?.GetVehicleHandler();
 
                         Task.Run(async () =>
                         {
@@ -659,6 +659,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 };
                 mainMenu.Add(spawnPerm);
                 #endregion
+
                 #region Get Vehicle Infos
 
                 spawnPerm = new MenuItem("Information Véhicule (Nécéssite plaque)", "Récupère les informations d'un véhicule", "ID_VehicleInfo", true);

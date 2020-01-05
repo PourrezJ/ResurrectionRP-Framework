@@ -78,7 +78,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
             MenuItem historique = new MenuItem("Historique", "", "Histo", true);
             mainMenu.Add(historique);
 
-            if (Owner == client.GetSocialClub() && !VehicleBench.GetVehicleHandler().PlateHide)
+            if (Owner == client.GetSocialClub() && !VehicleBench.GetVehicleHandler().VehicleData.PlateHide)
             {
                 MenuItem changePlate = new MenuItem("Retirer le véhicule du registre", "~r~Illégal ~w~Retirer le véhicule du registre de SanAndreas pour être non identifiable lors d'un contrôle.", "PlateChange", true);
                 mainMenu.Add(changePlate);
@@ -161,7 +161,7 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
 
                             if (vh != null)
                             {
-                                vh.PlateHide = true;
+                                vh.VehicleData.PlateHide = true;
                                 client.SendNotificationSuccess("La plaque du véhicule a été retirée du registre");
                                 vh.UpdateInBackground(false);
                             }

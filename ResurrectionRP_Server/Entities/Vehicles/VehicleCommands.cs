@@ -7,6 +7,7 @@ using ResurrectionRP_Server.Utils.Enums;
 using System.Numerics;
 using System.Threading.Tasks;
 using VehicleInfoLoader.Data;
+using ResurrectionRP_Server.Database;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
@@ -36,43 +37,43 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
 
             string plate = args[0].ToUpper();
-            VehicleHandler vehicle = null;
+            VehicleData vehicleData = null;
 
-            foreach (VehicleHandler veh in VehiclesManager.GetAllVehicles())
+            foreach (VehicleData veh in VehiclesManager.GetAllVehicles())
             {
                 if (veh.Plate.ToUpper() == plate)
                 {
-                    vehicle = veh;
+                    vehicleData = veh;
                     break;
                 }
             }
 
-            if (vehicle == null)
+            if (vehicleData == null)
             {
                 player.SendNotificationError("Véhicule inconnu");
                 return;
             }
 
-            PlayerHandler owner = await PlayerManager.GetPlayerHandlerDatabase(vehicle.OwnerID);
-            player.SendChatMessage($"Immatriculation : {vehicle.Plate}");
-            VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get(vehicle.Model);
-            player.SendChatMessage($"Modèle : {manifest.LocalizedName} ({vehicle.Model})");
+            PlayerHandler owner = await PlayerManager.GetPlayerHandlerDatabase(vehicleData.OwnerID);
+            player.SendChatMessage($"Immatriculation : {vehicleData.Plate}");
+            VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get(vehicleData.Model);
+            player.SendChatMessage($"Modèle : {manifest.LocalizedName} ({vehicleData.Model})");
 
             if (owner != null)
-                player.SendChatMessage($"Propriétaire : {owner.Identite.Name} ({vehicle.OwnerID})");
+                player.SendChatMessage($"Propriétaire : {owner.Identite.Name} ({vehicleData.OwnerID})");
             else
                 player.SendChatMessage("Propriétaire : Aucun");
 
-            player.SendChatMessage($"Verrouillé : {vehicle.IsLocked()}");
-            player.SendChatMessage($"Dernier chauffeur : {vehicle.LastDriver}");
-            player.SendChatMessage($"Dernier usage : {vehicle.LastUse}");
+            player.SendChatMessage($"Verrouillé : {vehicleData.LockState.ToString()}");
+            player.SendChatMessage($"Dernier chauffeur : {vehicleData.LastDriver}");
+            player.SendChatMessage($"Dernier usage : {vehicleData.LastUse}");
 
-            if (vehicle.ParkingName != string.Empty)
-                player.SendChatMessage($"Parking : {vehicle.ParkingName}");
+            if (vehicleData.ParkingName != string.Empty)
+                player.SendChatMessage($"Parking : {vehicleData.ParkingName}");
 
-            Vector3 position = vehicle.Location.Pos;
-            string dim = vehicle.Dimension.ToString();
-            player.SendChatMessage($"Position : X: {position.X}, Y: {position.Y}, Z: {position.Z}, Dim: {dim}");
+            Vector3 position = vehicleData.Location.Pos;
+            //string dim = vehicleData.Dimension.ToString();
+            player.SendChatMessage($"Position : X: {position.X}, Y: {position.Y}, Z: {position.Z}");
         }
 
         private void VehicleSpawn(IPlayer player, string[] args)
@@ -92,20 +93,20 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
 
             string plate = args[0].ToUpper();
-            VehicleHandler vehicle = VehiclesManager.GetVehicleHandler(plate);
+            VehicleHandler vehicle = VehiclesManager.GetVehicleByPlate(plate)?.GetVehicleHandler();
 
             if (vehicle == null)
             {
                 player.SendNotificationError("Véhicule inconnu");
                 return;
             }
-            else if (!vehicle.IsInPound && !vehicle.IsParked)
+            else if (!vehicle.VehicleData.IsInPound && !vehicle.VehicleData.IsParked)
             {
                 player.SendNotificationError("Véhicule déjà dans le monde");
                 return;
             }
             //if (GameMode.Instance.PoundManager.PoundVehicleList.Find(c => c.Plate == vehicle.Plate) != null)
-            else if (vehicle.IsInPound)
+            else if (vehicle.VehicleData.IsInPound)
             {
                 player.SendNotificationError("Véhicule à fourrière");
                 return;
@@ -113,14 +114,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             foreach (Parking parking in Parking.ParkingList)
             {
-                if (parking.ListVehicleStored.Find(c => c.Plate == vehicle.Plate) != null)
+                if (parking.ListVehicleStored.Find(c => c.Plate == vehicle.VehicleData.Plate) != null)
                 {
                     player.SendNotificationError("Véhicule dans un parking");
                     return;
                 }
             }
 
-            vehicle.SpawnVehicle();
+            //vehicle.SpawnVehicle();
             player.SendNotificationSuccess("Véhicule spawn");
         }
 
@@ -160,8 +161,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (vehicle != null)
             {
                 vehicle.LockState = VehicleLockState.Unlocked;
-                player.SetPlayerIntoVehicle(vehicle.Vehicle);
-                ph.ListVehicleKey.Add(new VehicleKey(manifest.DisplayName, vehicle.Plate));
+                player.SetPlayerIntoVehicle(vehicle);
+                ph.ListVehicleKey.Add(new VehicleKey(manifest.DisplayName, vehicle.NumberplateText));
                 //LogManager.Log($"~r~[ADMIN]~w~ {client.Name} a spawn le véhicule {_vehs.Model} {_vehs.Plate}");
             }
             else

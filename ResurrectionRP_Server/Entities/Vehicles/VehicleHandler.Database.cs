@@ -17,23 +17,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Methods
-        public void InsertVehicle()
-        {
-            Task.Run(async () =>
-            {
-                try
-                {
-                    if (SpawnVeh)
-                        return;
-
-                    await Database.MongoDB.Insert("vehicles", this);
-                }
-                catch (BsonException be)
-                {
-                    Alt.Server.LogError(be.Message);
-                }
-            });
-        }
 
         public void UpdateInBackground(bool updateLastUse = true, bool immediatePropertiesUpdate = false)
         {
@@ -44,10 +27,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 return;
 
             if (updateLastUse)
-                LastUse = DateTime.Now;
+                VehicleData.LastUse = DateTime.Now;
 
             if (immediatePropertiesUpdate)
-                UpdateProperties();
+                VehicleData.UpdateProperties();
 
             _lastUpdateRequest = DateTime.Now;
 
@@ -81,11 +64,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 try
                 {
-                    UpdateProperties();
-                    var result = await Database.MongoDB.Update(this, "vehicles", Plate, _nbUpdateRequests);
+                    VehicleData.UpdateProperties();
+                    var result = await Database.MongoDB.Update(this, "vehicles", VehicleData.Plate, _nbUpdateRequests);
 
                     if (result.ModifiedCount == 0)
-                        Alt.Server.LogError($"Update error for vehicle: {Plate} - Owner: {OwnerID}");
+                        Alt.Server.LogError($"Update error for vehicle: {VehicleData.Plate} - Owner: {VehicleData.OwnerID}");
 
                     _updateWaiting = false;
                 }
@@ -98,7 +81,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public async Task<bool> RemoveInDatabase()
         {
-            var result = await Database.MongoDB.Delete<VehicleHandler>("vehicles", Plate);
+            var result = await Database.MongoDB.Delete<VehicleHandler>("vehicles", VehicleData.Plate);
             return (result.DeletedCount != 0);
         }
         #endregion

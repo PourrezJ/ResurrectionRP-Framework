@@ -10,6 +10,7 @@ using ResurrectionRP_Server.Utils;
 using System.Collections.Concurrent;
 using System.Numerics;
 using System.Threading.Tasks;
+using VehicleInfoLoader;
 using VehicleInfoLoader.Data;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
@@ -20,7 +21,17 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public IPlayer Owner { get; private set; }
 
-        public VehicleManifest VehicleManifest;
+        private VehicleManifest _vehicleManifest;
+        public VehicleManifest VehicleManifest
+        {
+            get
+            {
+                if (_vehicleManifest == null)
+                    _vehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
+                return _vehicleManifest;
+            }
+            set => _vehicleManifest = value;
+        }
 
         public bool SpawnVeh { get; set; }
        
@@ -28,7 +39,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public VehicleData VehicleData { get; set; }
 
-        public bool hasTrailer = false;
+        public bool HasTrailer = false;
 
         public IEntity Trailer;
 
@@ -226,7 +237,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (Exists)
                     Remove();
             });
-
+            /*
             if (VehiclesManager.VehicleHandlerList.TryRemove(this, out _))
             {
                 if (perm && !SpawnVeh)
@@ -235,15 +246,26 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                     if (!await RemoveInDatabase())
                         return false;
-                }
-
+               
+                /*
                 if (perm || SpawnVeh)
                     VehiclesManager.DeleteVehicleHandler(this);
-
+                    
                 return true;
-            }
+            }*/
 
-            return false;
+            if (perm && !SpawnVeh)
+            {
+                _cancelUpdate = true;
+
+                if (!await RemoveInDatabase())
+                    return false;
+            }
+            /*
+            if (perm || SpawnVeh)
+                VehiclesManager.DeleteVehicleHandler(this);
+                */
+            return true;
         }
 
         public void ApplyDamage()

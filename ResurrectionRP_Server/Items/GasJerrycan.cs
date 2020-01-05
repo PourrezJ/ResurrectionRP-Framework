@@ -55,19 +55,19 @@ namespace ResurrectionRP_Server.Items
                     return;
                 }
                     
-                if(_vehicle.Fuel == _vehicle.FuelMax || _vehicle.FuelMax - _vehicle.Fuel < 2)
+                if(_vehicle.VehicleData.Fuel == _vehicle.VehicleData.FuelMax || _vehicle.VehicleData.FuelMax - _vehicle.VehicleData.Fuel < 2)
                 {
                     client.SendNotificationError("Inutile de remplir un véhicule plein.");
                     return;
                 }
-                if((_vehicle.Fuel + (float)item.Fuel) >= _vehicle.FuelMax)
+                if((_vehicle.VehicleData.Fuel + (float)item.Fuel) >= _vehicle.VehicleData.FuelMax)
                 {
-                    item.Fuel -= Math.Round(_vehicle.FuelMax - _vehicle.Fuel, 2);
-                    client.SendNotificationSuccess("Vous avez mis " + Math.Round(_vehicle.FuelMax - _vehicle.Fuel, 2) + "L d'essence.<br/>Il reste " + Math.Round(item.Fuel , 2)+ "L dans le jerrycan");
-                    _vehicle.Fuel = _vehicle.FuelMax;
+                    item.Fuel -= Math.Round(_vehicle.VehicleData.FuelMax - _vehicle.VehicleData.Fuel, 2);
+                    client.SendNotificationSuccess("Vous avez mis " + Math.Round(_vehicle.VehicleData.FuelMax - _vehicle.VehicleData.Fuel, 2) + "L d'essence.<br/>Il reste " + Math.Round(item.Fuel , 2)+ "L dans le jerrycan");
+                    _vehicle.VehicleData.Fuel = _vehicle.VehicleData.FuelMax;
                 } else
                 {
-                    _vehicle.Fuel += (float)item.Fuel;
+                    _vehicle.VehicleData.Fuel += (float)item.Fuel;
                     client.SendNotificationSuccess("Vous avez mis " + (item.Fuel) + "L d'essence.<br/>Votre jerrycan est maintenant vide");
                     item.Fuel = 0;
                 }

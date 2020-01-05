@@ -82,11 +82,11 @@ namespace ResurrectionRP_Server.Farms
             if (RaffinerieColshape.IsEntityIn(player))
             {
                 IVehicle vehicle = null;
-                List<IVehicle> vehs = Process_PosRot.Pos.GetVehiclesInRange(20);
+                List<IVehicle> vehs = VehiclesManager.GetNearestsVehicles(Process_PosRot.Pos, 20);
 
                 foreach (IVehicle veh in vehs)
                 {
-                    if (veh.GetVehicleHandler().hasTrailer)
+                    if (veh.GetVehicleHandler().HasTrailer)
                         vehicle = (IVehicle)(veh.GetVehicleHandler().Trailer);
                 }
 
@@ -158,10 +158,10 @@ namespace ResurrectionRP_Server.Farms
                     ProcessTimer = null;
                 }
 
-                if (vehHandler.OilTank.Traite >= TrailerMaxContent)
+                if (vehHandler.VehicleData.OilTank.Traite >= TrailerMaxContent)
                 {
                     client.EmitLocked("StopProgressBar");
-                    client.DisplaySubtitle($"Remplicage de la citerne terminé: Vous avez rempli ~r~ {vehHandler.OilTank.Traite}L {_itemTraite.name}(s)", 15000);
+                    client.DisplaySubtitle($"Remplicage de la citerne terminé: Vous avez rempli ~r~ {vehHandler.VehicleData.OilTank.Traite}L {_itemTraite.name}(s)", 15000);
                     player.UpdateFull();
                     vehHandler.UpdateInBackground();
                     player.IsOnProgress = false;
@@ -177,8 +177,8 @@ namespace ResurrectionRP_Server.Farms
                     return;
                 }
 
-                vehHandler.OilTank.Traite += 5;
-                client.DisplaySubtitle("Volume essence raffiné : " + vehHandler.OilTank.Traite + "L", 3000);
+                vehHandler.VehicleData.OilTank.Traite += 5;
+                client.DisplaySubtitle("Volume essence raffiné : " + vehHandler.VehicleData.OilTank.Traite + "L", 3000);
             }, (Process_Time * 1000) / (FillingTime));
         }
 
@@ -221,12 +221,12 @@ namespace ResurrectionRP_Server.Farms
 
             if (vehHandler == null)
                 return;
-            else if (vehHandler.OilTank.Traite > 0)
+            else if (vehHandler.VehicleData.OilTank.Traite > 0)
             {
                 client.DisplaySubtitle($"~r~Votre citerne contient déjà du pétrole raffiné.", 5000);
                 return;
             }
-            else if (vehHandler.OilTank.Brute >= 500)
+            else if (vehHandler.VehicleData.OilTank.Brute >= 500)
             {
                 client.DisplaySubtitle("~r~Le camion est déjà rempli.", 5000);
                 return;
@@ -244,14 +244,14 @@ namespace ResurrectionRP_Server.Farms
             client.DisplaySubtitle($"Remplissage en cours de la citerne de {item.name}", 5000);
 
             bool exit = false;
-            int needed = 500 - vehHandler.OilTank.Brute;
+            int needed = 500 - vehHandler.VehicleData.OilTank.Brute;
             client.EmitLocked("LaunchProgressBar", Harvest_Time * (needed / 10));
 
             Task.Run(async () =>
             {
                 for (int i = 0; !exit; i++)
                 {
-                    if (vehHandler.OilTank.Brute < 500)
+                    if (vehHandler.VehicleData.OilTank.Brute < 500)
                         await Task.Delay(Harvest_Time);
 
                     if (!await client.ExistsAsync() || !await fuelVeh.ExistsAsync())
@@ -277,13 +277,13 @@ namespace ResurrectionRP_Server.Farms
                         return;
                     }
 
-                    vehHandler.OilTank.Brute += 10;
+                    vehHandler.VehicleData.OilTank.Brute += 10;
 
-                    if (vehHandler.OilTank.Brute >= 500)
+                    if (vehHandler.VehicleData.OilTank.Brute >= 500)
                     {
                         fuelVeh.ResetData("Refuelling");
                         client.EmitLocked("StopProgressBar");
-                        client.DisplaySubtitle($"Récolte terminée: la citerne est pleine ~r~ ({vehHandler.OilTank.Brute}L {item.name})", 10000);
+                        client.DisplaySubtitle($"Récolte terminée: la citerne est pleine ~r~ ({vehHandler.VehicleData.OilTank.Brute}L {item.name})", 10000);
                         player.IsOnProgress = false;
                         return;
                     }
@@ -466,7 +466,7 @@ namespace ResurrectionRP_Server.Farms
                 sender.DisplaySubtitle($"Vous devez être dans un camion citerne.", 5000);
                 return;
             }
-            else if (vehHandler.OilTank.Brute == 0)
+            else if (vehHandler.VehicleData.OilTank.Brute == 0)
             {
                 sender.DisplaySubtitle($"Votre camion citerne est vide.", 5000);
                 return;
@@ -478,7 +478,7 @@ namespace ResurrectionRP_Server.Farms
             Item _itemTraite = Inventory.Inventory.ItemByID(ItemIDBrute);
             player.IsOnProgress = true;
             sender.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s)", 5000);
-            sender.EmitLocked("LaunchProgressBar", Process_Time * (vehHandler.OilTank.Brute / 10));
+            sender.EmitLocked("LaunchProgressBar", Process_Time * (vehHandler.VehicleData.OilTank.Brute / 10));
             bool exit = false;
 
             Task.Run(async () =>
@@ -488,7 +488,7 @@ namespace ResurrectionRP_Server.Farms
                     if (!await sender.ExistsAsync())
                         return;
 
-                    if (vehHandler.OilTank.Brute >= 1)
+                    if (vehHandler.VehicleData.OilTank.Brute >= 1)
                         await Task.Delay(Process_Time);
 
                     if (RaffineriePos.DistanceTo(vehicle.Position) > 30f)
@@ -504,13 +504,13 @@ namespace ResurrectionRP_Server.Farms
                         return;
                     }
 
-                    vehHandler.OilTank.Brute -= 10;
-                    vehHandler.OilTank.Traite += 5;
+                    vehHandler.VehicleData.OilTank.Brute -= 10;
+                    vehHandler.VehicleData.OilTank.Traite += 5;
 
-                    if (vehHandler.OilTank.Brute == 0)
+                    if (vehHandler.VehicleData.OilTank.Brute == 0)
                     {
                         sender.EmitLocked("StopProgressBar");
-                        sender.DisplaySubtitle($"Traitement de la citerne terminé: Vous avez traité ~r~ {vehHandler.OilTank.Traite}L {_itemTraite.name}(s)", 15000);
+                        sender.DisplaySubtitle($"Traitement de la citerne terminé: Vous avez traité ~r~ {vehHandler.VehicleData.OilTank.Traite}L {_itemTraite.name}(s)", 15000);
                         player.UpdateFull();
                         vehHandler.UpdateInBackground();
                         player.IsOnProgress = false;
@@ -656,12 +656,12 @@ namespace ResurrectionRP_Server.Farms
                 sender.DisplaySubtitle($"Vous devez être dans un camion citerne.", 5000);
                 return;
             }
-            else if (vehHandler.OilTank.Traite == 0)
+            else if (vehHandler.VehicleData.OilTank.Traite == 0)
             {
                 sender.DisplaySubtitle($"Vous camion citerne est vide.", 5000);
                 return;
             }
-            else if (vehHandler.OilTank.Brute > 0)
+            else if (vehHandler.VehicleData.OilTank.Brute > 0)
             {
                 sender.DisplaySubtitle($"Ce n'est pas du pétrole raffiné!", 5000);
                 return;
@@ -674,7 +674,7 @@ namespace ResurrectionRP_Server.Farms
 
             sender.DisplaySubtitle($"Vous commencez à vendre vos ~r~{_itemBuy.name}(s)", 5000);
 
-            int itemcount = vehHandler.OilTank.Traite;
+            int itemcount = vehHandler.VehicleData.OilTank.Traite;
             sender.EmitLocked("LaunchProgressBar", Selling_Time * itemcount);
 
             var count = 0;
@@ -687,7 +687,7 @@ namespace ResurrectionRP_Server.Farms
                     if (!sender.Exists)
                         return;
 
-                    if (vehHandler.OilTank.Traite >= 1)
+                    if (vehHandler.VehicleData.OilTank.Traite >= 1)
                         await Task.Delay(Selling_Time);
 
                     if (SellPos.DistanceTo(vehicle.Position) > 30f)
@@ -704,9 +704,9 @@ namespace ResurrectionRP_Server.Farms
                     }
 
                     count++;
-                    vehHandler.OilTank.Traite--;
+                    vehHandler.VehicleData.OilTank.Traite--;
 
-                    if (vehHandler.OilTank.Traite == 0)
+                    if (vehHandler.VehicleData.OilTank.Traite == 0)
                     {
                         sender.EmitLocked("StopProgressBar");
                         double gettaxe = Economy.Economy.CalculPriceTaxe(ItemPrice * itemcount, GameMode.Instance.Economy.Taxe_Exportation);

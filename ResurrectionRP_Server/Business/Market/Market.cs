@@ -91,14 +91,14 @@ namespace ResurrectionRP_Server.Business
 
             if (client.IsInVehicle )
             {
-                if (!client.Vehicle.hasTrailer)
+                if (!client.Vehicle.GetVehicleHandler().HasTrailer)
                     return;
                 if (Array.IndexOf(allowedTrailers, client.Vehicle.GetVehicleHandler().Trailer.Model) == -1)
                 {
                     client.DisplayHelp("La remorque n'est pas homologuée pour remplir la station!", 10000);
                     return;
                 }
-                VehicleHandler fueltruck = client.Vehicle.Trailer;
+                var fueltruck = client.Vehicle.GetVehicleHandler().Trailer as VehicleHandler;
                 // Si il posséde du carburant raffiné
                 if (fueltruck.VehicleData.OilTank.Traite > 0 )
                 {

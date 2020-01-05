@@ -16,7 +16,23 @@ namespace ResurrectionRP_Server.Utils
             if (string.IsNullOrEmpty(title))
                 title = Console.Title;
 
-            Console.Title = title + $" FPS: {CalculateFrameRate()} Joueurs: {Alt.GetAllPlayers().Count} Véhicules: {VehiclesManager.GetAllVehiclesInGame().Count}";
+            var players = Alt.GetAllPlayers();
+            var vehicles = Alt.GetAllVehicles();
+
+            int joueurCount = 0;
+            int vehicleCount = 0;
+
+            lock (players)
+            {
+                joueurCount = players.Count;
+            }
+
+            lock (vehicles)
+            {
+                vehicleCount = vehicles.Count;
+            }
+
+            Console.Title = title + $" FPS: {CalculateFrameRate()} Joueurs: {joueurCount} Véhicules: {vehicleCount}";
         }
 
         public static int CalculateFrameRate()

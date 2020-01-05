@@ -64,11 +64,11 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
                 if (place.VehicleHandler == null)
                     return;
 
-                if (!place.VehicleHandler.Vehicle.Exists)
+                if (!place.VehicleHandler.Exists)
                     return;
 
-                place.VehicleHandler.Vehicle.Freeze(true);
-                place.VehicleHandler.Vehicle.Invincible(true);
+                place.VehicleHandler.Freeze(true);
+                place.VehicleHandler.Invincible(true);
 
                 string str = $"{manifest.DisplayName} \n" +
                 $"Prix $ {place.VehicleInfo.Price} \n" +
@@ -79,8 +79,8 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
 
                 place.TextLabelId = Streamer.Streamer.AddEntityTextLabel(str, place.Location.Pos, 1, 255, 255, 255, 180);
 
-                place.VehicleHandler.Vehicle.SetData("CarDealer", place);
-                place.VehicleHandler.Vehicle.SetData("CarDealerPrice", place.VehicleInfo.Price);
+                place.VehicleHandler.SetData("CarDealer", place);
+                place.VehicleHandler.SetData("CarDealerPrice", place.VehicleInfo.Price);
             }
         }
 
@@ -91,13 +91,13 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
 
             vehicleplace.VehicleHandler.SpawnVeh = false;
             vehicleplace.VehicleHandler.SetOwner(ph);
-            vehicleplace.VehicleHandler.Vehicle.ResetData("CarDealer");
+            vehicleplace.VehicleHandler.ResetData("CarDealer");
             ph.ListVehicleKey.Add(Models.VehicleKey.GenerateVehicleKey(vehicleplace.VehicleHandler));
             
             ph.Client.SendNotificationSuccess($"Vous avez acheté un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");
-            vehicleplace.VehicleHandler.Vehicle.Freeze(false);
-            vehicleplace.VehicleHandler.Vehicle.Invincible(false);
-            vehicleplace.VehicleHandler.InsertVehicle();
+            vehicleplace.VehicleHandler.Freeze(false);
+            vehicleplace.VehicleHandler.Invincible(false);
+            vehicleplace.VehicleHandler.VehicleData.InsertVehicle();
             CarDealerPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;
         }
     }

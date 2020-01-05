@@ -39,8 +39,8 @@ namespace ResurrectionRP_Server.Services
                 foreach(ParkedCar ve in poundList)
                 {
                     ve.ParkTime = DateTime.Now;
-                    Parking.RemoveVehicle(VehiclesManager.GetVehicleHandler(ve.Plate));
-                    await Pound.AddVehicleInPoundAsync(VehiclesManager.GetVehicleHandler(ve.Plate));
+                    Parking.RemoveVehicle(ve.GetVehicleHandler());
+                    await Pound.AddVehicleInPoundAsync(ve.GetVehicleHandler());
                 }
 
                 if (poundList.Count != 0)

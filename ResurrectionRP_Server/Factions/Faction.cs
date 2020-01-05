@@ -172,7 +172,7 @@ namespace ResurrectionRP_Server.Factions
         #region Event handlers
         public virtual Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
         {
-            client.SetPlayerIntoVehicle(vehicle.Vehicle);
+            client.SetPlayerIntoVehicle(vehicle);
             vehicle.LockState = AltV.Net.Enums.VehicleLockState.Unlocked;
             UpdateInBackground();
             return Task.CompletedTask;
@@ -180,7 +180,7 @@ namespace ResurrectionRP_Server.Factions
 
         private Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
         {
-            vehicle.ParkingName = FactionName;
+            vehicle.VehicleData.ParkingName = FactionName;
             UpdateInBackground();
             return Task.CompletedTask;
         }
@@ -224,7 +224,7 @@ namespace ResurrectionRP_Server.Factions
 
         public void OnVehicleEnterParking(VehicleHandler vehicle, Parking parking)
         {
-            OpenConcessMenu(vehicle?.Vehicle?.Driver, ConcessType.Vehicle, ParkingLocation, FactionName);
+            OpenConcessMenu(vehicle.Driver, ConcessType.Vehicle, ParkingLocation, FactionName);
         }
 
         public void OnPlayerEnterHeliport(IColshape colshape, IPlayer client)

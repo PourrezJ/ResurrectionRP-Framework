@@ -736,18 +736,18 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Keys
         public void AddKey(VehicleHandler veh, string keyVehicleName = null)
         {
-            if (keyVehicleName == null) ListVehicleKey.Add(new VehicleKey(veh.VehicleManifest.DisplayName, veh.Plate));
-            else ListVehicleKey.Add(new VehicleKey(keyVehicleName, veh.Plate));
+            if (keyVehicleName == null) ListVehicleKey.Add(new VehicleKey(veh.VehicleManifest.DisplayName, veh.VehicleData.Plate));
+            else ListVehicleKey.Add(new VehicleKey(keyVehicleName, veh.VehicleData.Plate));
         }
 
         public bool HasKey(VehicleHandler veh) =>
-            ListVehicleKey.Exists(k => k.Plate == veh.Plate);
+            ListVehicleKey.Exists(k => k.Plate == veh.VehicleData.Plate);
         public bool HasKey(string plate) => 
             ListVehicleKey.Exists(k => k.Plate == plate);
 
         public void RemoveKey(VehicleHandler veh)
         {
-            VehicleKey _key = ListVehicleKey.Find(k => k.Plate == veh.Plate);
+            VehicleKey _key = ListVehicleKey.Find(k => k.Plate == veh.VehicleData.Plate);
             if (_key != null)
             {
                 ListVehicleKey.Remove(_key);

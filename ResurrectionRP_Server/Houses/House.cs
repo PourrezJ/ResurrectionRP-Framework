@@ -122,12 +122,12 @@ namespace ResurrectionRP_Server.Houses
         #region Event handlers
         private void OnPlayerEnterParking(PlayerHandler player, Parking parking)
         {
-            OpenParkingMenu(player?.Client);
+            OpenParkingMenu(player.Client);
         }
 
         private void OnVehicleEnterParking(VehicleHandler vehicle, Parking parking)
         {
-            OpenParkingMenu(vehicle?.Vehicle?.Driver);
+            OpenParkingMenu(vehicle.Driver);
         }
 
         private void OnPlayerEnterColshape(IColshape colshape, IPlayer client)
@@ -173,7 +173,7 @@ namespace ResurrectionRP_Server.Houses
 
         private Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
         {
-            vehicle.ParkingName = $"{Name} {ID}";
+            vehicle.VehicleData.ParkingName = $"{Name} {ID}";
             UpdateInBackground();
             return Task.CompletedTask;
         }
@@ -181,7 +181,7 @@ namespace ResurrectionRP_Server.Houses
         private Task OnVehicleOutParking(IPlayer client, VehicleHandler vehicle, Location location)
         {
             UpdateInBackground();
-            client.SetPlayerIntoVehicle(vehicle.Vehicle);
+            client.SetPlayerIntoVehicle(vehicle);
             return Task.CompletedTask;
         }
         #endregion

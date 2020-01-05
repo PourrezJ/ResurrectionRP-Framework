@@ -196,7 +196,7 @@ namespace ResurrectionRP_Server.Factions
             if (vh == null)
                 return;
 
-            if (BankAccount.GetBankMoney(PeinturePrice, $"Peinture du véhicule {vh.Plate} par {ph.Identite.Name}"))
+            if (BankAccount.GetBankMoney(PeinturePrice, $"Peinture du véhicule {vh.VehicleData.Plate} par {ph.Identite.Name}"))
             {
                 if (menu.Id == "ID_First")
                 {
@@ -380,9 +380,9 @@ namespace ResurrectionRP_Server.Factions
                     break;
 
                 case "ID_Body":
-                    if (BankAccount.GetBankMoney(ReparBody, $"Réparation carrosserie {_vh.Plate} par {ph.Identite.Name}"))
+                    if (BankAccount.GetBankMoney(ReparBody, $"Réparation carrosserie {_vh.VehicleData.Plate} par {ph.Identite.Name}"))
                     {
-                        _vh.UpdateProperties();
+                        _vh.VehicleData.UpdateProperties();
 
                         Utils.Utils.Delay(20000, () =>
                         {
@@ -406,7 +406,7 @@ namespace ResurrectionRP_Server.Factions
                     break;
 
                 case "ID_Engine":
-                    if (BankAccount.GetBankMoney(ReparEnginePrice, $"Réparation moteur {_vh.Plate} par {ph.Identite.Name}"))
+                    if (BankAccount.GetBankMoney(ReparEnginePrice, $"Réparation moteur {_vh.VehicleData.Plate} par {ph.Identite.Name}"))
                     {
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.","C'est parti!");
 
@@ -421,19 +421,19 @@ namespace ResurrectionRP_Server.Factions
 
                             for (byte i = 0; i < veh.WheelsCount; i++)
                             {
-                                veh.SetWheelBurst(i, _vh.Wheels[i].Burst);
-                                veh.SetWheelHealth(i, _vh.Wheels[i].Health);
-                                veh.SetWheelHasTire(i, _vh.Wheels[i].HasTire);
+                                veh.SetWheelBurst(i, _vh.VehicleData.Wheels[i].Burst);
+                                veh.SetWheelHealth(i, _vh.VehicleData.Wheels[i].Health);
+                                veh.SetWheelHasTire(i, _vh.VehicleData.Wheels[i].HasTire);
                             }
 
                             for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
-                                veh.SetDoorState(i, (byte)_vh.Doors[i]);
+                                veh.SetDoorState(i, (byte)_vh.VehicleData.Doors[i]);
 
                             for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
                             {
-                                if (_vh.Windows[i] == WindowState.WindowBroken)
+                                if (_vh.VehicleData.Windows[i] == WindowState.WindowBroken)
                                     veh.SetWindowDamaged(i, true);
-                                else if (_vh.Windows[i] == WindowState.WindowDown)
+                                else if (_vh.VehicleData.Windows[i] == WindowState.WindowDown)
                                     veh.SetWindowOpened(i, true);
                             }
 
@@ -449,7 +449,7 @@ namespace ResurrectionRP_Server.Factions
                     break;
 
                 case "ID_Clean":
-                    if (BankAccount.GetBankMoney(ClearVehicle, $"Néttoyage vehicule {_vh.Plate} par {ph.Identite.Name}"))
+                    if (BankAccount.GetBankMoney(ClearVehicle, $"Néttoyage vehicule {_vh.VehicleData.Plate} par {ph.Identite.Name}"))
                     {
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~r~Démarrage~w~.","C'est parti!" );
 
@@ -527,12 +527,12 @@ namespace ResurrectionRP_Server.Factions
                 xmenu.Add(new XMenuItem("Remorquer", "", "ID_attach", XMenuItemIcons.TRUCK_LOADING_SOLID, true));
             }
 
-            if (await target.GetModelAsync() == (int)VehicleModel.Flatbed && target.GetVehicleHandler().TowTruck != null)
+            if (await target.GetModelAsync() == (int)VehicleModel.Flatbed && target.GetVehicleHandler().VehicleData.TowTruck != null)
             {
                 xmenu.Add(new XMenuItem("Détacher", "", "ID_detach", XMenuItemIcons.TRUCK_LOADING_SOLID, true));
             }
 
-            if (FactionManager.IsLSCustom(client) && await target.GetModelAsync() == (uint)VehicleModel.Flatbed && target.GetVehicleHandler().TowTruck != null && (new Vector3(target.Position.X, target.Position.Y, target.Position.Z)).DistanceTo(LSCustom.DepotVehicle) <= 10)
+            if (FactionManager.IsLSCustom(client) && await target.GetModelAsync() == (uint)VehicleModel.Flatbed && target.GetVehicleHandler().VehicleData.TowTruck != null && (new Vector3(target.Position.X, target.Position.Y, target.Position.Z)).DistanceTo(LSCustom.DepotVehicle) <= 10)
             {
                 xmenu.Add(new XMenuItem("Transfert Atelier", "", "ID_atelier", XMenuItemIcons.WRENCH_SOLID, true));
             }
@@ -569,7 +569,7 @@ namespace ResurrectionRP_Server.Factions
                 case "ID_attach":
                     client.DisplaySubtitle("L'attache de véhicule est désactivée pour le moment!", 10000);
                     XMenuManager.XMenuManager.CloseMenu(client);
-                    if (vh.TowTruck == null)
+                    if (vh.VehicleData.TowTruck == null)
                     {
                         IVehicle towtruck = null;
                         foreach(IVehicle _vh in veh.GetVehiclesInRange(20))

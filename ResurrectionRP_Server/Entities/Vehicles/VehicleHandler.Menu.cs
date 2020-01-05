@@ -46,8 +46,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     if (LockState == VehicleLockState.Unlocked)
                         xmenu.Add(new XMenuItem("Gestion des portes", "", "ID_Doors", XMenuItemIcons.DOOR_CLOSED_SOLID, executeCallback: true));
                         
-                    if (NeonColor.IsEmpty != false)
-                        xmenu.Add(new XMenuItem($"{(NeonState.Item1 ? "Eteindre" : "Allumer")} les neons", "", "ID_neons", XMenuItemIcons.LIGHTBULB_SOLID, executeCallback: true));
+                    if (VehicleData.NeonColor.IsEmpty != false)
+                        xmenu.Add(new XMenuItem($"{(VehicleData.NeonState.Item1 ? "Eteindre" : "Allumer")} les neons", "", "ID_neons", XMenuItemIcons.LIGHTBULB_SOLID, executeCallback: true));
                 }
             }
             else
@@ -55,25 +55,25 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 dynamic data = null;
                 int carPrice;
                 
-                if (Vehicle.TryGetData("CarDealer", out data))
+                if (this.TryGetData("CarDealer", out data))
                 {
-                    Vehicle.TryGetData("CarDealerPrice", out carPrice);
+                    this.TryGetData("CarDealerPrice", out carPrice);
                     xmenu.Add(new XMenuItem("Acheter", $"Acheter le véhicule pour le prix de ${ carPrice }", "ID_Buy", XMenuItemIcons.MONEY_BILL_SOLID, false));
                 }
-                else if (Vehicle.GetData("RentShop", out data))
+                else if (GetData("RentShop", out data))
                     xmenu.Add(new XMenuItem("Louer", $"Louer le véhicule pour le prix de ${ data.VehicleInfo.Price}", "ID_Rent", XMenuItemIcons.MONEY_BILL_SOLID, false));
-                else if (_playerHandler.ListVehicleKey.Exists(key => key.Plate == Plate))
+                else if (_playerHandler.ListVehicleKey.Exists(key => key.Plate == VehicleData.Plate))
                     xmenu.Add(LockState == VehicleLockState.Locked ? new XMenuItem("Déverrouiller", "Déverrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_OPEN_SOLID, false)
                         : new XMenuItem("Verrouiller", "Vérrouille le véhicule", "ID_LockUnlockVehicle", XMenuItemIcons.LOCK_SOLID, false));
             }
 
-            if ((LockState == VehicleLockState.Unlocked || _playerHandler.ListVehicleKey.Exists(key => key.Plate == Plate)) && Inventory != null)
+            if ((LockState == VehicleLockState.Unlocked || _playerHandler.ListVehicleKey.Exists(key => key.Plate == VehicleData.Plate)) && VehicleData.Inventory != null)
                 xmenu.Add(new XMenuItem("Inventaire", "Ouvre l'inventaire du véhicule", "ID_OpenInventory", XMenuItemIcons.SUITCASE_SOLID, false));
             
-            if (hasTrailer)
+            if (HasTrailer)
                 xmenu.Add(new XMenuItem("Remorque", "Détacher la remorque", "ID_DetachTrailer", XMenuItemIcons.TRAIN_SOLID, false));
 
-            if (OwnerID == client.GetSocialClub() && !SpawnVeh)
+            if (VehicleData.OwnerID == client.GetSocialClub() && !SpawnVeh)
                 xmenu.Add(new XMenuItem("Donner le véhicule", "", "ID_give", XMenuItemIcons.HAND_HOLDING_SOLID, true));
 
             if (_playerHandler.StaffRank >= StaffRank.Helper)
@@ -87,7 +87,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (FactionManager.IsLSCustom(client) || FactionManager.IsLspd(client) || FactionManager.IsMedic(client) || FactionManager.IsNordiste(client))
                 xmenu.Add(new XMenuItem("Faction", "", "ID_Faction", XMenuItemIcons.ID_BADGE_SOLID, false));
 
-            if (Array.IndexOf(Farms.Petrol.allowedTrailers, (VehicleModel)Vehicle.Model) != -1)
+            if (Array.IndexOf(Farms.Petrol.allowedTrailers, (VehicleModel)Model) != -1)
                 xmenu.Add(new XMenuItem("Voir le litrage de la citerne", "", "ID_citerne", XMenuItemIcons.GAS_PUMP_SOLID, true));
 
             xmenu.OpenXMenu(client);
@@ -124,7 +124,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         private void VehicleXMenuCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
-            if (Vehicle == null || !Vehicle.Exists)
+            if (!Exists)
                 return;
 
             switch (menuItem.Id)
@@ -136,20 +136,20 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     break;
                 
                 case "ID_OpenInventory":
-                    if (Inventory == null)
+                    if (VehicleData.Inventory == null)
                         return;
 
-                    if (RPGInventoryManager.HasInventoryOpen(Inventory))
+                    if (RPGInventoryManager.HasInventoryOpen(VehicleData.Inventory))
                     {
                         client.SendNotificationError("Le coffre est déjà occupé.");
                         return;
                     }
 
                     XMenuManager.XMenuManager.CloseMenu(client);
-                    var inv = new RPGInventoryMenu(_playerHandler.PocketInventory, _playerHandler.OutfitInventory, _playerHandler.BagInventory, Inventory);
+                    var inv = new RPGInventoryMenu(_playerHandler.PocketInventory, _playerHandler.OutfitInventory, _playerHandler.BagInventory, VehicleData.Inventory);
                     inv.OnOpen = (IPlayer c, RPGInventoryMenu m) =>
                     {
-                        Inventory.Locked = true;
+                        VehicleData.Inventory.Locked = true;
                     };
 
                     inv.OnMove = (IPlayer c, RPGInventoryMenu m) =>
@@ -162,7 +162,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                     inv.OnClose = (IPlayer c, RPGInventoryMenu m) =>
                     {
-                        Inventory.Locked = false;
+                        VehicleData.Inventory.Locked = false;
                     };
                     inv.OpenMenu(client);
                     break;
@@ -215,7 +215,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     break;
                     */
                 case "ID_Start":
-                    EngineOn = !Vehicle.EngineOn;
+                    EngineOn = !EngineOn;
                     UpdateInBackground();
                     XMenuManager.XMenuManager.CloseMenu(client);
                     break;
@@ -240,7 +240,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                             if (destinataire != null)
                             {
                                 SetOwner(destinataire);
-                                var vehinfo = VehicleInfoLoader.VehicleInfoLoader.Get(Vehicle.Model);
+                                var vehinfo = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
                                 _client.SendNotificationSuccess("Vous avez donné votre " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " à " + destinataire.Identite.Name);
                                 destinataire.Client.SendNotificationSuccess("Vous avez reçu un(e) " + vehinfo.LocalizedManufacturer + " " + vehinfo.LocalizedName + " par " + _client.GetPlayerHandler()?.Identite.Name);
 
@@ -264,15 +264,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         XMenuManager.XMenuManager.CloseMenu(client);
                         int carPrice;
 
-                        if (Vehicle.TryGetData("CarDealer", out dynamic _data) == true)
+                        if (this.TryGetData("CarDealer", out dynamic _data) == true)
                         {
-                            Vehicle.TryGetData("CarDealerPrice", out carPrice);
+                            this.TryGetData("CarDealerPrice", out carPrice);
                             Loader.CarDealerLoader.CarDealerPlace _place = _data;
                             PlayerHandler ph = client.GetPlayerHandler();
 
                             if (ph != null)
                             {
-                                if (ph.HasBankMoney(carPrice, $"Achat de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
+                                if (ph.HasBankMoney(carPrice, $"Achat de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.VehicleData.Plate}."))
                                     _place.CarDealer.BuyCar(_place, ph);
                                 else
                                     client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque");
@@ -289,14 +289,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     {
                         XMenuManager.XMenuManager.CloseMenu(client);
 
-                        if (Vehicle.TryGetData("RentShop", out dynamic _data) == true)
+                        if (this.TryGetData("RentShop", out dynamic _data) == true)
                         {
                             Loader.VehicleRentLoader.VehicleRentPlace _place = _data;
                             PlayerHandler ph = client.GetPlayerHandler();
 
                             if (ph != null)
                             {
-                                if (ph.HasBankMoney(_place.VehicleInfo.Price, $"Location de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.Plate}."))
+                                if (ph.HasBankMoney(_place.VehicleInfo.Price, $"Location de véhicule {_place.VehicleInfo.Name} {_place.VehicleHandler.VehicleData.Plate}."))
                                     _place.RentShop.RentCar(_place, ph);
                                 else
                                     client.SendNotificationError("Vous n'avez pas assez d'argent sur votre compte en banque");
@@ -337,12 +337,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 case "ID_Faction":
                     menu.ClearItems();
-                    FactionManager.AddFactionVehicleMenu(client, Vehicle, menu);
+                    FactionManager.AddFactionVehicleMenu(client, this, menu);
                     menu.OpenXMenu(client);
                     break;
 
                 case "ID_citerne":
-                    client.DisplaySubtitle($"Contenu de la citerne: {OilTank.Traite}", 5000);
+                    client.DisplaySubtitle($"Contenu de la citerne: {VehicleData.OilTank.Traite}", 5000);
                     XMenuManager.XMenuManager.CloseMenu(client);
                     break;
 

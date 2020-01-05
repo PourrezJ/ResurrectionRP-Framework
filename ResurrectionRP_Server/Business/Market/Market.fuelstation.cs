@@ -56,13 +56,13 @@ namespace ResurrectionRP_Server.Business
 
                 VehicleHandler vh = vehicle.GetVehicleHandler();
 
-                if (vh.Fuel > (vh.FuelMax - 2))
+                if (vh.VehicleData.Fuel > (vh.VehicleData.FuelMax - 2))
                 {
                     client.DisplaySubtitle("Il se peut que certains véhicule n'aient pas besoin de plein!", 10000);
                     continue;
                 }
 
-                MenuItem item = new MenuItem(vh.VehicleManifest.DisplayName, rightLabel: vh.Plate, executeCallback: true);
+                MenuItem item = new MenuItem(vh.VehicleManifest.DisplayName, rightLabel: vh.VehicleData.Plate, executeCallback: true);
                 item.SetData("Vehicle", vh);
                 menu.Add(item);
             }
@@ -145,9 +145,9 @@ namespace ResurrectionRP_Server.Business
                     if (vh == null)
                         return Task.CompletedTask;
 
-                    maxFuel = vh.FuelMax - vh.Fuel;
+                    maxFuel = vh.VehicleData.FuelMax - vh.VehicleData.Fuel;
 
-                    if ((vh.FuelMax - vh.Fuel) > Station.Litrage && Station.Litrage > 0)
+                    if ((vh.VehicleData.FuelMax - vh.VehicleData.Fuel) > Station.Litrage && Station.Litrage > 0)
                     {
                         maxFuel = Station.Litrage;
                         client.DisplaySubtitle("Il n'y a pas assez d'essence pour faire le plein, \nvous serez remplis à hauteur du possible !", 10000);
@@ -160,11 +160,11 @@ namespace ResurrectionRP_Server.Business
                     {
                         if (reponse && Station.Litrage >= maxFuel)
                         {
-                            if (client.GetPlayerHandler().HasBankMoney(price, $"Plein d'essence {vh.Plate}."))
+                            if (client.GetPlayerHandler().HasBankMoney(price, $"Plein d'essence {vh.VehicleData.Plate}."))
                             {
-                                vh.Fuel += maxFuel;
+                                vh.VehicleData.Fuel += maxFuel;
                                 Station.Litrage -= maxFuel;
-                                BankAccount.AddMoney(price, $"Plein du véhicule {vh.Plate}");
+                                BankAccount.AddMoney(price, $"Plein du véhicule {vh.VehicleData.Plate}");
                                 client.DisplaySubtitle($"Le plein est fait.\n Vous avez payé ~r~${price}", 6000);
                                 UpdateInBackground();
                             }
@@ -198,7 +198,7 @@ namespace ResurrectionRP_Server.Business
 
             if (client.IsInVehicle)
             {
-                if (!client.Vehicle.GetVehicleHandler().hasTrailer)
+                if (!client.Vehicle.GetVehicleHandler().HasTrailer)
                     return;
 
                 if (Array.IndexOf(allowedTrailers, client.Vehicle.GetVehicleHandler().Trailer.Model) == -1)
@@ -210,7 +210,7 @@ namespace ResurrectionRP_Server.Business
                 IVehicle fueltruck = (IVehicle)client.Vehicle.GetVehicleHandler().Trailer;
                 VehicleHandler hfuel = ((IVehicle)(client.Vehicle.GetVehicleHandler().Trailer)).GetVehicleHandler();
                 var data = Convert.ToInt32(menuItem.InputValue);
-                if (data > 0 && hfuel.OilTank.Traite >= data)
+                if (data > 0 && hfuel.VehicleData.OilTank.Traite >= data)
                 {
                     if (_ravitaillement || _utilisateurRavi != null)
                     {
@@ -269,11 +269,11 @@ namespace ResurrectionRP_Server.Business
                                 Updater = (data - EssenceTransfert);
 
                             Station.Litrage += Updater;
-                            hfuel.OilTank.Traite -= Updater;
+                            hfuel.VehicleData.OilTank.Traite -= Updater;
                             EssenceTransfert += Updater;
                             _ravitaillement = true;
 
-                            client.DisplayHelp("Station service \nLitres en station: " + Station.Litrage + "\nLitres dans le camion: " + hfuel.OilTank.Traite, 30000);
+                            client.DisplayHelp("Station service \nLitres en station: " + Station.Litrage + "\nLitres dans le camion: " + hfuel.VehicleData.OilTank.Traite, 30000);
                         }, 1250);
                     });
                 }

@@ -61,7 +61,7 @@ namespace ResurrectionRP_Server.Database
             if (objet.GetType() == typeof(GameMode))
             {
                 GameMode gameMode = (GameMode)objet;
-                return $"Players: {Alt.GetAllPlayers().Count} - Vehicles: {VehiclesManager.VehicleHandlerList.Count}";
+                return $"Players: {Alt.GetAllPlayers().Count} - Vehicles: {Alt.GetAllVehicles().Count}";
             }
             else if (objet.GetType() == typeof(PlayerHandler))
             {
@@ -71,7 +71,7 @@ namespace ResurrectionRP_Server.Database
             else if (objet.GetType() == typeof(VehicleHandler))
             {
                 VehicleHandler vehicle = (VehicleHandler)objet;
-                return $"Vehicle: {vehicle.Plate} - Owner: {vehicle.OwnerID} - Last driver: {vehicle.LastDriver}";
+                return $"Vehicle: {vehicle.VehicleData.Plate} - Owner: {vehicle.VehicleData.OwnerID} - Last driver: {vehicle.VehicleData.LastDriver}";
             }
             else if (objet.GetType() == typeof(CarPark))
             {

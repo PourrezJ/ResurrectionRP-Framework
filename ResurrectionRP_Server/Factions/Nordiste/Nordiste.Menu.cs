@@ -358,7 +358,7 @@ namespace ResurrectionRP_Server.Factions
                 Identite identite = null;
                 string infos = string.Empty;
 
-                string ownerId = target.GetVehicleHandler()?.OwnerID;
+                string ownerId = target.GetVehicleHandler()?.VehicleData.OwnerID;
                 if (!string.IsNullOrEmpty(ownerId))
                 {
                     var player = PlayerManager.GetPlayerBySCN(ownerId);
@@ -368,7 +368,7 @@ namespace ResurrectionRP_Server.Factions
                     if (vh == null)
                         return;
 
-                    if (!vh.PlateHide)
+                    if (!vh.VehicleData.PlateHide)
                     {
                         identite = (player != null) ? player.Identite : await Identite.GetOfflineIdentite(ownerId);
 

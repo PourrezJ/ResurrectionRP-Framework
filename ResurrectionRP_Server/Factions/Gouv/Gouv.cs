@@ -158,8 +158,8 @@ namespace ResurrectionRP_Server.Factions
         {
             if (VehicleAllowed.Exists(p => (uint)p.Hash == vehicleHandler.Model))
             {
-                if (vehicleHandler.Inventory == null)
-                    vehicleHandler.Inventory = new Inventory.Inventory(40, 20);
+                if (vehicleHandler.VehicleData.Inventory == null)
+                    vehicleHandler.VehicleData.Inventory = new Inventory.Inventory(40, 20);
             }
 
             return base.OnVehicleOut(client, vehicleHandler, location);

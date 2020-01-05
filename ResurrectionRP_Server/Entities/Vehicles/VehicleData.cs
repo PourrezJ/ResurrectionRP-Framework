@@ -1,21 +1,22 @@
-﻿using AltV.Net.Async;
+﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.Options;
 using ResurrectionRP.Entities.Vehicles.Data;
-using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Entities.Vehicles.Data;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
-using WindowState = ResurrectionRP_Server.Entities.Vehicles.WindowState;
+using System.Threading.Tasks;
 
-namespace ResurrectionRP_Server.Database
+namespace ResurrectionRP_Server.Entities.Vehicles
 {
     public class VehicleData
     {
@@ -75,7 +76,7 @@ namespace ResurrectionRP_Server.Database
 
         public Inventory.Inventory Inventory { get; set; }
 
-
+        [BsonIgnore]
         public VehicleHandler Vehicle;
 
         public float Fuel
@@ -94,7 +95,7 @@ namespace ResurrectionRP_Server.Database
                 if (_fuel == 0)
                 {
                     EngineOn = false;
-                    Vehicle.UpdateInBackground(false);
+                    Vehicle?.UpdateInBackground(false);
                 }
 
                 if (Math.Ceiling(oldFuel * 10) != Math.Ceiling(_fuel * 10) && Vehicle != null && Vehicle.Driver != null && Vehicle.Driver.Exists)
@@ -577,6 +578,150 @@ namespace ResurrectionRP_Server.Database
             }
 
             _previousUpdate = updateTime;
+        }
+
+        public async Task<bool> DeleteAsync(bool perm = false)
+        {
+            await AltAsync.Do(() =>
+            {
+                if (Vehicle != null && Vehicle.Exists)
+                    Vehicle.Remove();
+            });
+
+            if (perm && !Vehicle.SpawnVeh)
+            {
+                //_cancelUpdate = true;
+
+                if (!await Vehicle.RemoveInDatabase())
+                    return false;
+            }
+            /*
+            if (perm || Vehicle.SpawnVeh)
+                VehiclesManager.DeleteVehicleHandler(this);
+                */
+            return true;
+        }
+
+        public IVehicle SpawnVehicle(Location location = null, bool setLastUse = true)
+        {
+            //Dimension = GameMode.GlobalDimension;
+            try
+            {
+                if (location != null)
+                    Location = location;
+                Vehicle = new VehicleHandler(Model, Location.Pos, Location.GetRotation());
+            }
+            catch (Exception ex)
+            {
+                Alt.Server.LogError("SpawnVehicle: " + ex);
+            }
+            if (Vehicle == null)
+                return null;
+            Vehicle.ModKit = 1;
+            Vehicle.SetData("VehicleHandler", this);
+            Vehicle.NumberplateText = Plate;
+            Vehicle.PrimaryColor = PrimaryColor;
+            Vehicle.SecondaryColor = SecondaryColor;
+            Vehicle.PearlColor = PearlColor;
+            if (Mods.Count > 0)
+            {
+                foreach (KeyValuePair<byte, byte> mod in Mods)
+                {
+                    Vehicle.SetMod(mod.Key, mod.Value);
+                    if (mod.Key == 69)
+                        Vehicle.WindowTint = mod.Value;
+                }
+            }
+            // BUG v792 : NeonState and NeonColor not working properly
+            if (NeonColor != null && NeonColor != Color.Empty)
+                Vehicle.NeonColor = NeonColor;
+            Vehicle.SetNeonActive(NeonState.Item1, NeonState.Item2, NeonState.Item3, NeonState.Item4);
+            Vehicle.SetSyncedMetaData("NeonColor", NeonColor.ToArgb());
+            Vehicle.SetSyncedMetaData("NeonState", NeonState.Item1);
+            Vehicle.DirtLevel = DirtLevel;
+            Vehicle.LockState = LockState;
+            Vehicle.EngineOn = EngineOn;
+            Vehicle.EngineHealth = EngineHealth;
+            Vehicle.BodyHealth = BodyHealth;
+            Vehicle.RadioStation = RadioStation;
+
+            if (Wheels == null)
+            {
+                Wheel[] wheels = new Wheel[Vehicle.WheelsCount];
+                for (int i = 0; i < wheels.Length; i++)
+                    wheels[i] = new Wheel();
+                Wheels = wheels;
+            }
+            for (byte i = 0; i < Vehicle.WheelsCount; i++)
+            {
+                Vehicle.SetWheelBurst(i, Wheels[i].Burst);
+                Vehicle.SetWheelHealth(i, Wheels[i].Health);
+                Vehicle.SetWheelHasTire(i, Wheels[i].HasTire);
+            }
+
+            for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
+                Vehicle.SetDoorState(i, (byte)Doors[i]);
+            for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
+            {
+                if (Windows[i] == WindowState.WindowBroken)
+                    Vehicle.SetWindowDamaged(i, true);
+                else if (Windows[i] == WindowState.WindowDown)
+                    Vehicle.SetWindowOpened(i, true);
+            }
+            Vehicle.SetBumperDamageLevel(VehicleBumper.Front, FrontBumperDamage);
+            Vehicle.SetBumperDamageLevel(VehicleBumper.Rear, RearBumperDamage);
+            Vehicle.SetWindowTint(WindowTint);
+            Vehicle.SetSyncedMetaData("torqueMultiplicator", TorqueMultiplicator);
+            Vehicle.SetSyncedMetaData("powerMultiplicator", PowerMultiplicator);
+            if (setLastUse)
+                LastUse = DateTime.Now;
+            _previousPosition = Location.Pos;
+            //Vehicle.Dimension = Dimension;
+            Vehicle.VehicleManifest = VehicleInfoLoader.VehicleInfoLoader.Get(Model);
+            // Needed as vehicles in database don't have this value
+            if ((Vehicle.VehicleManifest.fuelConsum <= 0 || Vehicle.VehicleManifest.fuelReservoir <= 0) && Vehicle.VehicleManifest.VehicleClass != 13)
+            {
+                Alt.Server.LogError("Erreur sur le chargement d'un véhicule, le fuel réservoir ou la consommation existe pas : " + Vehicle.Model);
+                FuelConsumption = 5.5f;
+                FuelMax = 70;
+            }
+            if (FuelMax == 100)
+            {
+                FuelConsumption = Vehicle.VehicleManifest.fuelConsum;
+                FuelMax = Vehicle.VehicleManifest.fuelReservoir;
+            }
+            if (Fuel > FuelMax)
+                Fuel = FuelMax;
+            //VehiclesManager.VehicleHandlerList.TryAdd(Vehicle, this);
+            /*
+            if (HaveTowVehicle())
+            {
+                IVehicle _vehtowed = VehiclesManager.GetVehicleWithPlate(TowTruck.VehPlate);
+                if (_vehtowed != null)
+                    Task.Run(async () => { await TowVehicle(_vehtowed); });
+            }*/
+            ParkingName = string.Empty;
+            IsInPound = false;
+            IsParked = false;
+            return Vehicle;
+        }
+
+        public void InsertVehicle()
+        {
+            Task.Run(async () =>
+            {
+                try
+                {
+                    if (Vehicle != null && Vehicle.SpawnVeh)
+                        return;
+
+                    await Database.MongoDB.Insert("vehicles", this);
+                }
+                catch (BsonException be)
+                {
+                    Alt.Server.LogError(be.Message);
+                }
+            });
         }
     }
 }

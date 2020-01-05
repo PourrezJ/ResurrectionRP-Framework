@@ -21,7 +21,7 @@ namespace ResurrectionRP_Server.Models
         public static VehicleKey GenerateVehicleKey(Entities.Vehicles.VehicleHandler veh)
         {
             VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get(veh.Model);
-            return new VehicleKey(manifest.DisplayName, veh.Plate);
+            return new VehicleKey(manifest.DisplayName, veh.VehicleData.Plate);
         }
         #endregion
     }

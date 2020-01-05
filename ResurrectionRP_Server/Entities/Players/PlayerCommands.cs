@@ -2,6 +2,7 @@ using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Database;
 using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Factions;
 using ResurrectionRP_Server.Factions.Model;
@@ -82,11 +83,11 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                 }
 
-                IEnumerable<VehicleHandler> vehicles = VehiclesManager.GetAllVehicles().ToArray();
+                IEnumerable<VehicleData> vehicles = VehiclesManager.GetAllVehicles();
 
-                foreach (VehicleHandler vehicle in vehicles)
+                foreach (var vehicleData in vehicles)
                 {
-                    if (vehicle.OwnerID != phWipe.PID)
+                    if (vehicleData.OwnerID != phWipe.PID)
                         continue;
 
                     foreach (Parking parking in Parking.ParkingList)
@@ -95,7 +96,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                         foreach (ParkedCar parkedCar in parking.ListVehicleStored)
                         {
-                            if (parkedCar.Plate == vehicle.Plate)
+                            if (parkedCar.Plate == vehicleData.Plate)
                             {
                                 parking.ListVehicleStored.Remove(parkedCar);
                                 saveNeeded = true;
@@ -106,7 +107,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             await parking.OnSaveNeeded();
                     }
 
-                    await vehicle.DeleteAsync(true);
+                    await vehicleData.DeleteAsync(true);
                 }
 
                 foreach (var faction in FactionManager.FactionList)
@@ -214,7 +215,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
 
             if (player.Vehicle.GetVehicleHandler() != null)
-                player.Vehicle.GetVehicleHandler().Fuel = player.Vehicle.GetVehicleHandler().FuelMax;
+                player.Vehicle.GetVehicleHandler().VehicleData.Fuel = player.Vehicle.GetVehicleHandler().VehicleData.FuelMax;
 
             player.DisplaySubtitle("Essence restaurée", 5000);
         }
@@ -228,7 +229,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
 
             if (player.Vehicle.GetVehicleHandler() != null && double.TryParse(args[0], out double fuel))
-                player.Vehicle.GetVehicleHandler().Fuel = (float)Math.Min(fuel, player.Vehicle.GetVehicleHandler().FuelMax);
+                player.Vehicle.GetVehicleHandler().VehicleData.Fuel = (float)Math.Min(fuel, player.Vehicle.GetVehicleHandler().VehicleData.FuelMax);
 
             player.SendNotificationSuccess("Quantité d'essence mise à jour");
         }
@@ -282,7 +283,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
             }
 
-            player.Vehicle.GetVehicleHandler().NeonState = new Tuple<bool, bool, bool, bool>(bool.Parse(args[0]), bool.Parse(args[0]), bool.Parse(args[0]), bool.Parse(args[0]));
+            player.Vehicle.GetVehicleHandler().VehicleData.NeonState = new Tuple<bool, bool, bool, bool>(bool.Parse(args[0]), bool.Parse(args[0]), bool.Parse(args[0]), bool.Parse(args[0]));
         }
     }
 }

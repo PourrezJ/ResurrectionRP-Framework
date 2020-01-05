@@ -257,8 +257,8 @@ namespace ResurrectionRP_Server.Factions
         {
             if (VehicleAllowed.Exists(p => (uint)p.Hash == vehicle.Model))
             {
-                if (vehicle.Inventory == null)
-                    vehicle.Inventory = new Inventory.Inventory(40, 20);
+                if (vehicle.VehicleData.Inventory == null)
+                    vehicle.VehicleData.Inventory = new Inventory.Inventory(40, 20);
             }
 
             return base.OnVehicleOut(client, vehicle, location);

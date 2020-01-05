@@ -404,7 +404,7 @@ namespace ResurrectionRP_Server.Society.Societies
 
             var mods = manifest.Mods(_modType).OrderBy(m => m.Key).Select(m => m.Value);
             var perfdata = Data.GetPerformanceData(_modType).Value;
-            vh.Mods.TryGetValue(_modType, out byte valueInstalled);
+            vh.VehicleData.Mods.TryGetValue(_modType, out byte valueInstalled);
 
             for (int i = 0; i < mods.Count(); i++)
             {
@@ -467,8 +467,8 @@ namespace ResurrectionRP_Server.Society.Societies
 
             if (menuItem == null)
             {
-                if (vh.Mods.ContainsKey(_modType))
-                    VehicleBench.SetMod(_modType, vh.Mods[_modType]);
+                if (vh.VehicleData.Mods.ContainsKey(_modType))
+                    VehicleBench.SetMod(_modType, vh.VehicleData.Mods[_modType]);
                 else
                     VehicleBench.SetMod(_modType, 0);
 
@@ -582,7 +582,7 @@ namespace ResurrectionRP_Server.Society.Societies
             menu.Finalizer = Finalizer;
 
             var mods = manifest.Mods(_modType).OrderBy(m => m.Key).Select(m => m.Value);
-            vh.Mods.TryGetValue(_modType, out byte valueInstalled);
+            vh.VehicleData.Mods.TryGetValue(_modType, out byte valueInstalled);
 
             for (int i = 0; i < mods.Count(); i++)
             {
@@ -640,16 +640,16 @@ namespace ResurrectionRP_Server.Society.Societies
 
             if (menuItem == null)
             {
-                if (_modType == 14 && vh.Mods.ContainsKey(_modType))
-                    HornStop(VehicleBench, vh.Mods[_modType]);
+                if (_modType == 14 && vh.VehicleData.Mods.ContainsKey(_modType))
+                    HornStop(VehicleBench, vh.VehicleData.Mods[_modType]);
                 else if (_modType == 14)
                     HornStop(VehicleBench, 0);
-                else if (_modType == 69 && vh.Mods.ContainsKey(_modType))
-                    VehicleBench.SetWindowTint(Utils.Utils.GetWindowTint(vh.Mods[_modType]));
+                else if (_modType == 69 && vh.VehicleData.Mods.ContainsKey(_modType))
+                    VehicleBench.SetWindowTint(Utils.Utils.GetWindowTint(vh.VehicleData.Mods[_modType]));
                 else if (_modType == 69)
                     VehicleBench.SetWindowTint(WindowTint.None);
-                else if (vh.Mods.ContainsKey(_modType))
-                    VehicleBench.SetMod(_modType, vh.Mods[_modType]);
+                else if (vh.VehicleData.Mods.ContainsKey(_modType))
+                    VehicleBench.SetMod(_modType, vh.VehicleData.Mods[_modType]);
                 else
                     VehicleBench.SetMod(_modType, 0);
 
@@ -754,18 +754,18 @@ namespace ResurrectionRP_Server.Society.Societies
                 return;
             }
 
-            if (vh.Mods.Count == 0)
+            if (vh.VehicleData.Mods.Count == 0)
             {
                 client.SendNotificationError("Aucune amélioration n'est disponible sur le véhicule!");
                 return;
             }
-            else if (vh.Mods.Count >= 1)
+            else if (vh.VehicleData.Mods.Count >= 1)
             {
                 Menu menu = new Menu("ID_Histo", "", "Historique :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, MenuBanner);
                 menu.ItemSelectCallback = HistoricMenuCallback;
                 menu.Finalizer = Finalizer;
 
-                foreach (var mod in vh.Mods)
+                foreach (var mod in vh.VehicleData.Mods)
                 {
                     VehicleMod modData;
 
@@ -789,7 +789,7 @@ namespace ResurrectionRP_Server.Society.Societies
                     }
                 }
 
-                if (vh.NeonColor != null && !vh.NeonColor.IsEmpty)
+                if (vh.NeonColor != null && !vh.VehicleData.NeonColor.IsEmpty)
                 {
                     Color color = vh.NeonColor;
                     menu.Add(new MenuItem($"Néons : Rouge {color.R / 17} - Vert {color.G / 17} - Bleu {color.B / 17}"));
@@ -892,10 +892,10 @@ namespace ResurrectionRP_Server.Society.Societies
                     return;
                 }
 
-                vh.Mods.AddOrUpdate(_modType, selected, (key, oldvalue) => selected);
+                vh.VehicleData.Mods.AddOrUpdate(_modType, selected, (key, oldvalue) => selected);
                 
                 if (_modType == 69)
-                    vh.WindowTint = Utils.Utils.GetWindowTint(selected);
+                    vh.VehicleData.WindowTint = Utils.Utils.GetWindowTint(selected);
                 else
                     VehicleBench.SetMod(_modType, selected);
                     

@@ -74,7 +74,7 @@ namespace ResurrectionRP_Server.DrivingSchool
 
         private void endTraj()
         {
-            this.End();
+            Task.Run(()=>this.End());
         }
 
         private Task VehicleChecker(IPlayer client, object[] args)
@@ -92,7 +92,7 @@ namespace ResurrectionRP_Server.DrivingSchool
         {
             if (seat != 1)
                 return;
-            if (vehicle != this.Vehicle.Vehicle)
+            if (vehicle != this.Vehicle)
                 return;
             client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANDREAS, "Auto-Ecole", "Information", "Ok! Maintenant allumer le moteur ~r~(F3) ~w~et rendez-vous au prochain point.");
             NextTraj();

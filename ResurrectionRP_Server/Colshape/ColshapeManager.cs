@@ -178,26 +178,31 @@ namespace ResurrectionRP_Server.Colshape
                 }
             }
 
-            foreach (IVehicle vehicle in VehiclesManager.GetAllVehiclesInGame())
+            var vehicles = Alt.GetAllVehicles();
+
+            lock (vehicles)
             {
-                if (!vehicle.Exists)
-                    continue;
-
-                lock (_colshapes)
+                foreach (IVehicle vehicle in vehicles)
                 {
-                    foreach (IColshape colshape in _colshapes.Values)
-                    {
-                        if (!colshape.IsEntityIn(vehicle) && colshape.IsEntityInside(vehicle))
-                        {
-                            colshape.AddEntity(vehicle);
-                            OnVehicleEnterColshape?.Invoke(colshape, vehicle);
+                    if (!vehicle.Exists)
+                        continue;
 
-                            if (GameMode.IsDebug)
-                                Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} entering, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
+                    lock (_colshapes)
+                    {
+                        foreach (IColshape colshape in _colshapes.Values)
+                        {
+                            if (!colshape.IsEntityIn(vehicle) && colshape.IsEntityInside(vehicle))
+                            {
+                                colshape.AddEntity(vehicle);
+                                OnVehicleEnterColshape?.Invoke(colshape, vehicle);
+
+                                if (GameMode.IsDebug)
+                                    Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} entering, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
+                            }
                         }
                     }
                 }
-            }
+            }     
         }
 
         private static void OnEntityInteractInColshape(IPlayer client, object[] args)

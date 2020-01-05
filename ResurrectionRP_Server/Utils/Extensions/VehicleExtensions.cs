@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System;
 using AltV.Net.Enums;
 using ResurrectionRP_Server.Utils;
+using System.Linq;
 
 namespace ResurrectionRP_Server
 {
@@ -15,7 +16,7 @@ namespace ResurrectionRP_Server
     {
         public static VehicleHandler GetVehicleHandler(this IVehicle vehicle)
         {
-            return VehiclesManager.GetVehicleHandler(vehicle);
+            return vehicle as VehicleHandler;
         }
 
         public static Vector3 GetVehicleVector(this IVehicle vehicle)
@@ -26,23 +27,25 @@ namespace ResurrectionRP_Server
 
         public static List<IVehicle> GetVehiclesInRange(this IVehicle client, int Range)
         {
-            // BUG v752 : La liste des véhicules renvoie des véhicules supprimés
-            // var vehs = Alt.GetAllVehicles();
-            var vehs = VehiclesManager.GetAllVehiclesInGame();
-
             List<IVehicle> endup = new List<IVehicle>();
-            var position = client.GetPosition();
-            Vector3 osition = new Vector3(position.X, position.Y, position.Z);
-            foreach (IVehicle veh in vehs)
+
+            var vehs = Alt.GetAllVehicles();
+            lock (vehs)
             {
-                if (!veh.Exists)
-                    continue;
-                var vehpos = veh.GetPosition();
-                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= Range)
+                var position = client.GetPosition();
+                Vector3 osition = new Vector3(position.X, position.Y, position.Z);
+                foreach (IVehicle veh in vehs)
                 {
-                    endup.Add(veh);
+                    if (!veh.Exists)
+                        continue;
+                    var vehpos = veh.GetPosition();
+                    if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= Range)
+                    {
+                        endup.Add(veh);
+                    }
                 }
             }
+            
             return endup;
         }
 

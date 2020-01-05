@@ -15,6 +15,7 @@ using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Factions;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Database;
 
 namespace ResurrectionRP_Server.Services
 {
@@ -65,7 +66,7 @@ namespace ResurrectionRP_Server.Services
             {
                 VehicleHandler _vh = vehicle.GetVehicleHandler();
 
-                if (_vh.TowTruck != null)
+                if (_vh.VehicleData.TowTruck != null)
                 {
                     AcceptMenu _accept = AcceptMenu.OpenMenu(client, "Fourrière", "Voulez-vous mettre en fourrière le véhicule?");
                     _accept.AcceptMenuCallBack = AcceptMenuCallBack;
@@ -83,7 +84,7 @@ namespace ResurrectionRP_Server.Services
                 VehicleHandler _vh = vehicle.GetVehicleHandler();
                 if (_vh != null)
                 {
-                    VehicleHandler _towedvehicle = VehiclesManager.GetVehicleHandler(_vh.TowTruck.Vehicle);
+                    VehicleHandler _towedvehicle = _vh.GetVehicleHandler();
 
                     if (_towedvehicle != null)
                     {
@@ -91,18 +92,15 @@ namespace ResurrectionRP_Server.Services
 
                         if (ph != null)
                         {
-                            if (VehiclesManager.VehicleHandlerList.Remove(_towedvehicle.Vehicle, out _))
-                            {
-                                Factions.FactionManager.LSCustom.BankAccount.AddMoney(750, $"Mise en fourrière {_towedvehicle.Plate} par {ph.Identite.Name}");
-                                ph.AddMoney(250);
+                            Factions.FactionManager.LSCustom.BankAccount.AddMoney(750, $"Mise en fourrière {_towedvehicle.VehicleData.Plate} par {ph.Identite.Name}");
+                            ph.AddMoney(250);
 
-                                _vh.TowTruck = null;
-                                _towedvehicle.IsInPound = true;
-                                _vh.UpdateProperties();
-                                _towedvehicle.UpdateInBackground(false, true);
-                                await _towedvehicle.DeleteAsync(false);
-                                MenuManager.CloseMenu(client);
-                            }
+                            _vh.VehicleData.TowTruck = null;
+                            _towedvehicle.VehicleData.IsInPound = true;
+                            _vh.VehicleData.UpdateProperties();
+                            _towedvehicle.UpdateInBackground(false, true);
+                            await _towedvehicle.DeleteAsync(false);
+                            MenuManager.CloseMenu(client);
                         }
                     }
                 }
@@ -154,14 +152,14 @@ namespace ResurrectionRP_Server.Services
                 if (ph.HasMoney(Price))
                 {
                     VehicleHandler veh = menuItem.GetData("Vehicle");
-                    veh.IsInPound = false;
-                    veh.LastUse = DateTime.Now;
-                    await veh.SpawnVehicleAsync(new Location(_poundSpawn.Pos, _poundSpawn.Rot.ConvertRotationToRadian()));
+                    veh.VehicleData.IsInPound = false;
+                    veh.VehicleData.LastUse = DateTime.Now;
+                   // await veh.SpawnVehicleAsync(new Location(_poundSpawn.Pos, _poundSpawn.Rot.ConvertRotationToRadian()));
                     veh.UpdateInBackground();
 
-                    var keyfind = ph.ListVehicleKey.FindLast(k => k.Plate == veh.Plate);
+                    var keyfind = ph.ListVehicleKey.FindLast(k => k.Plate == veh.VehicleData.Plate);
                     if (keyfind == null)
-                        ph.ListVehicleKey.Add(new VehicleKey(veh.VehicleManifest.LocalizedName, veh.Plate));
+                        ph.ListVehicleKey.Add(new VehicleKey(veh.VehicleManifest.LocalizedName, veh.VehicleData.Plate));
 
                     await GameMode.Instance.Save();
                     client.SendNotificationPicture(Utils.Enums.CharPicture.DIA_GARDENER,"Fourrière", "","~g~Votre véhicule vous attend sur le parking." );
@@ -174,7 +172,7 @@ namespace ResurrectionRP_Server.Services
             }
         }
 
-        public static IEnumerable<VehicleHandler> GetVehicleInPound(IPlayer client)
+        public static IEnumerable<VehicleData> GetVehicleInPound(IPlayer client)
         {
             return VehiclesManager.GetAllVehicles().Where(v => (v.OwnerID == client.GetSocialClub() || client.GetPlayerHandler().HasKey(v.Plate)) && v.IsInPound);
         }
@@ -184,12 +182,11 @@ namespace ResurrectionRP_Server.Services
             if (veh == null)
                 return;
 
-            veh.IsInPound = true;
-            veh.ParkingName = "Fourrière";
+            veh.VehicleData.IsInPound = true;
+            veh.VehicleData.ParkingName = "Fourrière";
             veh.UpdateInBackground(false, true);
+            Alt.Server.LogInfo($"Mise en fourrière véhicule {veh.VehicleData.Plate}");
             await veh.DeleteAsync();
-
-            Alt.Server.LogInfo($"Mise en fourrière véhicule {veh.Plate}");
         }
         #endregion
     }

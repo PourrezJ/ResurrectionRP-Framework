@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Async;
+using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using ResurrectionRP.Entities.Vehicles.Data;
@@ -9,9 +10,13 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
-    public partial class VehicleHandler : Vehicle, IVehicleHandler
+    public partial class VehicleHandler : Vehicle
     {
         public VehicleHandler(IntPtr nativePointer, ushort id) : base(nativePointer, id)
+        {
+        }
+
+        public VehicleHandler(uint model, Position position, Rotation rotation) : base(model, position, rotation)
         {
         }
         #region Methods
@@ -43,12 +48,12 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             if (Model != (int)VehicleModel.Flatbed && VehicleData.TowTruck == null) return null;
 
-            IVehicle vehicle = VehiclesManager.GetVehicleWithPlate(VehicleData.TowTruck.VehPlate);
+            VehicleHandler vehicle = VehiclesManager.GetVehicleByPlate(VehicleData.TowTruck.VehPlate) as VehicleHandler;
             VehicleData.TowTruck = null;
 
             await vehicle.SetPositionAsync(position.Pos);
             await vehicle.SetRotationAsync(position.Rot);
-            vehicle.GetVehicleHandler()?.UpdateInBackground(false);
+            vehicle.UpdateInBackground(false);
             UpdateInBackground();
             return vehicle;
         }

@@ -81,17 +81,18 @@ namespace ResurrectionRP_Server
 
         public static List<IVehicle> GetVehiclesInRange(this Vector3 pos, float range, short dimension = GameMode.GlobalDimension)
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            ICollection<IVehicle> vehicles = VehiclesManager.GetAllVehiclesInGame();
+            ICollection<IVehicle> vehicles = Alt.GetAllVehicles();
             List<IVehicle> end = new List<IVehicle>();
 
-            foreach (IVehicle veh in vehicles)
+            lock (vehicles)
             {
-                if (veh.Dimension == dimension && pos.DistanceTo2D(veh.Position) <= range)
-                    end.Add(veh);
+                foreach (IVehicle veh in vehicles)
+                {
+                    if (veh.Dimension == dimension && pos.DistanceTo2D(veh.Position) <= range)
+                        end.Add(veh);
+                }
             }
 
-            Console.WriteLine(stopwatch.ElapsedMilliseconds);
             return end;
         }
 

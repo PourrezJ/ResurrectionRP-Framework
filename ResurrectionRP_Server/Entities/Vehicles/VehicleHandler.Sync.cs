@@ -48,14 +48,21 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             if (Model != (int)VehicleModel.Flatbed && VehicleData.TowTruck == null) return null;
 
-            VehicleHandler vehicle = VehiclesManager.GetVehicleByPlate(VehicleData.TowTruck.VehPlate) as VehicleHandler;
-            VehicleData.TowTruck = null;
+            VehicleData vehicleData = VehiclesManager.GetVehicleDataWithPlate(VehicleData.TowTruck.VehPlate);
 
-            await vehicle.SetPositionAsync(position.Pos);
-            await vehicle.SetRotationAsync(position.Rot);
-            vehicle.UpdateInBackground(false);
-            UpdateInBackground();
-            return vehicle;
+            if (vehicleData.Vehicle != null)
+            {
+                var vehicle = vehicleData.Vehicle;
+                VehicleData.TowTruck = null;
+
+                await vehicle.SetPositionAsync(position.Pos);
+                await vehicle.SetRotationAsync(position.Rot);
+                vehicle.UpdateInBackground(false);
+                UpdateInBackground();
+                return vehicle;
+            }
+
+            return null;
         }
 
         public void SetNeonState(bool state)

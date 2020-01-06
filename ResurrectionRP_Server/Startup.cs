@@ -97,8 +97,8 @@ namespace ResurrectionRP_Server
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) 
                 FPSCounter.OnTick();
 
-            ColshapeManager.OnTick();
             VehiclesManager.OnTick();
+            ColshapeManager.OnTick();
             base.OnTick();
         }
     }

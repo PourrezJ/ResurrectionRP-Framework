@@ -47,8 +47,8 @@ namespace ResurrectionRP_Server.Models
         #endregion
 
         #region Methods
-        public IVehicle GetVehicle() => VehiclesManager.GetVehicleByPlate(Plate);
-        public VehicleHandler GetVehicleHandler() => VehiclesManager.GetVehicleByPlate(Plate)?.GetVehicleHandler();
+        public VehicleData GetVehicleHandler() 
+            => VehiclesManager.GetVehicleDataWithPlate(Plate);
         #endregion
     }
 
@@ -107,6 +107,7 @@ namespace ResurrectionRP_Server.Models
             }
             set => _listvehiclestored = value;
         }
+
         [BsonIgnore]
         private List<string> _whitelist = new List<string>();
         public List<string> Whitelist
@@ -211,7 +212,7 @@ namespace ResurrectionRP_Server.Models
 
         private void StoreVehicle(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
-            Task.Run(()=> StoreVehicle(client, client.Vehicle));
+            StoreVehicle(client, client.Vehicle);
             menu.CloseMenu(client);
         }
 
@@ -219,7 +220,7 @@ namespace ResurrectionRP_Server.Models
         {
             try
             {
-                VehicleHandler veh = menuItem.GetData("Vehicle"); // choix du véhicule choisi dans la liste de nos véhicule dans le parking
+                VehicleData veh = menuItem.GetData("Vehicle"); // choix du véhicule choisi dans la liste de nos véhicule dans le parking
                 Location Spawn = null;
 
                 if (menu.GetData("Location") != null)
@@ -227,7 +228,7 @@ namespace ResurrectionRP_Server.Models
                     if (!VehiclesManager.IsVehicleInSpawn(menu.GetData("Location")))
                     {
                         Spawn = menu.GetData("Location");
-                        //veh.SpawnVehicle(Spawn);
+                        veh.SpawnVehicle(Spawn);
                     }
                 }
                 else
@@ -236,12 +237,12 @@ namespace ResurrectionRP_Server.Models
                     if (!VehiclesManager.IsVehicleInSpawn(Spawn1.Pos))
                     {
                         Spawn = Spawn1;
-                        //veh.SpawnVehicle(Spawn1);
+                        veh.SpawnVehicle(Spawn1);
                     }
                     else if (Spawn2 != null && !VehiclesManager.IsVehicleInSpawn(Spawn2.Pos))
                     {
                         Spawn = Spawn2;
-                       // veh.SpawnVehicle(Spawn2);
+                        veh.SpawnVehicle(Spawn2);
                     }
                     else
                     {
@@ -251,13 +252,19 @@ namespace ResurrectionRP_Server.Models
                     }
                 }
 
+                if (veh.Vehicle == null)
+                {
+                    client.SendNotificationError($"Erreur avec votre véhicule, contactez le staff: {veh.Plate}");
+                    return;
+                }
+
                 veh.EngineOn = false;
                 RemoveVehicle(veh); // retrait du véhicule dans la liste
 
                 if (OnVehicleOut != null)
-                    Task.Run(()=> OnVehicleOut.Invoke(client, veh, Spawn)); // callback (ex carpark)
+                    Task.Run(()=> OnVehicleOut.Invoke(client, veh.Vehicle, Spawn)); // callback (ex carpark)
 
-                veh.UpdateInBackground();
+                veh.Vehicle.UpdateInBackground();
                 MenuManager.CloseMenu(client);
             }
             catch (Exception ex)
@@ -350,25 +357,25 @@ namespace ResurrectionRP_Server.Models
                     return;
 
                 string social = client.GetSocialClub();
-                List<ParkedCar> vehicleListParked = null;
+                List<ParkedCar> vehicleListParked = new List<ParkedCar>();
 
                 try
                 {
                     if (canGetAllVehicle)
                         vehicleListParked = ListVehicleStored;
                     else if (vehicleType == -1)
-                        vehicleListParked = ListVehicleStored.FindAll(p => p.GetVehicleHandler().VehicleData.OwnerID == social || ph.ListVehicleKey.Exists(v => v?.Plate == p.Plate));
+                        vehicleListParked = ListVehicleStored.FindAll(p => p.GetVehicleHandler().OwnerID == social || ph.ListVehicleKey.Exists(v => v?.Plate == p?.Plate));
                     else
-                        vehicleListParked = ListVehicleStored.FindAll(p => (p.GetVehicleHandler().VehicleData.OwnerID == social || ph.ListVehicleKey.Exists(v => v?.Plate == p.Plate)) && p.GetVehicleHandler().VehicleManifest.VehicleClass == vehicleType);
+                        vehicleListParked = ListVehicleStored.FindAll(p => (p.GetVehicleHandler().OwnerID == social || ph.ListVehicleKey.Exists(v => v?.Plate == p.Plate)) /* && p.GetVehicleHandler().VehicleManifest.VehicleClass == vehicleType*/);
                 }
                 catch (Exception ex)
                 {
                     Alt.Server.LogError($"OpenParkingMenu player: {client.GetSocialClub()} | parking: {Name} {ID} | {ex}");
                 }
 
-                List<VehicleData> vehicleList = VehiclesManager.GetAllVehicles().Where(v => vehicleListParked.Select(p => p.Plate).Contains(v.Plate)).ToList();
+                var vehicleList = VehiclesManager.GetAllVehicles().Where(v => vehicleListParked.Select(p => p.Plate).Contains(v.Plate)).ToList();
 
-                if (vehicleList.Count > 0)
+                if (vehicleList.Count() > 0)
                 {
                     foreach (var vehdata in vehicleList)
                     {
@@ -461,13 +468,13 @@ namespace ResurrectionRP_Server.Models
             }
         }
 
-        public bool RemoveVehicle(VehicleHandler veh)
+        public bool RemoveVehicle(VehicleData veh)
         {
             bool success = false;
 
             lock (ListVehicleStored)
             {
-                ParkedCar vehicle = ListVehicleStored.FirstOrDefault(v => v.Plate == veh.VehicleData.Plate);
+                ParkedCar vehicle = ListVehicleStored.FirstOrDefault(v => v.Plate == veh.Plate);
 
                 if (vehicle == null)
                     success = false;
@@ -476,7 +483,7 @@ namespace ResurrectionRP_Server.Models
             }
 
             if (!success)
-                Alt.Server.LogError($"Parking '{Name}': Error removing vehicle {veh.VehicleData.Plate}");
+                Alt.Server.LogError($"Parking '{Name}': Error removing vehicle {veh.Plate}");
 
             return success;
         }

@@ -113,32 +113,24 @@ namespace ResurrectionRP_Server.Houses
         #endregion
 
         #region Events        
-        public static async Task LoadAllHouses()
+        public static void LoadAllHouses()
         {
             Alt.Server.LogInfo($"Loading houses ...");
-            
-            var housesList = await Database.MongoDB.GetCollectionSafe<House>("houses").AsQueryable().ToListAsync();
 
-            await AltAsync.Do(() =>
+            var housesList = Database.MongoDB.GetCollectionSafe<House>("houses").AsQueryable();
+
+            foreach(var house in housesList)
             {
-                for (int i = 0; i < housesList.Count; i++)
+                try
                 {
-                    try
-                    {
-                        var house = housesList[i];
-
-                        if (house != null)
-                        {
-                            house.Init();
-                            Houses.Add(house);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Alt.Server.LogError($"Erreur sur maison id:{i}: " + ex.ToString());
-                    }
+                    house.Init();
+                    Houses.Add(house);
                 }
-            });
+                catch (Exception ex)
+                {
+                    Alt.Server.LogError($"Erreur sur maison id:{house.ID}: " + ex.ToString());
+                }
+            }
 
             Alt.Server.LogInfo($"Loaded {Houses.Count} houses.");
         }

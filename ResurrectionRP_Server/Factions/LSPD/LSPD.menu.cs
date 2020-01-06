@@ -332,7 +332,7 @@ namespace ResurrectionRP_Server.Factions
                         return;
 
                     client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande de mise en fourrière.", "La fourrière est venu récupérer le véhicule.");
-                    Task.Run(async ()=>await Pound.AddVehicleInPoundAsync(vh));
+                    Task.Run(async ()=>await Pound.AddVehicleInPoundAsync(vh.VehicleData));
                 });
             }
         }

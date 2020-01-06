@@ -71,7 +71,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
                 place.VehicleHandler.Invincible(true);
 
                 string str = $"{manifest.DisplayName} \n" +
-                $"Prix $ {place.VehicleInfo.Price} \n" +
+                $"Prix Actuel $ {place.VehicleInfo.Price} \n" +
                 $"Coffre: {place.VehicleInfo.InventoryWeight} \n" +
                 $"Vitesse Max: {Math.Ceiling(manifest.MaxSpeed * (manifest.MaxSpeed / 20) * 2)} km/h \n" +
                 $"Acceleration: {manifest.MaxAcceleration} \n" +

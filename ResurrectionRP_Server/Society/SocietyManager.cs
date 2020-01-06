@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AltV.Net.Elements.Entities;
 using AltV.Net;
+using System.Linq;
+
 namespace ResurrectionRP_Server.Society
 {
     public static class SocietyManager
@@ -14,10 +16,10 @@ namespace ResurrectionRP_Server.Society
         #endregion
 
         #region Init
-        public static async Task LoadAllSociety()
+        public static void LoadAllSociety()
         {
             Alt.Server.LogInfo("--- Start loading all society in database ---");
-            var societyList = await Database.MongoDB.GetCollectionSafe<Society>("society").AsQueryable().ToListAsync();
+            var societyList = Database.MongoDB.GetCollectionSafe<Society>("society").AsQueryable();
 
             Utils.Utils.Delay((int)TimeSpan.FromMinutes(7).TotalMilliseconds, (Action)(async() =>
             {
@@ -28,13 +30,10 @@ namespace ResurrectionRP_Server.Society
                 }
             }));
 
-            await AltV.Net.Async.AltAsync.Do(() =>
-            {
-                foreach (var society in societyList)
-                    society.Init();
-            });
+            foreach (var society in societyList)
+                society.Init();
 
-            Alt.Server.LogInfo($"--- Finish loading all society in database: {societyList.Count} ---");
+            Alt.Server.LogInfo($"--- Finish loading all society in database: {societyList.Count()} ---");
         }
         #endregion
     }

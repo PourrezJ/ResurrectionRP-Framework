@@ -3,14 +3,12 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
-using ResurrectionRP_Server.Database;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils;
 using System.Collections.Concurrent;
 using System.Numerics;
 using System.Threading.Tasks;
-using VehicleInfoLoader;
 using VehicleInfoLoader.Data;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
@@ -69,17 +67,20 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             VehicleData = new VehicleData(this)
             {
+                Vehicle = this,
                 OwnerID = socialClubName,
                 Model = model,
                 PrimaryColor = primaryColor,
                 SecondaryColor = secondaryColor,
                 Plate = string.IsNullOrEmpty(plate) ? VehiclesManager.GenerateRandomPlate() : plate,
                 LockState = locked ? VehicleLockState.Locked : VehicleLockState.Unlocked,
-                Mods = mods,   
+                Mods = (mods != null) ? mods : new ConcurrentDictionary<byte, byte>(),   
                 Location = new Location(position, rotation),
                 Inventory = inventory,
                 //OilTank = new OilTank()
             };
+
+            VehicleData.SpawnVehicle();
         }
         #endregion
 

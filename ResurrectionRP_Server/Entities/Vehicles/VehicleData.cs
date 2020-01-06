@@ -113,8 +113,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 {
                     _engineOn = value;
 
-                    if (Vehicle != null && Vehicle.Exists && Vehicle.EngineOn != value)
-                        AltAsync.Do(() => { Vehicle.EngineOn = value; });
+                    if (Vehicle != null && Vehicle.Exists)
+                        Vehicle.EngineOn = value;
                 }
             }
         }
@@ -286,11 +286,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public Location Location
         {
-            get => new Location(new Vector3(LastKnowLocation.Pos.X, LastKnowLocation.Pos.Y, LastKnowLocation.Pos.Z), new Vector3(LastKnowLocation.Rot.X, LastKnowLocation.Rot.Y, LastKnowLocation.Rot.Z));
+            get => new Location(LastKnowLocation.Pos, LastKnowLocation.Rot);
 
             set
             {
-                LastKnowLocation = new Location(new Vector3(value.Pos.X, value.Pos.Y, value.Pos.Z), new Vector3(value.Rot.X, value.Rot.Y, value.Rot.Z));
+                LastKnowLocation = new Location(value.Pos, value.Rot);
 
                 if (Vehicle != null && Vehicle.Exists)
                 {
@@ -480,6 +480,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public void UpdateProperties()
         {
+            Utils.Utils.CheckThread("UpdateProperties");
+
             if (!Vehicle.Exists)
                 return;
 
@@ -604,12 +606,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public IVehicle SpawnVehicle(Location location = null, bool setLastUse = true)
         {
+            Utils.Utils.CheckThread("SpawnVehicle");
+
             //Dimension = GameMode.GlobalDimension;
             try
             {
                 if (location != null)
                     Location = location;
-                Vehicle = new VehicleHandler(Model, Location.Pos, Location.GetRotation());
+                if (Vehicle == null)
+                    Vehicle = new VehicleHandler(Model, Location.Pos, Location.GetRotation());
+                Vehicle.VehicleData = this;
             }
             catch (Exception ex)
             {

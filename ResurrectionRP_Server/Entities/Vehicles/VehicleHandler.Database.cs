@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson;
 using ResurrectionRP_Server.Utils;
@@ -64,8 +65,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 try
                 {
-                    VehicleData.UpdateProperties();
-                    var result = await Database.MongoDB.Update(this, "vehicles", VehicleData.Plate, _nbUpdateRequests);
+                    await AltAsync.Do(()=> VehicleData.UpdateProperties());
+                    var result = await Database.MongoDB.Update(this.VehicleData, "vehicles", VehicleData.Plate, _nbUpdateRequests);
 
                     if (result.ModifiedCount == 0)
                         Alt.Server.LogError($"Update error for vehicle: {VehicleData.Plate} - Owner: {VehicleData.OwnerID}");

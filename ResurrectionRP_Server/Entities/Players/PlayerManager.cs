@@ -49,9 +49,10 @@ namespace ResurrectionRP_Server.Entities.Players
             AltAsync.OnClient<IPlayer>("LogPlayer", LogPlayer);
             AltAsync.OnClient<IPlayer, string, string>("MakePlayer", MakePlayer);
             AltAsync.OnClient <IPlayer, string>("SendLogin", SendLogin);
-            AltAsync.OnClient<IPlayer>("IWantToDie", IWantToDie);
+            
             AltAsync.OnClient<IPlayer, string, string>("Events_PlayerJoin", Events_PlayerJoin);
 
+            Alt.OnClient<IPlayer>("IWantToDie", IWantToDie);
             Alt.OnClient("Player_SetInComa", (IPlayer client) => client.GetPlayerHandler().IsInComa = true); // peut être mieux?
             Alt.OnClient("ExitGame", (IPlayer client) => client.Kick("Exit"));
 
@@ -196,7 +197,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
 
             player.SetData("SocialClub", socialclub);
-            await player.SetModelAsync((uint)AltV.Net.Enums.PedModel.FreemodeMale01);
+            await player.SetModelAsync((uint)PedModel.FreemodeMale01);
             await player.SpawnAsync(new Position(-1072.886f, -2729.607f, 0.8148939f));
 
             if (GameMode.ServerLock)
@@ -347,9 +348,9 @@ namespace ResurrectionRP_Server.Entities.Players
         public static async Task<PlayerHandler> GetPlayerHandlerDatabase(string socialClub) =>
             await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == socialClub.ToLower()).FirstOrDefaultAsync();
 
-        private static async void IWantToDie(IPlayer client)
+        private static void IWantToDie(IPlayer client)
         {
-            await client.ReviveAsync(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
+            client.Revive(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
 
             var ph = client.GetPlayerHandler();
 

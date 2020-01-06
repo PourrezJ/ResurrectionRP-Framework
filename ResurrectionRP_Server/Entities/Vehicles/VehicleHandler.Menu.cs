@@ -129,7 +129,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             switch (menuItem.Id)
             {
-                
                 case "ID_LockUnlockVehicle":
                     LockUnlock(client);
                     OpenXtremMenu(client);
@@ -215,7 +214,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     break;
                     */
                 case "ID_Start":
-                    EngineOn = !EngineOn;
+                    VehicleData.EngineOn = !VehicleData.EngineOn;
                     UpdateInBackground();
                     XMenuManager.XMenuManager.CloseMenu(client);
                     break;
@@ -350,6 +349,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     break;
             }
             #endregion
+
         }
     }
 }

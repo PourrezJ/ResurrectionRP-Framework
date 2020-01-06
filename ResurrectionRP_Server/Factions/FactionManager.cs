@@ -29,15 +29,15 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Init
-        public static async Task InitAllFactions()
+        public static void InitAllFactions()
         {
-            Onu = (ONU)(await LoadFaction<ONU>("ONU") ?? new ONU("ONU", FactionType.ONU)).Init();
-            Lspd = (LSPD)(await LoadFaction<LSPD>("LSPD") ?? new LSPD("LSPD", FactionType.LSPD)).Init();
-            Rebelle = (Division)(await LoadFaction<Division>("Division") ?? new Division("Division", FactionType.Division)).Init();
-            LSCustom = (LSCustom)(await LoadFaction<LSCustom>("LSCustom") ?? new LSCustom("LSCustom", FactionType.LSCustom)).Init();
-            Gouvernement = (Gouv)(await LoadFaction<Gouv>("Gouv") ?? new Gouv("Gouv", FactionType.Gouv)).Init();
-            Dock = (Dock)(await LoadFaction<Dock>("Dock") ?? new Dock("Dock", FactionType.Dock)).Init();
-            Nordiste = (Nordiste)(await LoadFaction<Nordiste>("Bureau du Shérif") ?? new Nordiste("Bureau du Shérif", FactionType.Nordiste)).Init();
+            Onu = (ONU)(LoadFaction<ONU>("ONU") ?? new ONU("ONU", FactionType.ONU)).Init();
+            Lspd = (LSPD)(LoadFaction<LSPD>("LSPD") ?? new LSPD("LSPD", FactionType.LSPD)).Init();
+            Rebelle = (Division)(LoadFaction<Division>("Division") ?? new Division("Division", FactionType.Division)).Init();
+            LSCustom = (LSCustom)(LoadFaction<LSCustom>("LSCustom") ?? new LSCustom("LSCustom", FactionType.LSCustom)).Init();
+            Gouvernement = (Gouv)(LoadFaction<Gouv>("Gouv") ?? new Gouv("Gouv", FactionType.Gouv)).Init();
+            Dock = (Dock)(LoadFaction<Dock>("Dock") ?? new Dock("Dock", FactionType.Dock)).Init();
+            Nordiste = (Nordiste)(LoadFaction<Nordiste>("Bureau du Shérif") ?? new Nordiste("Bureau du Shérif", FactionType.Nordiste)).Init();
 
             Utils.Utils.Delay((int)TimeSpan.FromMinutes(10).TotalMilliseconds, async () =>
             {
@@ -98,12 +98,12 @@ namespace ResurrectionRP_Server.Factions
             Nordiste?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
         }
 
-        public static async Task<T> LoadFaction<T>(string faction)
+        public static T LoadFaction<T>(string faction)
         {
             try
             {
                 var filter = Builders<T>.Filter.Eq("FactionName", faction);
-                return await Database.MongoDB.GetCollectionSafe<T>("factions").FindAsync<T>(filter).Result.FirstOrDefaultAsync();
+                return Database.MongoDB.GetCollectionSafe<T>("factions").FindAsync<T>(filter).Result.First();
             }
             catch (Exception ec)
             {

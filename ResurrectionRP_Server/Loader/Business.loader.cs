@@ -3,23 +3,21 @@ using MongoDB.Driver;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ResurrectionRP_Server.Loader
 {
     public static class BusinessesManager
     {
         public static List<Business.Business> BusinessesList = new List<Business.Business>();
-        public static async Task LoadAllBusinesses()
+        public static void LoadAllBusinesses()
         {
             Alt.Server.LogColored("--- Start loading all businesses in database ---");
 
-            var _businessesList = await Database.MongoDB.GetCollectionSafe<Business.Business>("businesses").AsQueryable().ToListAsync();
+            var _businessesList = Database.MongoDB.GetCollectionSafe<Business.Business>("businesses").AsQueryable();
 
-            await AltV.Net.Async.AltAsync.Do(() =>
-            {
-                foreach (var _businesses in _businessesList)
-                    _businesses.Init();
-            });
+            foreach (var _businesses in _businessesList)
+                _businesses.Init();
 
             Utils.Utils.SetInterval(async () =>
             {
@@ -30,7 +28,7 @@ namespace ResurrectionRP_Server.Loader
                 }
             }, (int)TimeSpan.FromMinutes(5).TotalMilliseconds);
 
-            Alt.Server.LogColored($"--- Finish loading all businesses in database: {_businessesList.Count} ---");
+            Alt.Server.LogColored($"--- Finish loading all businesses in database: {_businessesList.Count()} ---");
         }
 
     }

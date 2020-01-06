@@ -93,7 +93,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
 
             string plate = args[0].ToUpper();
-            VehicleHandler vehicle = VehiclesManager.GetVehicleByPlate(plate)?.GetVehicleHandler();
+            VehicleHandler vehicle = VehiclesManager.GetVehicleDataWithPlate(plate)?.Vehicle;
 
             if (vehicle == null)
             {

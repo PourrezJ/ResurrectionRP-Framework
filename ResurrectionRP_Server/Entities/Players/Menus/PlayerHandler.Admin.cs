@@ -190,7 +190,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             }
 
                             client.SendNotification($"Véhicule ~r~{vehFourriere.VehicleData.Plate} ~w~ mis en fourrière...");
-                            Task.Run(async () => await Pound.AddVehicleInPoundAsync(vehFourriere));
+                            Task.Run(async () => await Pound.AddVehicleInPoundAsync(vehFourriere.VehicleData));
                         }
                     }
                 };
@@ -604,18 +604,20 @@ namespace ResurrectionRP_Server.Entities.Players
                             return;
 
 
-                        VehicleHandler vehicle = VehiclesManager.GetVehicleByPlate(name)?.GetVehicleHandler();
+                        VehicleData vehicleData = VehiclesManager.GetVehicleDataWithPlate(name);
 
-                        if (vehicle == null)
+                        if (vehicleData != null && vehicleData.Vehicle != null)
+                        {
+                            var vehicle = vehicleData.Vehicle;
+
+                            _playerSelected.AddKey(vehicle, "Clé de " + vehicle.VehicleManifest.Name);
+                            _playerSelected.Client.DisplayHelp("Un admin vous a donné:\n" + "Clé de " + vehicle.VehicleManifest.Name);
+                            client.DisplayHelp("Vous avez donné:\n" + "Clé de " + vehicle.VehicleManifest.Name);
+                        }
+                        else
                         {
                             client.SendNotificationError($"véhicule inconnu : {name}");
-                            return;
                         }
-                        _playerSelected.AddKey(vehicle, "Clé de " + vehicle.VehicleManifest.Name);
-                        _playerSelected.Client.DisplayHelp("Un admin vous a donné:\n" + "Clé de " + vehicle.VehicleManifest.Name);
-                        client.DisplayHelp("Vous avez donné:\n" + "Clé de " + vehicle.VehicleManifest.Name);
-                        
-
                     }
                     catch (Exception ex)
                     {
@@ -640,7 +642,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             return;
 
 
-                        VehicleHandler vehicle = VehiclesManager.GetVehicleByPlate(name)?.GetVehicleHandler();
+                        VehicleHandler vehicle = VehiclesManager.GetVehicleDataWithPlate(name)?.Vehicle;
 
                         Task.Run(async () =>
                         {

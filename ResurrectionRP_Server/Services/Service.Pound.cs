@@ -177,15 +177,15 @@ namespace ResurrectionRP_Server.Services
             return VehiclesManager.GetAllVehicles().Where(v => (v.OwnerID == client.GetSocialClub() || client.GetPlayerHandler().HasKey(v.Plate)) && v.IsInPound);
         }
 
-        public static async Task AddVehicleInPoundAsync(VehicleHandler veh)
+        public static async Task AddVehicleInPoundAsync(VehicleData veh)
         {
             if (veh == null)
                 return;
 
-            veh.VehicleData.IsInPound = true;
-            veh.VehicleData.ParkingName = "Fourrière";
-            veh.UpdateInBackground(false, true);
-            Alt.Server.LogInfo($"Mise en fourrière véhicule {veh.VehicleData.Plate}");
+            veh.IsInPound = true;
+            veh.ParkingName = "Fourrière";
+            veh.Vehicle.UpdateInBackground(false, true);
+            Alt.Server.LogInfo($"Mise en fourrière véhicule {veh.Plate}");
             await veh.DeleteAsync();
         }
         #endregion

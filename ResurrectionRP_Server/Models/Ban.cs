@@ -27,21 +27,18 @@ namespace ResurrectionRP_Server.Models
     {
         public static List<Ban> BanList = new List<Ban>();
 
-        public static async Task Init()
+        public static void Init()
         {
-            var banList = await Database.MongoDB.GetCollectionSafe<Ban>("ban").AsQueryable().ToListAsync();
+            var banList = Database.MongoDB.GetCollectionSafe<Ban>("ban").AsQueryable(); ;
             foreach (Ban ban in banList)
             {
                 BanList.Add(ban);
 
-                await AltAsync.Do(() =>
+                if (GameMode.PlayerList.Any(p => p.SocialClubId == ban.SocialID))
                 {
-                    if (GameMode.PlayerList.Any(p => p.SocialClubId == ban.SocialID))
-                    {
-                        var player = GameMode.PlayerList.Find(p => p.Exists && (p.SocialClubId == ban.SocialID)) ?? null;
-                        player.Kick("Vous êtes bannis du serveur.");
-                    }
-                });
+                    var player = GameMode.PlayerList.Find(p => p.Exists && (p.SocialClubId == ban.SocialID)) ?? null;
+                    player.Kick("Vous êtes bannis du serveur.");
+                }
             }
         }
         

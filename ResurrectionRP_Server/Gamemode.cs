@@ -23,6 +23,7 @@ using ResurrectionRP_Server.Services;
 using ResurrectionRP_Server.Illegal;
 using ResurrectionRP_Server.AutoBusiness;
 using ResurrectionRP_Server.Entities.Worlds;
+using ResurrectionRP_Server.Jobs;
 
 namespace ResurrectionRP_Server
 {
@@ -160,31 +161,28 @@ namespace ResurrectionRP_Server
             Alt.Server.LogColored("~g~Initialisations des controlleurs...");
 
             VehiclesManager.LoadAllVehicles();
+            Loader.BusinessesManager.LoadAllBusinesses();
+            BanManager.Init();
+            HouseManager.LoadAllHouses();
+            Factions.FactionManager.InitAllFactions();
+            Society.SocietyManager.LoadAllSociety();
+            JobsManager.Init();
 
             Task.Run(async () =>
             {
                 try
                 {
-                    await BanManager.Init();  
                     await Loader.CarParkLoader.LoadAllCarParks();
-                    await Factions.FactionManager.InitAllFactions();
-                    await Loader.BusinessesManager.LoadAllBusinesses();
-                    await Society.SocietyManager.LoadAllSociety();
-
                     await IllegalManager.InitAll();
-                    //await JobsManager.Init();
-                    await HouseManager.LoadAllHouses();
-
+                    
                     Alt.Server.LogColored("~g~Serveur chargé!");
                     ServerLoaded = true;
                 }
                 catch (Exception ex)
                 {
                     Alt.Server.LogError(ex.ToString());
-
                 }
             });
-
             
             Pound.Init();
             Loader.CarDealerLoaders.LoadAllCardealer();

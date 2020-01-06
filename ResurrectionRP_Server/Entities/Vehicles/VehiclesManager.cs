@@ -156,10 +156,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             lock (vehicles)
             {
-                foreach (VehicleHandler vehicle in vehicles)
+                foreach (Vehicle veh in vehicles)
                 {
-                    if (vehicle == null || !vehicle.Exists)
+                    if (!veh.Exists)
                         continue;
+
+                    if (!(veh is VehicleHandler))
+                        continue;
+
+                     VehicleHandler vehicle = veh.GetVehicleHandler();
 
                     if (vehicle.EngineOn)
                     {
@@ -178,11 +183,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         }
                     }
 
+                    if (vehicle.SpawnVeh)
+                        continue;
+
                     // Mise en fourrière auto
                     TimeSpan timeSinceLastUse = DateTime.Now - vehicle.VehicleData.LastUse;
 
                     if (timeSinceLastUse >= expireTime)
-                        Task.Run(async () => { await Pound.AddVehicleInPoundAsync(vehicle); });
+                        Task.Run(async () => await Pound.AddVehicleInPoundAsync(vehicle.VehicleData));
                 }
             }
 
@@ -191,37 +199,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Database
-        /*
-        public static async Task LoadAllVehicles()
-        {
-            Alt.Server.LogInfo("--- Start loading all vehicles in database ---");
-            List<VehicleHandler> vehicles = await Database.MongoDB.GetCollectionSafe<VehicleHandler>("vehicles").AsQueryable().ToListAsync();
-
-            if (GameMode.Instance.AutoPound)
-            {
-                //GameMode.Instance.PoundManager.PoundVehicleList.AddRange(vehicleList);
-                await GameMode.Instance.Save();
-            }
-            else
-            {
-                await AltAsync.Do(() =>
-                {
-                    foreach (VehicleHandler vehicle in vehicles)
-                    {
-                        if (_vehicleHandlers.TryAdd(vehicle.Plate, vehicle))
-                        {
-                            if (vehicle.IsParked || vehicle.IsInPound)
-                                continue;
-
-                            vehicle.SpawnVehicle();
-                        }
-                    }
-                });
-            }
-
-            Alt.Server.LogInfo($"--- Finish loading all vehicles in database: {_vehicleHandlers.Count} ---");
-        }*/
-
         public static void LoadAllVehicles()
         {
             Alt.Server.LogInfo("--- Start loading all vehicles in database ---");
@@ -236,16 +213,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 foreach (VehicleData vd in vehicles)
                 {
-                    if (vd.IsParked || vd.IsInPound)
-                        continue;
-
-                    
                     if (_vehicleHandlers.TryAdd(vd.Plate, vd))
                     {
                         if (vd.IsParked || vd.IsInPound)
                             continue;
-                        // NeedRefacto
-                        //vehicle.SpawnVehicle();
+                        vd.SpawnVehicle();
                     }
                 }
             }
@@ -255,18 +227,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         #endregion
 
         #region Methods
-        public static async Task<VehicleHandler> SpawnVehicleAsync(string socialClubName, uint model, Vector3 position, Vector3 rotation, int primaryColor = 0, int secondaryColor = 0,
-        float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
-        IPlayer client = null, ConcurrentDictionary<byte, byte> mods = null, int[] neon = null, bool spawnVeh = false, uint dimension = (uint)GameMode.GlobalDimension, Inventory.Inventory inventory = null, bool freeze = false, byte dirt = 0, float health = 1000)
-        {
-            if (model == 0)
-                return null;
-
-            VehicleHandler veh = new VehicleHandler(socialClubName, model, position, rotation, (byte)primaryColor, (byte)secondaryColor, fuel, fuelMax, plate, engineStatus, locked, client, mods, neon, spawnVeh, (short)dimension, inventory, freeze, dirt, health);
-            _vehicleHandlers.TryAdd(veh.NumberplateText, veh.VehicleData);
-            //await veh.SpawnVehicleAsync(new Models.Location(position, rotation));
-            return veh;
-        }
 
         public static VehicleHandler SpawnVehicle(string socialClubName, uint model, Vector3 position, Vector3 rotation, int primaryColor = 0, int secondaryColor = 0,
         float fuel = 100, float fuelMax = 100, string plate = null, bool engineStatus = false, bool locked = true,
@@ -276,6 +236,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 return null;
 
             VehicleHandler veh = new VehicleHandler(socialClubName, model, position, rotation, (byte)primaryColor, (byte)secondaryColor, fuel, fuelMax, plate, engineStatus, locked, client, mods, neon, spawnVeh, (short)dimension, inventory, freeze, dirt, health);
+            _vehicleHandlers.TryAdd(veh.NumberplateText, veh.VehicleData);
+
             //veh.SpawnVehicle(new Models.Location(position, rotation));
             return veh;
         }
@@ -329,10 +291,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             var vehs = GetNearestsVehicles(position, distance, dimension);
 
-            if (vehs.Count > 0)
-                return vehs[0];
-            else
+            if (vehs == null)
                 return null;
+            else
+                return vehs[0];
         }
 
         public static List<IVehicle> GetNearestsVehicles(Vector3 position, float distance = 3.0f, short dimension = GameMode.GlobalDimension)
@@ -373,19 +335,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return _vehicleHandlers.Values;
         }
 
-        public static IVehicle GetVehicleByPlate(string plate)
+        public static VehicleData GetVehicleDataWithPlate(string plate)
         {
-            var vehicles = Alt.GetAllVehicles();
-
-            lock (vehicles)
+            foreach (var entity in _vehicleHandlers)
             {
-                foreach (var vehicle in vehicles)
-                {
-                    if (vehicle.NumberplateText == plate)
-                        return vehicle;
-                }
+                if (entity.Value.Plate == plate)
+                    return entity.Value;
             }
-
             return null;
         }
 

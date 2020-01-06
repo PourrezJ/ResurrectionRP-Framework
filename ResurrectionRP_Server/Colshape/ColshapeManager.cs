@@ -5,6 +5,7 @@ using ResurrectionRP_Server.Entities.Vehicles;
 using System.Collections.Generic;
 using System;
 using System.Numerics;
+using System.Threading;
 
 namespace ResurrectionRP_Server.Colshape
 {
@@ -34,7 +35,13 @@ namespace ResurrectionRP_Server.Colshape
         {
             Alt.OnPlayerDisconnect += OnPlayerDisconnect;
             Alt.OnVehicleRemove += OnVehicleRemove;
-            Alt.OnClient("InteractionInColshape", OnEntityInteractInColshape);
+            Alt.OnClient<IPlayer, long>("InteractionInColshape", OnEntityInteractInColshape);
+
+            var thread = new Thread(Loop)
+            {
+                IsBackground = true
+            };
+            thread.Start();
         }
         #endregion
 
@@ -70,7 +77,7 @@ namespace ResurrectionRP_Server.Colshape
                     {
                         colshape.RemoveEntity(vehicle);
                         OnVehicleLeaveColshape?.Invoke(colshape, vehicle);
-                        if (GameMode.IsDebug) 
+                        if (GameMode.IsDebug)
                             Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} removed, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
                     }
                 }
@@ -111,122 +118,141 @@ namespace ResurrectionRP_Server.Colshape
             }
         }
 
-        public static void OnTick()
+        public static void Loop()
         {
-            DateTime startTime = DateTime.Now;
-
-            lock (_colshapes)
+            while (true)
             {
-                foreach (IColshape colshape in _colshapes.Values)
-                {
-                    lock (colshape.Entities)
-                    {
-                        foreach (IEntity entity in colshape.Entities)
-                        {
-                            if (!colshape.IsEntityInside(entity))
-                            {
-                                _entitiesToRemove.Add(entity);
-
-                                if (entity.Type == BaseObjectType.Player)
-                                {
-                                    OnPlayerLeaveColshape?.Invoke(colshape, (IPlayer)entity);
-                                    ((IPlayer)entity).EmitLocked("OnPlayerLeaveColshape", colshape.Id);
-
-                                    if (GameMode.IsDebug)
-                                        Alt.Log($"[Colshape {colshape.Id}] Player {entity.Id} leaving, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count - _entitiesToRemove.Count}");
-                                }
-                                else if (entity.Type == BaseObjectType.Vehicle)
-                                {
-                                    OnVehicleLeaveColshape?.Invoke(colshape, (IVehicle)entity);
-
-                                    if (GameMode.IsDebug)
-                                        Alt.Log($"[Colshape {colshape.Id}] Vehicle {entity.Id} leaving, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count - _entitiesToRemove.Count}");
-                                }
-                            }
-                        }
-
-                        if (_entitiesToRemove.Count > 0)
-                        {
-                            foreach (IEntity entity in _entitiesToRemove)
-                                colshape.RemoveEntity(entity);
-
-                            _entitiesToRemove.Clear();
-                        }
-                    }
-                }
-            }
-
-            foreach (IPlayer player in Alt.GetAllPlayers())
-            {
-                if (!player.Exists)
-                    continue;
+                DateTime startTime = DateTime.Now;
 
                 lock (_colshapes)
                 {
                     foreach (IColshape colshape in _colshapes.Values)
                     {
-                        if (!colshape.IsEntityIn(player) && colshape.IsEntityInside(player))
+                        lock (colshape.Entities)
                         {
-                            colshape.AddEntity(player);
-                            OnPlayerEnterColshape?.Invoke(colshape, player);
-                            player.EmitLocked("OnPlayerEnterColshape", colshape.Id);
-
-                            if (GameMode.IsDebug)
-                                Alt.Log($"[Colshape {colshape.Id}] Player {player.Id} entering, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
-                        }
-                    }
-                }
-            }
-
-            var vehicles = Alt.GetAllVehicles();
-
-            lock (vehicles)
-            {
-                foreach (IVehicle vehicle in vehicles)
-                {
-                    if (!vehicle.Exists)
-                        continue;
-
-                    lock (_colshapes)
-                    {
-                        foreach (IColshape colshape in _colshapes.Values)
-                        {
-                            if (!colshape.IsEntityIn(vehicle) && colshape.IsEntityInside(vehicle))
+                            foreach (IEntity entity in colshape.Entities)
                             {
-                                colshape.AddEntity(vehicle);
-                                OnVehicleEnterColshape?.Invoke(colshape, vehicle);
+                                if (!colshape.IsEntityInside(entity))
+                                {
+                                    _entitiesToRemove.Add(entity);
 
-                                if (GameMode.IsDebug)
-                                    Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} entering, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
+                                    if (entity.Type == BaseObjectType.Player)
+                                    {
+                                        AltAsync.Do(() =>
+                                        {
+                                            OnPlayerLeaveColshape?.Invoke(colshape, (IPlayer)entity);
+                                            ((IPlayer)entity).Emit("OnPlayerLeaveColshape", colshape.Id);
+
+                                            if (GameMode.IsDebug)
+                                                Alt.Log($"[Colshape {colshape.Id}] Player {entity.Id} leaving, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count - _entitiesToRemove.Count}");
+                                        });
+                                    }
+                                    else if (entity.Type == BaseObjectType.Vehicle)
+                                    {
+                                       
+                                        AltAsync.Do(() =>
+                                        {
+                                            OnVehicleLeaveColshape?.Invoke(colshape, (IVehicle)entity);
+                                            if (GameMode.IsDebug)
+                                                Alt.Log($"[Colshape {colshape.Id}] Vehicle {entity.Id} leaving, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count - _entitiesToRemove.Count}");
+                                        });     
+                                    }
+                                }
+                            }
+
+                            if (_entitiesToRemove.Count > 0)
+                            {
+                                AltAsync.Do(() =>
+                                {
+                                    foreach (IEntity entity in _entitiesToRemove)
+                                        colshape.RemoveEntity(entity);
+
+                                    _entitiesToRemove.Clear();
+                                });
                             }
                         }
                     }
                 }
-            }     
+
+                var players = Alt.GetAllPlayers();
+                lock (players)
+                {
+                    foreach (IPlayer player in players)
+                    {
+                        if (!player.Exists)
+                            continue;
+
+                        lock (_colshapes)
+                        {
+                            foreach (IColshape colshape in _colshapes.Values)
+                            {
+                                if (!colshape.IsEntityIn(player) && colshape.IsEntityInside(player))
+                                {         
+                                    AltAsync.Do(() =>
+                                    {
+                                        colshape.AddEntity(player);
+                                        OnPlayerEnterColshape?.Invoke(colshape, player);
+                                        player.EmitLocked("OnPlayerEnterColshape", colshape.Id);
+
+                                        if (GameMode.IsDebug)
+                                            Alt.Log($"[Colshape {colshape.Id}] Player {player.Id} entering, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
+                                    });   
+                                }
+                            }
+                        }
+                    }
+                }
+
+                var vehicles = Alt.GetAllVehicles();
+                lock (vehicles)
+                {
+                    foreach (IVehicle vehicle in vehicles)
+                    {
+                        if (!vehicle.Exists)
+                            continue;
+
+                        lock (_colshapes)
+                        {
+                            foreach (IColshape colshape in _colshapes.Values)
+                            {
+                                if (!colshape.IsEntityIn(vehicle) && colshape.IsEntityInside(vehicle))
+                                {                                                                      
+                                    AltAsync.Do(() =>
+                                    {
+                                        colshape.AddEntity(vehicle);
+                                        OnVehicleEnterColshape?.Invoke(colshape, vehicle);
+                                        if (GameMode.IsDebug)
+                                            Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} entering, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
+                                    });
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+                Thread.Sleep(100);
+            }
         }
 
-        private static void OnEntityInteractInColshape(IPlayer client, object[] args)
+        private static void OnEntityInteractInColshape(IPlayer client, long colshapeID)
         {
             try
             {
                 DateTime startTime = DateTime.Now;
 
-            if (args[0] == null || (long)args[0] != 69)
-            {
-                Alt.Log($"[OnEntityInteractInColshape] Error args[0]: {args[0]}");
-                return;
-            }
-
                 lock (_colshapes)
                 {
-                    IColshape colshape = _colshapes[(long)args[1]];
+                    IColshape colshape = _colshapes[colshapeID];
 
                     if (colshape.IsEntityIn(client))
                     {
-                        colshape.PlayerInteractInColshape(client);
-                        OnPlayerInteractInColshape?.Invoke(colshape, client);
-                        if (GameMode.IsDebug)
-                            Alt.Log($"[Colshape {colshape.Id}] Player {client.Id} interacting, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
+                        AltAsync.Do(() =>
+                        {
+                            colshape.PlayerInteractInColshape(client);
+                            OnPlayerInteractInColshape?.Invoke(colshape, client);
+                            if (GameMode.IsDebug)
+                                Alt.Log($"[Colshape {colshape.Id}] Player {client.Id} interacting, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
+                        });    
                     }
                 }
             }

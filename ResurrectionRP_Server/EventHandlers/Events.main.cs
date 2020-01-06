@@ -16,10 +16,9 @@ namespace ResurrectionRP_Server.EventHandlers
         public static event FactionPriseService OnFactionPlayerTakeService;
         public static event FactionOutPriseService OnFactionPlayerOutService;
         #endregion
+
         public static void Initialize()
         {
-            Alt.OnColShape += OnEntityColshape;
-            Alt.OnClient("InteractionInColshape", OnEntityInteractInColShape);
             Alt.OnClient("InteractEmergencyCall", InteractEmergencyCall);
         }
 

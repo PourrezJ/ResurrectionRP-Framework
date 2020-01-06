@@ -98,7 +98,6 @@ namespace ResurrectionRP_Server
                 FPSCounter.OnTick();
 
             VehiclesManager.OnTick();
-            ColshapeManager.OnTick();
             base.OnTick();
         }
     }

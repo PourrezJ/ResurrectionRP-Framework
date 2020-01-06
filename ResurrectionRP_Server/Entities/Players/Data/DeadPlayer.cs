@@ -2,6 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Models.InventoryData;
 using ResurrectionRP_Server.Utils.Enums;
@@ -20,7 +21,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
 
 
         private Marker marker;
-        private IColShape colshape;
+        private IColshape colshape;
 
         public DeadPlayer(IPlayer player, IEntity killer, uint weapon)
         {
@@ -29,12 +30,12 @@ namespace ResurrectionRP_Server.Entities.Players.Data
             Weapon = weapon;
 
             marker = Marker.CreateMarker(MarkerType.UpsideDownCone, player.Position);
-            colshape = Alt.CreateColShapeCylinder(player.Position - new Position(0, 0, 1), 2f, 2f);
-            colshape.SetOnPlayerEnterColShape(OnPlayerEnterColshape);
-            colshape.SetOnPlayerLeaveColShape(OnPlayerExitColshape);
+            colshape = ColshapeManager.CreateCylinderColshape(player.Position - new Position(0, 0, 1), 2f, 2f);
+            colshape.OnPlayerEnterColshape += OnPlayerEnterColshape;
+            colshape.OnPlayerLeaveColshape += OnPlayerExitColshape;
         }
 
-        private void OnPlayerEnterColshape(IColShape colShape, IPlayer client)
+        private void OnPlayerEnterColshape(IColshape colShape, IPlayer client)
         {
             if (client == Victime)
                 return;
@@ -145,7 +146,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
             }
         }
 
-        private void OnPlayerExitColshape(IColShape colShape, IPlayer client)
+        private void OnPlayerExitColshape(IColshape colShape, IPlayer client)
         {
             XMenuManager.XMenuManager.CloseMenu(client);
         }
@@ -158,7 +159,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
         public void Remove()
         {
             marker?.Destroy();
-            colshape?.Remove();
+            colshape?.Delete();
             PlayerManager.DeadPlayers.Remove(this);
         }
     }

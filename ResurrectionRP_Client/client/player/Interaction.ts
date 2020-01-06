@@ -127,7 +127,7 @@ export class Interaction {
                         alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId, game.getEntityHeading(raycastResult.hitEntity));
                     }
                     else if (key == 69 && this.isInColshape()) {
-                        alt.emitServer('InteractionInColshape', key, this.colshapes[0]);
+                        alt.emitServer('InteractionInColshape', this.colshapes[0]);
                     }
                     else {
                         alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId, game.getEntityHeading(raycastResult.hitEntity));

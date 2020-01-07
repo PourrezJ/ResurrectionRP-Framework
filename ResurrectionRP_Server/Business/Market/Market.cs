@@ -18,7 +18,17 @@ namespace ResurrectionRP_Server.Business
         private static ItemID[] itemsWithoutOwner = new ItemID[]
         {
             ItemID.WaterBottle,
-
+            ItemID.Lasagnes,
+            ItemID.Fromage,
+            ItemID.JambonBeurre,
+            ItemID.Donuts,
+            ItemID.Nems,
+            ItemID.Sushi,
+            ItemID.Pizza,
+            ItemID.HotDog,
+            ItemID.Tacos,
+            ItemID.Sprunk,
+            ItemID.Jerrycan
         };
         #endregion
 

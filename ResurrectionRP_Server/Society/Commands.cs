@@ -16,6 +16,7 @@ namespace ResurrectionRP_Server.Society
         {
             Chat.RegisterCmd("addweazel", AddWeazel);
             Chat.RegisterCmd("addbennys", AddBennys);
+            Chat.RegisterCmd("addbennys", AddBennys);
         }
 
         private async Task AddBennys(IPlayer player, string[] args)
@@ -28,7 +29,7 @@ namespace ResurrectionRP_Server.Society
             var benny = new Bennys("Benny's Motorsport", await player.GetPositionAsync(), 488, 40, player.GetSocialClub(), new Inventory.Inventory(1000, 20), _parking);
 
             await benny.Insert();
-            await AltAsync.Do(()=>benny.Init());
+            await AltAsync.Do(()=> benny.Init());
         }
 
         private async Task AddWeazel(IPlayer player, string[] args)
@@ -47,5 +48,7 @@ namespace ResurrectionRP_Server.Society
             await weazel.Insert();
             await AltAsync.Do(() => weazel.Init());
         }
+
+
     }
 }

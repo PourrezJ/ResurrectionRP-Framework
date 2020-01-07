@@ -12,6 +12,8 @@ namespace ResurrectionRP_Server.Business
 
     public partial class Market
     {
+        private static int priceMultNoOwn = 4;
+
         #region Menus
         public override void OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
         {
@@ -51,12 +53,14 @@ namespace ResurrectionRP_Server.Business
                     for (int i = 1; i <= 100; i++) 
                         values.Add(i.ToString());
 
-                    var item = Inventory.GetItem(loadedItem);
+                    var item = ResurrectionRP_Server.Inventory.Inventory.ItemByID(loadedItem);
 
-                    double gettaxe = Economy.Economy.CalculPriceTaxe(item.itemPrice, GameMode.Instance.Economy.Taxe_Market);
-                    ListItem listitem = new ListItem(item.name + " ($ " + (item.itemPrice + gettaxe).ToString() + ")", item.description, "item_" + item.name, values, 0);
+                    if (item == null)
+                        continue;
+
+                    double gettaxe = Economy.Economy.CalculPriceTaxe(item.itemPrice * priceMultNoOwn, GameMode.Instance.Economy.Taxe_Market);
+                    ListItem listitem = new ListItem(item.name + " ($ " + ((item.itemPrice * priceMultNoOwn) + gettaxe).ToString() + ")", item.description, "item_" + item.name, values, 0);
                     listitem.ExecuteCallback = true;
-                    //listitem.SetData("StackIndex", a);
                     menu.Add(listitem);
                 }
             }
@@ -161,7 +165,7 @@ namespace ResurrectionRP_Server.Business
         {
             PlayerHandler _player = client.GetPlayerHandler();
 
-            Models.ItemStack itemStack = Owner != null ? Inventory.InventoryList[(int)menuItem.GetData("StackIndex")] : new Models.ItemStack(itemsWithoutOwner[itemIndex], 999, LoadItem.GetItemWithID(itemsWithoutOwner[itemIndex]).itemPrice);
+            Models.ItemStack itemStack = Owner != null ? Inventory.InventoryList[(int)menuItem.GetData("StackIndex")] : new Models.ItemStack(itemsWithoutOwner[itemIndex], 999, LoadItem.GetItemWithID(itemsWithoutOwner[itemIndex]).itemPrice * priceMultNoOwn);
             var selected = ((ListItem)menuItem).SelectedItem;
             int quantity = Convert.ToInt32(((ListItem)menuItem).Items[selected]);
             double tax = Economy.Economy.CalculPriceTaxe((itemStack.Price * quantity), GameMode.Instance.Economy.Taxe_Market);

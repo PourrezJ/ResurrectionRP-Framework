@@ -39,7 +39,7 @@
             new GarageData.PerformanceData(11, "Moteur", new double[] { 0, 7000, 14000, 21000, 35000, 50000}),
             new GarageData.PerformanceData(12, "Frein", new double[] { 0, 3500, 7000, 10500}),
             new GarageData.PerformanceData(13, "Transmission", new double[] { 0, 5250, 10500, 15750}),
-            new GarageData.PerformanceData(15, "Suspensions", new double[] { 0, 1750, 2625, 3500, 5250})
+            new GarageData.PerformanceData(15, "Suspensions", new double[] { 0, 1750, 2625, 3500, 5250}),
             new GarageData.PerformanceData(18, "Turbo", new double[] { 0, 78250 })
         };
     }

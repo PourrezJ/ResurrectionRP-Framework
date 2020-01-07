@@ -170,7 +170,7 @@ namespace ResurrectionRP_Server.Society.Societies
 
         protected GarageType Type { get; set; }
 
-        protected IVehicle VehicleBench { get; set; }
+        protected VehicleHandler VehicleBench { get; set; }
 
         protected Location PnjLocation { get; set; }
 
@@ -216,7 +216,7 @@ namespace ResurrectionRP_Server.Society.Societies
                 return;
 
             if (VehicleBench == null)
-                VehicleBench = vehicle;
+                VehicleBench = vehicle as VehicleHandler;
         }
 
         private void OnVehicleLeaveWorkzone(IColshape colshape, IVehicle vehicle)
@@ -827,7 +827,7 @@ namespace ResurrectionRP_Server.Society.Societies
             if (_modType == 14)
                 HornPreview(VehicleBench, selected);
             else if (_modType == 23)
-                VehicleBench.SetWheels(2, 10);
+                VehicleBench.SetWheels((byte)VehicleBench.VehicleManifest.WheelType, selected);
             else if (_modType == 69)
                 VehicleBench.SetWindowTint(Utils.Utils.GetWindowTint(selected));
             else

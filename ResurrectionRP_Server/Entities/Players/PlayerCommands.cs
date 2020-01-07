@@ -47,106 +47,109 @@ namespace ResurrectionRP_Server.Entities.Players
             player.SendNotificationSuccess("Commande effectuée!");
         }
 
-        private async Task Wipe(IPlayer player, string[] arguments)
+        private void Wipe(IPlayer player, string[] arguments)
         {
-            try
+            Task.Run(async () =>
             {
-                var ph = player.GetPlayerHandler();
-
-                if (ph.StaffRank <= StaffRank.Moderator)
-                    return;
-
-                var socialclub = arguments[0].ToString().ToLower();
-                PlayerHandler phWipe = PlayerManager.GetPlayerBySCN(socialclub);
-
-                if (phWipe != null && phWipe.Client != null && phWipe.Client.Exists)
-                    await phWipe.Client.KickAsync("Wipe en cours...");
-
-                phWipe = await PlayerManager.GetPlayerHandlerDatabase(socialclub);
-
-                if (phWipe == null)
-                    return;
-
-                if (player.Exists && player != phWipe.Client)
-                    player.SendChatMessage($"Wipe de {phWipe.Identite.Name} en cours");
-
-                foreach (House house in HouseManager.Houses)
+                try
                 {
-                    if (house.Owner == phWipe.PID)
+                    var ph = player.GetPlayerHandler();
+
+                    if (ph.StaffRank <= StaffRank.Moderator)
+                        return;
+
+                    var socialclub = arguments[0].ToString().ToLower();
+                    PlayerHandler phWipe = PlayerManager.GetPlayerBySCN(socialclub);
+
+                    if (phWipe != null && phWipe.Client != null && phWipe.Client.Exists)
+                        await phWipe.Client.KickAsync("Wipe en cours...");
+
+                    phWipe = await PlayerManager.GetPlayerHandlerDatabase(socialclub);
+
+                    if (phWipe == null)
+                        return;
+
+                    if (player.Exists && player != phWipe.Client)
+                        player.SendChatMessage($"Wipe de {phWipe.Identite.Name} en cours");
+
+                    foreach (House house in HouseManager.Houses)
                     {
-                        house.SetOwner(string.Empty);
-
-                        if (house.Parking != null)
-                            house.Parking.ListVehicleStored = new List<ParkedCar>();
-
-                        house.UpdateInBackground();
-                    }
-                }
-
-                IEnumerable<VehicleData> vehicles = VehiclesManager.GetAllVehicles();
-
-                foreach (var vehicleData in vehicles)
-                {
-                    if (vehicleData.OwnerID != phWipe.PID)
-                        continue;
-
-                    foreach (Parking parking in Parking.ParkingList)
-                    {
-                        bool saveNeeded = false;
-
-                        foreach (ParkedCar parkedCar in parking.ListVehicleStored)
+                        if (house.Owner == phWipe.PID)
                         {
-                            if (parkedCar.Plate == vehicleData.Plate)
+                            house.SetOwner(string.Empty);
+
+                            if (house.Parking != null)
+                                house.Parking.ListVehicleStored = new List<ParkedCar>();
+
+                            house.UpdateInBackground();
+                        }
+                    }
+
+                    IEnumerable<VehicleData> vehicles = VehiclesManager.GetAllVehicles();
+
+                    foreach (var vehicleData in vehicles)
+                    {
+                        if (vehicleData.OwnerID != phWipe.PID)
+                            continue;
+
+                        foreach (Parking parking in Parking.ParkingList)
+                        {
+                            bool saveNeeded = false;
+
+                            foreach (ParkedCar parkedCar in parking.ListVehicleStored)
                             {
-                                parking.ListVehicleStored.Remove(parkedCar);
-                                saveNeeded = true;
+                                if (parkedCar.Plate == vehicleData.Plate)
+                                {
+                                    parking.ListVehicleStored.Remove(parkedCar);
+                                    saveNeeded = true;
+                                }
                             }
+
+                            if (saveNeeded)
+                                await parking.OnSaveNeeded();
                         }
 
-                        if (saveNeeded)
-                            await parking.OnSaveNeeded();
+                        await vehicleData.DeleteAsync(true);
                     }
 
-                    await vehicleData.DeleteAsync(true);
-                }
-
-                foreach (var faction in FactionManager.FactionList)
-                {
-                    if (faction.FactionPlayerList.ContainsKey(phWipe.PID))
+                    foreach (var faction in FactionManager.FactionList)
                     {
-                        faction.FactionPlayerList.Remove(phWipe.PID, out FactionPlayer useless);
-                        faction.UpdateInBackground();
+                        if (faction.FactionPlayerList.ContainsKey(phWipe.PID))
+                        {
+                            faction.FactionPlayerList.Remove(phWipe.PID, out FactionPlayer useless);
+                            faction.UpdateInBackground();
+                        }
                     }
-                }
 
-                foreach (var society in SocietyManager.SocietyList)
-                {
-                    if (society.Employees.ContainsKey(phWipe.PID))
+                    foreach (var society in SocietyManager.SocietyList)
                     {
-                        society.Employees.TryRemove(phWipe.PID, out _);
-                        society.UpdateInBackground();
+                        if (society.Employees.ContainsKey(phWipe.PID))
+                        {
+                            society.Employees.TryRemove(phWipe.PID, out _);
+                            society.UpdateInBackground();
+                        }
                     }
-                }
 
-                foreach (var business in Loader.BusinessesManager.BusinessesList)
-                {
-                    if (business.Employees.ContainsKey(phWipe.PID))
+                    foreach (var business in Loader.BusinessesManager.BusinessesList)
                     {
-                        business.Employees.Remove(phWipe.PID);
-                        business.UpdateInBackground();
+                        if (business.Employees.ContainsKey(phWipe.PID))
+                        {
+                            business.Employees.Remove(phWipe.PID);
+                            business.UpdateInBackground();
+                        }
                     }
+
+                    var result = await Database.MongoDB.Delete<PlayerHandler>("players", phWipe.PID);
+
+                    if (player.Exists && player != phWipe.Client && result.DeletedCount != 0)
+                        player.SendChatMessage($"Wipe de {phWipe.Identite.Name} terminé!");
                 }
+                catch (Exception ex)
+                {
 
-                var result = await Database.MongoDB.Delete<PlayerHandler>("players", phWipe.PID);
-
-                if (player.Exists && player != phWipe.Client && result.DeletedCount != 0)
-                    player.SendChatMessage($"Wipe de {phWipe.Identite.Name} terminé!");
-            }
-            catch (Exception ex)
-            {
-
-                Alt.Server.LogError("(PlayerCommands.Wipe) " + ex.Message);
-            }
+                    Alt.Server.LogError("(PlayerCommands.Wipe) " + ex.Message);
+                }
+            });
         }
 
         public void AddItem(IPlayer player, string[] arguments = null)
@@ -242,7 +245,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
             }
 
-            player.Vehicle.GetVehicleHandler().Repair(player);
+            AltAsync.Do(()=>player.Vehicle.GetVehicleHandler().Repair(player));
             player.DisplaySubtitle("Vehicule réparé", 5000);
         }
 

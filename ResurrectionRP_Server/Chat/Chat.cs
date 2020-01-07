@@ -12,18 +12,16 @@ namespace ResurrectionRP_Server
     {
         #region Delegates
         public delegate void CmdCallback(IPlayer player, string[] args = null);
-        public delegate Task CmdCallbackAsync(IPlayer player, string[] args = null);
         #endregion
 
         #region Static fields
         static ConcurrentDictionary<string, CmdCallback> _cmdHandlers = new ConcurrentDictionary<string, CmdCallback>();
-        static ConcurrentDictionary<string, CmdCallbackAsync> _cmdAsyncHandlers = new ConcurrentDictionary<string, CmdCallbackAsync>();
         #endregion
 
         #region Client events
         public static void Initialize()
         {
-            Alt.OnClient("chatmessage", OnChatMessage);
+            Alt.OnClient<IPlayer, string, object[]>("chatmessage", OnChatMessage);
         }
         #endregion
 
@@ -34,8 +32,6 @@ namespace ResurrectionRP_Server
             {
                 if (_cmdHandlers.ContainsKey(cmd))
                     _cmdHandlers[cmd](player, args);
-                else if (_cmdAsyncHandlers.ContainsKey(cmd))
-                    Task.Run(async () => { await _cmdAsyncHandlers[cmd](player, args); });
                 else
                     Send(player, $"{{FF0000}} Unknown command /{cmd}");
             }
@@ -45,10 +41,8 @@ namespace ResurrectionRP_Server
             }
         }
 
-        private static void OnChatMessage(IPlayer player, object[] args)
+        private static void OnChatMessage(IPlayer player, string msg, object[] args)
         {
-            string msg = (string)args[0];
-
             if (msg.Length > 0 && msg[0] == '/')
             {
                 msg = msg.Trim().Substring(1);
@@ -89,17 +83,6 @@ namespace ResurrectionRP_Server
         public static void Broadcast(string msg)
         {
             Alt.EmitAllClients("ChatMessage", msg);
-        }
-
-        public static bool RegisterCmd(string cmd, CmdCallbackAsync callback)
-        {
-            if (!_cmdAsyncHandlers.TryAdd(cmd, callback))
-            {
-                Alt.Log($"[Error]Failed to register command /{cmd}, already registered");
-                return false;
-            }
-
-            return true;
         }
 
         public static bool RegisterCmd(string cmd, CmdCallback callback)

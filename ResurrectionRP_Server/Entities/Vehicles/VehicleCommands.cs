@@ -20,7 +20,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             Chat.RegisterCmd("vehicle", Vehicle);
         }
 
-        public static async Task VehicleInfo(IPlayer player, string[] args)
+        public static void VehicleInfo(IPlayer player, string[] args)
         {
             if (player == null || !player.Exists)
                 return;
@@ -53,16 +53,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 player.SendNotificationError("Véhicule inconnu");
                 return;
             }
-
-            PlayerHandler owner = await PlayerManager.GetPlayerHandlerDatabase(vehicleData.OwnerID);
+            Task.Run(async() =>
+            {
+                PlayerHandler owner = await PlayerManager.GetPlayerHandlerDatabase(vehicleData.OwnerID);
+                if (owner != null)
+                    player.SendChatMessage($"Propriétaire : {owner.Identite.Name} ({vehicleData.OwnerID})");
+                else
+                    player.SendChatMessage("Propriétaire : Aucun");
+            });
+           
             player.SendChatMessage($"Immatriculation : {vehicleData.Plate}");
             VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get(vehicleData.Model);
             player.SendChatMessage($"Modèle : {manifest.LocalizedName} ({vehicleData.Model})");
-
-            if (owner != null)
-                player.SendChatMessage($"Propriétaire : {owner.Identite.Name} ({vehicleData.OwnerID})");
-            else
-                player.SendChatMessage("Propriétaire : Aucun");
 
             player.SendChatMessage($"Verrouillé : {vehicleData.LockState.ToString()}");
             player.SendChatMessage($"Dernier chauffeur : {vehicleData.LastDriver}");

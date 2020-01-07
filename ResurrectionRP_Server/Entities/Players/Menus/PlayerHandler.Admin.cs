@@ -668,7 +668,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 spawnPerm.SetInput("", 30, InputType.Text);
                 spawnPerm.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
-                    Task.Run(async ()=> await VehicleCommands.VehicleInfo(client, new[] {  menuItem.InputValue }));
+                    VehicleCommands.VehicleInfo(client, new[] { menuItem.InputValue });
                 };
                 mainMenu.Add(spawnPerm);
                 #endregion

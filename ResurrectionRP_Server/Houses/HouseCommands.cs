@@ -19,13 +19,13 @@ namespace ResurrectionRP_Server.Houses
             Chat.RegisterCmd("addparkinghouse", Addparkinghouse);
         }
 
-        public async Task CreateHouse(IPlayer player, string[] arguments = null)
+        public void CreateHouse(IPlayer player, string[] arguments = null)
         {
             try
             {
                 int type = Convert.ToInt32(arguments[0]);
                 int price = Convert.ToInt32(arguments[1]);
-                var position = await player.GetPositionAsync();
+                var position = player.Position;
 
                 if (player.GetPlayerHandler()?.StaffRank < StaffRank.Moderator)
                 {
@@ -39,10 +39,18 @@ namespace ResurrectionRP_Server.Houses
                     return;
                 }
 
-                House new_house = new House(await House.GetID(), string.Empty, type, position, price, false);
+                House new_house = null;
 
-                await new_house.InsertHouse();
-                HouseManager.Houses.Add(new_house);
+                Task.Run(async() =>
+                {
+                    new_house = new House(await House.GetID(), string.Empty, type, position, price, false);
+                    await new_house.InsertHouse();
+                    HouseManager.Houses.Add(new_house);
+                });
+
+                if (new_house == null)
+                    return;
+
                 player.SendNotificationSuccess("Maison ajouter.");
                 new_house.Init();
             }

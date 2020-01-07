@@ -35,12 +35,15 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
             }
 
             // Boucle pour vérifier si la place est vide.
-            Utils.Utils.SetInterval(() =>
+            Utils.Utils.SetInterval(async () =>
             {
                 foreach (var place in CarDealerPlaces)
                 {
-                    if (place.VehicleHandler == null && !VehiclesManager.IsVehicleInSpawn(place.Location.Pos, 4))
-                        Respawn(place);
+                    await AltAsync.Do(() =>
+                    {
+                        if (place.VehicleHandler == null && !VehiclesManager.IsVehicleInSpawn(place.Location.Pos, 4))
+                            Respawn(place);
+                    });
                 }
             }, 30000);
         }

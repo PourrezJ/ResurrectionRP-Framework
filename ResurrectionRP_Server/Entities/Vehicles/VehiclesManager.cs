@@ -293,15 +293,17 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             if (vehs == null)
                 return null;
-            else
+            else if (vehs.Count > 0)
                 return vehs[0];
+
+            return null;
         }
 
         public static List<IVehicle> GetNearestsVehicles(Vector3 position, float distance = 3.0f, short dimension = GameMode.GlobalDimension)
         {
             ICollection<IVehicle> vehs = Alt.GetAllVehicles();
 
-            List<IVehicle> nearest = null;
+            List<IVehicle> nearest = new List<IVehicle>();
 
             lock (vehs)
             {

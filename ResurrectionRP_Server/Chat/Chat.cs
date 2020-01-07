@@ -21,7 +21,7 @@ namespace ResurrectionRP_Server
         #region Client events
         public static void Initialize()
         {
-            Alt.OnClient<IPlayer, string, object[]>("chatmessage", OnChatMessage);
+            Alt.OnClient<IPlayer, string>("chatmessage", OnChatMessage);
         }
         #endregion
 
@@ -41,7 +41,7 @@ namespace ResurrectionRP_Server
             }
         }
 
-        private static void OnChatMessage(IPlayer player, string msg, object[] args)
+        private static void OnChatMessage(IPlayer player, string msg)
         {
             if (msg.Length > 0 && msg[0] == '/')
             {

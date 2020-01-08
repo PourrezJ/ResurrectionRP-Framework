@@ -758,7 +758,7 @@ namespace ResurrectionRP_Server.Entities.Players
         #region inventory
         public Inventory.Inventory HasItemInAnyInventory(ItemID item)
         {
-            if (BagInventory.HasItemID(item))
+            if (BagInventory != null && BagInventory.HasItemID(item))
                 return BagInventory;
             if (PocketInventory.HasItemID(item))
                 return PocketInventory;

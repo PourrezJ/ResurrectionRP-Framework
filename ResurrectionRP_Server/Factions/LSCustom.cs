@@ -597,7 +597,6 @@ namespace ResurrectionRP_Server.Factions
             switch (menuItem.Id)
             {
                 case "ID_attach":
-                    client.DisplaySubtitle("L'attache de véhicule est désactivée pour le moment!", 10000);
                     XMenuManager.XMenuManager.CloseMenu(client);
                     if (vh.VehicleData.TowTruck == null)
                     {

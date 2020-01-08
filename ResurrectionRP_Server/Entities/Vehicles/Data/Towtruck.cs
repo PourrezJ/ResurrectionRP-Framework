@@ -3,6 +3,7 @@ using System.Numerics;
 using MongoDB.Bson.Serialization.Attributes;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Vehicles;
+using AltV.Net.Async;
 
 namespace ResurrectionRP.Entities.Vehicles.Data
 {
@@ -23,26 +24,28 @@ namespace ResurrectionRP.Entities.Vehicles.Data
             Position = position;
             Vehicle = vehicle;
             Master = master;
-/*            timer = Utils.SetInterval(() =>
+            timer = Utils.SetInterval(async () =>
             {
                 if(!master.HaveTowVehicle())
                 {
                     this.timer.Stop();
                     return;
                 }
-                if (!vehicle.Exists)
+                if (!await vehicle.ExistsAsync())
                     return;
-                AltV.Net.Data.Position pos = master.Vehicle.Position;
-                if((pos.Y - vehicle.Position.Y) < pos.Y)
+
+                AltV.Net.Data.Position pos = await master.GetPositionAsync();
+                if((pos.Y - (await vehicle.GetPositionAsync()).Y) < pos.Y)
                 {
-                    vehicle.Position = new AltV.Net.Data.Position(pos.X, pos.Y +2, pos.Z + 4);
+                    await vehicle.SetPositionAsync(new AltV.Net.Data.Position(pos.X, pos.Y + 2, pos.Z + 4));
                 }
                 else
                 {
-                    vehicle.Position = new AltV.Net.Data.Position(pos.X, pos.Y - 2, pos.Z + 4);
+                    await vehicle.SetPositionAsync(new AltV.Net.Data.Position(pos.X, pos.Y - 2, pos.Z + 4));
                 }
-                vehicle.Rotation = master.Vehicle.Rotation;
-            }, 500);*/
+                await vehicle.SetRotationAsync(await master.GetRotationAsync());
+                
+            }, 150);
         }
     }
 }

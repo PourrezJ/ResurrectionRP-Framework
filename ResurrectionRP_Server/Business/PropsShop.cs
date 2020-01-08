@@ -204,15 +204,15 @@ namespace ResurrectionRP_Server.Business
         #endregion
 
         #region Admin menu
-        public override async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
+        public override Menu OpenSellMenu(IPlayer client, Menu menu)
         {
             if (client.GetPlayerHandler().StaffRank >= Utils.Enums.StaffRank.Moderator)
             {
-                menu.ItemSelectCallbackAsync += AdminMenuCallback;
+                menu.ItemSelectCallback += AdminMenuCallback;
                 menu.Add(new MenuItem("~r~Gérer les catégories en vente", "", "ID_Components", true));
             }
 
-            return await base.OpenSellMenu(client, menu);
+            return base.OpenSellMenu(client, menu);
         }
 
         public void OpenComponentsMenu(IPlayer client, Menu menu)
@@ -265,7 +265,7 @@ namespace ResurrectionRP_Server.Business
             menu.OpenMenu(client);
         }
 
-        public async Task AdminMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        public void AdminMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null && menu.HasData("Categories"))
             {
@@ -274,7 +274,7 @@ namespace ResurrectionRP_Server.Business
             }
             else if (menuItem == null)
             {
-                await OnNpcSecondaryInteract(client, Ped);
+                OnNpcSecondaryInteract(client, Ped);
                 return;
             }
 

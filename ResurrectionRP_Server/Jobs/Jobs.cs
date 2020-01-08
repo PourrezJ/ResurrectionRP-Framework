@@ -151,7 +151,7 @@ namespace ResurrectionRP_Server.Jobs
             return Task.FromResult(false);
         }
 
-        public virtual async Task QuitterService(IPlayer client)
+        public virtual void QuitterService(IPlayer client)
         {
             client.ApplyCharacter();
 
@@ -162,7 +162,7 @@ namespace ResurrectionRP_Server.Jobs
 
                 if (job.VehicleSpawnLocation != null)
                 {
-                    await job.RemoveVehiclePlayer(client);
+                    job.RemoveVehiclePlayer(client);
                 }
                 _inServiceList.Remove( client.GetSocialClub());
                 client.SendNotificationSuccess("Vous avez quitté votre service.");
@@ -193,12 +193,12 @@ namespace ResurrectionRP_Server.Jobs
             return null;
         }
 
-        public async Task RemoveVehiclePlayer(IPlayer client)
+        public void RemoveVehiclePlayer(IPlayer client)
         {
             VehicleHandler _veh = GetJobVehiclePlayer(client);
             client.GetPlayerHandler()?.RemoveKey(_veh);
             _vehicleList.Remove(client.GetSocialClub());
-            await _veh.DeleteAsync();
+            Task.Run(async ()=> await _veh.DeleteAsync());
         }
         #endregion
     }

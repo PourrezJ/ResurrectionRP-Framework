@@ -119,7 +119,7 @@ namespace ResurrectionRP_Server.Business
                             client.SendNotificationError("Le client ne veut pas être tatoué.");
                         }
 
-                        return Task.CompletedTask;
+                        return;
                     };
                 }
             }

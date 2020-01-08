@@ -184,10 +184,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         if (pnj.Position.DistanceTo(client.Position) > 3)
                             return;
 
-                        if (pnj.NpcInteractCallBackAsync != null)
-                            Task.Run(async () => await pnj.NpcInteractCallBackAsync.Invoke(client, pnj));
-                        else if (pnj.NpcInteractCallBack != null)
-                            pnj.NpcInteractCallBack.Invoke(client, pnj);
+                        pnj.NpcInteractCallBack?.Invoke(client, pnj);
                     }
                     else if (raycastData.entityType == 3)
                     {
@@ -337,10 +334,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (pnj.Position.DistanceTo(client.Position) > 3)
                         return;
 
-                    if (pnj.NpcSecInteractCallBackAsync != null)
-                        Task.Run(async () => await pnj.NpcSecInteractCallBackAsync.Invoke(client, pnj));
-                    else if (pnj.NpcSecInteractCallBack != null)
-                        pnj.NpcSecInteractCallBack.Invoke(client, pnj);
+                    pnj.NpcSecInteractCallBack?.Invoke(client, pnj);
                     break;
 
 

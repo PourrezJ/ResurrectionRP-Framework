@@ -75,9 +75,9 @@ namespace ResurrectionRP_Server.Business
             menu.OpenMenu(client);
         }
 
-        public override async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
+        public override Menu OpenSellMenu(IPlayer client, Menu menu)
         {
-            if (IsOwner(client) ||  IsEmployee(client))
+            if (IsOwner(client) || IsEmployee(client))
             {
                 Inactivity = DateTime.Now;
                 menu.ItemSelectCallback = MarketOwnerMenuManager;
@@ -96,7 +96,7 @@ namespace ResurrectionRP_Server.Business
                     menu.Add(new MenuItem($"Gérer les finances", "", "ID_TakeMoney", true, rightLabel: $"${BankAccount.Balance}"));
             }
 
-            return await base.OpenSellMenu(client, menu);
+            return base.OpenSellMenu(client, menu);
         }
         #endregion
 
@@ -105,7 +105,7 @@ namespace ResurrectionRP_Server.Business
         {
             if (menuItem == null)
             {
-                Task.Run(async () => { await OnNpcSecondaryInteract(client, Ped); });
+                OnNpcSecondaryInteract(client, Ped);
                 return;
             }
 
@@ -153,7 +153,7 @@ namespace ResurrectionRP_Server.Business
                         Station.EssencePrice = price;
                         UpdateInBackground();
                         client.SendNotification($"Le nouveau prix de l'essence est de ${Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence} dont ${GameMode.Instance.Economy.Taxe_Essence} de taxe.");
-                        Task.Run(async () => { await OnNpcSecondaryInteract(client, Ped); });
+                        OnNpcSecondaryInteract(client, Ped);
                     }
                     break;
                 default:

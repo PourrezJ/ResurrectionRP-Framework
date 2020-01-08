@@ -26,7 +26,7 @@ namespace ResurrectionRP_Server.Factions
                     PlayerHandler ph = player.GetPlayerHandler();
 
                     if (ph == null)
-                        return Task.CompletedTask;
+                        return;
 
                     if (player.GetPlayerHandler().HasBankMoney(healprice, "Soin Hospital", false))
                     {
@@ -41,7 +41,7 @@ namespace ResurrectionRP_Server.Factions
                 else
                     player.SendNotification("Ne me faites pas perdre mon temps alors!");
 
-                return Task.CompletedTask;
+                return;
             };
         }
         #endregion

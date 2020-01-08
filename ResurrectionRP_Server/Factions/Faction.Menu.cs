@@ -159,8 +159,6 @@ namespace ResurrectionRP_Server.Factions
                 }
                 else
                     client.SendNotificationError($"La personne ne souhaite pas rejoindre {FactionName}.");
-
-                return Task.CompletedTask;
             };
         }
 
@@ -372,16 +370,12 @@ namespace ResurrectionRP_Server.Factions
 
             if (FactionPlayerList.Count > 0)
             {
-                Task.Run(async () =>
+                foreach (var employe in FactionPlayerList)
                 {
-                    foreach (var employe in FactionPlayerList)
-                    {
-                        var identite = await Identite.GetOfflineIdentite(employe.Key);
-                        menu.Add(new MenuItem(identite == null ? employe.Key : identite.Name, "", "delete_employe", executeCallback: true));
-                    }
-                    menu.OpenMenu(client);
-                });
-
+                    var identite = Identite.GetOfflineIdentite(employe.Key);
+                    menu.Add(new MenuItem(identite == null ? employe.Key : identite.Name, "", "delete_employe", executeCallback: true));
+                }
+                menu.OpenMenu(client);
             }
         }
 
@@ -444,7 +438,7 @@ namespace ResurrectionRP_Server.Factions
 
                             return;
                         }
-                        else if ((await Identite.GetOfflineIdentite(playerID.Key)).Name == menuItem.Text)
+                        else if ((Identite.GetOfflineIdentite(playerID.Key)).Name == menuItem.Text)
                         {
                             if (FactionPlayerList.TryRemove(playerID.Key, out FactionPlayer value))
                             {

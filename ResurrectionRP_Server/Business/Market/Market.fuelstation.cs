@@ -33,7 +33,7 @@ namespace ResurrectionRP_Server.Business
 
 
             Menu menu = new Menu("ID_GasPumpMenuMain", "Station Essence", $"Prix du litre: {fuelpump.Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence}", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
-            menu.ItemSelectCallbackAsync = fuelpump.FuelMenuCallBack;
+            menu.ItemSelectCallback = fuelpump.FuelMenuCallBack;
 
             menu.SubTitle = "Mettre le plein dans:";
             if (
@@ -82,7 +82,7 @@ namespace ResurrectionRP_Server.Business
             menu.OpenMenu(client);
         }
 
-        private Task FuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void FuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             AcceptMenu accept = null;
             float price = 0;
@@ -102,7 +102,7 @@ namespace ResurrectionRP_Server.Business
                     {
                         client.DisplaySubtitle("Votre jerrycan est déjà remplis! ", 10000);
                         MenuManager.CloseMenu(client);
-                        return Task.CompletedTask;
+                        return;
                     }
 
                     if (item.Fuel > 0 && item.Fuel < 15)
@@ -114,7 +114,7 @@ namespace ResurrectionRP_Server.Business
                     accept.AcceptMenuCallBack = (IPlayer _client, bool response) =>
                     {
                         if (!response)
-                            return Task.CompletedTask;
+                            return;
 
                         if (Station.Litrage < maxFuel)
                             maxFuel = Station.Litrage;
@@ -135,7 +135,6 @@ namespace ResurrectionRP_Server.Business
                             client.SendNotificationError("Vous n'avez pas assez d'argent en banque.");
 
                         MenuManager.CloseMenu(client);
-                        return Task.CompletedTask;
                     };
 
                     break;
@@ -143,7 +142,7 @@ namespace ResurrectionRP_Server.Business
                     VehicleHandler vh = menuItem.GetData("Vehicle");
 
                     if (vh == null)
-                        return Task.CompletedTask;
+                        return;
 
                     maxFuel = vh.VehicleData.FuelMax - vh.VehicleData.Fuel;
 
@@ -180,12 +179,9 @@ namespace ResurrectionRP_Server.Business
                         }
                         else
                             MenuManager.CloseMenu(client);
-
-                        return Task.CompletedTask;
                     };
                     break;
             }
-            return Task.CompletedTask;
         }
         
         private void RefuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)

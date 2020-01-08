@@ -139,7 +139,7 @@ namespace ResurrectionRP_Server.Society
             if (client == null || !client.Exists)
                 return;
 
-            Task.Run(async () => { await OpenSocietyMainMenu(client); }).Wait();
+            OpenSocietyMainMenu(client);
         }
 
         public virtual void OnPlayerLeaveServiceColshape(IColshape colshape, IPlayer client)
@@ -212,36 +212,34 @@ namespace ResurrectionRP_Server.Society
         #endregion
 
         #region Methods
-        public virtual Task PriseService(IPlayer client)
+        public virtual void PriseService(IPlayer client)
         {
             if (client == null || !client.Exists)
-                return Task.CompletedTask;
+                return;
 
             PlayerHandler ph = client.GetPlayerHandler();
 
             if (ph == null)
-                return Task.CompletedTask;
+                return;
 
             InService.TryAdd(client.GetSocialClub(), ph.Identite.Name);
             client.SendNotificationSuccess("Vous avez pris votre service");
-            return Task.CompletedTask;
         }
 
-        public virtual Task QuitterService(IPlayer client)
+        public virtual void QuitterService(IPlayer client)
         {
             if (client == null || !client.Exists)
-                return Task.CompletedTask;
+                return;
 
             PlayerHandler ph = client.GetPlayerHandler();
 
             if (ph == null)
-                return Task.CompletedTask;
+                return;
 
             InService.TryRemove(client.GetSocialClub(), out _);
 
             client.ApplyCharacter();
             client.SendNotificationSuccess("Vous avez quitté votre service");
-            return Task.CompletedTask;
         }
 
         public virtual bool IsEmployee(IPlayer client)

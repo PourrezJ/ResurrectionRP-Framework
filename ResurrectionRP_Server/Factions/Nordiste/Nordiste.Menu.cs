@@ -75,7 +75,7 @@ namespace ResurrectionRP_Server.Factions
                 client.DisplayHelp("Vous n'avez aucune amende à payer !", 5000);
 
             Menu menu = new Menu("ID_Accueil", FactionName, "", 0, 0, Menu.MenuAnchor.MiddleRight, backCloseMenu: true);
-            menu.ItemSelectCallbackAsync = AccueilMenuCallback;
+            menu.ItemSelectCallback = AccueilMenuCallback;
             //List<Invoice> amendes = InvoiceList.FindAll(b => b.SocialClub == client.GetSocialClubName());
             //MenuItem menuitem = new MenuItem("Payer mes amendes", rightLabel: amendes.Count.ToString());
             //menu.Add(menuitem);
@@ -102,7 +102,7 @@ namespace ResurrectionRP_Server.Factions
             menu.OpenMenu(client);
         }
 
-        private async Task AccueilMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void AccueilMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             switch (menuItem.Id)
             {
@@ -113,7 +113,7 @@ namespace ResurrectionRP_Server.Factions
 
                     if (invoice != null)
                     {
-                        if (!await clientHandler.BankAccount.GetBankMoney(menuItem.GetData("price"), $"Réglement amende {menuItem.GetData("name")}"))
+                        if (!clientHandler.BankAccount.GetBankMoney(menuItem.GetData("price"), $"Réglement amende {menuItem.GetData("name")}"))
                         {
                             client.DisplayHelp("Vous n'avez pas assez d'argent en banque pour payer l'amende.", 5000);
                             client.PlaySoundFrontEnd(-1, "ERROR", "HUD_FRONTEND_DEFAULT_SOUNDSET");
@@ -357,41 +357,38 @@ namespace ResurrectionRP_Server.Factions
 
                 Identite identite = null;
                 string infos = string.Empty;
-                Task.Run(async () =>
+                string ownerId = target.GetVehicleHandler()?.VehicleData.OwnerID;
+                if (!string.IsNullOrEmpty(ownerId))
                 {
-                    string ownerId = target.GetVehicleHandler()?.VehicleData.OwnerID;
-                    if (!string.IsNullOrEmpty(ownerId))
+                    var player = PlayerManager.GetPlayerBySCN(ownerId);
+
+                    var vh = target.GetVehicleHandler();
+
+                    if (vh == null)
+                        return;
+
+                    if (!vh.VehicleData.PlateHide)
                     {
-                        var player = PlayerManager.GetPlayerBySCN(ownerId);
+                        identite = (player != null) ? player.Identite : Identite.GetOfflineIdentite(ownerId);
 
-                        var vh = target.GetVehicleHandler();
-
-                        if (vh == null)
-                            return;
-
-                        if (!vh.VehicleData.PlateHide)
+                        if (identite != null)
                         {
-                            identite = (player != null) ? player.Identite : await Identite.GetOfflineIdentite(ownerId);
-
-                            if (identite != null)
-                            {
-                                infos = $"Plaque {await target.GetNumberplateTextAsync()} \n" +
-                                $"Appartient à: {identite.Name}";
-                            }
-                            else
-                            {
-                                infos = $"Véhicule {await target.GetNumberplateTextAsync()} inconnu!";
-                            }
+                            infos = $"Plaque {target.NumberplateText} \n" +
+                            $"Appartient à: {identite.Name}";
                         }
                         else
                         {
-                            infos = "Véhicule introuvable dans notre registre.";
+                            infos = $"Véhicule {target.NumberplateText} inconnu!";
                         }
                     }
+                    else
+                    {
+                        infos = "Véhicule introuvable dans notre registre.";
+                    }
+                }
 
-                    Utils.Utils.Delay(20000, () => {
-                        client.SendNotificationPicture(CharPicture.CHAR_CHAT_CALL, "Bureau Shérif", "Information trouvées:", infos);
-                    });
+                Utils.Utils.Delay(20000, () => {
+                    client.SendNotificationPicture(CharPicture.CHAR_CHAT_CALL, "Bureau Shérif", "Information trouvées:", infos);
                 });
             }
         }

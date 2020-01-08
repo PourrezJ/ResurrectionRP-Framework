@@ -19,14 +19,14 @@ namespace ResurrectionRP_Server.Business
             await Database.MongoDB.Insert("businesses", this);
         }
 
-        public async Task Delete()
+        public void Delete()
         {
             Loader.BusinessesManager.BusinessesList.Remove(this);
             Entities.Blips.BlipsManager.Destroy(Blip);
             Inventory = null;
             Owner = null;
             Employees = null;
-            await Database.MongoDB.Delete<Business>("businesses", _id);
+            Task.Run(async ()=> await Database.MongoDB.Delete<Business>("businesses", _id));
         }
 
         public void UpdateInBackground()

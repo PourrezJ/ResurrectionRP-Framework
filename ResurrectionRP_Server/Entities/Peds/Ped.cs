@@ -26,16 +26,8 @@ namespace ResurrectionRP_Server.Entities.Peds
     {
         public static List<Ped> NPCList = new List<Ped>();
 
-        public delegate Task NpcPrimaryCallBackAsync(IPlayer client, Ped npc);
-        public delegate Task NpcSecondaryCallBackAsync(IPlayer client, Ped npc);
-
         public delegate void NpcPrimaryCallBack(IPlayer client, Ped npc);
         public delegate void NpcSecondaryCallBack(IPlayer client, Ped npc);
-
-        [JsonIgnore, BsonIgnore]
-        public NpcPrimaryCallBackAsync NpcInteractCallBackAsync { get; set; }
-        [JsonIgnore, BsonIgnore]
-        public NpcSecondaryCallBackAsync NpcSecInteractCallBackAsync { get; set; }
 
         [JsonIgnore, BsonIgnore]
         public NpcPrimaryCallBack NpcInteractCallBack { get; set; }

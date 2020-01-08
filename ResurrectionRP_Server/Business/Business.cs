@@ -73,7 +73,7 @@ namespace ResurrectionRP_Server.Business
             {
                 Ped ped = Ped.CreateNPC(PedHash, Location.Pos, Location.Rot.Z);
                 ped.NpcInteractCallBack = OnNpcFirstInteract; // E
-                ped.NpcSecInteractCallBackAsync = OnNpcSecondaryInteract; // W
+                ped.NpcSecInteractCallBack = OnNpcSecondaryInteract; // W
                 Ped = ped;
             }
 
@@ -106,16 +106,13 @@ namespace ResurrectionRP_Server.Business
         public void OnNpcFirstInteract(IPlayer client, Ped npc = null)
         {
             OpenMenu(client, npc);
-            Task.Run(async ()=> await OpenMenuAsync(client, npc));
         }
 
-        public async Task OnNpcSecondaryInteract(IPlayer client, Ped npc = null)
+        public void OnNpcSecondaryInteract(IPlayer client, Ped npc = null)
         {
             Menu menu = new Menu("ID_SellMenu", BusinnessName, "Administration du magasin", backCloseMenu: true);
-            await OpenSellMenu(client, menu);
+            OpenSellMenu(client, menu);
         }
-
-        public virtual Task OpenMenuAsync(IPlayer client, Ped npc) => Task.CompletedTask;
 
         public virtual void OpenMenu(IPlayer client, Ped npc) { }
         #endregion

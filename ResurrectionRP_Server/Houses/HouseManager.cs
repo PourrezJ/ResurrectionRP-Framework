@@ -143,7 +143,7 @@ namespace ResurrectionRP_Server.Houses
             Menu menu = new Menu("House_PurchaseMenu", HouseTypes.HouseTypeList[house.Type].Name, "Choisissez une option :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
             menu.BannerColor = new MenuColor(0, 0, 0, 0);
             menu.SetData("House", house);
-            menu.ItemSelectCallbackAsync = MenuCallBack;
+            menu.ItemSelectCallback = MenuCallBack;
 
             menu.SubTitle = (house.Locked) ? "La porte est ~r~fermée" : "La porte est ~g~ouverte";
 
@@ -195,7 +195,7 @@ namespace ResurrectionRP_Server.Houses
             MenuManager.OpenMenu(player, menu);
         }
 
-        private static async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private static void MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             House house = menu.GetData("House");
 
@@ -239,7 +239,7 @@ namespace ResurrectionRP_Server.Houses
                     break;
                 case "ID_Delete":
                     house.Destroy();
-                    await house.RemoveInDatabase();
+                    Task.Run(async ()=> await house.RemoveInDatabase());
                     client.SendNotificationSuccess("Vous avez supprimé le logement.");
                     break;
                 case "ID_PriceChange":

@@ -2,14 +2,13 @@
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Utils;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server
 {
     public class AcceptMenu
     {
         #region Delegates
-        public delegate Task AcceptMenuCallbackDelegate(IPlayer client, bool reponse);
+        public delegate void AcceptMenuCallbackDelegate(IPlayer client, bool reponse);
         #endregion
 
         #region Private fields
@@ -36,7 +35,7 @@ namespace ResurrectionRP_Server
             };
 
             accept.menu = new Menu("ID_AcceptMenu", title, subtitle, Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, !backCloseMenu, false, backCloseMenu);
-            accept.menu.ItemSelectCallbackAsync = accept.MenuCallBack;
+            accept.menu.ItemSelectCallback = accept.MenuCallBack;
 
             if (banner != null)
                 accept.menu.BannerSprite = banner;
@@ -52,16 +51,16 @@ namespace ResurrectionRP_Server
         #endregion
 
         #region Callback
-        private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
-                await AcceptMenuCallBack?.Invoke(client, false);
+                AcceptMenuCallBack?.Invoke(client, false);
             else if (menu.Id == "ID_AcceptMenu")
             {
                 if (menuItem.Id == "ID_Accept")
-                    await AcceptMenuCallBack?.Invoke(client, true);
+                    AcceptMenuCallBack?.Invoke(client, true);
                 else if (menuItem.Id == "ID_Refuser")
-                    await AcceptMenuCallBack?.Invoke(client, false);
+                    AcceptMenuCallBack?.Invoke(client, false);
             }
 
             if (_closeAtEnd)

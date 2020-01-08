@@ -29,11 +29,11 @@ namespace ResurrectionRP_Server.Models
         public string Nationalite;
         public DateTime BirthDate;
 
-        public async static Task<Identite> GetOfflineIdentite(string socialClub)
+        public static Identite GetOfflineIdentite(string socialClub)
         {
             try
             {
-                var player = await Entities.Players.PlayerManager.GetPlayerHandlerDatabase(socialClub);
+                var player = Entities.Players.PlayerManager.GetPlayerHandlerDatabase(socialClub).Result;
                 return player?.Identite;
             }
             catch (Exception)

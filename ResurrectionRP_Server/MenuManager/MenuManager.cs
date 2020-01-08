@@ -44,16 +44,10 @@ namespace ResurrectionRP_Server
 
             if (menu != null && !menu.BackCloseMenu)
             {
-                if (menu.ItemSelectCallbackAsync != null)
-                    Task.Run(async () => { await menu.ItemSelectCallbackAsync(player, menu, null, -1); });
-
                 menu.ItemSelectCallback?.Invoke(player, menu, null, -1);
             }
             else if (menu != null)
             {
-                if (menu.FinalizerAsync != null)
-                    Task.Run(async () => { await menu.FinalizerAsync(player, menu); });
-
                 menu.Finalizer?.Invoke(player, menu);
                 _clientMenus.Remove(player, out _);
             }
@@ -110,9 +104,6 @@ namespace ResurrectionRP_Server
 
             if (_clientMenus.TryGetValue(player, out Menu menu))
             {
-                if (menu.IndexChangeCallbackAsync != null)
-                    Task.Run(async () => { await menu.IndexChangeCallbackAsync(player, menu, index, menu.Items[index]); });
-
                 menu.IndexChangeCallback?.Invoke(player, menu, index, menu.Items[index]);
             }
         }
@@ -124,9 +115,6 @@ namespace ResurrectionRP_Server
 
             if (_clientMenus.TryGetValue(player, out Menu menu))
             {
-                if (menu.ListItemChangeCallbackAsync != null)
-                    Task.Run(async () => { await menu.ListItemChangeCallbackAsync(player, menu, (ListItem)menu.Items[unk1], unk2); });
-
                 menu.ListItemChangeCallback?.Invoke(player, menu, (ListItem)menu.Items[unk1], unk2);
             }
         }
@@ -138,9 +126,6 @@ namespace ResurrectionRP_Server
 
             if (_clientMenus.TryGetValue(player, out Menu menu))
             {
-                if (menu.FinalizerAsync != null)
-                    Task.Run(async () => await menu.FinalizerAsync(player, menu));
-
                 menu.Finalizer?.Invoke(player, menu);
                 _clientMenus.Remove(player, out _);
             }
@@ -152,9 +137,6 @@ namespace ResurrectionRP_Server
         {
             if (_clientMenus.Remove(client, out Menu menu))
             {
-                if (menu.FinalizerAsync != null)
-                    Task.Run(async () => { await menu.FinalizerAsync(client, menu); });
-
                 menu.Finalizer?.Invoke(client, menu);
             }
 
@@ -163,7 +145,7 @@ namespace ResurrectionRP_Server
 
         public static void ForceCallback(IPlayer client)
         {
-            if (_clientMenus.TryGetValue(client, out Menu menu) && (menu.ItemSelectCallbackAsync != null || menu.ItemSelectCallback != null))
+            if (_clientMenus.TryGetValue(client, out Menu menu) && menu.ItemSelectCallback != null)
                 client.EmitLocked("MenuManager_ForceCallback");
         }
 
@@ -185,9 +167,6 @@ namespace ResurrectionRP_Server
 
             if (_clientMenus.Remove(client, out Menu oldMenu))
             {
-                if (oldMenu.FinalizerAsync != null)
-                    Task.Run(async () => { await oldMenu.FinalizerAsync(client, menu); });
-
                 oldMenu.Finalizer?.Invoke(client, menu);
             }
 

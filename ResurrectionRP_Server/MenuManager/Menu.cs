@@ -58,9 +58,7 @@ namespace ResurrectionRP_Server
         {
             get 
             {
-                if (IndexChangeCallbackAsync != null)
-                    return true;
-                else if (IndexChangeCallback != null)
+                if (IndexChangeCallback != null)
                     return true;
                 return false;
             }
@@ -97,19 +95,6 @@ namespace ResurrectionRP_Server
             }
         }
 
-        //ASYNC
-        [JsonIgnore]
-        public MenuCallbackAsync ItemSelectCallbackAsync { get; set; }
-        [JsonIgnore]
-        public MenuListCallbackAsync ListItemChangeCallbackAsync { get; set; }
-        [JsonIgnore]
-        public MenuCurrentIndexAsync IndexChangeCallbackAsync { get; set; }
-        [JsonIgnore]
-        public MenuCheckboxAsync CallbackCheckBoxAsync { get; set; }
-        [JsonIgnore]
-        public MenuFinalizerAsync FinalizerAsync { get; set; }
-
-        // SYNC
         [JsonIgnore]
         public MenuCallback ItemSelectCallback { get; set; }
         [JsonIgnore]
@@ -155,8 +140,6 @@ namespace ResurrectionRP_Server
 
             _data = new Dictionary<string, object>();
             Items = new MenuItemList();
-            ItemSelectCallbackAsync = null;
-            FinalizerAsync = null;
         }
         #endregion
 

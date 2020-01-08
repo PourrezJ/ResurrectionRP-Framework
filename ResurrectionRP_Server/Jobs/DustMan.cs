@@ -199,7 +199,7 @@ namespace ResurrectionRP_Server.Jobs
                 ph.AddMoney(_price);
 
                 Menu menu = new Menu("ID_DustMan", "Déchetterie", "Que voulez-vous faire?", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, true, true, false);
-                menu.ItemSelectCallbackAsync = DustManCallBack;
+                menu.ItemSelectCallback = DustManCallBack;
                 menu.Add(new MenuItem("~g~Prendre un autre quartier", "", "ID_Quartier", true));
                 menu.Add(new MenuItem("~r~Fin de mission", "", "ID_End", true));
 
@@ -207,7 +207,7 @@ namespace ResurrectionRP_Server.Jobs
             }
         }
 
-        private async Task DustManCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private async void DustManCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             switch (menuItem.Id)
             {
@@ -216,16 +216,16 @@ namespace ResurrectionRP_Server.Jobs
                     break;
 
                 case "ID_End":
-                    await QuitterService(client);
+                    QuitterService(client);
                     break;
             }
             MenuManager.CloseMenu(client);
         }
 
-        public override async Task QuitterService(IPlayer client)
+        public override void QuitterService(IPlayer client)
         {
-            await client.EmitAsync("Jobs_Dustman", "End");
-            await base.QuitterService(client);
+            client.Emit("Jobs_Dustman", "End");
+            base.QuitterService(client);
         }
     }
 }

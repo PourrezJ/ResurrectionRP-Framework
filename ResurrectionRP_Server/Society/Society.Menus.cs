@@ -26,14 +26,14 @@ namespace ResurrectionRP_Server.Society
         #endregion
 
         #region Society menu
-        public virtual async Task<Menu> OpenSocietyMainMenu(IPlayer client)
+        public virtual Menu OpenSocietyMainMenu(IPlayer client)
         {
             Menu menu = new Menu("ID_SocietyMainMenu", SocietyName, "Administration de la société", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
-            menu.ItemSelectCallbackAsync += SocietyMainMenuCallback;
+            menu.ItemSelectCallback += SocietyMainMenuCallback;
 
             if (Owner != null && (client.GetPlayerHandler().StaffRank >= StaffRank.Moderator || FactionManager.IsGouv(client)))
             {
-                var identite = await Identite.GetOfflineIdentite(Owner);
+                var identite = Identite.GetOfflineIdentite(Owner);
 
                 if (identite != null)
                 {
@@ -116,7 +116,7 @@ namespace ResurrectionRP_Server.Society
             return menu;
         }
 
-        private async Task SocietyMainMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void SocietyMainMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             PlayerHandler ph = client.GetPlayerHandler();
 
@@ -126,12 +126,12 @@ namespace ResurrectionRP_Server.Society
             switch (menuItem.Id)
             {
                 case "pservice":
-                    await PriseService(client);
+                    PriseService(client);
                     MenuManager.CloseMenu(client);
                     break;
 
                 case "qservice":
-                    await QuitterService(client);
+                    QuitterService(client);
                     MenuManager.CloseMenu(client);
                     break;
                 case "gemployee":
@@ -161,17 +161,20 @@ namespace ResurrectionRP_Server.Society
 
                     if (!string.IsNullOrEmpty(socialClub))
                     {
-                        PlayerHandler player = await PlayerManager.GetPlayerHandlerDatabase(socialClub);
-
-                        if (player == null)
-                            client.SendNotificationError("Joueur inconnu");
-                        else
+                        Task.Run(async () =>
                         {
-                            Owner = socialClub;
-                            UpdateInBackground();
-                            client.SendNotificationSuccess("Propriétaire changé");
-                            await OpenSocietyMainMenu(client);
-                        }
+                            PlayerHandler player = await PlayerManager.GetPlayerHandlerDatabase(socialClub);
+
+                            if (player == null)
+                                client.SendNotificationError("Joueur inconnu");
+                            else
+                            {
+                                Owner = socialClub;
+                                UpdateInBackground();
+                                client.SendNotificationSuccess("Propriétaire changé");
+                                OpenSocietyMainMenu(client);
+                            }
+                        });
                     }
                     break;
                 case "ID_CancelResell":
@@ -255,7 +258,7 @@ namespace ResurrectionRP_Server.Society
         {
             if (menuItem == null)
             {
-                Task.Run(async () => { await OpenSocietyMainMenu(client); });
+                OpenSocietyMainMenu(client);
                 return;
             }
 
@@ -269,7 +272,7 @@ namespace ResurrectionRP_Server.Society
             menu.Reset();
             menu.BackCloseMenu = false;
             menu.SubTitle = "Gestion des employés";
-            menu.ItemSelectCallbackAsync = GestionEmployeeCallback;
+            menu.ItemSelectCallback = GestionEmployeeCallback;
 
             MenuItem ajouter = new MenuItem("Ajouter un employé", "", "add_employe", executeCallback: true);
             ajouter.Description = "Mettez le prénom puis le nom de famille pour l'ajouter.";
@@ -289,11 +292,11 @@ namespace ResurrectionRP_Server.Society
             menu.OpenMenu(client);
         }
 
-        private async Task GestionEmployeeCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void GestionEmployeeCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
-                await OpenSocietyMainMenu(client);
+                OpenSocietyMainMenu(client);
                 return;
             }
 
@@ -339,7 +342,7 @@ namespace ResurrectionRP_Server.Society
                     if (ph != null && ph.Identite.Name == menuItem.Text)
                     {
                         if (InService.ContainsKey(playerID.Key))
-                            await QuitterService(ph.Client);
+                            QuitterService(ph.Client);
 
                         Employees.TryRemove(ph.PID, out _);
                         UpdateInBackground();
@@ -347,7 +350,7 @@ namespace ResurrectionRP_Server.Society
                         GestionEmployee(client, menu);
                         break;
                     }
-                    else if ((await Identite.GetOfflineIdentite(playerID.Key)).Name == menuItem.Text)
+                    else if ((Identite.GetOfflineIdentite(playerID.Key)).Name == menuItem.Text)
                     {
                         Employees.TryRemove(ph.PID, out _);
                         UpdateInBackground();

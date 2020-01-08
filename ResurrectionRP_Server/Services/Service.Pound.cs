@@ -76,7 +76,7 @@ namespace ResurrectionRP_Server.Services
         #endregion
 
         #region Methods
-        private static async Task AcceptMenuCallBack(IPlayer client, bool reponse)
+        private static void AcceptMenuCallBack(IPlayer client, bool reponse)
         {
             if (reponse)
             {
@@ -99,7 +99,7 @@ namespace ResurrectionRP_Server.Services
                             _towedvehicle.VehicleData.IsInPound = true;
                             _vh.VehicleData.UpdateProperties();
                             _towedvehicle.UpdateInBackground(false, true);
-                            await _towedvehicle.DeleteAsync(false);
+                            Task.Run(async ()=> await _towedvehicle.DeleteAsync(false));
                             MenuManager.CloseMenu(client);
                         }
                     }
@@ -110,7 +110,7 @@ namespace ResurrectionRP_Server.Services
         public static void OpenPoundMenu(IPlayer client)
         {
             Menu _menu = new Menu("ID_PoundMenu", "Fourrière", $"Sortir un véhicule pour la somme: ${Price}", backCloseMenu: true);
-            _menu.ItemSelectCallbackAsync = PoundMenuCallBack;
+            _menu.ItemSelectCallback = PoundMenuCallBack;
 
             var _poundList = GetVehicleInPound(client);
             if (_poundList.Count() <= 0)
@@ -140,7 +140,7 @@ namespace ResurrectionRP_Server.Services
             _menu.OpenMenu(client);
         }
 
-        private static async Task PoundMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private static void PoundMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menu.Id == "ID_PoundMenu" && menuItem.Id == "ID_Get" && menuItem.HasData("Vehicle"))
             {
@@ -161,7 +161,7 @@ namespace ResurrectionRP_Server.Services
                     if (keyfind == null)
                         ph.ListVehicleKey.Add(new VehicleKey(veh.VehicleManifest.LocalizedName, veh.VehicleData.Plate));
 
-                    await GameMode.Instance.Save();
+                    Task.Run(async ()=> await GameMode.Instance.Save());
                     client.SendNotificationPicture(Utils.Enums.CharPicture.DIA_GARDENER,"Fourrière", "","~g~Votre véhicule vous attend sur le parking." );
                     MenuManager.CloseMenu(client);
                 }

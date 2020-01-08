@@ -15,9 +15,9 @@ namespace ResurrectionRP_Server.Business
 {
     public partial class Business
     {
-        public virtual async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
+        public virtual Menu OpenSellMenu(IPlayer client, Menu menu)
         {
-            menu.ItemSelectCallbackAsync += MenuCallBack;
+            menu.ItemSelectCallback += MenuCallBack;
 
             if (Buyable && OnSale && Owner == client.GetSocialClub())
                 menu.Add(new MenuItem("~r~Annuler la mise en vente", "", id: "ID_CancellSell", executeCallback: true));
@@ -35,7 +35,7 @@ namespace ResurrectionRP_Server.Business
 
             if (Owner != null && (client.GetPlayerHandler().StaffRank >= Utils.Enums.StaffRank.Moderator || Factions.FactionManager.IsGouv(client)))
             {
-                var old = (await Models.Identite.GetOfflineIdentite(Owner));
+                var old = (Models.Identite.GetOfflineIdentite(Owner));
                 var identite = "No Owner";
 
                 if (old != null)
@@ -55,7 +55,7 @@ namespace ResurrectionRP_Server.Business
             return menu;
         }
 
-        private async Task MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void MenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
                 return;
@@ -65,7 +65,7 @@ namespace ResurrectionRP_Server.Business
                 if (menuItem.Id == "ID_Buy")
                 {
                     Buy(client);
-                    await OnNpcSecondaryInteract(client, Ped);
+                    OnNpcSecondaryInteract(client, Ped);
                 }
                 else if (menuItem.Id == "ID_Sell")
                 {
@@ -74,12 +74,12 @@ namespace ResurrectionRP_Server.Business
                     else
                         client.SendNotificationError("Montant non valide");
 
-                    await OnNpcSecondaryInteract(client, Ped);
+                    OnNpcSecondaryInteract(client, Ped);
                 }
                 else if (menuItem.Id == "ID_CancellSell")
                 {
                     CancelSell(client);
-                    await OnNpcSecondaryInteract(client, Ped);
+                    OnNpcSecondaryInteract(client, Ped);
                 }
                 else if (menuItem.Id == "ID_Close")
                 {
@@ -94,11 +94,11 @@ namespace ResurrectionRP_Server.Business
                     UpdateInBackground();
                     Entities.Blips.BlipsManager.SetColor(Blip, 35);
                     client.SendNotificationSuccess("Propriétaire retiré");
-                    await OnNpcSecondaryInteract(client, Ped);
+                    OnNpcSecondaryInteract(client, Ped);
                 }
                 else if (menuItem.Id == "ID_DeleteAdmin")
                 {
-                    await Delete();
+                    Delete();
                     client.SendNotificationSuccess("Le magasin a été supprimé");
                     MenuManager.CloseMenu(client);
                 }
@@ -114,7 +114,7 @@ namespace ResurrectionRP_Server.Business
             menu.Reset();
             menu.BackCloseMenu = false;
             menu.SubTitle = "Gestion des employés";
-            menu.ItemSelectCallbackAsync = GestionEmployeeCallback;
+            menu.ItemSelectCallback = GestionEmployeeCallback;
 
             MenuItem ajouter = new MenuItem("Ajouter un employé", "", "add_employe", executeCallback: true);
             ajouter.Description = "Mettez le prénom puis le nom de famille pour l'ajouter.";
@@ -134,11 +134,11 @@ namespace ResurrectionRP_Server.Business
             menu.OpenMenu(client);
         }
 
-        private async Task GestionEmployeeCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void GestionEmployeeCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menuItem == null)
             {
-                await OnNpcSecondaryInteract(client, Ped);
+                OnNpcSecondaryInteract(client, Ped);
                 return;
             }
 
@@ -179,7 +179,7 @@ namespace ResurrectionRP_Server.Business
             {
                 foreach (var playerID in Employees)
                 {
-                    if ((await Models.Identite.GetOfflineIdentite(playerID.Key)).Name == menuItem.Text)
+                    if ((Models.Identite.GetOfflineIdentite(playerID.Key)).Name == menuItem.Text)
                     {
                         Employees.Remove(playerID.Key);
                         UpdateInBackground();

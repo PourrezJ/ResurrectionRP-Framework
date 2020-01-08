@@ -63,7 +63,7 @@ namespace ResurrectionRP_Server.Business
             }
         }
 
-        public override async Task<Menu> OpenSellMenu(IPlayer client, Menu menu)
+        public override Menu OpenSellMenu(IPlayer client, Menu menu)
         {
             if ( IsOwner(client) ||  IsEmployee(client))
             {
@@ -75,7 +75,7 @@ namespace ResurrectionRP_Server.Business
                     menu.Add(new MenuItem($"Gérer les finances", "", "ID_TakeMoney", true, rightLabel: $"${BankAccount.Balance}"));
             }
 
-            return await base.OpenSellMenu(client, menu);
+            return base.OpenSellMenu(client, menu);
         }
         #endregion
 
@@ -84,7 +84,7 @@ namespace ResurrectionRP_Server.Business
         {
             if (menuItem == null)
             {
-                Task.Run(async () => { await OnNpcSecondaryInteract(client, Ped); });
+                OnNpcSecondaryInteract(client, Ped);
                 return;
             }
 

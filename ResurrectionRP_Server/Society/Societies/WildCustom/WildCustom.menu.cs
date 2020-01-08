@@ -171,7 +171,6 @@ namespace ResurrectionRP_Server.Society.Societies.WildCustom
                     }
 
                     OpenMainMenu(client);
-                    return Task.CompletedTask;
                 };
             }
         }

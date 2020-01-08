@@ -347,42 +347,39 @@ namespace ResurrectionRP_Server.Factions
 
                 Identite identite = null;
                 string infos = string.Empty;
-                Task.Run(async () =>
+                string ownerId = target.GetVehicleHandler()?.VehicleData.OwnerID;
+                if (!string.IsNullOrEmpty(ownerId))
                 {
-                    string ownerId = target.GetVehicleHandler()?.VehicleData.OwnerID;
-                    if (!string.IsNullOrEmpty(ownerId))
+                    var player = PlayerManager.GetPlayerBySCN(ownerId);
+
+                    var vh = target.GetVehicleHandler();
+
+                    if (vh == null)
+                        return;
+
+                    if (!vh.VehicleData.PlateHide)
                     {
-                        var player = PlayerManager.GetPlayerBySCN(ownerId);
+                        identite = (player != null) ? player.Identite : Identite.GetOfflineIdentite(ownerId);
 
-                        var vh = target.GetVehicleHandler();
-
-                        if (vh == null)
-                            return;
-
-                        if (!vh.VehicleData.PlateHide)
+                        if (identite != null)
                         {
-                            identite = (player != null) ? player.Identite : await Identite.GetOfflineIdentite(ownerId);
-
-                            if (identite != null)
-                            {
-                                infos = $"Plaque {target.NumberplateText} \n" +
-                                $"Appartient à: {identite.Name}";
-                            }
-                            else
-                            {
-                                infos = $"Véhicule {target.NumberplateText} inconnu!";
-                            }
+                            infos = $"Plaque {target.NumberplateText} \n" +
+                            $"Appartient à: {identite.Name}";
                         }
                         else
                         {
-                            infos = "Véhicule introuvable dans notre registre.";
+                            infos = $"Véhicule {target.NumberplateText} inconnu!";
                         }
                     }
+                    else
+                    {
+                        infos = "Véhicule introuvable dans notre registre.";
+                    }
+                }
 
-                    Utils.Utils.Delay(20000, () => {
-                        client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Information trouvées:", infos);
-                    });
-                });           
+                Utils.Utils.Delay(20000, () => {
+                    client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Information trouvées:", infos);
+                });
             }
         }
         #endregion

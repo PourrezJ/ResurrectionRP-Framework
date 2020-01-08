@@ -85,7 +85,7 @@ namespace ResurrectionRP_Server.Factions
             menu.SetData("Player", _target);
 
             var dismiss = new XMenuItem("Renvoyer", executeCallback: true);
-            dismiss.OnMenuItemCallbackAsync = DissMissPlayer;
+            dismiss.OnMenuItemCallback = DissMissPlayer;
             menu.Add(dismiss);
 
             foreach (var rang in FactionRang)
@@ -101,17 +101,16 @@ namespace ResurrectionRP_Server.Factions
             menu.OpenXMenu(client);
         }
 
-        private Task DissMissPlayer(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void DissMissPlayer(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             IPlayer _target = menu.GetData("Player");
 
             if (_target == null)
-                return Task.CompletedTask;
+                return;
 
             FactionPlayerList.Remove( _target.GetSocialClub(), out FactionPlayer value);
             _target.SendNotification($"Vous avez été renvoyé de {FactionName}.");
             UpdateInBackground();
-            return Task.CompletedTask;
         }
 
         private void InviteFactionChoise(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
@@ -204,14 +203,14 @@ namespace ResurrectionRP_Server.Factions
             if ( HasPlayerIntoFaction(client))
             {
                 var item = new XMenuItem(FactionName, "", "", icon, true);
-                item.OnMenuItemCallbackAsync = AddFactionVehicleMenu_Callback;
+                item.OnMenuItemCallback = AddFactionVehicleMenu_Callback;
                 xMenu.SetData("Faction_Target", vehicle);
                 xMenu.Add(item);
             }
             return xMenu;
         }
 
-        public virtual async Task AddFactionVehicleMenu_Callback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        public virtual void AddFactionVehicleMenu_Callback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             try
             {
@@ -219,7 +218,7 @@ namespace ResurrectionRP_Server.Factions
                 if (target == null || !target.Exists) return;
 
                 menu = new XMenu("ID_Faction");
-                await InteractVehicleMenu(client, target, menu);
+                InteractVehicleMenu(client, target, menu);
                 menu.OpenXMenu(client);
             }
             catch
@@ -228,9 +227,9 @@ namespace ResurrectionRP_Server.Factions
             }
         }
 
-        public virtual Task<XMenu> InteractVehicleMenu(IPlayer client, IVehicle target, XMenu xmenu)
+        public virtual XMenu InteractVehicleMenu(IPlayer client, IVehicle target, XMenu xmenu)
         {
-            return Task.FromResult(xmenu);
+            return xmenu;
         }
         #endregion
 

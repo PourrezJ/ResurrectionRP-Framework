@@ -49,7 +49,7 @@ namespace ResurrectionRP_Server.Factions
             xmenu.SetData("Player", target);
 
             var search = new XMenuItem("Fouiller", "", "", XMenuItemIcons.HAND_PAPER_SOLID, true);
-            search.OnMenuItemCallbackAsync = SearchPlayer;
+            search.OnMenuItemCallback = SearchPlayer;
             xmenu.Add(search);
 
             var penalty = new XMenuItem("Amende", "Mettre une amende", "ID_Invoice", XMenuItemIcons.FILE_INVOICE_SOLID, true);
@@ -295,19 +295,19 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Interaction Vehicle
-        public override async Task<XMenu> InteractVehicleMenu(IPlayer client, IVehicle target, XMenu xmenu)
+        public override XMenu InteractVehicleMenu(IPlayer client, IVehicle target, XMenu xmenu)
         {
             xmenu.SetData("Vehicle", target);
 
             var _identVeh = new XMenuItem("Identification du véhicule.", icon: XMenuItemIcons.ID_CARD_SOLID, executeCallback: true);
-            _identVeh.OnMenuItemCallbackAsync = IdentVehicle;
+            _identVeh.OnMenuItemCallback = IdentVehicle;
             xmenu.Add(_identVeh);
 
             var _poundVehicle = new XMenuItem("Fourrière", "Mettre en fourrière", "", XMenuItemIcons.INFO, false);
             _poundVehicle.OnMenuItemCallback = PoundVehicle;
             xmenu.Add(_poundVehicle);
 
-            return await base.InteractVehicleMenu(client, target, xmenu);
+            return base.InteractVehicleMenu(client, target, xmenu);
         }
 
         private void PoundVehicle(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
@@ -337,7 +337,7 @@ namespace ResurrectionRP_Server.Factions
             }
         }
 
-        private async Task IdentVehicle(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void IdentVehicle(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             XMenuManager.XMenuManager.CloseMenu(client);
             IVehicle target = menu.GetData("Vehicle");
@@ -347,48 +347,49 @@ namespace ResurrectionRP_Server.Factions
 
                 Identite identite = null;
                 string infos = string.Empty;
-
-                string ownerId = target.GetVehicleHandler()?.VehicleData.OwnerID;
-                if (!string.IsNullOrEmpty(ownerId))
+                Task.Run(async () =>
                 {
-                    var player = PlayerManager.GetPlayerBySCN(ownerId);
-
-                    var vh = target.GetVehicleHandler();
-
-                    if (vh == null)
-                        return;
-
-                    if (!vh.VehicleData.PlateHide)
+                    string ownerId = target.GetVehicleHandler()?.VehicleData.OwnerID;
+                    if (!string.IsNullOrEmpty(ownerId))
                     {
-                        identite = (player != null) ? player.Identite : await Identite.GetOfflineIdentite(ownerId);
+                        var player = PlayerManager.GetPlayerBySCN(ownerId);
 
-                        if (identite != null)
+                        var vh = target.GetVehicleHandler();
+
+                        if (vh == null)
+                            return;
+
+                        if (!vh.VehicleData.PlateHide)
                         {
-                            infos = $"Plaque {target.NumberplateText} \n" +
-                            $"Appartient à: {identite.Name}";
+                            identite = (player != null) ? player.Identite : await Identite.GetOfflineIdentite(ownerId);
+
+                            if (identite != null)
+                            {
+                                infos = $"Plaque {target.NumberplateText} \n" +
+                                $"Appartient à: {identite.Name}";
+                            }
+                            else
+                            {
+                                infos = $"Véhicule {target.NumberplateText} inconnu!";
+                            }
                         }
                         else
                         {
-                            infos = $"Véhicule {target.NumberplateText} inconnu!";
+                            infos = "Véhicule introuvable dans notre registre.";
                         }
                     }
-                    else
-                    {
-                        infos = "Véhicule introuvable dans notre registre.";
-                    }
-                }
 
-                Utils.Utils.Delay(20000, () => {
-                    client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Information trouvées:", infos );
-                });
+                    Utils.Utils.Delay(20000, () => {
+                        client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Information trouvées:", infos);
+                    });
+                });           
             }
         }
         #endregion
 
         #region Private methods
-        private Task SearchPlayer(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void SearchPlayer(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
-            return Task.CompletedTask;
         }
         #endregion
     }

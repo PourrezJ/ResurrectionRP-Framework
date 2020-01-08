@@ -46,10 +46,6 @@ namespace ResurrectionRP_Server.XMenuManager
                     if (menu.Items[menuIndex] != null)
                     {
                         menu.Items[menuIndex].OnMenuItemCallback?.Invoke(client, menu, menu.Items[menuIndex], menuIndex, "");
-
-                        if (menu.Items[menuIndex].OnMenuItemCallbackAsync != null)
-                            Task.Run(async ()=> await menu.Items[menuIndex].OnMenuItemCallbackAsync.Invoke(client, menu, menu.Items[menuIndex], menuIndex, ""));
-
                         menu.Callback?.Invoke(client, menu, menu.Items[menuIndex], menuIndex, "");         
                     }
                 }

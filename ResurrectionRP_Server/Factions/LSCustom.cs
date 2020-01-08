@@ -307,7 +307,7 @@ namespace ResurrectionRP_Server.Factions
             return base.InteractPlayerMenu(client, target, xmenu);
         }
 
-        private async Task UseCrateTool(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void UseCrateTool(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             var playerHandler = client.GetPlayerHandler();
 
@@ -324,7 +324,7 @@ namespace ResurrectionRP_Server.Factions
                 if (inventory.ContainsKey(InventoryTypes.Pocket) || inventory.ContainsKey(InventoryTypes.Bag))
                 {
                     var vehicle = menu.GetData("Vehicle");
-                    await CrateTools.RepairVehicle(client, vehicle);
+                    CrateTools.RepairVehicle(client, vehicle);
                 }
             }
         }
@@ -532,11 +532,11 @@ namespace ResurrectionRP_Server.Factions
             //towhandler.TowVehicle(towtruck, vehicle, new Vector3(0, -2, 1));
         }
 
-        public static async Task<bool> IsWhitelistClassTow(IVehicle vehicle)
+        public static bool IsWhitelistClassTow(IVehicle vehicle)
         {
             int[] whitelistClass = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 18 };
 
-            var data = VehicleInfoLoader.VehicleInfoLoader.Get(await vehicle.GetModelAsync());
+            var data = VehicleInfoLoader.VehicleInfoLoader.Get(vehicle.Model);
             if (data != null)
             {
                 if ( (data.VehicleClass == 18 || data.VehicleClass <= 12 && data.VehicleClass >= 0) && data.VehicleClass <= 18)
@@ -545,26 +545,24 @@ namespace ResurrectionRP_Server.Factions
             return false;
         }
 
-        public override async Task<XMenu> InteractVehicleMenu(IPlayer client, IVehicle target, XMenu xmenu)
+        public override XMenu InteractVehicleMenu(IPlayer client, IVehicle target, XMenu xmenu)
         {
             xmenu.SetData("Vehicle", target);
 
             xmenu.Callback += MenuCallback;
-            var nearest = (await client.GetNearestVehicleAsync(10));
+            var nearest = client.GetNearestVehicle(10);
 
-
-
-            if (await target.GetModelAsync() != (int)VehicleModel.Flatbed && await LSCustom.IsWhitelistClassTow(target) == true)
+            if (target.Model != (int)VehicleModel.Flatbed && LSCustom.IsWhitelistClassTow(target) == true)
             {
                 xmenu.Add(new XMenuItem("Remorquer", "", "ID_attach", XMenuItemIcons.TRUCK_LOADING_SOLID, true));
             }
 
-            if (await target.GetModelAsync() == (int)VehicleModel.Flatbed && target.GetVehicleHandler().VehicleData.TowTruck != null)
+            if (target.Model == (int)VehicleModel.Flatbed && target.GetVehicleHandler().VehicleData.TowTruck != null)
             {
                 xmenu.Add(new XMenuItem("Détacher", "", "ID_detach", XMenuItemIcons.TRUCK_LOADING_SOLID, true));
             }
 
-            if (FactionManager.IsLSCustom(client) && await target.GetModelAsync() == (uint)VehicleModel.Flatbed && target.GetVehicleHandler().VehicleData.TowTruck != null && (new Vector3(target.Position.X, target.Position.Y, target.Position.Z)).DistanceTo(LSCustom.DepotVehicle) <= 10)
+            if (FactionManager.IsLSCustom(client) && target.Model == (uint)VehicleModel.Flatbed && target.GetVehicleHandler().VehicleData.TowTruck != null && (new Vector3(target.Position.X, target.Position.Y, target.Position.Z)).DistanceTo(LSCustom.DepotVehicle) <= 10)
             {
                 xmenu.Add(new XMenuItem("Transfert Atelier", "", "ID_atelier", XMenuItemIcons.WRENCH_SOLID, true));
             }
@@ -572,16 +570,16 @@ namespace ResurrectionRP_Server.Factions
             var playerHandler = client.GetPlayerHandler();
 
             if (playerHandler == null)
-                return await base.InteractVehicleMenu(client, target, xmenu);
+                return base.InteractVehicleMenu(client, target, xmenu);
 
             if (playerHandler.GetStacksItems(ItemID.CrateTool).Count > 0)
             {
                 var _crateToolItem = new XMenuItem("Réparer", "Réparer avec la caisse a outils", "", XMenuItemIcons.TOOLBOX_SOLID, false);
-                _crateToolItem.OnMenuItemCallbackAsync = UseCrateTool;
+                _crateToolItem.OnMenuItemCallback = UseCrateTool;
                 xmenu.Add(_crateToolItem);
             }
 
-            return await base.InteractVehicleMenu(client, target, xmenu);
+            return base.InteractVehicleMenu(client, target, xmenu);
         }
 
         private void MenuCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)

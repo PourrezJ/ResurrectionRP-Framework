@@ -245,26 +245,26 @@ namespace ResurrectionRP_Server.Farms
             switch (Type)
             {
                 case InteractionPointTypes.Farm:
-                    Alt.Server.LogInfo("InteractionPoint | " + ph.PID + " a commence a farm " + _farm.Harvest_Name);
+                   // Alt.Server.LogInfo("InteractionPoint | " + ph.PID + " a commence a farm " + _farm.Harvest_Name);
                     if (item == null)
                         _farm?.StartFarming(client);
                     else
                         _farm?.StartFarmingNew(client, item, Anim_dict, Anim_anim, Scenario);
                     return;
                 case InteractionPointTypes.DoubleProcess:
-                    Alt.Server.LogInfo("InteractionPoint | " + ph.PID + " a commence a double process " + _farm.DoubleProcess_Name);
+                   // Alt.Server.LogInfo("InteractionPoint | " + ph.PID + " a commence a double process " + _farm.DoubleProcess_Name);
                     _farm?.StartDoubleProcessing(client);
                     return;
                 case InteractionPointTypes.Process:
-                    Alt.Server.LogInfo("InteractionPoint | " + ph.PID + " a commence a process " + _farm.Process_Name);
+                   // Alt.Server.LogInfo("InteractionPoint | " + ph.PID + " a commence a process " + _farm.Process_Name);
                     _farm?.StartProcessing(client);
                     return;
                 case InteractionPointTypes.Sell:
-                    Alt.Server.LogInfo("InteractionPoint | " + ph.PID + " a commence a vendre " + _farm.Selling_Name);
+                  // Alt.Server.LogInfo("InteractionPoint | " + ph.PID + " a commence a vendre " + _farm.Selling_Name);
                     _farm?.StartSellingNew(client, price, item);
                     return;
                 default:
-                    Alt.Server.LogError("Problem, an unknwn Interactin type in InteractionPoints! ");
+                   // Alt.Server.LogError("Problem, an unknwn Interactin type in InteractionPoints! ");
                     return;
             }
         }

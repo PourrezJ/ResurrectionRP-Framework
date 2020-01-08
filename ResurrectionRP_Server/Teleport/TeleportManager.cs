@@ -157,12 +157,12 @@ namespace ResurrectionRP_Server.Teleport
             client.Emit("FadeOut", 1000);
 
 
-            Utils.Utils.Delay(2000, () =>
+            Utils.Utils.Delay(2000, async () =>
                  {
-                     client.Position = etage.Pos;
+                    await client.SetPositionAsync(etage.Pos);
 
                     // BUG v801: Set rotation when player in game not working
-                    client.SetHeading(etage.Rot.Z);
+                    await client.SetHeadingAsync(etage.Rot.Z);
                     // client.Rotation = etage.Rot;
                     client.Emit("FadeIn", 1000);
                  });

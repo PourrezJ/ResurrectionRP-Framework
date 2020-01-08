@@ -414,10 +414,11 @@ namespace ResurrectionRP_Server.Factions
                                 _vh.ApplyDamage();
                                 client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~g~Terminé~w~.", "Elle est niquel!");
                                 onReparation = false;
+                                UpdateInBackground();
                             });
                         });
                         menu.CloseMenu(client);
-                        UpdateInBackground();
+                       
                     }
                     else
                         client.SendNotificationError("Vous n'avez pas assez d'argent dans les caisses!");
@@ -461,10 +462,10 @@ namespace ResurrectionRP_Server.Factions
                                 _vh.UpdateInBackground(false);
                                 _vh.ApplyDamage();
                                 onReparation = false;
+                                UpdateInBackground();
                             });
                         });
                         menu.CloseMenu(client);
-                        UpdateInBackground();
                     }
                     else
                        client.SendNotificationError("Vous n'avez pas assez d'argent dans les caisses!");
@@ -488,10 +489,9 @@ namespace ResurrectionRP_Server.Factions
                                 _vh.UpdateInBackground(false);
                                 _vh.ApplyDamage();
                                 onReparation = false;
+                                UpdateInBackground();
                             });
                         });
-
-                        UpdateInBackground();
                     }
                     else
                         client.SendNotificationError("Vous n'avez pas assez d'argent dans les caisses!");
@@ -514,6 +514,7 @@ namespace ResurrectionRP_Server.Factions
                                 _vh.UpdateInBackground(false);
                                 _vh.ApplyDamage();
                                 onReparation = false;
+                                UpdateInBackground();
                             });
                         });
                     }

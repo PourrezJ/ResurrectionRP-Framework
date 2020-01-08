@@ -3,11 +3,9 @@ using AltV.Net.Async;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities.Players;
-using ResurrectionRP_Server.EventHandlers;
 using ResurrectionRP_Server.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AltV.Net;
 
 namespace ResurrectionRP_Server.Teleport
 {
@@ -156,7 +154,6 @@ namespace ResurrectionRP_Server.Teleport
             client.RequestCollisionAtCoords(etage.Pos);
             client.Emit("FadeOut", 1000);
 
-
             Utils.Utils.Delay(2000, async () =>
                  {
                     await client.SetPositionAsync(etage.Pos);
@@ -164,7 +161,7 @@ namespace ResurrectionRP_Server.Teleport
                     // BUG v801: Set rotation when player in game not working
                     await client.SetHeadingAsync(etage.Rot.Z);
                     // client.Rotation = etage.Rot;
-                    client.Emit("FadeIn", 1000);
+                    client.EmitLocked("FadeIn", 1000);
                  });
         }
 

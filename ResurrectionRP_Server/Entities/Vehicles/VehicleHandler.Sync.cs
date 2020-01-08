@@ -35,16 +35,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public bool HaveTowVehicle() => VehicleData.TowTruck != null;
 
-        public async Task TowVehicle(IVehicle vehicle)
+        public void TowVehicle(IVehicle vehicle)
         {
-            if (await this.GetModelAsync() != (int)VehicleModel.Flatbed && !HaveTowVehicle())
+            if (this.Model != (int)VehicleModel.Flatbed && !HaveTowVehicle())
                 return;
 
             VehicleData.TowTruck = new TowTruck(vehicle.NumberplateText, new Vector3(0, -2, 1), vehicle, this);
             UpdateInBackground();
         }
 
-        public async Task<IVehicle> UnTowVehicle(Location position)
+        public IVehicle UnTowVehicle(Location position)
         {
             if (Model != (int)VehicleModel.Flatbed && VehicleData.TowTruck == null) return null;
 
@@ -55,8 +55,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 var vehicle = vehicleData.Vehicle;
                 VehicleData.TowTruck = null;
 
-                await vehicle.SetPositionAsync(position.Pos);
-                await vehicle.SetRotationAsync(position.Rot);
+                vehicle.Position = position.Pos;
+                vehicle.Rotation = position.Rot;
                 vehicle.UpdateInBackground(false);
                 UpdateInBackground();
                 return vehicle;

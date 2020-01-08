@@ -34,16 +34,16 @@ namespace ResurrectionRP_Server.Entities.Players
             Client?.SetSyncedMetaData("WalkingStyle", null);
         }
 
-        public async Task SetFacialAnim(string facial)
+        public void SetFacialAnim(string facial)
         {
             PlayerSync.MoodAnim = facial;
-            await Client?.SetSyncedMetaDataAsync("FacialAnim", facial);
+            Client?.SetSyncedMetaData("FacialAnim", facial);
         }
 
-        public async Task ResetFacialAnim()
+        public void ResetFacialAnim()
         {
             PlayerSync.MoodAnim = null;
-            await Client?.SetSyncedMetaDataAsync("FacialAnim", null);
+            Client?.SetSyncedMetaData("FacialAnim", null);
         }
     }
 }

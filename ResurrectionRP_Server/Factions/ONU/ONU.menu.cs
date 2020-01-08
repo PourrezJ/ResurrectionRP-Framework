@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.Factions
                 if (playerHandler.HasItemID(ItemID.KitSoin))
                     xmenu.Add(new XMenuItem("Kit de Soin", "Appliquer un kit de soin au patient", "ID_KitSoin", XMenuItemIcons.HEART_SOLID, false));
 
-                xmenu.CallbackAsync += OnInteractCallBack;
+                xmenu.Callback += OnInteractCallBack;
             }
             catch(Exception ex)
             {
@@ -78,13 +78,13 @@ namespace ResurrectionRP_Server.Factions
             return base.InteractPlayerMenu(client, target, xmenu);
         }
 
-        private async Task OnInteractCallBack(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void OnInteractCallBack(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             IPlayer _target = menu.GetData("Player");
             var ph = client.GetPlayerHandler();
             if (_target == null || ph == null) return;
 
-            var healthActual = await _target.GetHealthAsync();
+            var healthActual = _target.Health;
             switch (menuItem.Id)
             {
                 case "ID_Reanimate":
@@ -110,7 +110,7 @@ namespace ResurrectionRP_Server.Factions
                                 ph.BagInventory.Delete(defibrilators[InventoryTypes.Bag][0], 1);
                             }
                         }
-                        await _target.ReviveAsync(125);
+                        _target.Revive(125);
 
                         client.SendNotificationSuccess("Vous avez réanimé le patient.");
                     }
@@ -121,9 +121,9 @@ namespace ResurrectionRP_Server.Factions
                     if (ph.DeleteOneItemWithID(ItemID.KitSoin))
                     {
                         if ((healthActual += 75) > 200)
-                            await _target.SetHealthAsync(200);
+                            _target.Health = 200;
                         else
-                            await _target.SetHealthAsync((ushort)(healthActual + 75));
+                            _target.Health = (ushort)(healthActual + 75);
                         client.SendNotificationSuccess("Vous avez appliqué un kit de soin au patient.");
                     }
                     break;
@@ -132,9 +132,9 @@ namespace ResurrectionRP_Server.Factions
                     if (ph.DeleteOneItemWithID(ItemID.Bandages))
                     {
                         if ((healthActual + 5) > 200)
-                            await _target.SetHealthAsync(200);
+                            _target.Health = 200;
                         else
-                            await _target.SetHealthAsync(healthActual += 5);
+                            _target.Health = healthActual += 5;
                         client.SendNotificationSuccess("Vous avez appliqué un bandage au patient.");
                     }
                     break;

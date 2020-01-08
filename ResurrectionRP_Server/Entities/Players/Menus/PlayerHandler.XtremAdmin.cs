@@ -16,7 +16,7 @@ namespace ResurrectionRP_Server.Entities.Players
         public void OpenXtremAdmin()
         {
             var menu = new XMenu("ID_Admin");
-            menu.CallbackAsync += XtreamCallBack;
+            menu.Callback += XtreamCallBack;
 
             if (StaffRank >= Utils.Enums.StaffRank.Moderator)
             {
@@ -42,21 +42,19 @@ namespace ResurrectionRP_Server.Entities.Players
             menu.OpenXMenu(Client);
         }
 
-        private async Task XtreamCallBack(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void XtreamCallBack(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             switch (menuItem.Id)
             {
                 case "ID_Kick":
                     client.SendNotificationSuccess($"Vous venez de kick {TargetHandler.Identite.Name}.");
                     TargetClient.SendNotification($"Kick raison: {menuItem.InputValue}");
-                    await Task.Delay(100);
                     TargetClient.Kick(menuItem.InputValue);
                     break;
 
                 case "ID_Ban":
                     client.SendNotificationSuccess($"Vous venez de ban {TargetHandler.Identite.Name}.");
                     TargetClient.SendNotification($"Ban raison: {menuItem.InputValue}");
-                    await Task.Delay(100);
                     Models.BanManager.BanPlayer(TargetClient, menuItem.InputValue, new DateTime(2031, 1, 1));
                     break;
 
@@ -73,7 +71,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 case "ID_Revive":
                     client.SendNotificationSuccess($"Vous venez de revive {TargetHandler.Identite.Name}.");
-                    await TargetClient.ReviveAsync() ;
+                    TargetClient.Revive();
                     break;
 
                 case "ID_Heal":

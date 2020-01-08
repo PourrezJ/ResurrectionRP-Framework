@@ -50,10 +50,7 @@ namespace ResurrectionRP_Server.XMenuManager
                         if (menu.Items[menuIndex].OnMenuItemCallbackAsync != null)
                             Task.Run(async ()=> await menu.Items[menuIndex].OnMenuItemCallbackAsync.Invoke(client, menu, menu.Items[menuIndex], menuIndex, ""));
 
-                        menu.Callback?.Invoke(client, menu, menu.Items[menuIndex], menuIndex, "");
-
-                        if (menu.CallbackAsync != null)
-                            Task.Run(async ()=> await menu.CallbackAsync.Invoke(client, menu, menu.Items[menuIndex], menuIndex, ""));
+                        menu.Callback?.Invoke(client, menu, menu.Items[menuIndex], menuIndex, "");         
                     }
                 }
             }
@@ -71,12 +68,7 @@ namespace ResurrectionRP_Server.XMenuManager
             _clientMenus.TryGetValue(client, out XMenu menu);
             if (menu != null)
             {
-                if (menu.FinalizerAsync != null)
-                    Task.Run(async ()=> await menu.FinalizerAsync.Invoke(client, menu));
-                else if (menu.Finalizer != null)
-                    menu.Finalizer.Invoke(client, menu);
-
-
+                menu.Finalizer?.Invoke(client, menu);
                 client.EmitLocked("XMenuManager_CloseMenu");
             }
             else if (menu != null)
@@ -94,11 +86,7 @@ namespace ResurrectionRP_Server.XMenuManager
 
             if (oldMenu != null)
             {
-                if (menu.FinalizerAsync != null)
-                    Task.Run(async () => await menu.FinalizerAsync.Invoke(client, menu));
-                else if (menu.Finalizer != null)
-                    menu.Finalizer.Invoke(client, menu);
-
+                menu.Finalizer?.Invoke(client, menu);
                 client.EmitLocked("XMenuManager_CloseMenu");
             }
 
@@ -114,10 +102,7 @@ namespace ResurrectionRP_Server.XMenuManager
         {
             if (_clientMenus.TryRemove(client, out XMenu menu))
             {
-                if (menu.FinalizerAsync != null)
-                    Task.Run(async () => await menu.FinalizerAsync.Invoke(client, menu));
-                else if (menu.Finalizer != null)
-                    menu.Finalizer.Invoke(client, menu);
+                menu.Finalizer?.Invoke(client, menu);
                 client.EmitLocked("XMenuManager_CloseMenu");
             }
         }

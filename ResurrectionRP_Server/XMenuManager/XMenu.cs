@@ -1,16 +1,12 @@
 ﻿using AltV.Net.Elements.Entities;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.XMenuManager
 {
     public class XMenu
     {
         #region Public delegates
-        public delegate Task XMenuCallbackAsync(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data);
-        public delegate Task XMenuFinalizerAsync(IPlayer client, XMenu menu);
-
         public delegate void XMenuCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data);
         public delegate void XMenuFinalizer(IPlayer client, XMenu menu);
         #endregion
@@ -24,11 +20,6 @@ namespace ResurrectionRP_Server.XMenuManager
 
         #region Public properties
         public string Id { get; set; }
-
-        [JsonIgnore]
-        public XMenuCallbackAsync CallbackAsync { get; set; }
-        [JsonIgnore]
-        public XMenuFinalizerAsync FinalizerAsync { get; set; }
 
         [JsonIgnore]
         public XMenuCallback Callback { get; set; }

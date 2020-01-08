@@ -549,7 +549,7 @@ namespace ResurrectionRP_Server.Factions
         {
             xmenu.SetData("Vehicle", target);
 
-            xmenu.CallbackAsync += MenuCallback;
+            xmenu.Callback += MenuCallback;
             var nearest = (await client.GetNearestVehicleAsync(10));
 
 
@@ -584,7 +584,7 @@ namespace ResurrectionRP_Server.Factions
             return await base.InteractVehicleMenu(client, target, xmenu);
         }
 
-        private async Task MenuCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void MenuCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             IVehicle veh = menu.GetData("Vehicle");
 
@@ -606,13 +606,13 @@ namespace ResurrectionRP_Server.Factions
                         IVehicle towtruck = null;
                         foreach(IVehicle _vh in veh.GetVehiclesInRange(20))
                         {
-                            if (await _vh.GetModelAsync() == (uint)VehicleModel.Flatbed)
+                            if (_vh.Model == (uint)VehicleModel.Flatbed)
                                 towtruck = _vh;
                             
                         }
 
                         if (towtruck != null)
-                            await towtruck.GetVehicleHandler().TowVehicle(veh);
+                            towtruck.GetVehicleHandler().TowVehicle(veh);
                         else
                             client.SendNotificationError("Aucune dépanneuse dans les environs");
 
@@ -621,13 +621,12 @@ namespace ResurrectionRP_Server.Factions
                     }
                     break;
                 case "ID_detach":
-                    var rot = await veh.GetRotationAsync();
-                    await vh.UnTowVehicle(new Location((new Vector3(client.Position.X, client.Position.Y, client.Position.Z)).Forward(rot.Yaw, -10), rot));
+                    vh.UnTowVehicle(new Location((new Vector3(client.Position.X, client.Position.Y, client.Position.Z)).Forward(veh.Rotation.Yaw, -10), veh.Rotation));
                     vh.UpdateInBackground(false);
                     XMenuManager.XMenuManager.CloseMenu(client);
                     break;
                 case "ID_atelier":
-                    await vh.UnTowVehicle(ReparZoneVL);
+                    vh.UnTowVehicle(ReparZoneVL);
                     vh.UpdateInBackground(false);
 
                     XMenuManager.XMenuManager.CloseMenu(client);

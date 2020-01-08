@@ -43,7 +43,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
             PlayerHandler ph = client.GetPlayerHandler();
 
             XMenu menu = new XMenu("");
-            menu.CallbackAsync = CallBack;
+            menu.Callback = CallBack;
 
             if (Factions.FactionManager.IsMedic(client) && ph.HasItemID(ItemID.Defibrilateur))
                 menu.Add(new XMenuItem("RPC", "Réanimer la victime", "ID_Reanimate", XMenuItemIcons.HEART_SOLID, false));
@@ -56,7 +56,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
             menu.OpenXMenu(client);
         }
 
-        private async Task CallBack(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
+        private void CallBack(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
             if (client == Victime)
                 return;
@@ -71,7 +71,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
             switch (menuItem.Id)
             {
                 case "ID_Reanimate":
-                    if (await Victime.IsDeadAsync() && ph.HasItemID(ItemID.Defibrilateur))
+                    if (Victime.IsDead && ph.HasItemID(ItemID.Defibrilateur))
                     {
                         var defibrilators = ph.GetStacksItems(ItemID.Defibrilateur);
                         if (defibrilators.Count > 0)
@@ -94,7 +94,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                                     ph.BagInventory.Delete(defibrilators[InventoryTypes.Bag][0], 1);
                                 }
                             }
-                            await Victime.ReviveAsync(125);
+                            Victime.Revive(125);
                             vh.UpdateFull();
                             client.SendNotificationSuccess("Vous avez réanimé le patient.");
                         }
@@ -140,7 +140,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                         return;
                     }
 
-                    await Victime.ReviveAsync(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
+                    Victime.Revive(200, new Vector3(308.2974f, -567.4647f, 43.29008f));
                     vh.UpdateFull();
                     break;
             }

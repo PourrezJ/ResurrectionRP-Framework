@@ -320,9 +320,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             for (int i = 0; i < VehicleData.Wheels.Length; i++)
                 VehicleData.Wheels[i] = new Wheel();
 
+            for (byte i = 0; i < VehicleData.Doors.Length; i++)
+                SetDoorState(i, (byte)VehicleDoorState.Closed);
+
+            for (byte i = 0; i < VehicleData.Windows.Length; i++)
+                SetWindowDamaged(i, false);
+
             VehicleData.FrontBumperDamage = 0;
             VehicleData.RearBumperDamage = 0;
-            DamageData = string.Empty;
+            //DamageData = string.Empty;
             player.EmitLocked("vehicleFix", this);
         }
 

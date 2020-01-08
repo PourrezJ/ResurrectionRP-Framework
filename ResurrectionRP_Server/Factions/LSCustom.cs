@@ -37,6 +37,8 @@ namespace ResurrectionRP_Server.Factions
         private static readonly int PeinturePrice = 2000;
         private static readonly int ClearVehicle = 0;
 
+        private static bool onReparation;
+
         [BsonIgnore]
         private IVehicle VehicleInWorkbench;
 
@@ -329,6 +331,12 @@ namespace ResurrectionRP_Server.Factions
 
         public void OpenMenu(IPlayer client, IVehicle vehicle)
         {
+            if (onReparation)
+            {
+                client.SendNotificationError("Une réparation est déjà en cours.");
+                return;
+            }
+
             Menu menu = new Menu("ID_MainReparMenu", "", "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true, Banner.CarMod);
             menu.SetData("Vehicle", vehicle);
             menu.ItemSelectCallback = MenuCallBack;
@@ -357,6 +365,7 @@ namespace ResurrectionRP_Server.Factions
 
             PlayerHandler ph = client.GetPlayerHandler();
             VehicleHandler _vh = veh.GetVehicleHandler();
+            onReparation = true;
 
             switch (menuItem.Id)
             {
@@ -365,39 +374,49 @@ namespace ResurrectionRP_Server.Factions
 
                     Utils.Utils.Delay(20000, () =>
                     {
-                        if (!veh.Exists || !client.Exists)
-                            return;
+                        AltAsync.Do(() =>
+                        {
+                            if (!veh.Exists || !client.Exists)
+                                return;
 
-                        string str =
-                        "~r~Résultat:~w~\n" +
-                        $"Chassis:   {Math.Floor(veh.BodyHealth * 0.1)}% \n" +
-                        $"Moteur:    {Math.Floor(veh.EngineHealth * 0.1)}%\n" +
-                        $"Réservoir: {Math.Floor(veh.PetrolTankHealth * 0.1)}%\n";
+                            string str =
+                            "~r~Résultat:~w~\n" +
+                            $"Chassis:   {Math.Floor(veh.BodyHealth * 0.1)}% \n" +
+                            $"Moteur:    {Math.Floor(veh.EngineHealth * 0.1)}%\n" +
+                            $"Réservoir: {Math.Floor(veh.PetrolTankHealth * 0.1)}%\n";
 
-                        client.DisplaySubtitle(str, 5000);
+                            client.DisplaySubtitle(str, 5000);
+                            onReparation = false;
+                        });
                     });
-
+                    menu.CloseMenu(client);
                     break;
 
                 case "ID_Body":
                     if (BankAccount.GetBankMoney(ReparBody, $"Réparation carrosserie {_vh.VehicleData.Plate} par {ph.Identite.Name}"))
                     {
+                        client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~r~Démarrage~w~.", "En cours ...");
                         _vh.VehicleData.UpdateProperties();
 
                         Utils.Utils.Delay(20000, () =>
                         {
-                            if (client == null || !client.Exists)
-                                return;
+                            AltAsync.Do(() =>
+                            {
+                                if (client == null || !client.Exists)
+                                    return;
 
-                            int engineHealth = _vh.EngineHealth;
-                            int petrolTankHealth = _vh.PetrolTankHealth;
-                            _vh.Repair(client);
-                            _vh.EngineHealth = engineHealth;
-                            _vh.PetrolTankHealth = petrolTankHealth;
-                            _vh.UpdateInBackground(false);
-                            client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~g~Terminé~w~.", "Elle est niquel!");
+                                int engineHealth = _vh.EngineHealth;
+                                int petrolTankHealth = _vh.PetrolTankHealth;
+                                _vh.Repair(client);
+                                _vh.EngineHealth = engineHealth;
+                                _vh.PetrolTankHealth = petrolTankHealth;
+                                _vh.UpdateInBackground(false);
+                                _vh.ApplyDamage();
+                                client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~g~Terminé~w~.", "Elle est niquel!");
+                                onReparation = false;
+                            });
                         });
-
+                        menu.CloseMenu(client);
                         UpdateInBackground();
                     }
                     else
@@ -412,35 +431,39 @@ namespace ResurrectionRP_Server.Factions
 
                         Utils.Utils.Delay(20000, () =>
                         {
-                            if (!veh.Exists || !client.Exists)
-                                return;
-
-                            client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~g~Terminé~w~.","Il est niquel!");
-
-                            _vh.EngineHealth = 1000;
-
-                            for (byte i = 0; i < veh.WheelsCount; i++)
+                            AltAsync.Do(() =>
                             {
-                                veh.SetWheelBurst(i, _vh.VehicleData.Wheels[i].Burst);
-                                veh.SetWheelHealth(i, _vh.VehicleData.Wheels[i].Health);
-                                veh.SetWheelHasTire(i, _vh.VehicleData.Wheels[i].HasTire);
-                            }
+                                if (!veh.Exists || !client.Exists)
+                                    return;
 
-                            for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
-                                veh.SetDoorState(i, (byte)_vh.VehicleData.Doors[i]);
+                                client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~g~Terminé~w~.", "Il est niquel!");
 
-                            for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
-                            {
-                                if (_vh.VehicleData.Windows[i] == WindowState.WindowBroken)
-                                    veh.SetWindowDamaged(i, true);
-                                else if (_vh.VehicleData.Windows[i] == WindowState.WindowDown)
-                                    veh.SetWindowOpened(i, true);
-                            }
+                                _vh.EngineHealth = 1000;
 
-                            _vh.UpdateInBackground(false);
-                            _vh.ApplyDamage();
+                                for (byte i = 0; i < veh.WheelsCount; i++)
+                                {
+                                    veh.SetWheelBurst(i, _vh.VehicleData.Wheels[i].Burst);
+                                    veh.SetWheelHealth(i, _vh.VehicleData.Wheels[i].Health);
+                                    veh.SetWheelHasTire(i, _vh.VehicleData.Wheels[i].HasTire);
+                                }
+
+                                for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
+                                    veh.SetDoorState(i, (byte)_vh.VehicleData.Doors[i]);
+
+                                for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
+                                {
+                                    if (_vh.VehicleData.Windows[i] == WindowState.WindowBroken)
+                                        veh.SetWindowDamaged(i, true);
+                                    else if (_vh.VehicleData.Windows[i] == WindowState.WindowDown)
+                                        veh.SetWindowOpened(i, true);
+                                }
+
+                                _vh.UpdateInBackground(false);
+                                _vh.ApplyDamage();
+                                onReparation = false;
+                            });
                         });
-
+                        menu.CloseMenu(client);
                         UpdateInBackground();
                     }
                     else
@@ -455,21 +478,24 @@ namespace ResurrectionRP_Server.Factions
 
                         Utils.Utils.Delay(20000, () =>
                         {
-                            if (!veh.Exists || !client.Exists)
-                                return;
+                            AltAsync.Do(() => {
+                                if (!veh.Exists || !client.Exists)
+                                    return;
 
-                            client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~g~Terminé~w~.","Elle est niquel!");
-                            _vh.DirtLevel = 0;
-                            veh.DirtLevel = 0;
-                            _vh.UpdateInBackground(false);
-                            _vh.ApplyDamage();
+                                client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~g~Terminé~w~.", "Elle est niquel!");
+                                _vh.DirtLevel = 0;
+                                veh.DirtLevel = 0;
+                                _vh.UpdateInBackground(false);
+                                _vh.ApplyDamage();
+                                onReparation = false;
+                            });
                         });
 
                         UpdateInBackground();
                     }
                     else
                         client.SendNotificationError("Vous n'avez pas assez d'argent dans les caisses!");
-
+                    menu.CloseMenu(client);
                     break;
 
                 case "ID_BricoEngine":
@@ -479,18 +505,21 @@ namespace ResurrectionRP_Server.Factions
 
                         Utils.Utils.Delay(20000, () =>
                         {
-                            if (!veh.Exists || !client.Exists)
-                                return;
+                            AltAsync.Do(() => {
+                                if (!veh.Exists || !client.Exists)
+                                    return;
 
-                            client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~g~Terminé~w~.","Le moteur démarre, c'est déjà ça!");
-                            _vh.EngineHealth = 400;
-                            _vh.UpdateInBackground(false);
-                            _vh.ApplyDamage();
+                                client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~g~Terminé~w~.", "Le moteur démarre, c'est déjà ça!");
+                                _vh.EngineHealth = 400;
+                                _vh.UpdateInBackground(false);
+                                _vh.ApplyDamage();
+                                onReparation = false;
+                            });
                         });
                     }
                     else
                         client.SendNotificationError("Vous n'avez pas assez d'argent sur vous!");
-
+                    menu.CloseMenu(client);
                     break;
             }
         }
@@ -521,7 +550,10 @@ namespace ResurrectionRP_Server.Factions
             xmenu.SetData("Vehicle", target);
 
             xmenu.CallbackAsync += MenuCallback;
-            var nearest = (await client.GetNearestVehicleAsync(10))?.GetVehicleHandler();
+            var nearest = (await client.GetNearestVehicleAsync(10));
+
+
+
             if (await target.GetModelAsync() != (int)VehicleModel.Flatbed && await LSCustom.IsWhitelistClassTow(target) == true)
             {
                 xmenu.Add(new XMenuItem("Remorquer", "", "ID_attach", XMenuItemIcons.TRUCK_LOADING_SOLID, true));

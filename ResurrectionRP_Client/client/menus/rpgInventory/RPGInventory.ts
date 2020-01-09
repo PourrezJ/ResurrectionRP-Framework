@@ -107,14 +107,16 @@ export class RPGInventoryManager {
                 if (!this.view)
                     return;
 
-                this.view.emit('loadInventory',
-                    this.pocket,
-                    this.bag,
-                    this.distant,
-                    this.outfit,
-                    (this.give) ? "true" : "false");
+                alt.setTimeout(() => {
+                    this.view.emit('loadInventory',
+                        this.pocket,
+                        this.bag,
+                        this.distant,
+                        this.outfit,
+                        (this.give) ? "true" : "false");
 
-                this.loading = false;
+                    this.loading = false;
+                }, 50);
             });
 
             alt.emit("hideChat");

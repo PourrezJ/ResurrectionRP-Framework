@@ -27,11 +27,11 @@ namespace ResurrectionRP_Server.Entities.Players
     {
         public static void Init()
         {
-            Alt.OnClient("OnKeyPress", OnKeyPress);
-            Alt.OnClient("OnKeyUp", OnKeyReleased);
+            Alt.OnClient<IPlayer, Int64, string, IVehicle, IPlayer, int>("OnKeyPress", OnKeyPress);
+            Alt.OnClient<IPlayer, Int64>("OnKeyUp", OnKeyReleased);
         }
 
-        private static void OnKeyReleased(IPlayer client, object[] args)
+        private static void OnKeyReleased(IPlayer client, Int64 key64)
         {
             if (!client.Exists)
                 return;
@@ -41,7 +41,7 @@ namespace ResurrectionRP_Server.Entities.Players
             if (ph == null)
                 return;
 
-            ConsoleKey key = (ConsoleKey)(Int64)args[0];
+            ConsoleKey key = (ConsoleKey)key64;
 
             switch (key)
             {
@@ -54,7 +54,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        private static void OnKeyPress(IPlayer client, object[] args)
+        private static void OnKeyPress(IPlayer client, Int64 key64, string data, IVehicle vehicle, IPlayer playerDistant, int streamedID)
         {
             if (!client.Exists)
                 return;
@@ -64,15 +64,10 @@ namespace ResurrectionRP_Server.Entities.Players
             if (ph == null)
                 return;
 
-            RaycastData raycastData = JsonConvert.DeserializeObject<RaycastData>(args[1].ToString());
-            ConsoleKey key          = (ConsoleKey)(Int64)args[0];
-            IVehicle vehicle        = (IVehicle)args[2] ?? client.Vehicle;
-            IPlayer playerDistant   = (IPlayer)args[3] ?? null;
-            int streamedID          = Convert.ToInt32(args[4]);
-
+            RaycastData raycastData = JsonConvert.DeserializeObject<RaycastData>(data);
             VehicleHandler vh       = vehicle?.GetVehicleHandler();
             Position playerPos      = client.Position;
-
+            ConsoleKey key          = (ConsoleKey)key64;
 
             Ped pnj = null;
 
@@ -204,12 +199,12 @@ namespace ResurrectionRP_Server.Entities.Players
                         }
                         else if (Chair.IsChair(raycastData.entityHash))
                         {
-                            var data = Chair.GetChairData(raycastData.entityHash);
-                            if (data == null)
+                            var chair = Chair.GetChairData(raycastData.entityHash);
+                            if (chair == null)
                                 return;
 
-                            Vector3 pos = new Vector3(Convert.ToSingle(raycastData.entityPos.X + data.x), Convert.ToSingle(raycastData.entityPos.Y + data.y), Convert.ToSingle(raycastData.entityPos.Z + data.z));
-                            client.TaskStartScenarioAtPosition(data.task, pos, raycastData.entityHeading + (float)data.h, 0, true, true); ;
+                            Vector3 pos = new Vector3(Convert.ToSingle(raycastData.entityPos.X + chair.x), Convert.ToSingle(raycastData.entityPos.Y + chair.y), Convert.ToSingle(raycastData.entityPos.Z + chair.z));
+                            client.TaskStartScenarioAtPosition(chair.task, pos, raycastData.entityHeading + (float)chair.h, 0, true, true); ;
                             client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour vous relevez.", 5000);
                             ph.IsSitting = true;
                         }

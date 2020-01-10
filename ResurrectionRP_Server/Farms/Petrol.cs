@@ -144,7 +144,7 @@ namespace ResurrectionRP_Server.Farms
             Item _itemTraite = Inventory.Inventory.ItemByID(ItemIDProcess);
             player.IsOnProgress = true;
             client.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s)", 5000);
-            client.EmitLocked("LaunchProgressBar", FillingTime * (TrailerMaxContent / 10));
+            client.LaunchProgressBar(FillingTime * (TrailerMaxContent / 10));
             Timers[client] = Utils.Utils.SetInterval(() =>
             {
                 System.Timers.Timer ProcessTimer = Timers[client];
@@ -172,7 +172,7 @@ namespace ResurrectionRP_Server.Farms
 
                 if (ProcessTimer == null)
                 {
-                    client.EmitLocked("StopProgressBar");
+                    client.StopProgressBar();
                     player.IsOnProgress = false;
                     return;
                 }

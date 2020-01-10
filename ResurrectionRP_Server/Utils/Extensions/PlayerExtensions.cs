@@ -456,5 +456,11 @@ namespace ResurrectionRP_Server
 
         public static void ApplyCharacter(this IPlayer client)
             => client.GetPlayerHandler().Character.ApplyCharacter(client);
+
+        public static void LaunchProgressBar(this IPlayer client, int time)
+            => client.EmitLocked("LaunchProgressBar", time);
+
+        public static void StopProgressBar(this IPlayer client) =>
+            client.EmitLocked("StopProgressBar");
     }
 }

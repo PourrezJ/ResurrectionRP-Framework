@@ -451,6 +451,9 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public static void SwitchWeapon(int slot, IPlayer client, PlayerHandler ph)
         {
+
+
+
             switch (slot)
             {
                 case 1:

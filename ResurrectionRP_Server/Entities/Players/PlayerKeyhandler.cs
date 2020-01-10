@@ -123,8 +123,8 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    if (vehicle != null && vehicle.Exists)
-                        vh.OpenXtremMenu(client);
+                    if (client.Vehicle != null && client.Vehicle.Exists)
+                        client.Vehicle.GetVehicleHandler().OpenXtremMenu(client);
                     else if (HouseManager.IsInHouse(client))
                     {
                         if (client.Dimension == GameMode.GlobalDimension)

@@ -11,9 +11,7 @@ namespace ResurrectionRP_Server.Business
 {
 
     public partial class Market
-    {
-        private static int priceMultNoOwn = 4;
-
+    {   
         #region Menus
         public override void OpenMenu(IPlayer client, Entities.Peds.Ped npc = null)
         {
@@ -27,7 +25,26 @@ namespace ResurrectionRP_Server.Business
             menu.BannerSprite = Banner.Convenience;
             menu.ItemSelectCallback = MarketMenuManager;
 
-            if (!Inventory.IsEmpty())
+            if (Owner == null)
+            {
+                foreach (var loadedItem in itemsWithoutOwner)
+                {
+                    List<object> values = new List<object>();
+                    for (int i = 1; i <= 100; i++)
+                        values.Add(i.ToString());
+
+                    var item = ResurrectionRP_Server.Inventory.Inventory.ItemByID(loadedItem);
+
+                    if (item == null)
+                        continue;
+
+                    double gettaxe = Economy.Economy.CalculPriceTaxe(item.itemPrice * Globals.PRICE_MULT_IF_NO_OWN, GameMode.Instance.Economy.Taxe_Market);
+                    ListItem listitem = new ListItem(item.name + " ($ " + ((item.itemPrice * Globals.PRICE_MULT_IF_NO_OWN) + gettaxe).ToString() + ")", item.description, "item_" + item.name, values, 0);
+                    listitem.ExecuteCallback = true;
+                    menu.Add(listitem);
+                }
+            }
+            else if (!Inventory.IsEmpty())
             {
                 for (int a = 0; a < Inventory.InventoryList.Length; a++)
                 {
@@ -45,31 +62,13 @@ namespace ResurrectionRP_Server.Business
                     }
                 }
             }
-            else if (Owner == null)
-            {
-                foreach(var loadedItem in itemsWithoutOwner)
-                {
-                    List<object> values = new List<object>();
-                    for (int i = 1; i <= 100; i++) 
-                        values.Add(i.ToString());
-
-                    var item = ResurrectionRP_Server.Inventory.Inventory.ItemByID(loadedItem);
-
-                    if (item == null)
-                        continue;
-
-                    double gettaxe = Economy.Economy.CalculPriceTaxe(item.itemPrice * priceMultNoOwn, GameMode.Instance.Economy.Taxe_Market);
-                    ListItem listitem = new ListItem(item.name + " ($ " + ((item.itemPrice * priceMultNoOwn) + gettaxe).ToString() + ")", item.description, "item_" + item.name, values, 0);
-                    listitem.ExecuteCallback = true;
-                    menu.Add(listitem);
-                }
-            }
             else
             {
                 client.SendNotification("Il n'y a pas de produits en vente.");
 
                 if (MenuManager.HasOpenMenu(client))
                     MenuManager.CloseMenu(client);
+                return;
             }
 
             menu.OpenMenu(client);
@@ -164,8 +163,7 @@ namespace ResurrectionRP_Server.Business
         private void MarketMenuManager(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             PlayerHandler _player = client.GetPlayerHandler();
-
-            Models.ItemStack itemStack = Owner != null ? Inventory.InventoryList[(int)menuItem.GetData("StackIndex")] : new Models.ItemStack(itemsWithoutOwner[itemIndex], 999, LoadItem.GetItemWithID(itemsWithoutOwner[itemIndex]).itemPrice * priceMultNoOwn);
+            Models.ItemStack itemStack = Owner != null ? Inventory.InventoryList[(int)menuItem.GetData("StackIndex")] : new Models.ItemStack(itemsWithoutOwner[itemIndex], 999, LoadItem.GetItemWithID(itemsWithoutOwner[itemIndex]).itemPrice * Globals.PRICE_MULT_IF_NO_OWN);
             var selected = ((ListItem)menuItem).SelectedItem;
             int quantity = Convert.ToInt32(((ListItem)menuItem).Items[selected]);
             double tax = Economy.Economy.CalculPriceTaxe((itemStack.Price * quantity), GameMode.Instance.Economy.Taxe_Market);

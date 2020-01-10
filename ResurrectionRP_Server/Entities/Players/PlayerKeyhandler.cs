@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using Newtonsoft.Json;
@@ -451,36 +452,41 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public static void SwitchWeapon(int slot, IPlayer client, PlayerHandler ph)
         {
+            client.LaunchProgressBar(1500);
 
-
-
-            switch (slot)
+            Utils.Utils.Delay(1500, () =>
             {
-                case 1:
-                    if (ph.OutfitInventory.Slots[16] != null)
+                AltAsync.Do(() =>
+                {
+                    switch (slot)
                     {
-                        if((ph.OutfitInventory.Slots[16].Item) as Items.Weapons != null)
-                        {
-                            client.GiveWeapon((uint) ((ph.OutfitInventory.Slots[16].Item) as Items.Weapons).Hash, 99999, true);
-                        }
-                    }
-                    else client.RemoveAllWeapons();
-                    break;
+                        case 1:
+                            if (ph.OutfitInventory.Slots[16] != null)
+                            {
+                                if ((ph.OutfitInventory.Slots[16].Item) as Items.Weapons != null)
+                                {
+                                    client.GiveWeapon((uint)((ph.OutfitInventory.Slots[16].Item) as Items.Weapons).Hash, 99999, true);
+                                }
+                            }
+                            else client.RemoveAllWeapons();
+                            break;
 
-                case 2:
-                    if (ph.OutfitInventory.Slots[17] != null)
-                    {
-                        if((ph.OutfitInventory.Slots[17].Item) is Items.Weapons weaponItem) {
-                            client.GiveWeapon((uint) weaponItem.Hash, 99999, true);
-                        }
+                        case 2:
+                            if (ph.OutfitInventory.Slots[17] != null)
+                            {
+                                if ((ph.OutfitInventory.Slots[17].Item) is Items.Weapons weaponItem)
+                                {
+                                    client.GiveWeapon((uint)weaponItem.Hash, 99999, true);
+                                }
+                            }
+                            else client.RemoveAllWeapons();
+                            break;
+                        case 3:
+                            client.RemoveAllWeapons();
+                            break;
                     }
-                    else client.RemoveAllWeapons();
-                    break;
-                case 3:
-                    client.RemoveAllWeapons();
-                    break;
-            }
-
+                });
+            });
         }
 
         public static void OnAnimationKeyPressed(IPlayer client, PlayerHandler ph, ConsoleKey key)

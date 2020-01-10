@@ -61,6 +61,7 @@ function setHUD(hunger, thirst, vocal, vocaltype, money, mute)
     $('.money').html(`${money}<span>$</span>`);
 }
 
+let circle = null;
 
 function MakeProgressBar(duration)
 {
@@ -150,4 +151,6 @@ function showHide(value) {
 if ('alt' in window) {
     alt.on('setHUD', setHUD);
     alt.on('showHide', showHide);
+    alt.on('MakeProgressBar', MakeProgressBar);
+    alt.on('FinishCB', FinishCB);
 }

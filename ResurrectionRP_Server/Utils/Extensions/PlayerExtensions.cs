@@ -167,7 +167,7 @@ namespace ResurrectionRP_Server
 
         public static IVehicle GetNearestVehicle(this IPlayer client)
         {
-            var vehs = Alt.GetAllVehicles();
+            var vehs = VehicleHandler.GetAllWorldVehicle();
             IVehicle endup = null;
             var position = client.GetPosition();
             Vector3 pos = new Vector3(position.X, position.Y, position.Z);

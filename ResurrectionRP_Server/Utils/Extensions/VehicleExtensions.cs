@@ -25,16 +25,16 @@ namespace ResurrectionRP_Server
             return new Vector3(pos.X, pos.Y, pos.Z);
         }
 
-        public static List<IVehicle> GetVehiclesInRange(this IVehicle client, int Range)
+        public static List<VehicleHandler> GetVehiclesInRange(this IVehicle client, int Range)
         {
-            List<IVehicle> endup = new List<IVehicle>();
+            List<VehicleHandler> endup = new List<VehicleHandler>();
 
-            var vehs = Alt.GetAllVehicles();
+            var vehs = VehicleHandler.GetAllWorldVehicle();
             lock (vehs)
             {
                 var position = client.GetPosition();
                 Vector3 osition = new Vector3(position.X, position.Y, position.Z);
-                foreach (IVehicle veh in vehs)
+                foreach (VehicleHandler veh in vehs)
                 {
                     if (!veh.Exists)
                         continue;

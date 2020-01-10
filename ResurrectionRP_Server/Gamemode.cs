@@ -102,11 +102,6 @@ namespace ResurrectionRP_Server
                         player.Kick("Server stop");
                 }*/
 
-                foreach(var veh in Alt.GetAllVehicles())
-                {
-                    veh.Remove();
-                }
-
                 //await HouseManager.House_Exit();
             }).Wait();
         }

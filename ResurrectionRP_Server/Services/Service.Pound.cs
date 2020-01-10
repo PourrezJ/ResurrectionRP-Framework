@@ -174,7 +174,7 @@ namespace ResurrectionRP_Server.Services
 
         public static IEnumerable<VehicleData> GetVehicleInPound(IPlayer client)
         {
-            return VehiclesManager.GetAllVehicles().Where(v => (v.OwnerID == client.GetSocialClub() || client.GetPlayerHandler().HasKey(v.Plate)) && v.IsInPound);
+            return VehiclesManager.GetAllVehicleData().Where(v => (v.OwnerID == client.GetSocialClub() || client.GetPlayerHandler().HasKey(v.Plate)) && v.IsInPound);
         }
 
         public static async Task AddVehicleInPoundAsync(VehicleData veh)

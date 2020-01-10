@@ -39,7 +39,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             string plate = args[0].ToUpper();
             VehicleData vehicleData = null;
 
-            foreach (VehicleData veh in VehiclesManager.GetAllVehicles())
+            foreach (VehicleData veh in VehiclesManager.GetAllVehicleData())
             {
                 if (veh.Plate.ToUpper() == plate)
                 {

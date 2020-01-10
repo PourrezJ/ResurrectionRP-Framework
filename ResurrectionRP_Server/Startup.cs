@@ -100,10 +100,5 @@ namespace ResurrectionRP_Server
             VehiclesManager.OnTick();
             base.OnTick();
         }
-
-        public override IEntityPool<IVehicle> GetVehiclePool(IEntityFactory<IVehicle> vehicleFactory)
-        {
-            return base.GetVehiclePool(vehicleFactory);
-        }
     }
 }

@@ -85,7 +85,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         }
                     }
 
-                    IEnumerable<VehicleData> vehicles = VehiclesManager.GetAllVehicles();
+                    IEnumerable<VehicleData> vehicles = VehiclesManager.GetAllVehicleData();
 
                     foreach (var vehicleData in vehicles)
                     {

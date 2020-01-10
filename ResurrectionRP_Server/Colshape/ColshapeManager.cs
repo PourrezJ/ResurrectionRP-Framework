@@ -206,7 +206,7 @@ namespace ResurrectionRP_Server.Colshape
                 var vehicles = Alt.GetAllVehicles();
                 lock (vehicles)
                 {
-                    foreach (IVehicle vehicle in vehicles)
+                    foreach (Vehicle vehicle in vehicles)
                     {
                         if (!vehicle.Exists)
                             continue;
@@ -226,8 +226,7 @@ namespace ResurrectionRP_Server.Colshape
                                         OnVehicleEnterColshape?.Invoke(colshape, vehicle);
                                         if (GameMode.IsDebug)
                                             Alt.Log($"[Colshape {colshape.Id}] Vehicle {vehicle.Id} entering, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
-                                    });
-                                    
+                                    }); 
                                 }
                             }
                         }

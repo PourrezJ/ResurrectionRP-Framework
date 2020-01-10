@@ -709,6 +709,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             ParkingName = string.Empty;
             IsInPound = false;
             IsParked = false;
+            Vehicle.OnVehicleSpawned();
             return Vehicle;
         }
 

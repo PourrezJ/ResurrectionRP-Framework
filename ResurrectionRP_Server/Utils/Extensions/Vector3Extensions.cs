@@ -79,14 +79,14 @@ namespace ResurrectionRP_Server
 
         public static Rotation ConvertToEntityRotation(this Vector3 pos) => new Rotation(pos.X, pos.Y, pos.Z );
 
-        public static List<IVehicle> GetVehiclesInRange(this Vector3 pos, float range, short dimension = GameMode.GlobalDimension)
+        public static List<VehicleHandler> GetVehiclesInRange(this Vector3 pos, float range, short dimension = GameMode.GlobalDimension)
         {
-            ICollection<IVehicle> vehicles = Alt.GetAllVehicles();
-            List<IVehicle> end = new List<IVehicle>();
+            ICollection<VehicleHandler> vehicles = VehicleHandler.GetAllWorldVehicle();
+            List<VehicleHandler> end = new List<VehicleHandler>();
 
             lock (vehicles)
             {
-                foreach (IVehicle veh in vehicles)
+                foreach (var veh in vehicles)
                 {
                     if (veh.Dimension == dimension && pos.DistanceTo2D(veh.Position) <= range)
                         end.Add(veh);

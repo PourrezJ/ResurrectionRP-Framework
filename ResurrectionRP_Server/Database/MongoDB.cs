@@ -61,7 +61,7 @@ namespace ResurrectionRP_Server.Database
             if (objet.GetType() == typeof(GameMode))
             {
                 GameMode gameMode = (GameMode)objet;
-                return $"Players: {Alt.GetAllPlayers().Count} - Vehicles: {Alt.GetAllVehicles().Count}";
+                return $"Players: {Alt.GetAllPlayers().Count} - Vehicles: {VehicleHandler.GetAllWorldVehicle().Count}";
             }
             else if (objet.GetType() == typeof(PlayerHandler))
             {

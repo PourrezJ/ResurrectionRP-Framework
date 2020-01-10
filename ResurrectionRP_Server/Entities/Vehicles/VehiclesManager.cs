@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Numerics;
-using ResurrectionRP_Server.Database;
 
 namespace ResurrectionRP_Server.Entities.Vehicles
 {
@@ -20,8 +19,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         private static DateTime _nextLoop = DateTime.Now;
 
         private static ConcurrentDictionary<string, VehicleData> _vehicleHandlers = new ConcurrentDictionary<string, VehicleData>();
-        private static ConcurrentBag<VehicleHandler> _vehicleOnWorld = new ConcurrentBag<VehicleHandler>();
-
         #endregion
 
         #region Constructor
@@ -155,7 +152,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (_nextLoop > DateTime.Now)
                 return;
 
-            var vehicles = Alt.GetAllVehicles();
+            var vehicles = VehicleHandler.GetAllWorldVehicle();
 
             TimeSpan expireTime = TimeSpan.FromDays(3);
 
@@ -262,7 +259,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         private static bool IsPlateUnique(string plate)
         {
-            var vehicles = Alt.GetAllVehicles();
+            var vehicles = VehicleHandler.GetAllWorldVehicle();
 
             lock (vehicles)
             {
@@ -301,15 +298,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return null;
         }
 
-        public static List<IVehicle> GetNearestsVehicles(Vector3 position, float distance = 3.0f, short dimension = GameMode.GlobalDimension)
+        public static List<VehicleHandler> GetNearestsVehicles(Vector3 position, float distance = 3.0f, short dimension = GameMode.GlobalDimension)
         {
-            ICollection<IVehicle> vehs = Alt.GetAllVehicles();
+            ICollection<VehicleHandler> vehs = VehicleHandler.GetAllWorldVehicle();
 
-            List<IVehicle> nearest = new List<IVehicle>();
+            List<VehicleHandler> nearest = new List<VehicleHandler>();
 
             lock (vehs)
             {
-                foreach (IVehicle veh in vehs)
+                foreach (VehicleHandler veh in vehs)
                 {
                     if (veh.GetVehicleHandler() == null)
                         continue;
@@ -337,7 +334,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             return nearest;
         }
         
-        public static ICollection<VehicleData> GetAllVehicles()
+        public static ICollection<VehicleData> GetAllVehicleData()
         {
             return _vehicleHandlers.Values;
         }
@@ -376,16 +373,6 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             bool result = _vehicleHandlers.TryRemove(vehicle.Plate, out _);
         }*/
 
-        public static ICollection<VehicleHandler> GetAllInGameVehicleHandler()
-        {
-            var vehicles = Alt.GetAllVehicles().ToArray();
-            ICollection<VehicleHandler> vhlist = null;
-            lock (vehicles)
-            {
-                vhlist = Array.ConvertAll(vehicles, e => e.GetVehicleHandler());
-            }
-            return vhlist;
-        }
         #endregion
     }
 }

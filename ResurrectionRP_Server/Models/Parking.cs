@@ -373,7 +373,7 @@ namespace ResurrectionRP_Server.Models
                     Alt.Server.LogError($"OpenParkingMenu player: {client.GetSocialClub()} | parking: {Name} {ID} | {ex}");
                 }
 
-                var vehicleList = VehiclesManager.GetAllVehicles().Where(v => vehicleListParked.Select(p => p.Plate).Contains(v.Plate)).ToList();
+                var vehicleList = VehiclesManager.GetAllVehicleData().Where(v => vehicleListParked.Select(p => p.Plate).Contains(v.Plate)).ToList();
 
                 if (vehicleList.Count() > 0)
                 {

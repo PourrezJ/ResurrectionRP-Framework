@@ -81,13 +81,13 @@ namespace ResurrectionRP_Server.Farms
         {
             if (RaffinerieColshape.IsEntityIn(player))
             {
-                IVehicle vehicle = null;
-                List<IVehicle> vehs = VehiclesManager.GetNearestsVehicles(Process_PosRot.Pos, 20);
+                VehicleHandler vehicle = null;
+                List<VehicleHandler> vehs = VehiclesManager.GetNearestsVehicles(Process_PosRot.Pos, 20);
 
-                foreach (IVehicle veh in vehs)
+                foreach (VehicleHandler veh in vehs)
                 {
                     if (veh.GetVehicleHandler().HasTrailer)
-                        vehicle = (IVehicle)(veh.GetVehicleHandler().Trailer);
+                        vehicle = (VehicleHandler)veh.Trailer;
                 }
 
                 if (vehicle != null && Array.IndexOf(allowedTrailers, (VehicleModel)vehicle.Model) != -1)

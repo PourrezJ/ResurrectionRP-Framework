@@ -11,13 +11,19 @@ namespace ResurrectionRP_Server.Utils
         private static int frameRate;
         private static string title;
 
+        private static DateTime _nextLoop = DateTime.Now;
+
         public static void OnTick()
         {
+            CalculateFrameRate();
+            if (_nextLoop > DateTime.Now)
+                return;
+
             if (string.IsNullOrEmpty(title))
                 title = Console.Title;
 
             var players = Alt.GetAllPlayers();
-            var vehicles = Alt.GetAllVehicles();
+            var vehicles = VehicleHandler.GetAllWorldVehicle();
 
             int joueurCount = 0;
             int vehicleCount = 0;
@@ -32,7 +38,9 @@ namespace ResurrectionRP_Server.Utils
                 vehicleCount = vehicles.Count;
             }
 
-            Console.Title = title + $" FPS: {CalculateFrameRate()} Joueurs: {joueurCount} Véhicules: {vehicleCount}";
+            Console.Title = title + $" FPS: {lastFrameRate} Joueurs: {joueurCount} Véhicules: {vehicleCount}";
+
+            _nextLoop = _nextLoop.AddMilliseconds(1000);
         }
 
         public static int CalculateFrameRate()

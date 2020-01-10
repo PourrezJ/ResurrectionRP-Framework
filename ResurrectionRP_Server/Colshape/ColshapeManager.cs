@@ -211,6 +211,9 @@ namespace ResurrectionRP_Server.Colshape
                         if (!vehicle.Exists)
                             continue;
 
+                        if (vehicle.GetVehicleHandler() == null)
+                            continue;
+
                         lock (_colshapes)
                         {
                             foreach (IColshape colshape in _colshapes.Values)

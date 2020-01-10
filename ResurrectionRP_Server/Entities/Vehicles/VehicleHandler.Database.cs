@@ -65,6 +65,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 try
                 {
+                    if (VehicleData == null)
+                        return;
+
                     await AltAsync.Do(()=> VehicleData.UpdateProperties());
                     var result = await Database.MongoDB.Update(this.VehicleData, "vehicles", VehicleData.Plate, _nbUpdateRequests);
 

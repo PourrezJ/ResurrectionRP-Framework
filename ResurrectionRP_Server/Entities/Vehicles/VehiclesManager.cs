@@ -20,6 +20,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         private static DateTime _nextLoop = DateTime.Now;
 
         private static ConcurrentDictionary<string, VehicleData> _vehicleHandlers = new ConcurrentDictionary<string, VehicleData>();
+        private static ConcurrentBag<VehicleHandler> _vehicleOnWorld = new ConcurrentBag<VehicleHandler>();
 
         #endregion
 
@@ -29,8 +30,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             Alt.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             Alt.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
             Alt.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
+            Alt.OnVehicleRemove += OnVehicleRemove;
 
-            Alt.OnClient("LockUnlockVehicle", LockUnlockVehicle);
+            Alt.OnClient<IPlayer, IVehicle>("LockUnlockVehicle", LockUnlockVehicle);
             Alt.OnClient("UpdateTrailer", UpdateTrailerState);
         }
         #endregion
@@ -64,6 +66,11 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }
 
+        private static void OnVehicleRemove(IVehicle vehicle)
+        {
+
+        }
+
         public static void UpdateTrailerState(IPlayer player, object[] args)
         {
             if (!player.Exists)
@@ -94,12 +101,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }
 
-        private static void LockUnlockVehicle(IPlayer player, object[] args)
+        private static void LockUnlockVehicle(IPlayer player, IVehicle vehicle)
         {
             if (GameMode.IsDebug)
                 Alt.Server.LogColored("~b~VehicleManager ~w~| " + player.GetSocialClub() + " is trying to lock/unlock a car");
-
-            var vehicle = args[0] as IVehicle;
 
             if (vehicle != null && !vehicle.Exists)
                 return;
@@ -261,10 +266,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             lock (vehicles)
             {
-                if (vehicles.Any(p => p.NumberplateText == plate))
-                    return false;
-                else
-                    return true;
+                return !vehicles.Any(p => p.NumberplateText == plate);
             }
         }
 
@@ -309,6 +311,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 foreach (IVehicle veh in vehs)
                 {
+                    if (veh.GetVehicleHandler() == null)
+                        continue;
+
                     if (!veh.Exists || veh.Dimension != dimension || position.DistanceTo2D(veh.Position) > distance)
                         continue;
 

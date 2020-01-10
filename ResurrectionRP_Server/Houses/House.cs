@@ -122,11 +122,15 @@ namespace ResurrectionRP_Server.Houses
         #region Event handlers
         private void OnPlayerEnterParking(PlayerHandler player, Parking parking)
         {
+            if (player == null)
+                return;
             OpenParkingMenu(player.Client);
         }
 
         private void OnVehicleEnterParking(VehicleHandler vehicle, Parking parking)
         {
+            if (vehicle == null)
+                return;
             OpenParkingMenu(vehicle.Driver);
         }
 

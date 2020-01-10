@@ -317,8 +317,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             VehicleData.Windows = new WindowState[Globals.NB_VEHICLE_WINDOWS] { 0, 0, 0, 0 };
             VehicleData.Wheels = new Wheel[WheelsCount];
 
-            for (int i = 0; i < VehicleData.Wheels.Length; i++)
-                VehicleData.Wheels[i] = new Wheel();
+            for (byte i = 0; i < VehicleData.Wheels.Length; i++)
+            {
+                SetWheelBurst(i, false);
+                SetWheelHasTire(i, true);
+                SetWheelHealth(i, 100);
+                SetWheelOnFire(i, false);
+            }
 
             for (byte i = 0; i < VehicleData.Doors.Length; i++)
                 SetDoorState(i, (byte)VehicleDoorState.Closed);

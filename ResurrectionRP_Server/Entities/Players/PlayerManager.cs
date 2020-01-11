@@ -14,6 +14,7 @@ using ResurrectionRP_Server.Illegal;
 using ResurrectionRP_Server.Inventory;
 using ResurrectionRP_Server.Models;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -27,6 +28,9 @@ namespace ResurrectionRP_Server.Entities.Players
     {
         #region Variables 
         private readonly static Location charpos = new Location(new Vector3(402.8664f, -996.4108f, -99.00027f), new Vector3(0,0,60));
+
+        private static ConcurrentDictionary<string, PlayerHandler> allplayerHandlers = new ConcurrentDictionary<string, PlayerHandler>();
+
 
         public static List<DeadPlayer> DeadPlayers = new List<DeadPlayer>();
 
@@ -56,13 +60,23 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.OnClient("Player_SetInComa", (IPlayer client) => client.GetPlayerHandler().IsInComa = true); // peut être mieux?
             Alt.OnClient("ExitGame", (IPlayer client) => client.Kick("Exit"));
 
+            Alt.Server.LogInfo("--- Start loading all players from database ---");
+            var players = Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").AsQueryable();
+
+            foreach(var player in players)
+            {
+                // Todo: ajouter un check nombre de temps sans avoir jouer?
+                allplayerHandlers.TryAdd(player.PID, player);
+            }
+            Alt.Server.LogInfo($"--- Finish loading all players from database: {players.Count()} ---");
+
             Utils.Utils.SetInterval(() =>
             {
-                var players = PlayerHandler.PlayerHandlerList.ToList();
+                var pls = PlayerHandler.PlayerHandlerList.ToList();
 
-                for (int i = 0; i < players.Count; i++)
+                for (int i = 0; i < pls.Count; i++)
                 {
-                    var ph = players[i];
+                    var ph = pls[i];
 
                     if (!ph.Key.Exists)
                         continue;
@@ -74,7 +88,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                 }
 
-                players.Clear();
+                pls.Clear();
             }, 300000);
         }
 
@@ -347,6 +361,9 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Methods 
         public static async Task<PlayerHandler> GetPlayerHandlerDatabase(string socialClub) =>
             await Database.MongoDB.GetCollectionSafe<PlayerHandler>("players").Find(p => p.PID.ToLower() == socialClub.ToLower()).FirstOrDefaultAsync();
+
+        public static PlayerHandler GetPlayerHandlerCache(string socialClub) => allplayerHandlers[socialClub];
+
 
         private static void IWantToDie(IPlayer client)
         {

@@ -4,6 +4,7 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using AltV.Net;
+using ResurrectionRP_Server.Entities.Players;
 
 namespace ResurrectionRP_Server.Models
 {
@@ -33,7 +34,7 @@ namespace ResurrectionRP_Server.Models
         {
             try
             {
-                var player = Entities.Players.PlayerManager.GetPlayerHandlerDatabase(socialClub).Result;
+                var player = PlayerManager.GetPlayerHandlerCache(socialClub);
                 return player?.Identite;
             }
             catch (Exception)

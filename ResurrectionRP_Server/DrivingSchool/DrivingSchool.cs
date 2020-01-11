@@ -21,7 +21,7 @@ namespace ResurrectionRP_Server.DrivingSchool
         public byte Id { get; }
         public string SchoolName;
         private Vector3 EntryPosition;
-        private Location VehicleSpawnLocation;
+        private List<Location> VehicleSpawnLocation;
         private LicenseType LicenseType;
         private int Price;
         private List<Ride> RidePoints;
@@ -39,7 +39,7 @@ namespace ResurrectionRP_Server.DrivingSchool
         #endregion
 
         #region Constructor
-        public DrivingSchool(byte id, Vector3 pos, Models.Location spawnVeh, Models.LicenseType licenseType, int price, List<Ride> circuit, VehicleModel vehicleSchool)
+        public DrivingSchool(byte id, Vector3 pos, List<Location> spawnVeh, Models.LicenseType licenseType, int price, List<Ride> circuit, VehicleModel vehicleSchool)
         {
             Id = id;
             EntryPosition = pos;
@@ -48,7 +48,6 @@ namespace ResurrectionRP_Server.DrivingSchool
             Price = price;
             RidePoints = circuit;
             VehicleModel = vehicleSchool;
-
 
             switch (LicenseType)
             {
@@ -172,12 +171,21 @@ namespace ResurrectionRP_Server.DrivingSchool
 
         public void StartExam(IPlayer client)
         {
-            var veh = VehiclesManager.SpawnVehicle(client.GetSocialClub(), (uint)VehicleModel, VehicleSpawnLocation.Pos, VehicleSpawnLocation.Rot, plate: "SCHOOL", spawnVeh: true, locked: false);
-            Exam Examitem = new Exam(client, veh, this.RidePoints, this.Id);
-            //Examitem.endExam = End();
-            ConcernedPlayers.GetOrAdd(client.Id, Examitem);
-            client.GetPlayerHandler()?.AddKey(veh, "Auto école");
-            //await client.EmitAsync("BeginDrivingExamen", veh.Vehicle.Id, Circuit, ID);
+            // Spawn Check
+
+            foreach(var spawn in VehicleSpawnLocation)
+            {
+                if (!VehiclesManager.IsVehicleInSpawn(spawn))
+                {
+                    var veh = VehiclesManager.SpawnVehicle(client.GetSocialClub(), (uint)VehicleModel, spawn.Pos, spawn.Rot, plate: "SCHOOL", spawnVeh: true, locked: false);
+                    Exam Examitem = new Exam(client, veh, this.RidePoints, this.Id);
+                    //Examitem.endExam = End();
+                    ConcernedPlayers.GetOrAdd(client.Id, Examitem);
+                    client.GetPlayerHandler()?.AddKey(veh, "Auto école");
+                    //await client.EmitAsync("BeginDrivingExamen", veh.Vehicle.Id, Circuit, ID);
+                    return;
+                }
+            }
         }
         #endregion
 
@@ -241,11 +249,12 @@ namespace ResurrectionRP_Server.DrivingSchool
                     client.DisplayHelp("Vous avez annulé votre examen...", 10000);
                     break;
                 case "ID_Car":
+                    /*
                     if(VehiclesManager.IsVehicleInSpawn(VehicleSpawnLocation, 4))
                     {
                         client.DisplayHelp("Un véhicule bloque la sortie du véhicule!", 10000);
                         break;
-                    }
+                    }*/
                     if (ph.HasBankMoney(Price, "Paiement License " + SchoolName))
                         StartExam(client);
                     else

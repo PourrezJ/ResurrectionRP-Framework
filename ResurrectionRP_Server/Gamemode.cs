@@ -24,6 +24,7 @@ using ResurrectionRP_Server.Illegal;
 using ResurrectionRP_Server.AutoBusiness;
 using ResurrectionRP_Server.Entities.Worlds;
 using ResurrectionRP_Server.Jobs;
+using System.IO;
 
 namespace ResurrectionRP_Server
 {
@@ -217,22 +218,34 @@ namespace ResurrectionRP_Server
 
             Chat.RegisterCmd("coords", (IPlayer player, string[] args) =>
             {
-                if (player.IsInVehicle)
+                if (player.GetStaffRank() < Utils.Enums.StaffRank.Helper)
+                    return;
+
+                if (args.Length == 0)
                 {
-                    Chat.SendChatMessage(player, "X: " + player.Vehicle.Position.X + " Y: " + player.Vehicle.Position.Y + " Z: " + player.Vehicle.Position.Z + " Dim: " + player.Dimension);
-                    Chat.SendChatMessage(player, "RX: " + player.Vehicle.Rotation.Roll + " RY: " + player.Vehicle.Rotation.Pitch + " RZ: " + player.Vehicle.Rotation.Yaw);
+                    Chat.SendChatMessage(player, "Vous devez renseigné un nom pour la coordonnée");
+                    return;
+                }
+
+                Vector3 pos = (player.Vehicle != null) ? player.Vehicle.Position : player.Position;
+                Vector3 rot = (player.Vehicle != null) ? player.Vehicle.Rotation : player.Rotation;
+
+                string coordsName = args[0];
+
+                StreamWriter coordsFile;
+                if (!File.Exists("SavedCoords.txt"))
+                {
+                    coordsFile = new StreamWriter("SavedCoords.txt");
                 }
                 else
                 {
-                    Chat.SendChatMessage(player, "X: " + player.Position.X + " Y: " + player.Position.Y + " Z: " + player.Position.Z + " Dim: " + player.Dimension);
-                    Chat.SendChatMessage(player, "RX: " + player.Rotation.Roll + " RY: " + player.Rotation.Pitch + " RZ: " + player.Rotation.Yaw);
+                    coordsFile = File.AppendText("SavedCoords.txt");
                 }
-            });
 
-            Chat.RegisterCmd("getCoords", (IPlayer player, string[] args) =>
-            {
-                Alt.Server.LogColored($" X: {player.Position.X}  Y: {player.Position.Y} Z: {player.Position.Z} ");
-                Alt.Server.LogColored($" RX: {player.Rotation.Roll}  RY: {player.Rotation.Pitch} RZ: {player.Rotation.Yaw} ");
+                var data = $"| {coordsName} | Saved Coordenates: new Vector3({pos.X}f,{pos.Y}f,{pos.Z}f), new Vector3({rot.X}f,{rot.Y}f,{rot.Z}f) | InVehicle: {(player.Vehicle != null)}".Replace(',', '.');
+                Chat.SendChatMessage(player, data);
+                coordsFile.WriteLine(data);
+                coordsFile.Close();
             });
 
             Chat.RegisterCmd("dimension", (IPlayer player, string[] args) =>

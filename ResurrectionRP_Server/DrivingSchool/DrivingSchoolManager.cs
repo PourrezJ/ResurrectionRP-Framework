@@ -5,6 +5,7 @@ using AltV.Net.Enums;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
+using ResurrectionRP_Server.Models;
 
 namespace ResurrectionRP_Server.DrivingSchool
 {
@@ -36,10 +37,19 @@ namespace ResurrectionRP_Server.DrivingSchool
                 new Ride(){ Position = new Vector3(86.93179f, -1436.302f, 28), Speed = 70 } //15
             };
 
-            //var drivingSchool = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 29.29165f), new Models.Location(new Vector3(87.29823f, -1436.695f, 28.59703f), new Vector3(0.03492294f, 0.02653446f, 142.6451f)), Models.LicenseType.Car, 2500, schooltrajetcar, VehicleModel.Asea);
-            var drivingSchool = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 28.29165f), new Models.Location(new Vector3(87.29823f, -1436.695f, 28.59703f), new Vector3(0.03492294f, 0.02653446f, 142.6451f)), Models.LicenseType.Car, 2, schooltrajetcar, VehicleModel.Asea);
+            List<Location> locations = new List<Location>()
+            {
+                new Location(new Vector3(), new Vector3()),
+                new Location(new Vector3(), new Vector3()),
+                new Location(new Vector3(), new Vector3()),
+                new Location(new Vector3(), new Vector3()),
+                new Location(new Vector3(), new Vector3()),
+            };
 
-            drivingSchools.Add(drivingSchool);
+            //var drivingSchool = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 29.29165f), new Models.Location(new Vector3(87.29823f, -1436.695f, 28.59703f), new Vector3(0.03492294f, 0.02653446f, 142.6451f)), Models.LicenseType.Car, 2500, schooltrajetcar, VehicleModel.Asea);
+            //var drivingSchool = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 28.29165f), new Models.Location(new Vector3(87.29823f, -1436.695f, 28.59703f), new Vector3(0.03492294f, 0.02653446f, 142.6451f)), Models.LicenseType.Car, 2, schooltrajetcar, VehicleModel.Asea);
+
+            //drivingSchools.Add(drivingSchool);
 
         }
 /*

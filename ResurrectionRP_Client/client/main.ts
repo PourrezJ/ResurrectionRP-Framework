@@ -21,6 +21,57 @@ import * as CustomEvents from './Utils/CustomEvents';
 
 var GameClass: Game;
 
+const handlingproperties = [
+    'mass',
+    'initialDragCoeff',
+    'percentSubmerged',
+    'centreOfMassOffset',
+    'inertiaMultiplier',
+    'driveBiasFront',
+    'initialDriveGears',
+    'initialDriveForce',
+    'driveInertia',
+    'clutchChangeRateScaleUpShift',
+    'clutchChangeRateScaleDownShift',
+    'initialDriveMaxFlatVel',
+    'breakForce',
+    'brakeBiasFront',
+    'handBrakeForce',
+    'steeringLock',
+    'tractionCurveMax',
+    'tractionCurveMin',
+    'tractionCurveLateral',
+    'tractionSpringDeltaMax',
+    'lowSpeedTractionLossMult',
+    'camberStiffnesss',
+    'tractionBiasFront',
+    'tractionLossMult',
+    'suspensionForce',
+    'suspensionCompDamp',
+    'suspensionReboundDamp',
+    'suspensionUpperLimit',
+    'suspensionLowerLimit',
+    'suspensionRaise',
+    'suspensionBiasFront',
+    'antiRollBarForce',
+    'antiRollBarBiasFront',
+    'rollCentreHeightFront',
+    'rollCentreHeightRear',
+    'collisionDamageMult',
+    'weaponDamageMult',
+    'deformationDamageMult',
+    'engineDamageMult',
+    'petrolTankVolume',
+    'oilVolume',
+    'seatOffsetDistX',
+    'seatOffsetDistY',
+    'seatOffsetDistZ',
+    'monetaryValue',
+    'modelFlags',
+    'handlingFlags',
+    'damageFlags'
+];
+
 const init = async () => {
     try {
         alt.log('Chargement des events.');
@@ -70,6 +121,29 @@ const init = async () => {
             game.setFadeOutAfterDeath(false);
         });
 
+        alt.onServer("GetHandling", (model: number) => {
+            let handling : any = alt.HandlingData.getForModel(model);
+
+            let data = {};
+
+            for (const key in handlingproperties) {
+                const property = handlingproperties[key];
+                
+                if (property === 'centreOfMassOffset' || property === 'inertiaMultiplier') {
+                    const value: alt.Vector3 = handling[property];
+
+                    data[property] = value;
+
+                } else if (property === 'initialDriveGears' || property === 'modelFlags' || property === 'monetaryValue' || property === 'modelFlags' || property === 'handlingFlags' || property === 'damageFlags') {
+                    data[property] = parseInt(handling[property]);
+                } else {
+                    data[property] = parseFloat(handling[property]).toFixed(6);
+                }
+            }
+
+            alt.emitServer("CallbackGetHandling", model.toString(), JSON.stringify(data));
+        });
+
         alt.log("Chargement des controlleurs");
 
         chat.initialize();
@@ -87,6 +161,8 @@ const init = async () => {
         //alt.discordRequestOAuth2();
         //while (!alt.isDiscordInfoReady()) { }
 
+        
+
         alt.log("Connection avec le social club: " + game.scGetNickname());
 
         alt.emitServer("Events_PlayerJoin", game.scGetNickname(), JSON.stringify(alt.Discord.currentUser));
@@ -101,5 +177,3 @@ const init = async () => {
 
 new NetworkingEntityClient();
 init();
-
-

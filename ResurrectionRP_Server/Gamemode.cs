@@ -26,6 +26,7 @@ using ResurrectionRP_Server.Entities.Worlds;
 using ResurrectionRP_Server.Jobs;
 using System.IO;
 using ResurrectionRP_Server.DrivingSchool;
+using ResurrectionRP_Server.Utils;
 
 namespace ResurrectionRP_Server
 {
@@ -160,6 +161,7 @@ namespace ResurrectionRP_Server
             Factions.FactionManager.InitAllFactions();
             Society.SocietyManager.LoadAllSociety();
             JobsManager.Init();
+            HandlingManager.LoadAllHandling();
 
             Task.Run(async () =>
             {
@@ -266,6 +268,7 @@ namespace ResurrectionRP_Server
                 player.GetPlayerHandler()?.UpdateFull();
                 player.Vehicle?.GetVehicleHandler()?.UpdateInBackground();
             });
+
             Chat.RegisterCmd("anim", (IPlayer player, string[] args) =>
             {
                 if (player.GetPlayerHandler()?.StaffRank <= 0)
@@ -304,6 +307,11 @@ namespace ResurrectionRP_Server
                 }
 
                 player.Position = new Position(x, y, z);
+            });
+
+            Chat.RegisterCmd("gethandling", (IPlayer player, string[] args) =>
+            {
+                HandlingManager.GetAllHandling(player);
             });
         }
 

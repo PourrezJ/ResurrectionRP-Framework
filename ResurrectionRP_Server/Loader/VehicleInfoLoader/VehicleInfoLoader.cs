@@ -103,13 +103,13 @@ namespace VehicleInfoLoader
             _vehicles.Clear();
         }
 
-        public static async Task LoadAllManifests()
+        public static void LoadAllManifests()
         {
             string[] files = Directory.GetFiles(MakePath(), "*.json");
             
             foreach (var file in files)
             {
-                await GetAsync(Convert.ToString(Path.GetFileNameWithoutExtension(file)));
+                Get(Convert.ToString(Path.GetFileNameWithoutExtension(file)));
             }
         }
 

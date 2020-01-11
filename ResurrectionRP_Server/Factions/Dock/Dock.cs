@@ -302,9 +302,9 @@ namespace ResurrectionRP_Server.Factions
             base.OnPlayerPromote(client, rang);
         }
 
-        public override Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
+        public override void OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
         {
-            return base.OnVehicleOut(client, vehicle, location);
+            base.OnVehicleOut(client, vehicle, location);
         }
 
         public override void PlayerFactionAdded(IPlayer client)

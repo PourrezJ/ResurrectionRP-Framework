@@ -163,19 +163,17 @@ namespace ResurrectionRP_Server.Society
             OpenParkingMenu(vehicle.Driver);
         }
 
-        public virtual Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
+        public virtual void OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
         {
             vehicle.Rotation = location.Rot.ConvertRotationToRadian();
             client.SetPlayerIntoVehicle(vehicle);
             UpdateInBackground();
-            return Task.CompletedTask;
         }
 
-        public virtual Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
+        public virtual void OnVehicleStored(IPlayer client, VehicleHandler vehicle)
         {
             vehicle.VehicleData.ParkingName = SocietyName;
             UpdateInBackground();
-            return Task.CompletedTask;
         }
         #endregion
 

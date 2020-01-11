@@ -50,15 +50,15 @@ namespace ResurrectionRP_Server.Services
         #endregion
 
         #region Event handlers
-        private async Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Models.Location Spawn)
+        private void OnVehicleOut(IPlayer client, VehicleHandler vehicle, Models.Location Spawn)
         {
-            await Update();
+            Task.Run(async ()=>await Update());
             client.SendNotificationSuccess($"Vous avez sorti votre {vehicle.VehicleManifest.LocalizedName}!"); 
         }
 
-        private async Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
+        private void OnVehicleStored(IPlayer client, VehicleHandler vehicle)
         {
-            await Update();
+            Task.Run(async ()=> await Update());
             client.SendNotificationSuccess($"Vous avez rangé votre véhicule {vehicle.VehicleManifest.LocalizedName}");
         }
         #endregion

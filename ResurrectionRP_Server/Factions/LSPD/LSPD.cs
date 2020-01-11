@@ -344,7 +344,7 @@ namespace ResurrectionRP_Server.Factions
             base.PlayerFactionAdded(client);
         }
 
-        public override Task OnVehicleOut(IPlayer client, VehicleHandler vehicleHandler, Location location)
+        public override void OnVehicleOut(IPlayer client, VehicleHandler vehicleHandler, Location location)
         {
             if (VehicleAllowed.Exists(p => (uint)p.Hash == vehicleHandler.Model))
             {
@@ -355,7 +355,7 @@ namespace ResurrectionRP_Server.Factions
                 vehicleHandler.VehicleData.PowerMultiplicator = 30;
             }
 
-            return base.OnVehicleOut(client, vehicleHandler);
+            base.OnVehicleOut(client, vehicleHandler);
         }
 
         private void CallUrgenceLSPD(IPlayer client, object[] args)

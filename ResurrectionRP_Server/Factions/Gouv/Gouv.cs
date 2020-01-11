@@ -154,7 +154,7 @@ namespace ResurrectionRP_Server.Factions
                 OpenSecretaryMenu(client);
         }
 
-        public override Task OnVehicleOut(IPlayer client, VehicleHandler vehicleHandler, Location location = null)
+        public override void OnVehicleOut(IPlayer client, VehicleHandler vehicleHandler, Location location = null)
         {
             if (VehicleAllowed.Exists(p => (uint)p.Hash == vehicleHandler.Model))
             {
@@ -162,7 +162,7 @@ namespace ResurrectionRP_Server.Factions
                     vehicleHandler.VehicleData.Inventory = new Inventory.Inventory(40, 20);
             }
 
-            return base.OnVehicleOut(client, vehicleHandler, location);
+            base.OnVehicleOut(client, vehicleHandler, location);
         }
 
         public override void OnPlayerEnterColShape(IColshape ColshapePointer, IPlayer player)

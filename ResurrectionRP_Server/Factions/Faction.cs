@@ -170,19 +170,17 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Event handlers
-        public virtual Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
+        public virtual void OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
         {
             client.SetPlayerIntoVehicle(vehicle);
             vehicle.LockState = AltV.Net.Enums.VehicleLockState.Unlocked;
             UpdateInBackground();
-            return Task.CompletedTask;
         }
 
-        private Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
+        private void OnVehicleStored(IPlayer client, VehicleHandler vehicle)
         {
             vehicle.VehicleData.ParkingName = FactionName;
             UpdateInBackground();
-            return Task.CompletedTask;
         }
 
         public void OnPlayerEnterVestiaire(IColshape colshape, IPlayer client)

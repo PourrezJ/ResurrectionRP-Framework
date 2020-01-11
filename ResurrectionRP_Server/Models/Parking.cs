@@ -55,9 +55,9 @@ namespace ResurrectionRP_Server.Models
     public class Parking
     {
         #region Delegates
-        public delegate Task OnPlayerEnterParkingEvent(IPlayer client);
-        public delegate Task OnVehicleStoredEvent(IPlayer client, VehicleHandler vehicle);
-        public delegate Task OnVehicleOutEvent(IPlayer client, VehicleHandler vehicle, Location Spawn);
+        public delegate void OnPlayerEnterParkingEvent(IPlayer client);
+        public delegate void OnVehicleStoredEvent(IPlayer client, VehicleHandler vehicle);
+        public delegate void OnVehicleOutEvent(IPlayer client, VehicleHandler vehicle, Location Spawn);
         public delegate Task OnSaveNeededDelegate();
         public delegate void OnPlayerParkingEvent(PlayerHandler player, Parking parking);
         public delegate void OnVehicleParkingEvent(VehicleHandler vehicle, Parking parking);
@@ -261,8 +261,7 @@ namespace ResurrectionRP_Server.Models
                 veh.EngineOn = false;
                 RemoveVehicle(veh); // retrait du véhicule dans la liste
 
-                if (OnVehicleOut != null)
-                    Task.Run(()=> OnVehicleOut.Invoke(client, veh.Vehicle, Spawn)); // callback (ex carpark)
+                OnVehicleOut?.Invoke(client, veh.Vehicle, Spawn);
 
                 veh.Vehicle.UpdateInBackground();
                 MenuManager.CloseMenu(client);

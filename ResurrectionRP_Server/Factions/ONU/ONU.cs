@@ -253,7 +253,7 @@ namespace ResurrectionRP_Server.Factions
             base.PlayerFactionAdded(client);
         }
 
-        public override Task OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
+        public override void OnVehicleOut(IPlayer client, VehicleHandler vehicle, Location location = null)
         {
             if (VehicleAllowed.Exists(p => (uint)p.Hash == vehicle.Model))
             {
@@ -261,7 +261,7 @@ namespace ResurrectionRP_Server.Factions
                     vehicle.VehicleData.Inventory = new Inventory.Inventory(40, 20);
             }
 
-            return base.OnVehicleOut(client, vehicle, location);
+            base.OnVehicleOut(client, vehicle, location);
         }
         #endregion
     }

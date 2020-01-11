@@ -482,6 +482,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             Utils.Utils.CheckThread("UpdateProperties");
 
+            if (Vehicle == null)
+                return;
+
             if (!Vehicle.Exists)
                 return;
 

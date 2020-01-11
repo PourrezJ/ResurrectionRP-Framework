@@ -175,18 +175,16 @@ namespace ResurrectionRP_Server.Houses
             return Task.CompletedTask;
         }
 
-        private Task OnVehicleStored(IPlayer client, VehicleHandler vehicle)
+        private void OnVehicleStored(IPlayer client, VehicleHandler vehicle)
         {
             vehicle.VehicleData.ParkingName = $"{Name} {ID}";
             UpdateInBackground();
-            return Task.CompletedTask;
         }
 
-        private Task OnVehicleOutParking(IPlayer client, VehicleHandler vehicle, Location location)
+        private void OnVehicleOutParking(IPlayer client, VehicleHandler vehicle, Location location)
         {
             UpdateInBackground();
             client.SetPlayerIntoVehicle(vehicle);
-            return Task.CompletedTask;
         }
         #endregion
 

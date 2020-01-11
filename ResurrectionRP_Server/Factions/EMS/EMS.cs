@@ -15,16 +15,15 @@ using ResurrectionRP_Server.Teleport;
 
 namespace ResurrectionRP_Server.Factions
 {
-    public partial class ONU : Faction
+    public partial class EMS : Faction
     {
         #region Static fields
         private static readonly double healprice = 1000;
 
         #endregion
 
-
         #region Constructor
-        public ONU(string FactionName, FactionType FactionType) : base(FactionName, FactionType)
+        public EMS(string FactionName, FactionType FactionType) : base(FactionName, FactionType)
         {
         }
         #endregion
@@ -37,6 +36,7 @@ namespace ResurrectionRP_Server.Factions
             ParkingLocation = new Location(new Vector3(341.1377f, -559.7379f, 28.26499f), new Vector3(-0.0811837f, 0.02818833f, 339.2909f));
             HeliportLocation = new Location(new Vector3(351.8859f, -587.7157f, 74.49007f), new Vector3(0.183099f, 0.5883495f, 252.0849f));
 
+            // Rang à revoir
             FactionRang = new FactionRang[] {
                     new FactionRang(0,"Soldat", false, 1500),
                     new FactionRang(1,"Caporal", false, 2000),
@@ -64,16 +64,12 @@ namespace ResurrectionRP_Server.Factions
             ItemShop.Add(new FactionShopItem(Inventory.Inventory.ItemByID(ItemID.Coffee), 2, 0));
             ItemShop.Add(new FactionShopItem(new RadioItem(ItemID.Radio, "Talky", "", 1, true, true, false, true, true, 2000, icon: "talky"), 500, 0));
             ItemShop.Add(new FactionShopItem(new BagItem(ItemID.Bag, "Backpack", "", new ClothData(45, 0, 0), 40, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"), 500, 0));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Taser, "Taser", "", 3, hash: WeaponHash.StunGun), 30000, 0));
-            ItemShop.Add(new FactionShopItem(new HandCuff(ItemID.Handcuff, "Menottes", "Une paire de menottes", 0.1, true, false), 500, 0));
+            //ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Taser, "Taser", "", 3, hash: WeaponHash.StunGun), 30000, 0));
+           // ItemShop.Add(new FactionShopItem(new HandCuff(ItemID.Handcuff, "Menottes", "Une paire de menottes", 0.1, true, false), 500, 0));
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.LampeTorche, "Lampe Torche", "Une lampe leds 500watts.", 2, hash: WeaponHash.Flashlight), 2500, 0));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Matraque, "Matraque", "Une matraque de marque Théo.", 5, hash: WeaponHash.Nightstick), 3500, 0));
+           // ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Matraque, "Matraque", "Une matraque de marque Théo.", 5, hash: WeaponHash.Nightstick), 3500, 0));
 
             ServicePlayerList = new List<string>();
-
-
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pistol, "Pistol MK2", "", hash: WeaponHash.PistolMk2), 0, 1));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Carabine, "Special Carbine MK2", "", hash: WeaponHash.SpecialCarbineMk2), 0, 3));
 
             List<TeleportEtage> etages = new List<TeleportEtage>()
             {

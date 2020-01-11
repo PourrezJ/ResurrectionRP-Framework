@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using AltV.Net.Async;
-using AltV.Net.Elements.Entities;
+﻿using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Entities.Peds;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.XMenuManager;
@@ -12,7 +10,7 @@ using System;
 namespace ResurrectionRP_Server.Factions
 {
 
-    public partial class ONU
+    public partial class EMS
     {
         #region Infirmiere
         private void OnNPCInteract(IPlayer client, Ped npc)

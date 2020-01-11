@@ -10,7 +10,6 @@ namespace ResurrectionRP_Server.Factions
         {
             Chat.RegisterCmd("addonu", AddPlayerONU);
             Chat.RegisterCmd("addlspd", AddPlayerLSPD);
-            Chat.RegisterCmd("addrebelle", AddPlayerRebelle);
             Chat.RegisterCmd("addlscustom", AddPlayerLSCustom);
             Chat.RegisterCmd("addgouv", AddPlayerGouv);
             Chat.RegisterCmd("adddock", AddPlayerDock);
@@ -22,7 +21,7 @@ namespace ResurrectionRP_Server.Factions
             if (client.GetPlayerHandler().StaffRank <= StaffRank.Player)
                 return;
 
-            FactionManager.Onu.TryAddIntoFaction(client, 4);
+            FactionManager.EMS.TryAddIntoFaction(client, 4);
         }
 
         public void AddPlayerLSPD(IPlayer client, string[] args)
@@ -31,14 +30,6 @@ namespace ResurrectionRP_Server.Factions
                 return;
 
             FactionManager.Lspd.TryAddIntoFaction(client, 4);
-        }
-
-        public void AddPlayerRebelle(IPlayer client, string[] args)
-        {
-            if (client.GetPlayerHandler().StaffRank <= StaffRank.Player)
-                return;
-
-            FactionManager.Rebelle.TryAddIntoFaction(client, 3);
         }
 
         public void AddPlayerLSCustom(IPlayer client, string[] args)

@@ -4,7 +4,7 @@
     {
         Civil = 0,
         LSPD = 1,
-        ONU = 2,
+        EMS = 2,
         LAFD = 3,
         Mayor = 4,
         Division = 5,

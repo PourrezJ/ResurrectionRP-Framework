@@ -13,13 +13,11 @@ namespace ResurrectionRP_Server.Factions
         #region Fields and properties
         public static List<Faction> FactionList = new List<Faction>();
 
-        public static ONU Onu { get; private set; }
+        public static EMS EMS { get; private set; }
 
         public static LSPD Lspd { get; private set; }
 
         public static LSCustom LSCustom { get; private set; }
-
-        public static Division Rebelle { get; private set; }
 
         public static Gouv Gouvernement { get; private set; }
 
@@ -30,15 +28,14 @@ namespace ResurrectionRP_Server.Factions
 
         #region Init
         public static void InitAllFactions()
-        {
-            Onu = (ONU)(LoadFaction<ONU>("ONU") ?? new ONU("ONU", FactionType.ONU)).Init();
+        { 
+            EMS = (EMS)(LoadFaction<EMS>("EMS") ?? new EMS("EMS", FactionType.EMS)).Init();
             Lspd = (LSPD)(LoadFaction<LSPD>("LSPD") ?? new LSPD("LSPD", FactionType.LSPD)).Init();
-            Rebelle = (Division)(LoadFaction<Division>("Division") ?? new Division("Division", FactionType.Division)).Init();
             LSCustom = (LSCustom)(LoadFaction<LSCustom>("LSCustom") ?? new LSCustom("LSCustom", FactionType.LSCustom)).Init();
             Gouvernement = (Gouv)(LoadFaction<Gouv>("Gouv") ?? new Gouv("Gouv", FactionType.Gouv)).Init();
             Dock = (Dock)(LoadFaction<Dock>("Dock") ?? new Dock("Dock", FactionType.Dock)).Init();
             Nordiste = (Nordiste)(LoadFaction<Nordiste>("Bureau du Shérif") ?? new Nordiste("Bureau du Shérif", FactionType.Nordiste)).Init();
-
+            
             Utils.Utils.Delay((int)TimeSpan.FromMinutes(10).TotalMilliseconds, async () =>
             {
                 foreach (var faction in FactionList)
@@ -48,17 +45,16 @@ namespace ResurrectionRP_Server.Factions
                 }
             });
 
-            FactionList.AddRange(new List<Faction>() { Onu, Lspd, LSCustom, Gouvernement, Dock, Nordiste });
+            FactionList.AddRange(new List<Faction>() { EMS, Lspd, LSCustom, Gouvernement, Dock, Nordiste });
         }
         #endregion
 
         #region Event handlers
         public static void OnPlayerConnected(IPlayer client)
         {
-            Onu?.OnPlayerConnected(client);
+            EMS?.OnPlayerConnected(client);
             Lspd?.OnPlayerConnected(client);
             LSCustom?.OnPlayerConnected(client);
-            Rebelle?.OnPlayerConnected(client);
             Dock?.OnPlayerConnected(client);
             Gouvernement?.OnPlayerConnected(client);
             Nordiste?.OnPlayerConnected(client);
@@ -66,10 +62,9 @@ namespace ResurrectionRP_Server.Factions
 
         public static void OnPlayerDisconnected(IPlayer client)
         {
-            Onu?.OnPlayerDisconnected(client);
+            EMS?.OnPlayerDisconnected(client);
             Lspd?.OnPlayerDisconnected(client);
             LSCustom?.OnPlayerDisconnected(client);
-            Rebelle?.OnPlayerDisconnected(client);
             Dock?.OnPlayerDisconnected(client);
             Nordiste?.OnPlayerConnected(client);
         }
@@ -78,10 +73,9 @@ namespace ResurrectionRP_Server.Factions
         #region Methods
         public static void AddFactionTargetMenu(IPlayer client, IPlayer target, XMenu xMenu)
         {
-            Onu?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.BRIEFCASE_MEDICAL_SOLID);
+            EMS?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.BRIEFCASE_MEDICAL_SOLID);
             Lspd?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
             LSCustom?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.TOOLBOX_SOLID);
-            Rebelle?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.REBEL_BRAND);
             Gouvernement?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
             Dock?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
             Nordiste?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
@@ -89,10 +83,9 @@ namespace ResurrectionRP_Server.Factions
 
         public static void AddFactionVehicleMenu(IPlayer client, IVehicle vehicle, XMenu xMenu)
         {
-            Onu?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.BRIEFCASE_MEDICAL_SOLID);
+            EMS?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.BRIEFCASE_MEDICAL_SOLID);
             Lspd?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
             LSCustom?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.TOOLBOX_SOLID);
-            Rebelle?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.REBEL_BRAND);
             Gouvernement?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
             Dock?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
             Nordiste?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
@@ -103,7 +96,7 @@ namespace ResurrectionRP_Server.Factions
             try
             {
                 var filter = Builders<T>.Filter.Eq("FactionName", faction);
-                return Database.MongoDB.GetCollectionSafe<T>("factions").FindAsync<T>(filter).Result.First();
+                return Database.MongoDB.GetCollectionSafe<T>("factions").Find<T>(filter).FirstOrDefault<T>();
             }
             catch (Exception ec)
             {
@@ -114,8 +107,8 @@ namespace ResurrectionRP_Server.Factions
 
         public static bool IsMedic(IPlayer client)
         {  
-            if (Onu != null)
-                return Onu.HasPlayerIntoFaction(client);
+            if (EMS != null)
+                return EMS.HasPlayerIntoFaction(client);
             return false;
         }
 
@@ -126,14 +119,6 @@ namespace ResurrectionRP_Server.Factions
             return false;
         }
         
-        public static bool IsRebelle(IPlayer client)
-        {
-            if (Rebelle != null)
-                return Rebelle.HasPlayerIntoFaction(client);
-            return false;
-        }
-
-
         public static bool IsLSCustom(IPlayer client)
         {
             if (LSCustom != null)

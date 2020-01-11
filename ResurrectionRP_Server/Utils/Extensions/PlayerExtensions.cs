@@ -408,9 +408,9 @@ namespace ResurrectionRP_Server
             if (dead != null)
                 dead.Remove();
 
-            if (Factions.FactionManager.Onu != null && Factions.FactionManager.Onu.ServicePlayerList?.Count > 0)
+            if (Factions.FactionManager.EMS != null && Factions.FactionManager.EMS.ServicePlayerList?.Count > 0)
             {
-                foreach (var medecin in Factions.FactionManager.Onu?.GetEmployeeOnline())
+                foreach (var medecin in Factions.FactionManager.EMS?.GetEmployeeOnline())
                 {
                     if (medecin.Exists)
                         medecin.EmitLocked("ONU_BlesseEnd", (int)client.Id);
@@ -436,9 +436,9 @@ namespace ResurrectionRP_Server
                 client.GetPlayerHandler().IsInComa = false;
             }
 
-            if (Factions.FactionManager.Onu != null && Factions.FactionManager.Onu.ServicePlayerList?.Count > 0)
+            if (Factions.FactionManager.EMS != null && Factions.FactionManager.EMS.ServicePlayerList?.Count > 0)
             {
-                foreach (var medecin in Factions.FactionManager.Onu?.GetEmployeeOnline())
+                foreach (var medecin in Factions.FactionManager.EMS?.GetEmployeeOnline())
                 {
                     if (await medecin.ExistsAsync())
                         medecin.EmitLocked("ONU_BlesseEnd", (int)client.Id);

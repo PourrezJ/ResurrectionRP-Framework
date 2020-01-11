@@ -12,6 +12,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using ResurrectionRP_Server.Streamer.Data;
 using ResurrectionRP_Server.Colshape;
+using System;
 
 namespace ResurrectionRP_Server.DrivingSchool
 {
@@ -23,18 +24,16 @@ namespace ResurrectionRP_Server.DrivingSchool
         private Vector3 EntryPosition;
         private List<Location> VehicleSpawnLocation;
         private LicenseType LicenseType;
-        private int Price;
-        private List<Ride> RidePoints;
+        private int Price;        
         private VehicleModel VehicleModel;
 
         private Marker EntryMarker;
         private IColshape EntryColshape;
         private TextLabel EntryLabel;
         private Entities.Blips.Blips Blip;
+        private ConcurrentDictionary<ulong, Exam> ConcernedPlayers = new ConcurrentDictionary<ulong, Exam>();
 
-        private ConcurrentDictionary<int, Exam> ConcernedPlayers = new ConcurrentDictionary<int, Exam>();
-
-
+        public List<Ride> RidePoints;
 
         #endregion
 
@@ -85,27 +84,46 @@ namespace ResurrectionRP_Server.DrivingSchool
             {
                 if (!client.Exists)
                     return;
-                if (!ConcernedPlayers.ContainsKey(client.Id))
+                if (!ConcernedPlayers.ContainsKey(client.SocialClubId))
                     return;
-                ConcernedPlayers[client.Id].avert++;
-                client.DisplayHelp($"Vous allez bien trop vite, ralentissez ({RidePoints[ ConcernedPlayers[client.Id].CurrentCheckpoint ].Speed})", 10000);
+                ConcernedPlayers[client.SocialClubId].Avert++;
+                client.DisplayHelp($"Vous allez bien trop vite, ralentissez ({RidePoints[ ConcernedPlayers[client.SocialClubId].CurrentCheckpoint ].Speed})", 10000);
             });
 
-
+            Alt.OnPlayerConnect += OnPlayerConnect;
+            Alt.OnPlayerDisconnect += OnPlayerDisconnect;
             Blip = Entities.Blips.BlipsManager.CreateBlip(SchoolName, EntryPosition, 69, 535, 0.5f);
+        }
+
+        private void OnPlayerDisconnect(IPlayer player, string reason)
+        {
+        }
+
+        private void OnPlayerConnect(IPlayer player, string reason)
+        {
+            if (!ConcernedPlayers.ContainsKey(player.SocialClubId))
+                return;
+
+            var exam = ConcernedPlayers[player.SocialClubId];
+            exam.Player = player;
+
+            if (exam.Vehicle == null)
+                exam.End();
+
+            player.SetWaypoint(exam.Vehicle.Position);
         }
 
         private void Colshape_OnPlayerEnterColshape(IColshape colshape, IPlayer client)
         {
-            if (!ConcernedPlayers.ContainsKey(client.Id))
+            if (!ConcernedPlayers.ContainsKey(client.SocialClubId))
                 return;
             colshape.GetData("DrivingSchool_ID", out int result);
-            if ( result != ConcernedPlayers[client.Id].CurrentCheckpoint)
+            if ( result != ConcernedPlayers[client.SocialClubId].CurrentCheckpoint)
                 return;
-            ConcernedPlayers[client.Id].NextTraj();
+            ConcernedPlayers[client.SocialClubId].NextTraj();
 
-            if (ConcernedPlayers[client.Id].CurrentCheckpoint == RidePoints.Count)
-                Task.Run(()=>End(client, ConcernedPlayers[client.Id].avert));
+            if (ConcernedPlayers[client.SocialClubId].CurrentCheckpoint == RidePoints.Count)
+                End(client, ConcernedPlayers[client.SocialClubId].Avert);
         }
 
         private void EntryColshape_OnPlayerLeaveColshape(IColshape colshape, IPlayer client) =>
@@ -123,13 +141,13 @@ namespace ResurrectionRP_Server.DrivingSchool
         #region Public methods
 
         public bool ClientIsInExam(IPlayer client) =>
-            ConcernedPlayers.ContainsKey(client.Id);
+            ConcernedPlayers.ContainsKey(client.SocialClubId);
 
-        public async Task End(IPlayer client, int advert)
+        public void End(IPlayer client, int advert)
         {
-            if (ConcernedPlayers.TryRemove(client.Id, out Exam exam))
+            if (ConcernedPlayers.TryRemove(client.SocialClubId, out Exam exam))
             {
-                await exam.End();
+                exam.End();
 
                 if (advert >= 5)
                     //await client.SendNotificationPicture($"~r~ Vous avez échoué votre examen avec {advert} fautes.", Utils.Enums.CharPicture.CHAR_ANDREAS, false, 0, "Auto-école", "Examinateur");
@@ -145,18 +163,18 @@ namespace ResurrectionRP_Server.DrivingSchool
 
         public bool AddConcernedPlayer(IPlayer client, Exam exm)
         {
-            if (ConcernedPlayers.ContainsKey(client.Id))
+            if (ConcernedPlayers.ContainsKey(client.SocialClubId))
                 return true;
-            if (ConcernedPlayers.TryAdd(client.Id, exm))
+            if (ConcernedPlayers.TryAdd(client.SocialClubId, exm))
                 return true;
             Alt.Server.LogError("DrivingSchool | Error when trying to add a player from concerned | " + client.GetPlayerHandler().PID);
             return false;
         }
         public bool RemoveConcernedPlayer(IPlayer client, bool AnticipateEnd = false)
         {
-            if (!ConcernedPlayers.ContainsKey(client.Id))
+            if (!ConcernedPlayers.ContainsKey(client.SocialClubId))
                 return true;
-            if (ConcernedPlayers.TryRemove(client.Id, out Exam voided))
+            if (ConcernedPlayers.TryRemove(client.SocialClubId, out Exam voided))
             {
                 if(AnticipateEnd)
                     voided.End();
@@ -178,9 +196,9 @@ namespace ResurrectionRP_Server.DrivingSchool
                 if (!VehiclesManager.IsVehicleInSpawn(spawn))
                 {
                     var veh = VehiclesManager.SpawnVehicle(client.GetSocialClub(), (uint)VehicleModel, spawn.Pos, spawn.Rot, plate: "SCHOOL", spawnVeh: true, locked: false);
-                    Exam Examitem = new Exam(client, veh, this.RidePoints, this.Id);
+                    Exam Examitem = new Exam(client, veh, this);
                     //Examitem.endExam = End();
-                    ConcernedPlayers.GetOrAdd(client.Id, Examitem);
+                    ConcernedPlayers.GetOrAdd(client.SocialClubId, Examitem);
                     client.GetPlayerHandler()?.AddKey(veh, "Auto école");
                     //await client.EmitAsync("BeginDrivingExamen", veh.Vehicle.Id, Circuit, ID);
                     return;

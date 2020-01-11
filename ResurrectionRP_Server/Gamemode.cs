@@ -25,6 +25,7 @@ using ResurrectionRP_Server.AutoBusiness;
 using ResurrectionRP_Server.Entities.Worlds;
 using ResurrectionRP_Server.Jobs;
 using System.IO;
+using ResurrectionRP_Server.DrivingSchool;
 
 namespace ResurrectionRP_Server
 {
@@ -58,9 +59,6 @@ namespace ResurrectionRP_Server
 
         [BsonIgnore]
         public Economy.Economy Economy { get; private set; }
-
-        [BsonIgnore]
-        public DrivingSchool.DrivingSchoolManager DrivingSchoolManager { get; private set; }
 
         public static bool ServerLock;
 
@@ -148,7 +146,6 @@ namespace ResurrectionRP_Server
             Weather.WeatherManager.InitWeather();
 
             Economy = new Economy.Economy();
-            DrivingSchoolManager = new DrivingSchool.DrivingSchoolManager();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
 
             if (Time == null)

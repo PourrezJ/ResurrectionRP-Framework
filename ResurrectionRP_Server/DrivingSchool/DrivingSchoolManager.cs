@@ -6,16 +6,17 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using ResurrectionRP_Server.Models;
+using System;
 
 namespace ResurrectionRP_Server.DrivingSchool
 {
 
-    public class DrivingSchoolManager
+    public static class DrivingSchoolManager
     {
-        private List<DrivingSchool> drivingSchools = new List<DrivingSchool>();
+        private static List<DrivingSchool> drivingSchools = new List<DrivingSchool>();
 
 
-        public void Load()
+        public static void Load()
         {
             var schooltrajetcar = new List<Ride>()
             {
@@ -50,47 +51,6 @@ namespace ResurrectionRP_Server.DrivingSchool
             var drivingSchool = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 28.29165f), locations, LicenseType.Car, 2, schooltrajetcar, VehicleModel.Asea);
 
             drivingSchools.Add(drivingSchool);
-
         }
-/*
-        private async Task DrivingSchool_End(object[] args)
-        {
-            IPlayer client = args[0] as IPlayer;
-
-            if (!client.Exists)
-                return;
-
-            if (byte.TryParse(args[1].ToString(), out byte id))
-            {
-                var school = drivingSchools.Find(p => p.Id == id);
-                await school?.End(client, int.Parse(args[2].ToString()));
-            }
-        }
-
-        private async Task DrivingSchool_Cancel(IPlayer client, object[] args)
-        {
-            if (!client.Exists)
-                return;
-
-            if (byte.TryParse(args[0].ToString(), out byte id))
-            {
-                var school = drivingSchools.Find(p => p.Id == id);
-                await school?.Cancel(client);
-            }
-        }
-
-        private async Task DrivingSchoolManager_Open(IPlayer client, object[] args)
-        {
-            if (!client.Exists)
-                return;
-
-            if (byte.TryParse(args[0].ToString(), out byte id))
-            {
-                var school = drivingSchools.Find(p => p.Id == id);
-                school?.OpenMenuDrivingSchool(client);
-            }
-
-            await Task.CompletedTask;
-        }*/
     }
 }

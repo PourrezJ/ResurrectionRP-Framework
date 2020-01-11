@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AltV.Net.Elements.Entities;
-using AltV.Net.Enums;
 using AltV.Net;
-using AltV.Net.Async;
-using AltV.Net.Data;
-using System.Numerics;
 using ResurrectionRP_Server.Colshape;
 using Newtonsoft.Json;
 
 namespace ResurrectionRP_Server.DrivingSchool
 {
-    public class Exam : IDisposable
+    public class Exam
     {
         #region Fields
         public IPlayer Player;
@@ -25,18 +19,21 @@ namespace ResurrectionRP_Server.DrivingSchool
         public ICheckpoint checkpoint;
         public IColshape colshape = null;
 
-        public int avert = 0;
-        public int id = 0;
+        public int Avert = 0;
+        public DrivingSchool School = null;
 
         #endregion
 
         #region Constructor
-        public Exam(IPlayer client, Entities.Vehicles.VehicleHandler vehicle, List<Ride> traj, int SchooldId)
+        public Exam(IPlayer client, Entities.Vehicles.VehicleHandler vehicle, DrivingSchool school)
         {
             Player = client;
             Vehicle = vehicle;
-            this.id = SchooldId;
-            this.Trajectoire = traj;
+            School = school;
+
+            Trajectoire = school.RidePoints;
+
+            client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANTONIA, school.SchoolName, "Secrétaire", "La voiture vous attend sur le parking.");
 
             Alt.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
         }
@@ -51,32 +48,23 @@ namespace ResurrectionRP_Server.DrivingSchool
             colshape.OnPlayerEnterColshape -= Colshape_OnPlayerEnterColshape;
             Trajectoire[CurrentCheckpoint].Colshape.OnPlayerEnterColshape += Colshape_OnPlayerEnterColshape;
 
-            lock (colshape)
-            {
-                this.NextTraj();
-            }
+            NextTraj();
         }
 
         public void NextTraj()
         {
-            this.CurrentCheckpoint++;
-            if (this.CurrentCheckpoint == this.Trajectoire.Count )
+            CurrentCheckpoint++;
+            if (CurrentCheckpoint == Trajectoire.Count )
             {
-                this.Player.Emit("DriveSchool_CreateCP");
-                endTraj();
+                Player.Emit("DriveSchool_CreateCP");
+                End();
                 return;
             }
 
-            this.Player.Emit("DriveSchool_CreateCP", JsonConvert.SerializeObject( this.Trajectoire[this.CurrentCheckpoint].Position), this.Trajectoire[this.CurrentCheckpoint].Speed);
+            Player.Emit("DriveSchool_CreateCP", JsonConvert.SerializeObject( this.Trajectoire[this.CurrentCheckpoint].Position), this.Trajectoire[this.CurrentCheckpoint].Speed);
 
         }
-
-
-        private void endTraj()
-        {
-            Task.Run(()=>this.End());
-        }
-
+        /*
         private Task VehicleChecker(IPlayer client, object[] args)
         {
             if ((long)args[0] > Trajectoire[CurrentCheckpoint].Speed)
@@ -86,7 +74,7 @@ namespace ResurrectionRP_Server.DrivingSchool
             }
 
             return Task.CompletedTask;
-        }
+        }*/
 
         private void OnPlayerEnterVehicle(IVehicle vehicle, IPlayer client, byte seat)
         {
@@ -97,30 +85,13 @@ namespace ResurrectionRP_Server.DrivingSchool
             client.SendNotificationPicture(Utils.Enums.CharPicture.CHAR_ANDREAS, "Auto-Ecole", "Information", "Ok! Maintenant allumer le moteur ~r~(F3) ~w~et rendez-vous au prochain point.");
             NextTraj();
         }
-        public async Task End()
+
+        public void End()
         {
             Player.GetPlayerHandler()?.RemoveKey(Vehicle);
-            await Vehicle.DeleteAsync();
-            Dispose();
-        }
-        #endregion
+            if (Vehicle != null && Vehicle.Exists)
+                Task.Run(async () => await Vehicle.DeleteAsync());
 
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                disposedValue = true;
-            }
-        }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
         }
         #endregion
     }

@@ -39,17 +39,17 @@ namespace ResurrectionRP_Server.DrivingSchool
 
             List<Location> locations = new List<Location>()
             {
-                new Location(new Vector3(), new Vector3()),
-                new Location(new Vector3(), new Vector3()),
-                new Location(new Vector3(), new Vector3()),
-                new Location(new Vector3(), new Vector3()),
-                new Location(new Vector3(), new Vector3()),
+                new Location(new Vector3(78.5011f,-1442.3737f,28.58899f), new Vector3(0f,0f,-0.703125f)),
+                new Location(new Vector3(75.44176f,-1439.9868f,28.58899f), new Vector3(0f,0f,-0.65625f)),
+                new Location(new Vector3(72.05275f,-1436.6637f,28.58899f), new Vector3(0f,0f,-0.671875f)),
+                new Location(new Vector3(69.04616f,-1433.9604f,28.58899f), new Vector3(0f,0f,-0.703125f)),
+                new Location(new Vector3(66.14506f,-1431.2043f,28.58899f), new Vector3(0f,0f,-0.625f)),
             };
 
             //var drivingSchool = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 29.29165f), new Models.Location(new Vector3(87.29823f, -1436.695f, 28.59703f), new Vector3(0.03492294f, 0.02653446f, 142.6451f)), Models.LicenseType.Car, 2500, schooltrajetcar, VehicleModel.Asea);
-            //var drivingSchool = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 28.29165f), new Models.Location(new Vector3(87.29823f, -1436.695f, 28.59703f), new Vector3(0.03492294f, 0.02653446f, 142.6451f)), Models.LicenseType.Car, 2, schooltrajetcar, VehicleModel.Asea);
+            var drivingSchool = new DrivingSchool(0, new Vector3(76.07864f, -1455.614f, 28.29165f), locations, LicenseType.Car, 2, schooltrajetcar, VehicleModel.Asea);
 
-            //drivingSchools.Add(drivingSchool);
+            drivingSchools.Add(drivingSchool);
 
         }
 /*

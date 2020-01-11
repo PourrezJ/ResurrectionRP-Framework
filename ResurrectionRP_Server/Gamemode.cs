@@ -230,6 +230,14 @@ namespace ResurrectionRP_Server
                 Vector3 pos = (player.Vehicle != null) ? player.Vehicle.Position : player.Position;
                 Vector3 rot = (player.Vehicle != null) ? player.Vehicle.Rotation : player.Rotation;
 
+                string pPosX = pos.X.ToString().Replace(',', '.');
+                string pPosY = pos.Y.ToString().Replace(',', '.');
+                string pPosZ = pos.Z.ToString().Replace(',', '.');
+
+                string pRotX = rot.X.ToString().Replace(',', '.');
+                string pRotY = rot.Y.ToString().Replace(',', '.');
+                string pRotZ = rot.Z.ToString().Replace(',', '.');
+
                 string coordsName = args[0];
 
                 StreamWriter coordsFile;
@@ -242,7 +250,7 @@ namespace ResurrectionRP_Server
                     coordsFile = File.AppendText("SavedCoords.txt");
                 }
 
-                var data = $"| {coordsName} | Saved Coordenates: new Vector3({pos.X}f,{pos.Y}f,{pos.Z}f), new Vector3({rot.X}f,{rot.Y}f,{rot.Z}f) | InVehicle: {(player.Vehicle != null)}".Replace(',', '.');
+                var data = $"| {coordsName} | Saved Coordenates: new Vector3({pPosX}f,{pPosY}f,{pPosZ}f), new Vector3({pRotX}f,{pRotY}f,{pRotZ}f) | InVehicle: {(player.Vehicle != null)}";
                 Chat.SendChatMessage(player, data);
                 coordsFile.WriteLine(data);
                 coordsFile.Close();

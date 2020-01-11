@@ -61,7 +61,7 @@ namespace ResurrectionRP_Server.Factions
             if (client.GetPlayerHandler().StaffRank <= StaffRank.Player)
                 return;
 
-            FactionManager.Nordiste.TryAddIntoFaction(client, 6);
+            FactionManager.Sheriff.TryAddIntoFaction(client, 6);
         }
     }
 }

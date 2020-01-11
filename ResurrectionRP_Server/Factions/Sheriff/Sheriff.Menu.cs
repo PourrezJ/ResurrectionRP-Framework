@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using ResurrectionRP_Server.Factions;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.XMenuManager;
@@ -14,7 +12,7 @@ using ResurrectionRP_Server.Services;
 
 namespace ResurrectionRP_Server.Factions
 {
-    public partial class Nordiste : Faction
+    public partial class Sheriff : Faction
     {
         #region Cellule
         private void OpenCelluleDoor(IPlayer client, Door door)

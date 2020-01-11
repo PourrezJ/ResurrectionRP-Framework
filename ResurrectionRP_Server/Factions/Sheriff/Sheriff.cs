@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Factions
 {
-    public partial class Nordiste : Faction
+    public partial class Sheriff : Faction
     {
         #region Private fields
         private Ped _pedArmurerie;
@@ -33,7 +33,7 @@ namespace ResurrectionRP_Server.Factions
         #endregion
 
         #region Constructor
-        public Nordiste(string FactionName, FactionType FactionType) : base(FactionName, FactionType)
+        public Sheriff(string FactionName, FactionType FactionType) : base(FactionName, FactionType)
         {
         }
         #endregion

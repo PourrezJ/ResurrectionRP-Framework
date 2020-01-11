@@ -23,7 +23,7 @@ namespace ResurrectionRP_Server.Factions
 
         public static Dock Dock { get; private set; }
 
-        public static Nordiste Nordiste { get; private set; }
+        public static Sheriff Sheriff { get; private set; }
         #endregion
 
         #region Init
@@ -34,7 +34,7 @@ namespace ResurrectionRP_Server.Factions
             LSCustom = (LSCustom)(LoadFaction<LSCustom>("LSCustom") ?? new LSCustom("LSCustom", FactionType.LSCustom)).Init();
             Gouvernement = (Gouv)(LoadFaction<Gouv>("Gouv") ?? new Gouv("Gouv", FactionType.Gouv)).Init();
             Dock = (Dock)(LoadFaction<Dock>("Dock") ?? new Dock("Dock", FactionType.Dock)).Init();
-            Nordiste = (Nordiste)(LoadFaction<Nordiste>("Bureau du Shérif") ?? new Nordiste("Bureau du Shérif", FactionType.Nordiste)).Init();
+            Sheriff = (Sheriff)(LoadFaction<Sheriff>("Bureau du Shérif") ?? new Sheriff("Bureau du Shérif", FactionType.Nordiste)).Init();
             
             Utils.Utils.Delay((int)TimeSpan.FromMinutes(10).TotalMilliseconds, async () =>
             {
@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server.Factions
                 }
             });
 
-            FactionList.AddRange(new List<Faction>() { EMS, Lspd, LSCustom, Gouvernement, Dock, Nordiste });
+            FactionList.AddRange(new List<Faction>() { EMS, Lspd, LSCustom, Gouvernement, Dock, Sheriff });
         }
         #endregion
 
@@ -57,7 +57,7 @@ namespace ResurrectionRP_Server.Factions
             LSCustom?.OnPlayerConnected(client);
             Dock?.OnPlayerConnected(client);
             Gouvernement?.OnPlayerConnected(client);
-            Nordiste?.OnPlayerConnected(client);
+            Sheriff?.OnPlayerConnected(client);
         }
 
         public static void OnPlayerDisconnected(IPlayer client)
@@ -66,7 +66,7 @@ namespace ResurrectionRP_Server.Factions
             Lspd?.OnPlayerDisconnected(client);
             LSCustom?.OnPlayerDisconnected(client);
             Dock?.OnPlayerDisconnected(client);
-            Nordiste?.OnPlayerConnected(client);
+            Sheriff?.OnPlayerConnected(client);
         }
         #endregion
 
@@ -78,7 +78,7 @@ namespace ResurrectionRP_Server.Factions
             LSCustom?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.TOOLBOX_SOLID);
             Gouvernement?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
             Dock?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
-            Nordiste?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
+            Sheriff?.AddFactionTargetMenu(client, target, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
         }
 
         public static void AddFactionVehicleMenu(IPlayer client, IVehicle vehicle, XMenu xMenu)
@@ -88,7 +88,7 @@ namespace ResurrectionRP_Server.Factions
             LSCustom?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.TOOLBOX_SOLID);
             Gouvernement?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
             Dock?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
-            Nordiste?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
+            Sheriff?.AddFactionVehicleMenu(client, vehicle, xMenu, XMenuItemIcons.USER_SHIELD_SOLID);
         }
 
         public static T LoadFaction<T>(string faction)
@@ -142,8 +142,8 @@ namespace ResurrectionRP_Server.Factions
         
         public static bool IsNordiste(IPlayer client)
         {
-            if (Nordiste != null)
-                return Nordiste.HasPlayerIntoFaction(client);
+            if (Sheriff != null)
+                return Sheriff.HasPlayerIntoFaction(client);
             return false;
         }
 

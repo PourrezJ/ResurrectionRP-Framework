@@ -77,7 +77,7 @@ namespace ResurrectionRP_Server.Business
                 Ped = ped;
             }
 
-            Blip = Entities.Blips.BlipsManager.CreateBlip(BusinnessName, Location.Pos, (Owner == null || OnSale) ? 35 : 2, (int)BlipSprite);
+            Blip = Entities.Blips.BlipsManager.CreateBlip(((!OnSale && Owner != null) || !Buyable) ? BusinnessName : "[A VENDRE] " + BusinnessName, Location.Pos, (Owner == null || OnSale) ? 35 : 2, (int)BlipSprite);
 
             BankAccount.Owner = this;
             Loader.BusinessesManager.BusinessesList.Add(this);

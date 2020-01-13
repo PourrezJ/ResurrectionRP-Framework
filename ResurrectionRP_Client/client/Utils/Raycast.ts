@@ -49,6 +49,12 @@ class Raycast {
 
         return this.result(ray);
     }
+
+    public static castCapsule(from: alt.Vector3, to: alt.Vector3, ignoreEntity: number, flags: number, radius: number)
+    {
+        const ray = native.startShapeTestCapsule(from.x, from.y, from.z, to.x, to.y, to.z, radius, flags, ignoreEntity, 0);
+        return this.result(ray);
+    }
     
     private static result(ray: any): RaycastResultInterface {
         let result = native.getShapeTestResult(ray, undefined, undefined, undefined, undefined);

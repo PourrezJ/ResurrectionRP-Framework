@@ -166,7 +166,7 @@ export class Interaction {
                     _pos.z + (_dir.z * 9),
                 )
 
-                raycastResult = Raycast.raycastRayFromTo(_pos, _farAway, alt.Player.local.scriptID, 255);
+                raycastResult = Raycast.castCapsule(_pos, _farAway, alt.Player.local.scriptID, 255, 2);
 
                 if (raycastResult == null)
                     return;

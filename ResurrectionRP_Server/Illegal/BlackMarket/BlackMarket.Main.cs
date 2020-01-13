@@ -15,8 +15,8 @@ namespace ResurrectionRP_Server.Illegal
         public int CurrentLocation;
         private readonly Location[] _pnjPos = new Location[2]
         {
-            new Location(new Vector3(-151.0022f, 933.9956f, 235.69006f), new Vector3(0,0,0)),
-            new Location(new Vector3(-156.0022f, 925.74f, 235.65006f), new Vector3(0,0,0))
+            new Location(new Vector3(-595.1341f,-1653.0593f,20.619019f), new Vector3(0f,0f,-2.7210646f)),
+            new Location(new Vector3(2548.391f,2581.9385f,37.92383f), new Vector3(0f,0f,-1.8800083f))
         };
 
         [MongoDB.Bson.Serialization.Attributes.BsonIgnore]

@@ -48,6 +48,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 ph.Vehicle = vh;
                 ph.UpdateFull();
                 player.EmitLocked("OnPlayerEnterVehicle", vehicle, Convert.ToInt32(seat), vh.VehicleData.Fuel, vh.VehicleData.FuelMax, vh.VehicleData.Milage, vh.VehicleData.FuelConsumption);
+                if (ph.FirstSpawn && seat == 1)
+                    ph.Client.SendNotificationTutorial("Appuyer sur F3 pour démarrer votre véhicule.");
             }
         }
 

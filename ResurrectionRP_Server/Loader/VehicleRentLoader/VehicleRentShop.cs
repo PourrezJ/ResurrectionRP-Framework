@@ -25,7 +25,6 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
 
         public void Load()
         {
-            //await MP.Blips.NewAsync(BlipSprite, BlipPosition, 1, 0, $"[Location] {Name}", 255, 10, true);
             Entities.Blips.BlipsManager.CreateBlip($"[Location] {Name}", BlipPosition, 0, BlipSprite);
 
 
@@ -41,8 +40,11 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
             {
                 foreach (var place in VehicleRentPlaces)
                 {
-                    if (place.VehicleHandler == null && !VehiclesManager.IsVehicleInSpawn(place.Location.Pos, 4))
-                        Respawn(place);
+                    AltV.Net.Async.AltAsync.Do(() =>
+                    {
+                        if (place.VehicleHandler == null && !VehiclesManager.IsVehicleInSpawn(place.Location.Pos, 4))
+                            Respawn(place);
+                    });
                 }
             }, 30000);
         }
@@ -83,9 +85,15 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
             vehicleplace.VehicleHandler.SpawnVeh = true;
             vehicleplace.VehicleHandler.SetOwner(ph);
             vehicleplace.VehicleHandler.ResetData("RentShop");
-            veh.LockState = AltV.Net.Enums.VehicleLockState.Unlocked;
+            //veh.LockState = AltV.Net.Enums.VehicleLockState.Unlocked;
             ph.ListVehicleKey.Add(VehicleKey.GenerateVehicleKey(vehicleplace.VehicleHandler));
             ph.Client.SendNotificationSuccess($"Vous avez loué un(e) {vehicleplace.VehicleHandler.VehicleManifest.DisplayName}");
+
+            if (ph.FirstSpawn)
+            {
+                ph.Client.SendNotificationTutorial("Pour déverrouillé votre véhicule, visez le et appuyer sur la touche U.");
+            }
+
             VehicleRentPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;
 
             Utils.Utils.SetInterval(() =>

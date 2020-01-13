@@ -101,6 +101,9 @@ namespace ResurrectionRP_Server.Entities.Players
 
         [BsonIgnore]
         public bool IsInComa = false;
+
+        [BsonIgnore]
+        public bool FirstSpawn = false;
         /*
         private ushort _health = 200;
         public ushort Health
@@ -181,6 +184,7 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             await client.EmitAsync("FadeOut", 500);
             Client = client;
+            FirstSpawn = firstspawn;
             client.SetData("PlayerHandler", this);
 
             if (PlayerHandlerList.TryAdd(client, this))
@@ -286,9 +290,13 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 if (Alcohol > 0)
                     AddAlcolhol(0);
-
+              
                 if (firstspawn)
+                {
                     UpdateFull();
+                    client.SendNotificationTutorial("Besoin d'un véhicule provisoire? Rendez-vous à la location de scooter.");
+                    client.SetWaypoint(new Vector3(-898.7736f, -2330.413f, 6.70105f));
+                }
             }
             else
             {

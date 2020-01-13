@@ -87,6 +87,11 @@ namespace ResurrectionRP_Server
             client.EmitLocked("successNotify", "Succès", text, 7000);
         }
 
+        public static void SendNotificationTutorial(this IPlayer client, string text)
+        {
+            client.EmitLocked("notify", "[TUTO]", text, 14000);
+        }
+
         public static void SendNotificationPicture(this IPlayer client, Utils.Enums.CharPicture img, string sender, string subject, string message) =>
             client.EmitLocked("SetNotificationMessage", img.ToString(), sender, subject, message);
 

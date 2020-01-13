@@ -141,7 +141,8 @@ namespace ResurrectionRP_Server.Colshape
                                         AltAsync.Do(() =>
                                         {
                                             OnPlayerLeaveColshape?.Invoke(colshape, (IPlayer)entity);
-                                            ((IPlayer)entity).Emit("OnPlayerLeaveColshape", colshape.Id);
+                                            if (entity.Exists)
+                                                ((IPlayer)entity).EmitLocked("OnPlayerLeaveColshape", colshape.Id);
 
                                             if (GameMode.IsDebug)
                                                 Alt.Log($"[Colshape {colshape.Id}] Player {entity.Id} leaving, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count - _entitiesToRemove.Count}");
@@ -192,7 +193,8 @@ namespace ResurrectionRP_Server.Colshape
                                     {
                                         colshape.AddEntity(player);
                                         OnPlayerEnterColshape?.Invoke(colshape, player);
-                                        player.EmitLocked("OnPlayerEnterColshape", colshape.Id);
+                                        if (player.Exists)
+                                            player.EmitLocked("OnPlayerEnterColshape", colshape.Id);
 
                                         if (GameMode.IsDebug)
                                             Alt.Log($"[Colshape {colshape.Id}] Player {player.Id} entering, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");

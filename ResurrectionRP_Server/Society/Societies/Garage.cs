@@ -327,7 +327,7 @@ namespace ResurrectionRP_Server.Society.Societies
                 return;
             }
 
-            var manifest = VehicleBench.GetVehicleHandler()?.VehicleManifest;
+            var manifest = VehicleBench.VehicleManifest;
 
             if (manifest == null)
             {
@@ -388,10 +388,9 @@ namespace ResurrectionRP_Server.Society.Societies
                 return;
             }
 
-            var vh = VehicleBench.GetVehicleHandler();
-            var manifest = vh.VehicleManifest;
+            var manifest = VehicleBench.VehicleManifest;
 
-            if (vh == null || !manifest.HasModType(_modType))
+            if (manifest == null || !manifest.HasModType(_modType))
             {
                 client.SendNotificationError("Je ne peux pas sur ce véhicule.");
                 OpenPerformanceMenu(client);
@@ -404,7 +403,7 @@ namespace ResurrectionRP_Server.Society.Societies
 
             var mods = manifest.Mods(_modType).OrderBy(m => m.Key).Select(m => m.Value);
             var perfdata = Data.GetPerformanceData(_modType).Value;
-            vh.VehicleData.Mods.TryGetValue(_modType, out byte valueInstalled);
+            VehicleBench.VehicleData.Mods.TryGetValue(_modType, out byte valueInstalled);
 
             for (int i = 0; i < mods.Count(); i++)
             {
@@ -437,7 +436,7 @@ namespace ResurrectionRP_Server.Society.Societies
                 else
                 {
                     item = new MenuItem(modName, executeCallback: true, executeCallbackIndexChange: true);
-                    var price = GarageData.CalculPrice(vh, perfdata.ModPrice[i]);
+                    var price = GarageData.CalculPrice(VehicleBench, perfdata.ModPrice[i]);
 
                     if (price != 0)
                         item.RightLabel = $"${price}";
@@ -463,12 +462,10 @@ namespace ResurrectionRP_Server.Society.Societies
                 return;
             }
 
-            VehicleHandler vh = VehicleBench.GetVehicleHandler();
-
             if (menuItem == null)
             {
-                if (vh.VehicleData.Mods.ContainsKey(_modType))
-                    VehicleBench.SetMod(_modType, vh.VehicleData.Mods[_modType]);
+                if (VehicleBench.VehicleData.Mods.ContainsKey(_modType))
+                    VehicleBench.SetMod(_modType, VehicleBench.VehicleData.Mods[_modType]);
                 else
                     VehicleBench.SetMod(_modType, 0);
 
@@ -490,14 +487,13 @@ namespace ResurrectionRP_Server.Society.Societies
             menu.ItemSelectCallback = DesignMenuCallback;
             menu.Finalizer = Finalizer;
 
-            VehicleHandler vh = VehicleBench.GetVehicleHandler();
-            var manifest = vh.VehicleManifest;
+            var manifest = VehicleBench.VehicleManifest;
 
             foreach (var mod in Data.EsthetiqueModList)
             {
                 if (manifest.HasModType(mod.ModID))
                 {
-                    var price = GarageData.CalculPrice(vh, Data.GetEsthetiqueData(mod.ModID)?.ModPrice ?? 0);
+                    var price = GarageData.CalculPrice(VehicleBench, Data.GetEsthetiqueData(mod.ModID)?.ModPrice ?? 0);
 
                     MenuItem item = new MenuItem(mod.ModName, rightLabel: $"${price}", executeCallback: true);
                     item.SetData("mod", mod.ModID);
@@ -509,7 +505,7 @@ namespace ResurrectionRP_Server.Society.Societies
 
             if (manifest.Neon)
             {
-                double price = GarageData.CalculPrice(vh, 2500);
+                double price = GarageData.CalculPrice(VehicleBench, 2500);
                 MenuItem item = new MenuItem("Néons", "", "Neons", rightLabel: $"${price}", executeCallback: true, executeCallbackIndexChange: true);
                 item.SetData("price", price);
                 menu.Add(item);
@@ -567,8 +563,7 @@ namespace ResurrectionRP_Server.Society.Societies
                 return;
             }
 
-            VehicleHandler vh = VehicleBench.GetVehicleHandler();
-            var manifest = vh.VehicleManifest;
+            var manifest = VehicleBench.VehicleManifest;
 
             if (!manifest.HasModType(_modType)) // 666 = neons
             {
@@ -582,7 +577,7 @@ namespace ResurrectionRP_Server.Society.Societies
             menu.Finalizer = Finalizer;
 
             var mods = manifest.Mods(_modType).OrderBy(m => m.Key).Select(m => m.Value);
-            vh.VehicleData.Mods.TryGetValue(_modType, out byte valueInstalled);
+            VehicleBench.VehicleData.Mods.TryGetValue(_modType, out byte valueInstalled);
 
             for (int i = 0; i < mods.Count(); i++)
             {
@@ -630,26 +625,18 @@ namespace ResurrectionRP_Server.Society.Societies
                 return;
             }
 
-            VehicleHandler vh = VehicleBench.GetVehicleHandler();
-
-            if (vh == null)
-            {
-                menu.CloseMenu(client);
-                return;
-            }
-
             if (menuItem == null)
             {
-                if (_modType == 14 && vh.VehicleData.Mods.ContainsKey(_modType))
-                    HornStop(VehicleBench, vh.VehicleData.Mods[_modType]);
+                if (_modType == 14 && VehicleBench.VehicleData.Mods.ContainsKey(_modType))
+                    HornStop(VehicleBench, VehicleBench.VehicleData.Mods[_modType]);
                 else if (_modType == 14)
                     HornStop(VehicleBench, 0);
-                else if (_modType == 69 && vh.VehicleData.Mods.ContainsKey(_modType))
-                    VehicleBench.SetWindowTint(Utils.Utils.GetWindowTint(vh.VehicleData.Mods[_modType]));
+                else if (_modType == 69 && VehicleBench.VehicleData.Mods.ContainsKey(_modType))
+                    VehicleBench.SetWindowTint(Utils.Utils.GetWindowTint(VehicleBench.VehicleData.Mods[_modType]));
                 else if (_modType == 69)
                     VehicleBench.SetWindowTint(WindowTint.None);
-                else if (vh.VehicleData.Mods.ContainsKey(_modType))
-                    VehicleBench.SetMod(_modType, vh.VehicleData.Mods[_modType]);
+                else if (VehicleBench.VehicleData.Mods.ContainsKey(_modType))
+                    VehicleBench.SetMod(_modType, VehicleBench.VehicleData.Mods[_modType]);
                 else
                     VehicleBench.SetMod(_modType, 0);
 
@@ -665,17 +652,15 @@ namespace ResurrectionRP_Server.Society.Societies
                 return;
             }
 
-            VehicleHandler vh = VehicleBench.GetVehicleHandler();
-
             Menu menu = new Menu("ID_Neons", "", "Néons :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, banner: MenuBanner);
             menu.ItemSelectCallback = NeonsMenuCallback;
             menu.ListItemChangeCallback = NeonListItemChangeCallback;
             menu.Finalizer = Finalizer;
 
-            _neonColor = vh.NeonColor;
-            _red = vh.NeonColor.R / 17;
-            _green = vh.NeonColor.G / 17;
-            _blue = vh.NeonColor.B / 17;
+            _neonColor = VehicleBench.NeonColor;
+            _red = VehicleBench.NeonColor.R / 17;
+            _green = VehicleBench.NeonColor.G / 17;
+            _blue = VehicleBench.NeonColor.B / 17;
             List<object> colorItems = GetColorListItems();
             menu.Add(new ListItem("Rouge", "", "Red", colorItems, _red, false, true));
             menu.Add(new ListItem("Vert", "", "Green", colorItems, _green, false, true));
@@ -685,8 +670,8 @@ namespace ResurrectionRP_Server.Society.Societies
             menuItem.SetData("price", _price);
             menu.Add(menuItem);
 
-            vh.SetNeonState(true);
-            vh.EngineOn = true;
+            VehicleBench.SetNeonState(true);
+            VehicleBench.EngineOn = true;
             menu.OpenMenu(client);
             ClientInMenu = client;
         }
@@ -699,11 +684,9 @@ namespace ResurrectionRP_Server.Society.Societies
                 return;
             }
 
-            VehicleHandler vh = VehicleBench.GetVehicleHandler();
-
             if (menuItem == null)
             {
-                vh.NeonColor = _neonColor;
+                VehicleBench.NeonColor = _neonColor;
 
                 OpenDesignMenu(client);
                 return;
@@ -724,8 +707,6 @@ namespace ResurrectionRP_Server.Society.Societies
                 return;
             }
 
-            VehicleHandler vh = VehicleBench.GetVehicleHandler();
-
             if (listItem.Id == "Red")
                 _red = int.Parse(listItem.Items[listIndex].ToString());
             else if (listItem.Id == "Green")
@@ -733,7 +714,51 @@ namespace ResurrectionRP_Server.Society.Societies
             else if (listItem.Id == "Blue")
                 _blue = int.Parse(listItem.Items[listIndex].ToString());
 
-            vh.NeonColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
+            VehicleBench.NeonColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
+        }
+        #endregion
+
+        #region Handling
+        protected void OpenHandlingMenu(IPlayer client)
+        {
+            if (VehicleBench == null || !VehicleBench.Exists)
+            {
+                MenuManager.CloseMenu(client);
+                return;
+            }
+            if (VehicleBench.VehicleData.Mods.Count == 0)
+            {
+                client.SendNotificationError("Aucune amélioration n'est disponible sur le véhicule!");
+                return;
+            }
+
+
+            Menu menu = new Menu("ID_Handling", "", "Réglages :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, MenuBanner);
+            menu.ItemSelectCallback = HandlingMenuCallback;
+            menu.Finalizer = Finalizer;
+
+            /* pour la whitelist suivant les pièces équipé
+            foreach (var mod in VehicleBench.VehicleData.Mods)
+            {
+
+            }*/
+
+
+
+
+            menu.Add(new MenuItem(""));
+
+            menu.OpenMenu(client);
+        }
+
+        private void HandlingMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        {
+
+
+
+
+
+
         }
         #endregion
 
@@ -746,33 +771,25 @@ namespace ResurrectionRP_Server.Society.Societies
                 return;
             }
 
-            VehicleHandler vh = VehicleBench.GetVehicleHandler();
-
-            if (vh == null)
-            {
-                client.SendNotificationError("Problème avec le véhicule.");
-                return;
-            }
-
-            if (vh.VehicleData.Mods.Count == 0)
+            if (VehicleBench.VehicleData.Mods.Count == 0)
             {
                 client.SendNotificationError("Aucune amélioration n'est disponible sur le véhicule!");
                 return;
             }
-            else if (vh.VehicleData.Mods.Count >= 1)
+            else if (VehicleBench.VehicleData.Mods.Count >= 1)
             {
                 Menu menu = new Menu("ID_Histo", "", "Historique :", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, false, MenuBanner);
                 menu.ItemSelectCallback = HistoricMenuCallback;
                 menu.Finalizer = Finalizer;
 
-                foreach (var mod in vh.VehicleData.Mods)
+                foreach (var mod in VehicleBench.VehicleData.Mods)
                 {
                     VehicleMod modData;
 
                     if (mod.Key == 22)
-                        modData = vh.VehicleManifest.GetMod(mod.Key, mod.Value);
+                        modData = VehicleBench.VehicleManifest.GetMod(mod.Key, mod.Value);
                     else
-                        modData = vh.VehicleManifest.GetMod(mod.Key, mod.Value - 1);
+                        modData = VehicleBench.VehicleManifest.GetMod(mod.Key, mod.Value - 1);
 
                     if (modData != null)
                     {
@@ -789,9 +806,9 @@ namespace ResurrectionRP_Server.Society.Societies
                     }
                 }
 
-                if (vh.NeonColor != null && !vh.VehicleData.NeonColor.IsEmpty)
+                if (VehicleBench.NeonColor != null && !VehicleBench.VehicleData.NeonColor.IsEmpty)
                 {
-                    Color color = vh.NeonColor;
+                    Color color = VehicleBench.NeonColor;
                     menu.Add(new MenuItem($"Néons : Rouge {color.R / 17} - Vert {color.G / 17} - Bleu {color.B / 17}"));
                 }
 
@@ -842,13 +859,11 @@ namespace ResurrectionRP_Server.Society.Societies
                 return;
             }
 
-            VehicleHandler vh = VehicleBench.GetVehicleHandler();
-
             if (BankAccount.GetBankMoney(price, $"{SocietyName}: Néons"))
             {
                 _neonColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
-                vh.NeonColor = _neonColor;
-                vh.UpdateInBackground(false);
+                VehicleBench.NeonColor = _neonColor;
+                VehicleBench.UpdateInBackground(false);
 
                 client.SendNotificationSuccess($"Vous avez installé des Néons pour la somme de ${price}");
                 OpenNeonsMenu(client);
@@ -864,19 +879,17 @@ namespace ResurrectionRP_Server.Society.Societies
             }
 
             byte selected = (byte)itemIndex;
-
-            VehicleHandler vh = VehicleBench?.GetVehicleHandler();
             double price = menu.HasData("price") ? menu.GetData("price") : menuItem.GetData("price");
 
             string modName = string.Empty;
 
             // Bug with xenons
             if (_modType == 22)
-                modName = vh.VehicleManifest.GetMod(_modType, selected).LocalizedName;
+                modName = VehicleBench.VehicleManifest.GetMod(_modType, selected).LocalizedName;
             else
-                modName = vh.VehicleManifest.GetMod(_modType, selected - 1).LocalizedName;
+                modName = VehicleBench.VehicleManifest.GetMod(_modType, selected - 1).LocalizedName;
 
-            if (_modType == 11 && vh.VehicleManifest.GetMod(_modType, selected - 1).Name == "CMOD_ARM_0")
+            if (_modType == 11 && VehicleBench.VehicleManifest.GetMod(_modType, selected - 1).Name == "CMOD_ARM_0")
                 modName = "Gestion moteur de série";
 
             bool hasMoney = true;
@@ -886,20 +899,20 @@ namespace ResurrectionRP_Server.Society.Societies
 
             if (hasMoney)
             {
-                if (vh == null)
+                if (VehicleBench == null)
                 {
                     MenuManager.CloseMenu(client);
                     return;
                 }
 
-                vh.VehicleData.Mods.AddOrUpdate(_modType, selected, (key, oldvalue) => selected);
+                VehicleBench.VehicleData.Mods.AddOrUpdate(_modType, selected, (key, oldvalue) => selected);
                 
                 if (_modType == 69)
-                    vh.VehicleData.WindowTint = Utils.Utils.GetWindowTint(selected);
+                    VehicleBench.VehicleData.WindowTint = Utils.Utils.GetWindowTint(selected);
                 else
                     VehicleBench.SetMod(_modType, selected);
-                    
-                vh.UpdateInBackground(false);
+
+                VehicleBench.UpdateInBackground(false);
                 string str = $"Vous avez installé {modName}";
 
                 if (price != 0)

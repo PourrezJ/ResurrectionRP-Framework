@@ -5,6 +5,7 @@ using AltV.Net.Enums;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Entities.Vehicles.Data;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils;
 using System.Collections.Concurrent;
@@ -32,6 +33,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 return _vehicleManifest;
             }
             set => _vehicleManifest = value;
+        }
+
+        private Handling _vehicleHandling;
+        public Handling VehicleHandling
+        {
+            get
+            {
+                if (_vehicleHandling == null)
+                    _vehicleHandling = HandlingManager.Get(Model);
+                return _vehicleHandling;
+            }
+            set => _vehicleHandling = value;
         }
 
         public bool SpawnVeh { get; set; }

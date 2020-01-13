@@ -3,6 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson;
+using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.Options;
 using ResurrectionRP.Entities.Vehicles.Data;
@@ -473,6 +474,18 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }
 
+        private Handling _customHandling;
+        public Handling CustomHandling
+        {
+            get => _customHandling;
+            set
+            {
+                if (Vehicle != null)
+                    Vehicle.SetSyncedMetaData("CustomHandling", Newtonsoft.Json.JsonConvert.SerializeObject(value));
+                _customHandling = value;
+            }
+        }
+
         public VehicleData(VehicleHandler vehicleHandler)
         {
             Vehicle = vehicleHandler;
@@ -709,6 +722,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (_vehtowed != null)
                     Task.Run(async () => { await TowVehicle(_vehtowed); });
             }*/
+
+            if (CustomHandling != null)
+                Vehicle.SetSyncedMetaData("CustomHandling", Newtonsoft.Json.JsonConvert.SerializeObject(CustomHandling));
+
             ParkingName = string.Empty;
             IsInPound = false;
             IsParked = false;

@@ -94,15 +94,36 @@ export function initialize() {
                     game.setVehicleCheatPowerIncrease(vehId, torque);
 
                     let power: number = entity.getSyncedMeta("powerMultiplicator");
-                    // game.setVehicleEnginePowerMultiplier(vehId, power);
+                    game.setVehicleCheatPowerIncrease(vehId, power);
+
+                    if (entity.getSyncedMeta("CustomHandling") != null)
+                    {
+                        alt.log("vehicle has custom handling");
+                        let customHandling: any = JSON.parse(entity.getSyncedMeta("CustomHandling"));
+                        let handling = alt.HandlingData.getForModel(entity.model);
+
+                        for (const key in handlingproperties) {
+                            const property = handlingproperties[key];
+
+                            alt.log(property + ": " + customHandling[property])
+
+                            if (property === 'centreOfMassOffset' || property === 'inertiaMultiplier') {
+                                handling[property] = new alt.Vector3(0,0,0);
+
+                            } else if (property === 'initialDriveGears' || property === 'modelFlags' || property === 'monetaryValue' || property === 'modelFlags' || property === 'handlingFlags' || property === 'damageFlags') {
+                                handling[property] = parseInt(customHandling[property]);
+                            } else {
+                                handling[property] = parseFloat(customHandling[property]);
+                            }
+                        }
+                    }
+
                 }, 2500);
             }
         }
         catch (e) {
             alt.log("Error in setting data: " + e);
         }
-
-
     });
 
     alt.on('syncedMetaChange', (entity: alt.Entity, key: string, value: any) => {
@@ -138,8 +159,18 @@ export function initialize() {
                     break;
 
                 case 'powerMultiplicator':
-                    // game.setVehicleEnginePowerMultiplier(entity.scriptID, value);
+                    game.setVehicleCheatPowerIncrease(entity.scriptID, value);
                     break;
+                /*
+                case 'CustomHandling':
+                    let customHandling: alt.HandlingData = JSON.parse(entity.getSyncedMeta("CustomHandling"));
+
+                    let handling = alt.HandlingData.getForModel(entity.model);
+
+                    handlingproperties.forEach((properties: string) => {
+                        handling[properties] = customHandling[properties];
+                    });
+                    break;*/
             }
         }
     });
@@ -150,6 +181,29 @@ export function initialize() {
         if (vehicle != null && seat == -1 && enginePreviousState) {
             game.setVehicleEngineOn(vehicle.scriptID, keepEngineOn, true, true);
         }
+    });
+
+    alt.onServer("GetHandling", (model: number) => {
+        let handling: any = alt.HandlingData.getForModel(model);
+
+        let data = {};
+
+        for (const key in handlingproperties) {
+            const property = handlingproperties[key];
+
+            if (property === 'centreOfMassOffset' || property === 'inertiaMultiplier') {
+                const value: alt.Vector3 = handling[property];
+
+                data[property] = value;
+
+            } else if (property === 'initialDriveGears' || property === 'modelFlags' || property === 'monetaryValue' || property === 'modelFlags' || property === 'handlingFlags' || property === 'damageFlags') {
+                data[property] = parseInt(handling[property]);
+            } else {
+                data[property] = parseFloat(handling[property]).toFixed(6);
+            }
+        }
+
+        alt.emitServer("CallbackGetHandling", model.toString(), JSON.stringify(data));
     });
 
     alt.everyTick(() => {
@@ -264,3 +318,54 @@ export function getFuel(): number { return fuelCur; }
 export function getFuelConsumption(): number { return fuelConsum; }
 export function getMaxFuel(): number { return fuelMax; }
 export function getKm(): number { return CurrentMilage; }
+
+const handlingproperties = [
+    'mass',
+    'initialDragCoeff',
+    'percentSubmerged',
+    'centreOfMassOffset',
+    'inertiaMultiplier',
+    'driveBiasFront',
+    'initialDriveGears',
+    'initialDriveForce',
+    'driveInertia',
+    'clutchChangeRateScaleUpShift',
+    'clutchChangeRateScaleDownShift',
+    'initialDriveMaxFlatVel',
+    'breakForce',
+    'brakeBiasFront',
+    'handBrakeForce',
+    'steeringLock',
+    'tractionCurveMax',
+    'tractionCurveMin',
+    'tractionCurveLateral',
+    'tractionSpringDeltaMax',
+    'lowSpeedTractionLossMult',
+    'camberStiffnesss',
+    'tractionBiasFront',
+    'tractionLossMult',
+    'suspensionForce',
+    'suspensionCompDamp',
+    'suspensionReboundDamp',
+    'suspensionUpperLimit',
+    'suspensionLowerLimit',
+    'suspensionRaise',
+    'suspensionBiasFront',
+    'antiRollBarForce',
+    'antiRollBarBiasFront',
+    'rollCentreHeightFront',
+    'rollCentreHeightRear',
+    'collisionDamageMult',
+    'weaponDamageMult',
+    'deformationDamageMult',
+    'engineDamageMult',
+    'petrolTankVolume',
+    'oilVolume',
+    'seatOffsetDistX',
+    'seatOffsetDistY',
+    'seatOffsetDistZ',
+    'monetaryValue',
+    'modelFlags',
+    'handlingFlags',
+    'damageFlags'
+];

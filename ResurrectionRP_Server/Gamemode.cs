@@ -313,6 +313,18 @@ namespace ResurrectionRP_Server
             {
                 HandlingManager.GetAllHandling(player);
             });
+
+            Chat.RegisterCmd("makehandling", (IPlayer player, string[] args) =>
+            {
+                if (player.Vehicle == null)
+                {
+                    player.SendNotificationError("Vous devez être dans un véhicule.");
+                    return;
+                }
+
+                var vh = player.Vehicle.GetVehicleHandler();
+                vh.VehicleData.CustomHandling = vh.VehicleHandling;
+            });
         }
 
         private void Alt_OnConsoleCommand(string name, string[] args)

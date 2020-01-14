@@ -20,9 +20,9 @@ namespace ResurrectionRP_Server.Loader
 
             foreach (var file in files)
             {
-                VehicleRentLoader.VehicleRentShop _cardealer = JsonConvert.DeserializeObject<VehicleRentLoader.VehicleRentShop>(File.ReadAllText(file));
-                _cardealer.Name = Path.GetFileNameWithoutExtension(file);
-                _cardealer.Load();
+                VehicleRentLoader.VehicleRentShop _vehiclesRent = JsonConvert.DeserializeObject<VehicleRentLoader.VehicleRentShop>(File.ReadAllText(file));
+                _vehiclesRent.Name = Path.GetFileNameWithoutExtension(file);
+                _vehiclesRent.Load();
             }
             Alt.Server.LogColored("~grey~ ---- VehicleRent ~w~| All Rent Vehicle loaded ... ----");
 

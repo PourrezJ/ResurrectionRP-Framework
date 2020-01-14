@@ -17,7 +17,7 @@ namespace ResurrectionRP_Server.Business
         private static ItemID[] itemsWithoutOwner = new ItemID[]
         {
             ItemID.Pioche,
-            ItemID.Hache,
+            ItemID.Bag,
         };
         #endregion
 

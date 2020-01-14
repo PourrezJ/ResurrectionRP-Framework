@@ -153,9 +153,9 @@ namespace ResurrectionRP_Server.Items
                     #region Farms
 
                     new Axe(ItemID.Hache, "Hache", "Pour couper du bois", 1, icon: "pickaxe"),
-                #region Minage
-                    
 
+                    #region Minage
+                    
                     new Tool(ItemID.Pioche, "Pioche", "Pioche basique", 2, icon: "pickaxe", isDockable: true, itemPrice: 150),
                     new Tool(ItemID.MarteauPiqueur, "Marteau Piqueur", "Marteau piqueur", 15, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 2500, icon: "marteau-piqueur", miningrate: 5),
                     new Tool(ItemID.Marteau, "Marteau (Outil)", "Fond le cuivre", 3, isUsable: false, isStackable: false, isDropable: true, isDockable: true, itemPrice: 150, icon: "marteau", miningrate: 1),
@@ -177,28 +177,27 @@ namespace ResurrectionRP_Server.Items
                     new Unusable(ItemID.MineraiCuivre, "Minerai de Cuivre", "Un morceau de roche", 2, icon: "minerai_fer"),
                     new Unusable(ItemID.CuivreFondu, "Cuivre fondu", "A besoin d'être matellé", 2, icon: "cuivre_fondu"),
                     new Unusable(ItemID.Cuivre, "Cuivre", "Du bon cuivre de gitan", 1, icon: "cuivre"),
+                    #endregion
 
-
-                #endregion
-                #region Rhum 
+                    #region Rhum 
                     
 
-                    new Tool(ItemID.OutilCouteau, "Couteau (Outil)", "Permet de couper des choses", 1, miningrate: 1),
-                    new Tool(ItemID.OutilMachette, "Machette (Outil)", "Pour couper du bois", 1, miningrate: 5),
-                    new Alcohol(ItemID.Rhum , "Rhum", "Tous les chemins mènent au Rhum", 1 , true, true, true, drink:20, timer:120000, isDockable: false, itemPrice: 140, icon: "rum", alcohol:0.5),
-                    new Alcohol(ItemID.RhumApple , "Rhum arrangé pomme", "Tous les chemins mènent au Rhum", 1 , true, true, true, drink:20, timer:120000, isDockable: false, itemPrice: 140, icon: "rum", alcohol:0.5),
-                    new Alcohol(ItemID.RhumRaisin, "Rhum arrangé raisin", "Tous les chemins mènent au Rhum", 1 , true, true, true, drink:20, timer:120000, isDockable: false, itemPrice: 140, icon: "rum", alcohol:0.5),
-                    new HealItem(ItemID.RhumLiquide, "Rhum Liquide", "Déinfecte et sert de carburant.",1,true,true,true, life:0, icon:"bandage"),
+                        new Tool(ItemID.OutilCouteau, "Couteau (Outil)", "Permet de couper des choses", 1, miningrate: 1),
+                        new Tool(ItemID.OutilMachette, "Machette (Outil)", "Pour couper du bois", 1, miningrate: 5),
+                        new Alcohol(ItemID.Rhum , "Rhum", "Tous les chemins mènent au Rhum", 1 , true, true, true, drink:20, timer:120000, isDockable: false, itemPrice: 140, icon: "rum", alcohol:0.5),
+                        new Alcohol(ItemID.RhumApple , "Rhum arrangé pomme", "Tous les chemins mènent au Rhum", 1 , true, true, true, drink:20, timer:120000, isDockable: false, itemPrice: 140, icon: "rum", alcohol:0.5),
+                        new Alcohol(ItemID.RhumRaisin, "Rhum arrangé raisin", "Tous les chemins mènent au Rhum", 1 , true, true, true, drink:20, timer:120000, isDockable: false, itemPrice: 140, icon: "rum", alcohol:0.5),
+                        new HealItem(ItemID.RhumLiquide, "Rhum Liquide", "Déinfecte et sert de carburant.",1,true,true,true, life:0, icon:"bandage"),
 
-                    new Unusable(ItemID.Melasse, "Mélasse", "Est utilisé pour faire du Rhum", 1, isStackable: true),
-                    new Unusable(ItemID.MelasseApple, "Mélasse arrangé pomme", "Est utilisé pour faire du Rhum", 1, isStackable: true),
-                    new Unusable(ItemID.MelasseRaisin, "Mélasse arrangé raisin", "Est utilisé pour faire du Rhum", 1, isStackable: true),
+                        new Unusable(ItemID.Melasse, "Mélasse", "Est utilisé pour faire du Rhum", 1, isStackable: true),
+                        new Unusable(ItemID.MelasseApple, "Mélasse arrangé pomme", "Est utilisé pour faire du Rhum", 1, isStackable: true),
+                        new Unusable(ItemID.MelasseRaisin, "Mélasse arrangé raisin", "Est utilisé pour faire du Rhum", 1, isStackable: true),
 
-                    new Unusable(ItemID.Filet, "Filet", "Permet de ramasser divers choses", 2, isDockable: true, isStackable: false, itemPrice: 150),
+                        new Unusable(ItemID.Filet, "Filet", "Permet de ramasser divers choses", 2, isDockable: true, isStackable: false, itemPrice: 150),
 
-                    new Eat(ItemID.GrapeJuice , "Jus de raisin", "mi pisse, mi raisin", 1 , true, true, true, food:5, drink:5),
-                    new Unusable(ItemID.RaisinLiquide, "Raisin liquéfié", "Bah c'est du liquide, imbuvable", 1),
-                #endregion
+                        new Eat(ItemID.GrapeJuice , "Jus de raisin", "mi pisse, mi raisin", 1 , true, true, true, food:5, drink:5),
+                        new Unusable(ItemID.RaisinLiquide, "Raisin liquéfié", "Bah c'est du liquide, imbuvable", 1),
+                    #endregion
                 #endregion
             };
         }

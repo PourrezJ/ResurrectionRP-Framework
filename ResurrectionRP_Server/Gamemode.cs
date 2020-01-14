@@ -145,6 +145,7 @@ namespace ResurrectionRP_Server
             XMenuManager.XMenuManager.Init();
             RadioManager.Init();
             Weather.WeatherManager.InitWeather();
+            Business.Business.AddCommands();
 
             Economy = new Economy.Economy();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");

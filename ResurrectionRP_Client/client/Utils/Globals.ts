@@ -1,1 +1,1 @@
-﻿export const MAX_INTERACTION_DISTANCE = 2.0;
+﻿export const MAX_INTERACTION_DISTANCE = 3.0;

@@ -68,8 +68,6 @@ export class Hud {
 
             if (!game.hasStreamedTextureDictLoaded("resurrection_images"))
                 game.requestStreamedTextureDict("resurrection_images", true);
-            if (!game.hasStreamedTextureDictLoaded("srange_gen"))
-                game.requestStreamedTextureDict("srange_gen", true);
 
             if (!VoiceChat.isConnected && !alt.Player.local.getMeta("IsDebug") && alt.Player.local.getMeta("LevelRank") != null) {
                 if (alt.Player.local.getMeta("LevelRank") > 0)
@@ -110,9 +108,6 @@ export class Hud {
             }
 
             game.drawSprite("resurrection_images", "resu_2", 0.02, 0.03, 0.06, 0.08, 0, 255, 255, 255, 180, false);
-
-            if (!game.isPedSittingInAnyVehicle(alt.Player.local.scriptID))
-                game.drawSprite("srange_gen", "hits_dot", 0.5, 0.5, 0.005, 0.007, 0, 255, 255, 255, 60, false);
         });
 
         alt.setInterval(() => {

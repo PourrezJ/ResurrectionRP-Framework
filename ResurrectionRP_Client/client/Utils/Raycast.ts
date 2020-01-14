@@ -1,7 +1,7 @@
 ﻿import * as alt from 'alt-client';
 import * as native from 'natives';
 
-interface RaycastResultInterface {
+export interface RaycastResultInterface {
     isHit: boolean;
     pos: alt.Vector3;
     hitEntity: number;
@@ -9,7 +9,7 @@ interface RaycastResultInterface {
     entityHash: number;
 }
 
-class Raycast {
+export class Raycast {
     public static readonly player = alt.Player.local;
 
     public static raycastRayFromTo(from: alt.Vector3, to: alt.Vector3, ignoreEntity: number, flags: number)

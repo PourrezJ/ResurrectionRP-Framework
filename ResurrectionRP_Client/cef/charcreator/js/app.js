@@ -1,4 +1,4 @@
-﻿var today = moment().add(20, 'years');
+﻿var today = moment();
 
 let app = angular.module("charCreator", ['cp.ngConfirm']);
 

@@ -39,16 +39,6 @@ namespace ResurrectionRP_Server.Jobs
                     JobsList.Add(jobs);
                 }
             }
-
-            AltAsync.OnColShape += OnEntityColShape;
-        }
-
-        public static async Task OnEntityColShape(IColShape colShape, IEntity entity, bool state)
-        {
-            foreach (Jobs job in JobsList)
-            {
-                await job.OnEntityEnterColShape(colShape, entity, state);
-            }
         }
     }
 }

@@ -161,7 +161,7 @@ namespace ResurrectionRP_Server
             HouseManager.LoadAllHouses();
             Factions.FactionManager.InitAllFactions();
             Society.SocietyManager.LoadAllSociety();
-            JobsManager.Init();
+            //JobsManager.Init();
             HandlingManager.LoadAllHandling();
 
             Task.Run(async () =>
@@ -191,7 +191,6 @@ namespace ResurrectionRP_Server
             AutoBusinessManager.InitAll();
             Weather.WeatherManager.InitWeather();
             Phone.PhoneManager.Init();
-            Jobs.JobsManager.Init();
             TrainManager.LoadTrains();
             
 

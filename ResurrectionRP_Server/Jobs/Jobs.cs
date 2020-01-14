@@ -10,6 +10,8 @@ using VehicleManager = ResurrectionRP_Server.Entities.Vehicles.VehiclesManager;
 using ResurrectionRP_Server.Streamer.Data;
 using ResurrectionRP_Server.Entities;
 using System.Drawing;
+using ResurrectionRP_Server.Colshape;
+using ResurrectionRP_Server.Utils;
 
 namespace ResurrectionRP_Server.Jobs
 {
@@ -26,7 +28,7 @@ namespace ResurrectionRP_Server.Jobs
 
         private Entities.Blips.Blips _blip;
         private Marker _marker;
-        private IColShape _serviceColshape;
+        private IColshape _serviceColshape;
         private Dictionary<string, VehicleHandler> _vehicleList = new Dictionary<string, VehicleHandler>();
         private static Dictionary<string, Jobs> _inServiceList = new Dictionary<string, Jobs>();
         #endregion
@@ -44,91 +46,73 @@ namespace ResurrectionRP_Server.Jobs
             if (ServicePos != null)
             {
                 _blip = Entities.Blips.BlipsManager.CreateBlip(Name, ServicePos, 1, (int)BlipSprite, 1, true);
-                _serviceColshape = Alt.CreateColShapeCylinder(ServicePos, 1f, 1f);
+                _serviceColshape = ColshapeManager.CreateCylinderColshape(ServicePos, 1f, 1f);
+                _serviceColshape.OnPlayerEnterColshape += OnPlayerEnterColshape;
                 _marker = Marker.CreateMarker(MarkerType.VerticalCylinder, ServicePos - new Vector3(0, 0, 1), new Vector3(1, 1, 1), Color.FromArgb(128, 255, 255, 255));
+            }
+        }
+
+        private void OnPlayerEnterColshape(IColshape colshape, IPlayer client)
+        {
+            if (!client.Exists)
+                return;
+
+            if (colshape == _serviceColshape)
+            {
+                OpenServerJobMenu(client);
             }
         }
         #endregion
 
         #region Events
-        public virtual async Task OnEntityEnterColShape(IColShape colShape, IEntity entity, bool state)
+        public virtual void OnPlayerEnterVehicleJob(IVehicle vehicle, IPlayer client, byte seat)
         {
-            if (!state || !entity.Exists || entity.Type != BaseObjectType.Player)
-                return;
-            IPlayer client = entity as IPlayer;
-            if (colShape == _serviceColshape)
-            {
-                //if (client != null) await OpenServerJobMenu(client);
-                if (client != null && client.Exists)
-                    await PriseService(client);
-            }
-        }
-
-        public virtual Task OnPlayerEnterVehicleJob(IVehicle vehicle, IPlayer client, byte seat)
-        {
-            return Task.CompletedTask;
         }
         #endregion
 
         #region Menus
-/*        public virtual async Task<Menu> OpenServerJobMenu(IPlayer client)
+        public virtual Menu OpenServerJobMenu(IPlayer client)
         {
             Menu serverJobMenu = new Menu("ID_ServiceMenu", Name, "", Globals.MENU_POSX, Globals.MENU_POSY, Globals.MENU_ANCHOR, false, true, true);
             serverJobMenu.BannerColor = new MenuColor(0, 0, 0, 0);
-            serverJobMenu.Callback += MenuJobCallback;
+            serverJobMenu.ItemSelectCallback += MenuJobCallback;
 
-            if (!await IsInService(client)) serverJobMenu.Add(new MenuItem("Prendre votre service", "", "ID_GetService", executeCallback: true));
+            if (!IsInService(client)) serverJobMenu.Add(new MenuItem("Prendre votre service", "", "ID_GetService", executeCallback: true));
             else serverJobMenu.Add(new MenuItem("Quitter votre service", "", "ID_QuitService", executeCallback: true));
 
 
-            await MenuManager.OpenMenu(client, serverJobMenu);
+            MenuManager.OpenMenu(client, serverJobMenu);
             return serverJobMenu;
-        }*/
+        }
 
-/*        private async Task MenuJobCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void MenuJobCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             if (menu.Id == "ID_ServiceMenu")
             {
                 if (menuItem.Id == "ID_GetService")
                 {
-                    if (await PriseService(client))
+                    if (PriseService(client))
                     {
-                        await client.SendNotificationSuccess("Vous avez pris votre service.");
+                        client.SendNotificationSuccess("Vous avez pris votre service.");
                     }
-                    if (client.HasOpenMenu()) await MenuManager.CloseMenu(client);
+                    MenuManager.CloseMenu(client);
                 }
                 else if (menuItem.Id == "ID_QuitService")
                 {
-                    await QuitterService(client);
-                    if (client.HasOpenMenu()) await MenuManager.CloseMenu(client);
+                    QuitterService(client);
+                    MenuManager.CloseMenu(client);
                 }
             }
-        }*/
+        }
         #endregion
 
         #region Methods
-        public virtual Task<bool> PriseService(IPlayer client)
+        public virtual bool PriseService(IPlayer client)
         {
-            /*
-            PlayerHandler ph = PlayerManager.GetPlayerByClient(client);
-           
-            // Choix du sexe
-            switch (ph.Character.Gender)
-            {
-                case 0: // Homme
-                    NAPI.Player.SetPlayerClothes(client, 8, 59, 0);
-                    break;
-                case 1: // Femme
-                    NAPI.Player.SetPlayerClothes(client, 8, 36, 0);
-                    break;
-                default: // Ped?
-                    client.SendNotificationError("Vous ne pouvez pas avoir de tenue avec ce personnage");
-                    break;
-            }*/
             if (VehicleSpawnLocation != null && VehicleManager.IsVehicleInSpawn(VehicleSpawnLocation.Pos))
             {
                 client.SendNotificationError($"Un véhicule gêne la sortie de votre véhicule de fonction");
-                return Task.FromResult(false);
+                return false;
             }
 
             var social = client.GetSocialClub();
@@ -140,15 +124,15 @@ namespace ResurrectionRP_Server.Jobs
                     var _veh = VehicleManager.SpawnVehicle(social, (uint)VehicleSpawnHash, VehicleSpawnLocation.Pos, VehicleSpawnLocation.Rot, spawnVeh: true);
                     _veh.SpawnVeh = true;
                     //_veh.OnPlayerEnterVehicle = OnPlayerEnterVehicleJob;
-                    AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicleJob;
+                    Alt.OnPlayerEnterVehicle += OnPlayerEnterVehicleJob;
                     client.GetPlayerHandler()?.AddKey(_veh, "JOB DustMan");
                     _vehicleList.TryAdd(social, _veh);
                 }
 
-                return Task.FromResult(true);
+                return true;
             }
 
-            return Task.FromResult(false);
+            return false;
         }
 
         public virtual void QuitterService(IPlayer client)

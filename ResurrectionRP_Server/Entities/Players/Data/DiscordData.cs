@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Discord.WebSocket;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,5 +11,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
         public string name;
         public string discriminator;
         public string avatar;
+
+        public SocketGuildUser SocketGuildUser;
     }
 }

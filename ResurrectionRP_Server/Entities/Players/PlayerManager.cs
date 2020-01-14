@@ -184,15 +184,40 @@ namespace ResurrectionRP_Server.Entities.Players
             if (!await player.ExistsAsync())
                 return;
 
-            //string socialclub = args[0].ToString();
-            //DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(args[1].ToString());
-            string playerIp = string.Empty;
-
-            lock (player)
+            if (GameMode.ServerLock)
             {
-                if (player.Exists)
-                    playerIp = player.Ip;
+                await player.EmitAsync("FadeIn", 0);
+                await player.KickAsync("Serveur Lock!");
             }
+
+            while (!GameMode.Instance.ServerLoaded)
+                await Task.Delay(100);
+
+            if (discordData == "null")
+            {
+                player.SendNotificationError("Vous devez être connecter a Discord, relancez votre jeu.", 60000);
+                await Task.Delay(60000);
+                await player.KickAsync("Vous devez être connecter a Discord, relancez votre jeu.");
+                return;
+            }
+
+
+            DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(discordData);
+
+            var userGuildDiscord = Discord.GetSocketGuildUser(ulong.Parse(discord.id));
+
+            if (!Discord.IsCitoyen(userGuildDiscord))
+            {
+                player.SendNotificationError("Vous n'êtes pas whitelist Citoyen sur le discord.", 60000);
+                await Task.Delay(60000);
+                await player.KickAsync("Vous n'êtes pas whitelist Citoyen sur le discord.");
+            }
+
+            discord.SocketGuildUser = userGuildDiscord;
+            if (!Discord.DiscordPlayers.ContainsKey(player))
+                Discord.DiscordPlayers.TryAdd(player, discord);
+
+            string playerIp = string.Empty;
 
             Alt.Server.LogInfo($" {socialclub} : ({playerIp}) en attente de connexion.");
 
@@ -210,23 +235,26 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
             }
 
-            player.SetData("SocialClub", socialclub);
-            await player.SetModelAsync((uint)PedModel.FreemodeMale01);
-            await player.SpawnAsync(new Position(-1072.886f, -2729.607f, 0.8148939f));
-
-            if (GameMode.ServerLock)
+            lock (player)
             {
-                await player.EmitAsync("FadeIn", 0);
-                await player.KickAsync("Serveur Lock!");
+                if (!player.Exists)
+                    return;
+
+                playerIp = player.Ip;
+
+                player.Model = (uint)PedModel.FreemodeMale01;
+                player.Spawn(new Position(-1072.886f, -2729.607f, 0.8148939f));
+                player.Dimension = Dimension++;
             }
 
-            while (!GameMode.Instance.ServerLoaded)
-                await Task.Delay(100);
+            player.SetData("SocialClub", socialclub);
 
-            await player.SetDimensionAsync(Dimension++);
+            await ConnectPlayer(player);
 
+
+            /*
             if (!GameMode.IsDebug)
-            {
+            {    
                 try
                 {
                     if (!Config.GetSetting<bool>("WhitelistOpen"))
@@ -268,9 +296,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     await player.KickAsync(_kickMessage);
                     Alt.Server.LogError("Player Login" + ex.Data);
                 }
-            }
+        }
             else
-                await ConnectPlayer(player);
+                await ConnectPlayer(player);*/
         }
         #endregion
 

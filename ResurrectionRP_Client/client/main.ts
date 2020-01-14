@@ -7,6 +7,7 @@ import * as utils from './Utils/utils';
 import * as login from './login/Login';
 import * as nightClub from './Env/NightClub';
 import * as trains from './Env/Trains';
+import * as ui from './Helpers/UiHelper';
 import * as PlayerCustomization from './player/PlayerCustomization';
 import { Game } from './player/Game';
 import { OpenCharCreator } from './Creator/Creator';
@@ -84,12 +85,6 @@ const init = async () => {
         new Admin();
         menuManager();
         CustomEvents.initialize();
-        //alt.discordRequestOAuth2();
-        //while (!alt.isDiscordInfoReady()) { }
-
-        
-
-        alt.log("Connection avec le social club: " + game.scGetNickname());
 
         alt.emitServer("Events_PlayerJoin", game.scGetNickname(), JSON.stringify(alt.Discord.currentUser));
     }

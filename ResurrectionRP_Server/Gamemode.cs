@@ -169,7 +169,8 @@ namespace ResurrectionRP_Server
                 {
                     await Loader.CarParkLoader.LoadAllCarParks();
                     await IllegalManager.InitAll();
-                    
+                    await Discord.Init();
+
                     Alt.Server.LogColored("~g~Serveur chargé!");
                     ServerLoaded = true;
                 }
@@ -191,6 +192,7 @@ namespace ResurrectionRP_Server
             Phone.PhoneManager.Init();
             Jobs.JobsManager.Init();
             TrainManager.LoadTrains();
+            
 
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 

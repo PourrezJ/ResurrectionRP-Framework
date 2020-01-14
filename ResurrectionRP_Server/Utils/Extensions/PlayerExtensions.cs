@@ -69,27 +69,27 @@ namespace ResurrectionRP_Server
             return null;
         }
 
-        public static void SendNotification(this IPlayer client, string text)
+        public static void SendNotification(this IPlayer client, string text, int timer = 7000)
         {
             if (text == "")
                 return;
 
-            client.EmitLocked("notify", "Notification", text, 7000);
+            client.EmitLocked("notify", "Notification", text, timer);
         }
 
-        public static void SendNotificationError(this IPlayer client, string text)
+        public static void SendNotificationError(this IPlayer client, string text, int timer = 7000)
         {
-            client.EmitLocked("alertNotify", "Erreur", text, 7000);
+            client.EmitLocked("alertNotify", "Erreur", text, timer);
         }
 
-        public static void SendNotificationSuccess(this IPlayer client, string text)
+        public static void SendNotificationSuccess(this IPlayer client, string text, int timer = 7000)
         {
-            client.EmitLocked("successNotify", "Succès", text, 7000);
+            client.EmitLocked("successNotify", "Succès", text, timer);
         }
 
-        public static void SendNotificationTutorial(this IPlayer client, string text)
+        public static void SendNotificationTutorial(this IPlayer client, string text, int timer = 14000)
         {
-            client.EmitLocked("notify", "[TUTO]", text, 14000);
+            client.EmitLocked("notify", "[TUTO]", text, timer);
         }
 
         public static void SendNotificationPicture(this IPlayer client, Utils.Enums.CharPicture img, string sender, string subject, string message) =>

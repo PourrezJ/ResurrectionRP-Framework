@@ -96,6 +96,8 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public ushort Health;
 
+        public ulong DiscordID;
+
         [BsonIgnore]
         public bool IsSitting = false;
 
@@ -104,6 +106,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         [BsonIgnore]
         public bool FirstSpawn = false;
+
         /*
         private ushort _health = 200;
         public ushort Health
@@ -167,12 +170,13 @@ namespace ResurrectionRP_Server.Entities.Players
         public PlayerHandler(IPlayer client)
         {
             Client = client;
-            
+            DiscordID = ulong.Parse(Discord.GetDiscordData(client).id);
+
             AltAsync.Do(() =>
-           {
+            {
                client.GetData("SocialClub", out string PID);
                this.PID = PID;
-           });
+            });
         }
 
         #endregion
@@ -186,6 +190,19 @@ namespace ResurrectionRP_Server.Entities.Players
             Client = client;
             FirstSpawn = firstspawn;
             client.SetData("PlayerHandler", this);
+
+            ulong discordID = ulong.Parse(Discord.GetDiscordData(client).id);
+
+            if (DiscordID == 0)
+                DiscordID = ulong.Parse(Discord.GetDiscordData(client).id);
+
+            if (discordID != DiscordID)
+            {
+                client.SendNotificationError("Vous n'utilisez pas le compte discord lié au serveur.", 60000);
+                await Task.Delay(60000);
+                await client.KickAsync("Vous n'utilisez pas le compte discord lié au serveur.");
+                return;
+            }
 
             if (PlayerHandlerList.TryAdd(client, this))
             {
@@ -224,6 +241,17 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 if(Stats == null)
                     Stats = new ConcurrentDictionary<string, dynamic>();
+
+                var discordUser = Discord.GetDiscordData(client);
+
+                if (Discord.IsAdmin(discordUser.SocketGuildUser))
+                    StaffRank = StaffRank.Administrator;
+                else if (Discord.IsModerator(discordUser.SocketGuildUser))
+                    StaffRank = StaffRank.Moderator;
+                else if (Discord.IsHelper(discordUser.SocketGuildUser))
+                    StaffRank = StaffRank.Helper;
+                else if (Discord.IsAnimator(discordUser.SocketGuildUser))
+                    StaffRank = StaffRank.Animator;
 
                 //TrainManager.OnPlayerConnected(client);
 

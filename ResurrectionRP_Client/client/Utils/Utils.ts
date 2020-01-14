@@ -573,3 +573,7 @@ export function createBlip(pos: alt.Vector3, sprite: number, color: number, name
 
     return blip;
 }
+
+export function isPlayer(entity: number): boolean {
+    return (alt.Player.all.find(p => p.scriptID === entity) != null)
+}

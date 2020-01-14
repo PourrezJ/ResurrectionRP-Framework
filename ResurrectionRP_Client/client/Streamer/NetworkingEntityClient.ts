@@ -337,8 +337,10 @@ export class NetworkingEntityClient {
 
     private interactPickup = (OID: number ) => {
         NetworkingEntityClient.EntityList.forEach((item, index) => {
-            if (item == OID)
+            if (item == OID) {
                 alt.emitServer("ObjectManager_InteractPickup", index);
+                return;
+            }
         });
     }
 

@@ -305,19 +305,23 @@ namespace ResurrectionRP_Server.Entities.Players
         #region RemoteEvents
         private static async void MakePlayer(IPlayer client, string charData, string identite)
         {
-            if (!client.Exists)
+            if (!await client.ExistsAsync())
                 return;
-            PlayerHandler ph = new PlayerHandler(client);
 
+            PlayerHandler ph = null;
             try
             {
+                ph = new PlayerHandler(client);
                 ph.Character = JsonConvert.DeserializeObject<Models.PlayerCustomization>(charData);
                 ph.Clothing = new Clothings(client);
                 ph.Identite = JsonConvert.DeserializeObject<Models.Identite>(identite, new JsonSerializerSettings { DateParseHandling = DateParseHandling.DateTime } );
             } catch ( Exception ex) {
-                Alt.Server.LogWarning("Character Creator Error | " + ex.Data);
+                Alt.Server.LogWarning("Character Creator Error | " + ex.ToString());
                 await client.KickAsync("Character Creator Error");
             }
+
+            if (ph == null)
+                return;
 
             await client.EmitAsync("FadeOut", 0);
             await Database.MongoDB.Insert("players", ph);

@@ -79,6 +79,5 @@ export class Medical {
             Medical.scaleForm.call("SHOW_SHARD_WASTED_MP_MESSAGE", "~r~Vous êtes dans le Coma!", Medical.deathMessage);
             Medical.scaleForm.render2D();
         }
-
     }
 }

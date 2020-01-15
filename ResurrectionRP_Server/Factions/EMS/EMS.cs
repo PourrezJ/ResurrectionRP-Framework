@@ -31,8 +31,8 @@ namespace ResurrectionRP_Server.Factions
         #region Init
         public override Faction Init()
         {
-            ServiceLocation = new Vector3(353.1839f, -581.8728f, 43.2966f);
-            ShopLocation = new Vector3(349.9324f, -580.4365f, 42.29609f);
+            ServiceLocation = new Vector3(299.1165f, -598.37805f, 43.282104f);
+            ShopLocation = new Vector3(312.02637f, -597.3099f, 43.282104f);
             ParkingLocation = new Location(new Vector3(341.1377f, -559.7379f, 28.26499f), new Vector3(-0.0811837f, 0.02818833f, 339.2909f));
             HeliportLocation = new Location(new Vector3(351.8859f, -587.7157f, 74.49007f), new Vector3(0.183099f, 0.5883495f, 252.0849f));
 
@@ -78,7 +78,7 @@ namespace ResurrectionRP_Server.Factions
                 new TeleportEtage() { Name = "Héliport", Location = new Location(new Vector3(339.0878f, -583.9037f, 74.16565f), new Vector3(0, 0, 252.1023f))}
             };
 
-            Teleport.Teleport.CreateTeleport(new Location(new Vector3(325.285f, -598.7441f, 43.29178f), new Vector3(0, 0, 66.46763f)), etages, new Vector3(1, 1, 0.2f), menutitle: "Ascenseur");
+            Teleport.Teleport.CreateTeleport(new Location(new Vector3(331.66153f, -595.54285f, 43.282104f), new Vector3(0f, 0f, -1.1378998f)), etages, new Vector3(1, 1, 0.2f), menutitle: "Ascenseur");
 
             Entities.Peds.Ped npcmedic = Entities.Peds.Ped.CreateNPC(PedModel.Scrubs01SFY, new Vector3(308.4536f, -596.9634f, 43.29179f), 3.762666f);
             npcmedic.NpcInteractCallBack = OnNPCInteract;

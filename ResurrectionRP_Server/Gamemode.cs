@@ -58,7 +58,6 @@ namespace ResurrectionRP_Server
 
         #region Pools
 
-        [BsonIgnore]
         public Economy.Economy Economy { get; private set; }
 
         public static bool ServerLock;

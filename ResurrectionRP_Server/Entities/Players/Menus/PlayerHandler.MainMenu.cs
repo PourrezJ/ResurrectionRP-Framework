@@ -1,5 +1,6 @@
 ﻿using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Farms;
 using ResurrectionRP_Server.Menus;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils;
@@ -38,6 +39,7 @@ namespace ResurrectionRP_Server.Entities.Players
             menu.Add(new MenuItem("Animations", "Réglage des touches des animations", "ID_Animations", true));
             menu.Add(new MenuItem("Styles de Marche", "", "ID_WalkingStyles", true));
             menu.Add(new MenuItem("Expression Visage", "", "ID_Face", true));
+            menu.Add(new MenuItem("Bourse", "", "ID_Bourse", true));
             menu.Add(new MenuItem("Déconnecter", "", "ID_Disconnect", true));
             MenuManager.OpenMenu(Client, menu);
         }
@@ -92,6 +94,20 @@ namespace ResurrectionRP_Server.Entities.Players
                     case "ID_Face":
                         MenuManager.CloseMenu(client);
                         FaceMenu.OpenFaceMenu(client);
+                        break;
+                    case "ID_Bourse":
+                        menu.ClearItems();
+                        menu.Title = menuItem.Text;
+                        menu.SubTitle = "";
+
+                        foreach(var value in GameMode.Instance.Economy.Bourse.Values)
+                        {
+                            var menuitem = new MenuItem(Inventory.Inventory.ItemByID(value.Key)?.name, "", "", rightLabel: value.Value + "%");
+                            menuitem.Description = "Prix à l'unité: $" + GameMode.Instance.Economy.Bourse.GetCurrentPrice(value.Key, FarmManager.GetItemPrice(value.Key));
+                            menu.Add(menuitem);
+                        }
+                        menu.OpenMenu(Client);
+
                         break;
                     default:
                         break;

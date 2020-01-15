@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ResurrectionRP_Server.Models;
+using System;
 
 namespace ResurrectionRP_Server.Economy
 {
@@ -18,16 +19,16 @@ namespace ResurrectionRP_Server.Economy
         // Caisse
         public double CaissePublique;
 
+        public Bourse Bourse = new Bourse();
+
         public static double CalculPriceTaxe(double Price, double Taxes)
         {
-            double _price = Price * (Taxes / 100);
-            return Math.Round( _price,3);
+            return Math.Round(Price * (Taxes / 100), 3);
         }
 
         public static double CalculNewPrice(double Price, double Taxes)
         {
-            double _price = Price + Taxes;
-            return _price;
+            return Price + Taxes;
         }
 
         public static decimal CustomRound(decimal num) => Math.Round(num * 20.0M, MidpointRounding.AwayFromZero) / 20.0M;

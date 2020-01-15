@@ -15,6 +15,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Farms
 {
@@ -70,6 +71,11 @@ namespace ResurrectionRP_Server.Farms
             }
 
             return null;
+        }
+
+        public static double GetItemPrice(ItemID item)
+        {
+            return FarmList.Find(p => p.ItemIDProcess == item)?.ItemPrice ?? 0;
         }
         #endregion
     }
@@ -501,9 +507,11 @@ namespace ResurrectionRP_Server.Farms
                     if (player.DeleteAllItem(ItemIDProcess, itemcount))
                     {
                         double gettaxe = Economy.Economy.CalculPriceTaxe((ItemPrice * itemcount), GameMode.Instance.Economy.Taxe_Exportation);
-                        player.AddMoney((ItemPrice * itemcount) - gettaxe);
+                        double somme = GameMode.Instance.Economy.Bourse.GetCurrentPrice(ItemIDProcess, (ItemPrice * itemcount) - gettaxe);
+                        player.AddMoney(somme);
                         GameMode.Instance.Economy.CaissePublique += gettaxe;
-                        sender.DisplaySubtitle($"~r~{itemcount} ~w~{_itemBuy.name}(s) $~r~{(ItemPrice * itemcount) - gettaxe} ~w~taxe:$~r~{gettaxe}.", 15000);
+                        GameMode.Instance.Economy.Bourse.Update(ItemIDProcess, itemcount);
+                        sender.DisplaySubtitle($"~r~{itemcount} ~w~{_itemBuy.name}(s) $~r~{somme} ~w~taxe:$~r~{gettaxe}.", 15000);
                     }
                     else
                         sender.SendNotificationError("Inconnu.");
@@ -511,12 +519,13 @@ namespace ResurrectionRP_Server.Farms
                     player.IsOnProgress = false;
                     player.UpdateFull();
                     sender.StopProgressBar();
+                    Task.Run(()=> GameMode.Instance.Save());
                 }               
             });
         }
         #endregion
 
-        #region Mish
+        #region Misc
         public bool IsInFarmingZone(IPlayer player)
         {
             var position = player.Position;

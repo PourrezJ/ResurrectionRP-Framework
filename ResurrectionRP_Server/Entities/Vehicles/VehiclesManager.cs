@@ -165,10 +165,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     if (!veh.Exists)
                         continue;
 
-                    if (!(veh is VehicleHandler))
-                        continue;
-
                      VehicleHandler vehicle = veh.GetVehicleHandler();
+
+                    if (vehicle == null)
+                        continue;
 
                     if (vehicle.EngineOn)
                     {

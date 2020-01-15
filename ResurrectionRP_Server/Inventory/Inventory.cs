@@ -3,12 +3,10 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
-using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Inventory
 {
@@ -33,12 +31,15 @@ namespace ResurrectionRP_Server.Inventory
 
         public ItemStack this[int x]
         {
-            get { return InventoryList[x]; }
+            get => InventoryList[x];
             set
             {
                 if (value.Item != null)
                 {
-                    InventoryList[x] = value;
+                    lock (InventoryList)
+                    {
+                        InventoryList[x] = value;
+                    }   
                 }
             }
         }
@@ -116,19 +117,22 @@ namespace ResurrectionRP_Server.Inventory
             if (CurrentSize() + (item.weight * quantity) > MaxSize)
                 return false;
 
-            if (InventoryList.Any(x => x?.Item.id == item.id) && item.isStackable)
+            lock (InventoryList)
             {
-                ItemStack itemStack = InventoryList.First(x => x?.Item.id == item.id);
-                itemStack.Quantity += quantity;
-            }
-            else
-            {
-                slot = GetEmptySlot();
+                if (InventoryList.Any(x => x?.Item.id == item.id) && item.isStackable)
+                {
+                    ItemStack itemStack = InventoryList.First(x => x?.Item.id == item.id);
+                    itemStack.Quantity += quantity;
+                }
+                else
+                {
+                    slot = GetEmptySlot();
 
-                if (slot == -1)
-                    return false;
+                    if (slot == -1)
+                        return false;
 
-                InventoryList[slot] = new ItemStack(item, quantity, slot);
+                    InventoryList[slot] = new ItemStack(item, quantity, slot);
+                }
             }
 
             return true;
@@ -136,10 +140,14 @@ namespace ResurrectionRP_Server.Inventory
 
         public int GetEmptySlot()
         {
-            for (int i = 0; i < InventoryList.Length; i++)
+            lock (InventoryList)
             {
-                if (InventoryList[i] == null) return i;
+                for (int i = 0; i < InventoryList.Length; i++)
+                {
+                    if (InventoryList[i] == null) return i;
+                }
             }
+
             return -1;
         }
 
@@ -151,13 +159,16 @@ namespace ResurrectionRP_Server.Inventory
         {
             try
             {
-                if (itemStack.Quantity < quantity)
-                    return false;
-                else if (itemStack.Quantity > quantity)
-                    itemStack.Quantity -= quantity;
-                else
-                    InventoryList[GetSlotIndexUseStack(itemStack)] = null;
-                return true;
+                lock (InventoryList)
+                {
+                    if (itemStack.Quantity < quantity)
+                        return false;
+                    else if (itemStack.Quantity > quantity)
+                        itemStack.Quantity -= quantity;
+                    else
+                        InventoryList[GetSlotIndexUseStack(itemStack)] = null;
+                    return true;
+                }
             }
             catch (Exception ex)
             {
@@ -170,14 +181,17 @@ namespace ResurrectionRP_Server.Inventory
         {
             try
             {
-                var itemStack = InventoryList[slot];
-
-                if (itemStack.Quantity > quantity)
-                    itemStack.Quantity -= quantity;
-                else
+                lock (InventoryList)
                 {
-                    itemStack.Quantity = 0;
-                    InventoryList[slot] = null;
+                    var itemStack = InventoryList[slot];
+
+                    if (itemStack.Quantity > quantity)
+                        itemStack.Quantity -= quantity;
+                    else
+                    {
+                        itemStack.Quantity = 0;
+                        InventoryList[slot] = null;
+                    }
                 }
 
                 return true;
@@ -192,29 +206,31 @@ namespace ResurrectionRP_Server.Inventory
         public int DeleteAll(ItemID itemID, int quantityNeeded)
         {
             var value = quantityNeeded;
-
-            for (int i = 0; i < InventoryList.Length; i++)
+            lock (InventoryList)
             {
-                if (InventoryList[i] != null)
+                for (int i = 0; i < InventoryList.Length; i++)
                 {
-                    if (InventoryList[i].Item == null)
-                        continue;
-
-                    if (InventoryList[i].Item.id == itemID)
+                    if (InventoryList[i] != null)
                     {
-                        if (InventoryList[i].Quantity > value)
+                        if (InventoryList[i].Item == null)
+                            continue;
+
+                        if (InventoryList[i].Item.id == itemID)
                         {
-                            InventoryList[i].Quantity -= value;
-                            return quantityNeeded;
-                        }
-                        else
-                        {
-                            value -= InventoryList[i].Quantity; //5 - 3
-                            InventoryList[i] = null;
+                            if (InventoryList[i].Quantity > value)
+                            {
+                                InventoryList[i].Quantity -= value;
+                                return quantityNeeded;
+                            }
+                            else
+                            {
+                                value -= InventoryList[i].Quantity; //5 - 3
+                                InventoryList[i] = null;
+                            }
                         }
                     }
                 }
-            }
+            } 
 
             return quantityNeeded - value; // valeur supprimer
         }
@@ -248,28 +264,36 @@ namespace ResurrectionRP_Server.Inventory
 
         public bool HasItemID(ItemID id)
         {
-            if (InventoryList.Any(x => x?.Item.id == id))
-                return true;
+            lock (InventoryList)
+            {
+                if (InventoryList.Any(x => x?.Item.id == id))
+                    return true;
 
-            return false;
+                return false;
+            }
         }
 
         public bool HasItem(Item item)
         {
-            if (InventoryList.Any(x => x?.Item.id == item?.id))
-                return true;
+            lock (InventoryList)
+            {
+                if (InventoryList.Any(x => x?.Item.id == item?.id))
+                    return true;
 
-            return false;
+                return false;
+            }
         }
 
         public int CountItem(Item item)
         {
             int count = 0;
-
-            foreach (ItemStack invItem in InventoryList)
+            lock (InventoryList)
             {
-                if (invItem != null && invItem.Item.id == item.id)
-                    count += invItem.Quantity;
+                foreach (ItemStack invItem in InventoryList)
+                {
+                    if (invItem != null && invItem.Item.id == item.id)
+                        count += invItem.Quantity;
+                }
             }
 
             return count;
@@ -279,10 +303,13 @@ namespace ResurrectionRP_Server.Inventory
         {
             int count = 0;
 
-            foreach (ItemStack invItem in InventoryList)
+            lock (InventoryList)
             {
-                if (invItem != null && invItem.Item.id == itemID)
-                    count += invItem.Quantity;
+                foreach (ItemStack invItem in InventoryList)
+                {
+                    if (invItem != null && invItem.Item.id == itemID)
+                        count += invItem.Quantity;
+                }
             }
 
             return count;
@@ -290,10 +317,13 @@ namespace ResurrectionRP_Server.Inventory
 
         public int GetSlotIndexUseStack(ItemStack stack)
         {
-            for (int i = 0; i < InventoryList.Length; i++)
+            lock (InventoryList)
             {
-                if (InventoryList[i] == stack)
-                    return i;
+                for (int i = 0; i < InventoryList.Length; i++)
+                {
+                    if (InventoryList[i] == stack)
+                        return i;
+                }
             }
 
             return -1;

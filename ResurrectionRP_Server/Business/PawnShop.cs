@@ -18,6 +18,7 @@ namespace ResurrectionRP_Server.Business
         {
             ItemID.Pioche,
             ItemID.Bag,
+            ItemID.Marteau
         };
         #endregion
 

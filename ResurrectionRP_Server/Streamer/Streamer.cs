@@ -93,11 +93,11 @@ namespace ResurrectionRP_Server.Streamer
 
         public static void DeleteEntityObject(WorldObject data)
         {
-            if (ListEntities.ContainsKey(data.ID))
+            if (ListEntities.ContainsKey(data.ID) && ListEntities.TryRemove(data.ID, out INetworkingEntity entity))
             {
-                Alt.EmitAllClients("deleteObject", data.ID);
-                AltNetworking.RemoveEntity(ListEntities[data.ID]);
-                ListEntities.TryRemove(data.ID, out _);
+                entity.Remove();
+                AltNetworking.RemoveEntity(entity);
+                Alt.EmitAllClients("deleteObject", entity.Id);
             }      
         }
 

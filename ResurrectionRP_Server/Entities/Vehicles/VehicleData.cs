@@ -576,6 +576,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 float deltaY = newPos.Y - oldPos.Y;
                 float deltaZ = newPos.Z - oldPos.Z;
                 distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) / 1000;
+                if (distance >= 300)
+                    return;
                 Milage += (float)distance;
                 _previousPosition = newPos;
                 speed = distance * 3600000 / (updateTime - _previousUpdate).TotalMilliseconds;

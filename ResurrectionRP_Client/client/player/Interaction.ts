@@ -205,7 +205,7 @@ export class Interaction {
                 }
                 else if (raycastResult.isHit && raycastResult.entityType == 1 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
                     if (!Utils.isPlayer(raycastResult.hitEntity))
-                        Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le pnj");
+                        Interaction.displayHelp("Appuyez sur ~INPUT_CONTEXT~ pour intéragir avec le Ped");
                     game.drawSprite("srange_gen", "hits_dot", 0.5, 0.5, 0.005, 0.007, 0, 0, 130, 0, 255, false);
                 }
                 else

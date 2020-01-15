@@ -65,7 +65,7 @@ let circle = null;
 
 function MakeProgressBar(duration)
 {
-    if (circle !== null)
+    if (circle != null)
     {
         circle.destroy();
         circle = null;

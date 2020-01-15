@@ -200,32 +200,23 @@ namespace ResurrectionRP_Server.Entities.Players
             if (discordData == "null")
             {
                 player.SendNotificationError("Vous devez être connecter a Discord, relancez votre jeu.", 60000);
-                /*
-                await Task.Delay(60000);
-                lock (player)
-                {
-                    player.Kick("Vous devez être connecter a Discord, relancez votre jeu.");
-                } 
-                return;*/
+                
+                return;
             }
-            else
+
+            DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(discordData);
+
+            var userGuildDiscord = Discord.GetSocketGuildUser(ulong.Parse(discord.id));
+
+            if (!Discord.IsCitoyen(userGuildDiscord))
             {
-                DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(discordData);
-
-                var userGuildDiscord = Discord.GetSocketGuildUser(ulong.Parse(discord.id));
-
-                if (!Discord.IsCitoyen(userGuildDiscord))
-                {
-                    player.SendNotificationError("Vous n'êtes pas whitelist Citoyen sur le discord.", 60000);
-                    await Task.Delay(60000);
-                    await player.KickAsync("Vous n'êtes pas whitelist Citoyen sur le discord.");
-                }
-
-                discord.SocketGuildUser = userGuildDiscord;
-                if (!Discord.DiscordPlayers.ContainsKey(player))
-                    Discord.DiscordPlayers.TryAdd(player, discord);
+                player.SendNotificationError("Vous n'êtes pas whitelist Citoyen sur le discord.", 60000);
+                return;
             }
 
+            discord.SocketGuildUser = userGuildDiscord;
+            if (!Discord.DiscordPlayers.ContainsKey(player))
+                Discord.DiscordPlayers.TryAdd(player, discord);
             string playerIp = string.Empty;
 
             Alt.Server.LogInfo($" {socialclub} : ({playerIp}) en attente de connexion.");

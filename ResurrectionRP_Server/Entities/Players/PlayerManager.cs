@@ -186,36 +186,45 @@ namespace ResurrectionRP_Server.Entities.Players
 
             if (GameMode.ServerLock)
             {
-                await player.EmitAsync("FadeIn", 0);
-                await player.KickAsync("Serveur Lock!");
+                lock (player)
+                {
+                    player.Emit("FadeIn", 0);
+                    player.Kick("Serveur Lock!");
+                }
             }
 
             while (!GameMode.Instance.ServerLoaded)
                 await Task.Delay(100);
 
+
             if (discordData == "null")
             {
                 player.SendNotificationError("Vous devez être connecter a Discord, relancez votre jeu.", 60000);
+                /*
                 await Task.Delay(60000);
-                await player.KickAsync("Vous devez être connecter a Discord, relancez votre jeu.");
-                return;
+                lock (player)
+                {
+                    player.Kick("Vous devez être connecter a Discord, relancez votre jeu.");
+                } 
+                return;*/
             }
-
-
-            DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(discordData);
-
-            var userGuildDiscord = Discord.GetSocketGuildUser(ulong.Parse(discord.id));
-
-            if (!Discord.IsCitoyen(userGuildDiscord))
+            else
             {
-                player.SendNotificationError("Vous n'êtes pas whitelist Citoyen sur le discord.", 60000);
-                await Task.Delay(60000);
-                await player.KickAsync("Vous n'êtes pas whitelist Citoyen sur le discord.");
-            }
+                DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(discordData);
 
-            discord.SocketGuildUser = userGuildDiscord;
-            if (!Discord.DiscordPlayers.ContainsKey(player))
-                Discord.DiscordPlayers.TryAdd(player, discord);
+                var userGuildDiscord = Discord.GetSocketGuildUser(ulong.Parse(discord.id));
+
+                if (!Discord.IsCitoyen(userGuildDiscord))
+                {
+                    player.SendNotificationError("Vous n'êtes pas whitelist Citoyen sur le discord.", 60000);
+                    await Task.Delay(60000);
+                    await player.KickAsync("Vous n'êtes pas whitelist Citoyen sur le discord.");
+                }
+
+                discord.SocketGuildUser = userGuildDiscord;
+                if (!Discord.DiscordPlayers.ContainsKey(player))
+                    Discord.DiscordPlayers.TryAdd(player, discord);
+            }
 
             string playerIp = string.Empty;
 

@@ -676,21 +676,27 @@ namespace ResurrectionRP_Server.Factions
                 FactionVehicle fv = (FactionVehicle)menuItem.GetData("Veh");
                 PlayerHandler ph = client.GetPlayerHandler();
                 string vhname = (string)menuItem.GetData("Manifest");
-
-                if (BankAccount.GetBankMoney(fv.Price, $"Achat véhicule {vhname} par {ph.Identite.Name}"))
+                try
                 {
-                    VehicleHandler vh = VehiclesManager.SpawnVehicle(client.GetSocialClub(), (uint)fv.Hash, location.Pos, location.Rot, inventory: new Inventory.Inventory(fv.Weight, fv.MaxSlot), primaryColor: fv.PrimaryColor, secondaryColor: fv.SecondaryColor);
-                    client.SetPlayerIntoVehicle(vh);
-                    vh.VehicleData.InsertVehicle();
+                    if (BankAccount.GetBankMoney(fv.Price, $"Achat véhicule {vhname} par {ph.Identite.Name}"))
+                    {
+                        VehicleHandler vh = VehiclesManager.SpawnVehicle(client.GetSocialClub(), (uint)fv.Hash, location.Pos, location.Rot, inventory: new Inventory.Inventory(fv.Weight, fv.MaxSlot), primaryColor: fv.PrimaryColor, secondaryColor: fv.SecondaryColor);
+                        client.SetPlayerIntoVehicle(vh);
+                        vh.VehicleData.InsertVehicle();
 
 
-                    OnVehicleOut(client, vh);
-                    ph.ListVehicleKey.Add(new VehicleKey(vhname, vh.NumberplateText));
-                    ph.UpdateFull();
-                    MenuManager.CloseMenu(client);
+                        OnVehicleOut(client, vh);
+                        ph.ListVehicleKey.Add(new VehicleKey(vhname, vh.NumberplateText));
+                        ph.UpdateFull();
+                        MenuManager.CloseMenu(client);
+                    }
+                    else
+                        client.SendNotificationError("Votre faction n'a pas assez d'argent.");
                 }
-                else
-                    client.SendNotificationError("Votre faction n'a pas assez d'argent.");
+                catch(Exception ex)
+                {
+                    Alt.Server.LogError(ex.Message);
+                }
             }
         }
         #endregion

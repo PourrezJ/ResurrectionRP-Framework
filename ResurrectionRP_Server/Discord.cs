@@ -53,7 +53,12 @@ namespace ResurrectionRP_Server
         public static bool IsAnimator(SocketGuildUser pdiscord) => HasRoleName(pdiscord, "animateur");
         public static bool IsCitoyen(SocketGuildUser pdiscord) => HasRoleName(pdiscord, "Citoyen");
 
-        public static DiscordData GetDiscordData(IPlayer player) => DiscordPlayers[player];
+        public static DiscordData GetDiscordData(IPlayer player)
+        {
+            if (DiscordPlayers.TryGetValue(player, out _))
+                return DiscordPlayers[player];
+            else return null;
+        }
 
     }
 }

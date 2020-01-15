@@ -246,6 +246,9 @@ namespace ResurrectionRP_Server.Colshape
 
                 lock (_colshapes)
                 {
+                    if (!_colshapes.ContainsKey(colshapeID))
+                        return;
+
                     IColshape colshape = _colshapes[colshapeID];
 
                     if (colshape.IsEntityIn(client))

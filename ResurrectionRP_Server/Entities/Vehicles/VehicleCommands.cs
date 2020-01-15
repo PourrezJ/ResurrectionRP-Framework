@@ -27,7 +27,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             PlayerHandler ph = player.GetPlayerHandler();
 
-            if (ph == null || player.GetPlayerHandler().StaffRank < StaffRank.Moderator)
+            if (ph == null)
+                return;
+
+            if (ph.StaffRank < StaffRank.Moderator)
                 return;
 
             if (args == null || args.Length == 0)
@@ -41,6 +44,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             foreach (VehicleData veh in VehiclesManager.GetAllVehicleData())
             {
+                if (veh == null)
+                    continue;
+
                 if (veh.Plate.ToUpper() == plate)
                 {
                     vehicleData = veh;
@@ -64,7 +70,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
            
             player.SendChatMessage($"Immatriculation : {vehicleData.Plate}");
             VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get(vehicleData.Model);
-            player.SendChatMessage($"Modèle : {manifest.LocalizedName} ({vehicleData.Model})");
+            if (manifest != null)
+                player.SendChatMessage($"Modèle : {manifest.LocalizedName} ({vehicleData.Model})");
 
             player.SendChatMessage($"Verrouillé : {vehicleData.LockState.ToString()}");
             player.SendChatMessage($"Dernier chauffeur : {vehicleData.LastDriver}");

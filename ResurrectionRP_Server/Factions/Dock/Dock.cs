@@ -103,7 +103,7 @@ namespace ResurrectionRP_Server.Factions
                 new FactionVehicle(1, VehicleModel.Vagner, 1050000, 15),
                 new FactionVehicle(1, VehicleModel.Visione, 1155000, 15),
                 new FactionVehicle(1, VehicleModel.Zorrusso, 770000, 15),
-                new FactionVehicle(1, (VehicleModel) VehicleModel2.rmodlp750, 1470000, 15),
+                //new FactionVehicle(1, (VehicleModel) VehicleModel2.rmodlp750, 1470000, 15),
                 new FactionVehicle(1, (VehicleModel) VehicleModel2.skyline, 108500, 25),
                 new FactionVehicle(1, (VehicleModel) VehicleModel2.audirs6tk, 98000, 25),
                 new FactionVehicle(1, (VehicleModel) VehicleModel2.rmodm3e36, 133000, 25),
@@ -132,7 +132,7 @@ namespace ResurrectionRP_Server.Factions
                 new FactionVehicle(1, VehicleModel.Stafford, 192500, 25),
                 // VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.p205t16a, 0, 25));
                 new FactionVehicle(1, (VehicleModel) VehicleModel2.p205t16b, 70000, 25),
-                new FactionVehicle(1, (VehicleModel) VehicleModel2.charger, 54250, 30),
+                //new FactionVehicle(1, (VehicleModel) VehicleModel2.charger, 54250, 30),
                 new FactionVehicle(1, (VehicleModel) VehicleModel2.rmodgt63, 91000, 30),
                 new FactionVehicle(1, (VehicleModel) VehicleModel2.rmodm4gts, 119000, 30),
 

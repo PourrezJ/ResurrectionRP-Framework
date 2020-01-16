@@ -29,6 +29,17 @@ namespace ResurrectionRP_Server.Business
             Chat.RegisterCmd("AddPawnShop", AddPawnShop);
             Chat.RegisterCmd("AddDigitalDeen", AddDigitalDeen);
             Chat.RegisterCmd("AddAccessory", AddAccessory);
+            Chat.RegisterCmd("AddHeadShop", AddHeadShop);
+        }
+
+        private static void AddHeadShop(IPlayer client, string[] args)
+        {
+            if (client.GetStaffRank() <= StaffRank.Player)
+                return;
+
+            var headshop = new HeadShop("Head Shop", new Location(client.Position, client.Rotation), 496, 500, PedModel.FabienCutscene);
+            headshop.Init();
+            Task.Run(async () => await headshop.Insert());
         }
 
         public static void AddTatooStore(IPlayer client, string[] arguments)

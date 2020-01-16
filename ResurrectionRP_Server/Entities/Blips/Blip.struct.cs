@@ -50,7 +50,7 @@ namespace ResurrectionRP_Server.Entities.Blips
             return data;
         }
 
-        public void setColorAsyc(int color)
+        public void SetColor(int color)
         {
             BlipsManager.SetColor(this, color);
         }

@@ -80,7 +80,7 @@ namespace ResurrectionRP_Server.Factions
 
             Teleport.Teleport.CreateTeleport(new Location(new Vector3(331.66153f, -595.54285f, 43.282104f), new Vector3(0f, 0f, -1.1378998f)), etages, new Vector3(1, 1, 0.2f), menutitle: "Ascenseur");
 
-            Entities.Peds.Ped npcmedic = Entities.Peds.Ped.CreateNPC(PedModel.Scrubs01SFY, new Vector3(308.4536f, -596.9634f, 43.29179f), 3.762666f);
+            Entities.Peds.Ped npcmedic = Entities.Peds.Ped.CreateNPC(PedModel.Scrubs01SFY, new Vector3(308.37363f, -595.4901f, 43.282104f), 3.762666f);
             npcmedic.NpcInteractCallBack = OnNPCInteract;
 
             BlipsManager.CreateBlip("Clinique Médicale", new Vector3(-264.5344f, 6314.32f, 32.4364f), 57, 61, 1f);

@@ -35,6 +35,8 @@ namespace ResurrectionRP_Server.Illegal
 
         public override void Load()
         {
+            Utils.Utils.CheckThread();
+
             if (NextRefreshMarketPos < DateTime.Now || NextRefreshMarketPos == new DateTime())
             {
                 NextRefreshMarketPos = DateTime.UtcNow.AddDays(7);

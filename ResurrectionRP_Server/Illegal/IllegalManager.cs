@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using MongoDB.Bson;
@@ -54,35 +55,38 @@ namespace ResurrectionRP_Server.Illegal
             Alt.Server.LogDebug("--- Start loading all illegal business in database ---");
 
             var _illagelBusinessesList = await Database.MongoDB.GetCollectionSafe<IllegalSystem>("illegal").AsQueryable().ToListAsync();
-            foreach (var _businesses in _illagelBusinessesList)
+            await AltAsync.Do(() =>
             {
-                if (_businesses.GetType() == typeof(WeedBusiness))
+                foreach (var _businesses in _illagelBusinessesList)
                 {
-                    WeedBusiness = (WeedBusiness)_businesses;
-                    WeedBusiness?.Load();
+                    if (_businesses.GetType() == typeof(WeedBusiness))
+                    {
+                        WeedBusiness = (WeedBusiness)_businesses;
+                        WeedBusiness?.Load();
+                    }
+                    else if (_businesses.GetType() == typeof(BlackMarket))
+                    {
+                        BlackMarket = (BlackMarket)_businesses;
+                        BlackMarket?.Load();
+                    }
+
+                    IllegalList.Add(_businesses);
                 }
-                else if (_businesses.GetType() == typeof(BlackMarket))
+
+                if (WeedBusiness == null)
                 {
-                    BlackMarket = (BlackMarket)_businesses;
-                    BlackMarket?.Load();
+                    WeedBusiness = new WeedBusiness();
+                    WeedBusiness.Load();
+                    Task.Run(async () => await WeedBusiness.Insert());
                 }
 
-                IllegalList.Add(_businesses);
-            }
-
-            if (WeedBusiness == null)
-            {
-                WeedBusiness = new WeedBusiness();
-                await WeedBusiness.Insert();
-                WeedBusiness.Load();
-            }
-
-            if (BlackMarket == null)
-            {
-                BlackMarket = new BlackMarket();
-                await BlackMarket.Insert();
-                BlackMarket.Load();
-            }
+                if (BlackMarket == null)
+                {
+                    BlackMarket = new BlackMarket();
+                    BlackMarket.Load();
+                    Task.Run(async () => await BlackMarket.Insert());
+                }
+            });
 
             Alt.Server.LogDebug($"--- Finish loading all illegal businesses in database: {_illagelBusinessesList.Count} ---");
 
@@ -149,6 +153,8 @@ namespace ResurrectionRP_Server.Illegal
             if (player.IsOnProgress || sender.IsInVehicle)
                 return;
 
+            bool havedrug = false;
+
             if (IllegalPrice.Count > 0)
             {
                 foreach (var ItemProcess in IllegalPrice)
@@ -160,17 +166,18 @@ namespace ResurrectionRP_Server.Illegal
 
                     if (!player.HasItemID(ItemIDProcess))
                         continue;
+                    havedrug = true;
                     player.IsOnProgress = true;
                     sender.DisplaySubtitle($"Vous commencez à vendre vos ~r~{_itemBuy.name}(s)", 5000);
 
                     MenuManager.CloseMenu(sender);
                     int itemcount = player.CountItem(_itemBuy);
 
-                    sender.Emit("LaunchProgressBar", 1000 * itemcount);
+                    sender.LaunchProgressBar(1000 * itemcount);
 
-                    Utils.Utils.Delay(1000 * itemcount, () =>
+                    Utils.Utils.Delay(1000 * itemcount, async () =>
                     {
-                        if (!sender.Exists)
+                        if (!await sender.ExistsAsync())
                             return;
 
                         if (player.DeleteAllItem(ItemIDProcess, itemcount))
@@ -185,6 +192,9 @@ namespace ResurrectionRP_Server.Illegal
                         player.UpdateFull();
                     });
                 }
+
+                if (!havedrug)
+                    sender.SendNotificationError("Tu te moques de moi?! Tu n'as rien à vendre.");
             }
         }
 

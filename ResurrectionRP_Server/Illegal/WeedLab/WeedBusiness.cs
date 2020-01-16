@@ -23,21 +23,21 @@ namespace ResurrectionRP_Server.Illegal
     public partial class WeedBusiness : IllegalSystem
     {
         #region Private Variables
-        private Vector3 InventoryPos = new Vector3(1043.7627f, -3194.756f, -39.16992f);
-        private Location InsideBat = new Location(new Vector3(1066.032f, -3183.42f, -39.1635f), new Vector3(0, 0, 85.58551f));
+        private Vector3 InventoryPos = new Vector3(1758.7f, -1616.392f, 113.6451f);
+        private Location InsideBat = new Location(new Vector3(1744.833f, -1600.628f, 112.639f), new Vector3(0, 0, 85.58551f));
         private Timer Timer = new Timer(5000);
 
         public WeedZone[] WeedZoneList = new WeedZone[9]
         {
-            new WeedZone(0, StateZone.Stage0 , SeedType.Aucune, new Vector3(1053.894f, -3196.052f, -40.16129f)),
-            new WeedZone(1, StateZone.Stage0 , SeedType.Aucune, new Vector3(1053.783f, -3189.879f, -40.16138f)),
-            new WeedZone(2, StateZone.Stage0 , SeedType.Aucune, new Vector3(1056.23f, -3192.55f, -40.16134f)),
-            new WeedZone(3, StateZone.Stage0 , SeedType.Aucune, new Vector3(1060.228f, -3193.428f, -40.16134f)),
-            new WeedZone(4, StateZone.Stage0 , SeedType.Aucune, new Vector3(1060.289f, -3198.381f, -40.16125f)),
-            new WeedZone(5, StateZone.Stage0 , SeedType.Aucune, new Vector3(1060.687f, -3203.671f, -40.16113f)),
-            new WeedZone(6, StateZone.Stage0 , SeedType.Aucune, new Vector3(1057.476f, -3203.444f, -40.1539f)),
-            new WeedZone(7, StateZone.Stage0 , SeedType.Aucune, new Vector3(1057.831f, -3196.909f, -40.12994f)),
-            new WeedZone(8, StateZone.Stage0 , SeedType.Aucune, new Vector3(1051.53f, -3201.792f, -40.11644f))
+            new WeedZone(0, StateZone.Stage0, SeedType.Aucune, new Vector3(1757.966f, -1606.708f, 112.642f)),
+            new WeedZone(1, StateZone.Stage0, SeedType.Aucune, new Vector3(1752.82f, -1607.895f, 112.642f)),
+            new WeedZone(2, StateZone.Stage0, SeedType.Aucune, new Vector3(1754.381f, -1605.153f, 112.642f)),
+            new WeedZone(3, StateZone.Stage0, SeedType.Aucune, new Vector3(1754.759f, -1601.272f, 112.642f)),
+            new WeedZone(4, StateZone.Stage0, SeedType.Aucune, new Vector3(1758.905f, -1600.132f, 112.642f)),
+            new WeedZone(5, StateZone.Stage0, SeedType.Aucune, new Vector3(1764.289f, -1598.874f, 112.6521f)),
+            new WeedZone(6, StateZone.Stage0, SeedType.Aucune, new Vector3(1764.699f, -1601.641f, 112.6496f)),
+            new WeedZone(7, StateZone.Stage0, SeedType.Aucune, new Vector3(1758.685f, -1603.076f, 112.6731f)),
+            new WeedZone(8, StateZone.Stage0, SeedType.Aucune, new Vector3(1766.696f, -1608.012f, 112.6725f))
         };
         #endregion
 

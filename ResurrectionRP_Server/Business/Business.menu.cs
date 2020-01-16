@@ -21,7 +21,7 @@ namespace ResurrectionRP_Server.Business
 
             if (Buyable && OnSale && Owner == client.GetSocialClub())
                 menu.Add(new MenuItem("~r~Annuler la mise en vente", "", id: "ID_CancellSell", executeCallback: true));
-            else if (Buyable && OnSale)
+            else if (Buyable && (OnSale || Owner == null))
                 menu.Add(new MenuItem("~r~Acheter le commerce", $"Acheter le commerce pour la somme de ${BusinessPrice}", "ID_Buy", true, rightLabel: $"${BusinessPrice}"));
             else if (Buyable && !OnSale && Owner ==  client.GetSocialClub())
             {

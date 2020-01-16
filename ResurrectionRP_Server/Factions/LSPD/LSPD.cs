@@ -64,9 +64,8 @@ namespace ResurrectionRP_Server.Factions
             ShopLocation = new Vector3(419.9424f, 4809.9f, -60.99793f);
 
             VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Police3, 90000));
-            VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Sheriff2, 300000));
+            VehicleAllowed.Add(new FactionVehicle(1, VehicleModel.Police2, 300000));
             VehicleAllowed.Add(new FactionVehicle(3, VehicleModel.Riot, 250000));
-            VehicleAllowed.Add(new FactionVehicle(2, VehicleModel.Policeb, 200000));
             VehicleAllowed.Add(new FactionVehicle(3, VehicleModel.Maverick, 900000));
             VehicleAllowed.Add(new FactionVehicle(3, VehicleModel.Fbi, 250000));
             VehicleAllowed.Add(new FactionVehicle(3, VehicleModel.Police4, 50000));
@@ -78,31 +77,12 @@ namespace ResurrectionRP_Server.Factions
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Matraque, "Matraque", "Une matraque de marque Théo.", 5, hash: WeaponHash.Nightstick), 3500, 0));
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Pistolet MK2", "", 3, hash: WeaponHash.PistolMk2), 40000, 1));
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Taser, "Taser", "", 3, hash: WeaponHash.StunGun), 30000, 0));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Flare Gun", "", 5, hash: WeaponHash.FlareGun), 20000, 1));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Revolver MK2", "", 4, hash: WeaponHash.RevolverMk2), 50000, 2));
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Assault SMG", "", 10, hash: WeaponHash.AssaultSmg), 125000, 3));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "SMG", "", 10, hash: WeaponHash.AssaultSmg), 100000, 3));
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pump, "Fusil à pompe MK2", "", 10, hash: WeaponHash.PumpShotgun), 75000, 3));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pump, "Assault Pompe", "", 16, hash: WeaponHash.AssaultShotgun), 125000, 3));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pump, "Bull-Pup Shotgun", "", 17, hash: WeaponHash.BullpupShotgun), 110000, 3));
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Carabine, "Carabine", "", 15, hash: WeaponHash.CarbineRifle), 120000, 3));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Carabine, "Special Carabine", "", 15, hash: WeaponHash.SpecialCarbine), 160000, 3));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Carabine, "Sniper Rifle", "", 15, hash: WeaponHash.SniperRifle), 300000, 3));
-
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Combat MG", "", 26, hash: WeaponHash.CombatMg), 350000, 3));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Combat MG MK2", "", 26, hash: WeaponHash.CombatMgMk2), 400000, 3));
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Micro SMG", "", 26, hash: WeaponHash.MicroSmg), 150000, 3));
-            ItemShop.Add(new FactionShopItem(new ClothItem(ItemID.Hats, "Béret Homme", "", new ClothData(106, 3, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 500, 0));
-            ItemShop.Add(new FactionShopItem(new ClothItem(ItemID.Hats, "Béret Femme", "", new ClothData(105, 3, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 500, 0));
-
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "MarksMan Sniper MK2", "", 26, hash: WeaponHash.MarksmanRifleMk2), 250000, 3));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Rocket Launcher", "", 26, hash: WeaponHash.HomingLauncher), 400000, 3));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "RPG", "", 26, hash: WeaponHash.HomingLauncher), 400000, 3));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Grenade Launcher", "", 20, hash: WeaponHash.GrenadeLauncher), 350000, 3));
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Grenade Launcher Smoke", "", 20, hash: WeaponHash.GrenadeLauncherSmoke), 250000, 3));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Grenade", "", 20, hash: WeaponHash.Grenade), 100000, 3));
             ItemShop.Add(new FactionShopItem(new RadioItem(ItemID.Radio, "Talky", "", 1, true, true, false, true, true, 2000, icon: "talky"), 500, 0));
-
             ItemShop.Add(new FactionShopItem(new BagItem(ItemID.Bag, "Backpack", "", new ClothData(45, 0, 0), 40, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"), 500, 0));
 
             #region Portique
@@ -293,47 +273,30 @@ namespace ResurrectionRP_Server.Factions
 
             List<ClothItem> clothItem = null;
 
-            if (client.GetPlayerHandler()?.Character.Gender == 0)
+            if (client.GetPlayerHandler()?.Character.Gender == Sex.Men)
             {
                 clothItem = new List<ClothItem>()
                 {
-                     //new ClothItem(ItemID.Hats, "", "", new ClothData(90, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"),
-                     //new ClothItem(ItemID.Jacket, "", "", new ClothData(220, 0, 0), 0, false, false, false, false, false, 0, classes: "jacket", icon: "jacket"),
-                     //new ClothItem(ItemID.TShirt, "", "", new ClothData(15, 0, 0), 0, false, false, false, false, false, 0, classes: "shirt", icon: "shirt"),
-                     //new ClothItem(ItemID.Pant, "", "", new ClothData(33, 0, 0), 0, false, false, false, false, false, 0, classes: "pants", icon: "pants"),
-                     //new ClothItem(ItemID.Shoes, "", "", new ClothData(24, 0, 0), 0, false, false, false, false, false, 0, classes: "shoes", icon: "shoes"),
-                    //new ClothItem(ItemID.Glove, "", "", new ClothData(4, 0, 0), 0, false, false, false, false, false, 0, classes: "gloves", icon: "gloves")
-
-                     new ClothItem(ItemID.Hats, "", "", new ClothData(106, 3, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"),
-                     new ClothItem(ItemID.Hats, "", "", new ClothData(90, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"),
-                     new ClothItem(ItemID.Jacket, "", "", new ClothData(220, 0, 0), 0, false, false, false, false, false, 0, classes: "jacket", icon: "jacket"),
-                     //new ClothItem(ItemID.TShirt, "", "", new ClothData(15, 0, 0), 0, false, false, false, false, false, 0, classes: "shirt", icon: "shirt"),
-                     new ClothItem(ItemID.Pant, "", "", new ClothData(77, 0, 0), 0, false, false, false, false, false, 0, classes: "pants", icon: "pants"),
-                     new ClothItem(ItemID.Shoes, "", "", new ClothData(25, 0, 0), 0, false, false, false, false, false, 0, classes: "shoes", icon: "shoes"),
-                     //new ClothItem(ItemID.Glove, "", "", new ClothData(4, 0, 0), 0, false, false, false, false, false, 0, classes: "gloves", icon: "gloves"),
-                     new ClothItem(ItemID.Glasses, "", "", new ClothData(2, 0, 0), 0, false, false, false, false, false, 0, classes: "glasses", icon: "glasses"),
-                     new ClothItem(ItemID.Mask, "", "", new ClothData(51, 0, 0), 0, false, false, false, false, false, 0, classes: "mask", icon: "mask"),
-                     new ClothItem(ItemID.Kevlar, "", "", new ClothData(28, 1, 0), 0, false, false, false, false, false, 0, classes: "kevlar", icon: "kevlar"),
+                     new ClothItem(ItemID.Hats, "", "", new ClothData(46, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"),
+                     new ClothItem(ItemID.Jacket, "", "", new ClothData(318, 0, 0), 0, false, false, false, false, false, 0, classes: "jacket", icon: "jacket"),
+                     new ClothItem(ItemID.Pant, "", "", new ClothData(35, 0, 0), 0, false, false, false, false, false, 0, classes: "pants", icon: "pants"),
+                     new ClothItem(ItemID.Shoes, "", "", new ClothData(24, 0, 0), 0, false, false, false, false, false, 0, classes: "shoes", icon: "shoes"),
+                     new ClothItem(ItemID.Kevlar, "", "", new ClothData(28, 9, 0), 0, false, false, false, false, false, 0, classes: "kevlar", icon: "kevlar"),
+                     new ClothItem(ItemID.Necklace, "", "", new ClothData(125, 0, 0), 0, false, false, false, false, false, 0, classes: "necklace", icon: "necklace"),
                 };
             }
             else
             {
                 clothItem = new List<ClothItem>()
                 {
-                    new ClothItem(ItemID.Hats, "", "", new ClothData(105, 3, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"),
-                     new ClothItem(ItemID.Hats, "", "", new ClothData(107, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"),
-                     new ClothItem(ItemID.Hats, "", "", new ClothData(89, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"),
-                     new ClothItem(ItemID.Jacket, "", "", new ClothData(218, 0, 0), 0, false, false, false, false, false, 0, classes: "jacket", icon: "jacket"),
-                     //new ClothItem(ItemID.TShirt, "", "", new ClothData(15, 0, 0), 0, false, false, false, false, false, 0, classes: "shirt", icon: "shirt"),
-                     new ClothItem(ItemID.Pant, "", "", new ClothData(79, 0, 0), 0, false, false, false, false, false, 0, classes: "pants", icon: "pants"),
-                     new ClothItem(ItemID.Shoes, "", "", new ClothData(25, 0, 0), 0, false, false, false, false, false, 0, classes: "shoes", icon: "shoes"),
-                     //new ClothItem(ItemID.Glove, "", "", new ClothData(7, 0, 0), 0, false, false, false, false, false, 0, classes: "gloves", icon: "gloves"),
-                     new ClothItem(ItemID.Glasses, "", "", new ClothData(9, 1, 0), 0, false, false, false, false, false, 0, classes: "glasses", icon: "glasses"),
-                     new ClothItem(ItemID.Mask, "", "", new ClothData(51, 0, 0), 0, false, false, false, false, false, 0, classes: "mask", icon: "mask"),
-                     new ClothItem(ItemID.Kevlar, "", "", new ClothData(30, 1, 0), 0, false, false, false, false, false, 0, classes: "kevlar", icon: "kevlar"),
+                     new ClothItem(ItemID.Hats, "", "", new ClothData(45, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"),
+                     new ClothItem(ItemID.Jacket, "", "", new ClothData(329, 0, 0), 0, false, false, false, false, false, 0, classes: "jacket", icon: "jacket"),
+                     new ClothItem(ItemID.Pant, "", "", new ClothData(34, 0, 0), 0, false, false, false, false, false, 0, classes: "pants", icon: "pants"),
+                     new ClothItem(ItemID.Shoes, "", "", new ClothData(24, 0, 0), 0, false, false, false, false, false, 0, classes: "shoes", icon: "shoes"),
+                     new ClothItem(ItemID.Kevlar, "", "", new ClothData(28, 9, 0), 0, false, false, false, false, false, 0, classes: "kevlar", icon: "kevlar"),
+                     new ClothItem(ItemID.Necklace, "", "", new ClothData(96, 0, 0), 0, false, false, false, false, false, 0, classes: "necklace", icon: "necklace"),
                 };
             }
-
 
             for (int i = 0; i < clothItem.Count; i++)
             {

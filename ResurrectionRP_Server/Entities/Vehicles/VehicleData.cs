@@ -659,6 +659,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             // BUG v792 : NeonState and NeonColor not working properly
             if (NeonColor != null && NeonColor != Color.Empty)
                 Vehicle.NeonColor = NeonColor;
+
             Vehicle.SetNeonActive(NeonState.Item1, NeonState.Item2, NeonState.Item3, NeonState.Item4);
             Vehicle.SetSyncedMetaData("NeonColor", NeonColor.ToArgb());
             Vehicle.SetSyncedMetaData("NeonState", NeonState.Item1);
@@ -668,6 +669,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             Vehicle.EngineHealth = EngineHealth;
             Vehicle.BodyHealth = BodyHealth;
             Vehicle.RadioStation = RadioStation;
+            Vehicle.ManualEngineControl = true;
 
             if (Wheels == null)
             {

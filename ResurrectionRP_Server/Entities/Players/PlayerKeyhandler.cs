@@ -147,6 +147,9 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.E:
+                    if (client.IsInVehicle)
+                        return;
+
                     if (ph.HasOpenMenu())
                         return;
 

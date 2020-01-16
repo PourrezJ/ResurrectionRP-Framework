@@ -32,7 +32,7 @@ namespace ResurrectionRP_Server.Factions
         public override Faction Init()
         {
             ServiceLocation = new Vector3(299.1165f, -598.37805f, 43.282104f);
-            ShopLocation = new Vector3(312.02637f, -597.3099f, 43.282104f);
+            ShopLocation = new Vector3(312.02637f, -597.3099f, 42.282104f);
             ParkingLocation = new Location(new Vector3(341.1377f, -559.7379f, 28.26499f), new Vector3(-0.0811837f, 0.02818833f, 339.2909f));
             HeliportLocation = new Location(new Vector3(351.8859f, -587.7157f, 74.49007f), new Vector3(0.183099f, 0.5883495f, 252.0849f));
 
@@ -80,7 +80,7 @@ namespace ResurrectionRP_Server.Factions
 
             Teleport.Teleport.CreateTeleport(new Location(new Vector3(331.66153f, -595.54285f, 43.282104f), new Vector3(0f, 0f, -1.1378998f)), etages, new Vector3(1, 1, 0.2f), menutitle: "Ascenseur");
 
-            Entities.Peds.Ped npcmedic = Entities.Peds.Ped.CreateNPC(PedModel.Scrubs01SFY, new Vector3(308.37363f, -595.4901f, 43.282104f), 3.762666f);
+            Entities.Peds.Ped npcmedic = Entities.Peds.Ped.CreateNPC(PedModel.Scrubs01SFY, new Vector3(311.6044f, -594.2769f, 43.282104f), 0.3957912f);
             npcmedic.NpcInteractCallBack = OnNPCInteract;
 
             BlipsManager.CreateBlip("Clinique Médicale", new Vector3(-264.5344f, 6314.32f, 32.4364f), 57, 61, 1f);

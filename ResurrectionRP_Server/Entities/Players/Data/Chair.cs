@@ -120,7 +120,15 @@ namespace ResurrectionRP_Server.Entities.Players.Data
             { "v_tre_sofa_mess_b_s", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
             { "v_tre_sofa_mess_c_s", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
             { "prop_roller_car_01", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
-            { "prop_roller_car_02", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}}
+            { "prop_roller_car_02", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
+
+            { "ex_mp_h_stn_chairarm_24", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
+            { "v_med_cor_medstool", new Chair(){ task = "PROP_HUMAN_SEAT_BENCH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
+
+            //{ "gabz_pillbox_diagnostics_bed_03", new Chair(){ task = "CODE_HUMAN_MEDIC_TIME_OF_DEATH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
+            //{ "gabz_pillbox_diagnostics_bed_02", new Chair(){ task = "CODE_HUMAN_MEDIC_TIME_OF_DEATH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
+            //{ "v_med_emptybed", new Chair(){ task = "CODE_HUMAN_MEDIC_TIME_OF_DEATH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
+            //{ "v_med_bed1", new Chair(){ task = "CODE_HUMAN_MEDIC_TIME_OF_DEATH", x = 0.0, y = 0.0, z = 0.5, h = 180.0}},
         };
         #endregion
 

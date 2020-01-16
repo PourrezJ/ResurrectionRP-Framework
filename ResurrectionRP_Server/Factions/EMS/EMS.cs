@@ -99,59 +99,6 @@ namespace ResurrectionRP_Server.Factions
             if (!client.Exists)
                 return;
 
-            var socialClub = client.GetSocialClub();
-
-            if (client.GetPlayerHandler()?.Character.Gender == 0)
-            {
-                switch (rang)
-                {
-                    case 0:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(106, 2, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 1:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(106, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 2:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(106, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 3:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(106, 1, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 4:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(106, 1, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-                }
-            }
-            else
-            {
-                switch (FactionPlayerList[socialClub].Rang)
-                {
-                    case 0:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(105, 2, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 1:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(105, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 2:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(105, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 3:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(105, 1, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 4:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(105, 1, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-                }
-            }
-
             base.OnPlayerPromote(client, rang);
         }
 
@@ -169,75 +116,29 @@ namespace ResurrectionRP_Server.Factions
 
             List<ClothItem> clothItem = null;
 
-            if (client.GetPlayerHandler()?.Character.Gender == 0)
+            if (ph.Character.Gender == Sex.Men)
             {
                 clothItem = new List<ClothItem>()
                 {
-                     new ClothItem(ItemID.Hats, "", "", new ClothData(59, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"),
-                     new ClothItem(ItemID.Jacket, "", "", new ClothData(116, 0, 0), 0, false, false, false, false, false, 0, classes: "jacket", icon: "jacket"),
-                     new ClothItem(ItemID.Pant, "", "", new ClothData(33, 0, 0), 0, false, false, false, false, false, 0, classes: "pants", icon: "pants"),
+                     //new ClothItem(ItemID.Hats, "", "", new ClothData(59, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"),
+                     new ClothItem(ItemID.Jacket, "", "", new ClothData(250, 1, 0), 0, false, false, false, false, false, 0, classes: "jacket", icon: "jacket"),
+                     new ClothItem(ItemID.Pant, "", "", new ClothData(96, 1, 0), 0, false, false, false, false, false, 0, classes: "pants", icon: "pants"),
                      new ClothItem(ItemID.Shoes, "", "", new ClothData(24, 0, 0), 0, false, false, false, false, false, 0, classes: "shoes", icon: "shoes"),
-                     new ClothItem(ItemID.Mask, "", "", new ClothData(121, 0, 0), 0, false, false, false, false, false, 0, classes: "mask", icon: "mask"),
+                     //new ClothItem(ItemID.Mask, "", "", new ClothData(121, 0, 0), 0, false, false, false, false, false, 0, classes: "mask", icon: "mask"),
                      new ClothItem(ItemID.Necklace, "", "", new ClothData(126, 0, 0), 0, false, false, false, false, false, 0, classes: "necklace", icon: "necklace")
                 };
-
-                switch (FactionPlayerList[socialClub].Rang)
-                {
-                    case 0:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(106, 2, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 1:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(106, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 2:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(106, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 3:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(106, 1, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 4:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(106, 1, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-                }
             }
             else
             {
                 clothItem = new List<ClothItem>()
                 {
-                     new ClothItem(ItemID.Hats, "", "", new ClothData(59, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"),
-                     new ClothItem(ItemID.Jacket, "", "", new ClothData(108, 0, 0), 0, false, false, false, false, false, 0, classes: "jacket", icon: "jacket"),
-                     new ClothItem(ItemID.Pant, "", "", new ClothData(30, 0, 0), 0, false, false, false, false, false, 0, classes: "pants", icon: "pants"),
+                     //new ClothItem(ItemID.Hats, "", "", new ClothData(59, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"),
+                     new ClothItem(ItemID.Jacket, "", "", new ClothData(258, 1, 0), 0, false, false, false, false, false, 0, classes: "jacket", icon: "jacket"),
+                     new ClothItem(ItemID.Pant, "", "", new ClothData(99, 1, 0), 0, false, false, false, false, false, 0, classes: "pants", icon: "pants"),
                      new ClothItem(ItemID.Shoes, "", "", new ClothData(24, 0, 0), 0, false, false, false, false, false, 0, classes: "shoes", icon: "shoes"),
-                     new ClothItem(ItemID.Mask, "", "", new ClothData(121, 0, 0), 0, false, false, false, false, false, 0, classes: "mask", icon: "mask"),
+                    // new ClothItem(ItemID.Mask, "", "", new ClothData(121, 0, 0), 0, false, false, false, false, false, 0, classes: "mask", icon: "mask"),
                      new ClothItem(ItemID.Necklace, "", "", new ClothData(96, 0, 0), 0, false, false, false, false, false, 0, classes: "necklace", icon: "necklace")
                 };
-
-                switch (FactionPlayerList[socialClub].Rang)
-                {
-                    case 0:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(105, 2, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 1:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(105, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 2:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(105, 0, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 3:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(105, 1, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-
-                    case 4:
-                        FactionPlayerList[socialClub].Inventory.AddItem(new ClothItem(ItemID.Hats, "", "", new ClothData(105, 1, 0), 0, false, false, false, false, false, 0, classes: "cap", icon: "cap"), 1);
-                        break;
-                }
             }
 
             for (int i = 0; i < clothItem.Count; i++)

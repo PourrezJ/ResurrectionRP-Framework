@@ -234,11 +234,11 @@ namespace ResurrectionRP_Server.Factions
         {
             switch (client.GetPlayerHandler().Character.Gender)
             {
-                case 0: // Homme
-                    client.SetCloth(Models.ClothSlot.Undershirt, 8, 36, 0);
+                case Sex.Men: // Homme
+                    client.SetCloth(ClothSlot.Undershirt, 8, 36, 0);
                     break;
-                case 1: // Femme
-                    client.SetCloth(Models.ClothSlot.Undershirt, 8, 36, 0);
+                case Sex.Female: // Femme
+                    client.SetCloth(ClothSlot.Undershirt, 8, 36, 0);
                     break;
                 default: // Ped?
                     client.SendNotificationError("Vous ne pouvez pas avoir de tenue avec ce personnage");

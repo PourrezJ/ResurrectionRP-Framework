@@ -151,7 +151,7 @@ namespace ResurrectionRP_Server.Business.Barber
             if (ClientSelected == null)
                 return;
 
-            if (ClientSelected.Character.Gender == 1) // if is a girl
+            if (ClientSelected.Character.Gender == Sex.Female) // if is a girl
             {
                 client.SendNotificationError("Les femmes à barbe sont interdites dans le pays.");
                 return;

@@ -44,10 +44,16 @@ namespace ResurrectionRP_Server.Models
         public int SecondaryColor = 0;
     }
 
+    public enum Sex : int
+    {
+        Men = 0,
+        Female = 1
+    }
+
     public class PlayerCustomization
     {
         // Player
-        public int Gender;
+        public Sex Gender;
 
         // Parents
         public HeadBlend Parents;

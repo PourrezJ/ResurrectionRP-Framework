@@ -50,45 +50,42 @@ namespace ResurrectionRP_Server.Illegal
             }
         }
 
-        public static async Task InitAll()
+        public static void InitAll()
         {
             Alt.Server.LogDebug("--- Start loading all illegal business in database ---");
 
-            var _illagelBusinessesList = await Database.MongoDB.GetCollectionSafe<IllegalSystem>("illegal").AsQueryable().ToListAsync();
-            await AltAsync.Do(() =>
+            var _illagelBusinessesList = Database.MongoDB.GetCollectionSafe<IllegalSystem>("illegal").AsQueryable();
+            foreach (var _businesses in _illagelBusinessesList)
             {
-                foreach (var _businesses in _illagelBusinessesList)
+                if (_businesses.GetType() == typeof(WeedBusiness))
                 {
-                    if (_businesses.GetType() == typeof(WeedBusiness))
-                    {
-                        WeedBusiness = (WeedBusiness)_businesses;
-                        WeedBusiness?.Load();
-                    }
-                    else if (_businesses.GetType() == typeof(BlackMarket))
-                    {
-                        BlackMarket = (BlackMarket)_businesses;
-                        BlackMarket?.Load();
-                    }
-
-                    IllegalList.Add(_businesses);
+                    WeedBusiness = (WeedBusiness)_businesses;
+                    WeedBusiness?.Load();
+                }
+                else if (_businesses.GetType() == typeof(BlackMarket))
+                {
+                    BlackMarket = (BlackMarket)_businesses;
+                    BlackMarket?.Load();
                 }
 
-                if (WeedBusiness == null)
-                {
-                    WeedBusiness = new WeedBusiness();
-                    WeedBusiness.Load();
-                    Task.Run(async () => await WeedBusiness.Insert());
-                }
+                IllegalList.Add(_businesses);
+            }
 
-                if (BlackMarket == null)
-                {
-                    BlackMarket = new BlackMarket();
-                    BlackMarket.Load();
-                    Task.Run(async () => await BlackMarket.Insert());
-                }
-            });
+            if (WeedBusiness == null)
+            {
+                WeedBusiness = new WeedBusiness();
+                WeedBusiness.Load();
+                Task.Run(async () => await WeedBusiness.Insert());
+            }
 
-            Alt.Server.LogDebug($"--- Finish loading all illegal businesses in database: {_illagelBusinessesList.Count} ---");
+            if (BlackMarket == null)
+            {
+                BlackMarket = new BlackMarket();
+                BlackMarket.Load();
+                Task.Run(async () => await BlackMarket.Insert());
+            }
+
+            Alt.Server.LogDebug($"--- Finish loading all illegal businesses in database: {_illagelBusinessesList.Count()} ---");
 
             Utils.Utils.SetInterval(async () =>
             {

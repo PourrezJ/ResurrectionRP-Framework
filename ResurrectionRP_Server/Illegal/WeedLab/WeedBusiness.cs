@@ -27,6 +27,17 @@ namespace ResurrectionRP_Server.Illegal
         private Location InsideBat = new Location(new Vector3(1744.833f, -1600.628f, 112.639f), new Vector3(0, 0, 85.58551f));
         private Timer Timer = new Timer(5000);
 
+        public static Location[] LocationLab = new Location[]
+        {
+            new Location(new Vector3(904.022f,3560.044f,33.795654f), new Vector3(0f,0f,-0.1978956f)),
+            new Location(new Vector3(1395.389f,3623.6177f,35.00879f), new Vector3(0f,0f,-0.24736951f)),
+            new Location(new Vector3(2310.435f,4884.8174f,41.799316f), new Vector3(0f,0f,2.473695f)),
+            new Location(new Vector3(-55.186813f,6392.5845f,31.487183f), new Vector3(0f,0f,-0.7915824f)),
+            new Location(new Vector3(144.13187f,-131.20879f,54.82422f), new Vector3(0f,0f,-2.6715908f)),
+            new Location(new Vector3(399.77142f,66.72527f,97.97656f), new Vector3(0f,0f,-2.7210646f)),
+            new Location(new Vector3(1961.0637f,5184.8438f,47.932617f), new Vector3(0f,0f,-1.3357954f)),
+        };
+
         public WeedZone[] WeedZoneList = new WeedZone[9]
         {
             new WeedZone(0, StateZone.Stage0, SeedType.Aucune, new Vector3(1757.966f, -1606.708f, 112.642f)),
@@ -67,7 +78,7 @@ namespace ResurrectionRP_Server.Illegal
             DealerPedHash = PedModel.Hippie01;
 
             if (LabEnter == null)
-                LabEnter = new Location(new Vector3(), new Vector3());
+                LabEnter = LocationLab[Utils.Utils.RandomNumber(LocationLab.Length)];
 
 
             if (GameMode.IsDebug)
@@ -77,13 +88,17 @@ namespace ResurrectionRP_Server.Illegal
 
             DealerLocations = new Location[]
             {
-                new Location(new Vector3(-1121.171f, 2712.382f, 18.86371f), new Vector3(0, 0, 33.02702f)),
-                new Location(new Vector3(1525.506f, 1709.852f, 110.0081f), new Vector3(0, 0, 350.3264f)),
-                new Location(new Vector3(2484.941f, 3718.431f, 43.4684f), new Vector3(0, 0, 224.6393f)),
-                new Location(new Vector3(86.1665f, 4562.606f, 90.50889f), new Vector3(0, 0, 49.5118f)),
-                new Location(new Vector3(-504.0669f, -1632.734f, 17.7978f), new Vector3(0, 0, 248.5665f)),
-                new Location(new Vector3(-492.0018f, -1029.593f, 52.47616f), new Vector3(0, 0, 0.9144158f)),
-                new Location(new Vector3(28.57924f, -637.2659f, 7.508431f), new Vector3(0, 0, 5.610692f))
+                new Location(new Vector3(-112.82637f,-994.61536f,54.25122f), new Vector3(0f,0f,-2.7210646f)),
+                new Location(new Vector3(-286.9978f,6181.3584f,31.487183f), new Vector3(0f,0f,-2.424221f)),
+                new Location(new Vector3(1447.6615f,3749.3801f,31.925293f), new Vector3(0f,0f,-1.1873736f)),
+                new Location(new Vector3(-8.3076935f,6487.5693f,31.504028f), new Vector3(0f,0f,2.7210646f)),
+                new Location(new Vector3(1433.0637f,1499.5912f,113.76489f), new Vector3(0f,0f,-1.7315865f)),
+                new Location(new Vector3(-864.8571f,-1095.9297f,2.1516113f), new Vector3(0f,0f,0.0989478f)),
+                new Location(new Vector3(1471.2263f,6551.512f,14.013916f), new Vector3(0f,0f,0.7421085f)),
+                new Location(new Vector3(1639.5824f,4879.4507f,42.13623f), new Vector3(0f,0f,-1.6821126f)),
+                new Location(new Vector3(2327.4592f,2569.8594f,46.668823f), new Vector3(0f,0f,1.3357954f)),
+                new Location(new Vector3(2818.4438f,-741.33624f,2.623413f), new Vector3(0f,0f,1.6326387f))
+
             };
 
             IllegalPrice = new Dictionary<ItemID, double>()

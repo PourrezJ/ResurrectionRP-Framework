@@ -15,7 +15,7 @@ namespace ResurrectionRP_Server.Illegal
         public int CurrentLocation;
         private readonly Location[] _pnjPos = new Location[2]
         {
-            new Location(new Vector3(-595.1341f,-1653.0593f,20.619019f), new Vector3(0f,0f,-2.7210646f)),
+            new Location(new Vector3(-595.9385f,-1652.6901f,20.619019f), new Vector3(0f,0f,-2.6715908f)),
             new Location(new Vector3(2548.391f,2581.9385f,37.92383f), new Vector3(0f,0f,-1.8800083f))
         };
 
@@ -35,8 +35,6 @@ namespace ResurrectionRP_Server.Illegal
 
         public override void Load()
         {
-            Utils.Utils.CheckThread();
-
             if (NextRefreshMarketPos < DateTime.Now || NextRefreshMarketPos == new DateTime())
             {
                 NextRefreshMarketPos = DateTime.UtcNow.AddDays(7);

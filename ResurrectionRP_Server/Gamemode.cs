@@ -161,13 +161,13 @@ namespace ResurrectionRP_Server
             Society.SocietyManager.LoadAllSociety();
             //JobsManager.Init();
             HandlingManager.LoadAllHandling();
+            IllegalManager.InitAll();
 
             Task.Run(async () =>
             {
                 try
                 {
                     await Loader.CarParkLoader.LoadAllCarParks();
-                    await IllegalManager.InitAll();
                     await Discord.Init();
 
                     Alt.Server.LogColored("~g~Serveur chargé!");

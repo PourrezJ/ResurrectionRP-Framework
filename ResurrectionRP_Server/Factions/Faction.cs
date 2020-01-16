@@ -302,7 +302,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         FactionPlayerList[socialClub].LastPayCheck = DateTime.Now.AddMinutes(PayCheckMinutes);
                         ph.BankAccount.AddMoney(salaire, $"Salaire {FactionName}");
-                        ph.Client.SendNotification($"Vous avez touché votre salaire ~g~${salaire}~w~.");
+                        ph.Client.SendNotification($"Vous avez touché votre salaire ${salaire}.");
                     }
                     else
                         ph.Client.SendNotificationError("Vous n'avez pas reçu votre salaire, les caisses sont vide!");

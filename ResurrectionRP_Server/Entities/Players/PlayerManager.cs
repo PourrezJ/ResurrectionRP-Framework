@@ -50,12 +50,12 @@ namespace ResurrectionRP_Server.Entities.Players
             new Society.Commands();
 
             
-            AltAsync.OnClient<IPlayer>("LogPlayer", LogPlayer);
+            
             AltAsync.OnClient<IPlayer, string, string>("MakePlayer", MakePlayer);
             AltAsync.OnClient <IPlayer, string>("SendLogin", SendLogin);
             
-            AltAsync.OnClient<IPlayer, string, string>("Events_PlayerJoin", Events_PlayerJoin);
-
+            Alt.OnClient<IPlayer, string, string>("Events_PlayerJoin", Events_PlayerJoin);
+            Alt.OnClient<IPlayer>("LogPlayer", LogPlayer);
             Alt.OnClient<IPlayer>("IWantToDie", IWantToDie);
             Alt.OnClient("Player_SetInComa", (IPlayer client) => client.GetPlayerHandler().IsInComa = true); // peut être mieux?
             Alt.OnClient("ExitGame", (IPlayer client) => client.Kick("Exit"));
@@ -179,9 +179,9 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        public static async void Events_PlayerJoin(IPlayer player, string socialclub, string discordData)
+        public static void Events_PlayerJoin(IPlayer player, string socialclub, string discordData)
         {
-            if (!await player.ExistsAsync())
+            if (!player.Exists)
                 return;
 
             if (GameMode.ServerLock)
@@ -193,14 +193,15 @@ namespace ResurrectionRP_Server.Entities.Players
                 }
             }
 
-            while (!GameMode.Instance.ServerLoaded)
-                await Task.Delay(100);
-
+            if (string.IsNullOrEmpty(socialclub))
+            {
+                player.SendNotificationError("Vous avez un problème avec votre socialclub", 60000);
+                return;
+            }
 
             if (discordData == "null")
             {
-                player.SendNotificationError("Vous devez être connecter a Discord, relancez votre jeu.", 60000);
-                
+                player.SendNotificationError("Vous devez être connecter a Discord, relancez votre jeu.", 60000);              
                 return;
             }
 
@@ -224,32 +225,25 @@ namespace ResurrectionRP_Server.Entities.Players
             if (socialclub == "UNKNOWN")
             {
                 Alt.Server.LogInfo($"({playerIp}) kick pour problème de social club.");
-                await player.KickAsync("Vous avez un problème avec votre social club.");
+                player.Kick("Vous avez un problème avec votre social club.");
                 return;
             }
 
             if (IsBan(socialclub))
             {
                 Alt.Server.LogInfo($"({playerIp}) est banni.");
-                await player.KickAsync("Vous êtes banni!");
+                player.Kick("Vous êtes banni!");
                 return;
             }
 
-            lock (player)
-            {
-                if (!player.Exists)
-                    return;
+            playerIp = player.Ip;
 
-                playerIp = player.Ip;
-
-                player.Model = (uint)PedModel.FreemodeMale01;
-                player.Spawn(new Position(-1072.886f, -2729.607f, 0.8148939f));
-                player.Dimension = Dimension++;
-            }
+            player.Model = (uint)PedModel.FreemodeMale01;
+            player.Spawn(new Position(-1072.886f, -2729.607f, 0.8148939f));
+            player.Dimension = Dimension++;
 
             player.SetData("SocialClub", socialclub);
-
-            await ConnectPlayer(player);
+            ConnectPlayer(player);
 
 
             /*
@@ -303,9 +297,9 @@ namespace ResurrectionRP_Server.Entities.Players
         #endregion
 
         #region RemoteEvents
-        private static async void MakePlayer(IPlayer client, string charData, string identite)
+        private static void MakePlayer(IPlayer client, string charData, string identite)
         {
-            if (!await client.ExistsAsync())
+            if (!client.Exists)
                 return;
 
             PlayerHandler ph = null;
@@ -317,15 +311,21 @@ namespace ResurrectionRP_Server.Entities.Players
                 ph.Identite = JsonConvert.DeserializeObject<Models.Identite>(identite, new JsonSerializerSettings { DateParseHandling = DateParseHandling.DateTime } );
             } catch ( Exception ex) {
                 Alt.Server.LogWarning("Character Creator Error | " + ex.ToString());
-                await client.KickAsync("Character Creator Error");
+                client.Kick("Character Creator Error");
             }
 
             if (ph == null)
                 return;
 
-            await client.EmitAsync("FadeOut", 0);
-            await Database.MongoDB.Insert("players", ph);
-            await ph.LoadPlayer(client, true);
+            if(ph.PID == null)
+            {
+                client.SendNotificationError("Vous avez un problème avec votre social-club.", 60000);
+                return;
+            }
+
+            client.Emit("FadeOut", 0);
+            Task.Run(async () => await Database.MongoDB.Insert("players", ph));
+            ph.LoadPlayer(client, true);
         }
 
         private static async void SendLogin(IPlayer client, string datastr)
@@ -363,10 +363,10 @@ namespace ResurrectionRP_Server.Entities.Players
             if (!client.Exists)
                 return;
 
-            await ConnectPlayer(client);
+            ConnectPlayer(client);
         }
 
-        public static async Task ConnectPlayer(IPlayer client)
+        public static void ConnectPlayer(IPlayer client)
         {
             ulong socialClubId = 0;
 
@@ -374,18 +374,21 @@ namespace ResurrectionRP_Server.Entities.Players
                 socialClubId = client.SocialClubId;
             
             if (socialClubId == 0)
-                await client.KickAsync("Vous n'êtes pas connecté correctement, redémarrez.");
-            
-            if (await client.PlayerHandlerExist())
+                client.Kick("Vous n'êtes pas connecté correctement, redémarrez.");
+
+            Task.Run(async () =>
             {
-                await client.EmitAsync("FadeOut",0);
-                client.GetData("SocialClub", out string social);
-                PlayerHandler player = await GetPlayerHandlerDatabase(social);
-                player.LastUpdate = DateTime.Now;
-                await player.LoadPlayer(client);
-            }
-            else
-                await client.EmitAsync("OpenCreator");
+                if (await client.PlayerHandlerExist())
+                {
+                    await client.EmitAsync("FadeOut", 0);
+                    client.GetData("SocialClub", out string social);
+                    PlayerHandler player = await GetPlayerHandlerDatabase(social);
+                    player.LastUpdate = DateTime.Now;
+                    await AltAsync.Do(()=> player.LoadPlayer(client));
+                }
+                else
+                    await client.EmitAsync("OpenCreator");
+            });
         }
 
         #endregion

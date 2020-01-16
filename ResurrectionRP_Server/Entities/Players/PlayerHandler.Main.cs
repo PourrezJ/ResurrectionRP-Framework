@@ -172,12 +172,11 @@ namespace ResurrectionRP_Server.Entities.Players
             Client = client;
             DiscordID = ulong.Parse(Discord.GetDiscordData(client).id);
 
-            AltAsync.Do(() =>
+            if (client.Exists)
             {
-                if (client.Exists)
-                   client.GetData("SocialClub", out string PID);
-                   this.PID = PID;
-            });
+                client.GetData("SocialClub", out string pid);
+                PID = pid;
+            }
         }
 
         #endregion
@@ -185,9 +184,9 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Methods
 
         #region Load
-        public async Task LoadPlayer(IPlayer client, bool firstspawn = false)
+        public void LoadPlayer(IPlayer client, bool firstspawn = false)
         {
-            await client.EmitAsync("FadeOut", 500);
+            client.Emit("FadeOut", 500);
             Client = client;
             FirstSpawn = firstspawn;
             client.SetData("PlayerHandler", this);
@@ -200,8 +199,7 @@ namespace ResurrectionRP_Server.Entities.Players
             if (discordID != DiscordID)
             {
                 client.SendNotificationError("Vous n'utilisez pas le compte discord lié au serveur.", 60000);
-                await Task.Delay(60000);
-                await client.KickAsync("Vous n'utilisez pas le compte discord lié au serveur.");
+                client.Kick("Vous n'utilisez pas le compte discord lié au serveur.");
                 return;
             }
 
@@ -254,68 +252,65 @@ namespace ResurrectionRP_Server.Entities.Players
                 else if (Discord.IsAnimator(discordUser.SocketGuildUser))
                     StaffRank = StaffRank.Animator;
 
-                //TrainManager.OnPlayerConnected(client);
+                TrainManager.OnPlayerConnected(client);
 
-                await AltAsync.Do( () =>
+                IP = Client.Ip;
+                IsOnline = true;
+
+                if (Client.Model != ((Character.Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01))
+                    Client.Model = (Character.Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01;
+
+                Alt.Server.LogInfo($"[PlayerHandler.LoadPlayer()] {PID} : Init Player hunger ({Hunger}) thirst({Thirst})");
+                Client.Emit
+                (
+                    Events.PlayerInitialised,
+                    (int)StaffRank,
+                    Identite.Name,
+                    Convert.ToSingle(Money),
+                    Thirst,
+                    Hunger,
+                    JsonConvert.SerializeObject(GameMode.Instance.Time),
+                    Weather.WeatherManager.Actual_weather.ToString(),
+                    Weather.WeatherManager.Wind,
+                    Weather.WeatherManager.WindDirection,
+                    GameMode.IsDebug,
+                    Location.Pos.ConvertToVector3Serialized()
+                );
+
+                Client.Spawn(Location.Pos, 0);
+
+                Character.ApplyCharacter(Client);
+                Client.Dimension = GameMode.GlobalDimension;
+
+                if (Health <= 100)
                 {
-                    IP = Client.Ip;
-                    IsOnline = true;
+                    Client.Health = 0;
+                    Client.Emit("ONU_PlayerDeath", WeaponHash.AdvancedRifle);
 
-                    if (Client.Model != ((Character.Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01))
-                        Client.Model = (Character.Gender == 0) ? (uint)AltV.Net.Enums.PedModel.FreemodeMale01 : (uint)AltV.Net.Enums.PedModel.FreemodeFemale01;
+                    PlayerManager.DeadPlayers.Add(new DeadPlayer(Client, null, (uint)WeaponHash.AdvancedRifle));
+                }
 
-                    Alt.Server.LogInfo($"[PlayerHandler.LoadPlayer()] {PID} : Init Player hunger ({Hunger}) thirst({Thirst})");
-                    Client.Emit
-                    (
-                        Events.PlayerInitialised,
-                        (int)StaffRank,
-                        Identite.Name,
-                        Convert.ToSingle(Money),
-                        Thirst,
-                        Hunger,
-                        JsonConvert.SerializeObject(GameMode.Instance.Time),
-                        Weather.WeatherManager.Actual_weather.ToString(),
-                        Weather.WeatherManager.Wind,
-                        Weather.WeatherManager.WindDirection,
-                        GameMode.IsDebug,
-                        Location.Pos.ConvertToVector3Serialized()
-                    );
+                Client.SetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, Voice.CreateTeamSpeakName());
+                Client.SetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, "Parler");
 
-                    Client.Spawn(Location.Pos, 0);
+                Client.SetSyncedMetaData("WalkingStyle", PlayerSync.WalkingAnim);
+                Client.SetSyncedMetaData("FacialAnim", PlayerSync.MoodAnim);
+                Client.SetSyncedMetaData("Crounch", PlayerSync.Crounch);
 
-                    Character.ApplyCharacter(Client);
-                    Client.Dimension = GameMode.GlobalDimension;
+                Client.Emit(SaltyShared.Event.Voice_Initialize, Voice.ServerUniqueIdentifier, Voice.RequiredUpdateBranch, Voice.MinimumPluginVersion, Voice.SoundPack, Voice.IngameChannel, Voice.IngameChannelPassword);
+                Utils.Utils.Delay(1000, () => Client.Emit("FadeIn", 3000));
 
-                    if (Health <= 100)
-                    {
-                        Client.Health = 0;
-                        Client.Emit("ONU_PlayerDeath", WeaponHash.AdvancedRifle);
+                UpdateClothing();
+                if (PlayerSync.IsCuff)
+                    SetCuff(true);
 
-                        PlayerManager.DeadPlayers.Add(new DeadPlayer(Client, null, (uint)WeaponHash.AdvancedRifle));
-                    }
+                Streamer.Streamer.LoadStreamPlayer(client);
+                Door.OnPlayerConnected(client);
+                Houses.HouseManager.OnPlayerConnected(client);
+                Illegal.IllegalManager.OnPlayerConnected(client);
+                Factions.FactionManager.OnPlayerConnected(client);
 
-                    Client.SetSyncedMetaData(SaltyShared.SharedData.Voice_TeamSpeakName, Voice.CreateTeamSpeakName());
-                    Client.SetSyncedMetaData(SaltyShared.SharedData.Voice_VoiceRange, "Parler");
-
-                    Client.SetSyncedMetaData("WalkingStyle", PlayerSync.WalkingAnim);
-                    Client.SetSyncedMetaData("FacialAnim", PlayerSync.MoodAnim);
-                    Client.SetSyncedMetaData("Crounch", PlayerSync.Crounch);
-
-                    Client.Emit(SaltyShared.Event.Voice_Initialize, Voice.ServerUniqueIdentifier, Voice.RequiredUpdateBranch, Voice.MinimumPluginVersion, Voice.SoundPack, Voice.IngameChannel, Voice.IngameChannelPassword);
-                    Utils.Utils.Delay(1000, () => Client.Emit("FadeIn", 3000));
-
-                    UpdateClothing();
-                    if (PlayerSync.IsCuff)
-                        SetCuff(true);
-
-                    Streamer.Streamer.LoadStreamPlayer(client);
-                    Door.OnPlayerConnected(client);
-                    Houses.HouseManager.OnPlayerConnected(client);
-                    Illegal.IllegalManager.OnPlayerConnected(client);
-                    Factions.FactionManager.OnPlayerConnected(client); 
-                });
-                
-                await Task.Delay(600);
+                //await Task.Delay(600);
 
                 if (Alcohol > 0)
                     AddAlcolhol(0);
@@ -331,7 +326,7 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 client.SendNotificationError("Erreur avec votre personnage.");
                 //await client.FadeIn(0);
-                await client.KickAsync("Une erreur s'est produite");
+                client.Kick("Une erreur s'est produite");
             }
         }
 
@@ -456,7 +451,8 @@ namespace ResurrectionRP_Server.Entities.Players
         #region Inventory
         public void UpdateClothing()
         {
-            Clothing = new Clothings(Client);
+            if (Clothing == null)
+                Clothing = new Clothings(Client);
 
             for (int i = 0; i < OutfitInventory.Slots.Length; i++)
             {

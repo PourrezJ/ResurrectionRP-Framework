@@ -26,9 +26,6 @@ namespace ResurrectionRP_Server.Entities.Worlds
 
         public static void OnPlayerConnected(IPlayer player)
         {
-            while (!TrainLoaded)
-                Task.Delay(20);
-
             // On envoi au joueur la liste des trains
             player.EmitLocked("LoadsAllTrains", JsonConvert.SerializeObject(TrainsList));
 
@@ -100,7 +97,6 @@ namespace ResurrectionRP_Server.Entities.Worlds
         public static void TrainAttribute(IPlayer player, Train train)
         {
             train.Owner = player;
-            Console.WriteLine($"Train Manager: attribution du train ID: {train.NetworkID} à {player.GetSocialClub()}");
             player.EmitLocked("Train_OwnUpdate", train.NetworkID, true);
         }
     }

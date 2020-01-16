@@ -160,16 +160,6 @@ namespace ResurrectionRP_Server.Entities.Players
                         return;
                     }
 
-                    PlayerHandler distantPh = null;
-                    if (playerDistant == null && vehicle == null)
-                        distantPh = PlayerManager.GetPlayersList().Find(p => p.Location.Pos.DistanceTo(raycastData.pos) < Globals.MAX_INTERACTION_DISTANCE);
-
-                    if (playerDistant != null || distantPh != null && distantPh != ph)
-                    {
-                        ph.OpenXtremPlayer(playerDistant ?? distantPh.Client);
-                        return;
-                    }
-
                     Door door = Door.DoorList.Find(p => p.Position.DistanceTo2D(raycastData.pos) <= 1 && p.Hash == raycastData.entityHash && raycastData.isHit);
 
                     if (door != null)
@@ -177,6 +167,16 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (raycastData.entityType == 1)
                     {
+                        PlayerHandler distantPh = null;
+                        if (playerDistant == null && vehicle == null)
+                            distantPh = PlayerManager.GetPlayersList().Find(p => p.Location.Pos.DistanceTo(raycastData.pos) < Globals.MAX_INTERACTION_DISTANCE);
+
+                        if (playerDistant != null || distantPh != null && distantPh != ph)
+                        {
+                            ph.OpenXtremPlayer(playerDistant ?? distantPh.Client);
+                            return;
+                        }
+
                         if (pnj == null)
                             return;
 
@@ -212,6 +212,25 @@ namespace ResurrectionRP_Server.Entities.Players
                             client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour vous relevez.", 5000);
                             ph.IsSitting = true;
                         }
+                        else if (raycastData.entityHash == AltV.Net.Alt.Hash("prop_money_bag_01"))
+                        {
+                            Objects.WorldObject pickup = Objects.WorldObject.ListObject.FirstOrDefault(o => o.Value.Position.Distance(playerPos) <= 2).Value;
+
+                            if (pickup != null)
+                            {
+                                ResuPickup resupickup = ResuPickup.GetResuPickup(pickup.ID);
+
+                                if (resupickup != null)
+                                    Task.Run(async () => await resupickup.Take(client));
+
+                                return;
+                            }
+                        }
+                        else if (raycastData.isHit && IsPump(raycastData.entityHash) && client.Position.Distance(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE)
+                        {
+                            Business.Market.OpenGasPumpMenu(client);
+                            return;
+                        }
                     }
 
                     if (IsAtm(raycastData.entityHash) && client.Position.Distance(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE)
@@ -223,24 +242,6 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (vh != null && !client.IsInVehicle)
                     {
                         vh.OpenXtremMenu(client);
-                        return;
-                    }
-
-                    Objects.WorldObject pickup = Objects.WorldObject.ListObject.FirstOrDefault(o => o.Value.Position.Distance(playerPos) <= Globals.MAX_INTERACTION_DISTANCE && o.Value.Model == AltV.Net.Alt.Hash("prop_money_bag_01")).Value;
-
-                    if (pickup != null)
-                    {
-                        ResuPickup resupickup = ResuPickup.GetResuPickup(pickup.ID);
-
-                        if (resupickup != null)
-                            Task.Run(async () => await resupickup.Take(client));
-
-                        return;
-                    }
-
-                    if (raycastData.isHit && IsPump(raycastData.entityHash) && client.Position.Distance(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE)
-                    {
-                        Business.Market.OpenGasPumpMenu(client);
                         return;
                     }
 

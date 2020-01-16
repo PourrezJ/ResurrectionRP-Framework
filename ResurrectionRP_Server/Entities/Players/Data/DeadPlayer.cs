@@ -49,6 +49,11 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                 menu.Add(new XMenuItem("RPC", "Réanimer la victime", "ID_Reanimate", XMenuItemIcons.HEART_SOLID, false));
 
             menu.Add(new XMenuItem("Fouiller les poches", "", "ID_Poche", XMenuItemIcons.HANDS_SOLID));
+
+            if (Victime.GetPlayerHandler().BagInventory != null)
+                menu.Add(new XMenuItem("Fouiller le sac à dos", "", "ID_Bag", XMenuItemIcons.HANDS_SOLID));
+
+
             menu.Add(new XMenuItem("Prendre l'argent", "", "ID_GetMoney", XMenuItemIcons.MONEY_BILL_SOLID));
             menu.Add(new XMenuItem("Regarder la carte d'identité", "", "ID_Identite", XMenuItemIcons.ID_CARD_ALT_SOLID));
             menu.Add(new XMenuItem("Envoyer en soin intensif", "", "ID_Intensif", XMenuItemIcons.SKULL_SOLID));
@@ -101,20 +106,12 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                     }
                     break;
 
-                case "ID_Poche":      
-                    var invmenu = new Inventory.RPGInventoryMenu(vh.PocketInventory, vh.OutfitInventory, vh.BagInventory, ph.BagInventory != null ? ph.BagInventory : ph.PocketInventory);
-                    invmenu.OnMove += (p, m) =>
-                    {
-                        ph.UpdateFull();
-                        vh.UpdateFull();
-                    };
+                case "ID_Poche":
+                    Rob(client, false);
+                    break;
 
-                    invmenu.OnClose += (p, m) =>
-                    {
-                        ph.UpdateFull();
-                        vh.UpdateFull();
-                    };
-                    invmenu.OpenMenu(client);
+                case "ID_Bag":
+                    Rob(client, true);
                     break;
 
                 case "ID_GetMoney":
@@ -144,6 +141,38 @@ namespace ResurrectionRP_Server.Entities.Players.Data
                     vh.UpdateFull();
                     break;
             }
+        }
+
+        public void Rob(IPlayer robber, bool bag)
+        {
+            var ph = robber.GetPlayerHandler();
+
+            if (ph == null)
+                return;
+
+            var vh = Victime.GetPlayerHandler();
+
+            if (vh == null)
+                return;
+
+            XMenuManager.XMenuManager.CloseMenu(robber);
+            Victime.SendNotification("Quelqu'un fouille vos poches");
+            var invmenu = new Inventory.RPGInventoryMenu(ph.PocketInventory, ph.OutfitInventory, ph.BagInventory, (bag) ? vh.BagInventory : vh.PocketInventory);
+            invmenu.OnMove += (p, m) =>
+            {
+                ph.UpdateClothing();
+                vh.UpdateClothing();
+
+                ph.UpdateFull();
+                vh.UpdateFull();
+            };
+
+            invmenu.OnClose += (p, m) =>
+            {
+                ph.UpdateFull();
+                vh.UpdateFull();
+            };
+            invmenu.OpenMenu(robber);
         }
 
         private void OnPlayerExitColshape(IColshape colShape, IPlayer client)

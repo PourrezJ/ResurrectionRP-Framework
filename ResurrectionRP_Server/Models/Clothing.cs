@@ -100,7 +100,16 @@ namespace ResurrectionRP_Server.Models
             };
 
             foreach (KeyValuePair<ClothSlot, ClothData> entry in cloths)
+            {
+                if (entry.Key == ClothSlot.BodyArmor)
+                {
+                    if (entry.Value.Drawable != 0)
+                        Player.Armor = 100;
+                    else
+                        Player.Armor = 0;
+                }
                 Player.SetCloth(entry.Key, entry.Value.Drawable, entry.Value.Texture, entry.Value.Palette);
+            }
 
             if (Bracelets != null)
                 Player.SetProp(PropSlot.Bracelets, Bracelets.Value);

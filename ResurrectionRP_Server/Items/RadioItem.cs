@@ -22,6 +22,10 @@ namespace ResurrectionRP_Server.Items
         {
         }
 
+        public RadioItem()
+        {
+        }
+
         public override void Use(IPlayer c, string inventoryType, int slot)
         {
             RadLib.RadioManager.OpenRadio(c, Radio);

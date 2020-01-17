@@ -1,6 +1,7 @@
 ﻿using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Farms;
+using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Menus;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Utils;
@@ -102,7 +103,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                         foreach(var value in GameMode.Instance.Economy.Bourse.Values)
                         {
-                            var menuitem = new MenuItem(Inventory.Inventory.ItemByID(value.Key)?.name, "", "", rightLabel: value.Value + "%");
+                            var menuitem = new MenuItem(LoadItem.GetItemWithID(value.Key)?.name, "", "", rightLabel: value.Value + "%");
                             menuitem.Description = "Prix à l'unité: $" + GameMode.Instance.Economy.Bourse.GetCurrentPrice(value.Key, FarmManager.GetItemPrice(value.Key));
                             menu.Add(menuitem);
                         }

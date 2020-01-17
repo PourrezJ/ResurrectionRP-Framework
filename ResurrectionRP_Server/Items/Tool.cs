@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace ResurrectionRP_Server.Items
 {
-    class Tool : Item
+    public class Tool : Item
     {
         public float Health = 1000;
         public float Speed = 1.0f;
@@ -18,6 +18,10 @@ namespace ResurrectionRP_Server.Items
             Health = health;
             Speed = speed;
             MiningRate = miningrate;
+        }
+
+        public Tool()
+        {
         }
 
         public override Task Give(IPlayer sender, IPlayer recever, int quantite)

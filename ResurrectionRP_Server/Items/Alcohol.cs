@@ -18,6 +18,10 @@ namespace ResurrectionRP_Server.Items
             Drink = drink;
         }
 
+        public Alcohol()
+        {
+        }
+
         public override void Use(IPlayer client, string inventoryType, int slot)
         {
             Entities.Players.PlayerHandler ph = client.GetPlayerHandler();

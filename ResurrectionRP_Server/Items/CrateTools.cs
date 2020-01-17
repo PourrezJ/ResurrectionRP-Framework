@@ -4,8 +4,12 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Items
 {
-    class CrateTools : Item
+    public class CrateTools : Item
     {
+        public CrateTools()
+        {
+        }
+
         public CrateTools(Models.InventoryData.ItemID id, string name, string description, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, int itemPrice = 0, bool isDockable = false, string type = "crateTool", string icon = "unknown-item", string classes = "weapon") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
         {
         }

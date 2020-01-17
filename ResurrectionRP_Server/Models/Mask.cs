@@ -1,6 +1,6 @@
 ﻿namespace ResurrectionRP_Server.Models
 {
-    struct Mask
+    public struct Mask
     {
         public string name;
         public byte variation;

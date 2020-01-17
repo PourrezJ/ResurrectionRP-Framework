@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Items
 {
-    class MaskItem : Item
+    public class MaskItem : Item
     {
         private bool used = false;
         public Mask Mask = new Mask("",0, 0);
@@ -12,6 +12,10 @@ namespace ResurrectionRP_Server.Items
         public MaskItem(Models.InventoryData.ItemID id, string name, string description, Mask mask, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, int itemPrice = 0, string type = "mask", string icon = "unknown-item", string classes = "basic") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice,type, icon, classes)
         {
             Mask = mask;
+        }
+
+        public MaskItem()
+        {
         }
 
         public override void Use(IPlayer client, string inventoryType, int slot)

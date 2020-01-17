@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server.Business
                     for (int i = 1; i <= 100; i++)
                         values.Add(i.ToString());
 
-                    var item = ResurrectionRP_Server.Inventory.Inventory.ItemByID(loadedItem);
+                    var item = LoadItem.GetItemWithID(loadedItem);
 
                     if (item == null)
                         continue;

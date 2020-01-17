@@ -14,7 +14,7 @@ namespace ResurrectionRP_Server.Models
 {
     [BsonKnownTypes(typeof(Items.Alcohol), typeof(Items.Axe), typeof(Items.Tool), typeof(Items.BuildingItem), typeof(ClothItem), typeof(Items.CrateTools), typeof(Items.Defibrilator), typeof(Items.Eat) ,typeof(Items.GasJerrycan), typeof(Items.HandCuff), typeof(Items.HealItem),
         typeof(Items.IdentityCard), typeof(Items.MaskItem), typeof(Items.PhoneItem), typeof(Items.RadioItem), typeof(Items.BagItem), typeof(Items.Unusable), typeof(Items.Weapons), typeof(Items.SeedItem), typeof(Items.LockPick))]
-    public class Item : ICloneable
+    public class Item
     {
         [JsonProperty("id")]
         public ItemID id { get; set; }
@@ -46,6 +46,11 @@ namespace ResurrectionRP_Server.Models
         public bool isDockable { get; set; }
 
         public Dictionary<string, dynamic> Variables = new Dictionary<string, dynamic>();
+
+        public Item()
+        {
+
+        }
 
         public Item(ItemID id, string name, string description, double weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, double itemPrice = 0,
             string type = "item", string icon = "unknown-item", string classes = "basic")
@@ -149,15 +154,5 @@ namespace ResurrectionRP_Server.Models
         public dynamic GetData(string key) => Variables.GetValueOrDefault(key);
         public void ResetData(string key) => Variables[key] = null;
         public bool HasData(string key) => Variables.ContainsKey(key);
-        
-        object ICloneable.Clone()
-        {
-            return MemberwiseClone();
-        }
-
-        public Item CloneItem()
-        {
-            return (Item)MemberwiseClone();
-        }
     }
 }

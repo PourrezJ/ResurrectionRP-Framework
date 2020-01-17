@@ -10,6 +10,10 @@ namespace ResurrectionRP_Server.Items
     {
         public Phone.Phone PhoneHandler;
 
+        public PhoneItem()
+        {
+        }
+
         public PhoneItem(Models.InventoryData.ItemID id, string name, string description, Phone.Phone phone, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, int itemPrice = 0, string type = "phone", string icon = "phone", string classes = "phone") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
         {
             PhoneHandler = phone;

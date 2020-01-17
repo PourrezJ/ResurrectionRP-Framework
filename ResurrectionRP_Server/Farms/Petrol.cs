@@ -6,6 +6,7 @@ using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
 using ResurrectionRP_Server.Utils.Extensions;
@@ -134,8 +135,8 @@ namespace ResurrectionRP_Server.Farms
 
             MenuManager.CloseMenu(client);
 
-            Item _itemNoTraite = Inventory.Inventory.ItemByID(ItemIDBrute);
-            Item _itemTraite = Inventory.Inventory.ItemByID(ItemIDProcess);
+            Item _itemNoTraite = LoadItem.GetItemWithID(ItemIDBrute);
+            Item _itemTraite = LoadItem.GetItemWithID(ItemIDProcess);
             player.IsOnProgress = true;
             client.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s)", 5000);
             client.EmitLocked("LaunchProgressBar", FillingTime * (TrailerMaxContent / 10));
@@ -233,7 +234,7 @@ namespace ResurrectionRP_Server.Farms
             client.GetPlayerHandler().IsOnProgress = true;
             Vector3 lastPos = fuelVeh.Position;
             fuelVeh.SetData("Refuelling", true);
-            Item item = Inventory.Inventory.ItemByID(ItemIDBrute);
+            Item item = LoadItem.GetItemWithID(ItemIDBrute);
             client.DisplaySubtitle($"Remplissage en cours de la citerne de {item.name}", 5000);
 
             bool exit = false;
@@ -322,8 +323,8 @@ namespace ResurrectionRP_Server.Farms
 
             MenuManager.CloseMenu(sender);
 
-            Item _itemNoTraite = Inventory.Inventory.ItemByID(ItemIDBrute);
-            Item _itemTraite = Inventory.Inventory.ItemByID(ItemIDBrute);
+            Item _itemNoTraite = LoadItem.GetItemWithID(ItemIDBrute);
+            Item _itemTraite = LoadItem.GetItemWithID(ItemIDBrute);
             player.IsOnProgress = true;
             sender.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s)", 5000);
             sender.EmitLocked("LaunchProgressBar", Process_Time * (vehHandler.VehicleData.OilTank.Brute / 10));
@@ -411,7 +412,7 @@ namespace ResurrectionRP_Server.Farms
 
             MenuManager.CloseMenu(sender);
 
-            Item _itemBuy = Inventory.Inventory.ItemByID(ItemIDProcess);
+            Item _itemBuy = LoadItem.GetItemWithID(ItemIDProcess);
             player.IsOnProgress = true;
 
             sender.DisplaySubtitle($"Vous commencez à vendre vos ~r~{_itemBuy.name}(s)", 5000);

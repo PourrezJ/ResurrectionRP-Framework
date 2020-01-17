@@ -14,7 +14,7 @@ namespace ResurrectionRP_Server.Models
 
         public ItemStack(ItemID item, int quantity, double price = 0)
         {
-            this.Item = Inventory.Inventory.ItemByID(item);
+            this.Item = LoadItem.GetItemWithID(item);
             this.Quantity = quantity;
             this.Price = price;
         }

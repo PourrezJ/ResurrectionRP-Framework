@@ -10,20 +10,6 @@ namespace ResurrectionRP_Server.Items
 {
     class LoadItem
     {
-        private static List<Item> items;
-        public static List<Item> ItemsList
-        {
-            get
-            {
-                if (items == null)
-                {
-                    items = new List<Item>();
-                    items.AddRange(LoadItemList());
-                }
-                return items;
-            }
-        }
-
         public static Item GetItemWithID(ItemID itemID)
         {
             var item = ItemsList.Find(i => i.id == itemID) ?? null;
@@ -31,12 +17,12 @@ namespace ResurrectionRP_Server.Items
             if (item == null)
                 return null;
 
-            return item.CloneItem();
+            return ObjectCloner.ObjectCloner.DeepClone(item);
         }
 
-        private static List<Item> LoadItemList()
-        {
-            return new List<Item>()
+        public static List<Item> ItemsList
+        {    
+            get => new List<Item>()
                 {
                     new Eat(ItemID.Lasagnes, "Lasagnes", "Les lasagnes de la Mama!", 1 , true, true, true, food:15),
                     new Eat(ItemID.Fromage, "Fromage de chèvre", "Fromage de chèvre bien odorant", 1, true, true,true, food:15, isDockable: true, itemPrice: 23, icon:"cheese"),

@@ -23,6 +23,10 @@ namespace ResurrectionRP_Server.Items
             Drink = drink;
         }
 
+        public Eat()
+        {
+        }
+
         public override void Use(IPlayer client, string inventoryType, int slot)
         {
             Alt.Server.LogInfo($"[Eat.Use()] : inventoryType: {inventoryType}, slot: {slot}");
@@ -120,5 +124,7 @@ namespace ResurrectionRP_Server.Items
                 });
             }
         }
+
+        public Eat GetClone() => this;
     }
 }

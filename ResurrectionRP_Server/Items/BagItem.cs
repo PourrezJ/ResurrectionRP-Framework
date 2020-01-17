@@ -13,5 +13,14 @@ namespace ResurrectionRP_Server.Items
             Clothing = bag;
             InventoryBag = new Inventory.Inventory(weightMax, maxSlot);
         }
+
+        public BagItem()
+        {
+        }
+
+        //public override BagItem GetClone()
+        //{
+        //    return base.GetClone();
+        //}
     }
 }

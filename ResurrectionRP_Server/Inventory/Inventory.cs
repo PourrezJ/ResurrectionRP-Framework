@@ -29,6 +29,10 @@ namespace ResurrectionRP_Server.Inventory
             MaxSlot = maxSlot;
         }
 
+        public Inventory()
+        {
+        }
+
         public ItemStack this[int x]
         {
             get => InventoryList[x];
@@ -244,16 +248,6 @@ namespace ResurrectionRP_Server.Inventory
             }
 
             return null;
-        }
-
-        public static Item ItemByID(ItemID id)
-        {
-            var item = Items.LoadItem.ItemsList.Find(i => i.id == id) ?? null;
-
-            if (item == null)
-                return null;
-
-            return item.CloneItem();
         }
 
         public Item GetItem(ItemID itemID)

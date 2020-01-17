@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -52,12 +53,6 @@ namespace ResurrectionRP_Server
                 return (T)tmpList[index];
             }
             catch { return defaultValue; }
-        }
-
-        public static T CloneObject<T>(this object source)
-        {
-            T result = Activator.CreateInstance<T>();
-            return result;
         }
     }
 }

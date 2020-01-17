@@ -10,6 +10,11 @@ namespace ResurrectionRP_Server.Items
         [BsonRepresentation(BsonType.Int32, AllowOverflow = true)]
         public ushort Life;
 
+        public HealItem()
+        {
+
+        }
+
         public HealItem(Models.InventoryData.ItemID id, string name, string description, int weight = 0, bool isGiven = false, bool isUsable = false, bool isStackable = true, bool isDropable = true, bool isDockable = false, ushort life = 0, int itemPrice = 0, string type = "heal", string icon = "unknown-item", string classes = "health") : base(id, name, description, weight, isGiven, isUsable, isStackable, isDropable, isDockable, itemPrice, type, icon, classes)
         {
             Life = life;

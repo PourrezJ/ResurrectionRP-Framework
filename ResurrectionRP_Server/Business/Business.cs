@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Business
 {
-    [BsonKnownTypes(typeof(Market), typeof(TattoosStore), typeof(Barber.BarberStore), typeof(WeaponsShop), typeof(ClothingStore), typeof(PawnShop), typeof(DigitalDeen), typeof(PropsStore))]
+    [BsonKnownTypes(typeof(Market), typeof(TattoosStore), typeof(Barber.BarberStore), typeof(WeaponsShop), typeof(ClothingStore), typeof(PawnShop), typeof(DigitalDeen), typeof(PropsStore), typeof(HeadShop))]
     public partial class Business
     {
         #region Fields

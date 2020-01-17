@@ -5,7 +5,7 @@ using ResurrectionRP_Server.Utils.Enums;
 
 namespace ResurrectionRP_Server.Items
 {
-    class Weapons : Item
+    public class Weapons : Item
     {
         [BsonRepresentation(BsonType.Int64, AllowOverflow = true)]
         public WeaponHash Hash;
@@ -16,6 +16,10 @@ namespace ResurrectionRP_Server.Items
             Hash = hash;
             NSerie = Utils.Utils.RandomNumber(11111111, 99999999);
             isStackable = false;
+        }
+
+        public Weapons()
+        {
         }
     }
 }

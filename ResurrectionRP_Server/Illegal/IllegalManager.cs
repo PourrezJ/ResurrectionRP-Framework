@@ -9,6 +9,7 @@ using MongoDB.Driver;
 using ResurrectionRP_Server.Colshape;
 using ResurrectionRP_Server.Entities.Peds;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
 using System;
@@ -159,7 +160,7 @@ namespace ResurrectionRP_Server.Illegal
                     var ItemIDProcess = ItemProcess.Key;
                     var ItemPrice = ItemProcess.Value;
 
-                    Item _itemBuy = ResurrectionRP_Server.Inventory.Inventory.ItemByID(ItemIDProcess);
+                    Item _itemBuy = LoadItem.GetItemWithID(ItemIDProcess);
 
                     if (!player.HasItemID(ItemIDProcess))
                         continue;

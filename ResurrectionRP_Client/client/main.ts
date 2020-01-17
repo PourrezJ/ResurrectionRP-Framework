@@ -25,7 +25,6 @@ var GameClass: Game;
 const init = async () => {
     try {
         alt.log('Chargement des events.');
-
         new Doors();
 
         alt.onServer("PlayerInitialised", (

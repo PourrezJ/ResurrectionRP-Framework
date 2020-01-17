@@ -8,6 +8,7 @@ using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Blips;
 using ResurrectionRP_Server.Entities.Peds;
 using ResurrectionRP_Server.Entities.Players;
+using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
 using System;
@@ -224,7 +225,7 @@ namespace ResurrectionRP_Server.Farms
             if (player == null || player.IsOnProgress)
                 return;
 
-            Item item = Inventory.Inventory.ItemByID(ItemIDBrute);
+            Item item = LoadItem.GetItemWithID(ItemIDBrute);
 
             if (item == null)
                 return;
@@ -310,8 +311,8 @@ namespace ResurrectionRP_Server.Farms
             if (player == null || player.IsOnProgress)
                 return;
 
-            Item _itemNoTraite = Inventory.Inventory.ItemByID(ItemIDBrute);
-            Item _itemTraite = Inventory.Inventory.ItemByID(ItemIDProcess);
+            Item _itemNoTraite = LoadItem.GetItemWithID(ItemIDBrute);
+            Item _itemTraite = LoadItem.GetItemWithID(ItemIDProcess);
 
             if (!player.HasItemID(ItemIDBrute))
             {
@@ -389,9 +390,9 @@ namespace ResurrectionRP_Server.Farms
             if (player == null || player.IsOnProgress)
                 return;
 
-            Item _itemNoTraite = Inventory.Inventory.ItemByID(ItemIDBrute);
-            Item _itemNoTraite2 = Inventory.Inventory.ItemByID(ItemIDBrute2);
-            Item _itemTraite = Inventory.Inventory.ItemByID(ItemIDProcess);
+            Item _itemNoTraite = LoadItem.GetItemWithID(ItemIDBrute);
+            Item _itemNoTraite2 = LoadItem.GetItemWithID(ItemIDBrute2);
+            Item _itemTraite = LoadItem.GetItemWithID(ItemIDProcess);
 
             if (!player.HasItemID(ItemIDBrute))
             {
@@ -481,7 +482,7 @@ namespace ResurrectionRP_Server.Farms
             if (player == null || player.IsOnProgress)
                 return;
 
-            Item _itemBuy = Inventory.Inventory.ItemByID(ItemIDProcess);
+            Item _itemBuy = LoadItem.GetItemWithID(ItemIDProcess);
 
             if (!player.HasItemID(ItemIDProcess))
             {

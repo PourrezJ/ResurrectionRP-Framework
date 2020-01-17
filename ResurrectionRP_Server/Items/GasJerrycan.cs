@@ -17,6 +17,10 @@ namespace ResurrectionRP_Server.Items
             Fuel = 0;
         }
 
+        public GasJerrycan()
+        {
+        }
+
         public override void Use(IPlayer client, string inventoryType, int slot)
         {
             if (!client.Exists)

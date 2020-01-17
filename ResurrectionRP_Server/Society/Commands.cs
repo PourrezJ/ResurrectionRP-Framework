@@ -1,7 +1,9 @@
 ﻿using System.Numerics;
 using System.Threading.Tasks;
 using AltV.Net.Elements.Entities;
+using ResurrectionRP_Server.Entities.Blips;
 using ResurrectionRP_Server.Models;
+using ResurrectionRP_Server.Society.Societies;
 using ResurrectionRP_Server.Society.Societies.Bennys;
 
 namespace ResurrectionRP_Server.Society
@@ -41,7 +43,16 @@ namespace ResurrectionRP_Server.Society
             // -557.4198 -899.7758 24.12378 parking
             weazel.Init();
             Task.Run(async () => await weazel.Insert());
-            weazel.Init();
+        }
+
+        private void PetrolSociety(IPlayer client)
+        {
+            if (client.GetStaffRank() < Utils.Enums.StaffRank.Moderator)
+                return;
+
+            Society society = new PetrolSociety("Au Bon Réservoir", client.Position, 351, (int)BlipColor.Grey, "", inventory: new Inventory.Inventory(5000, 40));
+            Task.Run(async () => await society.Insert());
+            society.Init();
         }
 
 

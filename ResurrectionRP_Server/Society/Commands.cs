@@ -43,7 +43,7 @@ namespace ResurrectionRP_Server.Society
             var inventory = new Inventory.Inventory(500, 40);
             var parking = new Parking(new Vector3(-557.4198f, -899.7758f, 24.12378f), new Location(new System.Numerics.Vector3(-557.4198f, -899.7758f, 24.12378f), new System.Numerics.Vector3()));
 
-            var weazel = new Weazel("Weazel News", new System.Numerics.Vector3(-580.33844f, -935.45935f, 23.871094f), 459, 1, "Armex72", inventory, parking);
+            var weazel = new Weazel("Weazel News", new System.Numerics.Vector3(-580.33844f, -935.45935f, 23.871094f), 459, 1, "", inventory, parking);
             weazel.Init();
             Task.Run(async () => await weazel.Insert());
         }
@@ -53,7 +53,7 @@ namespace ResurrectionRP_Server.Society
             if (client.GetStaffRank() < Utils.Enums.StaffRank.Moderator)
                 return;
 
-            Society society = new PetrolSociety("Au Bon Réservoir", client.Position, 351, (int)BlipColor.Grey, "", inventory: new Inventory.Inventory(5000, 40));
+            Society society = new PetrolSociety("Au Bon Réservoir", client.Position - new AltV.Net.Data.Position(0,0,1), 351, (int)BlipColor.Grey, "", inventory: new Inventory.Inventory(5000, 40));
             Task.Run(async () => await society.Insert());
             society.Init();
         }
@@ -72,7 +72,7 @@ namespace ResurrectionRP_Server.Society
         {
             if (client.GetStaffRank() < Utils.Enums.StaffRank.Moderator)
                 return;
-            Society society = new Sandjob("LosSantos Bottle", client.Position, 181, 28, "", inventory: new Inventory.Inventory(5000, 40));
+            Society society = new Sandjob("LosSantos Bottle", client.Position - new AltV.Net.Data.Position(0, 0, 1), 181, 28, "", inventory: new Inventory.Inventory(5000, 40));
             Task.Run(async () => await society.Insert());
             society.Init();
         }
@@ -81,7 +81,7 @@ namespace ResurrectionRP_Server.Society
         {
             if (client.GetStaffRank() < Utils.Enums.StaffRank.Moderator)
                 return;
-            Society society = new Rhumerie("Rhumerie de Los Santos", client.Position, 93, 51, "", inventory: new Inventory.Inventory(5000, 40));
+            Society society = new Rhumerie("Rhumerie de Los Santos", client.Position - new AltV.Net.Data.Position(0, 0, 1), 93, 51, "", inventory: new Inventory.Inventory(5000, 40));
             Task.Run(async () => await society.Insert());
             society.Init();
         }
@@ -90,7 +90,7 @@ namespace ResurrectionRP_Server.Society
         {
             if (client.GetStaffRank() < Utils.Enums.StaffRank.Moderator)
                 return;
-            Society society = new Tequilala("Tequi-La-La", client.Position, 93, (int)BlipColor.Purple, "", inventory: new Inventory.Inventory(5000, 40));
+            Society society = new Tequilala("Tequi-La-La", client.Position - new AltV.Net.Data.Position(0, 0, 1), 93, (int)BlipColor.Purple, "", inventory: new Inventory.Inventory(5000, 40));
             Task.Run(async () => await society.Insert());
             society.Init();
         }

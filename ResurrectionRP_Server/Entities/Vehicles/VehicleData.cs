@@ -403,8 +403,22 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
         }
 
+        [BsonIgnore]
+        private OilTank oilTank;
         [BsonIgnoreIfNull]
-        public OilTank OilTank = null;
+        public OilTank OilTank
+        {
+            get
+            {
+                if (oilTank == null && Model == 1956216962)
+                    oilTank = new OilTank();
+                return oilTank;
+            }
+            set
+            {
+                oilTank = value;
+            }
+        }
         [BsonIgnoreIfNull]
         public Attachment Attachment { get; set; }
         [BsonIgnoreIfNull]

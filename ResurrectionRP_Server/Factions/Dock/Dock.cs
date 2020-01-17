@@ -135,6 +135,7 @@ namespace ResurrectionRP_Server.Factions
                 //new FactionVehicle(1, (VehicleModel) VehicleModel2.charger, 54250, 30),
                 new FactionVehicle(1, (VehicleModel) VehicleModel2.rmodgt63, 91000, 30),
                 new FactionVehicle(1, (VehicleModel) VehicleModel2.rmodm4gts, 119000, 30),
+                new FactionVehicle(1, VehicleModel.Phantom3, 200000, 30),
 
                 // Autres
                 //VehicleAllowed.Add(new FactionVehicle(1, (VehicleModel)VehicleModel2.charge4, 0, 90));

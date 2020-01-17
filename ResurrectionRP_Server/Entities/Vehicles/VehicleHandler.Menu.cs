@@ -86,9 +86,9 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             if (FactionManager.IsLSCustom(client) || FactionManager.IsLspd(client) || FactionManager.IsMedic(client) || FactionManager.IsNordiste(client))
                 xmenu.Add(new XMenuItem("Faction", "", "ID_Faction", XMenuItemIcons.ID_BADGE_SOLID, false));
-            /*
-            if (Array.IndexOf(Farms.Petrol.allowedTrailers, (VehicleModel)Model) != -1)
-                xmenu.Add(new XMenuItem("Voir le litrage de la citerne", "", "ID_citerne", XMenuItemIcons.GAS_PUMP_SOLID, true));*/
+            
+            if (Array.IndexOf(Farms.Petrol.AllowedTrailers, (VehicleModel)Model) != -1)
+                xmenu.Add(new XMenuItem("Voir le litrage de la citerne", "", "ID_citerne", XMenuItemIcons.GAS_PUMP_SOLID, true));
 
             xmenu.OpenXMenu(client);
         }
@@ -341,7 +341,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     break;
 
                 case "ID_citerne":
-                    client.DisplaySubtitle($"Contenu de la citerne: {VehicleData.OilTank.Traite}", 5000);
+                    client.DisplaySubtitle($"Contenu de la citerne: {((VehicleData.OilTank.Traite != 0) ? VehicleData.OilTank.Traite + " Traité" : VehicleData.OilTank.Brute + " Brute")}", 5000);
                     XMenuManager.XMenuManager.CloseMenu(client);
                     break;
 

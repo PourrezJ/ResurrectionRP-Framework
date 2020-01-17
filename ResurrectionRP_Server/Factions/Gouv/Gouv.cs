@@ -90,17 +90,12 @@ namespace ResurrectionRP_Server.Factions
             PortDerriereA = Door.CreateDoor(114775988, new Vector3(-582.8537f, -196.2415f, 38.23097f), true);
             PortDerriereB = Door.CreateDoor(114775988, new Vector3(-582.0195f, -195.5236f, 38.23092f), true);
 
-            // Villa Chancelier
-            PortailA = Door.CreateDoor(3945237283, new Vector3(-123.8705f, 899.3705f, 235.792f), true);
-            PortailB = Door.CreateDoor(2376486946, new Vector3(-124.4718f, 901.7889f, 236.13594f), true);
             _doors = new List<Door>()
             {
                 PortChancelierA,
                 PortChancelierB,
                 PortDevantA,
                 PortDevantB,
-                PortailA,
-                PortailB,
                 PortDerriereA,
                 PortDerriereB
             };
@@ -112,24 +107,24 @@ namespace ResurrectionRP_Server.Factions
 
             Ped npcsecuoutside = Ped.CreateNPC(PedModel.ChemSec01SMM, new Vector3(-519.5601f, -257.3863f, 35.76096f), 299.4756f);
 
-            VehicleAllowed.Add(new FactionVehicle(6, VehicleModel.Swift, 5000000, 25));
-            VehicleAllowed.Add(new FactionVehicle(2, VehicleModel.Menacer, 2000000, 90));
-            VehicleAllowed.Add(new FactionVehicle(2, VehicleModel.Baller5, 700000, 90));
-            VehicleAllowed.Add(new FactionVehicle(2, VehicleModel.Cog552, 400000, 60));
-            VehicleAllowed.Add(new FactionVehicle(2, VehicleModel.Schafter6, 400000, 90));
-            VehicleAllowed.Add(new FactionVehicle(3, VehicleModel.Kuruma2, 1500000, 60));
+            //VehicleAllowed.Add(new FactionVehicle(6, VehicleModel.Swift, 5000000, 25));
+            // VehicleAllowed.Add(new FactionVehicle(2, VehicleModel.Menacer, 2000000, 90));
+            //VehicleAllowed.Add(new FactionVehicle(2, VehicleModel.Baller5, 700000, 90));
+            // VehicleAllowed.Add(new FactionVehicle(2, VehicleModel.Cog552, 400000, 60));
+            //VehicleAllowed.Add(new FactionVehicle(2, VehicleModel.Schafter6, 400000, 90));
+            //VehicleAllowed.Add(new FactionVehicle(3, VehicleModel.Kuruma2, 1500000, 60));
             VehicleAllowed.Add(new FactionVehicle(3, (VehicleModel)VehicleModel2.rmodx6, 1500000, 60));
 
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Flashlight, "Lampe de poche", "Une lampe leds 500watts.", hash: WeaponHash.Flashlight), 0, 0));
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Matraque, "Matraque", "Une matraque de marque Théo.", hash: WeaponHash.Nightstick), 0, 0));
             ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pistol, "Pistol MK2", "", hash: WeaponHash.PistolMk2), 0, 1));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pistol, "Revolver MK2", "", hash: WeaponHash.RevolverMk2), 0, 2));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pump, "Fusil à canon scié", "", hash: WeaponHash.SawnOffShotgun), 0, 2));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Carabine, "Special Carbine MK2", "", hash: WeaponHash.SpecialCarbineMk2), 0, 3));
+            //ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pistol, "Revolver MK2", "", hash: WeaponHash.RevolverMk2), 0, 2));
+            //ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Pump, "Fusil à canon scié", "", hash: WeaponHash.SawnOffShotgun), 0, 2));
+            //ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Carabine, "Special Carbine MK2", "", hash: WeaponHash.SpecialCarbineMk2), 0, 3));
             ItemShop.Add(new FactionShopItem(new RadioItem(ItemID.Radio, "Talky", "", 1, true, true, false, true, true, 2000, icon: "talky"), 500, 0));
             ItemShop.Add(new FactionShopItem(new BagItem(ItemID.Bag, "Backpack", "", new ClothData(45, 0, 0), 40, 20, 1, true, false, false, true, true, 500, classes: "backpack", icon: "backpack"), 500, 0));
             ItemShop.Add(new FactionShopItem(new HandCuff(ItemID.Handcuff, "Menottes", "Une paire de menottes", 0.1, true, false), 500, 0));
-            ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Combat MG MK2", "", 26, hash: WeaponHash.CombatMgMk2), 40000, 2));
+            //ItemShop.Add(new FactionShopItem(new Weapons(ItemID.Weapon, "Combat MG MK2", "", 26, hash: WeaponHash.CombatMgMk2), 40000, 2));
 
             _boatColShape = Alt.CreateColShapeCylinder(new Vector3(-2095.39f, -1014.713f, 8.980465f), 4f, 4f);
 

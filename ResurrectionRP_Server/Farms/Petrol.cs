@@ -26,15 +26,16 @@ namespace ResurrectionRP_Server.Farms
 
         private static int TrailerMaxContent = 1500;
 
-        public static VehicleModel[] allowedTrailers = new VehicleModel[3] { VehicleModel.ArmyTanker, VehicleModel.Tanker, VehicleModel.Tanker2 };
+        public static VehicleModel[] AllowedTrailers = new VehicleModel[3] { VehicleModel.ArmyTanker, VehicleModel.Tanker, VehicleModel.Tanker2 };
 
         public IColshape RaffinerieColshape = null;
         public IColshape SellingColshape = null;
 
-        public ConcurrentDictionary<IPlayer, System.Timers.Timer> Timers = new ConcurrentDictionary<IPlayer, System.Timers.Timer>();
+        public ConcurrentDictionary<IPlayer, System.Timers.Timer> SellingTimer = new ConcurrentDictionary<IPlayer, System.Timers.Timer>();
 
         private int FillingTime = 8250;
 
+        #region Constructor
         public Petrol()
         {
             Harvest_Name = "Puit de pétrole";
@@ -47,12 +48,12 @@ namespace ResurrectionRP_Server.Farms
             Selling_BlipSprite = 500;
 
             Harvest_Position.Add(new Vector3(587.3458f, 2935.362f, 40.95748f));
-            Process_PosRot = new Location(RaffineriePos - new Vector3(0,0,5), new Vector3(0f, 0f, -178f));
+            Process_PosRot = new Location(RaffineriePos - new Vector3(0, 0, 5), new Vector3(0f, 0f, -178f));
             Selling_PosRot = new Location(SellPos - new Vector3(0, 0, 5), new Vector3());
 
             Harvest_Range = 20f;
 
-            BlipColor = Entities.Blips.BlipColor.Grey; 
+            BlipColor = Entities.Blips.BlipColor.Grey;
 
             ItemIDBrute = ItemID.PetrolBrute;
             ItemIDProcess = ItemID.Petrol;
@@ -62,7 +63,9 @@ namespace ResurrectionRP_Server.Farms
             Selling_Time = 600; // prod /  600
             Enabled = true;
         }
+        #endregion
 
+        #region Events
         public override void Init()
         {
             base.Init();
@@ -72,32 +75,28 @@ namespace ResurrectionRP_Server.Farms
             SellingColshape = ColshapeManager.CreateCylinderColshape(SellPos, 10, 4);
             SellingColshape.OnPlayerEnterColshape += OnPlayerEnterColshape;
 
-            Marker.CreateMarker(MarkerType.VerticalCylinder, RaffineriePos - new Vector3(0,0,1), new Vector3(10, 10, 2), Color.FromArgb(0,0,0));
-            Marker.CreateMarker(MarkerType.VerticalCylinder, Selling_PosRot.Pos - new Vector3(0,0,0), new Vector3(10, 10, 2), Color.FromArgb(0,0,0));
-
-            Streamer.Streamer.AddEntityTextLabel("~o~Appuyez sur E en dehors du véhicule\n pour lancer le remplissage", Harvest_Position[0]);
+            Marker.CreateMarker(MarkerType.VerticalCylinder, RaffineriePos - new Vector3(0, 0, 1), new Vector3(10, 10, 2), Color.FromArgb(0, 0, 0));
+            Marker.CreateMarker(MarkerType.VerticalCylinder, Selling_PosRot.Pos - new Vector3(0, 0, 0), new Vector3(10, 10, 2), Color.FromArgb(0, 0, 0));
+            Streamer.Streamer.AddEntityTextLabel("~o~Appuyez sur E en dehors du véhicule\n pour lancer le remplissage", Harvest_Position[0], 1);
         }
 
         public override void OnPlayerEnterColshape(IColshape colshape, IPlayer player)
         {
             if (RaffinerieColshape.IsEntityIn(player))
             {
-                IVehicle vehicle = null;
-                List<VehicleHandler> vehs = Process_PosRot.Pos.GetVehiclesInRange(20);
+                VehicleHandler vehicle = null;
+                List<VehicleHandler> vehs = VehiclesManager.GetNearestsVehicles(Process_PosRot.Pos, 20);
 
-                foreach (IVehicle veh in vehs)
+                foreach (VehicleHandler veh in vehs)
                 {
                     if (veh.GetVehicleHandler().HasTrailer)
-                        vehicle = (IVehicle)(veh.GetVehicleHandler().Trailer);
+                        vehicle = (VehicleHandler)veh.Trailer;
                 }
 
-                if (vehicle != null && Array.IndexOf(allowedTrailers, (VehicleModel)vehicle.Model) != -1)
+                if (vehicle != null && Array.IndexOf(AllowedTrailers, (VehicleModel)vehicle.Model) != -1)
                 {
                     TankFilling(player, vehicle);
                 }
-                else
-                    StartProcessing(player);
-
             }
             else if (SellingColshape.IsEntityIn(player))
                 StartSelling(player);
@@ -105,79 +104,10 @@ namespace ResurrectionRP_Server.Farms
 
             base.OnPlayerEnterColshape(colshape, player);
         }
-
-        public void TankFilling(IPlayer client, IVehicle trailer)
-        {
-
-            if (client.Vehicle != null)
-                client.DisplayHelp("Vous êtes libre de sortir du véhicule le temps du traitement!", 15000);
-
-            if (trailer == null || !trailer.Exists)
-            {
-                client.DisplayHelp("Aucune remorque à proximité", 5000);
-                return;
-            }
-            else if (trailer.HasData("Refueling"))
-            {
-                client.DisplayHelp("La remorque est déjà en traitement.", 5000);
-                return;
-            }
-
-            VehicleHandler vehHandler = trailer.GetVehicleHandler();
-
-            if (vehHandler == null)
-                return;
-
-            PlayerHandler player = client.GetPlayerHandler();
-
-            if (player == null)
-                return;
-
-            MenuManager.CloseMenu(client);
-
-            Item _itemNoTraite = LoadItem.GetItemWithID(ItemIDBrute);
-            Item _itemTraite = LoadItem.GetItemWithID(ItemIDProcess);
-            player.IsOnProgress = true;
-            client.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s)", 5000);
-            client.EmitLocked("LaunchProgressBar", FillingTime * (TrailerMaxContent / 10));
-            Timers[client] = Utils.Utils.SetInterval(async () =>
-            {
-                System.Timers.Timer ProcessTimer = Timers[client];
-                if (!await client.ExistsAsync() || !await trailer.ExistsAsync())
-                    return;
-
-                if (RaffineriePos.DistanceTo(await trailer.GetPositionAsync()) > 30f)
-                {
-                    client.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous deviez rester dans la zone.", 5000);
-                    ProcessTimer.Stop();
-                    ProcessTimer = null;
-                }
-
-                if (vehHandler.VehicleData.OilTank.Traite >= TrailerMaxContent)
-                {
-                    client.EmitLocked("StopProgressBar");
-                    client.DisplaySubtitle($"Remplicage de la citerne terminé: Vous avez rempli ~r~ {vehHandler.VehicleData.OilTank.Traite}L {_itemTraite.name}(s)", 15000);
-                    player.UpdateFull();
-                    vehHandler.UpdateInBackground();
-                    player.IsOnProgress = false;
-                    ProcessTimer.Stop();
-                    ProcessTimer = null;
-                    return;
-                }
-
-                if (ProcessTimer == null)
-                {
-                    client.EmitLocked("StopProgressBar");
-                    player.IsOnProgress = false;
-                    return;
-                }
-
-                vehHandler.VehicleData.OilTank.Traite += 5;
-                client.DisplaySubtitle("Volume essence raffiné : " + vehHandler.VehicleData.OilTank.Traite + "L", 3000);
-            }, (Process_Time * 1000) / (FillingTime));
-        }
+        #endregion
 
         #region Start Farming
+
         public override void StartFarming(IPlayer client)
         {
             if (client == null || !client.Exists)
@@ -188,16 +118,22 @@ namespace ResurrectionRP_Server.Farms
             if (player == null || player.IsOnProgress)
                 return;
 
-            IVehicle fuelVeh = VehiclesManager.GetNearestVehicle(client.Position, 5, GameMode.GlobalDimension);
+            VehicleHandler fuelVeh = null;
+
+            var vehs = VehiclesManager.GetNearestsVehicles(client.Position, 5, GameMode.GlobalDimension);
+
+            foreach(var veh in vehs)
+            {
+                if (veh.HasTrailer && veh.Trailer != null && Array.IndexOf(AllowedTrailers, (VehicleModel)veh.Trailer.Model) != -1)
+                {
+                    fuelVeh = (VehicleHandler)veh.Trailer;
+                    break;
+                }
+            }
 
             if (fuelVeh == null || !fuelVeh.Exists)
             {
                 client.DisplaySubtitle("~r~Aucun camion citerne à proximité", 5000);
-                return;
-            }
-            else if (fuelVeh.Model != 4097861161)
-            {
-                client.SendNotificationError("Euh c'est pas un camion citerne.");
                 return;
             }
             else if (fuelVeh.HasData("Refueling"))
@@ -220,7 +156,7 @@ namespace ResurrectionRP_Server.Farms
                 client.DisplaySubtitle($"~r~Votre citerne contient déjà du pétrole raffiné.", 5000);
                 return;
             }
-            else if (vehHandler.VehicleData.OilTank.Brute >= 500)
+            else if (vehHandler.VehicleData.OilTank.Brute >= 1500)
             {
                 client.DisplaySubtitle("~r~Le camion est déjà rempli.", 5000);
                 return;
@@ -238,138 +174,144 @@ namespace ResurrectionRP_Server.Farms
             client.DisplaySubtitle($"Remplissage en cours de la citerne de {item.name}", 5000);
 
             bool exit = false;
-            int needed = 500 - vehHandler.VehicleData.OilTank.Brute;
-            client.LaunchProgressBar(Harvest_Time * (needed / 10));
+            int needed = 1500 - vehHandler.VehicleData.OilTank.Brute;
+            client.EmitLocked("LaunchProgressBar", Harvest_Time * (needed / 10));
 
-            Task.Run(async () =>
-            {
-                for (int i = 0; !exit; i++)
+
+            FarmTimers[client] = Utils.Utils.SetInterval(async () => {
+
+                //if (vehHandler.VehicleData.OilTank.Brute < 1500)
+                //    await Task.Delay(Harvest_Time);
+
+                if (!await client.ExistsAsync() || !await fuelVeh.ExistsAsync())
+                    return;
+
+                if (!exit && await client.IsInVehicleAsync())
                 {
-                    if (vehHandler.VehicleData.OilTank.Brute < 500)
-                        await Task.Delay(Harvest_Time);
-
-                    if (!await client.ExistsAsync() || !await fuelVeh.ExistsAsync())
-                        return;
-
-                    if (await client.IsInVehicleAsync())
-                    {
-                        client.DisplaySubtitle($"~r~Récolte interrompue: ~s~Vous ne pouvez pas récolter depuis le véhicule.", 5000);
-                        exit = true;
-                    }
-
-                    if ((await fuelVeh.GetPositionAsync()).Distance(lastPos) > Harvest_Range)
-                    {
-                        client.DisplaySubtitle($"~r~Récolte interrompue: ~s~Vous devez rester dans la zone.", 5000);
-                        exit = true;
-                    }
-
-                    if (exit)
-                    {
-                        player.IsOnProgress = false;
-                        fuelVeh.ResetData("Refuelling");
-                        client.EmitLocked("StopProgressBar");
-                        return;
-                    }
-
-                    vehHandler.VehicleData.OilTank.Brute += 10;
-
-                    if (vehHandler.VehicleData.OilTank.Brute >= 500)
-                    {
-                        fuelVeh.ResetData("Refuelling");
-                        client.EmitLocked("StopProgressBar");
-                        client.DisplaySubtitle($"Récolte terminée: la citerne est pleine ~r~ ({vehHandler.VehicleData.OilTank.Brute}L {item.name})", 10000);
-                        player.IsOnProgress = false;
-                        return;
-                    }
+                    client.DisplaySubtitle($"~r~Récolte interrompue: ~s~Vous ne pouvez pas récolter depuis le véhicule.", 5000);
+                    exit = true;
                 }
-            });
 
-            player.UpdateFull();
-            vehHandler.UpdateInBackground();
+                if (!exit && (await fuelVeh.GetPositionAsync()).Distance(lastPos) > Harvest_Range)
+                {
+                    client.DisplaySubtitle($"~r~Récolte interrompue: ~s~Vous devez rester dans la zone.", 5000);
+                    exit = true;
+                }
+
+                if (exit)
+                {
+                    client.StopProgressBar();
+                    if (FarmTimers.ContainsKey(client))
+                    {
+                        FarmTimers[client].Stop();
+                        FarmTimers[client].Close();
+                        FarmTimers.TryRemove(client, out _);
+                    }
+                    return;
+                }
+
+                vehHandler.VehicleData.OilTank.Brute += 10;
+
+                if (vehHandler.VehicleData.OilTank.Brute >= 1500)
+                {
+                    fuelVeh.ResetData("Refuelling");
+                    client.EmitLocked("StopProgressBar");
+                    client.DisplaySubtitle($"Récolte terminée: la citerne est pleine ~r~ ({vehHandler.VehicleData.OilTank.Brute}L {item.name})", 10000);
+                    player.IsOnProgress = false;
+                    FarmTimers[client].Stop();
+                    FarmTimers[client] = null;
+                    exit = true;
+                }
+            }, Harvest_Time);
         }
-
         #endregion
 
         #region Start Traitement
-        public override void StartProcessing(IPlayer sender)
+        public void TankFilling(IPlayer client, IVehicle trailer)
         {
-            if (sender == null || !sender.Exists)
+
+            if (client.Vehicle != null)
+                client.DisplayHelp("Vous êtes libre de sortir du véhicule le temps du traitement!", 15000);
+
+            if (trailer == null || !trailer.Exists)
+            {
+                client.DisplayHelp("Aucune remorque à proximité", 5000);
                 return;
-
-            PlayerHandler player = sender.GetPlayerHandler();
-
-            if (player == null || player.IsOnProgress)
+            }
+            else if (trailer.HasData("Refueling"))
+            {
+                client.DisplayHelp("La remorque est déjà en traitement.", 5000);
                 return;
+            }
 
-            IVehicle vehicle = sender.Vehicle;
+            //if (Array.IndexOf(allowedTrailers, vehicle.Model) == -1)
+            //{
+            //    client.DisplayHelp("La remorque n'est pas homologuée pour cette action!", 10000);
+            //    return;
+            //}
 
-            if (vehicle == null || !vehicle.Exists || vehicle.Driver != sender)
-                return;
-
-            VehicleHandler vehHandler = vehicle.GetVehicleHandler();
+            VehicleHandler vehHandler = trailer.GetVehicleHandler();
 
             if (vehHandler == null)
                 return;
-            else if (vehicle.Model != 4097861161)
-            {
-                sender.DisplaySubtitle($"Vous devez être dans un camion citerne.", 5000);
-                return;
-            }
-            else if (vehHandler.VehicleData.OilTank.Brute == 0)
-            {
-                sender.DisplaySubtitle($"Votre camion citerne est vide.", 5000);
-                return;
-            }
 
-            MenuManager.CloseMenu(sender);
+            PlayerHandler player = client.GetPlayerHandler();
+
+            if (player == null)
+                return;
+
+            MenuManager.CloseMenu(client);
 
             Item _itemNoTraite = LoadItem.GetItemWithID(ItemIDBrute);
-            Item _itemTraite = LoadItem.GetItemWithID(ItemIDBrute);
+            Item _itemTraite = LoadItem.GetItemWithID(ItemIDProcess);
             player.IsOnProgress = true;
-            sender.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s)", 5000);
-            sender.EmitLocked("LaunchProgressBar", Process_Time * (vehHandler.VehicleData.OilTank.Brute / 10));
+            client.DisplaySubtitle($"Vous commencez à traiter vos ~r~{_itemNoTraite.name}(s)", 5000);
+            int needed = 1500 - vehHandler.VehicleData.OilTank.Brute;
+            //client.LaunchProgressBar(Harvest_Time * (vehHandler.VehicleData.OilTank.Brute / 100));
             bool exit = false;
-
-            Task.Run(async () =>
+            ProcessTimers[client] = Utils.Utils.SetInterval(async () =>
             {
-                while (!exit)
+                if (!await client.ExistsAsync() || !await trailer.ExistsAsync())
+                    return;
+
+                if (!exit && RaffineriePos.DistanceTo(await trailer.GetPositionAsync()) > 30f)
                 {
-                    if (!await sender.ExistsAsync())
-                        return;
-
-                    if (vehHandler.VehicleData.OilTank.Brute >= 1)
-                        await Task.Delay(Process_Time);
-
-                    if (RaffineriePos.DistanceTo(await vehicle.GetPositionAsync()) > 30f)
-                    {
-                        sender.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous devez rester dans la zone.", 5000);
-                        exit = true;
-                    }
-
-                    if (exit)
-                    {
-                        sender.EmitLocked("StopProgressBar");
-                        player.IsOnProgress = false;
-                        return;
-                    }
-
-                    vehHandler.VehicleData.OilTank.Brute -= 10;
-                    vehHandler.VehicleData.OilTank.Traite += 5;
-
-                    if (vehHandler.VehicleData.OilTank.Brute == 0)
-                    {
-                        sender.EmitLocked("StopProgressBar");
-                        sender.DisplaySubtitle($"Traitement de la citerne terminé: Vous avez traité ~r~ {vehHandler.VehicleData.OilTank.Traite}L {_itemTraite.name}(s)", 15000);
-                        player.UpdateFull();
-                        vehHandler.UpdateInBackground();
-                        player.IsOnProgress = false;
-                        return;
-                    }
+                    client.DisplaySubtitle($"~r~Traitement interrompu: ~s~Vous deviez rester dans la zone.", 5000);
+                    exit = true;
                 }
-            });
+
+
+                if (exit)
+                {
+                    client.StopProgressBar();
+                    if (ProcessTimers.ContainsKey(client))
+                    {
+                        ProcessTimers[client].Stop();
+                        ProcessTimers[client].Close();
+                        ProcessTimers.TryRemove(client, out _);
+                    }
+                    return;
+                }
+
+                if (vehHandler.VehicleData.OilTank.Traite >= TrailerMaxContent || vehHandler.VehicleData.OilTank.Brute <= 0)
+                {
+                    client.EmitLocked("StopProgressBar");
+                    client.DisplaySubtitle($"Remplicage de la citerne terminé: Vous avez rempli ~r~ {vehHandler.VehicleData.OilTank.Traite}L {_itemTraite.name}(s)", 15000);
+                    player.UpdateFull();
+                    vehHandler.UpdateInBackground();
+                    player.IsOnProgress = false;
+                    exit = true;
+                    return;
+                }
+
+                vehHandler.VehicleData.OilTank.Traite += 5;
+                vehHandler.VehicleData.OilTank.Brute -= 5;
+                client.DisplaySubtitle("Volume essence raffiné : " + vehHandler.VehicleData.OilTank.Traite + "L", 3000);
+            }, (Process_Time * 1000) / (FillingTime));
         }
         #endregion
 
+        #region Start Selling
         public override void StartSelling(IPlayer sender)
         {
             if (sender == null || !sender.Exists)
@@ -379,32 +321,33 @@ namespace ResurrectionRP_Server.Farms
 
             if (player == null || player.IsOnProgress)
                 return;
-            else if (!sender.IsInVehicle)
-            {
-                sender.DisplaySubtitle($"Vous devez être dans votre camion citerne.", 5000);
-                return;
-            }
 
-            IVehicle vehicle = sender.Vehicle;
+            VehicleHandler vehicle = sender.Vehicle as VehicleHandler;
+            VehicleHandler trailer = null;
 
             if (vehicle == null || !vehicle.Exists || vehicle.Driver != sender)
                 return;
 
-            VehicleHandler vehHandler = vehicle.GetVehicleHandler();
-
-            if (vehHandler == null)
-                return;
-            else if (vehicle.Model != 4097861161)
+            if (vehicle.Trailer != null)
             {
-                sender.DisplaySubtitle($"Vous devez être dans un camion citerne.", 5000);
+                trailer = (VehicleHandler)vehicle.Trailer;
+            }
+
+            if (trailer == null)
+                return;
+
+            if (Array.IndexOf(AllowedTrailers, (VehicleModel)trailer.Model) == -1)
+            {
+                sender.DisplaySubtitle($"Vous devez avoir un camion citerne.", 5000);
                 return;
             }
-            else if (vehHandler.VehicleData.OilTank.Traite == 0)
+
+            if (trailer.VehicleData.OilTank.Traite == 0)
             {
                 sender.DisplaySubtitle($"Vous camion citerne est vide.", 5000);
                 return;
             }
-            else if (vehHandler.VehicleData.OilTank.Brute > 0)
+            else if (trailer.VehicleData.OilTank.Brute > 0 && trailer.VehicleData.OilTank.Traite == 0)
             {
                 sender.DisplaySubtitle($"Ce n'est pas du pétrole raffiné!", 5000);
                 return;
@@ -417,53 +360,57 @@ namespace ResurrectionRP_Server.Farms
 
             sender.DisplaySubtitle($"Vous commencez à vendre vos ~r~{_itemBuy.name}(s)", 5000);
 
-            int itemcount = vehHandler.VehicleData.OilTank.Traite;
-            sender.EmitLocked("LaunchProgressBar", Selling_Time * itemcount);
+            int itemcount = trailer.VehicleData.OilTank.Traite;
 
             var count = 0;
             bool exit = false;
 
-            Task.Run(async () =>
+            sender.LaunchProgressBar((Process_Time * 1000) / (FillingTime) * (trailer.VehicleData.OilTank.Traite / 5));
+            SellingTimer[sender] = Utils.Utils.SetInterval(async () =>
             {
-                while (!exit)
+                if (!await sender.ExistsAsync())
+                    return;          
+
+                if (SellPos.DistanceTo(await vehicle.GetPositionAsync()) > 30f)
                 {
-                    if (!await sender.ExistsAsync())
-                        return;
-
-                    if (vehHandler.VehicleData.OilTank.Traite >= 1)
-                        await Task.Delay(Selling_Time);
-
-                    if (SellPos.DistanceTo(await vehicle.GetPositionAsync()) > 30f)
-                    {
-                        sender.DisplaySubtitle($"~r~Vente interrompue: ~s~Vous devez rester dans la zone.", 5000);
-                        exit = true;
-                    }
-
-                    if (exit)
-                    {
-                        sender.EmitLocked("StopProgressBar");
-                        player.IsOnProgress = false;
-                        return;
-                    }
-
-                    count++;
-                    vehHandler.VehicleData.OilTank.Traite--;
-
-                    if (vehHandler.VehicleData.OilTank.Traite == 0)
-                    {
-                        sender.EmitLocked("StopProgressBar");
-                        double gettaxe = Economy.Economy.CalculPriceTaxe(ItemPrice * itemcount, GameMode.Instance.Economy.Taxe_Exportation);
-                        player.AddMoney((ItemPrice * itemcount) - gettaxe);
-                        GameMode.Instance.Economy.CaissePublique += gettaxe;
-                        sender.DisplaySubtitle($"~r~{itemcount} ~w~{_itemBuy.name}(s) $~r~{(ItemPrice * itemcount) - gettaxe} ~w~taxe:$~r~{gettaxe}.", 15000);
-                        player.IsOnProgress = false;
-                        return;
-                    }
+                    sender.DisplaySubtitle($"~r~Vente interrompue: ~s~Vous devez rester dans la zone.", 5000);
+                    player.IsOnProgress = false;
+                    player.UpdateFull();
+                    trailer.UpdateInBackground();
+                    exit = true;
                 }
 
-                player.IsOnProgress = false;
-                player.UpdateFull();
-            });
+                if (exit)
+                {
+                    sender.StopProgressBar();
+                    if (SellingTimer.ContainsKey(sender))
+                    {
+                        SellingTimer[sender].Stop();
+                        SellingTimer[sender].Close();
+                        SellingTimer.TryRemove(sender, out _);
+                    }
+                    return;
+                }
+                else
+                    sender.DisplaySubtitle($"~r~Vente en cours...", 500);
+
+                trailer.VehicleData.OilTank.Traite -= 5;
+
+                if (trailer.VehicleData.OilTank.Traite <= 0)
+                {
+                    exit = true;
+                    sender.EmitLocked("StopProgressBar");
+                    double gettaxe = Economy.Economy.CalculPriceTaxe(ItemPrice * itemcount, GameMode.Instance.Economy.Taxe_Exportation);
+                    player.AddMoney((ItemPrice * itemcount) - gettaxe);
+                    GameMode.Instance.Economy.CaissePublique += gettaxe;
+                    sender.DisplaySubtitle($"~r~{itemcount} ~w~{_itemBuy.name}(s) $~r~{(ItemPrice * itemcount) - gettaxe} ~w~taxe:$~r~{gettaxe}.", 15000);
+                    player.IsOnProgress = false;
+                    player.UpdateFull();
+                    trailer.UpdateInBackground();
+                    return;
+                }
+            }, (Process_Time * 1000) / (FillingTime));
         }
+        #endregion
     }
 }

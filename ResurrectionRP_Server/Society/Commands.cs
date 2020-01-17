@@ -12,8 +12,14 @@ namespace ResurrectionRP_Server.Society
     {
         public Commands()
         {
-            Chat.RegisterCmd("addweazel", AddWeazel);
             Chat.RegisterCmd("addbennys", AddBennys);
+            Chat.RegisterCmd("addweazel", AddWeazel);
+            Chat.RegisterCmd("addpetrol", PetrolSociety);
+            Chat.RegisterCmd("addunicorn", AddUnicorn);
+            Chat.RegisterCmd("addsandjob", Sandjob);
+            Chat.RegisterCmd("addrhumerie", Rhumerie);
+            Chat.RegisterCmd("addtequilala", TequilalaSociety);
+            Chat.RegisterCmd("addyellowjack", YellowJack);
         }
 
         private void AddBennys(IPlayer player, string[] args)
@@ -35,17 +41,14 @@ namespace ResurrectionRP_Server.Society
                 return;
 
             var inventory = new Inventory.Inventory(500, 40);
-            var parking = new Parking(new System.Numerics.Vector3(-557.4198f, -899.7758f, 24.12378f), new Location(new System.Numerics.Vector3(-557.4198f, -899.7758f, 24.12378f), new System.Numerics.Vector3()));
+            var parking = new Parking(new Vector3(-557.4198f, -899.7758f, 24.12378f), new Location(new System.Numerics.Vector3(-557.4198f, -899.7758f, 24.12378f), new System.Numerics.Vector3()));
 
             var weazel = new Weazel("Weazel News", new System.Numerics.Vector3(-580.33844f, -935.45935f, 23.871094f), 459, 1, "Armex72", inventory, parking);
-            // -580.33844 -935.45935 23.871094 prise de service
-            // -591.5868 -933.32306 23.871094 lifeinvader
-            // -557.4198 -899.7758 24.12378 parking
             weazel.Init();
             Task.Run(async () => await weazel.Insert());
         }
 
-        private void PetrolSociety(IPlayer client)
+        private void PetrolSociety(IPlayer client, string[] args)
         {
             if (client.GetStaffRank() < Utils.Enums.StaffRank.Moderator)
                 return;
@@ -55,6 +58,50 @@ namespace ResurrectionRP_Server.Society
             society.Init();
         }
 
+        public void AddUnicorn(IPlayer client, string[] args)
+        {
+            if (client.GetStaffRank() < Utils.Enums.StaffRank.Moderator)
+                return;
 
+            var uni = new Unicorn("Vanilla Unicorn", new Vector3(132.456f, -1290.048f, 29.26952f), 121, 73, "", new Inventory.Inventory(500, 40));
+            Task.Run(async () => await uni.Insert());
+            uni.Init();
+        }
+
+        public void Sandjob(IPlayer client, string[] args)
+        {
+            if (client.GetStaffRank() < Utils.Enums.StaffRank.Moderator)
+                return;
+            Society society = new Sandjob("LosSantos Bottle", client.Position, 181, 28, "", inventory: new Inventory.Inventory(5000, 40));
+            Task.Run(async () => await society.Insert());
+            society.Init();
+        }
+
+        public void Rhumerie(IPlayer client, string[] args)
+        {
+            if (client.GetStaffRank() < Utils.Enums.StaffRank.Moderator)
+                return;
+            Society society = new Rhumerie("Rhumerie de Los Santos", client.Position, 93, 51, "", inventory: new Inventory.Inventory(5000, 40));
+            Task.Run(async () => await society.Insert());
+            society.Init();
+        }
+
+        public void TequilalaSociety(IPlayer client, string[] args)
+        {
+            if (client.GetStaffRank() < Utils.Enums.StaffRank.Moderator)
+                return;
+            Society society = new Tequilala("Tequi-La-La", client.Position, 93, (int)BlipColor.Purple, "", inventory: new Inventory.Inventory(5000, 40));
+            Task.Run(async () => await society.Insert());
+            society.Init();
+        }
+
+        public void YellowJack(IPlayer client, string[] args)
+        {
+            if (client.GetStaffRank() < Utils.Enums.StaffRank.Moderator)
+                return;
+            Society society = new YellowJack("Yellow Jack", new Vector3(1982.244f, 3053.145f, 47.21507f), 93, (int)BlipColor.Yellow, "Rohakar", inventory: new Inventory.Inventory(5000, 40));
+            Task.Run(async () => await society.Insert());
+            society.Init();
+        }
     }
 }

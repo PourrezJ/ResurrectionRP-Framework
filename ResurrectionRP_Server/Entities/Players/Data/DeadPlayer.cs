@@ -40,6 +40,9 @@ namespace ResurrectionRP_Server.Entities.Players.Data
             if (client == Victime)
                 return;
 
+            if (!Victime.IsDead)
+                return;
+
             PlayerHandler ph = client.GetPlayerHandler();
 
             XMenu menu = new XMenu("");
@@ -187,7 +190,10 @@ namespace ResurrectionRP_Server.Entities.Players.Data
 
         public void Remove()
         {
+            Utils.Utils.CheckThread("Remove");
             marker?.Destroy();
+            colshape.OnPlayerEnterColshape -= OnPlayerEnterColshape;
+            colshape.OnPlayerLeaveColshape -= OnPlayerExitColshape;
             colshape?.Delete();
             PlayerManager.DeadPlayers.Remove(this);
         }

@@ -213,11 +213,11 @@ namespace ResurrectionRP_Server.Factions
                     Quai = Rack.CreateRack("Quai", new Vector3(1180.685f, -3168.366f, 5.1175f), new Location(new Vector3(1183.685f, -3168.366f, 7.1175f), new Vector3(0, 0, 83.16074f)), true);
                 
                 if (Importation == null)
-                    Importation = Rack.CreateRack("Importation", new Vector3(1216.311f, -3038.197f, 4.868594f), new Location(new Vector3(1216.311f, -3041.197f, 5.868594f), new Vector3()), true);
+                    Importation = Rack.CreateRack("Importation", new Vector3(1216.311f, -3038.197f, 5.868594f), new Location(new Vector3(1216.311f, -3041.197f, 5.868594f), new Vector3()), true);
 
 
                 Quai.RackPos = new Vector3(1180.685f, -3168.366f, 4.1175f);
-                Importation.RackPos = new Vector3(1216.311f, -3038.197f, 4.868594f);
+                Importation.RackPos = new Vector3(1216.311f, -3038.197f, 5.868594f);
 
                 Quai.Load();
                 Importation.Load();
@@ -448,7 +448,7 @@ namespace ResurrectionRP_Server.Factions
         {
             Racks = new List<Rack>();
             Quai = Rack.CreateRack("Quai", new Vector3(1180.685f, -3168.366f, 4.1175f), new Location(new Vector3(1183.685f, -3168.366f, 7.1175f), new Vector3(0, 0, 83.16074f)), true);
-            Importation = Rack.CreateRack("Importation", new Vector3(1216.311f, -3038.197f, 3.868594f), new Location(new Vector3(1216.311f, -3041.197f, 5.868594f), new Vector3()), true);
+            Importation = Rack.CreateRack("Importation", new Vector3(1216.311f, -3038.197f, 4.868594f), new Location(new Vector3(1216.311f, -3041.197f, 5.868594f), new Vector3()), true);
 
             Vector3 a = new Vector3(1003.698f, -3111.308f, -38.99989f);
             Vector3 b = new Vector3(1018.397f, -3094.57f, -38.99988f);
@@ -462,13 +462,13 @@ namespace ResurrectionRP_Server.Factions
                 Vector3 temp = new Vector3(a.X, a.Y, a.Z);
                 temp.Y += j * y;
 
-                Racks.Add(Rack.CreateRack($"Rack {e}", new Vector3(temp.X, temp.Y, temp.Z - 1), new Location(new Vector3(temp.X, temp.Y + 3, temp.Z), new Vector3())));
+                Racks.Add(Rack.CreateRack($"Rack {e}", new Vector3(temp.X, temp.Y, temp.Z - 2), new Location(new Vector3(temp.X, temp.Y + 3, temp.Z), new Vector3())));
                 e++;
 
                 for (int i = 0; i < 6; i++)
                 {
                     temp.X += x;
-                    Racks.Add(Rack.CreateRack($"Rack {e}", new Vector3(temp.X, temp.Y, temp.Z - 1), new Location(new Vector3(temp.X, temp.Y + 3, temp.Z), new Vector3())));
+                    Racks.Add(Rack.CreateRack($"Rack {e}", new Vector3(temp.X, temp.Y, temp.Z - 2), new Location(new Vector3(temp.X, temp.Y + 3, temp.Z), new Vector3())));
                     e++;
                 }
             }

@@ -192,16 +192,20 @@ namespace ResurrectionRP_Server.Entities.Players
             FirstSpawn = firstspawn;
             client.SetData("PlayerHandler", this);
 
-            ulong discordID = ulong.Parse(Discord.GetDiscordData(client).id);
-
-            if (DiscordID == 0)
-                DiscordID = ulong.Parse(Discord.GetDiscordData(client).id);
-
-            if (discordID != DiscordID)
+            var discordData = Discord.GetDiscordData(client);
+            if (discordData != null)
             {
-                client.SendNotificationError("Vous n'utilisez pas le compte discord lié au serveur.", 60000);
-                client.Kick("Vous n'utilisez pas le compte discord lié au serveur.");
-                return;
+                ulong discordID = ulong.Parse(Discord.GetDiscordData(client).id);
+
+                if (DiscordID == 0)
+                    DiscordID = ulong.Parse(Discord.GetDiscordData(client).id);
+
+                if (discordID != DiscordID)
+                {
+                    client.SendNotificationError("Vous n'utilisez pas le compte discord lié au serveur.", 60000);
+                    client.Kick("Vous n'utilisez pas le compte discord lié au serveur.");
+                    return;
+                }
             }
 
             if (PlayerHandlerList.TryAdd(client, this))

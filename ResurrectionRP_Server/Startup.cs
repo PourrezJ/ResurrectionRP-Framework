@@ -84,7 +84,7 @@ namespace ResurrectionRP_Server
 
         private void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
         {
-            PlayerManager.Alt_OnPlayerDead(player, killer, weapon);
+            PlayerManager.OnPlayerDead(player, killer, weapon);
         }
 
         public override void OnStop()

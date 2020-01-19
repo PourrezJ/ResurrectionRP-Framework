@@ -54,7 +54,7 @@ namespace ResurrectionRP_Server.Entities.Players
             AltAsync.OnClient<IPlayer, string, string>("MakePlayer", MakePlayer);
             AltAsync.OnClient <IPlayer, string>("SendLogin", SendLogin);
             
-            Alt.OnClient<IPlayer, string, string>("Events_PlayerJoin", Events_PlayerJoin);
+            Alt.OnClient<IPlayer, string, string>("Events_PlayerJoin", OnPlayerJoin);
             Alt.OnClient<IPlayer>("LogPlayer", LogPlayer);
             Alt.OnClient<IPlayer>("IWantToDie", IWantToDie);
             Alt.OnClient("Player_SetInComa", (IPlayer client) => client.GetPlayerHandler().IsInComa = true); // peut être mieux?
@@ -155,7 +155,7 @@ namespace ResurrectionRP_Server.Entities.Players
             Alt.Server.LogInfo($"Joueur social: {ph.PID} || Nom: {ph.Identite.Name} est déconnecté raison: {reason}.");
         }
 
-        public static void Alt_OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
+        public static void OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
         {
             if (player.Exists)
             {
@@ -179,7 +179,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        public static void Events_PlayerJoin(IPlayer player, string socialclub, string discordData)
+        public static void OnPlayerJoin(IPlayer player, string socialclub, string discordData)
         {
             if (!player.Exists)
                 return;

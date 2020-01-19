@@ -195,10 +195,10 @@ namespace ResurrectionRP_Server.Entities.Players
             var discordData = Discord.GetDiscordData(client);
             if (discordData != null)
             {
-                ulong discordID = ulong.Parse(Discord.GetDiscordData(client).id);
+                ulong discordID = ulong.Parse(discordData.id);
 
                 if (DiscordID == 0)
-                    DiscordID = ulong.Parse(Discord.GetDiscordData(client).id);
+                    DiscordID = discordID;
 
                 if (discordID != DiscordID)
                 {
@@ -206,6 +206,15 @@ namespace ResurrectionRP_Server.Entities.Players
                     client.Kick("Vous n'utilisez pas le compte discord lié au serveur.");
                     return;
                 }
+
+                if (Discord.IsAdmin(discordData.SocketGuildUser))
+                    StaffRank = StaffRank.Administrator;
+                else if (Discord.IsModerator(discordData.SocketGuildUser))
+                    StaffRank = StaffRank.Moderator;
+                else if (Discord.IsHelper(discordData.SocketGuildUser))
+                    StaffRank = StaffRank.Helper;
+                else if (Discord.IsAnimator(discordData.SocketGuildUser))
+                    StaffRank = StaffRank.Animator;
             }
 
             if (PlayerHandlerList.TryAdd(client, this))
@@ -246,16 +255,6 @@ namespace ResurrectionRP_Server.Entities.Players
                 if(Stats == null)
                     Stats = new ConcurrentDictionary<string, dynamic>();
 
-                var discordUser = Discord.GetDiscordData(client);
-
-                if (Discord.IsAdmin(discordUser.SocketGuildUser))
-                    StaffRank = StaffRank.Administrator;
-                else if (Discord.IsModerator(discordUser.SocketGuildUser))
-                    StaffRank = StaffRank.Moderator;
-                else if (Discord.IsHelper(discordUser.SocketGuildUser))
-                    StaffRank = StaffRank.Helper;
-                else if (Discord.IsAnimator(discordUser.SocketGuildUser))
-                    StaffRank = StaffRank.Animator;
 
                 //TrainManager.OnPlayerConnected(client);
 

@@ -29,7 +29,6 @@ namespace ResurrectionRP_Server.Items
 
         public override void Use(IPlayer client, string inventoryType, int slot)
         {
-            Alt.Server.LogInfo($"[Eat.Use()] : inventoryType: {inventoryType}, slot: {slot}");
             Entities.Players.PlayerHandler ph = client.GetPlayerHandler();
 
             if (ph != null)

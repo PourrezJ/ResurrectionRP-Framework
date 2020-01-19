@@ -139,7 +139,7 @@ namespace ResurrectionRP_Server.Factions
             str += (InventoryBox != null) ? $"{InventoryBox.Inventory.CurrentSize()} : {InventoryBox.Inventory.MaxSize}" : "Vide";
 
             if (TextLabel != null)
-                Streamer.Streamer.UpdateEntityTextLabel(TextLabel.id, str);
+                Streamer.Streamer.UpdateEntityTextLabel(TextLabel.ID, str);
             else
                 TextLabel = Streamer.Streamer.AddEntityTextLabel(str, BoxLocation.Pos, 1, 255, 255, 255, 160);
         }

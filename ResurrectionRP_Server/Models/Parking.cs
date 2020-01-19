@@ -494,7 +494,7 @@ namespace ResurrectionRP_Server.Models
             if (EntityMarker != null)
                 Marker.DestroyMarker(EntityMarker);
             if (EntityLabel != null)
-                Streamer.Streamer.ListEntities[EntityLabel.id].Remove();
+                Streamer.Streamer.ListEntities[EntityLabel.ID].Remove();
             if (EntityBlip != null)
                 BlipsManager.Destroy(EntityBlip);
         }

@@ -29,7 +29,7 @@ namespace ResurrectionRP_Server.Models
 
         public static void Init()
         {
-            var banList = Database.MongoDB.GetCollectionSafe<Ban>("ban").AsQueryable(); ;
+            var banList = Database.MongoDB.GetCollectionSafe<Ban>("ban").AsQueryable();
             foreach (Ban ban in banList)
             {
                 BanList.Add(ban);

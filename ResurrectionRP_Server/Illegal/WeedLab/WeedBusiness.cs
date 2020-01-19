@@ -266,7 +266,7 @@ namespace ResurrectionRP_Server.Illegal
             $"Etape: {(zone.Plant ? croissanceSTR : "Aucune")}";
 
             if (zone.Textlabel != null)
-                zone.Textlabel.text = str;
+                zone.Textlabel.Text = str;
             return str;
         }
 

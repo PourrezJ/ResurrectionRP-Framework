@@ -10,6 +10,7 @@ using WorldObject = ResurrectionRP_Server.Entities.Objects.WorldObject;
 using TextLabel = ResurrectionRP_Server.Streamer.Data.TextLabel;
 using Blips = ResurrectionRP_Server.Entities.Blips.Blips;
 using ResurrectionRP_Server.Entities.Peds;
+using System.Drawing;
 
 namespace ResurrectionRP_Server.Streamer
 {
@@ -102,6 +103,16 @@ namespace ResurrectionRP_Server.Streamer
         {
             var data = new TextLabel(label, font, r, g, b, a);
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, drawDistance, data.export());
+            data.ID = item.Id;
+            ListEntities.TryAdd(item.Id, item);
+            return data;
+        }
+
+        public static TextLabel AddEntityTextLabel(string label, Vector3 pos, Color color, int font = 2, int drawDistance = 5, int dimension = GameMode.GlobalDimension)
+        {
+            var data = new TextLabel(label, font, color.R, color.G, color.B, color.A);
+            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, drawDistance, data.export());
+            data.ID = item.Id;
             ListEntities.TryAdd(item.Id, item);
             return data;
         }

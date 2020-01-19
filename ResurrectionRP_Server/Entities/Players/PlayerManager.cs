@@ -208,15 +208,18 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 var userGuildDiscord = Discord.GetSocketGuildUser(ulong.Parse(discord.id));
 
-                if (!Discord.IsCitoyen(userGuildDiscord))
+                if(userGuildDiscord != null)
                 {
-                    player.SendNotificationError("Vous n'êtes pas whitelist Citoyen sur le discord.", 60000);
-                    return;
-                }
+                    if (!Discord.IsCitoyen(userGuildDiscord))
+                    {
+                        player.SendNotificationError("Vous n'êtes pas whitelist Citoyen sur le discord.", 60000);
+                        return;
+                    }
 
-                discord.SocketGuildUser = userGuildDiscord;
-                if (!Discord.DiscordPlayers.ContainsKey(player))
-                    Discord.DiscordPlayers.TryAdd(player, discord);
+                    discord.SocketGuildUser = userGuildDiscord;
+                    if (!Discord.DiscordPlayers.ContainsKey(player))
+                        Discord.DiscordPlayers.TryAdd(player, discord);
+                }
             }
   
             string playerIp = string.Empty;

@@ -51,7 +51,7 @@ namespace ResurrectionRP_Server.Utils
         public void SetDoorLockState(bool lockStatut)
         {
             Locked = lockStatut;
-            Streamer.Streamer.UpdateEntityTextLabel(this.TextLabel.id, $"Porte: {((Locked) ? "Verrouillée" : "Deverrouillée")}");
+            Streamer.Streamer.UpdateEntityTextLabel(this.TextLabel.ID, $"Porte: {((Locked) ? "Verrouillée" : "Deverrouillée")}");
             Alt.EmitAllClients("SetDoorLockState", ID, Locked);
         }
 

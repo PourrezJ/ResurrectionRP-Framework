@@ -29,7 +29,7 @@ namespace ResurrectionRP_Server.Society
 
             Parking _parking = new Parking(new Vector3(-188.0847f, -1290.69f, 31.5549f), new Location(new Vector3(-188.0847f, -1290.69f, 31.5549f), new Vector3(0.1376072f, -0.009726464f, 266.3796f)));
 
-            var benny = new Bennys("Benny's Motorsport", player.Position, 488, 40, player.GetSocialClub(), new Inventory.Inventory(1000, 20), _parking);
+            var benny = new Bennys("Benny's Motorsport", player.Position - new AltV.Net.Data.Position(0, 0, 1), 488, 40, player.GetSocialClub(), new Inventory.Inventory(1000, 20), _parking);
 
             Task.Run(async ()=> await benny.Insert());
             benny.Init();
@@ -63,7 +63,7 @@ namespace ResurrectionRP_Server.Society
             if (client.GetStaffRank() < Utils.Enums.StaffRank.Moderator)
                 return;
 
-            var uni = new Unicorn("Vanilla Unicorn", new Vector3(132.456f, -1290.048f, 29.26952f), 121, 73, "", new Inventory.Inventory(500, 40));
+            var uni = new Unicorn("Vanilla Unicorn", new Vector3(132.456f, -1290.048f, 28.26952f), 121, 73, "", new Inventory.Inventory(500, 40));
             Task.Run(async () => await uni.Insert());
             uni.Init();
         }
@@ -99,7 +99,7 @@ namespace ResurrectionRP_Server.Society
         {
             if (client.GetStaffRank() < Utils.Enums.StaffRank.Moderator)
                 return;
-            Society society = new YellowJack("Yellow Jack", new Vector3(1982.244f, 3053.145f, 47.21507f), 93, (int)BlipColor.Yellow, "Rohakar", inventory: new Inventory.Inventory(5000, 40));
+            Society society = new YellowJack("Yellow Jack", new Vector3(1982.244f, 3053.145f, 46.21507f), 93, (int)BlipColor.Yellow, "Rohakar", inventory: new Inventory.Inventory(5000, 40));
             Task.Run(async () => await society.Insert());
             society.Init();
         }

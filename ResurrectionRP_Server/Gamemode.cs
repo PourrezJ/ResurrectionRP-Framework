@@ -188,7 +188,7 @@ namespace ResurrectionRP_Server
             FarmManager.InitAll();
             Weather.WeatherManager.InitWeather();
             Phone.PhoneManager.Init();
-            TrainManager.LoadTrains();
+            //TrainManager.LoadTrains();
             
 
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");

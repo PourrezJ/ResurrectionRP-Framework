@@ -49,8 +49,7 @@ namespace ResurrectionRP_Server.Entities.Players
             new IllegalCommands();
             new Society.Commands();
 
-            
-            
+                 
             AltAsync.OnClient<IPlayer, string, string>("MakePlayer", MakePlayer);
             AltAsync.OnClient <IPlayer, string>("SendLogin", SendLogin);
             
@@ -100,59 +99,63 @@ namespace ResurrectionRP_Server.Entities.Players
             PlayerHandler.PlayerHandlerList.TryGetValue(player, out PlayerHandler ph);
 
             if (ph == null)
-                return;
-
-            ph.IsOnline = false;
-            MenuManager.OnPlayerDisconnect(player);
-            FactionManager.OnPlayerDisconnected(player);
-            TrainManager.OnPlayerDisconnected(player);
-
-            if (Phone.PhoneManager.PhoneClientList.ContainsKey(player))
-                Phone.PhoneManager.PhoneClientList.TryRemove(player, out List<Phone.Phone> phoneList);
-
-            if (RPGInventoryManager.HasInventoryOpen(player))
             {
-                var rpg = RPGInventoryManager.GetRPGInventory(player);
-
-                if (rpg != null)
-                    rpg.OnClose?.Invoke(player, rpg);
-
-                RPGInventoryManager.OnPlayerQuit(player);
-            }
-
-            if (HouseManager.IsInHouse(player))
-            {
-                House house = HouseManager.GetHouse(player);
-                ph.Location = new Location(house.Position, new Vector3());
+                Alt.Server.LogInfo($"Joueur social: {player.Name} {player.SocialClubId} est déconnecté raison: {reason}.");
             }
             else
-                ph.Location = new Location(player.Position, player.Rotation);
-
-            if ((DateTime.Now - ph.LastUpdate).Minutes >= 1)
             {
-                ph.TimeSpent += (DateTime.Now - ph.LastUpdate).Minutes;
-                ph.LastUpdate = DateTime.Now;
-            }
+                ph.IsOnline = false;
+                MenuManager.OnPlayerDisconnect(player);
+                FactionManager.OnPlayerDisconnected(player);
+                TrainManager.OnPlayerDisconnected(player);
 
-            var dead = DeadPlayers.FindLast(p => p.Victime == player);
-            if (dead != null)
-                dead.Remove();
+                if (Phone.PhoneManager.PhoneClientList.ContainsKey(player))
+                    Phone.PhoneManager.PhoneClientList.TryRemove(player, out List<Phone.Phone> phoneList);
 
-            ph.UpdateInBackground();
-            PlayerHandler.PlayerHandlerList.Remove(player, out _);
-
-            if (ph.Vehicle != null)
-            {
-                VehicleHandler vh = ph.Vehicle;
-
-                if (vh.VehicleData.LastDriver == ph.Identite.Name)
+                if (RPGInventoryManager.HasInventoryOpen(player))
                 {
-                    vh.LockState = VehicleLockState.Locked;
-                    vh.UpdateInBackground();
-                }
-            }
+                    var rpg = RPGInventoryManager.GetRPGInventory(player);
 
-            Alt.Server.LogInfo($"Joueur social: {ph.PID} || Nom: {ph.Identite.Name} est déconnecté raison: {reason}.");
+                    if (rpg != null)
+                        rpg.OnClose?.Invoke(player, rpg);
+
+                    RPGInventoryManager.OnPlayerQuit(player);
+                }
+
+                if (HouseManager.IsInHouse(player))
+                {
+                    House house = HouseManager.GetHouse(player);
+                    ph.Location = new Location(house.Position, new Vector3());
+                }
+                else
+                    ph.Location = new Location(player.Position, player.Rotation);
+
+                if ((DateTime.Now - ph.LastUpdate).Minutes >= 1)
+                {
+                    ph.TimeSpent += (DateTime.Now - ph.LastUpdate).Minutes;
+                    ph.LastUpdate = DateTime.Now;
+                }
+
+                var dead = DeadPlayers.FindLast(p => p.Victime == player);
+                if (dead != null)
+                    dead.Remove();
+
+                ph.UpdateInBackground();
+                PlayerHandler.PlayerHandlerList.Remove(player, out _);
+
+                if (ph.Vehicle != null)
+                {
+                    VehicleHandler vh = ph.Vehicle;
+
+                    if (vh.VehicleData.LastDriver == ph.Identite.Name)
+                    {
+                        vh.LockState = VehicleLockState.Locked;
+                        vh.UpdateInBackground();
+                    }
+                }
+
+                Alt.Server.LogInfo($"Joueur social: {ph.PID} || Nom: {ph.Identite.Name} est déconnecté raison: {reason}.");
+            }    
         }
 
         public static void OnPlayerDead(IPlayer player, IEntity killer, uint weapon)
@@ -199,7 +202,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 return;
             }
 
-            if (discordData != "null")
+            if (!string.IsNullOrEmpty(discordData) || discordData != "null")
             {
                 DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(discordData);
 
@@ -255,31 +258,33 @@ namespace ResurrectionRP_Server.Entities.Players
                     Task.Run(async () =>
                     {
                         Whitelist whitelist = await Whitelist.GetWhitelistFromAPI(socialclub);
-
-                        if (whitelist != null && whitelist.Whitelisted)
+                        await AltAsync.Do(() =>
                         {
-                            if (whitelist.IsBan)
+                            if (whitelist != null && whitelist.Whitelisted)
                             {
-                                if (DateTime.Now > whitelist.EndBanTime)
+                                if (whitelist.IsBan)
                                 {
-                                    whitelist.IsBan = false;
-                                    player.EmitLocked("OpenLogin", socialclub);
-                                    return;
-                                }
+                                    if (DateTime.Now > whitelist.EndBanTime)
+                                    {
+                                        whitelist.IsBan = false;
+                                        player.EmitLocked("OpenLogin", socialclub);
+                                        return;
+                                    }
 
-                                string _kickMessage = $"Vous êtes ban du serveur jusqu'au {whitelist.EndBanTime.ToShortDateString()}";
-                                player.Kick(_kickMessage);
+                                    string _kickMessage = $"Vous êtes ban du serveur jusqu'au {whitelist.EndBanTime.ToShortDateString()}";
+                                    player.Kick(_kickMessage);
+                                }
+                                else
+                                    player.EmitLocked("OpenLogin", socialclub);
                             }
                             else
-                                player.EmitLocked("OpenLogin", socialclub);
-                        }
-                        else
-                        {
-                            Alt.Server.LogInfo($"({player.Ip}) ({socialclub}) n'est pas whitelist sur le serveur.");
-                            player.EmitLocked("FadeIn", 0);
-                            string _kickMessage = "Vous n'êtes pas whitelist sur le serveur";
-                            player.Kick(_kickMessage);
-                        }
+                            {
+                                Alt.Server.LogInfo($"({player.Ip}) ({socialclub}) n'est pas whitelist sur le serveur.");
+                                player.EmitLocked("FadeIn", 0);
+                                string _kickMessage = "Vous n'êtes pas whitelist sur le serveur";
+                                player.Kick(_kickMessage);
+                            }
+                        });
                     });       
                 }
                 catch (Exception ex)
@@ -356,7 +361,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
         }
 
-        private static async void LogPlayer(IPlayer client)
+        private static void LogPlayer(IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -372,7 +377,11 @@ namespace ResurrectionRP_Server.Entities.Players
                 socialClubId = client.SocialClubId;
             
             if (socialClubId == 0)
+            {
                 client.Kick("Vous n'êtes pas connecté correctement, redémarrez.");
+                Alt.Server.LogWarning(client.Name + " est kick, problème avec sont social club");
+                return;
+            }
 
             Task.Run(async () =>
             {
@@ -381,6 +390,11 @@ namespace ResurrectionRP_Server.Entities.Players
                     await client.EmitAsync("FadeOut", 0);
                     client.GetData("SocialClub", out string social);
                     PlayerHandler player = await GetPlayerHandlerDatabase(social);
+                    if (player == null)
+                    {
+                        client.SendNotificationError("Erreur avec votre personnage.");
+                        return;
+                    }
                     player.LastUpdate = DateTime.Now;
                     await AltAsync.Do(()=> player.LoadPlayer(client));
                 }

@@ -41,8 +41,10 @@ export function initialize() {
     alt.on('keyup', (key) => {
         if (!loaded || hidden)
             return;
+        
+        const rank: enums.AdminRank = alt.Player.local.getMeta("LevelRank");
 
-        if (alt.Player.local.getMeta("LevelRank") == null || alt.Player.local.getMeta("LevelRank") == enums.AdminRank.Player)
+        if (rank == null || rank == enums.AdminRank.Player)
             return;
 
         if (!opened && (key == 0x54 || key == 0xBF) && alt.gameControlsEnabled()) {

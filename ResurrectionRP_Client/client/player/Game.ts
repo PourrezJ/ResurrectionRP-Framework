@@ -30,7 +30,7 @@ export class Game {
 
     //region Variables
     private _LevelRank: enums.AdminRank = enums.AdminRank.Player;
-    public get LevelRank(): number { return this._LevelRank }
+    public get LevelRank(): enums.AdminRank { return this._LevelRank }
 
     private _PlayerName: string;
     public get PlayerName(): string { return this._PlayerName }
@@ -99,6 +99,7 @@ export class Game {
             this._Time = new TimeLib(time.Hours, time.Minutes, time.Seconds);
             Game.isDebug = isDebug;
             alt.Player.local.setMeta("IsDebug", isDebug);
+            alt.Player.local.setMeta("LevelRank", this.LevelRank);
 
             new InteractionLib();
             new PhoneManager();
@@ -151,7 +152,6 @@ export class Game {
             alt.log("Stats terminées");
 
             alt.Player.local.setMeta("IsConnected", true);
-            alt.Player.local.setMeta("LevelRank", this.LevelRank);
 
             alt.on('keydown', (key) => {
                 if (key == 117)

@@ -44,19 +44,8 @@ namespace ResurrectionRP_Server.Entities.Players
         [BsonIgnore]
         public VehicleHandler Vehicle { get; set; }
 
-        private StaffRank _adminrank;
+        public StaffRank StaffRank;
 
-        public StaffRank StaffRank
-        {
-            get => _adminrank;
-            set
-            {
-                _adminrank = value;
-
-                if (Client != null && Client.Exists)
-                    Client.EmitLocked("SetRank", _adminrank);
-            }
-        }
         public Identite Identite { get; set; }
         public int TimeSpent { get; set; }
         
@@ -171,7 +160,10 @@ namespace ResurrectionRP_Server.Entities.Players
         public PlayerHandler(IPlayer client)
         {
             Client = client;
-            DiscordID = ulong.Parse(Discord.GetDiscordData(client).id);
+
+            var discordData = Discord.GetDiscordData(client);
+            if (discordData != null)
+                DiscordID = ulong.Parse(discordData.id);
 
             if (client.Exists)
             {
@@ -179,7 +171,6 @@ namespace ResurrectionRP_Server.Entities.Players
                 PID = pid;
             }
         }
-
         #endregion
 
         #region Methods
@@ -197,15 +188,7 @@ namespace ResurrectionRP_Server.Entities.Players
             {
                 ulong discordID = ulong.Parse(discordData.id);
 
-                if (DiscordID == 0)
-                    DiscordID = discordID;
-
-                if (discordID != DiscordID)
-                {
-                    client.SendNotificationError("Vous n'utilisez pas le compte discord lié au serveur.", 60000);
-                    client.Kick("Vous n'utilisez pas le compte discord lié au serveur.");
-                    return;
-                }
+                DiscordID = discordID;
 
                 if (Discord.IsAdmin(discordData.SocketGuildUser))
                     StaffRank = StaffRank.Administrator;
@@ -238,7 +221,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     Location = GameMode.FirstSpawn;
                 }
 
-                var inventoriesPhones = GetStacksItems(Models.InventoryData.ItemID.Phone);
+                var inventoriesPhones = GetStacksItems(ItemID.Phone);
 
                 if (inventoriesPhones.Count > 0)
                 {
@@ -328,6 +311,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
             else
             {
+                Alt.Server.LogError($"Erreur avec le personnage de {PID}");
                 client.SendNotificationError("Erreur avec votre personnage.");
                 //await client.FadeIn(0);
                 client.Kick("Une erreur s'est produite");

@@ -1,6 +1,6 @@
 ﻿namespace ResurrectionRP_Server.Utils.Enums
 {
-    public enum StaffRank
+    public enum StaffRank : int
     {
         Player = 0,
         Donator = 1,

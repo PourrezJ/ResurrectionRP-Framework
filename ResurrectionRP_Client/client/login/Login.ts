@@ -77,5 +77,4 @@ export function init() {
 
     alt.onServer("GetSocialClub", (arg: string) => 
         alt.emitServer(arg, game.scGetNickname()));
-
 }

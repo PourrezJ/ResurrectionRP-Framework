@@ -190,7 +190,8 @@ namespace ResurrectionRP_Server.Business
                         if (_player.HasMoney(price))
                         {
                             Inventory.Delete(itemStack, quantity);
-                            BankAccount.AddMoney(itemStack.Price * quantity, $"Achat de {itemStack.Item.name}", false);
+                            if (Owner != null)
+                                BankAccount.AddMoney(itemStack.Price * quantity, $"Achat de {itemStack.Item.name}", false);
                             GameMode.Instance.Economy.CaissePublique += tax;
                             UpdateInBackground();
                             client.SendNotification($"Vous avez acheté un/des {itemStack.Item.name}(s) pour la somme de {(itemStack.Price * quantity) + tax} dont {tax} de taxes.");

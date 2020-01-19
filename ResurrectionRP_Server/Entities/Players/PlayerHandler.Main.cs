@@ -257,7 +257,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 else if (Discord.IsAnimator(discordUser.SocketGuildUser))
                     StaffRank = StaffRank.Animator;
 
-                TrainManager.OnPlayerConnected(client);
+                //TrainManager.OnPlayerConnected(client);
 
                 IP = Client.Ip;
                 IsOnline = true;

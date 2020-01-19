@@ -20,7 +20,7 @@ import { Medical } from '../Medical';
 import { Weedlabs } from '../Env/WeedLabs';
 import { Effects } from './Effects';
 import { EmergencyCall } from '../EmergencyCall';
-
+import { Dock } from '../Env/Dock';
 //import ObjectTool from '../Debug/ObjectTool';
 
 export class Game {
@@ -109,6 +109,7 @@ export class Game {
             new EmergencyCall();
             new Weedlabs();
             new Effects();
+            new Dock();
             //if (isDebug)
             //    new ObjectTool();
 

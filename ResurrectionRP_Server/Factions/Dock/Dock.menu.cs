@@ -27,6 +27,7 @@ namespace ResurrectionRP_Server.Factions
 
             foreach(DockItemData item in importItems) {
                 MenuItem listItem = new MenuItem(item.Name, "", item.ItemID.ToString(), true, rightLabel: "0");
+                listItem.Description = "Prix unitaire: $" + item.Price;
                 listItem.SetInput("", 3, InputType.UNumber);
                 listItem.InputSetRightLabel = true;
                 listItem.SetData("DockItem", item);
@@ -36,7 +37,7 @@ namespace ResurrectionRP_Server.Factions
             menu.Add(new MenuItem("~g~Valider", "", "Validate", true));
 
             menu.OpenMenu(client);
-            client.Emit("InitDockOrder", ((DockItemData) menu.Items[0].GetData("DockItem")).Price);
+            client.Emit("InitDockOrder");
         }
 
         private void ImportationMenuCallback(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)

@@ -97,6 +97,7 @@
     <TypeScriptCompile Include="client\main.ts" />
     <TypeScriptCompile Include="client\Medical.ts" />
     <TypeScriptCompile Include="client\MenuManager\MenuManager.ts" />
+    <TypeScriptCompile Include="client\Env\Dock.ts" />
     <TypeScriptCompile Include="client\Menus\rpgInventory\RPGInventory.ts" />
     <TypeScriptCompile Include="client\Menus\xtreamMenu\xtreamMenuManager.ts" />
     <TypeScriptCompile Include="client\Models\Camera.ts" />

@@ -13,7 +13,7 @@ namespace ResurrectionRP_Server.Models
         public int Model;
 
         [BsonIgnore, JsonIgnore]
-        public Entities.Objects.WorldObject Obj { get; private set; }
+        public WorldObject Obj { get; private set; }
 
         private Location _location;
         public Location Location
@@ -34,6 +34,7 @@ namespace ResurrectionRP_Server.Models
         {
             if (model == 0)
                 model = (int)Alt.Hash("prop_box_wood07a");
+
             InventoryBox inv = new InventoryBox()
             {
                 ID = id,

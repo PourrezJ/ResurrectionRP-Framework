@@ -20,7 +20,7 @@ namespace ResurrectionRP_Server.Loader
     {
         private static string _basePath = $"parkings{Path.DirectorySeparatorChar}";
 
-        public static async Task LoadAllCarParks()
+        public static void LoadAllCarParks()
         {
             Alt.Server.LogColored("~w~----- ~b~ Parkings ~w~| Loading all parking ... ------");
 
@@ -39,11 +39,11 @@ namespace ResurrectionRP_Server.Loader
                         CarParkModel _carParkModel = JsonConvert.DeserializeObject<CarParkModel>(File.ReadAllText(file));
                         Services.CarPark carpark = null;
 
-                        if (await Services.CarPark.HasCarPark(_carParkModel.ID))
-                            carpark = await Services.CarPark.LoadCarPark(_carParkModel.ID, _carParkModel.Borne, _carParkModel.Spawn1, _carParkModel.Spawn2);
+                        if (Services.CarPark.HasCarPark(_carParkModel.ID))
+                            carpark = Services.CarPark.LoadCarPark(_carParkModel.ID, _carParkModel.Borne, _carParkModel.Spawn1, _carParkModel.Spawn2);
                         else
                         {
-                            carpark = await Services.CarPark.CreateCarPark(_carParkModel.ID, _name, _carParkModel.Borne, _carParkModel.Spawn1, _carParkModel.Spawn2);
+                            carpark = Services.CarPark.CreateCarPark(_carParkModel.ID, _name, _carParkModel.Borne, _carParkModel.Spawn1, _carParkModel.Spawn2);
                             Alt.Server.LogColored("~b~CarPark.Loader.cs ~w~| New carpark()");
                             //Alt.Server.LogInfo($"Car Park {_name} vient d'être ajouté!");
                         }

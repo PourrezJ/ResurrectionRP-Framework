@@ -190,7 +190,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             }
 
                             client.SendNotification($"Véhicule ~r~{vehFourriere.VehicleData.Plate} ~w~ mis en fourrière...");
-                            Task.Run(async () => await Pound.AddVehicleInPoundAsync(vehFourriere.VehicleData));
+                            Pound.AddVehicleInPound(vehFourriere.VehicleData);
                         }
                     }
                 };

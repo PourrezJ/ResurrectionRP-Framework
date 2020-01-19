@@ -22,7 +22,7 @@ namespace ResurrectionRP_Server.Services
         #endregion
 
         #region Init
-        public async Task Init()
+        public void Init()
         {
             if (Parking != null)
             {
@@ -40,11 +40,11 @@ namespace ResurrectionRP_Server.Services
                 {
                     ve.ParkTime = DateTime.Now;
                     Parking.RemoveVehicle(ve.GetVehicleHandler());
-                    await Pound.AddVehicleInPoundAsync(ve.GetVehicleHandler());
+                    Pound.AddVehicleInPound(ve.GetVehicleHandler());
                 }
 
                 if (poundList.Count != 0)
-                    await Update();
+                    Task.Run(async ()=> await Update());
             }
         }
         #endregion
@@ -83,27 +83,27 @@ namespace ResurrectionRP_Server.Services
         #endregion
 
         #region Static methods
-        public static async Task<CarPark> LoadCarPark(int id, Vector3 borne, Models.Location spawn1, Models.Location spawn2)
+        public static CarPark LoadCarPark(int id, Vector3 borne, Models.Location spawn1, Models.Location spawn2)
         {
-            CarPark carpark = await Database.MongoDB.GetCollectionSafe<CarPark>("carparks").Find(p => p.ID == id).FirstAsync();
+            CarPark carpark = Database.MongoDB.GetCollectionSafe<CarPark>("carparks").Find(p => p.ID == id).First();
             carpark.ID = id;
             carpark.Parking.Location = borne;
             carpark.Parking.Spawn1 = spawn1;
             carpark.Parking.Spawn2 = spawn2;
-            await carpark.Init();
+            carpark.Init();
             return carpark;
         }
 
-        public static async Task<bool> HasCarPark(int id) =>
-            await Database.MongoDB.GetCollectionSafe<CarPark>("carparks").Find(p => p.ID == id).AnyAsync();
+        public static bool HasCarPark(int id) =>
+            Database.MongoDB.GetCollectionSafe<CarPark>("carparks").Find(p => p.ID == id).Any();
 
-        public static async Task<CarPark> CreateCarPark(int ID, string name, Vector3 borne, Models.Location spawn1, Models.Location spawn2)
+        public static CarPark CreateCarPark(int ID, string name, Vector3 borne, Models.Location spawn1, Models.Location spawn2)
         {
             CarPark carPark = new CarPark();
             carPark.ID = ID;
             carPark.Parking = new Models.Parking(borne, spawn1, spawn2, name, maxVehicles: 2100, hidden: false);
-            await carPark.Insert();
-            await carPark.Init();
+            Task.Run(async ()=> await carPark.Insert());
+            carPark.Init();
             return carPark;
         }
         #endregion

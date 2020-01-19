@@ -10,6 +10,7 @@ using ResurrectionRP_Server.XMenuManager;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Services;
+using AltV.Net.Async;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -316,7 +317,7 @@ namespace ResurrectionRP_Server.Factions
             IVehicle target = menu.GetData("Vehicle");
             if (target != null && target.Exists)
             {
-                if ((Factions.FactionManager.LSCustom?.GetEmployeeOnline()).Count > 0) 
+                if ((FactionManager.LSCustom?.GetEmployeeOnline()).Count > 0) 
                 {
                     // appel vers la fourrière
                     client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande de mise en fourrière.", "Fourrière indisponible, contacter un dépanneur.");
@@ -332,7 +333,7 @@ namespace ResurrectionRP_Server.Factions
                         return;
 
                     client.SendNotificationPicture(CharPicture.DIA_MIC, "QG LSPD", "Demande de mise en fourrière.", "La fourrière est venu récupérer le véhicule.");
-                    Task.Run(async ()=>await Pound.AddVehicleInPoundAsync(vh.VehicleData));
+                    AltAsync.Do(()=> Pound.AddVehicleInPound(vh.VehicleData));
                 });
             }
         }

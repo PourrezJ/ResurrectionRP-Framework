@@ -340,7 +340,7 @@ namespace ResurrectionRP_Server.Factions
                         return;
 
                     client.SendNotificationPicture(CharPicture.CHAR_CHAT_CALL, "Bureau Shérif", "Demande de mise en fourrière.", "La fourrière est venu récupérer le véhicule.");
-                    await Pound.AddVehicleInPoundAsync(vh.VehicleData);
+                    await AltAsync.Do(()=> Pound.AddVehicleInPound(vh.VehicleData));
                 });
             }
         }

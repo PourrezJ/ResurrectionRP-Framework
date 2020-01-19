@@ -162,12 +162,12 @@ namespace ResurrectionRP_Server
             //JobsManager.Init();
             HandlingManager.LoadAllHandling();
             IllegalManager.InitAll();
+            Loader.CarParkLoader.LoadAllCarParks();
 
             Task.Run(async () =>
             {
                 try
                 {
-                    await Loader.CarParkLoader.LoadAllCarParks();
                     await Discord.Init();
 
                     Alt.Server.LogColored("~g~Serveur chargé!");

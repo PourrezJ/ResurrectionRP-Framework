@@ -194,7 +194,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     TimeSpan timeSinceLastUse = DateTime.Now - vehicle.VehicleData.LastUse;
 
                     if (timeSinceLastUse >= expireTime)
-                        Task.Run(async () => await Pound.AddVehicleInPoundAsync(vehicle.VehicleData));
+                        Pound.AddVehicleInPound(vehicle.VehicleData);
                 }
             }
 

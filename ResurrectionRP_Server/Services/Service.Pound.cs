@@ -151,15 +151,15 @@ namespace ResurrectionRP_Server.Services
 
                 if (ph.HasMoney(Price))
                 {
-                    VehicleHandler veh = menuItem.GetData("Vehicle");
-                    veh.VehicleData.IsInPound = false;
-                    veh.VehicleData.LastUse = DateTime.Now;
+                    VehicleData vehdata = menuItem.GetData("Vehicle");
+                    vehdata.IsInPound = false;
+                    vehdata.LastUse = DateTime.Now;
                    // await veh.SpawnVehicleAsync(new Location(_poundSpawn.Pos, _poundSpawn.Rot.ConvertRotationToRadian()));
-                    veh.UpdateInBackground();
+                    vehdata.Vehicle?.UpdateInBackground();
 
-                    var keyfind = ph.ListVehicleKey.FindLast(k => k.Plate == veh.VehicleData.Plate);
+                    var keyfind = ph.ListVehicleKey.FindLast(k => k.Plate == vehdata.Plate);
                     if (keyfind == null)
-                        ph.ListVehicleKey.Add(new VehicleKey(veh.VehicleManifest.LocalizedName, veh.VehicleData.Plate));
+                        ph.ListVehicleKey.Add(new VehicleKey(vehdata.Vehicle?.VehicleManifest.LocalizedName, vehdata.Plate));
 
                     Task.Run(async ()=> await GameMode.Instance.Save());
                     client.SendNotificationPicture(Utils.Enums.CharPicture.DIA_GARDENER,"Fourrière", "","~g~Votre véhicule vous attend sur le parking." );
@@ -177,7 +177,7 @@ namespace ResurrectionRP_Server.Services
             return VehiclesManager.GetAllVehicleData().Where(v => (v.OwnerID == client.GetSocialClub() || client.GetPlayerHandler().HasKey(v.Plate)) && v.IsInPound);
         }
 
-        public static async Task AddVehicleInPoundAsync(VehicleData veh)
+        public static void AddVehicleInPound(VehicleData veh)
         {
             if (veh == null)
                 return;
@@ -186,7 +186,7 @@ namespace ResurrectionRP_Server.Services
             veh.ParkingName = "Fourrière";
             veh.Vehicle.UpdateInBackground(false, true);
             Alt.Server.LogInfo($"Mise en fourrière véhicule {veh.Plate}");
-            await veh.DeleteAsync();
+            Task.Run(async ()=> await veh.DeleteAsync());
         }
         #endregion
     }

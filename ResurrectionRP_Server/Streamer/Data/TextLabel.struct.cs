@@ -15,7 +15,7 @@ namespace ResurrectionRP_Server.Streamer.Data
             set
             {
                 _text = value;
-                Streamer.UpdateEntityTextLabel(this.ID, value);
+                Streamer.UpdateEntityTextLabel(ID, value);
             }
             get => _text;
         }
@@ -42,18 +42,17 @@ namespace ResurrectionRP_Server.Streamer.Data
             var data = new Dictionary<string, object>();
             data["text"] = Text;
             data["font"] = Font;
-            data["r"] = Color.R;
-            data["b"] = Color.B;
-            data["g"] = Color.G;
-            data["a"] = Color.A;
+            data["r"] = (int)Color.R;
+            data["b"] = (int)Color.B;
+            data["g"] = (int)Color.G;
+            data["a"] = (int)Color.A;
             data["entityType"] = (int)EntityType.TextLabel;
-            data["id"] = ID;
             return data;
         }
 
         public void Destroy()
         {
-            Streamer.DestroyEntity(this.ID);
+            Streamer.DestroyEntity(ID);
         }
     }
 }

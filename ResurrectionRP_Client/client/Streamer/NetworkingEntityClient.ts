@@ -243,6 +243,7 @@ export class NetworkingEntityClient {
 
 
             case 2: // Text label
+                alt.log(JSON.stringify(entity));
                 await this.streamTextLabel(
                     entity.id,
                     entity.data.text.stringValue,

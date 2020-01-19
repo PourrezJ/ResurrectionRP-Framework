@@ -235,7 +235,7 @@ namespace ResurrectionRP_Server.Business
             if (client.GetStaffRank() <= StaffRank.Player)
                 return;
 
-            var inventoryBox = InventoryBox.CreateInventoryBox("Pawnshop", new Location(new Vector3(2752.311f, 3489.616f, 56.24662f), new Vector3(0, 0, 330f)), new Inventory.Inventory(1000, 40), Alt.Hash("p_v_43_safe_s"));
+            var inventoryBox = InventoryBox.CreateInventoryBox("Pawnshop", new Location(new Vector3(2752.311f, 3489.616f, 56.24662f), new Vector3(0, 0, 330f)), new Inventory.Inventory(1000, 40), (int)Alt.Hash("p_v_43_safe_s"));
             var pawnShop = new PawnShop("Pawn-Shop", new Location(client.Position, client.Rotation), 108, 10000, inventoryBox, PedModel.Strvend01SMY, "Armex72", true, false);
             Task.Run(async () => await pawnShop.Insert());
         }

@@ -194,7 +194,7 @@ namespace ResurrectionRP_Server.Entities.Players
                             rackList.Add(FactionManager.Dock.Importation);
                             rackList.Add(FactionManager.Dock.Quai);
 
-                            var rack = rackList.Find(p => p?.InventoryBox?.Obj.ID == streamedID);
+                            var rack = rackList.Find(p => p?.InventoryBox?.Obj.ID == (ulong)streamedID);
                             if (rack == null)
                                 return;
 
@@ -212,9 +212,9 @@ namespace ResurrectionRP_Server.Entities.Players
                             client.DisplayHelp("Appuyez sur ~INPUT_CONTEXT~ pour vous relevez.", 5000);
                             ph.IsSitting = true;
                         }
-                        else if (raycastData.entityHash == AltV.Net.Alt.Hash("prop_money_bag_01"))
+                        else if (raycastData.entityHash == Alt.Hash("prop_money_bag_01"))
                         {
-                            Objects.WorldObject pickup = Objects.WorldObject.ListObject.FirstOrDefault(o => o.Value.Position.Distance(playerPos) <= 2).Value;
+                            Objects.WorldObject pickup = Objects.WorldObject.ListObject.FirstOrDefault(o => o.Value.ID == (ulong)streamedID).Value;
 
                             if (pickup != null)
                             {

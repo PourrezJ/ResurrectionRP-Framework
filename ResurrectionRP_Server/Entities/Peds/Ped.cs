@@ -34,7 +34,7 @@ namespace ResurrectionRP_Server.Entities.Peds
         [JsonIgnore, BsonIgnore]
         public NpcSecondaryCallBack NpcSecInteractCallBack { get; set; }
 
-        public int ID { get; private set; }
+        public ulong ID { get; private set; }
         public PedModel Model;
         public Vector3 Position;
         public float Rotation;
@@ -103,6 +103,6 @@ namespace ResurrectionRP_Server.Entities.Peds
             }
         }
 
-        public static Ped GetNPCbyID(int id) => NPCList.Find(x => x.ID == id) ?? null;
+        public static Ped GetNPCbyID(ulong id) => NPCList.Find(x => x.ID == id) ?? null;
     }
 }

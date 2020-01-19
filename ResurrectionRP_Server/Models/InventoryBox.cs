@@ -1,8 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using System.Numerics;
-using System.Threading.Tasks;
-using AltV.Net.Async;
 using AltV.Net;
 using ResurrectionRP_Server.Entities.Objects;
 
@@ -12,7 +10,7 @@ namespace ResurrectionRP_Server.Models
     {
         public string ID;
         public Inventory.Inventory Inventory;
-        public uint Model;
+        public int Model;
 
         [BsonIgnore, JsonIgnore]
         public Entities.Objects.WorldObject Obj { get; private set; }
@@ -32,10 +30,10 @@ namespace ResurrectionRP_Server.Models
             }
         }
 
-        public static InventoryBox CreateInventoryBox(string id, Location location,Inventory.Inventory inventory = null, uint model = 0, int taille = 200)
+        public static InventoryBox CreateInventoryBox(string id, Location location,Inventory.Inventory inventory = null, int model = 0, int taille = 200)
         {
             if (model == 0)
-                model = Alt.Hash("prop_box_wood07a");
+                model = (int)Alt.Hash("prop_box_wood07a");
             InventoryBox inv = new InventoryBox()
             {
                 ID = id,
@@ -49,7 +47,7 @@ namespace ResurrectionRP_Server.Models
         }
 
         public void Spawn() =>
-            Obj = WorldObject.CreateObject((int)Model, new Vector3(Location.Pos.X, Location.Pos.Y, Location.Pos.Z ), Location.Rot, true);
+            Obj = WorldObject.CreateObject(Model, new Vector3(Location.Pos.X, Location.Pos.Y, Location.Pos.Z ), Location.Rot, true);
 
         public void Destruct() =>
             Obj?.Destroy();

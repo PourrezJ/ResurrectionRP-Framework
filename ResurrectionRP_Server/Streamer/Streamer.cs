@@ -2,7 +2,6 @@
 using AltV.Net.Elements.Entities;
 using AltV.Net.NetworkingEntity;
 using AltV.Net.NetworkingEntity.Elements.Entities;
-using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Numerics;
@@ -16,8 +15,7 @@ namespace ResurrectionRP_Server.Streamer
 {
     public static partial class Streamer
     {
-        public static int EntityNumber = 0;
-        public static ConcurrentDictionary<int, INetworkingEntity> ListEntities = new ConcurrentDictionary<int, INetworkingEntity>();
+        public static ConcurrentDictionary<ulong, INetworkingEntity> ListEntities = new ConcurrentDictionary<ulong, INetworkingEntity>();
 
         public static int StaticEntityNumber = 0;
         public static ConcurrentDictionary<int, dynamic> ListStaticEntities = new ConcurrentDictionary<int, dynamic>();
@@ -58,26 +56,25 @@ namespace ResurrectionRP_Server.Streamer
 
         private static void OnEntityStreamOut(INetworkingEntity entity, INetworkingClient client)
         {
-            Ped ped = Ped.GetNPCbyID((int)entity.Id);
+            Ped ped = Ped.GetNPCbyID(entity.Id);
             if (ped != null)
             {
                 if (ped.Owner != null) ped.Owner = null;
             }
         }
 
-        public static int AddEntityPed(Ped ped, int dimension = GameMode.GlobalDimension)
+        public static ulong AddEntityPed(Ped ped, int dimension = GameMode.GlobalDimension)
         {
             INetworkingEntity item = AltNetworking.CreateEntity(ped.Position.ConvertToEntityPosition(), dimension, GameMode.StreamDistance, ped.Export());
-            ListEntities.TryAdd(EntityNumber, item);
-            return EntityNumber;
+            ListEntities.TryAdd(item.Id, item);
+            return item.Id;
         }
 
-        public static WorldObject AddEntityObject(WorldObject data)
+        public static INetworkingEntity AddEntityObject(WorldObject data)
         {
             INetworkingEntity item = AltNetworking.CreateEntity(data.Position.ConvertToEntityPosition(), GameMode.GlobalDimension, GameMode.StreamDistance, data.export());
-            
             ListEntities.TryAdd(data.ID, item);
-            return data;
+            return item;
         }
 
         public static WorldObject UpdateEntityObject(WorldObject obj)
@@ -103,19 +100,18 @@ namespace ResurrectionRP_Server.Streamer
 
         public static TextLabel AddEntityTextLabel(string label, Vector3 pos, int font = 2, int r = 255, int g = 255, int b = 255, int a = 128, int drawDistance = 5, int dimension = GameMode.GlobalDimension)
         {
-            var data = new TextLabel(label, font, r, g, b, a, EntityNumber++);
+            var data = new TextLabel(label, font, r, g, b, a);
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, drawDistance, data.export());
-            ListEntities.TryAdd(data.id, item);
+            ListEntities.TryAdd(item.Id, item);
             return data;
         }
 
-        public static int UpdateEntityTextLabel(int entityid, string label)
+        public static void UpdateEntityTextLabel(ulong entityid, string label)
         {
             ListEntities[entityid].SetData("text", label);
-            return entityid;
         }
 
-        public static int DestroyEntity(int entityid)
+        public static int DestroyEntity(ulong entityid)
         {
             if (ListEntities.ContainsKey(entityid))
             {
@@ -162,16 +158,13 @@ namespace ResurrectionRP_Server.Streamer
             }
         }
 
-        private static void OwnPed(IPlayer client, int id)
+        private static void OwnPed(IPlayer client, ulong id)
         {
             Ped ped = Ped.GetNPCbyID(id);
 
             if (ped != null) 
                 ped.Owner = client;
 
-            if (ListEntities.ContainsKey(id))
-            {
-            }
         }
 
         public static IPlayer TokenToPlayer(string token)

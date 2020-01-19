@@ -6,7 +6,7 @@ namespace ResurrectionRP_Server.Streamer.Data
 {
     public class TextLabel
     {
-        public int id;
+        public ulong id;
 
         private string _text;
         public string text
@@ -25,7 +25,7 @@ namespace ResurrectionRP_Server.Streamer.Data
         public int b;
         public int a;
 
-        public TextLabel(string text, int font, int r, int g, int b, int a, int entityId)
+        public TextLabel(string text, int font, int r, int g, int b, int a)
         {
             this._text = text;
             this.font = font;
@@ -33,7 +33,6 @@ namespace ResurrectionRP_Server.Streamer.Data
             this.g = g;
             this.b = b;
             this.a = a;
-            this.id = entityId;
         }
 
         public Dictionary<string, object> export()

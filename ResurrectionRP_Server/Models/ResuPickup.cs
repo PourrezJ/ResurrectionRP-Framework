@@ -16,7 +16,7 @@ namespace ResurrectionRP_Server.Models
         #endregion
 
         #region Fields
-        public static ConcurrentDictionary<int, ResuPickup> ResuPickupList = new ConcurrentDictionary<int, ResuPickup>();
+        public static ConcurrentDictionary<ulong, ResuPickup> ResuPickupList = new ConcurrentDictionary<ulong, ResuPickup>();
 
 
         [JsonIgnore]
@@ -44,7 +44,7 @@ namespace ResurrectionRP_Server.Models
         #region Static methods
         public static ResuPickup CreatePickup(string model, Item item, int quantite, Vector3 position, bool hide, TimeSpan endlife, short dimension = GameMode.GlobalDimension)
         {
-            Entities.Objects.WorldObject worldObject = Entities.Objects.WorldObject.CreateObject(model, position, new Vector3(), true, true, dimension);
+            Entities.Objects.WorldObject worldObject = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash(model), position, new Vector3(), true, true, dimension);
 
             ResuPickup pickup = new ResuPickup()
             {
@@ -98,7 +98,7 @@ namespace ResurrectionRP_Server.Models
             }
         }
 
-        public static ResuPickup GetResuPickup(int netID)
+        public static ResuPickup GetResuPickup(ulong netID)
         {
             ResuPickupList.TryGetValue(netID, out ResuPickup pickup);
             return pickup;

@@ -10,7 +10,7 @@ namespace ResurrectionRP_Server.Entities
 {
     public class Marker
     {
-        public int id;
+        public ulong id;
         public MarkerType type;
         public Vector3 pos;
         public float scalex = 1;
@@ -51,11 +51,11 @@ namespace ResurrectionRP_Server.Entities
                 marker.a = 60;
             }
 
-            marker.id = Streamer.Streamer.EntityNumber++;
-            marker.dimension = dimension;
-
             INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, GameMode.StreamDistance, marker.Export());
-            Streamer.Streamer.ListEntities.TryAdd(marker.id, item);
+            marker.id = item.Id;
+            item.Dimension = dimension;
+            marker.dimension = dimension;
+            Streamer.Streamer.ListEntities.TryAdd(item.Id, item);
             return marker;
         }
 

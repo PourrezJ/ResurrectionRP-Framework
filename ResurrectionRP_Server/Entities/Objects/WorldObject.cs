@@ -6,16 +6,29 @@ using AltV.Net.Data;
 using System.Collections.Concurrent;
 using System.Numerics;
 using AltV.Net;
+using AltV.Net.NetworkingEntity.Elements.Entities;
 
 namespace ResurrectionRP_Server.Entities.Objects
 {
     public class WorldObject
     {
-        public static ConcurrentDictionary<int, WorldObject> ListObject = new ConcurrentDictionary<int, WorldObject>();
+        public static ConcurrentDictionary<ulong, WorldObject> ListObject = new ConcurrentDictionary<ulong, WorldObject>();
 
-        public int ID { get; private set; }
-        public int Model;
-        public bool Exists;
+        private ulong id;
+        public ulong ID { 
+            get
+            {
+                if (INetworkEntity != null)
+                    return INetworkEntity.Id;
+                return id;
+            }
+            private set
+            {
+                id = value;
+            }
+        }
+        public int Model { get; private set; }
+        public bool Exists { get; private set; }
 
         private Position _position;
         public Position Position
@@ -42,34 +55,35 @@ namespace ResurrectionRP_Server.Entities.Objects
             get => _rotation;
         }
 
-        public short Dimension;
-        public bool Freeze;
-        public Models.Attachment Attachment = null;
-        public string Pickup = null;
+        public short Dimension { get; private set; }
+        public bool Freeze { get; private set; }
+        public Models.Attachment Attachment { get; private set; }
+        public string Pickup { get; private set; }
         private ConcurrentDictionary<string, object> Datas;
+        public INetworkingEntity INetworkEntity;
 
-        public WorldObject(int model, Position position, Rotation rotation, int entityId, bool freeze = false, short dimension = GameMode.GlobalDimension)
+        public WorldObject(int model, Position position, Rotation rotation, bool freeze = false, short dimension = GameMode.GlobalDimension)
         {
             Exists = false;
             Model = model;
-            ID = entityId;
             Freeze = freeze;
             Position = position;
             Rotation = rotation;
             Dimension = dimension;
             Datas = new ConcurrentDictionary<string, object>();
+            INetworkEntity = Streamer.Streamer.AddEntityObject(this);
         }
-        public WorldObject(int model, Position position, Rotation rotation, int entityId, Models.Attachment attachment = null, bool freeze = false, short dimension = GameMode.GlobalDimension)
+        public WorldObject(int model, Position position, Rotation rotation, Models.Attachment attachment = null, bool freeze = false, short dimension = GameMode.GlobalDimension)
         {
             Exists = false;
             Model = model;
-            ID = entityId;
             Freeze = freeze;
             Position = position;
             Rotation = rotation;
             Dimension = dimension;
             Attachment = attachment;
             Datas = new ConcurrentDictionary<string, object>();
+            INetworkEntity = Streamer.Streamer.AddEntityObject(this);
         }
 
         public bool SetAttachToEntity(IEntity target, string bone, Position positionOffset, Rotation rotationOffset)
@@ -117,13 +131,11 @@ namespace ResurrectionRP_Server.Entities.Objects
                 model,
                 position.ConvertToPosition(),
                 rotation.ConvertToEntityRotation(),
-                Streamer.Streamer.EntityNumber++,
                 freeze,
                 dimension
             );
 
-            ListObject.TryAdd(resuobject.ID, resuobject);
-            Streamer.Streamer.AddEntityObject(resuobject);
+            ListObject.TryAdd(resuobject.ID, resuobject);        
             resuobject.Exists = true;
             return resuobject;
         }
@@ -134,26 +146,7 @@ namespace ResurrectionRP_Server.Entities.Objects
                 model,
                 position.ConvertToPosition(),
                 rotation.ConvertToEntityRotation(),
-                Streamer.Streamer.EntityNumber++,
                 attachment,
-                freeze,
-                dimension
-            );
-
-            ListObject.TryAdd(resuobject.ID, resuobject);
-            Streamer.Streamer.AddEntityObject(resuobject);
-            resuobject.Exists = true;
-            return resuobject;
-        }
-
-        public static WorldObject CreateObject(string model, Vector3 position, Vector3 rotation, bool freeze = false, bool dynamic = false, short dimension = GameMode.GlobalDimension)
-        {
-            var resuobject = new WorldObject
-            (
-                (int)Alt.Hash(model),
-                position.ConvertToPosition(),
-                rotation.ConvertToEntityRotation(),
-                Streamer.Streamer.EntityNumber++,
                 freeze,
                 dimension
             );

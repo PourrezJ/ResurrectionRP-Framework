@@ -184,63 +184,72 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public static void OnPlayerJoin(IPlayer player, string socialclub, string discordData)
         {
-            if (!player.Exists)
-                return;
-
-            if (GameMode.ServerLock)
+            try
             {
-                lock (player)
+                if (!player.Exists)
+                    return;
+
+                if (GameMode.ServerLock)
                 {
-                    player.Emit("FadeIn", 0);
-                    player.Kick("Serveur Lock!");
-                }
-            }
-
-            if (string.IsNullOrEmpty(socialclub))
-            {
-                player.SendNotificationError("Vous avez un problème avec votre socialclub", 60000);
-                return;
-            }
-
-            if (!string.IsNullOrEmpty(discordData) || discordData != "null")
-            {
-                DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(discordData);
-
-                var userGuildDiscord = Discord.GetSocketGuildUser(ulong.Parse(discord.id));
-
-                if(userGuildDiscord != null)
-                {
-                    if (!Discord.IsCitoyen(userGuildDiscord))
+                    lock (player)
                     {
-                        player.SendNotificationError("Vous n'êtes pas whitelist Citoyen sur le discord.", 60000);
-                        return;
+                        player.Emit("FadeIn", 0);
+                        player.Kick("Serveur Lock!");
                     }
-
-                    discord.SocketGuildUser = userGuildDiscord;
-                    if (!Discord.DiscordPlayers.ContainsKey(player))
-                        Discord.DiscordPlayers.TryAdd(player, discord);
                 }
+
+                if (string.IsNullOrEmpty(socialclub))
+                {
+                    player.SendNotificationError("Vous avez un problème avec votre socialclub", 60000);
+                    return;
+                }
+
+                if (!string.IsNullOrEmpty(discordData) || discordData != "null")
+                {
+                    DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(discordData);
+
+                    if (discord != null)
+                    {
+                        var userGuildDiscord = Discord.GetSocketGuildUser(ulong.Parse(discord.id));
+
+                        if (userGuildDiscord != null)
+                        {
+                            if (!Discord.IsCitoyen(userGuildDiscord))
+                            {
+                                player.SendNotificationError("Vous n'êtes pas whitelist Citoyen sur le discord.", 60000);
+                                return;
+                            }
+
+                            discord.SocketGuildUser = userGuildDiscord;
+                            if (!Discord.DiscordPlayers.ContainsKey(player))
+                                Discord.DiscordPlayers.TryAdd(player, discord);
+                        }
+                    }
+                }
+
+                string playerIp = string.Empty;
+
+                Alt.Server.LogInfo($" {socialclub} : ({playerIp}) en attente de connexion.");
+
+                if (socialclub == "UNKNOWN")
+                {
+                    Alt.Server.LogInfo($"({playerIp}) kick pour problème de social club.");
+                    player.Kick("Vous avez un problème avec votre social club.");
+                    return;
+                }
+
+                if (IsBan(socialclub))
+                {
+                    Alt.Server.LogInfo($"({playerIp}) est banni.");
+                    player.Kick("Vous êtes banni!");
+                    return;
+                }
+                playerIp = player.Ip;
             }
-  
-            string playerIp = string.Empty;
-
-            Alt.Server.LogInfo($" {socialclub} : ({playerIp}) en attente de connexion.");
-
-            if (socialclub == "UNKNOWN")
+            catch(Exception ex)
             {
-                Alt.Server.LogInfo($"({playerIp}) kick pour problème de social club.");
-                player.Kick("Vous avez un problème avec votre social club.");
-                return;
+                Alt.Server.LogError(ex.ToString());
             }
-
-            if (IsBan(socialclub))
-            {
-                Alt.Server.LogInfo($"({playerIp}) est banni.");
-                player.Kick("Vous êtes banni!");
-                return;
-            }
-
-            playerIp = player.Ip;
 
             player.Model = (uint)PedModel.FreemodeMale01;
             player.Spawn(new Position(-1072.886f, -2729.607f, 0.8148939f));
@@ -296,7 +305,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     player.Kick(_kickMessage);
                     Alt.Server.LogError("Player Login" + ex.Data);
                 }
-        }
+            }
             else
                 ConnectPlayer(player);
         }

@@ -8,6 +8,7 @@ using ResurrectionRP_Server.Entities;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
+using ResurrectionRP_Server.Streamer.Data;
 
 namespace ResurrectionRP_Server.Teleport
 {
@@ -71,7 +72,8 @@ namespace ResurrectionRP_Server.Teleport
 
             IColshape enterColshape = ColshapeManager.CreateCylinderColshape(entree.Pos - new Vector3(0,0,1), scale.X, 3f);
             Marker.CreateMarker(MarkerType.VerticalCylinder, entree.Pos - new Vector3(0.0f, 0.0f, 1f), scale, Color.FromArgb(opacite, 255, 255, 255));
-            if (!hide) Streamer.Streamer.AddEntityTextLabel("~o~Appuyez sur ~w~E \n ~o~pour intéragir", entree.Pos, 1, 255, 255, 255, 255, 10);
+            if (!hide) 
+                TextLabel.CreateTextLabel("~o~Appuyez sur ~w~E \n ~o~pour intéragir", entree.Pos, Color.White);
             enterColshape.SetData("Teleport", JsonConvert.SerializeObject(new
             {
                 teleport.ID,
@@ -83,7 +85,8 @@ namespace ResurrectionRP_Server.Teleport
             {
                 IColshape sortiColshape = ColshapeManager.CreateCylinderColshape(sortipos.Location.Pos - new Vector3(0, 0, 1), scale.X, 3f);
                 Marker.CreateMarker(MarkerType.VerticalCylinder, sortipos.Location.Pos - new Vector3(0, 0, 1f), scale, Color.FromArgb(opacite, 255, 255, 255));
-                if (!hide) Streamer.Streamer.AddEntityTextLabel("~o~Appuyez sur ~w~E \n ~o~pour intéragir", sortipos.Location.Pos, 1, 255, 255, 255, 255, 10);
+                if (!hide) 
+                    TextLabel.CreateTextLabel("~o~Appuyez sur ~w~E \n ~o~pour intéragir", sortipos.Location.Pos, Color.White);
                 sortiColshape.SetData("Teleport", JsonConvert.SerializeObject( new
                 {
                     teleport.ID,

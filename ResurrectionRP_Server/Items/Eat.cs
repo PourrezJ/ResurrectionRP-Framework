@@ -7,6 +7,7 @@ using System.Numerics;
 using Flags = ResurrectionRP_Server.Utils.Enums.AnimationFlags;
 using MongoDB.Bson.Serialization.Attributes;
 using ResurrectionRP_Server.Utils.Enums;
+using AltV.Net.Async;
 
 namespace ResurrectionRP_Server.Items
 {
@@ -98,13 +99,13 @@ namespace ResurrectionRP_Server.Items
 
                 Utils.Utils.Delay(4000, async () =>
                 {
-                    if (!client.Exists)
+                    if (!await client.ExistsAsync())
                         return;
 
                     client.StopAnimation();
                     await Task.Delay(750);
-                    Object.DetachAttach();
-                    Object.Destroy();
+                    Object.DetachEntity();
+                    await Object.Destroy();
                 });
             }
             else
@@ -113,13 +114,13 @@ namespace ResurrectionRP_Server.Items
 
                 Utils.Utils.Delay(4000, async () =>
                 {
-                    if (!client.Exists)
+                    if (!await client.ExistsAsync())
                         return;
 
                     client.StopAnimation();
                     await Task.Delay(750);
-                    Object.DetachAttach();
-                    Object.Destroy();
+                    Object.DetachEntity();
+                    await Object.Destroy();
                 });
             }
         }

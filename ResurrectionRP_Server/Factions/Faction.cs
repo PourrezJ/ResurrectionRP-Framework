@@ -14,6 +14,9 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using Discord;
+using System.Drawing;
+using ResurrectionRP_Server.Streamer.Data;
 
 namespace ResurrectionRP_Server.Factions
 {
@@ -144,7 +147,7 @@ namespace ResurrectionRP_Server.Factions
                 Heliport_colShape.OnPlayerEnterColshape += OnPlayerEnterHeliport;
                 Heliport_colShape.OnPlayerLeaveColshape += OnPlayerLeaveHeliport;
                 Marker.CreateMarker(MarkerType.VerticalCylinder, HeliportLocation.Pos - new Vector3(0, 0, 3), new Vector3(3, 3, 0.2f));
-                Streamer.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", HeliportLocation.Pos, 4);
+                TextLabel.CreateTextLabel("~o~Approchez pour intéragir", HeliportLocation.Pos, System.Drawing.Color.White);
             }
 
             if (ShopLocation != null && ShopLocation != Vector3.Zero)
@@ -153,7 +156,7 @@ namespace ResurrectionRP_Server.Factions
                 Shop_colShape.OnPlayerEnterColshape += OnPlayerEnterShop;
                 Shop_colShape.OnPlayerLeaveColshape += OnPlayerLeaveShop;
                 Marker.CreateMarker(MarkerType.VerticalCylinder, ShopLocation - new Vector3(0, 0, 0), new Vector3(1, 1, 0.2f));
-                Streamer.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", ShopLocation, 4);
+                TextLabel.CreateTextLabel("~o~Approchez pour intéragir", ShopLocation, System.Drawing.Color.White);
             }
 
             if (BlipPosition != Vector3.Zero)

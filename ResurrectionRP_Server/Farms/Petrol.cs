@@ -9,6 +9,7 @@ using ResurrectionRP_Server.Entities.Vehicles;
 using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
+using ResurrectionRP_Server.Streamer.Data;
 using ResurrectionRP_Server.Utils.Extensions;
 using System;
 using System.Collections.Concurrent;
@@ -77,7 +78,7 @@ namespace ResurrectionRP_Server.Farms
 
             Marker.CreateMarker(MarkerType.VerticalCylinder, RaffineriePos - new Vector3(0, 0, 1), new Vector3(10, 10, 2), Color.FromArgb(0, 0, 0));
             Marker.CreateMarker(MarkerType.VerticalCylinder, Selling_PosRot.Pos - new Vector3(0, 0, 0), new Vector3(10, 10, 2), Color.FromArgb(0, 0, 0));
-            Streamer.Streamer.AddEntityTextLabel("~o~Appuyez sur E en dehors du véhicule\n pour lancer le remplissage", Harvest_Position[0], 1);
+            TextLabel.CreateTextLabel("~o~Appuyez sur E en dehors du véhicule\n pour lancer le remplissage", Harvest_Position[0], Color.FromArgb(255,255,255),1);
         }
 
         public override void OnPlayerEnterColshape(IColshape colshape, IPlayer player)

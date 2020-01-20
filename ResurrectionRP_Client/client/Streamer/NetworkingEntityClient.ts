@@ -131,7 +131,7 @@ export class NetworkingEntityClient {
 
     onDataChange = async (entity: any, data: any) => {
         let count = 0;
-
+        alt.log(`entity ${entity} ${JSON.stringify(data)}`);
         // Creating an entity can take some time so wait until it is created before updating it
         const interval = alt.setInterval(() => {
             if (NetworkingEntityClient.EntityList[entity.id] == undefined || NetworkingEntityClient.EntityList[entity.id] == null) {
@@ -199,6 +199,8 @@ export class NetworkingEntityClient {
                 return;
 
             if (entity.data.entityType.intValue == 0 || entity.data.entityType.intValue == 1) {
+                if (game.isEntityAttached(item))
+                    game.detachEntity(item, true, true);
                 game.deleteEntity(item);
             }
 
@@ -228,15 +230,19 @@ export class NetworkingEntityClient {
 
 
             case 1: // Static objec
-                await utils.loadModelAsync(game.getHashKey(entity.data.model.stringValue));
-                let object = await this.streamObject(
-                    entity.id,
-                    entity.data.model.intValue,
-                    entity.position.x,
-                    entity.position.y,
-                    entity.position.z,
-                    entity.data.freeze.boolValue
-                );
+                if (entity.data.model != null) {
+                    await utils.loadModelAsync(game.getHashKey(entity.data.model.stringValue));
+                    let object = await this.streamObject(
+                        entity.id,
+                        entity.data.model.intValue,
+                        entity.position.x,
+                        entity.position.y,
+                        entity.position.z,
+                        entity.data.freeze.boolValue
+                    );
+                }
+                alt.log(JSON.stringify(entity.data));
+
                 if (JSON.parse(entity.data.attach.stringValue) != null)
                     this.objectAttach(entity.id, JSON.parse(entity.data.attach.stringValue));
                 break;
@@ -273,10 +279,20 @@ export class NetworkingEntityClient {
     }
 
     private deleteObject = (entityid: number) => {
+        alt.log("deleteObject needed: " + entityid);
         if (NetworkingEntityClient.EntityList[entityid] == undefined)
             return;
 
-        game.deleteObject(NetworkingEntityClient.EntityList[entityid]);
+        let entity = NetworkingEntityClient.EntityList[entityid];
+
+        if (entity == null)
+            return;
+
+        if (game.isEntityAttached(entity))
+            game.detachEntity(entity, true, true);
+
+        game.deleteObject(entity);
+        alt.log("deleteObject ok: " + entityid);
     }
 
     private streamPed = async (id: number, model: any, x: number, y: number, z: number, heading: number) => {
@@ -303,7 +319,8 @@ export class NetworkingEntityClient {
     private objectAttach = (entityId: number, attach: any) => {
         switch (attach.Type) {
             case 0:
-                var player: alt.Player = alt.Player.local.id != attach.RemoteID ? alt.Player.all.find(p => p.id == attach.RemoteID) : alt.Player.local;
+                alt.log(`attach: ${alt.Player.local.id} ${attach.RemoteID}`)
+                var player: alt.Player = alt.Player.local.scriptID != attach.RemoteID ? alt.Player.all.find(p => p.id == attach.RemoteID) : alt.Player.local;
 
                 let boneID = 0;
 
@@ -318,7 +335,6 @@ export class NetworkingEntityClient {
                     case "PH_R_Hand_PHONE":
                         boneID = enums.Bone.PH_R_Hand;
                 }
-
                 var bone = game.getPedBoneIndex(player.scriptID, boneID);
                 alt.log(`attach: ${player.scriptID} ${enums.Bone[attach.Bone]} ${ NetworkingEntityClient.EntityList[entityId] }`)
                 game.attachEntityToEntity(NetworkingEntityClient.EntityList[entityId], player.scriptID, bone, attach.PositionOffset.X, attach.PositionOffset.Y, attach.PositionOffset.Z, attach.RotationOffset.X, attach.RotationOffset.Y, attach.RotationOffset.Z, true, true, false, true , 0, true);

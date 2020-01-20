@@ -32,7 +32,7 @@ namespace ResurrectionRP_Server.Items
         public void JackHammerSetWalkingStyle(IPlayer client, Entities.Objects.WorldObject prop)
         {
             client.PlayAnimation("weapons@heavy@rpg@f", "idle", 8, -1, 6000000, (AnimationFlags)49);
-            prop.SetAttachToEntity(client, "PH_R_Hand", new Vector3(0.1f, 0.2f, 0.02f), new Vector3(-0, 80, 170));
+            prop.AttachEntity(client, "PH_R_Hand", new Vector3(0.1f, 0.2f, 0.02f), new Vector3(-0, 80, 170));
         }
 
         public void SetPickaxeAnimation(IPlayer client, int durationms)
@@ -43,7 +43,7 @@ namespace ResurrectionRP_Server.Items
         public void SetJackHammerAnimation(IPlayer client, int durationms)
         {
 
-            client.GetPlayerHandler()?.OutfitInventory.prop.SetAttachToEntity(client, "PH_R_Hand", new Vector3(0.1f, -0.1f, -0.02f), new Vector3(0, 0, 170));
+            client.GetPlayerHandler()?.OutfitInventory.prop.AttachEntity(client, "PH_R_Hand", new Vector3(0.1f, -0.1f, -0.02f), new Vector3(0, 0, 170));
             client.PlayAnimation("AMB@WORLD_HUMAN_CONST_DRILL@MALE@DRILL@BASE", "base", 8, -1, durationms, (AnimationFlags)49);
         }
     }

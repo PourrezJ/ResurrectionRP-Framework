@@ -2,6 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Entities;
 using System;
 using System.Collections.Concurrent;
 using System.Numerics;
@@ -22,7 +23,7 @@ namespace ResurrectionRP_Server.Models
         [JsonIgnore]
         public Entities.Objects.WorldObject Object;
         [JsonIgnore]
-        public Streamer.Data.TextLabel Label;
+        public TextLabel Label;
 
         public uint Hash;
         public Item Item;
@@ -59,7 +60,7 @@ namespace ResurrectionRP_Server.Models
             if (!hide)
             {
                 string str = $"{item.name} x{quantite}";
-                pickup.Label = Streamer.Streamer.AddEntityTextLabel(str, pickup.Position + new Vector3(0, 0, 0.5f), 0, 255, 255, 255, 120, 3);
+                pickup.Label = TextLabel.CreateTextLabel(str, pickup.Position + new Vector3(0, 0, 0.5f), System.Drawing.Color.White);
             }
 
             ResuPickupList.TryAdd(worldObject.ID, pickup);
@@ -85,14 +86,14 @@ namespace ResurrectionRP_Server.Models
             }
         }
 
-        public void Delete()
+        public async Task Delete()
         {
             if (Object != null)
             {
-                Object.Destroy();
+                await Object.Destroy();
 
                 if (Label != null)
-                    Label.Destroy();
+                    await Label.Destroy();
 
                 ResuPickupList.TryRemove(Object.ID, out _);
             }

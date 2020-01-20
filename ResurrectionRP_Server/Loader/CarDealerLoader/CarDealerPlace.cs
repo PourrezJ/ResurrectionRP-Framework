@@ -1,4 +1,4 @@
-﻿using ResurrectionRP_Server.Streamer.Data;
+﻿using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server.Loader.CarDealerLoader
 {

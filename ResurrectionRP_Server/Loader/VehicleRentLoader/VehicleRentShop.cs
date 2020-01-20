@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using VehicleInfoLoader.Data;
+using ResurrectionRP_Server.Streamer.Data;
+using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server.Loader.VehicleRentLoader
 {
@@ -71,13 +73,13 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
                 $"Acceleration: {manifest.MaxAcceleration} \n" +
                 $"Places: {manifest.MaxNumberOfPassengers + 1} \n";
 
-                place.TextLabelId = Streamer.Streamer.AddEntityTextLabel(str, place.Location.Pos + new Vector3(0,0,1f),1,255,255,255, 180);
+                place.TextLabelId = TextLabel.CreateTextLabel(str, place.Location.Pos + new Vector3(0,0,1f), System.Drawing.Color.White);
             }
         }
 
         public void RentCar(VehicleRentPlace vehicleplace, Entities.Players.PlayerHandler ph)
         {
-            vehicleplace.TextLabelId.Destroy();
+            Task.Run(async ()=> await vehicleplace.TextLabelId.Destroy());
             var veh = vehicleplace.VehicleHandler;
             veh.SetSyncedMetaData("VehicleRent", DateTime.Now.ToString());
             veh.Freeze(false);

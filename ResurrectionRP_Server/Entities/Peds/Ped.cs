@@ -2,11 +2,11 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Threading.Tasks;
-using AltV.Net;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using AltV.Net.NetworkingEntity.Elements.Entities;
+using AltV.Net.NetworkingEntity;
+using AltV.Net.Data;
 
 namespace ResurrectionRP_Server.Entities.Peds
 {
@@ -22,7 +22,7 @@ namespace ResurrectionRP_Server.Entities.Peds
         }
     }
 
-    public class Ped
+    public class Ped : Entity
     {
         public static List<Ped> NPCList = new List<Ped>();
 
@@ -33,11 +33,10 @@ namespace ResurrectionRP_Server.Entities.Peds
         public NpcPrimaryCallBack NpcInteractCallBack { get; set; }
         [JsonIgnore, BsonIgnore]
         public NpcSecondaryCallBack NpcSecInteractCallBack { get; set; }
-
-        public ulong ID { get; private set; }
+         
         public PedModel Model;
-        public Vector3 Position;
-        public float Rotation;
+
+        public float Heading;
 
         private IPlayer owner;
         public IPlayer Owner
@@ -46,40 +45,33 @@ namespace ResurrectionRP_Server.Entities.Peds
             set
             {
                 owner = value;
-
-                if (Streamer.Streamer.ListEntities.ContainsKey(ID))
-                {
-                    INetworkingEntity oitem = Streamer.Streamer.ListEntities[ID];
-                    oitem?.SetData("ownerid", ((value != null) ? Owner.Id : -1));
-                }
+                if (NetworkEntity != null && NetworkEntity.Exists)
+                    NetworkEntity.SetData("ownerid", ((value != null) ? Owner.Id : -1));
             }
         }
 
-        public Dictionary<dynamic, dynamic> Variable = new Dictionary<dynamic, dynamic>();
-
-        public static Ped CreateNPC(PedModel pedHash, Vector3 startPosition, float facingAngle, short dimension = GameMode.GlobalDimension, IPlayer owner = null)
+        public Ped(PedModel model, Position position, float heading, IPlayer owner = null, int dimension = GameMode.GlobalDimension) : base(position, dimension)
         {
-            var ped = new Ped()
-            {              
-                Model = pedHash,
-                Position = startPosition,
-                Rotation = facingAngle,
-                Owner = owner
-            };
+            Model = model;
+            Heading = heading;
+            Owner = owner;
+            NetworkEntity = AltNetworking.CreateEntity(position.ConvertToEntityPosition(), dimension, GameMode.StreamDistance, Export(), StreamingType.EntityStreaming);
+        }
 
-            ped.ID = Streamer.Streamer.AddEntityPed(ped, dimension);
+        public static Ped CreateNPC(PedModel pedHash, Position startPosition, float facingAngle, short dimension = GameMode.GlobalDimension, IPlayer owner = null)
+        {
+            var ped = new Ped(pedHash, startPosition, facingAngle, owner);
 
             NPCList.Add(ped);
             return ped;
         }
 
-        public Dictionary<string, object> Export()
+        public override Dictionary<string, object> Export()
         {
             var data = new Dictionary<string, object>();
-            data["model"] = (uint)this.Model;
-            data["heading"] = this.Rotation;
+            data["model"] = (uint)Model;
+            data["heading"] = Heading;
             data["entityType"] = (int)Streamer.Data.EntityType.Ped;
-            data["id"] = this.ID;
             data["ownerid"] = (Owner == null) ? -1 : Owner.Id;
             data["taskWanderStandard"] = false;
             return data;
@@ -87,20 +79,14 @@ namespace ResurrectionRP_Server.Entities.Peds
 
         public void TaskWanderStandard(bool free)
         {
-            if (Streamer.Streamer.ListEntities.ContainsKey(ID))
-            {
-                INetworkingEntity oitem = Streamer.Streamer.ListEntities[ID];
-                oitem.SetData("taskWanderStandard", free);
-            }
+            if (NetworkEntity != null && NetworkEntity.Exists)
+                NetworkEntity.SetData("taskWanderStandard", free);
         }
 
         public void WalkTo(Vector3 pos)
         {
-            if (Streamer.Streamer.ListEntities.ContainsKey(ID))
-            {
-                INetworkingEntity oitem = Streamer.Streamer.ListEntities[ID];
-                oitem.SetData("WalkTo", new WalkToData(1, pos));
-            }
+            if (NetworkEntity != null && NetworkEntity.Exists)
+                NetworkEntity.SetData("WalkTo", new WalkToData(1, pos));
         }
 
         public static Ped GetNPCbyID(ulong id) => NPCList.Find(x => x.ID == id) ?? null;

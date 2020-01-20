@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using ResurrectionRP_Server.Streamer.Data;
 using ResurrectionRP_Server.Entities.Blips;
 using ResurrectionRP_Server.Database;
+using System.Drawing;
 
 namespace ResurrectionRP_Server.Models
 {
@@ -284,9 +285,9 @@ namespace ResurrectionRP_Server.Models
             ParkingColshape.OnVehicleLeaveColshape += OnVehicleLeaveColshape;
 
             if (!string.IsNullOrEmpty(Name))
-                EntityLabel = Streamer.Streamer.AddEntityTextLabel($"{Name}\n~o~Approchez pour intéragir", Location, 4);
+                EntityLabel = TextLabel.CreateTextLabel($"{Name}\n~o~Approchez pour intéragir", Location, drawDistance:10, font:1);
             else
-                EntityLabel = Streamer.Streamer.AddEntityTextLabel("~o~Approchez pour intéragir", Location, 4);
+                EntityLabel = TextLabel.CreateTextLabel("~o~Approchez pour intéragir", Location, drawDistance: 10, font: 1);
 
             if (blip)
                 EntityBlip=  Entities.Blips.BlipsManager.CreateBlip(name, Location,color,(int) sprite);
@@ -487,14 +488,14 @@ namespace ResurrectionRP_Server.Models
             return success;
         }
 
-        public void Destroy()
+        public async Task Destroy()
         {
             ParkingColshape.Delete();
 
             if (EntityMarker != null)
-                Marker.DestroyMarker(EntityMarker);
+                await EntityMarker.Destroy();
             if (EntityLabel != null)
-                Streamer.Streamer.ListEntities[EntityLabel.ID].Remove();
+                await EntityLabel.Destroy();
             if (EntityBlip != null)
                 BlipsManager.Destroy(EntityBlip);
         }

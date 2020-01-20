@@ -1,4 +1,4 @@
-﻿using AltV.Net;
+﻿using AltV.Net.Data;
 using AltV.Net.NetworkingEntity;
 using AltV.Net.NetworkingEntity.Elements.Entities;
 using ResurrectionRP_Server.Streamer.Data;
@@ -8,95 +8,51 @@ using System.Numerics;
 
 namespace ResurrectionRP_Server.Entities
 {
-    public class Marker
+    public class Marker : Entity
     {
-        public ulong id;
-        public MarkerType type;
-        public Vector3 pos;
-        public float scalex = 1;
-        public float scaley = 1;
-        public float scalez = 1;
-        public int r;
-        public int g;
-        public int b;
-        public int a;
-        public int dimension;
+        public MarkerType Type;
 
-        public static Marker CreateMarker(MarkerType type, Vector3 pos, Vector3? scale = null, Color? color = null, int dimension = GameMode.GlobalDimension)
+        public Vector3 Scale;
+
+        public Color Color;
+
+        public Marker(MarkerType type, Vector3 position, Vector3 scale, Color? color, int dimension = GameMode.GlobalDimension) : base(position, dimension)
         {
-            var marker = new Marker();
+            Type = type;
+            Scale = scale;
+            Color = (color != null) ? color.Value : Color.FromArgb(60, 255, 255, 255);
+            NetworkEntity = AltNetworking.CreateEntity(position.ConvertToEntityPosition(), dimension, GameMode.StreamDistance, Export(), StreamingType.EntityStreaming);
+        }
 
-            marker.type = type;
-            marker.pos = pos;
-
-            if (scale != null)
-            {
-                marker.scalex = scale.Value.X;
-                marker.scaley = scale.Value.Y;
-                marker.scalez = scale.Value.Z;
-            }
-
-            if (color != null)
-            {
-                marker.r = color.Value.R;
-                marker.g = color.Value.G;
-                marker.b = color.Value.B;
-                marker.a = color.Value.A;
-            }
-            else
-            {
-                marker.r = 255;
-                marker.g = 255;
-                marker.b = 255;
-                marker.a = 60;
-            }
-
-            INetworkingEntity item = AltNetworking.CreateEntity(pos.ConvertToEntityPosition(), dimension, GameMode.StreamDistance, marker.Export());
-            marker.id = item.Id;
-            item.Dimension = dimension;
-            marker.dimension = dimension;
-            Streamer.Streamer.ListEntities.TryAdd(item.Id, item);
+        public static Marker CreateMarker(MarkerType type, Vector3 pos, Vector3 scale, Color? color = null, int dimension = GameMode.GlobalDimension)
+        {
+            var marker = new Marker(type, pos, scale, color);
             return marker;
         }
 
-        public static void DestroyMarker(Marker marker)
-        {
-            Streamer.Streamer.ListEntities[marker.id].Remove();
-            Streamer.Streamer.ListEntities[marker.id] = null;
-        }
-
-        public Dictionary<string, object> Export()
+        public override Dictionary<string, object> Export()
         {
             var data = new Dictionary<string, object>();
-            data["type"] = (int)this.type;
-            data["scalex"] = this.scalex;
-            data["scaley"] = this.scaley;
-            data["scalez"] = this.scalez;
-            data["r"] = this.r;
-            data["b"] = this.b;
-            data["g"] = this.g;
-            data["a"] = this.a;
+            data["type"] = (int)Type;
+            data["scalex"] = Scale.X;
+            data["scaley"] = Scale.Y;
+            data["scalez"] = Scale.Z;
+            data["r"] = (int)Color.R;
+            data["b"] = (int)Color.B;
+            data["g"] = (int)Color.G;
+            data["a"] = (int)Color.A;
             data["entityType"] = (int)EntityType.Marker;
-            data["id"] = this.id;
             return data;
         }
 
         internal void SetColor(Color color)
         {
-            this.r = color.R;
-            this.g = color.G;
-            this.b = color.B;
-            this.a = color.A;
+            Color = color;
 
-            Streamer.Streamer.ListEntities[id].SetData("r", color.R);
-            Streamer.Streamer.ListEntities[id].SetData("g", color.G);
-            Streamer.Streamer.ListEntities[id].SetData("b", color.B);
-            Streamer.Streamer.ListEntities[id].SetData("a", color.A);
-        }
-
-        internal void Destroy()
-        {
-            Streamer.Streamer.DestroyEntity(this.id);
+            NetworkEntity.SetData("r", (int)color.R);
+            NetworkEntity.SetData("g", (int)color.G);
+            NetworkEntity.SetData("b", (int)color.B);
+            NetworkEntity.SetData("a", (int)color.A);
         }
     }
 

@@ -11,6 +11,7 @@ using ResurrectionRP_Server.Illegal.WeedLab.Data;
 using ResurrectionRP_Server.Items;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Models.InventoryData;
+using ResurrectionRP_Server.Streamer.Data;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -120,7 +121,7 @@ namespace ResurrectionRP_Server.Illegal
 
             foreach (WeedZone weedzone in WeedZoneList)
             {
-                weedzone.Textlabel = Streamer.Streamer.AddEntityTextLabel(LabelRefresh(weedzone), weedzone.Position + new Vector3(0, 0, 0.75f), 1);
+                weedzone.Textlabel = TextLabel.CreateTextLabel(LabelRefresh(weedzone), weedzone.Position + new Vector3(0, 0, 0.75f), System.Drawing.Color.White);
                 weedzone.Colshape = ColshapeManager.CreateCylinderColshape(weedzone.Position, 1f, 1f);
                 weedzone.Marker = Marker.CreateMarker(MarkerType.VerticalCylinder, weedzone.Position, new Vector3(1, 1, 0.2f), Color.FromArgb(80, 0, 100, 0));
 

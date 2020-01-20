@@ -1,6 +1,8 @@
 ﻿using AltV.Net.Async;
 using Newtonsoft.Json;
+using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Entities.Vehicles;
+using ResurrectionRP_Server.Streamer.Data;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -80,7 +82,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
                 $"Acceleration: {manifest.MaxAcceleration} \n" +
                 $"Places: {manifest.MaxNumberOfPassengers + 1} \n";
 
-                place.TextLabelId = Streamer.Streamer.AddEntityTextLabel(str, place.Location.Pos, 1, 255, 255, 255, 180);
+                place.TextLabelId = TextLabel.CreateTextLabel(str, place.Location.Pos, System.Drawing.Color.White);
 
                 place.VehicleHandler.SetData("CarDealer", place);
                 place.VehicleHandler.SetData("CarDealerPrice", place.VehicleInfo.Price);
@@ -90,7 +92,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
         public void BuyCar(CarDealerPlace vehicleplace, Entities.Players.PlayerHandler ph)
         {
             if (vehicleplace.TextLabelId != null)
-                vehicleplace.TextLabelId.Destroy();
+                Task.Run(async ()=> vehicleplace.TextLabelId.Destroy());
 
             vehicleplace.VehicleHandler.SpawnVeh = false;
             vehicleplace.VehicleHandler.SetOwner(ph);

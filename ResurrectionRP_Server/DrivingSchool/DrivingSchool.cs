@@ -71,7 +71,7 @@ namespace ResurrectionRP_Server.DrivingSchool
             EntryColshape = ColshapeManager.CreateCylinderColshape(EntryPosition, 2, 3);
             EntryColshape.OnPlayerEnterColshape += EntryColshape_OnPlayerEnterColshape;
             EntryColshape.OnPlayerLeaveColshape += EntryColshape_OnPlayerLeaveColshape;
-            EntryLabel = Streamer.Streamer.AddEntityTextLabel($"[~o~Auto Ecole~w~]\nPassez votre permis ici", EntryPosition + new Vector3(0,0,1), 2);
+            EntryLabel = TextLabel.CreateTextLabel($"[~o~Auto Ecole~w~]\nPassez votre permis ici", EntryPosition + new Vector3(0,0,1), Color.White, 2);
 
             var i = 0;
             RidePoints.ForEach((Ride p) => {

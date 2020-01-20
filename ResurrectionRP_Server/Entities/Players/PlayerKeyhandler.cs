@@ -73,7 +73,7 @@ namespace ResurrectionRP_Server.Entities.Players
             Ped pnj = null;
 
             if (raycastData.entityType == 1)
-                pnj = Ped.NPCList.Find(p => p.Position.DistanceTo(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE && p.Model == (AltV.Net.Enums.PedModel)raycastData.entityHash);
+                pnj = Ped.NPCList.Find(p => p.Position.Distance(raycastData.pos) <= Globals.MAX_INTERACTION_DISTANCE && p.Model == (AltV.Net.Enums.PedModel)raycastData.entityHash);
 
             switch (key)
             {
@@ -180,7 +180,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         if (pnj == null)
                             return;
 
-                        if (pnj.Position.DistanceTo(client.Position) > 3)
+                        if (pnj.Position.Distance(client.Position) > 3)
                             return;
 
                         pnj.NpcInteractCallBack?.Invoke(client, pnj);
@@ -331,7 +331,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     if (pnj == null)
                         return;
 
-                    if (pnj.Position.DistanceTo(client.Position) > 3)
+                    if (pnj.Position.Distance(client.Position) > 3)
                         return;
 
                     pnj.NpcSecInteractCallBack?.Invoke(client, pnj);

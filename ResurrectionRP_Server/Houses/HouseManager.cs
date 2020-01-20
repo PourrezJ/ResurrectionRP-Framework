@@ -33,7 +33,7 @@ namespace ResurrectionRP_Server.Houses
             Alt.OnPlayerDead += OnPlayerDead;
 
             for (int i = 0; i < HouseTypes.HouseTypeList.Count; i++)
-                Marker.CreateMarker(MarkerType.VerticalCylinder, HouseTypes.HouseTypeList[i].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), null, null);
+                Marker.CreateMarker(MarkerType.VerticalCylinder, HouseTypes.HouseTypeList[i].Position.Pos - new Vector3(0.0f, 0.0f, 1.0f), new Vector3(1,1,1));
             
             Utils.Utils.SetInterval(async () =>
             {

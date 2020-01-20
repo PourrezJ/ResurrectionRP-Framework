@@ -29,7 +29,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
             Killer = killer;
             Weapon = weapon;
 
-            marker = Marker.CreateMarker(MarkerType.UpsideDownCone, player.Position);
+            marker = Marker.CreateMarker(MarkerType.UpsideDownCone, player.Position, new Vector3(1,1,1));
             colshape = ColshapeManager.CreateCylinderColshape(player.Position - new Position(0, 0, 1), 2f, 2f);
             colshape.OnPlayerEnterColshape += OnPlayerEnterColshape;
             colshape.OnPlayerLeaveColshape += OnPlayerExitColshape;

@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Numerics;
-using System.Threading.Tasks;
 using AltV.Net.Elements.Entities;
-using AltV.Net.Async;
 using AltV.Net;
 using ResurrectionRP_Server.Streamer.Data;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using System.Drawing;
+using ResurrectionRP_Server.Entities;
 
 namespace ResurrectionRP_Server.Utils
 {
@@ -42,7 +42,7 @@ namespace ResurrectionRP_Server.Utils
                 Hide = hide
             };
 
-            door.TextLabel = Streamer.Streamer.AddEntityTextLabel($"Porte: {((door.Locked) ? "Verrouillée" : "Deverrouillée")}", door.Position, 1, drawDistance:2);
+            door.TextLabel = TextLabel.CreateTextLabel($"Porte: {((door.Locked) ? "Verrouillée" : "Deverrouillée")}", door.Position, Color.White ,1, 2);
             DoorList.Add(door);
             door.SetDoorLockState(locked);
             return door;
@@ -51,7 +51,7 @@ namespace ResurrectionRP_Server.Utils
         public void SetDoorLockState(bool lockStatut)
         {
             Locked = lockStatut;
-            Streamer.Streamer.UpdateEntityTextLabel(this.TextLabel.ID, $"Porte: {((Locked) ? "Verrouillée" : "Deverrouillée")}");
+            TextLabel.Text = $"Porte: {((Locked) ? "Verrouillée" : "Deverrouillée")}";
             Alt.EmitAllClients("SetDoorLockState", ID, Locked);
         }
 

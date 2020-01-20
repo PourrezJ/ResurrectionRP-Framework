@@ -4,6 +4,7 @@ using AltV.Net.Enums;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Colshape;
+using ResurrectionRP_Server.Entities;
 using ResurrectionRP_Server.Models;
 using ResurrectionRP_Server.Streamer.Data;
 using ResurrectionRP_Server.Utils;
@@ -100,7 +101,7 @@ namespace ResurrectionRP_Server.Factions
 
                 if (menuItem.Id == "ID_TakeRack")
                 {
-                    InventoryBox.Obj.SetAttachToEntity(vehicle, "forks_attach", new Vector3(), new Vector3()); 
+                    InventoryBox.Obj.AttachEntity(vehicle, "forks_attach", new Vector3(), new Vector3()); 
                     vehicle.SetData("BoxForks", InventoryBox);
                     InventoryBox = null;
                     //client.DisplayHelp("Transport d'une box", 60000);
@@ -114,7 +115,7 @@ namespace ResurrectionRP_Server.Factions
 
                         inventoryBox.ID = RackName;
                         InventoryBox = inventoryBox;
-                        InventoryBox.Obj.DetachAttach();
+                        InventoryBox.Obj.DetachEntity();
                         InventoryBox.Location = new Location(new Vector3(BoxLocation.Pos.X, BoxLocation.Pos.Y, BoxLocation.Pos.Z - 1), BoxLocation.Rot);                       
                         
                         vehicle.ResetData("BoxForks");
@@ -139,9 +140,9 @@ namespace ResurrectionRP_Server.Factions
             str += (InventoryBox != null) ? $"{InventoryBox.Inventory.CurrentSize()} : {InventoryBox.Inventory.MaxSize}" : "Vide";
 
             if (TextLabel != null)
-                Streamer.Streamer.UpdateEntityTextLabel(TextLabel.ID, str);
+                TextLabel.Text = str;
             else
-                TextLabel = Streamer.Streamer.AddEntityTextLabel(str, BoxLocation.Pos, 1, 255, 255, 255, 160);
+                TextLabel = TextLabel.CreateTextLabel(str, BoxLocation.Pos, Color.FromArgb(168, 255, 255, 255), 1);
         }
         #endregion
     }

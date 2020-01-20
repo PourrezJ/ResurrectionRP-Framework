@@ -1,4 +1,5 @@
-﻿using ResurrectionRP_Server.Streamer.Data;
+﻿using ResurrectionRP_Server.Entities;
+using ResurrectionRP_Server.Streamer.Data;
 
 namespace ResurrectionRP_Server.Loader.VehicleRentLoader
 {
@@ -8,7 +9,7 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
         public Models.Location Location;
         public TextLabel TextLabelId;
         public Entities.Vehicles.VehicleHandler VehicleHandler;
-        public Loader.CarDealerLoader.VehicleInfo VehicleInfo;
+        public CarDealerLoader.VehicleInfo VehicleInfo;
         public VehicleRentShop RentShop;
 
         public VehicleRentPlace(int id, Models.Location location, VehicleRentShop rentShop)

@@ -6,6 +6,7 @@ using AltV.Net;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using ResurrectionRP_Server.Models.InventoryData;
+using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Inventory
 {
@@ -78,8 +79,11 @@ namespace ResurrectionRP_Server.Inventory
         {
             if (prop != null)
             {
-                prop.Destroy();
-                prop = null;
+                Task.Run(async () =>
+                {
+                    await prop.Destroy();
+                    prop = null;
+                });
             }
         }
 

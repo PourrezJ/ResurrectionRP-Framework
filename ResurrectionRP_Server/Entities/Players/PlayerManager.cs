@@ -227,7 +227,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     }
                 }
 
-                string playerIp = string.Empty;
+                string playerIp = player.Ip;
 
                 Alt.Server.LogInfo($" {socialclub} : ({playerIp}) en attente de connexion.");
 
@@ -244,7 +244,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     player.Kick("Vous êtes banni!");
                     return;
                 }
-                playerIp = player.Ip;
+               
             }
             catch(Exception ex)
             {

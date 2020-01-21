@@ -25,7 +25,7 @@ namespace ResurrectionRP_Server.Society
 {
     [BsonIgnoreExtraElements]
     [BsonKnownTypes(typeof(Bennys), typeof(Unicorn), typeof(Sandjob), typeof(Rhumerie), typeof(PetrolSociety), typeof(Tequilala), typeof(WhiteWereWolf), typeof(PawnCar), typeof(WildCustom), typeof(BlackStreetNation), typeof(YellowJack), typeof(Amphitheatre)
-        , typeof(BurgerShot))]
+        , typeof(BurgerShot), typeof(Weazel))]
     public partial class Society
     {
         #region Static fields

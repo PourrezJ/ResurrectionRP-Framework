@@ -19,21 +19,40 @@ namespace ResurrectionRP_Server.Society
         public static void LoadAllSociety()
         {
             Alt.Server.LogInfo("--- Start loading all society in database ---");
-            var societyList = Database.MongoDB.GetCollectionSafe<Society>("society").AsQueryable();
 
-            Utils.Util.Delay((int)TimeSpan.FromMinutes(7).TotalMilliseconds, (Action)(async() =>
+            try
             {
+                var societyList = Database.MongoDB.GetCollectionSafe<Society>("society").AsQueryable();
+
+                Utils.Util.Delay((int)TimeSpan.FromMinutes(7).TotalMilliseconds, (Action)(async () =>
+                {
+                    foreach (var society in societyList)
+                    {
+                        society.UpdateInBackground();
+                        await Task.Delay(50);
+                    }
+                }));
+
                 foreach (var society in societyList)
                 {
-                    society.UpdateInBackground();
-                    await Task.Delay(50);
+                    try
+                    {
+                        society.Init();
+                    }
+                    catch (Exception ex)
+                    {
+                        Alt.Server.LogError(ex.ToString());
+                    }
                 }
-            }));
 
-            foreach (var society in societyList)
-                society.Init();
+                Alt.Server.LogInfo($"--- Finish loading all society in database: {societyList.Count()} ---");
+            }
+            catch(Exception ex)
+            {
+                Alt.Server.LogError(ex.ToString());
+            }
 
-            Alt.Server.LogInfo($"--- Finish loading all society in database: {societyList.Count()} ---");
+           
         }
         #endregion
     }

@@ -10,7 +10,8 @@ namespace ResurrectionRP_Server.Farms
         public Rhum()
         {
             Harvest_Name = "Champ de canne a sucre";
-            Process_Name = "Distillerie";
+            Process_Name = "Distillerie (Rhum)";
+            Selling_Name = "Revendeur de Rhum";
             //Selling_Name = "Revendeur de rhum";
 
             Harvest_BlipSprite = 85;
@@ -19,16 +20,27 @@ namespace ResurrectionRP_Server.Farms
             Harvest_BlipPosition = new Vector3(2262.616f, 4770.627f, 39.27166f);
             Harvest_Position.Add(new Vector3(2262.616f, 4770.627f, 39.27166f));
 
-            Process_PosRot = new Location(new Vector3(1255.333f, -2682.066f, 2.072282f), new Vector3(0, 0, 285.0722f));
+            //Process_PosRot = new Location(new Vector3(1255.333f, -2682.066f, 2.072282f), new Vector3(0, 0, 285.0722f));
 
             Harvest_Range = 10f;
 
             Process_PedHash = AltV.Net.Enums.PedModel.Beach03AMY;
 
             BlipColor = (BlipColor)51;
+          
+            DoubleProcess_PosRot = new Location(new Vector3(2555.167f, 4651.451f, 34.07678f), new Vector3(0, 0, 0));
+            Selling_PosRot = new Location(new Vector3(-1256.917f, -1149.656f, 7.604019f), new Vector3(0, 0, 246.4353f));
+
+            DoubleProcess_PedHash = AltV.Net.Enums.PedModel.Beach03AMY;
+            Selling_PedHash = AltV.Net.Enums.PedModel.Beach03AMY;
+
+            BlipColor = (BlipColor)51;
 
             ItemIDBrute = ItemID.Canneasurcre;
-            ItemIDProcess = ItemID.RhumLiquide;
+            ItemIDBrute2 = ItemID.BouteilleTraite;
+            ItemIDProcess = ItemID.Rhum;
+
+            ItemPrice = 481;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Numerics;
 
 namespace ResurrectionRP_Server.Farms
 {
+    /*
     public class RhumBottle : Farm
     {
         public RhumBottle()
@@ -29,5 +30,5 @@ namespace ResurrectionRP_Server.Farms
 
             ItemPrice = 481;
         }
-    }
+    }*/
 }

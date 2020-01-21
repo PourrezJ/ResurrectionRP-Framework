@@ -17,6 +17,7 @@ namespace ResurrectionRP_Server.Models
             { ItemID.Rhum, 0 },
             { ItemID.Vine, 0 },
             { ItemID.Petrol, 0 },
+            { ItemID.BouteilleTraite, 0 },
         };
 
         public double GetCurrentPrice(ItemID itemID, double somme)

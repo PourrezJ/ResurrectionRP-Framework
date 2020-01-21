@@ -29,10 +29,6 @@ namespace ResurrectionRP_Server.Inventory
             MaxSlot = maxSlot;
         }
 
-        public Inventory()
-        {
-        }
-
         public ItemStack this[int x]
         {
             get => InventoryList[x];

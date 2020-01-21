@@ -442,9 +442,9 @@ namespace ResurrectionRP_Server.Entities.Players
                 #endregion
 
                 #region Spawn Perm
-                var spawnPerm = new MenuItem("Spawn véhicule", "Spawn un véhicule avec le nom rentré.", "ID_SpawnVehPerm", true);
-                spawnPerm.SetInput("", 30, InputType.Text);
-                spawnPerm.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                var menuitem = new MenuItem("Spawn véhicule", "Spawn un véhicule avec le nom rentré.", "ID_SpawnVehPerm", true);
+                menuitem.SetInput("", 30, InputType.Text);
+                menuitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
                     try
                     {
@@ -481,7 +481,7 @@ namespace ResurrectionRP_Server.Entities.Players
                         Alt.Server.LogError($"ADMIN SPAWN VEHICLE PERSISTANT: {ex}");
                     }
                 };
-                mainMenu.Add(spawnPerm);
+                mainMenu.Add(menuitem);
                 #endregion
 
                 #region Delete Vehicle Perm
@@ -535,9 +535,9 @@ namespace ResurrectionRP_Server.Entities.Players
                 #endregion
 
                 #region Time Change All
-                spawnPerm = new MenuItem("Changer l'heure All", "Exemple de format valide 16:00", "ID_SetTime", true);
-                spawnPerm.SetInput("", 30, InputType.Text);
-                spawnPerm.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                menuitem = new MenuItem("Changer l'heure All", "Exemple de format valide 16:00", "ID_SetTime", true);
+                menuitem.SetInput("", 30, InputType.Text);
+                menuitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
                     try
                     {
@@ -559,13 +559,13 @@ namespace ResurrectionRP_Server.Entities.Players
                         Alt.Server.LogError($"World Time Change All: {ex}");
                     }
                 };
-                mainMenu.Add(spawnPerm);
+                mainMenu.Add(menuitem);
                 #endregion
 
                 #region Time Change Local
-                spawnPerm = new MenuItem("Changer l'heure Local", "Exemple de format valide 16:00", "ID_SetTime", true);
-                spawnPerm.SetInput("", 30, InputType.Text);
-                spawnPerm.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                menuitem = new MenuItem("Changer l'heure Local", "Exemple de format valide 16:00", "ID_SetTime", true);
+                menuitem.SetInput("", 30, InputType.Text);
+                menuitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
                     try
                     {
@@ -587,14 +587,14 @@ namespace ResurrectionRP_Server.Entities.Players
                         Alt.Server.LogError($"World Time Change Local: {ex}");
                     }
                 };
-                mainMenu.Add(spawnPerm);
+                mainMenu.Add(menuitem);
                 #endregion
 
                 #region Duplicate clé 
 
-                spawnPerm = new MenuItem("Donner une clé", "Donne une clé de véhicule, avec la plaque.", "ID_Generatekey", true);
-                spawnPerm.SetInput("", 30, InputType.Text);
-                spawnPerm.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                menuitem = new MenuItem("Donner une clé", "Donne une clé de véhicule, avec la plaque.", "ID_Generatekey", true);
+                menuitem.SetInput("", 30, InputType.Text);
+                menuitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
                     try
                     {
@@ -624,15 +624,14 @@ namespace ResurrectionRP_Server.Entities.Players
                         Alt.Server.LogError($"ADMIN CREATE KEY PERSISTANT: {ex}");
                     }
                 };
-                mainMenu.Add(spawnPerm);
+                mainMenu.Add(menuitem);
                 #endregion
-
 
                 #region Remove a car
 
-                spawnPerm = new MenuItem("Supprimer un véhicule (Nécéssite plaque)", "Supprimer un véhicule DEFINiTIVEMENT en utilsant sa plaque", "ID_PermDeleteWithPlate", true);
-                spawnPerm.SetInput("", 30, InputType.Text);
-                spawnPerm.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                menuitem = new MenuItem("Supprimer un véhicule (Nécéssite plaque)", "Supprimer un véhicule DEFINiTIVEMENT en utilsant sa plaque", "ID_PermDeleteWithPlate", true);
+                menuitem.SetInput("", 30, InputType.Text);
+                menuitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
                     try
                     {
@@ -659,27 +658,37 @@ namespace ResurrectionRP_Server.Entities.Players
                         Alt.Server.LogError($"(PlayerHandler.Admin.OpenMenuAdmin) {ex}");
                     }
                 };
-                mainMenu.Add(spawnPerm);
+                mainMenu.Add(menuitem);
                 #endregion
 
                 #region Get Vehicle Infos
 
-                spawnPerm = new MenuItem("Information Véhicule (Nécéssite plaque)", "Récupère les informations d'un véhicule", "ID_VehicleInfo", true);
-                spawnPerm.SetInput("", 30, InputType.Text);
-                spawnPerm.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
+                menuitem = new MenuItem("Information Véhicule (Nécéssite plaque)", "Récupère les informations d'un véhicule", "ID_VehicleInfo", true);
+                menuitem.SetInput("", 30, InputType.Text);
+                menuitem.OnMenuItemCallback = (IPlayer client, Menu menu, IMenuItem menuItem, int _itemIndex) =>
                 {
                     VehicleCommands.VehicleInfo(client, new[] { menuItem.InputValue });
                 };
-                mainMenu.Add(spawnPerm);
+                mainMenu.Add(menuitem);
                 #endregion
 
                 #region DEBUG CreateObject
                 if (GameMode.IsDebug)
                 {
-                    spawnPerm = new MenuItem("DEBUG: Object Hand", "Tester les objets dans sa main", "ID_ObjectHand", true);
-                    spawnPerm.SetInput("", 30, InputType.Text);
-                    spawnPerm.OnMenuItemCallback = DEBUG_ObjectHand;
-                    mainMenu.Add(spawnPerm);
+                    menuitem = new MenuItem("DEBUG: Object Hand", "Tester les objets dans sa main", "ID_ObjectHand", true);
+                    menuitem.SetInput("", 30, InputType.Text);
+                    menuitem.OnMenuItemCallback = DEBUG_ObjectHand;
+                    mainMenu.Add(menuitem);
+                }
+                #endregion
+
+                #region Vehicle Inventory
+                if (Client.Vehicle != null)
+                {
+                    menuitem = new MenuItem(((VehicleHandler)(Client.Vehicle)).VehicleData.Inventory != null ? "Changer la taille de l'inventaire véhicule" : "Créer un inventaire pour le véhicule", "", "ID_VehInventory", true);
+                    menuitem.SetInput("", 30, InputType.Text);
+                    menuitem.OnMenuItemCallback = OnModifyInventory;
+                    mainMenu.Add(menuitem);
                 }
                 #endregion
             }
@@ -687,6 +696,24 @@ namespace ResurrectionRP_Server.Entities.Players
             #region Fin
             mainMenu.OpenMenu(Client);
             #endregion
+        }
+
+        private void OnModifyInventory(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        {
+            var veh = Client.Vehicle as VehicleHandler;
+            if (veh == null)
+                return;
+
+            if (veh.VehicleData.Inventory == null)
+            {
+                veh.VehicleData.Inventory = new Inventory.Inventory(int.Parse(menuItem.InputValue), 20);
+                Client.SendNotificationSuccess("Vous avez créer un inventaire pour le véhicule.");
+            }
+            else
+            {
+                Array.Resize(ref veh.VehicleData.Inventory.InventoryList, int.Parse(menuItem.InputValue));
+                Client.SendNotificationSuccess("Vous avez modifier le poids max du coffre.");
+            }
         }
 
         private void OnFinalize(IPlayer client, Menu menu)

@@ -45,7 +45,7 @@ namespace ResurrectionRP_Server.Entities
             return data;
         }
 
-        public static TextLabel CreateTextLabel(string label, Vector3 pos, Color? color = null, int font = 0, int drawDistance = 5, int dimension = GameMode.GlobalDimension)
+        public static TextLabel CreateTextLabel(string label, Vector3 pos, Color? color = null, int font = 1, int drawDistance = 5, int dimension = GameMode.GlobalDimension)
         {
             var data = new TextLabel(label, font, (color != null) ? color.Value : Color.FromArgb(128,255,255,255), pos, drawDistance, dimension);
             return data;

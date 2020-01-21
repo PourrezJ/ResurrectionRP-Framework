@@ -251,7 +251,7 @@ namespace ResurrectionRP_Server
                     coordsFile = File.AppendText("SavedCoords.txt");
                 }
 
-                var data = $"| {coordsName} | Saved Coordenates: new Vector3({pPosX}f,{pPosY}f,{pPosZ}f), new Vector3({pRotX}f,{pRotY}f,{pRotZ}f) | InVehicle: {(player.Vehicle != null)}";
+                var data = $"| {coordsName} | Saved Coordenates: new Vector3({pPosX}f,{pPosY}f,{pPosZ}f), new Vector3({pRotX}f,{pRotY}f,{pRotZ}f) | Heading: {player.HeadRotation} | InVehicle: {(player.Vehicle != null)}";
                 Chat.SendChatMessage(player, data);
                 coordsFile.WriteLine(data);
                 coordsFile.Close();

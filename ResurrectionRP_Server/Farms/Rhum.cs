@@ -10,12 +10,13 @@ namespace ResurrectionRP_Server.Farms
         public Rhum()
         {
             Harvest_Name = "Champ de canne a sucre";
-            Process_Name = "Distillerie (Rhum)";
+            DoubleProcess_Name = "Distillerie (Rhum)";
             Selling_Name = "Revendeur de Rhum";
-            //Selling_Name = "Revendeur de rhum";
+
 
             Harvest_BlipSprite = 85;
-            Process_BlipSprite = 499;
+            DoubleProcess_BlipSprite = 499;
+            Selling_BlipSprite = 500;
 
             Harvest_BlipPosition = new Vector3(2262.616f, 4770.627f, 39.27166f);
             Harvest_Position.Add(new Vector3(2262.616f, 4770.627f, 39.27166f));
@@ -26,9 +27,11 @@ namespace ResurrectionRP_Server.Farms
 
             Process_PedHash = AltV.Net.Enums.PedModel.Beach03AMY;
 
+            DoubleProcess_Time = 40000;
+
             BlipColor = (BlipColor)51;
           
-            DoubleProcess_PosRot = new Location(new Vector3(2555.167f, 4651.451f, 34.07678f), new Vector3(0, 0, 0));
+            DoubleProcess_PosRot = new Location(new Vector3(346.53625f, 3405.9297f, 36.457886f), new Vector3(0, 0, 0));
             Selling_PosRot = new Location(new Vector3(-1256.917f, -1149.656f, 7.604019f), new Vector3(0, 0, 246.4353f));
 
             DoubleProcess_PedHash = AltV.Net.Enums.PedModel.Beach03AMY;

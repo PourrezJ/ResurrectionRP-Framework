@@ -177,7 +177,10 @@ namespace ResurrectionRP_Server.Models.InventoryData
         Filet,
 
         JusRaisin,
-        RaisinLiquide
+        RaisinLiquide,
+
+        Orge,
+
 
     }
 }

@@ -21,11 +21,7 @@ namespace ResurrectionRP_Server.Farms
             Harvest_BlipPosition = new Vector3(2262.616f, 4770.627f, 39.27166f);
             Harvest_Position.Add(new Vector3(2262.616f, 4770.627f, 39.27166f));
 
-            //Process_PosRot = new Location(new Vector3(1255.333f, -2682.066f, 2.072282f), new Vector3(0, 0, 285.0722f));
-
             Harvest_Range = 10f;
-
-            Process_PedHash = AltV.Net.Enums.PedModel.Beach03AMY;
 
             DoubleProcess_Time = 40000;
 

@@ -405,6 +405,8 @@ namespace ResurrectionRP_Server.Factions
                             {
                                 if (client == null || !client.Exists)
                                     return;
+                                var oldpos = _vh.Position;
+                                var oldrot = _vh.Rotation;
                                 int engineHealth = _vh.EngineHealth;
                                 int petrolTankHealth = _vh.PetrolTankHealth;
                                 _vh.Repair(client);
@@ -413,7 +415,7 @@ namespace ResurrectionRP_Server.Factions
                                 _vh.UpdateInBackground(false);
                                 var vehdata = _vh.VehicleData;
                                 _vh.Remove();
-                                vehdata.SpawnVehicle();
+                                vehdata.SpawnVehicle(new Location(oldpos, oldrot));
                                 client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~g~Terminé~w~.", "Elle est niquel!");
                                 onReparation = false;
                                 UpdateInBackground();
@@ -467,8 +469,7 @@ namespace ResurrectionRP_Server.Factions
                                     return;
 
                                 client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~g~Terminé~w~.", "Elle est niquel!");
-                                _vh.DirtLevel = 0;
-                                veh.DirtLevel = 0;
+                                _vh.VehicleData.DirtLevel = 0;
                                 _vh.UpdateInBackground(false);
                                 _vh.ApplyDamage();
                                 onReparation = false;

@@ -116,6 +116,7 @@ namespace ResurrectionRP_Server.Items
                     new Weapons(ItemID.Weapon, "Lampe Torche", "", 1, hash: WeaponHash.Flashlight, isDockable: true, itemPrice: 250),
 
                     new Unusable(ItemID.Canneasurcre, "Canne a sucre", "", 2),
+                    new Unusable(ItemID.Orge, "Orge", "", 2),
 
                     new Unusable(ItemID.BouquetFleur, "Bouquet de fleur", "", 1, isDockable: true, itemPrice: 100),
                     new Unusable(ItemID.Bague, "Bague Jourdan Acier", "", 1, isDockable: true, itemPrice: 500),

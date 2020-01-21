@@ -18,6 +18,7 @@ using ResurrectionRP_Server.Utils.Enums;
 using ResurrectionRP_Server.XMenuManager;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
 
@@ -60,8 +61,8 @@ namespace ResurrectionRP_Server.Factions
         #region Init
         public override Faction Init()
         {
-            Vector3 reparZone = new Vector3(-324.7894f, -134.2555f, 35.54341f);
-            Marker.CreateMarker(MarkerType.VerticalCylinder, reparZone, new Vector3(4, 4, 1), System.Drawing.Color.White, GameMode.GlobalDimension);
+            Vector3 reparZone = new Vector3(-324.7894f, -134.2555f, 37.54341f);
+            Marker.CreateMarker(MarkerType.VerticalCylinder, reparZone, new Vector3(4, 4, 1), Color.FromArgb(80,255,255,255), GameMode.GlobalDimension);
             ReparationVLColshape = ColshapeManager.CreateCylinderColshape(reparZone, 4, 4);
             ReparationVLColshape.OnPlayerInteractInColshape += OnEnterRepairZoneVL;
             ReparationVLColshape.OnPlayerEnterColshape += OnEnterColshapeInteract;
@@ -69,7 +70,7 @@ namespace ResurrectionRP_Server.Factions
             ReparationVLColshape.OnVehicleLeaveColshape += OnVehicleLeaveColshape;
 
             PeintureColshape = ColshapeManager.CreateCylinderColshape(PeintureZone, 4, 4);
-            Marker.CreateMarker(MarkerType.VerticalCylinder, PeintureZone, new Vector3(4, 4, 1), System.Drawing.Color.White, GameMode.GlobalDimension);
+            Marker.CreateMarker(MarkerType.VerticalCylinder, PeintureZone, new Vector3(4, 4, 1), Color.FromArgb(80, 255, 255, 255), GameMode.GlobalDimension);
             PeintureColshape.OnPlayerInteractInColshape += OnEnterPaintZoneVL;
             PeintureColshape.OnPlayerEnterColshape += OnEnterColshapeInteract;
             PeintureColshape.OnVehicleEnterColshape += OnVehicleEnterColshape;
@@ -341,7 +342,7 @@ namespace ResurrectionRP_Server.Factions
             menu.SetData("Vehicle", vehicle);
             menu.ItemSelectCallback = MenuCallBack;
 
-            if (HasPlayerIntoFaction(client))
+            if (HasPlayerIntoFaction(client) || FactionPlayerList.Count == 0)
             {
                 menu.Add(new MenuItem("Diagnostique véhicule", "", "ID_Diag", true));
                 menu.Add(new MenuItem("Réparer la carrosserie", "", "ID_Body", true));
@@ -404,14 +405,15 @@ namespace ResurrectionRP_Server.Factions
                             {
                                 if (client == null || !client.Exists)
                                     return;
-
                                 int engineHealth = _vh.EngineHealth;
                                 int petrolTankHealth = _vh.PetrolTankHealth;
                                 _vh.Repair(client);
                                 _vh.EngineHealth = engineHealth;
                                 _vh.PetrolTankHealth = petrolTankHealth;
                                 _vh.UpdateInBackground(false);
-                                _vh.ApplyDamage();
+                                var vehdata = _vh.VehicleData;
+                                _vh.Remove();
+                                vehdata.SpawnVehicle();
                                 client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~g~Terminé~w~.", "Elle est niquel!");
                                 onReparation = false;
                                 UpdateInBackground();
@@ -440,27 +442,8 @@ namespace ResurrectionRP_Server.Factions
                                 client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~g~Terminé~w~.", "Il est niquel!");
 
                                 _vh.EngineHealth = 1000;
-
-                                for (byte i = 0; i < veh.WheelsCount; i++)
-                                {
-                                    veh.SetWheelBurst(i, _vh.VehicleData.Wheels[i].Burst);
-                                    veh.SetWheelHealth(i, _vh.VehicleData.Wheels[i].Health);
-                                    veh.SetWheelHasTire(i, _vh.VehicleData.Wheels[i].HasTire);
-                                }
-
-                                for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
-                                    veh.SetDoorState(i, (byte)_vh.VehicleData.Doors[i]);
-
-                                for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
-                                {
-                                    if (_vh.VehicleData.Windows[i] == WindowState.WindowBroken)
-                                        veh.SetWindowDamaged(i, true);
-                                    else if (_vh.VehicleData.Windows[i] == WindowState.WindowDown)
-                                        veh.SetWindowOpened(i, true);
-                                }
-
+                                _vh.VehicleData.EngineHealth = 1000;
                                 _vh.UpdateInBackground(false);
-                                _vh.ApplyDamage();
                                 onReparation = false;
                                 UpdateInBackground();
                             });

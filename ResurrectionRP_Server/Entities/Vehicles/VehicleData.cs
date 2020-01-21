@@ -113,9 +113,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (!value || Fuel > 0)
                 {
                     _engineOn = value;
-
-                    if (Vehicle != null && Vehicle.Exists)
+                    if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
+                    {
                         Vehicle.EngineOn = value;
+                    }
                 }
             }
         }
@@ -128,8 +129,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 _primaryColor = value;
 
-                if (Vehicle != null && Vehicle.Exists && Vehicle.PrimaryColor != value)
-                    AltAsync.Do(() => { Vehicle.PrimaryColor = value; });
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
+                {
+                    Vehicle.PrimaryColor = value;
+                }
             }
         }
 
@@ -140,9 +143,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             set
             {
                 _secondaryColor = value;
-
-                if (Vehicle != null && Vehicle.Exists && Vehicle.SecondaryColor != value)
-                    AltAsync.Do(() => { Vehicle.SecondaryColor = value; });
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
+                {
+                    Vehicle.SecondaryColor = value;
+                }
             }
         }
 
@@ -153,9 +157,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             set
             {
                 _pearlColor = value;
-
-                if (Vehicle != null && Vehicle.Exists && Vehicle.PearlColor != value)
-                    AltAsync.Do(() => { Vehicle.PearlColor = value; });
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
+                {
+                    Vehicle.PearlColor = value;
+                }
             }
         }
 
@@ -166,9 +171,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             set
             {
                 _windowTint = value;
-
-                if (Vehicle != null && Vehicle.Exists && Vehicle.WindowTint != (byte)value)
-                    AltAsync.Do(() => { Vehicle.SetWindowTint(value); });
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
+                {
+                    Vehicle.SetWindowTint(value);
+                }
             }
         }
 
@@ -179,9 +185,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             set
             {
                 _frontBumperDamage = value;
-
-                if (Vehicle != null && Vehicle.Exists && Vehicle.GetBumperDamageLevel(VehicleBumper.Front) != value)
-                    AltAsync.Do(() => { Vehicle.SetBumperDamageLevel(VehicleBumper.Front, value); });
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
+                {
+                    Vehicle.SetBumperDamageLevel(VehicleBumper.Front, value);
+                }
             }
         }
 
@@ -192,9 +199,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             set
             {
                 _rearBumperDamage = value;
-
-                if (Vehicle != null && Vehicle.Exists && Vehicle.GetBumperDamageLevel(VehicleBumper.Rear) != value)
-                    AltAsync.Do(() => { Vehicle.SetBumperDamageLevel(VehicleBumper.Rear, value); });
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
+                {
+                    Vehicle.SetBumperDamageLevel(VehicleBumper.Rear, value);
+                }
             }
         }
 
@@ -220,18 +228,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             set
             {
                 _doors = value;
-
-                AltAsync.Do(() =>
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
                 {
-                    if (Vehicle != null && Vehicle.Exists)
+                    for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
                     {
-                        for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
-                        {
-                            if (Vehicle.GetDoorState(i) != (byte)_doors[i])
-                                Vehicle.SetDoorState(i, (byte)_doors[i]);
-                        }
+                        if (Vehicle.GetDoorState(i) != (byte)_doors[i])
+                            Vehicle.SetDoorState(i, (byte)_doors[i]);
                     }
-                });
+                }
             }
         }
 
@@ -242,21 +246,17 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             set
             {
                 _windows = value;
-
-                if (Vehicle != null && Vehicle.Exists)
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
                 {
-                    AltAsync.Do(() =>
+                    for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
                     {
-                        for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
-                        {
-                            if (_windows[i] == WindowState.WindowBroken)
-                                Vehicle.SetWindowDamaged(i, true);
-                            else if (_windows[i] == WindowState.WindowDown)
-                                Vehicle.SetWindowOpened(i, true);
-                            else
-                                Vehicle.SetWindowOpened(i, false);
-                        }
-                    });
+                        if (_windows[i] == WindowState.WindowBroken)
+                            Vehicle.SetWindowDamaged(i, true);
+                        else if (_windows[i] == WindowState.WindowDown)
+                            Vehicle.SetWindowOpened(i, true);
+                        else
+                            Vehicle.SetWindowOpened(i, false);
+                    }
                 }
             }
         }
@@ -269,16 +269,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 _wheels = value;
 
-                if (Vehicle != null && Vehicle.Exists)
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
                 {
-                    AltAsync.Do(() =>
+                    for (byte i = 0; i < Vehicle.WheelsCount; i++)
                     {
-                        for (byte i = 0; i < Vehicle.WheelsCount; i++)
-                        {
-                            Vehicle.SetWheelHealth(i, _wheels[i].Health);
-                            Vehicle.SetWheelBurst(i, _wheels[i].Burst);
-                        }
-                    });
+                        Vehicle.SetWheelHealth(i, _wheels[i].Health);
+                        Vehicle.SetWheelBurst(i, _wheels[i].Burst);
+                    }
                 }
             }
         }
@@ -293,13 +290,10 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 LastKnowLocation = new Location(value.Pos, value.Rot);
 
-                if (Vehicle != null && Vehicle.Exists)
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
                 {
-                    AltAsync.Do(() =>
-                    {
-                        Vehicle.Position = LastKnowLocation.Pos;
-                        Vehicle.Rotation = LastKnowLocation.Rot;
-                    });
+                    Vehicle.Position = LastKnowLocation.Pos;
+                    Vehicle.Rotation = LastKnowLocation.Rot;
                 }
             }
         }
@@ -312,15 +306,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 _neonState = value;
 
-                if (Vehicle != null && Vehicle.Exists)
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
                 {
                     // BUG v792 : Vehicle.SetNeonActive isn't working correctly
                     Vehicle.GetSyncedMetaData("NeonState", out bool neonState);
 
                     if (neonState != value.Item1)
                     {
-                        // AltAsync.Do(() => { Vehicle.SetNeonActive(value.Item1, value.Item2, value.Item3, value.Item4); });
-                        AltAsync.Do(() => { Vehicle.SetSyncedMetaData("NeonState", value.Item1); });
+                        Vehicle.SetSyncedMetaData("NeonState", value.Item1);
                     }
                 }
             }
@@ -334,15 +327,14 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 _neonColor = value;
 
-                if (Vehicle != null && Vehicle.Exists)
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
                 {
                     // BUG v792 : Vehicle.NeonColor isn't working correctly
                     Vehicle.GetSyncedMetaData("NeonColor", out int neonColor);
 
                     if (neonColor != _neonColor.ToArgb())
                     {
-                        // AltAsync.Do(() => { Vehicle.NeonColor = new Rgba(value.R, value.G, value.B, value.A); });
-                        AltAsync.Do(() => { Vehicle.SetSyncedMetaData("NeonColor", value.ToArgb()); });
+                        Vehicle.SetSyncedMetaData("NeonColor", value.ToArgb());
                     }
                 }
             }
@@ -356,8 +348,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 _dirtLevel = value;
 
-                if (Vehicle != null && Vehicle.Exists && Vehicle.DirtLevel != value)
-                    AltAsync.Do(() => { Vehicle.DirtLevel = value; });
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
+                    Vehicle.DirtLevel = value;
             }
         }
 
@@ -372,8 +364,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 _bodyhealth = value;
 
-                if (Vehicle != null && Vehicle.Exists && Vehicle.BodyHealth != value)
-                    AltAsync.Do(() => { Vehicle.BodyHealth = value; });
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
+                    Vehicle.BodyHealth = value;
             }
         }
 
@@ -385,8 +377,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 _engineHealth = value;
 
-                if (Vehicle != null && Vehicle.Exists && Vehicle.EngineHealth != value)
-                    AltAsync.Do(() => { Vehicle.EngineHealth = value; });
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
+                    Vehicle.EngineHealth = value;
             }
         }
 
@@ -398,8 +390,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 _petrolTankHealth = value;
 
-                if (Vehicle != null && Vehicle.Exists && Vehicle.PetrolTankHealth != value)
-                    AltAsync.Do(() => { Vehicle.PetrolTankHealth = value; });
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
+                    Vehicle.PetrolTankHealth = value;
             }
         }
 
@@ -435,8 +427,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 _radioStation = value;
 
-                if (Vehicle != null && Vehicle.Exists && Vehicle.RadioStation != value)
-                    AltAsync.Do(() => { Vehicle.RadioStation = value; });
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
+                    Vehicle.RadioStation = value;
             }
         }
 
@@ -448,8 +440,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             {
                 _lockState = value;
 
-                if (Vehicle != null && Vehicle.Exists && Vehicle.LockState != value)
-                    AltAsync.Do(() => { Vehicle.LockState = value; });
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
+                    Vehicle.LockState = value;
             }
         }
 
@@ -459,7 +451,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             get => _torqueMultiplicator;
             set
             {
-                AltAsync.Do(() => Vehicle?.SetSyncedMetaData("torqueMultiplicator", value));
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
+                    Vehicle.SetSyncedMetaData("torqueMultiplicator", value);
                 _torqueMultiplicator = value;
             }
         }
@@ -469,7 +462,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             get => _powerMultiplicator;
             set
             {
-                AltAsync.Do(() => Vehicle?.SetSyncedMetaData("powerMultiplicator", value));
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
+                    Vehicle.SetSyncedMetaData("powerMultiplicator", value);
                 _powerMultiplicator = value;
             }
         }
@@ -494,7 +488,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             get => _customHandling;
             set
             {
-                if (Vehicle != null)
+                if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
                     Vehicle.SetSyncedMetaData("CustomHandling", Newtonsoft.Json.JsonConvert.SerializeObject(value));
                 _customHandling = value;
             }
@@ -507,7 +501,8 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         public void UpdateProperties()
         {
-            Utils.Utils.CheckThread("UpdateProperties");
+            if (Utils.Utils.CheckThread("UpdateProperties"))
+                return;
 
             if (Vehicle == null)
                 return;
@@ -549,13 +544,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
 
             if (Vehicle.WheelsCount > _wheels.Length)
-                _wheels = new Wheel[Vehicle.WheelsCount];
+                Array.Resize(ref _wheels, Vehicle.WheelsCount);
 
             for (byte i = 0; i < Vehicle.WheelsCount; i++)
             {
-                _wheels[i] = new Wheel();
+                if (_wheels[i] == null)
+                    _wheels[i] = new Wheel();
+
                 _wheels[i].Health = Vehicle.GetWheelHealth(i);
                 _wheels[i].Burst = Vehicle.IsWheelBurst(i);
+                _wheels[i].HasTire = Vehicle.DoesWheelHasTire(i);
             }
 
             VehicleModType[] values = (VehicleModType[])Enum.GetValues(typeof(VehicleModType));

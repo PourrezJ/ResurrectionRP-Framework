@@ -170,19 +170,35 @@ namespace ResurrectionRP_Server.Entities.Vehicles
         {
             if (!Exists || player == null || !player.Exists)
                 return;
+            /*
+            var players = player.GetNearestPlayers(GameMode.StreamDistance, false);
 
+            lock (players)
+            {
+                foreach (var client in players)
+                    if (client.Exists)
+                        client.EmitLocked("vehicleFix", this);
+            }
+            */
             BodyHealth = 1000;
             VehicleData.Doors = new VehicleDoorState[Globals.NB_VEHICLE_DOORS] { 0, 0, 0, 0, 0, 0, 0, 0 };
             VehicleData.Windows = new WindowState[Globals.NB_VEHICLE_WINDOWS] { 0, 0, 0, 0 };
-            VehicleData.Wheels = new Wheel[WheelsCount];
+           // VehicleData.Wheels = new Wheel[WheelsCount];
 
-            for (byte i = 0; i < VehicleData.Wheels.Length; i++)
+            for (byte i = 0; i < WheelsCount; i++)
             {
+                VehicleData.Wheels[i] = new Wheel();
                 SetWheelBurst(i, false);
                 SetWheelHasTire(i, true);
                 SetWheelHealth(i, 100);
                 SetWheelOnFire(i, false);
             }
+
+            for (byte i = 0; i < 6; i++)
+                SetLightDamaged(i, false);
+
+            for (byte i = 0; i < 5; i++)
+                SetPartDamageLevel(i, 0);
 
             for (byte i = 0; i < VehicleData.Doors.Length; i++)
                 SetDoorState(i, (byte)VehicleDoorState.Closed);
@@ -192,8 +208,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
             VehicleData.FrontBumperDamage = 0;
             VehicleData.RearBumperDamage = 0;
-            //DamageData = string.Empty;
-            player.EmitLocked("vehicleFix", this);
+            
         }
 
         public void SetOwner(IPlayer player) => VehicleData.OwnerID = player.GetSocialClub();

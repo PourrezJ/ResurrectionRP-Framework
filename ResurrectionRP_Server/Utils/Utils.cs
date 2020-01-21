@@ -16,13 +16,14 @@ namespace ResurrectionRP_Server.Utils
         //    await SetInterval(action, timeout);
         //}
 
-        public static void CheckThread(string data = "")
+        public static bool CheckThread(string data = "")
         {
             if (Startup.MainThreadId != System.Threading.Thread.CurrentThread.ManagedThreadId)
             {
                 Alt.Server.LogError(data + " not in the main thread!");
-                throw new Exception("not in the main thread!");
+                return false;
             }
+            return true;
         }
 
         public static int RandomNumber(int max) => new Random().Next(max);

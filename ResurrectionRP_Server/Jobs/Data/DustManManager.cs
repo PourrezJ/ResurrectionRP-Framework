@@ -64,7 +64,7 @@ namespace ResurrectionRP_Server.Jobs
                 depotInProgress = true;
                 client.SendNotificationSuccess("Génial ! Restez ici pour vider votre camion !");
                 client.DisplayHelp("Déchargement de la remorque en cours, veuillez patenter! ", 30000);
-                timer = Utils.Utils.SetInterval(() =>
+                timer = Utils.Util.SetInterval(() =>
                 {
                     if (!depotInProgress)
                         timer.Stop();

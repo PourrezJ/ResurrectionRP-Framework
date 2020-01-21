@@ -88,7 +88,7 @@ namespace ResurrectionRP_Server.Illegal
 
             Alt.Server.LogDebug($"--- Finish loading all illegal businesses in database: {_illagelBusinessesList.Count()} ---");
 
-            Utils.Utils.SetInterval(async () =>
+            Utils.Util.SetInterval(async () =>
             {
                 foreach (var _businesses in IllegalList)
                 {
@@ -131,7 +131,7 @@ namespace ResurrectionRP_Server.Illegal
             if (NextRefreshDealerPos < DateTime.Now || NextRefreshDealerPos == new DateTime())
             {
                 NextRefreshDealerPos = DateTime.UtcNow.AddDays(7);
-                CurrentPos = Utils.Utils.RandomNumber(0, DealerLocations.Length);
+                CurrentPos = Utils.Util.RandomNumber(0, DealerLocations.Length);
                 Task.Run(async()=> await Update());
             }
 
@@ -173,7 +173,7 @@ namespace ResurrectionRP_Server.Illegal
 
                     sender.LaunchProgressBar(1000 * itemcount);
 
-                    Utils.Utils.Delay(1000 * itemcount, async () =>
+                    Utils.Util.Delay(1000 * itemcount, async () =>
                     {
                         if (!await sender.ExistsAsync())
                             return;

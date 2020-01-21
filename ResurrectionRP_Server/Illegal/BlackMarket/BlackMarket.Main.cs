@@ -38,7 +38,7 @@ namespace ResurrectionRP_Server.Illegal
             if (NextRefreshMarketPos < DateTime.Now || NextRefreshMarketPos == new DateTime())
             {
                 NextRefreshMarketPos = DateTime.UtcNow.AddDays(7);
-                CurrentLocation = Utils.Utils.RandomNumber(0, _pnjPos.Length);
+                CurrentLocation = Utils.Util.RandomNumber(0, _pnjPos.Length);
             }
 
             if (_pnjPos.Length > 0)
@@ -55,7 +55,7 @@ namespace ResurrectionRP_Server.Illegal
                 }
             }
 
-            Utils.Utils.SetInterval(() =>
+            Utils.Util.SetInterval(() =>
             {
                 // Check si milicien dans la zone
                 // GOTO ResetLabs ou ResetDealer

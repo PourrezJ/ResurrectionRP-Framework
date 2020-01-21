@@ -154,7 +154,7 @@ namespace ResurrectionRP_Server.Teleport
             client.RequestCollisionAtCoords(etage.Pos);
             client.Emit("FadeOut", 1000);
 
-            Utils.Utils.Delay(2000, async () =>
+            Utils.Util.Delay(2000, async () =>
                  {
                     await client.SetPositionAsync(etage.Pos);
 

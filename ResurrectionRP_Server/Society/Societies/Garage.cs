@@ -632,7 +632,7 @@ namespace ResurrectionRP_Server.Society.Societies
                 else if (_modType == 14)
                     HornStop(VehicleBench, 0);
                 else if (_modType == 69 && VehicleBench.VehicleData.Mods.ContainsKey(_modType))
-                    VehicleBench.SetWindowTint(Utils.Utils.GetWindowTint(VehicleBench.VehicleData.Mods[_modType]));
+                    VehicleBench.SetWindowTint(Utils.Util.GetWindowTint(VehicleBench.VehicleData.Mods[_modType]));
                 else if (_modType == 69)
                     VehicleBench.SetWindowTint(WindowTint.None);
                 else if (VehicleBench.VehicleData.Mods.ContainsKey(_modType))
@@ -846,7 +846,7 @@ namespace ResurrectionRP_Server.Society.Societies
             else if (_modType == 23)
                 VehicleBench.SetWheels((byte)VehicleBench.VehicleManifest.WheelType, selected);
             else if (_modType == 69)
-                VehicleBench.SetWindowTint(Utils.Utils.GetWindowTint(selected));
+                VehicleBench.SetWindowTint(Utils.Util.GetWindowTint(selected));
             else
                 VehicleBench.SetMod(_modType, selected);
         }
@@ -908,7 +908,7 @@ namespace ResurrectionRP_Server.Society.Societies
                 VehicleBench.VehicleData.Mods.AddOrUpdate(_modType, selected, (key, oldvalue) => selected);
                 
                 if (_modType == 69)
-                    VehicleBench.VehicleData.WindowTint = Utils.Utils.GetWindowTint(selected);
+                    VehicleBench.VehicleData.WindowTint = Utils.Util.GetWindowTint(selected);
                 else
                     VehicleBench.SetMod(_modType, selected);
 

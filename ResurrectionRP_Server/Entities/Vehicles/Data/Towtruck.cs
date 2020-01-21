@@ -24,7 +24,7 @@ namespace ResurrectionRP.Entities.Vehicles.Data
             Position = position;
             Vehicle = vehicle;
             Master = master;
-            timer = Utils.SetInterval(async () =>
+            timer = Util.SetInterval(async () =>
             {
                 if(!master.HaveTowVehicle())
                 {

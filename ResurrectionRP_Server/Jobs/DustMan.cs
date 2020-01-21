@@ -178,7 +178,7 @@ namespace ResurrectionRP_Server.Jobs
                         return;
                 }
 
-                DustManManager DustManmanager = new DustManManager(client, TrashZoneList[Utils.Utils.RandomNumber(TrashZoneList.Count)], _depotZone);
+                DustManManager DustManmanager = new DustManManager(client, TrashZoneList[Utils.Util.RandomNumber(TrashZoneList.Count)], _depotZone);
                 TrashVehiclesList.TryAdd(DustManmanager, vehicle.GetVehicleHandler());
                 //await client.EmitAsync("Jobs_Dustman", "Init", vehicle.Id, TrashZoneList[Utils.Utils.RandomNumber(TrashZoneList.Count)], _depotZone);
             }
@@ -210,7 +210,7 @@ namespace ResurrectionRP_Server.Jobs
             switch (menuItem.Id)
             {
                 case "ID_Quartier":
-                    DustManManager DustManmanager = new DustManManager(client, TrashZoneList[Utils.Utils.RandomNumber(TrashZoneList.Count)], _depotZone);
+                    DustManManager DustManmanager = new DustManManager(client, TrashZoneList[Utils.Util.RandomNumber(TrashZoneList.Count)], _depotZone);
                     break;
 
                 case "ID_End":

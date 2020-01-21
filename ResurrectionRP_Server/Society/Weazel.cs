@@ -52,7 +52,7 @@ namespace ResurrectionRP_Server
 
                     if (client.GetPlayerHandler().HasBankMoney(AnnoncePrice + CalcPriceAnnonce(AnnoncePrice), "Message Weazel News"))
                     {
-                        Utils.Utils.Delay(50000, () => Utils.Utils.SendNotificationPicture(CharPicture.CHAR_DEFAULT, "Weazel News", "Message d'annonce:", message));
+                        Utils.Util.Delay(50000, () => Utils.Util.SendNotificationPicture(CharPicture.CHAR_DEFAULT, "Weazel News", "Message d'annonce:", message));
                         client.SendNotification("Votre annonce va être diffusée.");
                         BankAccount.AddMoney(AnnoncePrice);
                     }

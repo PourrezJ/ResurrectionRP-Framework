@@ -97,7 +97,7 @@ namespace ResurrectionRP_Server.Items
             {
                 client.PlayAnimation("mp_player_inteat@burger", "mp_player_int_eat_burger", 8, -1, -1, (AnimationFlags)49);
 
-                Utils.Utils.Delay(4000, async () =>
+                Utils.Util.Delay(4000, async () =>
                 {
                     if (!await client.ExistsAsync())
                         return;
@@ -112,7 +112,7 @@ namespace ResurrectionRP_Server.Items
             {
                 client.PlayAnimation("mp_player_intdrink", "loop_bottle", 8, -1, -1, (AnimationFlags)49);
 
-                Utils.Utils.Delay(4000, async () =>
+                Utils.Util.Delay(4000, async () =>
                 {
                     if (!await client.ExistsAsync())
                         return;

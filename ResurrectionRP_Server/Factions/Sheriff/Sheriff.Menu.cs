@@ -330,7 +330,7 @@ namespace ResurrectionRP_Server.Factions
 
                 client.SendNotificationPicture(CharPicture.CHAR_CHAT_CALL, "Bureau Shérif", "Demande de mise en fourrière.", $"Besoin de retrait du véhicule {target.NumberplateText}");
 
-                Utils.Utils.Delay(30000, async () =>
+                Utils.Util.Delay(30000, async () =>
                 {
                     if (! await target.ExistsAsync())
                         return;
@@ -385,7 +385,7 @@ namespace ResurrectionRP_Server.Factions
                     }
                 }
 
-                Utils.Utils.Delay(20000, () => {
+                Utils.Util.Delay(20000, () => {
                     client.SendNotificationPicture(CharPicture.CHAR_CHAT_CALL, "Bureau Shérif", "Information trouvées:", infos);
                 });
             }

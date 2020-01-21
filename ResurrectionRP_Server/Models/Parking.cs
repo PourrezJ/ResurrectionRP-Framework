@@ -203,10 +203,10 @@ namespace ResurrectionRP_Server.Models
         #region Private methods
         private int GenerateRandomID()
         {
-            int number = Utils.Utils.RandomNumber(999999999);
+            int number = Utils.Util.RandomNumber(999999999);
 
             while (ParkingList.Exists(x => x.ID == number))
-                number = Utils.Utils.RandomNumber(999999999);
+                number = Utils.Util.RandomNumber(999999999);
 
             return number;
         }

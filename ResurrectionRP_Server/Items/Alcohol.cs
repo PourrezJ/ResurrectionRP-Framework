@@ -44,7 +44,7 @@ namespace ResurrectionRP_Server.Items
         public void AnimateEatDrink(IPlayer client, Entities.Players.PlayerHandler ph, string props, Vector3 position, Vector3 rotation)
         {
             client.PlayAnimation("mp_player_intdrink", "loop_bottle", 4, -8, -1, (Flags.OnlyAnimateUpperBody | Flags.AllowPlayerControl));
-            Utils.Utils.Delay(4000, async () =>
+            Utils.Util.Delay(4000, async () =>
             {
                 if (!await client.ExistsAsync())
                     return;

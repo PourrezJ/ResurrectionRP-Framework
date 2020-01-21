@@ -105,10 +105,10 @@ namespace ResurrectionRP_Server.Phone
         private static string GeneratePhoneNumber()
         {
 
-            string phoneNumber = $"{Utils.Utils.RandomNumber(1000, 9999)}-{Utils.Utils.RandomNumber(1000, 9999)}";
+            string phoneNumber = $"{Utils.Util.RandomNumber(1000, 9999)}-{Utils.Util.RandomNumber(1000, 9999)}";
             while (PhoneNumberList.Contains(phoneNumber))
             {
-                phoneNumber = $"{Utils.Utils.RandomNumber(1000, 9999)}-{Utils.Utils.RandomNumber(1000, 9999)}";
+                phoneNumber = $"{Utils.Util.RandomNumber(1000, 9999)}-{Utils.Util.RandomNumber(1000, 9999)}";
             }
             return phoneNumber;
         }
@@ -223,7 +223,7 @@ namespace ResurrectionRP_Server.Phone
             {
                 client.EmitLocked("ClosePhone");
 
-                Utils.Utils.Delay(750, () =>
+                Utils.Util.Delay(750, () =>
                 {
                     AltAsync.Do(() =>
                     {

@@ -179,7 +179,7 @@ namespace ResurrectionRP_Server.Farms
             client.EmitLocked("LaunchProgressBar", Harvest_Time * (needed / 10));
 
 
-            FarmTimers[client] = Utils.Utils.SetInterval(async () => {
+            FarmTimers[client] = Utils.Util.SetInterval(async () => {
 
                 //if (vehHandler.VehicleData.OilTank.Brute < 1500)
                 //    await Task.Delay(Harvest_Time);
@@ -270,7 +270,7 @@ namespace ResurrectionRP_Server.Farms
             int needed = 1500 - vehHandler.VehicleData.OilTank.Brute;
             //client.LaunchProgressBar(Harvest_Time * (vehHandler.VehicleData.OilTank.Brute / 100));
             bool exit = false;
-            ProcessTimers[client] = Utils.Utils.SetInterval(async () =>
+            ProcessTimers[client] = Utils.Util.SetInterval(async () =>
             {
                 if (!await client.ExistsAsync() || !await trailer.ExistsAsync())
                     return;
@@ -367,7 +367,7 @@ namespace ResurrectionRP_Server.Farms
             bool exit = false;
 
             sender.LaunchProgressBar((Process_Time * 1000) / (FillingTime) * (trailer.VehicleData.OilTank.Traite / 5));
-            SellingTimer[sender] = Utils.Utils.SetInterval(async () =>
+            SellingTimer[sender] = Utils.Util.SetInterval(async () =>
             {
                 if (!await sender.ExistsAsync())
                     return;          

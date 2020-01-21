@@ -31,7 +31,7 @@ namespace ResurrectionRP_Server.Weather
                 var results = client.Query(Config.GetSetting<string>("OpenWeatherCity"));
                 WeatherDataReceived(results.Weathers[0], results.Wind);
 
-                Utils.Utils.Delay((int)TimeSpan.FromMinutes(5).TotalMilliseconds, () =>
+                Utils.Util.Delay((int)TimeSpan.FromMinutes(5).TotalMilliseconds, () =>
                 {
                     results = client.Query(Config.GetSetting<string>("OpenWeatherCity"));
                     WeatherDataReceived(results?.Weathers[0], results?.Wind);
@@ -67,7 +67,7 @@ namespace ResurrectionRP_Server.Weather
             {
                 Actual_weather = weather;
                 WeatherTransition = 0.0f;
-                timer = Utils.Utils.SetInterval(() =>
+                timer = Utils.Util.SetInterval(() =>
                 {
                     WeatherTransition += 0.02f;
 

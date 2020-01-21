@@ -373,7 +373,7 @@ namespace ResurrectionRP_Server.Factions
                 case "ID_Diag":
                     client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Diagnostique: ~r~Démarrage~w~.", "En cours ...");
 
-                    Utils.Utils.Delay(20000, () =>
+                    Utils.Util.Delay(20000, () =>
                     {
                         AltAsync.Do(() =>
                         {
@@ -399,7 +399,7 @@ namespace ResurrectionRP_Server.Factions
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Carrosserie: ~r~Démarrage~w~.", "En cours ...");
                         _vh.VehicleData.UpdateProperties();
 
-                        Utils.Utils.Delay(20000, () =>
+                        Utils.Util.Delay(20000, () =>
                         {
                             AltAsync.Do(() =>
                             {
@@ -434,7 +434,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.","C'est parti!");
 
-                        Utils.Utils.Delay(20000, () =>
+                        Utils.Util.Delay(20000, () =>
                         {
                             AltAsync.Do(() =>
                             {
@@ -462,7 +462,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         client.SendNotificationPicture(CharPicture.CHAR_LS_CUSTOMS, "Los Santos Custom", "Nettoyage: ~r~Démarrage~w~.","C'est parti!" );
 
-                        Utils.Utils.Delay(20000, () =>
+                        Utils.Util.Delay(20000, () =>
                         {
                             AltAsync.Do(() => {
                                 if (!veh.Exists || !client.Exists)
@@ -487,7 +487,7 @@ namespace ResurrectionRP_Server.Factions
                     {
                         client.SendNotificationPicture( CharPicture.CHAR_LS_CUSTOMS ,"Los Santos Custom", "Réparation Moteur: ~r~Démarrage~w~.", "Alors ce tuyau va où déjà?");
 
-                        Utils.Utils.Delay(20000, () =>
+                        Utils.Util.Delay(20000, () =>
                         {
                             AltAsync.Do(() => {
                                 if (!veh.Exists || !client.Exists)

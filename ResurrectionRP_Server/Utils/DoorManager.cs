@@ -35,7 +35,7 @@ namespace ResurrectionRP_Server.Utils
         {
             var door = new Door()
             {
-                ID = Utils.RandomNumber(int.MinValue, int.MaxValue),
+                ID = Util.RandomNumber(int.MinValue, int.MaxValue),
                 Hash = hash,
                 Position = position,
                 Locked = locked,

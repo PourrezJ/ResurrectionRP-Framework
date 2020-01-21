@@ -38,7 +38,7 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
             }
 
             // Boucle pour vérifié si place est vide.
-            Utils.Utils.SetInterval(() =>
+            Utils.Util.SetInterval(() =>
             {
                 foreach (var place in VehicleRentPlaces)
                 {
@@ -53,11 +53,11 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
 
         public void Respawn(VehicleRentPlace place)
         {
-            place.VehicleInfo = VehicleInfoList[Utils.Utils.RandomNumber(VehicleInfoList.Count)];
+            place.VehicleInfo = VehicleInfoList[Utils.Util.RandomNumber(VehicleInfoList.Count)];
             place.VehicleInfo.Price = Convert.ToInt32(place.VehicleInfo.Price);
             Array colorArray = Enum.GetValues(typeof(Utils.Enums.VehicleColor));
-            int color1 = (int)colorArray.GetValue(Utils.Utils.RandomNumber(colorArray.Length));
-            int color2 = (int)colorArray.GetValue(Utils.Utils.RandomNumber(colorArray.Length));
+            int color1 = (int)colorArray.GetValue(Utils.Util.RandomNumber(colorArray.Length));
+            int color2 = (int)colorArray.GetValue(Utils.Util.RandomNumber(colorArray.Length));
             VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get((uint)place.VehicleInfo.VehicleHash);
 
             if (manifest != null)
@@ -98,7 +98,7 @@ namespace ResurrectionRP_Server.Loader.VehicleRentLoader
 
             VehicleRentPlaces.Find(c => c.VehicleHandler == vehicleplace.VehicleHandler).VehicleHandler = null;
 
-            Utils.Utils.SetInterval(() =>
+            Utils.Util.SetInterval(() =>
             {
                 if (!veh.Exists)
                     return;

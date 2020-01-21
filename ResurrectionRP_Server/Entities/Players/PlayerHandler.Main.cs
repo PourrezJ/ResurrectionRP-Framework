@@ -285,7 +285,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 Client.SetSyncedMetaData("Crounch", PlayerSync.Crounch);
 
                 Client.Emit(SaltyShared.Event.Voice_Initialize, Voice.ServerUniqueIdentifier, Voice.RequiredUpdateBranch, Voice.MinimumPluginVersion, Voice.SoundPack, Voice.IngameChannel, Voice.IngameChannelPassword);
-                Utils.Utils.Delay(1000, () => Client.Emit("FadeIn", 3000));
+                Utils.Util.Delay(1000, () => Client.Emit("FadeIn", 3000));
 
                 UpdateClothing();
                 if (PlayerSync.IsCuff)
@@ -405,7 +405,7 @@ namespace ResurrectionRP_Server.Entities.Players
             if (DrunkTimer != null)
                 return;
 
-            DrunkTimer = Utils.Utils.SetInterval(() =>
+            DrunkTimer = Utils.Util.SetInterval(() =>
             {
                 Alcohol -= 0.2;
                 Client.EmitLocked("AlcoholDrink", Alcohol);

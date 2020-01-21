@@ -246,7 +246,7 @@ namespace ResurrectionRP_Server.Farms
             int i = 0;
             client.LaunchProgressBar(Harvest_Time);
 
-            FarmTimers[client] = Utils.Utils.SetInterval(() =>
+            FarmTimers[client] = Utils.Util.SetInterval(() =>
             {
                 lock (client)
                 {
@@ -327,7 +327,7 @@ namespace ResurrectionRP_Server.Farms
             sender.LaunchProgressBar(Process_Time);
             bool exit = false;
             int i = 0;
-            ProcessTimers[sender] = Utils.Utils.SetInterval(() =>
+            ProcessTimers[sender] = Utils.Util.SetInterval(() =>
             {
                 lock (sender)
                 {
@@ -412,7 +412,7 @@ namespace ResurrectionRP_Server.Farms
             bool exit = false;
             var i = 0;
 
-            DoubleProcessTimers[sender] = Utils.Utils.SetInterval(() =>
+            DoubleProcessTimers[sender] = Utils.Util.SetInterval(() =>
             {
                 lock (sender)
                 {
@@ -498,7 +498,7 @@ namespace ResurrectionRP_Server.Farms
 
             sender.LaunchProgressBar(Selling_Time * itemcount);
 
-            Utils.Utils.Delay(Selling_Time * itemcount, () =>
+            Utils.Util.Delay(Selling_Time * itemcount, () =>
             {
                 lock (sender)
                 {

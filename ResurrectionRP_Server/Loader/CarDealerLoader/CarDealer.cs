@@ -37,7 +37,7 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
             }
 
             // Boucle pour vérifier si la place est vide.
-            Utils.Utils.SetInterval(async () =>
+            Utils.Util.SetInterval(async () =>
             {
                 foreach (var place in CarDealerPlaces)
                 {
@@ -52,14 +52,14 @@ namespace ResurrectionRP_Server.Loader.CarDealerLoader
 
         public void Respawn(CarDealerPlace place)
         {
-            place.VehicleInfo = VehicleInfoList[Utils.Utils.RandomNumber(VehicleInfoList.Count)];
+            place.VehicleInfo = VehicleInfoList[Utils.Util.RandomNumber(VehicleInfoList.Count)];
 
             var pourcent = place.VehicleInfo.Price * 0.02;
 
-            place.VehicleInfo.Price = Utils.Utils.RandomNumber(Convert.ToInt32(place.VehicleInfo.Price - pourcent), Convert.ToInt32(place.VehicleInfo.Price + pourcent));
+            place.VehicleInfo.Price = Utils.Util.RandomNumber(Convert.ToInt32(place.VehicleInfo.Price - pourcent), Convert.ToInt32(place.VehicleInfo.Price + pourcent));
             Array colorArray = Enum.GetValues(typeof(Utils.Enums.VehicleColor));
-            int color1 = (int)colorArray.GetValue(Utils.Utils.RandomNumber(colorArray.Length));
-            int color2 = (int)colorArray.GetValue(Utils.Utils.RandomNumber(colorArray.Length));
+            int color1 = (int)colorArray.GetValue(Utils.Util.RandomNumber(colorArray.Length));
+            int color2 = (int)colorArray.GetValue(Utils.Util.RandomNumber(colorArray.Length));
             VehicleManifest manifest = VehicleInfoLoader.VehicleInfoLoader.Get((uint)place.VehicleInfo.VehicleHash);
 
             if (manifest != null)

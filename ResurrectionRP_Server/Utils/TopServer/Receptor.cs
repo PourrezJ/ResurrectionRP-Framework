@@ -10,6 +10,8 @@ namespace ResurrectionRP_Server.Utils.TopServer
     {
         private Action<string, string, string, string, string> _callback;
 
+
+
         public Receptor(Action<string, string, string, string, string> callback, int port)
         {
             this._callback = callback;
@@ -36,7 +38,7 @@ namespace ResurrectionRP_Server.Utils.TopServer
             }
             else if (array.Length == 2 && array[1] == "test")
             {
-                AltV.Net.Alt.Server.LogError("[VotePlugin] Test : Le plugin de vote est bien relié à Top-Serveurs !");
+                AltV.Net.Alt.Server.LogInfo("[VotePlugin] Test : Le plugin de vote est bien relié à Top-Serveurs !");
             }
             udpClient.BeginReceive(new AsyncCallback(this.OnReceptSocket), udpClient);
         }

@@ -70,7 +70,7 @@ namespace ResurrectionRP_Server.Entities.Players
             }
             Alt.Server.LogInfo($"--- Finish loading all players from database: {players.Count()} ---");
 
-            Utils.Utils.SetInterval(() =>
+            Utils.Util.SetInterval(() =>
             {
                 var pls = PlayerHandler.PlayerHandlerList.ToList();
 
@@ -172,7 +172,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 {
                     player.SendNotification($"Ne va pas vers la lumière, tu vas te relever.");
 
-                    Utils.Utils.SetInterval(() =>
+                    Utils.Util.SetInterval(() =>
                     {
                         if (player.Exists)
                             player.Revive(105);
@@ -424,6 +424,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         public static PlayerHandler GetPlayerHandlerCache(string socialClub) => allplayerHandlers[socialClub];
 
+        public static ConcurrentDictionary<string, PlayerHandler> GetAllPlayerHandlerCache() => allplayerHandlers;
 
         private static void IWantToDie(IPlayer client)
         {

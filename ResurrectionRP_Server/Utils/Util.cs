@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Utils
 {
-    class Utils
+    class Util
     {
         // Aucune idée de sont impacte ... djoe
         //public static async Task SetInterval(Action action, TimeSpan timeout)

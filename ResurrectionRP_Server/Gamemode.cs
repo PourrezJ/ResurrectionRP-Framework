@@ -128,7 +128,6 @@ namespace ResurrectionRP_Server
             Alt.OnConsoleCommand += Alt_OnConsoleCommand;
  
             Alt.Server.LogColored("~g~Création des controlleurs...");
-            //Utils.TopServer.Vote.InitVotePlugin();
             Streamer.Streamer.Init();
             ColshapeManager.Init();
             Voice.Init();
@@ -144,6 +143,7 @@ namespace ResurrectionRP_Server
             RadioManager.Init();
             Weather.WeatherManager.InitWeather();
             Business.Business.AddCommands();
+            Utils.TopServer.Vote.InitVotePlugin();
 
             Economy = new Economy.Economy();
             Alt.Server.LogColored("~g~Création des controlleurs terminée");
@@ -193,16 +193,16 @@ namespace ResurrectionRP_Server
 
             Alt.Server.LogColored("~g~Initialisation des controlleurs terminé");
 
-            Utils.Utils.SetInterval(async () => await Save(), 15000);
-            Utils.Utils.SetInterval(async () => await Factions.FactionManager.Update(), 60000);
+            Utils.Util.SetInterval(async () => await Save(), 15000);
+            Utils.Util.SetInterval(async () => await Factions.FactionManager.Update(), 60000);
 
             if (!IsDevServer)
-                Utils.Utils.SetInterval(async () => await Restart(), 1000);
+                Utils.Util.SetInterval(async () => await Restart(), 1000);
             
-            Utils.Utils.SetInterval(() => Time.Update(), 1000);
+            Utils.Util.SetInterval(() => Time.Update(), 1000);
 
             bool Hunger = false;
-            Utils.Utils.SetInterval( () => {
+            Utils.Util.SetInterval( () => {
                 AltAsync.Do(() =>
                 {
                     Hunger = !Hunger;

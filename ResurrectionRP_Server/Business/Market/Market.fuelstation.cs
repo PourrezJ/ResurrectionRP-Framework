@@ -218,7 +218,7 @@ namespace ResurrectionRP_Server.Business
                     client.DisplaySubtitle("Début du transfert ...", 1000);
                     Task.Run(() =>
                     {
-                        timer = Utils.Utils.SetInterval(() =>
+                        timer = Utils.Util.SetInterval(() =>
                         {
                             //API.OnProgressBar(client, true, i, currentmax);
                             if (Station.Litrage == Station.LitrageMax)
@@ -227,7 +227,7 @@ namespace ResurrectionRP_Server.Business
                                 //API.Shared.OnProgressBar(client, false);
                                 _ravitaillement = false;
                                 _utilisateurRavi = null;
-                                Utils.Utils.StopTimer(timer);
+                                Utils.Util.StopTimer(timer);
                                 UpdateInBackground();
                                 return;
 
@@ -238,7 +238,7 @@ namespace ResurrectionRP_Server.Business
                                 //API.Shared.OnProgressBar(client, false);
                                 _ravitaillement = false;
                                 _utilisateurRavi = null;
-                                Utils.Utils.StopTimer(timer);
+                                Utils.Util.StopTimer(timer);
                                 UpdateInBackground();
                                 return;
                             }
@@ -249,7 +249,7 @@ namespace ResurrectionRP_Server.Business
                                 _utilisateurRavi = null;
 
 
-                                Utils.Utils.StopTimer(timer);
+                                Utils.Util.StopTimer(timer);
                                 UpdateInBackground();
                                 return;
                             }

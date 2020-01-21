@@ -21,7 +21,7 @@ namespace ResurrectionRP_Server.Society
             Alt.Server.LogInfo("--- Start loading all society in database ---");
             var societyList = Database.MongoDB.GetCollectionSafe<Society>("society").AsQueryable();
 
-            Utils.Utils.Delay((int)TimeSpan.FromMinutes(7).TotalMilliseconds, (Action)(async() =>
+            Utils.Util.Delay((int)TimeSpan.FromMinutes(7).TotalMilliseconds, (Action)(async() =>
             {
                 foreach (var society in societyList)
                 {

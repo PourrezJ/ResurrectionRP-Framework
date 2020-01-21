@@ -458,7 +458,7 @@ namespace ResurrectionRP_Server.Entities.Players
         {
             client.LaunchProgressBar(1500);
 
-            Utils.Utils.Delay(1500, () =>
+            Utils.Util.Delay(1500, () =>
             {
                 AltAsync.Do(() =>
                 {

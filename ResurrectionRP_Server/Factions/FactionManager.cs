@@ -36,7 +36,7 @@ namespace ResurrectionRP_Server.Factions
             Dock = (Dock)(LoadFaction<Dock>("Dock") ?? new Dock("Dock", FactionType.Dock)).Init();
             Sheriff = (Sheriff)(LoadFaction<Sheriff>("Bureau du Shérif") ?? new Sheriff("Bureau du Shérif", FactionType.Nordiste)).Init();
             
-            Utils.Utils.Delay((int)TimeSpan.FromMinutes(10).TotalMilliseconds, async () =>
+            Utils.Util.Delay((int)TimeSpan.FromMinutes(10).TotalMilliseconds, async () =>
             {
                 foreach (var faction in FactionList)
                 {       

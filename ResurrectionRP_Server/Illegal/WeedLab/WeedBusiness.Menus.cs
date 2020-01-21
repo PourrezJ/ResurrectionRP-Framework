@@ -77,7 +77,7 @@ namespace ResurrectionRP_Server.Illegal
 
         private void GrowZoneMenuCallback(IPlayer client, XMenu menu, XMenuItem menuItem, int itemIndex, dynamic data)
         {
-            Utils.Utils.CheckThread("GrowZoneMenuCallback");
+            Utils.Util.CheckThread("GrowZoneMenuCallback");
 
             WeedZone zone = (WeedZone)menu.GetData("Zone");
             if (zone == null) return;

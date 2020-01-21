@@ -190,7 +190,7 @@ namespace ResurrectionRP_Server.Entities.Players.Data
 
         public void Remove()
         {
-            Utils.Utils.CheckThread("Remove");
+            Utils.Util.CheckThread("Remove");
             marker?.Destroy();
             colshape.OnPlayerEnterColshape -= OnPlayerEnterColshape;
             colshape.OnPlayerLeaveColshape -= OnPlayerExitColshape;

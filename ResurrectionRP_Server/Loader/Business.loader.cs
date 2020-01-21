@@ -19,7 +19,7 @@ namespace ResurrectionRP_Server.Loader
             foreach (var _businesses in _businessesList)
                 _businesses.Init();
 
-            Utils.Utils.SetInterval(async () =>
+            Utils.Util.SetInterval(async () =>
             {
                 foreach (var _businesses in _businessesList)
                 {

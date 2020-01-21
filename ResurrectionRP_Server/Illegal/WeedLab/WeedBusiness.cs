@@ -80,7 +80,7 @@ namespace ResurrectionRP_Server.Illegal
             DealerPedHash = PedModel.Hippie01;
 
             if (LabEnter == null)
-                LabEnter = LocationLab[Utils.Utils.RandomNumber(LocationLab.Length)];
+                LabEnter = LocationLab[Utils.Util.RandomNumber(LocationLab.Length)];
 
 
             if (GameMode.IsDebug)

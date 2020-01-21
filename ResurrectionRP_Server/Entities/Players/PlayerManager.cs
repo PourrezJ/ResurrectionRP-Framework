@@ -204,7 +204,7 @@ namespace ResurrectionRP_Server.Entities.Players
                     return;
                 }
 
-                if (!string.IsNullOrEmpty(discordData) || discordData != "null")
+                if (!string.IsNullOrEmpty(discordData) && discordData != "null")
                 {
                     DiscordData discord = JsonConvert.DeserializeObject<DiscordData>(discordData);
 
@@ -244,70 +244,70 @@ namespace ResurrectionRP_Server.Entities.Players
                     player.Kick("Vous êtes banni!");
                     return;
                 }
-               
+
+                player.Model = (uint)PedModel.FreemodeMale01;
+                player.Spawn(new Position(-1072.886f, -2729.607f, 0.8148939f));
+                player.Dimension = Dimension++;
+
+                player.SetData("SocialClub", socialclub);
+
+
+                if (!GameMode.IsDebug)
+                {
+                    try
+                    {
+                        if (!Config.GetSetting<bool>("WhitelistOpen"))
+                        {
+                            player.EmitLocked("OpenLogin");
+                            return;
+                        }
+
+                        Task.Run(async () =>
+                        {
+                            Whitelist whitelist = await Whitelist.GetWhitelistFromAPI(socialclub);
+                            await AltAsync.Do(() =>
+                            {
+                                if (whitelist != null && whitelist.Whitelisted)
+                                {
+                                    if (whitelist.IsBan)
+                                    {
+                                        if (DateTime.Now > whitelist.EndBanTime)
+                                        {
+                                            whitelist.IsBan = false;
+                                            player.EmitLocked("OpenLogin", socialclub);
+                                            return;
+                                        }
+
+                                        string _kickMessage = $"Vous êtes ban du serveur jusqu'au {whitelist.EndBanTime.ToShortDateString()}";
+                                        player.Kick(_kickMessage);
+                                    }
+                                    else
+                                        player.EmitLocked("OpenLogin", socialclub);
+                                }
+                                else
+                                {
+                                    Alt.Server.LogInfo($"({player.Ip}) ({socialclub}) n'est pas whitelist sur le serveur.");
+                                    player.EmitLocked("FadeIn", 0);
+                                    string _kickMessage = "Vous n'êtes pas whitelist sur le serveur";
+                                    player.Kick(_kickMessage);
+                                }
+                            });
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        string _kickMessage = "Vous n'êtes pas whitelist sur le serveur";
+                        player.Kick(_kickMessage);
+                        Alt.Server.LogError("Player Login" + ex.Data);
+                    }
+                }
+                else
+                    ConnectPlayer(player);
             }
             catch(Exception ex)
             {
                 Alt.Server.LogError(ex.ToString());
-            }
-
-            player.Model = (uint)PedModel.FreemodeMale01;
-            player.Spawn(new Position(-1072.886f, -2729.607f, 0.8148939f));
-            player.Dimension = Dimension++;
-
-            player.SetData("SocialClub", socialclub);
-
-            if (!GameMode.IsDebug)
-            {    
-                try
-                {
-                    if (!Config.GetSetting<bool>("WhitelistOpen"))
-                    {
-                        player.EmitLocked("OpenLogin");
-                        return;
-                    }
-
-                    Task.Run(async () =>
-                    {
-                        Whitelist whitelist = await Whitelist.GetWhitelistFromAPI(socialclub);
-                        await AltAsync.Do(() =>
-                        {
-                            if (whitelist != null && whitelist.Whitelisted)
-                            {
-                                if (whitelist.IsBan)
-                                {
-                                    if (DateTime.Now > whitelist.EndBanTime)
-                                    {
-                                        whitelist.IsBan = false;
-                                        player.EmitLocked("OpenLogin", socialclub);
-                                        return;
-                                    }
-
-                                    string _kickMessage = $"Vous êtes ban du serveur jusqu'au {whitelist.EndBanTime.ToShortDateString()}";
-                                    player.Kick(_kickMessage);
-                                }
-                                else
-                                    player.EmitLocked("OpenLogin", socialclub);
-                            }
-                            else
-                            {
-                                Alt.Server.LogInfo($"({player.Ip}) ({socialclub}) n'est pas whitelist sur le serveur.");
-                                player.EmitLocked("FadeIn", 0);
-                                string _kickMessage = "Vous n'êtes pas whitelist sur le serveur";
-                                player.Kick(_kickMessage);
-                            }
-                        });
-                    });       
-                }
-                catch (Exception ex)
-                {
-                    string _kickMessage = "Vous n'êtes pas whitelist sur le serveur";
-                    player.Kick(_kickMessage);
-                    Alt.Server.LogError("Player Login" + ex.Data);
-                }
-            }
-            else
-                ConnectPlayer(player);
+            }           
         }
         #endregion
 

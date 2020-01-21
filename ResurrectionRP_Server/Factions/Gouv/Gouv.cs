@@ -23,9 +23,6 @@ namespace ResurrectionRP_Server.Factions
     {
         #region Private fields
         private List<Door> _doors;
-        private Teleport.Teleport _teleport;
-        // private IColShape _portail1;
-        // private IColShape _portail2;
         private IColShape _boatColShape;
         private Ped _secretaire;
         #endregion
@@ -174,21 +171,6 @@ namespace ResurrectionRP_Server.Factions
             base.OnPlayerEnterColShape(ColshapePointer, player);
         }
 
-        public override void OnPlayerPromote(IPlayer client, int rang)
-        {
-            if (!_teleport.Whileliste.Contains(client.GetSocialClub()))
-                _teleport.Whileliste.Add(client.GetSocialClub());
-
-            base.OnPlayerPromote(client, rang);
-        }
-
-        public override void PlayerFactionAdded(IPlayer client)
-        {
-            if (!_teleport.Whileliste.Contains( client.GetSocialClub()))
-                _teleport.Whileliste.Add( client.GetSocialClub());
-
-            base.PlayerFactionAdded(client);
-        }
         #endregion
 
         #region Methods

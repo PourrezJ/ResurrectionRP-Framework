@@ -40,6 +40,7 @@ namespace ResurrectionRP_Server.Utils.TopServer
             {
                 if (player.BankAccount.Owner == null)
                     player.BankAccount.Owner = player;
+                player.Rewards++;
                 player.BankAccount.AddMoney(PriceReward, true);
 
                 Alt.Server.LogColored(player.PID + " viens de voté sur top serveur!");

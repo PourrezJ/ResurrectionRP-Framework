@@ -97,6 +97,8 @@ namespace ResurrectionRP_Server.Entities.Players
         [BsonIgnore]
         public bool FirstSpawn = false;
 
+        public int Rewards;
+
         /*
         private ushort _health = 200;
         public ushort Health

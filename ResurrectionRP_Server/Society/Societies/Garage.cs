@@ -695,7 +695,7 @@ namespace ResurrectionRP_Server.Society.Societies
             if (menuItem.Id == "Validate")
             {
                 double price = menuItem.GetData("price");
-                InstallNeon(client, price);
+                InstallNeon(client, Math.Round(price, 2));
             }
         }
 
@@ -714,7 +714,7 @@ namespace ResurrectionRP_Server.Society.Societies
             else if (listItem.Id == "Blue")
                 _blue = int.Parse(listItem.Items[listIndex].ToString());
 
-            VehicleBench.NeonColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
+            VehicleBench.VehicleData.NeonColor = Color.FromArgb(_red * 17, _green * 17, _blue * 17);
         }
         #endregion
 

@@ -309,12 +309,13 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
                 {
                     // BUG v792 : Vehicle.SetNeonActive isn't working correctly
-                    Vehicle.GetSyncedMetaData("NeonState", out bool neonState);
-
+                    //Vehicle.GetSyncedMetaData("NeonState", out bool neonState);
+                    Vehicle.SetNeonActive(value.Item1, value.Item2, value.Item3, value.Item4);
+                    /*
                     if (neonState != value.Item1)
                     {
                         Vehicle.SetSyncedMetaData("NeonState", value.Item1);
-                    }
+                    }*/
                 }
             }
         }
@@ -329,13 +330,15 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
                 if (Utils.Utils.CheckThread() && Vehicle != null && Vehicle.Exists)
                 {
+                    Vehicle.NeonColor = value;
+                    /*
                     // BUG v792 : Vehicle.NeonColor isn't working correctly
                     Vehicle.GetSyncedMetaData("NeonColor", out int neonColor);
 
                     if (neonColor != _neonColor.ToArgb())
                     {
                         Vehicle.SetSyncedMetaData("NeonColor", value.ToArgb());
-                    }
+                    }*/
                 }
             }
         }

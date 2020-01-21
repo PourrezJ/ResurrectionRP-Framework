@@ -46,7 +46,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     if (LockState == VehicleLockState.Unlocked)
                         xmenu.Add(new XMenuItem("Gestion des portes", "", "ID_Doors", XMenuItemIcons.DOOR_CLOSED_SOLID, executeCallback: true));
                         
-                    if (VehicleData.NeonColor.IsEmpty != false)
+                    if (VehicleData.NeonColor != System.Drawing.Color.FromArgb(0,0,0,0))
                         xmenu.Add(new XMenuItem($"{(VehicleData.NeonState.Item1 ? "Eteindre" : "Allumer")} les neons", "", "ID_neons", XMenuItemIcons.LIGHTBULB_SOLID, executeCallback: true));
                 }
             }
@@ -197,22 +197,16 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                     SetDoorState(client, VehicleDoor.Trunk, (this.GetDoorState(VehicleDoor.Trunk) >= VehicleDoorState.OpenedLevel1 ? VehicleDoorState.Closed : VehicleDoorState.OpenedLevel7));
                     OpenDoorsMenu(client);
                     break;
-                    /*
+                    
                 case "ID_neons":
-                    if (VehicleSync.NeonsColor == null)
-                    {
-                        await client.SendNotificationError("Aucun néons d'installé sur la voiture.");
-                        return;
-                    }
+                    if (VehicleData.NeonState.Item1 == false)
+                        SetNeonState(true);
+                    else
+                        SetNeonState(false); 
 
-                    VehicleSync.NeonState = !VehicleSync.NeonState;
-
-                    await Vehicle.SetNeonsColorAsync(VehicleSync.NeonsColor);
-
-                    await Vehicle.SetNeonsActiveAsync(VehicleSync.NeonState);
-                    await XMenuManager.CloseMenu(client);
+                    XMenuManager.XMenuManager.CloseMenu(client);
                     break;
-                    */
+                    
                 case "ID_Start":
                     VehicleData.EngineOn = !VehicleData.EngineOn;
                     UpdateInBackground();

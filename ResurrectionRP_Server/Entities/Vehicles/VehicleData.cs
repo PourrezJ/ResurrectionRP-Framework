@@ -513,61 +513,68 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             if (!Vehicle.Exists)
                 return;
 
-            _radioStation = Vehicle.RadioStation;
-            _lockState = Vehicle.LockState;
-            _bodyhealth = Vehicle.BodyHealth;
-            _engineHealth = Vehicle.EngineHealth;
-            _petrolTankHealth = Vehicle.PetrolTankHealth;
-
-            bool neonActive = Vehicle.IsNeonActive;
-            NeonState = new Tuple<bool, bool, bool, bool>(neonActive, neonActive, neonActive, neonActive);
-            NeonColor = Vehicle.NeonColor;
-
-            _dirtLevel = Vehicle.DirtLevel;
-            _engineOn = Vehicle.EngineOn;
-            _primaryColor = Vehicle.PrimaryColor;
-            _secondaryColor = Vehicle.SecondaryColor;
-            _pearlColor = Vehicle.PearlColor;
-            _windowTint = Vehicle.GetWindowTint();
-            _frontBumperDamage = Vehicle.GetBumperDamageLevel(VehicleBumper.Front);
-            _rearBumperDamage = Vehicle.GetBumperDamageLevel(VehicleBumper.Rear);
-            _damageData = Vehicle.DamageData;
-
-            for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
-                _doors[i] = (VehicleDoorState)Vehicle.GetDoorState(i);
-
-            for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
+            try
             {
-                if (Vehicle.IsWindowDamaged(i))
-                    _windows[i] = WindowState.WindowBroken;
-                else if (Vehicle.IsWindowOpened(i))
-                    _windows[i] = WindowState.WindowDown;
-                else
-                    _windows[i] = WindowState.WindowFixed;
+                _radioStation = Vehicle.RadioStation;
+                _lockState = Vehicle.LockState;
+                _bodyhealth = Vehicle.BodyHealth;
+                _engineHealth = Vehicle.EngineHealth;
+                _petrolTankHealth = Vehicle.PetrolTankHealth;
+
+                bool neonActive = Vehicle.IsNeonActive;
+                NeonState = new Tuple<bool, bool, bool, bool>(neonActive, neonActive, neonActive, neonActive);
+                NeonColor = Vehicle.NeonColor;
+
+                _dirtLevel = Vehicle.DirtLevel;
+                _engineOn = Vehicle.EngineOn;
+                _primaryColor = Vehicle.PrimaryColor;
+                _secondaryColor = Vehicle.SecondaryColor;
+                _pearlColor = Vehicle.PearlColor;
+                _windowTint = Vehicle.GetWindowTint();
+                _frontBumperDamage = Vehicle.GetBumperDamageLevel(VehicleBumper.Front);
+                _rearBumperDamage = Vehicle.GetBumperDamageLevel(VehicleBumper.Rear);
+                _damageData = Vehicle.DamageData;
+
+                for (byte i = 0; i < Globals.NB_VEHICLE_DOORS; i++)
+                    _doors[i] = (VehicleDoorState)Vehicle.GetDoorState(i);
+
+                for (byte i = 0; i < Globals.NB_VEHICLE_WINDOWS; i++)
+                {
+                    if (Vehicle.IsWindowDamaged(i))
+                        _windows[i] = WindowState.WindowBroken;
+                    else if (Vehicle.IsWindowOpened(i))
+                        _windows[i] = WindowState.WindowDown;
+                    else
+                        _windows[i] = WindowState.WindowFixed;
+                }
+
+                if (Vehicle.WheelsCount > _wheels.Length)
+                    Array.Resize(ref _wheels, Vehicle.WheelsCount);
+
+                for (byte i = 0; i < Vehicle.WheelsCount; i++)
+                {
+                    if (_wheels[i] == null)
+                        _wheels[i] = new Wheel();
+
+                    _wheels[i].Health = Vehicle.GetWheelHealth(i);
+                    _wheels[i].Burst = Vehicle.IsWheelBurst(i);
+                    _wheels[i].HasTire = Vehicle.DoesWheelHasTire(i);
+                }
+
+                VehicleModType[] values = (VehicleModType[])Enum.GetValues(typeof(VehicleModType));
+
+                foreach (VehicleModType vehicleModType in values)
+                {
+                    if (Vehicle.GetMod(vehicleModType) > 0)
+                        Mods[(byte)vehicleModType] = Vehicle.GetMod(vehicleModType);
+                }
+
+                LastKnowLocation = new Location(Vehicle.Position, Vehicle.Rotation);
             }
-
-            if (Vehicle.WheelsCount > _wheels.Length)
-                Array.Resize(ref _wheels, Vehicle.WheelsCount);
-
-            for (byte i = 0; i < Vehicle.WheelsCount; i++)
+            catch(Exception ex)
             {
-                if (_wheels[i] == null)
-                    _wheels[i] = new Wheel();
-
-                _wheels[i].Health = Vehicle.GetWheelHealth(i);
-                _wheels[i].Burst = Vehicle.IsWheelBurst(i);
-                _wheels[i].HasTire = Vehicle.DoesWheelHasTire(i);
+                Alt.Server.LogError(ex.ToString());
             }
-
-            VehicleModType[] values = (VehicleModType[])Enum.GetValues(typeof(VehicleModType));
-
-            foreach (VehicleModType vehicleModType in values)
-            {
-                if (Vehicle.GetMod(vehicleModType) > 0)
-                    Mods[(byte)vehicleModType] = Vehicle.GetMod(vehicleModType);
-            }
-
-            LastKnowLocation = new Location(Vehicle.Position, Vehicle.Rotation);
         }
 
         public void UpdateMilageAndFuel()

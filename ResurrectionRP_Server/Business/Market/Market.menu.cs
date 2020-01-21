@@ -76,17 +76,19 @@ namespace ResurrectionRP_Server.Business
 
         public override Menu OpenSellMenu(IPlayer client, Menu menu)
         {
+            var ph = client.GetPlayerHandler();
+            menu.ItemSelectCallback = MarketOwnerMenuManager;
+
             if (IsOwner(client) || IsEmployee(client))
             {
                 Inactivity = DateTime.Now;
-                menu.ItemSelectCallback = MarketOwnerMenuManager;
-
+                
                 menu.Items.AddRange(new List<MenuItem>()
                 {
                     new MenuItem("Ajouter des produits", "", "ID_Add", true),
                     new MenuItem("Statut des pompes à essence", "", "ID_Stats", true)
                 });
-
+               
                 MenuItem _item = new MenuItem("Prix de revente de l'essence", "", "ID_EssencePrice", true, false, $"${Station.EssencePrice} + ${GameMode.Instance.Economy.Taxe_Essence}");
                 _item.SetInput(Station.EssencePrice.ToString(), 10, InputType.UFloat);
                 menu.Add(_item);
@@ -95,6 +97,14 @@ namespace ResurrectionRP_Server.Business
                     menu.Add(new MenuItem($"Gérer les finances", "", "ID_TakeMoney", true, rightLabel: $"${BankAccount.Balance}"));
             }
 
+            if (ph != null && ph.StaffRank >= Utils.Enums.StaffRank.Moderator)
+            {
+                MenuItem menuitem = new MenuItem("[STAFF] Définir le niveau d'essence", $"Niveau actuel {Station.Litrage}L / {Station.LitrageMax}L", "ID_StaffEssence", true, false);
+                menuitem.SetInput(Station.Litrage.ToString(), 10, InputType.UFloat);
+                menu.Add(menuitem);
+
+                menu.Add(new MenuItem("[STAFF] Ouvrir l'inventaire", "", "ID_Add", true));
+            }
             return base.OpenSellMenu(client, menu);
         }
         #endregion
@@ -152,6 +162,16 @@ namespace ResurrectionRP_Server.Business
                         Station.EssencePrice = price;
                         UpdateInBackground();
                         client.SendNotification($"Le nouveau prix de l'essence est de ${Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence} dont ${GameMode.Instance.Economy.Taxe_Essence} de taxe.");
+                        OnNpcSecondaryInteract(client, Ped);
+                    }
+                    break;
+
+                case "ID_StaffEssence":
+                    if (int.TryParse(menuItem.InputValue, out int quantity))
+                    {
+                        Station.Litrage = quantity;
+                        UpdateInBackground();
+                        client.SendNotification($"Vous avez défini le litrage de la station à {quantity.ToString()}");
                         OnNpcSecondaryInteract(client, Ped);
                     }
                     break;

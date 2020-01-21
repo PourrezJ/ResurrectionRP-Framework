@@ -48,7 +48,7 @@ namespace ResurrectionRP_Server.Business
             }
 
             if (client.GetPlayerHandler().StaffRank >= Utils.Enums.StaffRank.Moderator)
-                menu.Add(new MenuItem("~r~Supprimer le commerce", "Supprimer le commerce", "ID_DeleteAdmin", true));
+                menu.Add(new MenuItem("~r~[STAFF]  Supprimer le commerce", "Supprimer le commerce", "ID_DeleteAdmin", true));
 
             menu.Add(new MenuItem("Fermer", "", "ID_Close", true));
             menu.OpenMenu(client);

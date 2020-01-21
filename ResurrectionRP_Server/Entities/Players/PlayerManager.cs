@@ -50,9 +50,10 @@ namespace ResurrectionRP_Server.Entities.Players
             new Society.Commands();
 
                  
-            AltAsync.OnClient<IPlayer, string, string>("MakePlayer", MakePlayer);
-            AltAsync.OnClient <IPlayer, string>("SendLogin", SendLogin);
             
+            AltAsync.OnClient <IPlayer, string>("SendLogin", SendLogin);
+
+            Alt.OnClient<IPlayer, string, string>("MakePlayer", MakePlayer);
             Alt.OnClient<IPlayer, string, string>("Events_PlayerJoin", OnPlayerJoin);
             Alt.OnClient<IPlayer>("LogPlayer", LogPlayer);
             Alt.OnClient<IPlayer>("IWantToDie", IWantToDie);
@@ -345,7 +346,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
         private static async void SendLogin(IPlayer client, string datastr)
         {
-            if (!client.Exists)
+            if (!await client.ExistsAsync())
                 return;
 
             var definition = new { login = "", password = "", socialClub = "" };

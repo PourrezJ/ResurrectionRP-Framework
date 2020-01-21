@@ -32,7 +32,7 @@ namespace ResurrectionRP_Server.Business
             }
 
 
-            Menu menu = new Menu("ID_GasPumpMenuMain", "Station Essence", $"Prix du litre: {fuelpump.Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence}", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
+            Menu menu = new Menu("ID_GasPumpMenuMain", "Station Essence", $"Prix du litre: {Math.Round(fuelpump.Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence, 2)}", 0, 0, Menu.MenuAnchor.MiddleRight, false, true, true);
             menu.ItemSelectCallback = fuelpump.FuelMenuCallBack;
 
             menu.SubTitle = "Mettre le plein dans:";
@@ -67,11 +67,6 @@ namespace ResurrectionRP_Server.Business
                 menu.Add(item);
             }
 
-
-/*            Alt.Server.LogInfo("Status Bag Inventory : " + (client.GetPlayerHandler().BagInventory != null).ToString());
-            Alt.Server.LogInfo("Has Item in Bag Inventory : " + (client.GetPlayerHandler().BagInventory != null && !client.GetPlayerHandler().BagInventory.HasItemID(Models.InventoryData.ItemID.Jerrycan)).ToString());
-            Alt.Server.LogInfo("Status Pocket Inventory : " + (client.GetPlayerHandler().PocketInventory != null).ToString());
-            Alt.Server.LogInfo("Has Item in Pocket Inventory : " + ( client.GetPlayerHandler().PocketInventory.HasItemID(Models.InventoryData.ItemID.Jerrycan)).ToString());*/
             if (client.GetPlayerHandler().BagInventory != null && client.GetPlayerHandler().BagInventory.HasItemID(Models.InventoryData.ItemID.Jerrycan))
             {
                 MenuItem item = new MenuItem("Remplir le jerrycan", "Remplissez votre jerrycan de 15 litres (remplit le premier jerrycan dans l'inventaire)", "ID_Jerrycan", true);
@@ -85,7 +80,7 @@ namespace ResurrectionRP_Server.Business
         private void FuelMenuCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             AcceptMenu accept = null;
-            float price = 0;
+            double price = 0;
             float maxFuel = 0;
 
             switch(menuItem.Id)
@@ -152,7 +147,7 @@ namespace ResurrectionRP_Server.Business
                         client.DisplaySubtitle("Il n'y a pas assez d'essence pour faire le plein, \nvous serez remplis à hauteur du possible !", 10000);
                     }
 
-                    price = CalculEssencePriceNeeded(maxFuel, this.Station.EssencePrice);
+                    price = Math.Round(CalculEssencePriceNeeded(maxFuel, this.Station.EssencePrice), 2);
                     accept = AcceptMenu.OpenMenu(client, menu.Title, $"Prix du litre: ${Station.EssencePrice + GameMode.Instance.Economy.Taxe_Essence} TTC ", $"Mettre le plein dans {vh.VehicleManifest.DisplayName} pour la somme de ~r~${price}~w~.", rightlabel: $"${price}");
 
                     accept.AcceptMenuCallBack = (IPlayer _client, bool reponse) =>

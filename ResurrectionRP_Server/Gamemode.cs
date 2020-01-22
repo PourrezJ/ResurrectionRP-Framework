@@ -199,17 +199,26 @@ namespace ResurrectionRP_Server
             Utils.Util.SetInterval(() => Time.Update(), 1000);
 
             bool Hunger = false;
-            Utils.Util.SetInterval( () => {
-                AltAsync.Do(() =>
+            Utils.Util.SetInterval(async () => {
+                Hunger = !Hunger;
+                foreach (PlayerHandler ph in PlayerManager.GetPlayersList())
                 {
-                    Hunger = !Hunger;
-                    foreach (PlayerHandler playerHandler in PlayerManager.GetPlayersList())
-                    {
-                        if (playerHandler.Client == null || !playerHandler.Client.Exists)
-                            return;
-                        playerHandler.UpdateHungerThirst((Hunger) ? playerHandler.Hunger - 1 : playerHandler.Hunger, playerHandler.Thirst - 1);
-                    }
-                });
+                    if (ph.Client == null)
+                        continue;
+
+                    if (!await ph.Client.ExistsAsync())
+                        continue;
+
+                    if (Hunger && ph.Hunger > 0)
+                        ph.Hunger--;
+                    else if (!Hunger && ph.Thirst > 0)
+                        ph.Thirst--;
+
+                    if ((ph.Hunger <= 0 || ph.Thirst <= 0) && !ph.IsInComa)
+                        await AltAsync.Do(() => ph.SetHealth((ushort)(ph.Client.Health - 25)));
+                    else
+                        ph.Client.EmitLocked("UpdateHungerThirst", ph.Hunger, ph.Thirst);
+                }
             }, 1000 * 60 * 3 / 2 );
                 
             Chat.Initialize();

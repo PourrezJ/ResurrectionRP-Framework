@@ -72,6 +72,10 @@ namespace ResurrectionRP_Server.Business
                 case 3:
                     BannerStyle = Banner.HighFashion;
                     break;
+
+                case 4:
+                    BannerStyle = Banner.MovieMasks;
+                    break;
             }
         }
         #endregion

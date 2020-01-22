@@ -48,6 +48,7 @@ namespace ResurrectionRP_Server.Business
                 return;
 
             var tatoo = new TattoosStore("Tatoueur", new Location(client.Position, client.Rotation), 75, 500, PedModel.Tattoo01AMO);
+            tatoo.Init();
             Task.Run(async ()=> await tatoo.Insert());
         }
 
@@ -57,6 +58,7 @@ namespace ResurrectionRP_Server.Business
                 return;
 
             var barber = new BarberStore("Barbier", new Location(client.Position, client.Rotation), 71, 500, PedModel.FemBarberSFM);
+            barber.Init();
             Task.Run(async () => await barber.Insert());
         }
 
@@ -66,6 +68,7 @@ namespace ResurrectionRP_Server.Business
                 return;
 
             var weaponStore = new WeaponsShop("Armurerie", new Location(client.Position, client.Rotation), 110, 10000, PedModel.Ammucity01SMY);
+            weaponStore.Init();
             Task.Run(async () => await weaponStore.Insert());
         }
 
@@ -96,7 +99,7 @@ namespace ResurrectionRP_Server.Business
 
             clothingStore.MenUnderShirt = new List<int>() { 0, 1, 2, 3, 4, 5, 8, 9, 10, 12, 13, 14, 16, 17, 18, 27, 30, 34 };
             clothingStore.GirlUnderShirt = new List<int>() { 0, 1, 11, 12, 13, 16, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 37, 38, 39 };
-
+            clothingStore.Init();
             Task.Run(async () => await clothingStore.Insert());
         }
 
@@ -127,7 +130,7 @@ namespace ResurrectionRP_Server.Business
 
             clothingStore.MenUnderShirt = new List<int>() { 0, 1, 2, 3, 4, 5, 8, 9, 10, 12, 13, 14, 16, 17, 18, 27, 30, 34 };
             clothingStore.GirlUnderShirt = new List<int>() { 0, 1, 11, 12, 13, 16, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 37, 38, 39 };
-
+            clothingStore.Init();
             Task.Run(async () => await clothingStore.Insert());
         }
 
@@ -154,7 +157,7 @@ namespace ResurrectionRP_Server.Business
 
             clothingStore.MenUnderShirt = new List<int>() { 0, 1, 2, 3, 4, 5, 8, 9, 10, 12, 13, 14, 16, 17, 18, 27, 30, 34 };
             clothingStore.GirlUnderShirt = new List<int>() { 0, 1, 11, 12, 13, 16, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 37, 38, 39 };
-
+            clothingStore.Init();
             Task.Run(async () => await clothingStore.Insert());
         }
 
@@ -181,7 +184,7 @@ namespace ResurrectionRP_Server.Business
 
             clothingStore.MenUnderShirt = new List<int>() { 0, 1, 2, 3, 4, 5, 8, 9, 10, 12, 13, 14, 16, 17, 18, 27, 30, 34 };
             clothingStore.GirlUnderShirt = new List<int>() { 0, 1, 11, 12, 13, 16, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 37, 38, 39 };
-
+            clothingStore.Init();
             Task.Run(async () => await clothingStore.Insert());
         }
 
@@ -210,7 +213,7 @@ namespace ResurrectionRP_Server.Business
 
             clothingStore.MenUnderShirt = new List<int>();
             clothingStore.GirlUnderShirt = new List<int>();
-
+            clothingStore.Init();
             Task.Run(async () => await clothingStore.Insert());
         }
 
@@ -221,12 +224,12 @@ namespace ResurrectionRP_Server.Business
 
             var clothingPos = new Vector3(-1336.856f, -1279.136f, 4.856103f); // position du colshape pour changer de tenu
 
-            var clothingStore = new ClothingStore("Boutique de masques", new Location(client.Position, client.Rotation), 102, 10000, clothingPos, PedModel.JimmyDisanto);
+            var clothingStore = new ClothingStore("Boutique de masques", new Location(client.Position, client.Rotation), 362, 10000, clothingPos, PedModel.JimmyDisanto, null, 4);
             clothingStore.BannerStyle = Banner.MovieMasks;
             clothingStore.Buyable = false;
 
             clothingStore.Mask = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 32, 33, 34, 35 };
-
+            clothingStore.Init();
             Task.Run(async () => await clothingStore.Insert());
         }
 
@@ -237,6 +240,7 @@ namespace ResurrectionRP_Server.Business
 
             var inventoryBox = InventoryBox.CreateInventoryBox("Pawnshop", new Location(new Vector3(2752.311f, 3489.616f, 56.24662f), new Vector3(0, 0, 330f)), new Inventory.Inventory(1000, 40), (int)Alt.Hash("p_v_43_safe_s"));
             var pawnShop = new PawnShop("Pawn-Shop", new Location(client.Position, client.Rotation), 108, 10000, inventoryBox, PedModel.Strvend01SMY, "Armex72", true, false);
+            pawnShop.Init();
             Task.Run(async () => await pawnShop.Insert());
         }
 
@@ -246,6 +250,7 @@ namespace ResurrectionRP_Server.Business
                 return;
 
             var digitalDeen = new DigitalDeen("Digital Deen", new Location(client.Position, client.Rotation), 606, 750, PedModel.Stwhi02AMY);
+            digitalDeen.Init();
             Task.Run(async () => await digitalDeen.Insert());
         }
 
@@ -276,7 +281,7 @@ namespace ResurrectionRP_Server.Business
             clothingStore.GirlBracelets = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 
             //clothingStore.Accessories = new int[] { };
-
+            clothingStore.Init();
             Task.Run(async () => await clothingStore.Insert());
         }
     }

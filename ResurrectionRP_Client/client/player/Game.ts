@@ -6,12 +6,12 @@ import * as utils from '../Utils/Utils';
 import * as ui from '../Helpers/UiHelper';
 
 import { Time as TimeLib } from '../Env/Time';
-import { Survival as SurvivalLib } from '../player/Survival';
-import { Hud as HudLib } from '../player/Hud';
-import { RPGInventoryManager } from '../menus/rpgInventory/RPGinventory';
+import { Survival as SurvivalLib } from '../Player/Survival';
+import { Hud as HudLib } from '../Player/Hud';
+import { RPGInventoryManager } from '../Menus/rpgInventory/RPGinventory';
 import { Weather as WeatherLib } from '../Env/Weather';
 import { Interaction as InteractionLib } from '../Player/Interaction';
-import PhoneManager from '../phone/PhoneManager';
+import PhoneManager from '../Phone/PhoneManager';
 import { DrivingSchool } from '../DrivingSchool';
 import { RadioManager } from '../Menus/RadioManager';
 import { DustManManager } from '../Jobs/DustManManager';

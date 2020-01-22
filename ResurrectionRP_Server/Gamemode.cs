@@ -211,7 +211,8 @@ namespace ResurrectionRP_Server
 
                     if (Hunger && ph.Hunger > 0)
                         ph.Hunger--;
-                    else if (!Hunger && ph.Thirst > 0)
+                   
+                    if (ph.Thirst > 0)
                         ph.Thirst--;
 
                     if ((ph.Hunger <= 0 || ph.Thirst <= 0) && !ph.IsInComa)

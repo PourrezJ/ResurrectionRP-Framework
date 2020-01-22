@@ -115,7 +115,6 @@ export class Hud {
                 let range = "Parler";
                 if (alt.Player.local.getSyncedMeta("Voice_VoiceRange") != null)
                     range = alt.Player.local.getSyncedMeta("Voice_VoiceRange");
-
                 this.Browser.emit("setHUD", Survival.Hunger, Survival.Thirst, VoiceChat.isTalking, range, this.Money, VoiceChat.isMicrophoneMuted);
             }
         }, 250);

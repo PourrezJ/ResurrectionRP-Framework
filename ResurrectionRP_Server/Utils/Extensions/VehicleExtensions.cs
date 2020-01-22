@@ -51,22 +51,23 @@ namespace ResurrectionRP_Server
 
         public static List<IPlayer> GetPlayersInRange(this IVehicle client, float Range)
         {
-            var vehs = Alt.GetAllPlayers();
-            List<IPlayer> endup = new List<IPlayer>();
-            var position = client.GetPosition();
-            Vector3 osition = new Vector3(position.X, position.Y, position.Z);
-
-            foreach (IPlayer veh in vehs)
+            var players = Alt.GetAllPlayers();
+            lock (players)
             {
-                if (!veh.Exists)
-                    continue;
-                var vehpos = veh.GetPosition();
+                List<IPlayer> endup = new List<IPlayer>();
 
-                if (osition.DistanceTo2D(new Vector3(vehpos.X, vehpos.Y, vehpos.Z)) <= Range)
-                    endup.Add(veh);
+                foreach (IPlayer player in players)
+                {
+                    if (!player.Exists)
+                        continue;
+
+                    if (client.Position.Distance(player.Position) <= Range)
+                        if (!endup.Contains(player))
+                            endup.Add(player);
+                }
+
+                return endup;
             }
-
-            return endup;
         }
 
         public static void ResetData(this IVehicle vehicle, string key)

@@ -222,16 +222,19 @@ namespace ResurrectionRP_Server
             client.SetData(Data, null);
         }
 
-        public static void PlaySoundFrontEnd(this IPlayer client, int id, string dict, string anim)
+        public static void PlaySoundFrontEnd(this IPlayer client, int id, string audioName, string audioRef)
         {
+            client.EmitLocked("PlaySoundFrontEnd", id, audioName, audioRef);
         }
 
-        public static void PlaySoundFromEntity(this IPlayer client, IVehicle initiator, int id, string dict, string anim)
+        public static void PlaySoundFromEntity(this IPlayer client, IVehicle initiator, int id, string audioName, string audioRef)
         {
+            client.EmitLocked("PlaySoundFromEntity", initiator, id, audioName, audioRef);
         }
 
-        public static void PlaySoundFromEntity(this IPlayer client, IEntity initiator, int id, string dict, string anim)
+        public static void PlaySoundFromEntity(this IPlayer client, IPlayer initiator, int id, string audioName, string audioRef)
         {
+            client.EmitLocked("PlaySoundFromEntity", initiator, id, audioName, audioRef);
         }
 
         public static void SetDecoration(this IPlayer client, uint collection, uint overlay)

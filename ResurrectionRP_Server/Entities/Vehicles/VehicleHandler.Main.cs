@@ -150,6 +150,21 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                 LockState = (LockState == VehicleLockState.Locked) ? VehicleLockState.Unlocked : VehicleLockState.Locked;
                 client.SendNotification($"Vous avez {(LockState == VehicleLockState.Locked ? " fermé" : "ouvert")} le véhicule");
                 UpdateInBackground();
+
+                if (LockState == VehicleLockState.Unlocked)
+                {
+                    var receverList = this.GetPlayersInRange(5f);
+                    lock (receverList)
+                    {
+                        foreach (IPlayer recever in receverList)
+                        {
+                            if (!recever.Exists)
+                                continue;
+
+                            recever.PlaySoundFromEntity(this, 0, "5_SEC_WARNING", "HUD_MINI_GAME_SOUNDSET");
+                        }
+                    }
+                }
                 return true;
             }
 

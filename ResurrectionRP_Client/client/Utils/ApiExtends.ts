@@ -159,4 +159,12 @@ export function initialize()
     alt.onServer('VehicleSetSirenSound', (vehicle: alt.Vehicle, status: boolean) => {
         game.setVehicleHasMutedSirens(vehicle.scriptID, status);
     });
+
+    alt.onServer('PlaySoundFrontEnd', (id: number, audioName: string, audioRef: string) => {
+        game.playSoundFrontend(id, audioName, audioRef, true);   
+    });
+
+    alt.onServer('PlaySoundFromEntity', (entity: alt.Entity, id: number, audioName: string, audioRef: string) => {
+        game.playSoundFromEntity(id, audioName, entity.scriptID, audioRef, true, 0);
+    });
 }

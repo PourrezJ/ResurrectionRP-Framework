@@ -1,5 +1,4 @@
-﻿import * as alt from 'alt-client';
-import * as game from 'natives';
+﻿import * as game from 'natives';
 import * as utils from '../Utils/utils';
 
 export class Subtitle {

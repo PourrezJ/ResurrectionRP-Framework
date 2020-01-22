@@ -1,7 +1,7 @@
 ﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as enums from '../Utils/Enums/Enums';
-import * as veh from '../vehicle/vehicle';
+import * as veh from '../Vehicle/Vehicle';
 import * as utils from '../Utils/Utils';
 import * as ui from '../Helpers/UiHelper';
 
@@ -13,7 +13,7 @@ import { Weather as WeatherLib } from '../Env/Weather';
 import { Interaction as InteractionLib } from '../Player/Interaction';
 import PhoneManager from '../phone/PhoneManager';
 import { DrivingSchool } from '../DrivingSchool';
-import { RadioManager } from '../menus/RadioManager';
+import { RadioManager } from '../Menus/RadioManager';
 import { DustManManager } from '../Jobs/DustManManager';
 import { VoiceChat } from '../Voice/VoiceChat';
 import { Medical } from '../Medical';

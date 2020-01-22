@@ -1,6 +1,6 @@
 ﻿import * as alt from 'alt-client';
 import * as game from 'natives';
-import * as utils from './Utils/utils';
+import * as utils from './Utils/Utils';
 import * as ui from './Helpers/UiHelper';
 
 class LSPDCall

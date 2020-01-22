@@ -1,6 +1,5 @@
 ﻿import * as alt from 'alt-client';
 import * as game from 'natives';
-import * as chat from '../chat/chat'
 
 let player = alt.Player.local;
 let vehicle: alt.Vehicle = null;

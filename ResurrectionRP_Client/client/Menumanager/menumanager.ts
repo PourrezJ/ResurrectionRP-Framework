@@ -1,7 +1,6 @@
 ﻿import * as alt from 'alt-client';
-import * as NativeUI from '../NativeUIMenu/NativeUI.js';
-import * as chat from '../chat/chat';
 import * as game from 'natives';
+import * as NativeUI from '../NativeUIMenu/NativeUI.js';
 
 enum InputType {
     Text,

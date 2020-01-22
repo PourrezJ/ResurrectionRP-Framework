@@ -77,7 +77,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="client\chat\chat.ts" />
+    <TypeScriptCompile Include="client\Chat\Chat.ts" />
     <TypeScriptCompile Include="client\Creator\Creator.ts" />
     <TypeScriptCompile Include="client\DrivingSchool.ts" />
     <TypeScriptCompile Include="client\EmergencyCall.ts" />
@@ -96,16 +96,16 @@
     <TypeScriptCompile Include="client\Helpers\UiHelper.ts" />
     <TypeScriptCompile Include="client\Jobs\Data\Trash.ts" />
     <TypeScriptCompile Include="client\Jobs\DustManManager.ts" />
-    <TypeScriptCompile Include="client\login\Login.ts" />
-    <TypeScriptCompile Include="client\main.ts" />
+    <TypeScriptCompile Include="client\Login\Login.ts" />
+    <TypeScriptCompile Include="client\Main.ts" />
     <TypeScriptCompile Include="client\Medical.ts" />
     <TypeScriptCompile Include="client\MenuManager\MenuManager.ts" />
     <TypeScriptCompile Include="client\Env\Dock.ts" />
-    <TypeScriptCompile Include="client\Menus\rpgInventory\RPGInventory.ts" />
-    <TypeScriptCompile Include="client\Menus\xtreamMenu\xtreamMenuManager.ts" />
+    <TypeScriptCompile Include="client\Menus\RpgInventory\RPGInventory.ts" />
+    <TypeScriptCompile Include="client\Menus\XtreamMenu\XtreamMenuManager.ts" />
     <TypeScriptCompile Include="client\Models\Camera.ts" />
-    <TypeScriptCompile Include="client\notify\notify.ts" />
-    <TypeScriptCompile Include="client\phone\PhoneManager.ts" />
+    <TypeScriptCompile Include="client\Notify\Notify.ts" />
+    <TypeScriptCompile Include="client\Phone\PhoneManager.ts" />
     <TypeScriptCompile Include="client\player\Effects.ts" />
     <TypeScriptCompile Include="client\Ragdoll.ts" />
     <TypeScriptCompile Include="client\Streamer\Entities\Ped.ts" />
@@ -123,7 +123,7 @@
     <TypeScriptCompile Include="client\Utils\Enums\Enums.ts" />
     <TypeScriptCompile Include="client\Utils\Globals.ts" />
     <TypeScriptCompile Include="client\Utils\Raycast.ts" />
-    <TypeScriptCompile Include="client\vehicle\vehicle.ts" />
+    <TypeScriptCompile Include="client\Vehicle\Vehicle.ts" />
     <TypeScriptCompile Include="client\Voice\VoiceChat.ts" />
     <TypeScriptCompile Include="typings\altv-client.d.ts" />
     <TypeScriptCompile Include="typings\natives.d.ts" />

@@ -1,9 +1,9 @@
 ﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as ui from '../Helpers/UiHelper';
-import * as veh from '../vehicle/vehicle';
-import * as chat from '../chat/chat'
-import { Survival } from '../player/Survival';
+import * as veh from '../Vehicle/Vehicle';
+import * as chat from '../Chat/Chat'
+import { Survival } from '../Player/Survival';
 import { VoiceChat } from '../Voice/VoiceChat';
 
 export class Hud {

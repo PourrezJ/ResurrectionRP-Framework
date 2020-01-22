@@ -2,8 +2,8 @@
 import * as game from 'natives';
 import * as utils from '../Utils/Utils';
 import * as voice from '../Voice/VoiceChat';
-import * as chat from '../chat/chat';
-import { Interaction } from '../player/Interaction';
+import * as chat from '../Chat/Chat';
+import { Interaction } from '../Player/Interaction';
 
 var isPhoneOpen: boolean = false;
 
@@ -101,12 +101,12 @@ export default class PhoneManager {
 
                 inputView.emit('Input_Data', 999, "");
 
-                inputView.on('Input_Submit', (text) => {
+                inputView.on('Input_Submit', (text: string) => {
                     inputView.destroy();
                     alt.showCursor(false);
                     alt.toggleGameControls(true);
                     Interaction.SetCanClose(true);
-                    alt.emitServer("InteractEmergencyCall", "emit", "EMS", ""+text);
+                    alt.emitServer("InteractEmergencyCall", "emit", "EMS", text);
                 });
             });
 
@@ -123,12 +123,12 @@ export default class PhoneManager {
 
                 inputView.emit('Input_Data', 999, "");
 
-                inputView.on('Input_Submit', (text) => {
+                inputView.on('Input_Submit', (text: string) => {
                     inputView.destroy();
                     alt.showCursor(false);
                     alt.toggleGameControls(true);
                     Interaction.SetCanClose(true);
-                    alt.emitServer("InteractEmergencyCall", "emit", "LSPD", ""+text);                   
+                    alt.emitServer("InteractEmergencyCall", "emit", "LSPD", text);                   
                 });
             });
 

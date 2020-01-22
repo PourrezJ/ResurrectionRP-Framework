@@ -1,6 +1,6 @@
 ﻿import * as alt from 'alt-client';
 import * as game from 'natives';
-import * as chat from '../chat/chat';
+import * as chat from '../Chat/Chat';
 
 let player = alt.Player.local;
 let fuelMax = 100;

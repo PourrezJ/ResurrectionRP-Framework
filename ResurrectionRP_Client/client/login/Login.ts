@@ -1,6 +1,6 @@
 ﻿import * as alt from 'alt-client';
 import * as game from 'natives';
-import * as chat from '../chat/chat'
+import * as chat from '../Chat/Chat'
 import * as camera from '../Models/Camera';
 
 let inLogin = false;

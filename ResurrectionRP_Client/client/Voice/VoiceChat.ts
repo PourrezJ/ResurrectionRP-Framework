@@ -1,6 +1,6 @@
 ﻿import * as alt from 'alt-client';
 import * as game from 'natives';
-import * as Utils from '../Utils/utils';
+import * as Utils from '../Utils/Utils';
 
 export class VoiceChat
 {

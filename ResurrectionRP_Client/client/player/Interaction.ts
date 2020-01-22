@@ -8,7 +8,6 @@ import * as Streamer from '../Streamer/NetworkingEntityClient';
 import Ragdoll from '../Ragdoll';
 import { EmergencyCall } from '../EmergencyCall';
 import { Raycast, RaycastResultInterface } from '../Utils/Raycast';
-import * as ui from '../Helpers/UiHelper';
 
 /*
  * POUR LE RAY CAST LES FLAGS

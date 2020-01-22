@@ -4,7 +4,6 @@ import * as utils from '../Utils/Utils';
 import * as textlabel from './Entities/TextLabel';
 import * as enums from '../Utils/Enums/Enums';
 import Ped from './Entities/Ped';
-import * as chat from '../chat/chat';
 
 export class NetworkingEntityClient {
 

@@ -1,6 +1,5 @@
 ﻿import * as alt from 'alt-client';
 import * as game from 'natives';
-import * as utils from './Utils/Utils'
 import Scaleforms from './Helpers/Scaleform';
 
 const MEDIC_CALL_WAIT_TIME: number = 3 * 60000;

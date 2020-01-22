@@ -18,8 +18,6 @@ export function RequestScaleForm(scaleformId: string) {
 export function BeginTextCommand(textCommand: string) {
     game.beginTextCommandScaleformString(textCommand);
     game.endTextCommandScaleformString();
-    //RAGE.Game.Graphics.PopScaleformMovieFunctionVoid();
-
 }
 
 export function drawText(msg, x, y, scale, fontType, r, g, b, a, useOutline = true, useDropShadow = true, layer = 0) {

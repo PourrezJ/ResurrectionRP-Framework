@@ -1,6 +1,5 @@
 ﻿import * as alt from 'alt-client';
 import * as game from 'natives';
-import Scaleforms from '../Helpers/Scaleform';
 
 export function EnableHuds(hud = true, radar = true) {
     game.displayRadar(radar);

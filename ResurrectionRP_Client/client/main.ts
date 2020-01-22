@@ -1,15 +1,13 @@
 ﻿import * as alt from 'alt-client';
 import * as game from 'natives';
-import * as chat from './chat/chat';
-import * as speedometer from './vehicle/vehicle';
-import * as xtreamMenu from './menus/xtreamMenu/xtreamMenuManager';
-import * as utils from './Utils/utils';
-import * as login from './login/Login';
+import * as chat from './Chat/Chat';
+import * as speedometer from './Vehicle/Vehicle';
+import * as xtreamMenu from './Menus/xtreamMenu/xtreamMenuManager';
+import * as login from './Login/Login';
 import * as nightClub from './Env/NightClub';
 import * as trains from './Env/Trains';
-import * as ui from './Helpers/UiHelper';
-import * as PlayerCustomization from './player/PlayerCustomization';
-import { Game } from './player/Game';
+import * as PlayerCustomization from './Player/PlayerCustomization';
+import { Game } from './Player/Game';
 import { OpenCharCreator } from './Creator/Creator';
 import { NetworkingEntityClient } from './Streamer/NetworkingEntityClient';
 import { Notify } from './Notify/Notify';
@@ -40,11 +38,11 @@ const init = async () => {
             Weather: string,
             WeatherWind: number,
             WeatherWindDirection: number,
-            isDebug: boolean,
+            IsDebug: boolean,
             Position: Vector3
         ) => {
             PlayerCustomization.init();
-            GameClass = new Game(StaffRank, IdentiteName, Money, Thirst, Hunger, Time, Weather, WeatherWind, WeatherWindDirection, isDebug, Position);
+            GameClass = new Game(StaffRank, IdentiteName, Money, Thirst, Hunger, Time, Weather, WeatherWind, WeatherWindDirection, IsDebug, Position);
             game.freezeEntityPosition(alt.Player.local.scriptID, false);
         });
 

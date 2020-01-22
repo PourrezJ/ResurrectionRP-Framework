@@ -19,8 +19,7 @@ namespace ResurrectionRP_Server.EventHandlers
 
         public static void Initialize()
         {
-            Alt.OnClient<IPlayer, string, dynamic, dynamic>("InteractEmergencyCall", InteractEmergencyCall);
+            Alt.OnClient("InteractEmergencyCall", InteractEmergencyCall);
         }
-
     }
 }

@@ -140,9 +140,12 @@ export class Interaction {
                     ragdoll.start();
                     break;
                 case 89:
-                    if (EmergencyCall.IsAnyMissionAvailable || EmergencyCall.IsInMission)
-                        alt.emitServer("InteractEmergencyCall", "openMenu");
-
+                    {   
+                        if (EmergencyCall.IsAnyMissionAvailable || EmergencyCall.IsInMission) {
+                            alt.emitServer("InteractEmergencyCall", "openMenu", "", "");
+                            alt.log("Call emergency: " + EmergencyCall.IsAnyMissionAvailable + " " + EmergencyCall.IsInMission);
+                        }         
+                    }
             }
         });
 

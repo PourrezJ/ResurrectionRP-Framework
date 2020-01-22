@@ -23,18 +23,16 @@ class Call {
         this.Blip.shortRange = false;
 
 
-        this.EveryTick = alt.everyTick(() => {
-
-
+        this.EveryTick = alt.everyTick(() =>
+        {
             if (this == undefined || this == null)
                 return;
+
             if (this.Taken && game.getDistanceBetweenCoords(this.position.x as number, this.position.y as number, this.position.z as number, alt.Player.local.pos.x, alt.Player.local.pos.y, alt.Player.local.pos.z, false) < 15) {
                 EmergencyCall.IsInMission = false;
                 alt.clearEveryTick(this.EveryTick);
-                alt.emitServer("InteractEmergencyCall", "release", this.id);
+                alt.emitServer("InteractEmergencyCall", "release", this.id, "");
             }
-
-
         });
     }
 
@@ -49,13 +47,10 @@ export class EmergencyCall {
 
 
     constructor() {
-
-        alt.onServer("EC_UpdateBlipColor", this.EC_UpdateBlipColor);
-        alt.onServer("EC_ReleaseCall", this.EC_ReleaseCall);
-        alt.onServer("EC_EmitCall", this.EC_EmitCall);
-
+        alt.onServer("EC_UpdateBlipColor", this.EC_UpdateBlipColor.bind(this));
+        alt.onServer("EC_ReleaseCall", this.EC_ReleaseCall.bind(this));
+        alt.onServer("EC_EmitCall", this.EC_EmitCall.bind(this));
     }
-
 
     public EC_UpdateBlipColor = (FactionName: string, callid: number, blipcolor: number) => {
         if (EmergencyCall.Calls[FactionName][callid] != undefined) {
@@ -64,7 +59,6 @@ export class EmergencyCall {
         }
     }
     
-
     public EC_ReleaseCall = (FactionName: string, callid: number) => {
         var item: Call =
             EmergencyCall.Calls[FactionName][callid];
@@ -74,7 +68,6 @@ export class EmergencyCall {
         alt.clearEveryTick(item.EveryTick);
         item.Blip.destroy();
         EmergencyCall.Calls[FactionName][callid] = undefined;
-
     }
 
     public EC_EmitCall = (FactionName: string, callid: number, positionString: string, BlipSprite: number, BlipColor: number, reason: string) => {
@@ -90,8 +83,6 @@ export class EmergencyCall {
 
         EmergencyCall.Calls[FactionName][callid] = new Call(callid, position, FactionName, BlipSprite, BlipColor);
         if(!EmergencyCall.IsInMission)
-            alt.emit("SetNotificationMessage", "CHAR_BRYONY", "Centrale", "Appel", "Nouveau appel, appuyez sur ~g~Y~w~ pour accepter, à tout moment!");
+            alt.emit("SetNotificationMessage", "CHAR_BRYONY", "Centrale", "Appel", "Nouvelle appel, appuyez sur ~g~Y~w~ pour accepter, à tout moment!");
     }
-
-
 }

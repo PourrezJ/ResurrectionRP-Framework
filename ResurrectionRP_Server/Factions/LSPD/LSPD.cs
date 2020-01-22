@@ -148,7 +148,7 @@ namespace ResurrectionRP_Server.Factions
 
             #endregion
 
-            Alt.OnClient("CallUrgenceLSPD", CallUrgenceLSPD);
+            Alt.OnClient<IPlayer, object>("CallUrgenceLSPD", CallUrgenceLSPD);
 
             EmCall = new EmergencyCall(FactionName);
 
@@ -321,7 +321,7 @@ namespace ResurrectionRP_Server.Factions
             base.OnVehicleOut(client, vehicleHandler);
         }
 
-        private void CallUrgenceLSPD(IPlayer client, object[] args)
+        private void CallUrgenceLSPD(IPlayer client, object idk)
         {
             if (!client.Exists)
                 return;
@@ -337,7 +337,7 @@ namespace ResurrectionRP_Server.Factions
                     foreach (IPlayer player in players)
                     {
                         if (player.Exists)
-                            player.EmitLocked("LSPD_Call", client, phone.PhoneNumber, JsonConvert.SerializeObject(client.Position.ConvertToEntityPosition()), args[0]);
+                            player.EmitLocked("LSPD_Call", client, phone.PhoneNumber, JsonConvert.SerializeObject(client.Position.ConvertToEntityPosition()), idk);
                     }
                 }
                 //client.EmitLocked("LSPD_Call", ServicePlayerList.Count);

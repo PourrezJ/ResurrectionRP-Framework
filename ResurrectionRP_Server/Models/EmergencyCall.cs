@@ -3,11 +3,9 @@ using AltV.Net.Elements.Entities;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Text;
 using ResurrectionRP_Server.EventHandlers;
 using System.Threading.Tasks;
 using System.Numerics;
-using ResurrectionRP_Server.Factions;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Utils;
 
@@ -26,9 +24,9 @@ namespace ResurrectionRP_Server.Models
 
         public Call(IPlayer client, Vector3 pos , int ID, string FactionName)
         {
-            this.Player = client;
-            this.Position = pos;
-            this.Id = ID;
+            Player = client;
+            Position = pos;
+            Id = ID;
             this.FactionName = FactionName;
         }
 
@@ -43,7 +41,6 @@ namespace ResurrectionRP_Server.Models
 
     public class EmergencyCall
     {
-
         public static int DefaultCallAgainTime = 2; // En Minutes
 
         private int CallsID = 0;
@@ -61,7 +58,7 @@ namespace ResurrectionRP_Server.Models
         public Banner ECBanner = null;
 
         public EmergencyCall(string FactionNames)  {
-            this.FactionName = FactionNames;
+            FactionName = FactionNames;
             Events.OnPlayerEmitEmergencyCall += Events_OnPlayerEmitEmergencyCall;
             Events.OnPlayerReleaseEmergencyCall += Events_OnPlayerReleaseEmergencyCall;
             Events.OnPlayerRemoveEmergencyCall += Events_OnPlayerRemoveEmergencyCall;
@@ -79,7 +76,7 @@ namespace ResurrectionRP_Server.Models
             if (!player.Exists)
                 return false;
 
-            if (this.ConcernedPlayers.ContainsKey(player.Id))
+            if (ConcernedPlayers.ContainsKey(player.Id))
                 return true;
 
             if (this.ConcernedPlayers.TryAdd(player.Id, player))
@@ -136,6 +133,7 @@ namespace ResurrectionRP_Server.Models
                 else
                     pl.Value.Emit("EC_UpdateBlipColor", FactionName, call.Id, ECBlipColors[1]);
 
+            client.SetWaypoint(call.Position);
             client.Emit("SetNotificationMessage", "CHAR_BRYONY", "Centrale", "Information", "Ok, vous venez de prendre l'appel, il est disponible sur votre gps!");
             call.Player.SendNotificationSuccess("Quelqu'un a répondu à votre appel!");
 
@@ -202,7 +200,7 @@ namespace ResurrectionRP_Server.Models
             if (FactionName == null || factionName != FactionName || !client.Exists)
                 return;
 
-            if(ConcernedPlayers.Count == 0 && !GameMode.IsDebug)
+            if(ConcernedPlayers.Count == 0)
             {
                 client.DisplayHelp("Personne n'est disponible ! ", 10000);
                 // Callback en cas de 0
@@ -227,7 +225,7 @@ namespace ResurrectionRP_Server.Models
                     else 
                     {
                         ReleaseCall(pl.Value);
-                        if (!Calls.TryRemove(pl.Value.Id, out Call voided))
+                        if (!Calls.TryRemove(pl.Value.Id, out _))
                             Alt.Server.LogError("EmergencyCall | Erreur lors de la suppression d'un call | Events_OnPlayerEmitEmergencyCall");
                     }
                 }
@@ -328,15 +326,5 @@ namespace ResurrectionRP_Server.Models
             foreach (KeyValuePair<int, IPlayer> pl in ConcernedPlayers)
                 pl.Value.Emit("EC_ReleaseCall", FactionName, call.Id);
         }
-
-        private Call GetCallFromPlayer(IPlayer client)
-        {
-
-            foreach (KeyValuePair<int, Call> pl in Calls)
-                if (pl.Value.Player == client)
-                    return pl.Value;
-            return null;
-       }
-
     }
 }

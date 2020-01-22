@@ -373,13 +373,17 @@ namespace ResurrectionRP_Server.Factions
             if (ServicePlayerList.Count <= 0)
                 return new List<IPlayer>();
 
-            foreach (var client in Alt.GetAllPlayers().ToList())
+            var players = Alt.GetAllPlayers();
+            lock (players)
             {
-                if (!client.Exists)
-                    continue;
-                if (ServicePlayerList.Contains(client.GetSocialClub()))
+                foreach (var client in players)
                 {
-                    _employeeOnline.Add(client);
+                    if (!client.Exists)
+                        continue;
+                    if (ServicePlayerList.Contains(client.GetSocialClub()))
+                    {
+                        _employeeOnline.Add(client);
+                    }
                 }
             }
 

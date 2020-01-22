@@ -106,17 +106,17 @@
     <TypeScriptCompile Include="client\Models\Camera.ts" />
     <TypeScriptCompile Include="client\Notify\Notify.ts" />
     <TypeScriptCompile Include="client\Phone\PhoneManager.ts" />
-    <TypeScriptCompile Include="client\player\Effects.ts" />
+    <TypeScriptCompile Include="client\Player\Effects.ts" />
     <TypeScriptCompile Include="client\Ragdoll.ts" />
     <TypeScriptCompile Include="client\Streamer\Entities\Ped.ts" />
     <TypeScriptCompile Include="client\Streamer\Entities\TextLabel.ts" />
     <TypeScriptCompile Include="client\Utils\ApiExtends.ts" />
     <TypeScriptCompile Include="client\Utils\CustomEvents.ts" />
-    <TypeScriptCompile Include="client\player\Game.ts" />
-    <TypeScriptCompile Include="client\player\Hud.ts" />
-    <TypeScriptCompile Include="client\player\Interaction.ts" />
-    <TypeScriptCompile Include="client\player\PlayerCustomization.ts" />
-    <TypeScriptCompile Include="client\player\Survival.ts" />
+    <TypeScriptCompile Include="client\Player\Game.ts" />
+    <TypeScriptCompile Include="client\Player\Hud.ts" />
+    <TypeScriptCompile Include="client\Player\Interaction.ts" />
+    <TypeScriptCompile Include="client\Player\PlayerCustomization.ts" />
+    <TypeScriptCompile Include="client\Player\Survival.ts" />
     <TypeScriptCompile Include="client\Menus\RadioManager.ts" />
     <TypeScriptCompile Include="client\Streamer\NetworkingEntityClient.ts" />
     <TypeScriptCompile Include="client\Utils\Admin.ts" />
@@ -527,7 +527,7 @@
     <TypeScriptOutDir>bin\</TypeScriptOutDir>
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
-    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot />
   </PropertyGroup>

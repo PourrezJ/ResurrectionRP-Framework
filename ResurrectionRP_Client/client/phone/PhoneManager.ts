@@ -106,7 +106,7 @@ export default class PhoneManager {
                     alt.showCursor(false);
                     alt.toggleGameControls(true);
                     Interaction.SetCanClose(true);
-                    alt.emitServer("InteractEmergencyCall", "emit", "ONU", ""+text);
+                    alt.emitServer("InteractEmergencyCall", "emit", "EMS", ""+text);
                 });
             });
 

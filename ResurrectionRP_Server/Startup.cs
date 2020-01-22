@@ -21,6 +21,7 @@ namespace ResurrectionRP_Server
 
         public static int MainThreadId { get; private set; }
 
+        public static bool ServerLoaded = false;
         static void Main(string[] args)
         {
 

@@ -200,6 +200,8 @@ namespace ResurrectionRP_Server.Entities.Players
                     StaffRank = StaffRank.Helper;
                 else if (Discord.IsAnimator(discordData.SocketGuildUser))
                     StaffRank = StaffRank.Animator;
+                else
+                    StaffRank = StaffRank.Player;
             }
 
             if (PlayerHandlerList.TryAdd(client, this))

@@ -211,7 +211,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                     if (discord != null)
                     {
-                        var userGuildDiscord = Discord.GetSocketGuildUser(ulong.Parse(discord.id));
+                        var userGuildDiscord = Discord.GetSocketGuildUser(discord);
 
                         if (userGuildDiscord != null)
                         {
@@ -252,58 +252,62 @@ namespace ResurrectionRP_Server.Entities.Players
 
                 player.SetData("SocialClub", socialclub);
 
-
-                if (!GameMode.IsDebug)
+                try
                 {
-                    try
+                    Task.Run(async () =>
                     {
-                        if (!Config.GetSetting<bool>("WhitelistOpen"))
-                        {
-                            player.EmitLocked("OpenLogin");
-                            return;
-                        }
+                        while (!Startup.ServerLoaded && !Discord.DiscordLoaded)
+                            await Task.Delay(100);
 
-                        Task.Run(async () =>
+                        Whitelist whitelist = await Whitelist.GetWhitelistFromAPI(socialclub);
+                        await AltAsync.Do(() =>
                         {
-                            Whitelist whitelist = await Whitelist.GetWhitelistFromAPI(socialclub);
-                            await AltAsync.Do(() =>
+                            if (!GameMode.IsDebug)
                             {
-                                if (whitelist != null && whitelist.Whitelisted)
+                                if (!Config.GetSetting<bool>("WhitelistOpen"))
                                 {
-                                    if (whitelist.IsBan)
-                                    {
-                                        if (DateTime.Now > whitelist.EndBanTime)
-                                        {
-                                            whitelist.IsBan = false;
-                                            player.EmitLocked("OpenLogin", socialclub);
-                                            return;
-                                        }
-
-                                        string _kickMessage = $"Vous êtes ban du serveur jusqu'au {whitelist.EndBanTime.ToShortDateString()}";
-                                        player.Kick(_kickMessage);
-                                    }
-                                    else
-                                        player.EmitLocked("OpenLogin", socialclub);
+                                    player.EmitLocked("OpenLogin");
+                                    return;
                                 }
                                 else
                                 {
-                                    Alt.Server.LogInfo($"({player.Ip}) ({socialclub}) n'est pas whitelist sur le serveur.");
-                                    player.EmitLocked("FadeIn", 0);
-                                    string _kickMessage = "Vous n'êtes pas whitelist sur le serveur";
-                                    player.Kick(_kickMessage);
+                                    if (whitelist != null && whitelist.Whitelisted)
+                                    {
+                                        if (whitelist.IsBan)
+                                        {
+                                            if (DateTime.Now > whitelist.EndBanTime)
+                                            {
+                                                whitelist.IsBan = false;
+                                                player.EmitLocked("OpenLogin", socialclub);
+                                                return;
+                                            }
+
+                                            string _kickMessage = $"Vous êtes ban du serveur jusqu'au {whitelist.EndBanTime.ToShortDateString()}";
+                                            player.Kick(_kickMessage);
+                                        }
+                                        else
+                                            player.EmitLocked("OpenLogin", socialclub);
+                                    }
+                                    else
+                                    {
+                                        Alt.Server.LogInfo($"({player.Ip}) ({socialclub}) n'est pas whitelist sur le serveur.");
+                                        player.EmitLocked("FadeIn", 0);
+                                        string _kickMessage = "Vous n'êtes pas whitelist sur le serveur";
+                                        player.Kick(_kickMessage);
+                                    }
                                 }
-                            });
+                            }
+                            else
+                                ConnectPlayer(player); 
                         });
-                    }
-                    catch (Exception ex)
-                    {
-                        string _kickMessage = "Vous n'êtes pas whitelist sur le serveur";
-                        player.Kick(_kickMessage);
-                        Alt.Server.LogError("Player Login" + ex.Data);
-                    }
+                    });
                 }
-                else
-                    ConnectPlayer(player);
+                catch (Exception ex)
+                {
+                    string _kickMessage = "Vous n'êtes pas whitelist sur le serveur";
+                    player.Kick(_kickMessage);
+                    Alt.Server.LogError("Player Login" + ex.Data);
+                }
             }
             catch(Exception ex)
             {

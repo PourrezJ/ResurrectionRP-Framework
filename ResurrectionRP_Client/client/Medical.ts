@@ -43,7 +43,7 @@ export class Medical {
     {
         if (game.isPlayerDead(0)) {
             if (key == 'Y'.charCodeAt(0)) {
-                alt.emitServer("InteractEmergencyCall", "emit", "ONU", "Appel d'un témoin, une personne inconsciente");
+                alt.emitServer("InteractEmergencyCall", "emit", "EMS", "Appel d'un témoin, une personne inconsciente");
             } else if (key == 'R'.charCodeAt(0)) {
                 alt.log("i want a die");
                 Medical.ComaTime = Date.now() + 10000;

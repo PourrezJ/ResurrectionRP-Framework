@@ -43,9 +43,6 @@ namespace ResurrectionRP_Server
         [BsonIgnore]
         public static bool IsDevServer { get; private set; } = false;
 
-        [BsonIgnore]
-        public bool ServerLoaded = false;
-
         public static float StreamDistance { get; private set; } = 500;
 
         [BsonIgnore]
@@ -171,7 +168,7 @@ namespace ResurrectionRP_Server
                     await Discord.Init();
 
                     Alt.Server.LogColored("~g~Serveur chargé!");
-                    ServerLoaded = true;
+                    Startup.ServerLoaded = true;
                 }
                 catch (Exception ex)
                 {

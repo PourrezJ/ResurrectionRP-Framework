@@ -20,6 +20,8 @@ namespace ResurrectionRP_Server
         private static DiscordSocketClient _client;
         private static CommandService _commands;
 
+        public static bool DiscordLoaded;
+
         public static SocketGuild GTAVGuild { get; private set; }
 
         public static async Task Init()
@@ -40,13 +42,13 @@ namespace ResurrectionRP_Server
         {
             GTAVGuild = _client.GetGuild(Config.GetSetting<ulong>("GuildGTAV"));
             Alt.Server.LogInfo("Discord ready");
+            DiscordLoaded = true;
             return Task.CompletedTask;
         }
 
-        public static SocketGuildUser GetSocketGuildUser(ulong id) => GTAVGuild.GetUser(id);
+        public static SocketGuildUser GetSocketGuildUser(DiscordData data) => GTAVGuild.Users.First(p => p.Id.ToString() == data.id && p.Discriminator == data.discriminator);
 
         public static bool HasRoleName(SocketGuildUser pdiscord, string name) => pdiscord.Roles.Any(p => p.Name.ToLower() == name.ToLower());
-
         public static bool IsAdmin(SocketGuildUser pdiscord) => HasRoleName(pdiscord, "Administrateur (NO-MP)");
         public static bool IsModerator(SocketGuildUser pdiscord) => HasRoleName(pdiscord, "modérateur");
         public static bool IsHelper(SocketGuildUser pdiscord) => HasRoleName(pdiscord, "helpers");

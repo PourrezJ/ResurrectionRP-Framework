@@ -226,30 +226,12 @@ namespace ResurrectionRP_Server
         {
         }
 
-
-        public async static Task PlaySoundFromEntityAsync(this IPlayer client, IPlayer initiator, int id, string dict, string anim)
-        {
-            await Task.CompletedTask;
-        }
-
         public static void PlaySoundFromEntity(this IPlayer client, IVehicle initiator, int id, string dict, string anim)
         {
         }
 
         public static void PlaySoundFromEntity(this IPlayer client, IEntity initiator, int id, string dict, string anim)
         {
-        }
-
-        public static Task SetDecorationAsync(this IPlayer client, uint collection, uint overlay)
-        {
-            // TODO
-            return Task.CompletedTask;
-        }
-
-        public static Task RemoveDecorationAsync(this IPlayer client, uint collection, uint overlay)
-        {
-            // TODO
-            return Task.CompletedTask;
         }
 
         public static void SetDecoration(this IPlayer client, uint collection, uint overlay)
@@ -260,12 +242,6 @@ namespace ResurrectionRP_Server
         public static void ClearDecorations(this IPlayer client)
         {
             client.EmitLocked("ClearDecorations");
-        }
-
-        public static Task ClearDecorationsAsync(this IPlayer client)
-        {
-            // TODO
-            return Task.CompletedTask;
         }
 
         public static async Task SetInvisibleAsync(this IPlayer client, bool invisible)

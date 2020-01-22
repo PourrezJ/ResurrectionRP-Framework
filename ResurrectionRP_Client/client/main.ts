@@ -18,7 +18,10 @@ import { Admin } from './Utils/Admin';
 import { LSPDManager } from './LSPDCall';
 import { Doors } from './Env/Doors';
 import * as CustomEvents from './Utils/CustomEvents';
-
+import * as apiext from './Utils/ApiExtends';
+import { Loading } from './Env/Loading';
+import { Subtitle } from './Env/Subtitle';
+import { HelpText } from './Env/HelpText';
 
 var GameClass: Game;
 
@@ -55,6 +58,13 @@ const init = async () => {
 
         alt.everyTick(() => {
             game.drawRect(0, 0, 0, 0, 0, 0, 0, 0, false);
+
+            if (Loading.loading != null)
+                Loading.loading.Draw();
+            if (Subtitle.subtitle != null)
+                Subtitle.subtitle.Draw();
+            if (HelpText.helpText != null)
+                HelpText.helpText.Draw();
         });
 
         alt.on("disconnect", () => {
@@ -68,16 +78,27 @@ const init = async () => {
             game.pauseDeathArrestRestart(true);
             game.setFadeInAfterLoad(false);
             game.setFadeOutAfterDeath(false);
+
+            // Unfreeze Player
+            game.freezeEntityPosition(alt.Player.local.scriptID, false);
+
+            // Destroy All Cameras
+            game.renderScriptCams(false, false, 0, false, false, 0);
+            game.destroyAllCams(true);
+
+            // Turn off Screen Fades
+            game.doScreenFadeIn(1);
+            game.triggerScreenblurFadeOut(1);
         });
 
         alt.log("Chargement des controlleurs");
 
         chat.initialize();
         speedometer.initialize();
-        utils.initialize();
         login.init();
         xtreamMenu.init();
         nightClub.initialize();
+        apiext.initialize();
         await trains.initialize();
         new LSPDManager();
         new Notify();       

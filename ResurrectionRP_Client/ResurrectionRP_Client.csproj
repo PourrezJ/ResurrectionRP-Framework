@@ -82,7 +82,10 @@
     <TypeScriptCompile Include="client\DrivingSchool.ts" />
     <TypeScriptCompile Include="client\EmergencyCall.ts" />
     <TypeScriptCompile Include="client\Env\Doors.ts" />
+    <TypeScriptCompile Include="client\Env\HelpText.ts" />
+    <TypeScriptCompile Include="client\Env\Loading.ts" />
     <TypeScriptCompile Include="client\Env\NightClub.ts" />
+    <TypeScriptCompile Include="client\Env\Subtitle.ts" />
     <TypeScriptCompile Include="client\Env\Time.ts" />
     <TypeScriptCompile Include="client\Env\Trains.ts" />
     <TypeScriptCompile Include="client\Env\Weather.ts" />
@@ -107,6 +110,7 @@
     <TypeScriptCompile Include="client\Ragdoll.ts" />
     <TypeScriptCompile Include="client\Streamer\Entities\Ped.ts" />
     <TypeScriptCompile Include="client\Streamer\Entities\TextLabel.ts" />
+    <TypeScriptCompile Include="client\Utils\ApiExtends.ts" />
     <TypeScriptCompile Include="client\Utils\CustomEvents.ts" />
     <TypeScriptCompile Include="client\player\Game.ts" />
     <TypeScriptCompile Include="client\player\Hud.ts" />
@@ -502,6 +506,41 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <NoWarn>TS2307</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <TypeScriptTarget>ES2019</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptModuleKind>ES6</TypeScriptModuleKind>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir>bin\</TypeScriptOutDir>
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />

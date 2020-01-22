@@ -1,339 +1,49 @@
-﻿
-import * as alt from 'alt-client';
+﻿import * as alt from 'alt-client';
 import * as game from 'natives';
 import * as enums from '../Utils/Enums/Enums';
 
-var helpText;
-var subtitle;
-var loading;
+export function SetNotificationPicture(message: string, dict: string, img: string, flash: boolean, iconType: number, sender: string, subject: string) {
+    game.beginTextCommandThefeedPost("STRING");
+    game.addTextComponentSubstringPlayerName(message);
+    game.endTextCommandThefeedPostMessagetext(dict, img, flash, iconType, sender, subject);
+    game.endTextCommandThefeedPostTicker(true, false);
+}
 
-export function initialize() {
+export function RequestScaleForm(scaleformId: string) {
 
-    alt.onServer('TaskStartScenarioAtPosition', (scenarioName: string, x: number, y: number, z: number, heading: number, duration: number, sittingScenario: boolean, teleport: boolean) => {
-        alt.log(`${x} ${y} ${z} ${heading}`);
-        game.taskStartScenarioAtPosition(alt.Player.local.scriptID, scenarioName, x, y, z, heading, duration, sittingScenario, teleport);
-    }); 
+    var sf = game.requestScaleformMovie(scaleformId);
+    return sf;
+}
 
-    alt.onServer('TaskAdvancedPlayAnimation', (animDict: string, animName: string, posX: number, posY: number, posZ: number, rotX: number, rotY: number, rotZ: number, speed: number, speedMultiplier: number, duration: number, flag: number, animTime: number) => {
-        alt.log("TaskAdvancedPlayAnimation");
-        game.taskPlayAnimAdvanced(alt.Player.local.scriptID, animDict, animName, posX, posY, posZ, rotX, rotY, rotZ, speed, speedMultiplier, duration, flag, animTime, 15000,15000);
-    });
-    alt.onServer('StopAnimation', () => {
-        game.clearPedTasks(alt.Player.local.scriptID);
-        game.clearPedSecondaryTask(alt.Player.local.scriptID);
-    }); 
+export function BeginTextCommand(textCommand: string) {
+    game.beginTextCommandScaleformString(textCommand);
+    game.endTextCommandScaleformString();
+    //RAGE.Game.Graphics.PopScaleformMovieFunctionVoid();
 
-    alt.onServer('SetWaypoint', (posx: number, posy: number, override: boolean) => {
-        if (game.isWaypointActive() && override)
-            game.setWaypointOff();
-        if (override && !game.isWaypointActive())
-            game.setNewWaypoint(posx, posy);
-    });
+}
 
-    alt.onServer('DeleteWaypoint', () => {
-        game.setWaypointOff();
-    })
+export function drawText(msg, x, y, scale, fontType, r, g, b, a, useOutline = true, useDropShadow = true, layer = 0) {
+    game.setScriptGfxDrawOrder(layer);
+    game.beginTextCommandDisplayText('STRING');
+    game.addTextComponentSubstringPlayerName(msg);
+    game.setTextFont(fontType);
+    game.setTextScale(1, scale);
+    game.setTextWrap(0.0, 1.0);
+    game.setTextCentre(true);
+    game.setTextColour(r, g, b, a);
 
-    alt.onServer("RequestCollisionAtCoords", (x: number, y: number, z: number) => {
-        game.requestCollisionAtCoord(x,y,z);
-    });
+    if (useOutline)
+        game.setTextOutline();
 
-    alt.onServer('ShowNotification', (imageName, headerMsg, detailsMsg, message) => {
-        game.beginTextCommandThefeedPost('STRING');
-        game.addTextComponentSubstringPlayerName(message);
-        game.endTextCommandThefeedPostMessagetextWithCrewTag(imageName.toUpperCase(), imageName.toUpperCase(), false, 4, headerMsg, detailsMsg, 1.0, '');
-        game.endTextCommandThefeedPostTicker(false, false);
-    });
+    if (useDropShadow)
+        game.setTextDropShadow();
 
-
-    alt.onServer('SetPlayerIntoVehicle', (vehicle, seat) => {
-        let timeout = alt.setTimeout(() => {
-            alt.clearInterval(interval);
-        }, 5000);
-
-        let interval = alt.setInterval(() => {
-            if (alt.Player.local.vehicle == null) {
-                game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle.scriptID, seat);
-            } else {
-                alt.clearInterval(interval);
-                alt.clearTimeout(timeout);
-            }
-        }, 20);
-    });
-
-    alt.onServer('SetPlayerOutOfVehicle', (force: boolean) => {
-        game.taskLeaveVehicle(alt.Player.local.scriptID, alt.Player.local.vehicle.scriptID, force ? 16 : 0);
-    });
-
-    alt.onServer('TrySetPlayerIntoVehicle', (vehicle: alt.Vehicle) => {
-        var success: boolean = false;
-        var seat: number = game.getVehicleModelNumberOfSeats(vehicle.model);
-
-        for (var i = seat - 2; i > -1; i--) {
-            alt.log("Nombre de siège: " + seat);
-            alt.log("Vérificatin actuelle: " + i);
-
-            if (game.isVehicleSeatFree(vehicle.scriptID, i, false) && success == false) {
-                game.taskEnterVehicle(alt.Player.local.scriptID, vehicle.scriptID, 10000, i, 1, 1, 0);
-                success = true;
-            }
-        }
-        if (!success) {
-
-            alt.emit('alertNotify', "Erreur", "Aucun siège dans le véhicule disponible! ", 5000);
-        }
-
-        alt.setTimeout(() => {
-            game.setPedIntoVehicle(alt.Player.local.scriptID, vehicle.scriptID, seat);
-        }, 20);
-    });
-
-    alt.onServer('toggleControl', (state: boolean) => {
-        alt.toggleGameControls(state);
-    });
-
-    alt.onServer('Display_Help', (text, time) => {
-        new HelpText(text, time);
-    });
-
-    alt.on('Display_Help', (text, time) => {
-        new HelpText(text, time);
-    });
-
-    alt.onServer('Display_subtitle', (text, time) => {
-        new Subtitle(text, time);
-    });
-
-    alt.on('Display_subtitle', (text, time) => {
-        new Subtitle(text, time);
-    });
-
-    alt.onServer('ShowLoading', (text, time, type, toggled) => {
-        new Loading(text, time, type, toggled);
-    });
-
-    alt.onServer('ShowCursor', (state: boolean) => {
-        alt.showCursor(state);
-    });
-
-    alt.onServer('CreateBlip', (sprite: number, position: alt.Vector3, name: string, scale: number, color: number, alpha: number, shortRange: boolean) =>
-    {
-        createBlip(position, sprite, color, name, alpha, scale, shortRange);
-    });
-
-    alt.onServer('setEntityHeading', (entity: alt.Entity, angle: number) =>
-    {
-        game.setEntityHeading(entity.scriptID, angle);
-    });
-
-    alt.onServer('ShowNotification', (text) => {
-        game.beginTextCommandThefeedPost("STRING");
-        game.addTextComponentSubstringPlayerName(text);
-        game.endTextCommandThefeedPostTicker(true, false);
-    });
-
-    alt.on('SET_NOTIFICATION_BACKGROUND_COLOR', (args: any[]) => game.thefeedSetNextPostBackgroundColor(parseInt(args[0])))
-
-    alt.onServer("SetNotificationMessage", (img, sender, subject, message) =>
-    {
-        game.beginTextCommandThefeedPost("STRING");
-        game.addTextComponentSubstringPlayerName(message);
-        game.endTextCommandThefeedPostMessagetext(img.toUpperCase(), img.toUpperCase(), false, 4, sender, subject);
-        game.endTextCommandThefeedPostTicker(false, false);
-    });
-
-    alt.on("SetNotificationMessage", (img, sender, subject, message) =>
-    {
-        game.beginTextCommandThefeedPost("STRING");
-        game.addTextComponentSubstringPlayerName(message);
-        game.endTextCommandThefeedPostMessagetext(img.toUpperCase(), img.toUpperCase(), false, 4, sender, subject);
-        game.endTextCommandThefeedPostTicker(false, false);
-    });
-
-    alt.on('RemoveLoadingPrompt', () => game.busyspinnerOff());
-
-    alt.onServer('FadeIn', (args: number) => game.doScreenFadeIn(args));
-    alt.onServer('FadeOut', (args: number) => game.doScreenFadeOut(args));
-    alt.on('FadeIn', (args: number) => game.doScreenFadeIn(args));
-    alt.on('FadeOut', (args: number) => game.doScreenFadeOut(args));
-
-    /*
-     * Vehicle
-    */
-    alt.onServer('VehicleSetSirenSound', (vehicle: alt.Vehicle, status: boolean) => {
-        game.setVehicleHasMutedSirens(vehicle.scriptID, status);
-    });
-
-    function SetNotificationPicture(message: string, dict: string, img: string, flash: boolean, iconType: number, sender: string, subject: string) {
-        game.beginTextCommandThefeedPost("STRING");
-        game.addTextComponentSubstringPlayerName(message);
-        game.endTextCommandThefeedPostMessagetext(dict, img, flash, iconType, sender, subject);
-        game.endTextCommandThefeedPostTicker(true, false);
-    }
-
-    function RequestScaleForm(scaleformId: string) {
-
-        var sf = game.requestScaleformMovie(scaleformId);
-        return sf;
-    }
-
-    function BeginTextCommand(textCommand: string) {
-        game.beginTextCommandScaleformString(textCommand);
-        game.endTextCommandScaleformString();
-        //RAGE.Game.Graphics.PopScaleformMovieFunctionVoid();
-        
-    }
-
-    class HelpText {
-        text: string;
-        time: number;
-        helpText: string;
-        constructor(text, time) {
-            this.text = text;
-            this.time = Date.now() + time;
-            helpText = this
-        }
-
-        Draw() {
-            if (this.time < Date.now()) {
-                helpText = undefined;
-            }
-
-            game.beginTextCommandDisplayHelp('STRING');
-            game.addTextComponentSubstringPlayerName(this.text);
-            game.endTextCommandDisplayHelp(0, false, true, 0);
-        }
-    }
-
-    class Subtitle {
-        alpha: number;
-        text: string;
-        time: number;
-        res: any;
-        constructor(text, time) {
-            this.alpha = 255;
-            this.text = text;
-            this.time = Date.now() + time;
-            this.res = game.getActiveScreenResolution(0, 0);
-            subtitle = this;
-        }
-
-        Draw() {
-            if (this.time < Date.now()) {
-                this.alpha -= 1;
-            }
-
-            if (this.alpha <= 10) {
-                subtitle = undefined;
-                return;
-            }
-
-            drawText(this.text, 0.5, 0.80, 0.8, 4, 255, 255, 255, this.alpha, true);
-        }
-    }
-    class Loading {
-        text: string;
-        type: any;
-        toggled: boolean;
-        time: number;
-        constructor(text, time, type, toggled) {
-            this.text = text;
-            this.type = type;
-            this.toggled = toggled;
-
-            if (time !== null && time !== undefined) {
-                this.time = Date.now() + time;
-            }
-
-            loading = this;
-            game.busyspinnerOff();
-            game.beginTextCommandBusyspinnerOn('STRING');
-            game.addTextComponentSubstringPlayerName(this.text);
-            game.endTextCommandBusyspinnerOn(this.type);
-        }
-
-        Draw() {
-            if (this.time < Date.now()) {
-                loading = undefined;
-                game.busyspinnerOff();
-            }
-
-            if (this.toggled !== null && this.toggled !== undefined && !this.toggled) {
-                loading = undefined;
-                game.busyspinnerOff();
-            }
-        }
-    }
-
-    /**
- * Draw text in an update loop.
- * @param msg 
- * @param x is a float 0 - 1.0
- * @param y is a float 0 - 1.0
- */
-    function drawText(msg, x, y, scale, fontType, r, g, b, a, useOutline = true, useDropShadow = true, layer = 0) {
-        game.setScriptGfxDrawOrder(layer);
-        game.beginTextCommandDisplayText('STRING');
-        game.addTextComponentSubstringPlayerName(msg);
-        game.setTextFont(fontType);
-        game.setTextScale(1, scale);
-        game.setTextWrap(0.0, 1.0);
-        game.setTextCentre(true);
-        game.setTextColour(r, g, b, a);
-
-        if (useOutline)
-            game.setTextOutline();
-
-        if (useDropShadow)
-            game.setTextDropShadow();
-
-        game.endTextCommandDisplayText(x, y, 0);
-    }
-
-    alt.everyTick(() => {
-        if (helpText !== undefined)
-            helpText.Draw();
-        if (subtitle !== undefined)
-            subtitle.Draw();
-        if (loading !== undefined)
-            loading.Draw();
-    });
-
-    alt.on('disconnect', () => {
-
-        // Unfreeze Player
-        game.freezeEntityPosition(alt.Player.local.scriptID, false);
-
-        // Destroy All Cameras
-        game.renderScriptCams(false, false, 0, false, false, 0);
-        game.destroyAllCams(true);
-
-        // Turn off Screen Fades
-        game.doScreenFadeIn(1);
-        game.triggerScreenblurFadeOut(1);
-    });
-
-    
+    game.endTextCommandDisplayText(x, y, 0);
 }
 
 export function Distance(positionOne, positionTwo) {
     return Math.sqrt(Math.pow(positionOne.x - positionTwo.x, 2) + Math.pow(positionOne.y - positionTwo.y, 2) + Math.pow(positionOne.z - positionTwo.z, 2));
 }
-
-//export function GetCameraDirection() {
-//    const heading = game.getGameplayCamRelativeHeading() + game.getEntityHeading(alt.Player.local.scriptID);
-//    const pitch = game.getGameplayCamRot(0).x;
-//    var x = -Math.sin(heading * Math.PI / 180.0);
-//    var y = Math.cos(heading * Math.PI / 180.0);
-//    var z = Math.sin(pitch * Math.PI / 180.0);
-//    var len = Math.sqrt(x * x + y * y + z * z);
-//    if (len !== 0) {
-//        x = x / len;
-//        y = y / len;
-//        z = z / len;
-//    }
-//    return new alt.Vector3(x, y, z);
-//}
 
 export function GetCameraDirection() {
     const heading = game.getGameplayCamRelativeHeading() + game.getEntityHeading(alt.Player.local.scriptID);

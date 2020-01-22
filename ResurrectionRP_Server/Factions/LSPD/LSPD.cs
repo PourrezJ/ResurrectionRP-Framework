@@ -294,7 +294,7 @@ namespace ResurrectionRP_Server.Factions
                      new ClothItem(ItemID.Pant, "", "", new ClothData(34, 0, 0), 0, false, false, false, false, false, 0, classes: "pants", icon: "pants"),
                      new ClothItem(ItemID.Shoes, "", "", new ClothData(24, 0, 0), 0, false, false, false, false, false, 0, classes: "shoes", icon: "shoes"),
                      new ClothItem(ItemID.Kevlar, "", "", new ClothData(28, 9, 0), 0, false, false, false, false, false, 0, classes: "kevlar", icon: "kevlar"),
-                     new ClothItem(ItemID.Necklace, "", "", new ClothData(96, 0, 0), 0, false, false, false, false, false, 0, classes: "necklace", icon: "necklace"),
+                     new ClothItem(ItemID.Necklace, "", "", new ClothData(95, 0, 0), 0, false, false, false, false, false, 0, classes: "necklace", icon: "necklace"),
                 };
             }
 

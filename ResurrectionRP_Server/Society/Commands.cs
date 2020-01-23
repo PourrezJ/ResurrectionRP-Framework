@@ -30,7 +30,7 @@ namespace ResurrectionRP_Server.Society
             if (player.GetStaffRank() < Utils.Enums.StaffRank.Moderator)
                 return;
 
-            Society society = new Whisky("Asgail's Brothers & Co", player.Position - new AltV.Net.Data.Position(0, 0, 1), 93, (int)BlipColor.Orange, "", inventory: new Inventory.Inventory(5000, 40));
+            Society society = new Whisky("Asgail's Brothers & Co", player.Position - new AltV.Net.Data.Position(0, 0, 1), 93, 28, "", inventory: new Inventory.Inventory(5000, 40));
             Task.Run(async () => await society.Insert());
             society.Init();
         }

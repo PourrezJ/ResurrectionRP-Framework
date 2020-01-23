@@ -50,6 +50,7 @@ namespace ResurrectionRP_Server.EventHandlers
 
                 case "emit":
                     OnPlayerEmitEmergencyCall?.Invoke(client, args[1].ToString(), client.Position.ConvertToVector3(), args[2].ToString());
+                    Phone.PhoneManager.ClosePhone(client);
                     break;
 
 

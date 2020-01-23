@@ -306,7 +306,7 @@ namespace ResurrectionRP_Server
                     player.SendNotificationError("Syntaxe : /tpto X Y Z");
                     return;
                 }
-                else if (!float.TryParse(args[0].ToString(), out x) || !float.TryParse(args[1].ToString(), out y) || !float.TryParse(args[2].ToString(), out z))
+                else if (!float.TryParse(args[0].Replace('.', ','), out x) || !float.TryParse(args[1].Replace('.', ','), out y) || !float.TryParse(args[2].Replace('.', ','), out z))
                 {
                     player.SendNotificationError("Paramètre(s) invalide(s)");
                     return;

@@ -16,8 +16,8 @@ namespace ResurrectionRP_Server.Services
         #region Variables
         [BsonId]
         public int ID;
-
-        public Models.Parking Parking;
+        public bool HasBlip = true;
+        public Parking Parking;
 
         #endregion
 
@@ -26,7 +26,7 @@ namespace ResurrectionRP_Server.Services
         {
             if (Parking != null)
             {
-                Parking.Init(alpha: 150, scale: 0.7f, name: "Parking", blip: true);
+                Parking.Init(alpha: 150, scale: 0.7f, name: "Parking", blip: HasBlip);
                 Parking.ParkingType = ParkingType.Public;
                 Parking.Spawn1.Rot = Parking.Spawn1.Rot.ConvertRotationToRadian();
                 Parking.Spawn2.Rot = Parking.Spawn2.Rot.ConvertRotationToRadian();
@@ -83,13 +83,14 @@ namespace ResurrectionRP_Server.Services
         #endregion
 
         #region Static methods
-        public static CarPark LoadCarPark(int id, Vector3 borne, Models.Location spawn1, Models.Location spawn2)
+        public static CarPark LoadCarPark(int id, Vector3 borne, Location spawn1, Location spawn2, bool hasblip)
         {
             CarPark carpark = Database.MongoDB.GetCollectionSafe<CarPark>("carparks").Find(p => p.ID == id).First();
             carpark.ID = id;
             carpark.Parking.Location = borne;
             carpark.Parking.Spawn1 = spawn1;
             carpark.Parking.Spawn2 = spawn2;
+            carpark.HasBlip = hasblip;
             carpark.Init();
             return carpark;
         }
@@ -97,10 +98,11 @@ namespace ResurrectionRP_Server.Services
         public static bool HasCarPark(int id) =>
             Database.MongoDB.GetCollectionSafe<CarPark>("carparks").Find(p => p.ID == id).Any();
 
-        public static CarPark CreateCarPark(int ID, string name, Vector3 borne, Models.Location spawn1, Models.Location spawn2)
+        public static CarPark CreateCarPark(int ID, string name, Vector3 borne, Location spawn1, Location spawn2, bool hasblip)
         {
             CarPark carPark = new CarPark();
             carPark.ID = ID;
+            carPark.HasBlip = hasblip;
             carPark.Parking = new Models.Parking(borne, spawn1, spawn2, name, maxVehicles: 2100, hidden: false);
             Task.Run(async ()=> await carPark.Insert());
             carPark.Init();

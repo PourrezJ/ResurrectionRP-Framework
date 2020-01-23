@@ -11,6 +11,7 @@ namespace ResurrectionRP_Server.Loader
     public class CarParkModel
     {
         public int ID;
+        public bool HasBlip = true;
         public Vector3 Borne;
         public Models.Location Spawn1;
         public Models.Location Spawn2;
@@ -40,10 +41,10 @@ namespace ResurrectionRP_Server.Loader
                         Services.CarPark carpark = null;
 
                         if (Services.CarPark.HasCarPark(_carParkModel.ID))
-                            carpark = Services.CarPark.LoadCarPark(_carParkModel.ID, _carParkModel.Borne, _carParkModel.Spawn1, _carParkModel.Spawn2);
+                            carpark = Services.CarPark.LoadCarPark(_carParkModel.ID, _carParkModel.Borne, _carParkModel.Spawn1, _carParkModel.Spawn2, _carParkModel.HasBlip);
                         else
                         {
-                            carpark = Services.CarPark.CreateCarPark(_carParkModel.ID, _name, _carParkModel.Borne, _carParkModel.Spawn1, _carParkModel.Spawn2);
+                            carpark = Services.CarPark.CreateCarPark(_carParkModel.ID, _name, _carParkModel.Borne, _carParkModel.Spawn1, _carParkModel.Spawn2, _carParkModel.HasBlip);
                             Alt.Server.LogColored("~b~CarPark.Loader.cs ~w~| New carpark()");
                             //Alt.Server.LogInfo($"Car Park {_name} vient d'être ajouté!");
                         }

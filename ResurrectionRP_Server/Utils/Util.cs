@@ -1,6 +1,9 @@
 ﻿using AltV.Net;
 using AltV.Net.Enums;
 using System;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,6 +27,12 @@ namespace ResurrectionRP_Server.Utils
                 return false;
             }
             return true;
+        }
+
+        public static string GetIPAddress()
+        {
+            return new WebClient().DownloadString("https://ipinfo.io/ip").Replace("\n", "");
+
         }
 
         public static int RandomNumber(int max) => new Random().Next(max);

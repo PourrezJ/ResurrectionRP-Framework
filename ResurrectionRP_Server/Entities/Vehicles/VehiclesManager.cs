@@ -144,7 +144,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             }
 
             if (vh != null)
-                vh.UpdateInBackground();
+                vh.UpdateInBackground(false, true);
         }
         #endregion
 

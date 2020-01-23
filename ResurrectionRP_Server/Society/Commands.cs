@@ -22,6 +22,17 @@ namespace ResurrectionRP_Server.Society
             Chat.RegisterCmd("addtequilala", TequilalaSociety);
             Chat.RegisterCmd("addyellowjack", YellowJack);
             Chat.RegisterCmd("addburgershot", BurgerShotSociety);
+            Chat.RegisterCmd("addwhisky", WhiskySociety);
+        }
+
+        private void WhiskySociety(IPlayer player, string[] args)
+        {
+            if (player.GetStaffRank() < Utils.Enums.StaffRank.Moderator)
+                return;
+
+            Society society = new Whisky("Asgail's Brothers & Co", player.Position - new AltV.Net.Data.Position(0, 0, 1), 93, (int)BlipColor.Orange, "", inventory: new Inventory.Inventory(5000, 40));
+            Task.Run(async () => await society.Insert());
+            society.Init();
         }
 
         private void BurgerShotSociety(IPlayer player, string[] args)

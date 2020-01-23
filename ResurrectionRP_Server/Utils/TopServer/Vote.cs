@@ -28,26 +28,53 @@ namespace ResurrectionRP_Server.Utils.TopServer
 
         public static void CallbackAfterVote(string token, string playername, string vote_ip, string date, string version)
         {
-            if (token != ServerToken)
+            try
             {
-                Alt.Server.LogError("[VotePlugin] Un vote a été émis avec une token incorrecte (la token est accessible sur votre fiche serveur top-serveurs.net).");
-                return;
+                if (token != ServerToken)
+                {
+                    Alt.Server.LogError("[VotePlugin] Un vote a été émis avec une token incorrecte (la token est accessible sur votre fiche serveur top-serveurs.net).");
+                    return;
+                }
+
+                var player = Entities.Players.PlayerManager.GetAllPlayerHandlerCache().Values.FirstOrDefault(p => p.IP.ToString() == vote_ip || p.PID.ToLower() == playername.ToLower());
+
+                if (player != null)
+                {
+                    bool found = false;
+                    var players = Alt.GetAllPlayers();
+                    lock (players)
+                    {
+                        foreach(var client in players)
+                        {
+                            if (client.GetSocialClub() == player.PID)
+                            {
+                                found = true;
+                                client.SendNotificationSuccess($"Vous avez reçu ${PriceReward} pour votre vote sur TopServeur!");
+
+                                var ph = client.GetPlayerHandler();
+                                if (ph != null)
+                                {
+                                    ph.AddMoney(PriceReward);
+                                    ph.UpdateInBackground();
+                                }
+                                return;
+                            }
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        player.Rewards++;
+                        player.AddMoney(PriceReward);
+                        player.UpdateInBackground();
+                    }
+
+                    Alt.Server.LogColored(player.PID + " viens de voté sur top serveur!");
+                }
             }
-
-            var player = Entities.Players.PlayerManager.GetAllPlayerHandlerCache().Values.FirstOrDefault(p => p.IP.ToString() == vote_ip || p.PID.ToLower() == playername.ToLower());
-
-            if (player != null)
+            catch(Exception ex)
             {
-                if (player.BankAccount.Owner == null)
-                    player.BankAccount.Owner = player;
-                player.Rewards++;
-                player.BankAccount.AddMoney(PriceReward, true);
-
-                Alt.Server.LogColored(player.PID + " viens de voté sur top serveur!");
-
-                if (player.Client != null && player.Client.Exists)
-                    player.Client.SendNotificationSuccess($"Vous avez reçu ${PriceReward} pour votre vote sur TopServeur!");
-
+                Alt.Server.LogError(ex.ToString());
             }
         }
     }

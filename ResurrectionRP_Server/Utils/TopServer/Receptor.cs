@@ -10,8 +10,6 @@ namespace ResurrectionRP_Server.Utils.TopServer
     {
         private Action<string, string, string, string, string> _callback;
 
-
-
         public Receptor(Action<string, string, string, string, string> callback, int port)
         {
             this._callback = callback;

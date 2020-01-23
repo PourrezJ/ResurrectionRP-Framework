@@ -267,17 +267,6 @@ namespace ResurrectionRP_Server.Houses
                     break;
             }
         }
-
-        public static void House_Exit()
-        {
-            foreach(House house in Houses)
-            {
-                house.UpdateInBackground();
-                house.Destroy();
-            }
-
-            Houses.Clear();
-        }
         #endregion
     }
 }

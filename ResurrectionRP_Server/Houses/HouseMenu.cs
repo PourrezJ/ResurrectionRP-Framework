@@ -83,6 +83,11 @@ namespace ResurrectionRP_Server.Houses
                             ph.UpdateFull();
                             _house.UpdateInBackground();
                         };
+                        inv.OnClose += (cl, inventaire) =>
+                        {
+                            ph.UpdateFull();
+                            _house.UpdateInBackground();
+                        };
                         menu.CloseMenu(client);
                         inv.OpenMenu(client);
                         break;
@@ -94,7 +99,7 @@ namespace ResurrectionRP_Server.Houses
                             client.SendNotification("Vous avez fermé votre maison.");
                         else
                             client.SendNotification("Vous avez ouvert votre maison.");
-
+                        _house.UpdateInBackground();
                         OpenHouseMenu(client, _house);
                         break;
                     case "playerSelected":

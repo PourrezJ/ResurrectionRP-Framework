@@ -94,9 +94,8 @@ export class Game {
 
             this._LevelRank = StaffRank;
             this._PlayerName = IdentiteName;
-            this._Survival = new SurvivalLib(Hunger, Thirst);
-            var time = JSON.parse(Time);
-            this._Time = new TimeLib(time.Hours, time.Minutes, time.Seconds);
+            
+            var time = JSON.parse(Time);        
             Game.isDebug = isDebug;
             alt.Player.local.setMeta("IsDebug", isDebug);
             alt.Player.local.setMeta("LevelRank", this.LevelRank);
@@ -125,6 +124,8 @@ export class Game {
             alt.log('Données chargées');
 
             alt.log('Chargement des pools');
+            this._Time = new TimeLib(time.Hours, time.Minutes, time.Seconds);
+            this._Survival = new SurvivalLib(Hunger, Thirst);
             this._Voice = new VoiceChat();
             this._Hud = new HudLib(Money);
             this._Inventory = new RPGInventoryManager();

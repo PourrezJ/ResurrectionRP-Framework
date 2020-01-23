@@ -46,13 +46,12 @@ namespace ResurrectionRP_Server.Houses
                     new_house = new House(await House.GetID(), string.Empty, type, position, price, false);
                     await new_house.InsertHouse();
                     HouseManager.Houses.Add(new_house);
+                    await AltAsync.Do(() =>
+                    {
+                        player.SendNotificationSuccess("Maison ajouter.");
+                        new_house.Init();
+                    });
                 });
-
-                if (new_house == null)
-                    return;
-
-                player.SendNotificationSuccess("Maison ajouter.");
-                new_house.Init();
             }
             catch (Exception ex)
             {

@@ -265,41 +265,35 @@ namespace ResurrectionRP_Server.Houses
 
         public void SendPlayer(IPlayer player)
         {
-            AltAsync.Do(() =>
+            if (!player.Exists)
+                return;
+
+            if (!SetIntoHouse(player))
+                Alt.Server.LogWarning($"Player {player.GetPlayerHandler().Identite.Name} trying to enter house {ID} but already registered in another house");
+            else
             {
-                if (!player.Exists)
-                    return;
+                player.Dimension = (short)(DIMENSION_START + ID);
+                player.Position = HouseTypes.HouseTypeList[Type].Position.Pos;
 
-                if (!SetIntoHouse(player))
-                    Alt.Server.LogWarning($"Player {player.GetPlayerHandler().Identite.Name} trying to enter house {ID} but already registered in another house");
-                else
-                {
-                    player.Dimension = (short)(DIMENSION_START + ID);
-                    player.Position = HouseTypes.HouseTypeList[Type].Position.Pos;
-
-                    // BUG v801: Set rotation when player in game not working
-                    player.SetHeading(HouseTypes.HouseTypeList[Type].Position.Rot.Z);
-                    // player.Rotation = HouseTypes.HouseTypeList[Type].Position.Rot.ConvertRotationToRadian();
-                }
-            }).Wait();
+                // BUG v801: Set rotation when player in game not working
+                player.SetHeading(HouseTypes.HouseTypeList[Type].Position.Rot.Z);
+                // player.Rotation = HouseTypes.HouseTypeList[Type].Position.Rot.ConvertRotationToRadian();
+            }
         }
 
         public void RemovePlayer(IPlayer player, bool set_pos = true)
         {
-            AltAsync.Do(() =>
+            if (!player.Exists)
+                return;
+
+            if (!RemoveFromHouse(player))
+                Alt.Server.LogWarning($"Exiting unregistered player {player.GetPlayerHandler().Identite.Name} from house {ID}");
+
+            if (set_pos)
             {
-                if (!player.Exists)
-                    return;
-
-                if (!RemoveFromHouse(player))
-                    Alt.Server.LogWarning($"Exiting unregistered player {player.GetPlayerHandler().Identite.Name} from house {ID}");
-
-                if (set_pos)
-                {
-                    player.Position = Position;
-                    player.Dimension = GameMode.GlobalDimension;
-                }
-            }).Wait();
+                player.Position = Position;
+                player.Dimension = GameMode.GlobalDimension;
+            }
         }
 
         public void RemoveAllPlayers()
@@ -321,7 +315,7 @@ namespace ResurrectionRP_Server.Houses
             if (Marker != null || ColshapeEnter != null)
             {
                 RemoveAllPlayers();
-                Marker.Destroy();
+                Task.Run(()=> Marker.Destroy());
                 // ColshapeEnter.Remove();
             }
         }

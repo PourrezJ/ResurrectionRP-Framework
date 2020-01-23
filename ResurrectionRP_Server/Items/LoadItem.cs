@@ -20,6 +20,16 @@ namespace ResurrectionRP_Server.Items
             return ObjectCloner.ObjectCloner.DeepClone(item);
         }
 
+        public static Item GetItemWithName(string name)
+        {
+            var item = ItemsList.Find(i => i.name.ToLower() == name.ToLower()) ?? null;
+
+            if (item == null)
+                return null;
+
+            return ObjectCloner.ObjectCloner.DeepClone(item);
+        }
+
         public static List<Item> ItemsList
         {    
             get => new List<Item>()

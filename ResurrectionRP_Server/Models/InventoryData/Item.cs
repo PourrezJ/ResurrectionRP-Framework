@@ -149,7 +149,9 @@ namespace ResurrectionRP_Server.Models
         {
             return Task.CompletedTask;
         }
-        
+
+        public Item Clone() => ObjectCloner.ObjectCloner.DeepClone(this);
+
         public void SetData(string key, object value) => Variables.Add(key, value);
         public dynamic GetData(string key) => Variables.GetValueOrDefault(key);
         public void ResetData(string key) => Variables[key] = null;

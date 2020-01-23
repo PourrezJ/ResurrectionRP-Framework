@@ -353,7 +353,7 @@ namespace ResurrectionRP_Server.Factions
             {
                 if (item.Value > 0)
                 {
-                    var itemData = LoadItem.ItemsList.Find(p => p.name == item.Key.Name);
+                    var itemData = LoadItem.GetItemWithID(item.Key.ItemID);
 
                     if (item.Key.ItemID == ItemID.Phone)
                     {

@@ -795,10 +795,10 @@ namespace ResurrectionRP_Server.Entities.Players
             };
 
 
-            foreach (Models.Item item in LoadItem.ItemsList)
+            foreach (Item item in LoadItem.ItemsList)
             {
                 MenuItem listItem = new MenuItem(item.name, "", item.id.ToString(), true, rightLabel: "1");
-                listItem.SetData("Item", item);
+                listItem.SetData("Item", LoadItem.GetItemWithID(item.id));
                 menu.Add(listItem);
             }
 

@@ -171,7 +171,7 @@ namespace ResurrectionRP_Server.Entities.Players
                 string[] infos = command.Split(new[] { " x" }, StringSplitOptions.RemoveEmptyEntries);
                 int number = (Convert.ToInt32(infos[1]) != 0) ? Convert.ToInt32(infos[1]) : 1;
                 string itemName = infos[0].Remove(0, 1);
-                Item item = LoadItem.ItemsList.Find(x => x.name.ToLower() == itemName);
+                Item item = LoadItem.GetItemWithName(itemName);
 
                 if (item != null && ph != null)
                 {

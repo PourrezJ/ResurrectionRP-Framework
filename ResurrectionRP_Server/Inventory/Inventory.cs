@@ -235,20 +235,11 @@ namespace ResurrectionRP_Server.Inventory
             return quantityNeeded - value; // valeur supprimer
         }
 
-        public Item FindItemID(ItemID id)
-        {
-            foreach (Item item in Items.LoadItem.ItemsList)
-            {
-                if (item.id == id)
-                    return item;
-            }
-
-            return null;
-        }
-
         public Item GetItem(ItemID itemID)
         {
             ItemStack item = InventoryList.ToList().Find(p => p?.Item.id == itemID);
+            if (item == null)
+                return null;
             return item?.Item;
         }
 

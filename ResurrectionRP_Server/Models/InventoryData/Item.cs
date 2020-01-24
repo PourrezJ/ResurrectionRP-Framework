@@ -133,7 +133,7 @@ namespace ResurrectionRP_Server.Models
                     if (ph.AddItem(pickup.Item, pickup.Quantite))
                     {
                         //client.PlayAnimation("putdown_low", "pickup_object", 49);
-                        pickup.Delete();
+                        Task.Run(()=>pickup.Delete());
                     }
                     else
                         client.SendNotificationError("Action impossible.");

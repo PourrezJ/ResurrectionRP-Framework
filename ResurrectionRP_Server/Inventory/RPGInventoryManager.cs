@@ -915,8 +915,8 @@ namespace ResurrectionRP_Server.Inventory
                         Alt.Server.LogError($"[RPGInventoryManager.RPGInventory_SplitItemInventory_SRV()] inventoryType: {inventoryType}, itemID: {itemID}, newSlot: {newSlot}, oldSlot: {oldSlot}, oldCount: {oldCount}, newCount: {newCount}, splitCount: {splitCount}, inv.InventoryList.Length: {inv.InventoryList.Length} - {ex}");
                     }
 
-                    new RPGInventoryMenu(menu.Inventory, menu.Outfit, menu.Bag, menu.Distant).OpenMenu(client);
-
+                    //new RPGInventoryMenu(menu.Inventory, menu.Outfit, menu.Bag, menu.Distant).OpenMenu(client);
+                    Refresh(client, menu);
                 }
             }
         }

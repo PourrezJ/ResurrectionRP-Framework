@@ -20,11 +20,11 @@ namespace ResurrectionRP_Server.Streamer
         {
             AltNetworking.Configure(options =>
             {
-                /*
+                
                 if (!string.IsNullOrEmpty(Config.GetSetting<string>("StreamerIP")))
                     options.Ip = Config.GetSetting<string>("StreamerIP");
-                    */
-                options.Ip = Utils.Util.GetIPAddress();
+                    
+                //options.Ip = Utils.Util.GetIPAddress();
                 options.Port = 46429;
             });
 

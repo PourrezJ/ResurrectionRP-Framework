@@ -550,7 +550,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
                         Alt.Server.LogError(ex.ToString());
                     }
                 });
-            })         
+            });         
         }
 
         public void UpdateMilageAndFuel()

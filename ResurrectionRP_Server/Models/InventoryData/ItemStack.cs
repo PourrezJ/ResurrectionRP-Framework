@@ -33,7 +33,7 @@ namespace ResurrectionRP_Server.Models
 
         internal object Clone()
         {
-            return MemberwiseClone();
+            return ObjectCloner.ObjectCloner.DeepClone(this);
         }
     }
 }

@@ -126,9 +126,6 @@ export class Interaction {
                     else if (raycastResult.isHit && raycastResult.entityType == 3 && Utils.Distance(alt.Player.local.pos, raycastResult.pos) <= Globals.MAX_INTERACTION_DISTANCE) {
                         alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId, game.getEntityHeading(raycastResult.hitEntity));
                     }
-                    else if (key == 69 && this.isInColshape()) {
-                        alt.emitServer('InteractionInColshape', this.colshapes[0]);
-                    }
                     else {
                         alt.emitServer('OnKeyPress', key, JSON.stringify(raycastResult), null, null, objNetId, game.getEntityHeading(raycastResult.hitEntity));
                     }

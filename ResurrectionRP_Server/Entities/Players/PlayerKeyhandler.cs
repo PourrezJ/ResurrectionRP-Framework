@@ -147,6 +147,13 @@ namespace ResurrectionRP_Server.Entities.Players
                     break;
 
                 case ConsoleKey.E:
+
+                    if (Colshape.ColshapeManager.IsInColShape(client))
+                    {
+                        Colshape.ColshapeManager.OnEntityInteractInColshape(client);
+                        return;
+                    }
+
                     if (client.IsInVehicle)
                         return;
 

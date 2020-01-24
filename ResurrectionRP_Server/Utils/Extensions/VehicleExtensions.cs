@@ -85,7 +85,7 @@ namespace ResurrectionRP_Server
 
         public static async Task FreezeAsync(this IVehicle vehicle, bool freeze)
         {
-            if (!vehicle.Exists)
+            if (!await vehicle.ExistsAsync())
                 return;
 
             await vehicle.SetSyncedMetaDataAsync("IsFreezed", freeze);
@@ -131,6 +131,14 @@ namespace ResurrectionRP_Server
                 return true;
 
             return false;
+        }
+
+        public static void SetVehicleOnGroundProperly(this IVehicle vehicle, IPlayer client)
+        {
+            if (!vehicle.Exists)
+                return;
+
+            client.EmitLocked("SetVehicleOnGroundProperly", vehicle);
         }
     }
 }

@@ -6,6 +6,7 @@ using ResurrectionRP_Server.Entities.Players;
 using ResurrectionRP_Server.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ResurrectionRP_Server.Entities.Vehicles;
 
 namespace ResurrectionRP_Server.Teleport
 {
@@ -78,47 +79,43 @@ namespace ResurrectionRP_Server.Teleport
                 }
                 else
                 {
-                    if (teleport.VehicleAllowed && client.Vehicle != null)
-                    {
-                        var vehicle = client.Vehicle;
-                        vehicle.GetVehicleHandler().WasTeleported = true;
-                        if (data.State == TeleportState.Enter)
-                        {
-                            var location = teleport.Sortie[0].Location;
-                            client.RequestCollisionAtCoords(location.Pos);
-                            vehicle.Position = location.Pos;
-                            vehicle.Rotation = location.Rot;
-                        }
-                        else
-                        {
-                            client.RequestCollisionAtCoords(teleport.Entree.Pos);
-                            vehicle.Position = teleport.Entree.Pos;
-                            vehicle.Rotation = teleport.Entree.Rot;
-                        }
-                    }
-                    else
-                    {
-                        if (data.State == TeleportState.Enter)
-                        {
-                            var location = teleport.Sortie[0].Location;
-                            client.RequestCollisionAtCoords(location.Pos);
-                            client.Position = location.Pos;
-                            client.Rotation = location.Rot;
-                        }
-                        else
-                        {
-                            client.RequestCollisionAtCoords(teleport.Entree.Pos);
-                            client.Position = teleport.Entree.Pos;
-                            client.Rotation = teleport.Entree.Rot;
-                        }
-                    }
+                    client.Emit("FadeOut", 1000);
+                    Location location = (data.State == TeleportState.Enter) ? teleport.Sortie[0].Location : teleport.Entree;
+                    client.RequestCollisionAtCoords(location.Pos);
 
-                    client.Freeze(true);
+                    VehicleHandler vehicle = client.Vehicle as VehicleHandler;
 
-                    Task.Run(async () =>
+                    if (vehicle != null)
+                        vehicle.Freeze(true);
+
+                    Utils.Util.Delay(2000, async () =>
                     {
-                        await Task.Delay(250);
-                        client.Freeze(false);
+                        await AltAsync.Do(() =>
+                        {
+                            if (!client.Exists)
+                                return;
+
+                            if (teleport.VehicleAllowed && vehicle != null)
+                            {
+                                vehicle.WasTeleported = true;
+                                /*
+                                foreach(IPlayer player in client.GetNearestPlayers(150, false))
+                                {
+                                    player.EmitLocked("SetVehiclePosition", vehicle, location.Pos.ConvertToVector3Serialized());
+                                }*/
+
+                                vehicle.Position= location.Pos;
+                                vehicle.SetVehicleOnGroundProperly(client);
+                                vehicle.Rotation = location.Rot;
+                                vehicle.Freeze(false);
+                            }
+                            else
+                            {
+                                client.Position = location.Pos;
+                                client.Rotation = location.Rot;
+                            }
+                            client.EmitLocked("FadeIn", 1000);
+                        });
                     });
                 }
             }

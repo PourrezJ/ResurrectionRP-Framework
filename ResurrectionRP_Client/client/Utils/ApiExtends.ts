@@ -167,4 +167,12 @@ export function initialize()
     alt.onServer('PlaySoundFromEntity', (entity: alt.Entity, id: number, audioName: string, audioRef: string) => {
         game.playSoundFromEntity(id, audioName, entity.scriptID, audioRef, true, 0);
     });
+
+    alt.onServer('SetVehicleOnGroundProperly', (vehicle: alt.Vehicle) => {
+        game.setVehicleOnGroundProperly(vehicle.scriptID, 5);
+    });
+
+    alt.onServer('SetVehiclePosition', (vehicle: alt.Vehicle, pos: Vector3) => {
+        game.setEntityCoords(vehicle.scriptID, pos.x, pos.y, pos.z, false, false, false, false);
+    });
 }

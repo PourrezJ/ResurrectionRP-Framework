@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System;
 using System.Numerics;
 using System.Threading;
+using System.Linq;
 
 namespace ResurrectionRP_Server.Colshape
 {
@@ -35,7 +36,6 @@ namespace ResurrectionRP_Server.Colshape
         {
             Alt.OnPlayerDisconnect += OnPlayerDisconnect;
             Alt.OnVehicleRemove += OnVehicleRemove;
-            Alt.OnClient<IPlayer, long>("InteractionInColshape", OnEntityInteractInColshape);
 
             var thread = new Thread(Loop)
             {
@@ -238,7 +238,7 @@ namespace ResurrectionRP_Server.Colshape
             }
         }
 
-        private static void OnEntityInteractInColshape(IPlayer client, long colshapeID)
+        public static void OnEntityInteractInColshape(IPlayer client)
         {
             try
             {
@@ -246,20 +246,16 @@ namespace ResurrectionRP_Server.Colshape
 
                 lock (_colshapes)
                 {
-                    if (!_colshapes.ContainsKey(colshapeID))
-                        return;
-
-                    IColshape colshape = _colshapes[colshapeID];
-
-                    if (colshape.IsEntityIn(client))
+                    foreach(var colshape in _colshapes)
                     {
-                        AltAsync.Do(() =>
+                        if (colshape.Value.IsEntityIn(client))
                         {
-                            colshape.PlayerInteractInColshape(client);
-                            OnPlayerInteractInColshape?.Invoke(colshape, client);
+                            colshape.Value.PlayerInteractInColshape(client);
+                            OnPlayerInteractInColshape?.Invoke(colshape.Value, client);
                             if (GameMode.IsDebug)
-                                Alt.Log($"[Colshape {colshape.Id}] Player {client.Id} interacting, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Entities.Count}");
-                        });    
+                                Alt.Log($"[Colshape {colshape.Value.Id}] Player {client.Id} interacting, {Math.Round((DateTime.Now - startTime).TotalMilliseconds, 4)}ms, Entities: {colshape.Value.Entities.Count}");
+                            return;
+                        }   
                     }
                 }
             }
@@ -267,6 +263,15 @@ namespace ResurrectionRP_Server.Colshape
             {
                 Alt.Server.LogError(ex.ToString());
             }
+        }
+
+        public static bool IsInColShape(IEntity entity) { 
+            foreach(var colshape in _colshapes)
+            {
+                if (colshape.Value.IsEntityIn(entity))
+                    return true;
+            }
+            return false;
         }
         #endregion
     }

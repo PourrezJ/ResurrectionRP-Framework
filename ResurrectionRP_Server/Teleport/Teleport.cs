@@ -1,5 +1,4 @@
-﻿using AltV.Net;
-using AltV.Net.Elements.Entities;
+﻿using AltV.Net.Elements.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Colshape;
@@ -8,7 +7,6 @@ using ResurrectionRP_Server.Entities;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
-using ResurrectionRP_Server.Streamer.Data;
 
 namespace ResurrectionRP_Server.Teleport
 {
@@ -21,11 +19,6 @@ namespace ResurrectionRP_Server.Teleport
     [BsonIgnoreExtraElements]
     public class Teleport
     {
-        public delegate void OnTeleport(IPlayer client, TeleportState state);
-
-        [JsonIgnore]
-        public OnTeleport OnTeleportEvent { get; set; }
-
         public int ID { get; private set; }
         public bool VehicleAllowed { get; set; }
         public Location Entree { get; set; }
@@ -45,10 +38,12 @@ namespace ResurrectionRP_Server.Teleport
             set => whitelist = value;
         }
 
-        //public Teleport(Location Entree, Location Sorti, float Scale = 1f, bool VehicleAllowed = false, int opacite = 128, uint dimensionIN = 0, uint dimensionOUT = 0, string menutitle = "Ouvrir la porte", bool iswhitelisted = false, List<string> whitelist = null)
         public Teleport()
         {
-            ID = TeleportManager.Teleports.Count + 1;
+            lock (TeleportManager.Teleports)
+            {
+                ID = TeleportManager.Teleports.Count + 1;
+            }
         }
 
         public static Teleport CreateTeleport(Location entree, List<TeleportEtage> sorti, Vector3 scale, bool vehicleAllowed = false, byte opacite = 128, short dimensionIN = 0, short dimensionOUT = 0, string menutitle = "Ouvrir la porte", bool iswhitelisted = false, List<string> whitelist = null, bool hide = false)

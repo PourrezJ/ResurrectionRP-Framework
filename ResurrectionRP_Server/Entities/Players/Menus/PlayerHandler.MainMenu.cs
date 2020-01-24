@@ -103,7 +103,7 @@ namespace ResurrectionRP_Server.Entities.Players
 
                         foreach(var value in GameMode.Instance.Economy.Bourse.Values)
                         {
-                            var menuitem = new MenuItem(LoadItem.GetItemWithID(value.Key)?.name, "", "", rightLabel: value.Value + "%");
+                            var menuitem = new MenuItem(LoadItem.GetItemWithID(value.Key)?.name, "", "", rightLabel: Math.Round(value.Value, 2) + "%");
                             menuitem.Description = "Prix à l'unité: $" + GameMode.Instance.Economy.Bourse.GetCurrentPrice(value.Key, FarmManager.GetItemPrice(value.Key));
                             menu.Add(menuitem);
                         }

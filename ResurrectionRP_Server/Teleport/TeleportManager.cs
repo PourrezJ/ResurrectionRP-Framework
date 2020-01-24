@@ -98,14 +98,14 @@ namespace ResurrectionRP_Server.Teleport
                             if (teleport.VehicleAllowed && vehicle != null)
                             {
                                 vehicle.WasTeleported = true;
-                                /*
+                                
                                 foreach(IPlayer player in client.GetNearestPlayers(150, false))
                                 {
                                     player.EmitLocked("SetVehiclePosition", vehicle, location.Pos.ConvertToVector3Serialized());
-                                }*/
+                                }
 
                                 vehicle.Position= location.Pos;
-                                vehicle.SetVehicleOnGroundProperly(client);
+                                //vehicle.SetVehicleOnGroundProperly(client);
                                 vehicle.Rotation = location.Rot;
                                 vehicle.Freeze(false);
                             }

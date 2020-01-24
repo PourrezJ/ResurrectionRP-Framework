@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using Blips = ResurrectionRP_Server.Entities.Blips.Blips;
 using ResurrectionRP_Server.Entities.Peds;
-using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.Streamer
 {

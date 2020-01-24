@@ -24,11 +24,11 @@ namespace ResurrectionRP_Server.Farms
 
             BlipColor = (BlipColor)73;
 
-            Process_QuantityNeeded = 4;
+            Process_QuantityNeeded = 3;
             Process_Time = 50000;
             ItemIDBrute = ItemID.Sable;
             ItemIDProcess = ItemID.BouteilleTraite;
-            ItemPrice = 248;
+            ItemPrice = 268;
         }
     }
 }

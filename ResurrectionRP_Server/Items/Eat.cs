@@ -92,6 +92,7 @@ namespace ResurrectionRP_Server.Items
                 Type = (int)Streamer.Data.EntityType.Ped,
                 RemoteID = client.Id
             };
+
             Object = Entities.Objects.WorldObject.CreateObject((int)Alt.Hash(props), client.Position.ConvertToVector3(), new Vector3(), attach, false);
             if (Food > 0)
             {

@@ -85,7 +85,7 @@ namespace ResurrectionRP_Server.Entities.Objects
             ListObject.TryAdd(resuobject.ID, resuobject);
             return resuobject;
         }
-        /*
+        
         public static void AttachToEntity(WorldObject ent1, WorldObject target, string bone, Vector3 positionOffset, Vector3 rotationOffset)
         {
             var attach = new Attachment()
@@ -100,10 +100,10 @@ namespace ResurrectionRP_Server.Entities.Objects
             target.Attachment = attach;
             ent1.SetData("attach", JsonConvert.SerializeObject(attach));
         }
-        */
+        
         public static void AttachToEntity(IEntity entity, WorldObject target, string bone, Vector3 positionOffset, Vector3 rotationOffset)
         {
-            var attach = new Models.Attachment()
+            Attachment attach = new Attachment()
             {
                 Bone = bone,
                 PositionOffset = positionOffset,
@@ -123,7 +123,8 @@ namespace ResurrectionRP_Server.Entities.Objects
             }
 
             target.Attachment = attach;
-            entity.SetData("attach", JsonConvert.SerializeObject(attach));
+
+            target.NetworkEntity.SetData("attach", JsonConvert.SerializeObject(attach));
         }
 
         public void DetachEntity()

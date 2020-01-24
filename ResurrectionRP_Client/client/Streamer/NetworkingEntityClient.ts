@@ -130,7 +130,6 @@ export class NetworkingEntityClient {
 
     onDataChange = async (entity: any, data: any) => {
         let count = 0;
-        alt.log(`entity ${entity} ${JSON.stringify(data)}`);
         // Creating an entity can take some time so wait until it is created before updating it
         const interval = alt.setInterval(() => {
             if (NetworkingEntityClient.EntityList[entity.id] == undefined || NetworkingEntityClient.EntityList[entity.id] == null) {
@@ -240,15 +239,13 @@ export class NetworkingEntityClient {
                         entity.data.freeze.boolValue
                     );
                 }
-                alt.log(JSON.stringify(entity.data));
-
+                alt.log(entity.data.attach.stringValue);
                 if (JSON.parse(entity.data.attach.stringValue) != null)
                     this.objectAttach(entity.id, JSON.parse(entity.data.attach.stringValue));
                 break;
 
 
             case 2: // Text label
-                alt.log(JSON.stringify(entity));
                 await this.streamTextLabel(
                     entity.id,
                     entity.data.text.stringValue,
@@ -278,7 +275,6 @@ export class NetworkingEntityClient {
     }
 
     private deleteObject = (entityid: number) => {
-        alt.log("deleteObject needed: " + entityid);
         if (NetworkingEntityClient.EntityList[entityid] == undefined)
             return;
 
@@ -291,7 +287,6 @@ export class NetworkingEntityClient {
             game.detachEntity(entity, true, true);
 
         game.deleteObject(entity);
-        alt.log("deleteObject ok: " + entityid);
     }
 
     private streamPed = async (id: number, model: any, x: number, y: number, z: number, heading: number) => {
@@ -318,7 +313,6 @@ export class NetworkingEntityClient {
     private objectAttach = (entityId: number, attach: any) => {
         switch (attach.Type) {
             case 0:
-                alt.log(`attach: ${alt.Player.local.id} ${attach.RemoteID}`)
                 var player: alt.Player = alt.Player.local.scriptID != attach.RemoteID ? alt.Player.all.find(p => p.id == attach.RemoteID) : alt.Player.local;
 
                 let boneID = 0;

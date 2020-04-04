@@ -7,12 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResurrectionRP_Server", "Re
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResurrectionRP_Client", "ResurrectionRP_Client\ResurrectionRP_Client.csproj", "{2574F603-4B6C-4A30-BFDD-E3BC09EEDFDF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AltV.Net", "coreclr-module\api\AltV.Net\AltV.Net.csproj", "{8CB3EADA-64C7-42F9-9A5D-698E470EBEE1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AltV.Net.Async", "coreclr-module\api\AltV.Net.Async\AltV.Net.Async.csproj", "{A21F8D4F-295C-430D-8115-72377BB2A41E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AltV.Net.NetworkingEntity", "coreclr-module\api\AltV.Net.NetworkingEntity\AltV.Net.NetworkingEntity.csproj", "{89AF7940-35FB-417E-B2D7-7FA200493FD0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,42 +40,6 @@ Global
 		{2574F603-4B6C-4A30-BFDD-E3BC09EEDFDF}.Testing|Any CPU.ActiveCfg = Release|Any CPU
 		{2574F603-4B6C-4A30-BFDD-E3BC09EEDFDF}.Testing|x64.ActiveCfg = Release|x64
 		{2574F603-4B6C-4A30-BFDD-E3BC09EEDFDF}.Testing|x64.Build.0 = Release|x64
-		{8CB3EADA-64C7-42F9-9A5D-698E470EBEE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CB3EADA-64C7-42F9-9A5D-698E470EBEE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8CB3EADA-64C7-42F9-9A5D-698E470EBEE1}.Debug|x64.ActiveCfg = Debug|x64
-		{8CB3EADA-64C7-42F9-9A5D-698E470EBEE1}.Debug|x64.Build.0 = Debug|x64
-		{8CB3EADA-64C7-42F9-9A5D-698E470EBEE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8CB3EADA-64C7-42F9-9A5D-698E470EBEE1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8CB3EADA-64C7-42F9-9A5D-698E470EBEE1}.Release|x64.ActiveCfg = Release|x64
-		{8CB3EADA-64C7-42F9-9A5D-698E470EBEE1}.Release|x64.Build.0 = Release|x64
-		{8CB3EADA-64C7-42F9-9A5D-698E470EBEE1}.Testing|Any CPU.ActiveCfg = Testing|Any CPU
-		{8CB3EADA-64C7-42F9-9A5D-698E470EBEE1}.Testing|Any CPU.Build.0 = Testing|Any CPU
-		{8CB3EADA-64C7-42F9-9A5D-698E470EBEE1}.Testing|x64.ActiveCfg = Testing|x64
-		{8CB3EADA-64C7-42F9-9A5D-698E470EBEE1}.Testing|x64.Build.0 = Testing|x64
-		{A21F8D4F-295C-430D-8115-72377BB2A41E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A21F8D4F-295C-430D-8115-72377BB2A41E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A21F8D4F-295C-430D-8115-72377BB2A41E}.Debug|x64.ActiveCfg = Debug|x64
-		{A21F8D4F-295C-430D-8115-72377BB2A41E}.Debug|x64.Build.0 = Debug|x64
-		{A21F8D4F-295C-430D-8115-72377BB2A41E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A21F8D4F-295C-430D-8115-72377BB2A41E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A21F8D4F-295C-430D-8115-72377BB2A41E}.Release|x64.ActiveCfg = Release|x64
-		{A21F8D4F-295C-430D-8115-72377BB2A41E}.Release|x64.Build.0 = Release|x64
-		{A21F8D4F-295C-430D-8115-72377BB2A41E}.Testing|Any CPU.ActiveCfg = Debug|Any CPU
-		{A21F8D4F-295C-430D-8115-72377BB2A41E}.Testing|Any CPU.Build.0 = Debug|Any CPU
-		{A21F8D4F-295C-430D-8115-72377BB2A41E}.Testing|x64.ActiveCfg = Release|x64
-		{A21F8D4F-295C-430D-8115-72377BB2A41E}.Testing|x64.Build.0 = Release|x64
-		{89AF7940-35FB-417E-B2D7-7FA200493FD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{89AF7940-35FB-417E-B2D7-7FA200493FD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{89AF7940-35FB-417E-B2D7-7FA200493FD0}.Debug|x64.ActiveCfg = Debug|x64
-		{89AF7940-35FB-417E-B2D7-7FA200493FD0}.Debug|x64.Build.0 = Debug|x64
-		{89AF7940-35FB-417E-B2D7-7FA200493FD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{89AF7940-35FB-417E-B2D7-7FA200493FD0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{89AF7940-35FB-417E-B2D7-7FA200493FD0}.Release|x64.ActiveCfg = Release|x64
-		{89AF7940-35FB-417E-B2D7-7FA200493FD0}.Release|x64.Build.0 = Release|x64
-		{89AF7940-35FB-417E-B2D7-7FA200493FD0}.Testing|Any CPU.ActiveCfg = Debug|Any CPU
-		{89AF7940-35FB-417E-B2D7-7FA200493FD0}.Testing|Any CPU.Build.0 = Debug|Any CPU
-		{89AF7940-35FB-417E-B2D7-7FA200493FD0}.Testing|x64.ActiveCfg = Release|x64
-		{89AF7940-35FB-417E-B2D7-7FA200493FD0}.Testing|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

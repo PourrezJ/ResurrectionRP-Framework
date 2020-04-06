@@ -21,8 +21,6 @@ using AltV.Net.Data;
 using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Services;
 using ResurrectionRP_Server.Illegal;
-using ResurrectionRP_Server.Entities.Worlds;
-using ResurrectionRP_Server.Jobs;
 using System.IO;
 using ResurrectionRP_Server.DrivingSchool;
 using ResurrectionRP_Server.Utils;

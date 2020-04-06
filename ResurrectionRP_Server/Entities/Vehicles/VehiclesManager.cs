@@ -30,7 +30,7 @@ namespace ResurrectionRP_Server.Entities.Vehicles
             Alt.OnVehicleRemove += OnVehicleRemove;
 
             Alt.OnClient<IPlayer, IVehicle>("LockUnlockVehicle", LockUnlockVehicle);
-            Alt.OnClient("UpdateTrailer", UpdateTrailerState);
+            Alt.OnClient<IPlayer, VehicleHandler, bool, VehicleHandler>("UpdateTrailer", UpdateTrailerState);
         }
         #endregion
 
@@ -70,34 +70,17 @@ namespace ResurrectionRP_Server.Entities.Vehicles
 
         }
 
-        public static void UpdateTrailerState(IPlayer player, object[] args)
+        public static void UpdateTrailerState(IPlayer player, VehicleHandler vehicleHandler, bool hasTrailer, VehicleHandler trailer)
         {
             if (!player.Exists)
                 return;
 
-            if (args[0] == null || args[1] == null)
+            if (vehicleHandler == null)
                 return;
 
-            if (GameMode.IsDebug)
-                Alt.Server.LogInfo("VehicleManager | Update trailer state for " + player.GetPlayerHandler().PID + " to " + args[1] + " for " + ((IVehicle)(args[0])).NumberplateText);
-
-            VehicleHandler veh = ((IVehicle)args[0])?.GetVehicleHandler();
-
-            if (veh == null)
-                return;
-
-            veh.HasTrailer = (bool)args[1];
-
-            if (args[2] != null)
-            {
-                veh.Trailer = (IEntity)args[2];
-                ((IVehicle)veh.Trailer)?.GetVehicleHandler().UpdateInBackground();
-            }
-            else
-            {
-                ((IVehicle)veh.Trailer)?.GetVehicleHandler().UpdateInBackground();
-                veh.Trailer = null;
-            }
+            vehicleHandler.HasTrailer = hasTrailer;
+            vehicleHandler.Trailer = trailer;
+            vehicleHandler.UpdateInBackground();
         }
 
         private static void LockUnlockVehicle(IPlayer player, IVehicle vehicle)

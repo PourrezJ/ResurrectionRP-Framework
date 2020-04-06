@@ -16,7 +16,6 @@ using SaltyServer;
 using ResurrectionRP_Server.Entities.Players.Data;
 using ResurrectionRP_Server.Utils;
 using ResurrectionRP_Server.Models.InventoryData;
-using ResurrectionRP_Server.Entities.Worlds;
 using ResurrectionRP_Server.Items;
 
 namespace ResurrectionRP_Server.Entities.Players

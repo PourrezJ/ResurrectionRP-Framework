@@ -35,22 +35,21 @@ namespace ResurrectionRP_Server.Jobs
 
         public async Task Init()
         {
-            AltAsync.OnClient("Jobs_Dustman_Depot", OnDepot);
+            Alt.OnClient<IPlayer>("Jobs_Dustman_Depot", OnDepot);
             DustManClient.SendNotificationSuccess($"Vous devez vous rendre dans la zone de ~g~{Zone.NameZone}~w~.");
             if (GameMode.IsDebug)
             DustManClient.SetWaypoint(Zone.ZonePosition, true);
             await DustManClient.EmitAsync("Jobs_Dustman", JsonConvert.SerializeObject(Zone.ZonePosition), JsonConvert.SerializeObject(Zone.TrashList));
         }
 
-        public Task OnDepot(IPlayer client, object[] args)
+        public void OnDepot(IPlayer client)
         {
             if (client.Id != DustManClient.Id)
-                return Task.CompletedTask;
+                return;
 
             depotColShape = Alt.CreateColShapeCircle(DepotZone, 8);
             AltAsync.OnColShape += OnEnterColShape;
             client.SetWaypoint(DepotZone);
-            return Task.CompletedTask;
         }
 
         public Task OnEnterColShape(IColShape colShape, IEntity entity, bool state)

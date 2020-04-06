@@ -40,30 +40,30 @@ namespace ResurrectionRP_Server.EventHandlers
          *  Release format: {
          *              }
          **/
-        public static void InteractEmergencyCall(IPlayer client, object[] args)
+        public static void InteractEmergencyCall(IPlayer client, string reason, string data, string data2)
         {
             if (!client.Exists)
                 return;
-            var reason = args[0];
+
             switch (reason)
             {
 
                 case "emit":
-                    OnPlayerEmitEmergencyCall?.Invoke(client, args[1].ToString(), client.Position.ConvertToVector3(), args[2].ToString());
+                    OnPlayerEmitEmergencyCall?.Invoke(client, data, client.Position.ConvertToVector3(), data2);
                     Phone.PhoneManager.ClosePhone(client);
                     break;
 
 
                 case "release":
-                    OnPlayerReleaseEmergencyCall?.Invoke(client, int.Parse(args[1] + ""));
+                    OnPlayerReleaseEmergencyCall?.Invoke(client, int.Parse(data));
                     break;
 
                 case "state":
-                    OnPlayerChangeStateEmergencyCall?.Invoke(client, args[1].ToString(), (bool)args[2]);
+                    OnPlayerChangeStateEmergencyCall?.Invoke(client, data, bool.Parse(data2));
                     break;
 
                 case "remove":
-                    OnPlayerRemoveEmergencyCall?.Invoke(client, int.Parse(args[1] + ""));
+                    OnPlayerRemoveEmergencyCall?.Invoke(client, int.Parse(data));
                     break;
 
                 case "openMenu":

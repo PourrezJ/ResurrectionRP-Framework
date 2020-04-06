@@ -38,9 +38,9 @@ namespace SaltyServer
             IngameChannelPassword = Config.GetSetting<string>("IngameChannelPassword");
 
             Alt.OnPlayerDisconnect += OnPlayerDisconnect;
-            Alt.OnClient(SaltyShared.Event.Voice_RejectedVersion, OnRejectedVersion);
-            Alt.OnClient(SaltyShared.Event.Voice_TalkingOnRadio, OnPlayerTalkingOnRadio);
-            Alt.OnClient(SaltyShared.Event.Voice_IsTalking, OnPlayerTalking);
+            Alt.OnClient<IPlayer, string, string>(SaltyShared.Event.Voice_RejectedVersion, OnRejectedVersion);
+            Alt.OnClient<IPlayer, string, bool>(SaltyShared.Event.Voice_TalkingOnRadio, OnPlayerTalkingOnRadio);
+            Alt.OnClient<IPlayer, bool>(SaltyShared.Event.Voice_IsTalking, OnPlayerTalking);
         }
 
         public static void OnPlayerDisconnect(IPlayer client, string reason)
@@ -59,13 +59,10 @@ namespace SaltyServer
             }
         }
 
-        private static void OnRejectedVersion(IPlayer client, object[] args)
+        private static void OnRejectedVersion(IPlayer client, string updateBranch, string version)
         {
             if (!client.Exists)
                 return;
-
-            string updateBranch = args[0].ToString();
-            string version = args[1].ToString();
 
             if (string.IsNullOrWhiteSpace(RequiredUpdateBranch) && string.IsNullOrWhiteSpace(MinimumPluginVersion))
                 return;
@@ -78,7 +75,7 @@ namespace SaltyServer
             client.Kick("SaltyChat version");
         }
 
-        public static void OnPlayerTalking(IPlayer client, object[] args)
+        public static void OnPlayerTalking(IPlayer client, bool isTalking)
         {
             if (!client.Exists)
                 return;
@@ -90,17 +87,15 @@ namespace SaltyServer
             {
                 if (!cl.Client.Exists)
                     continue;
-                cl.Client.Emit(SaltyShared.Event.Voice_IsTalking, tsName, (bool)args[0]);
+                cl.Client.Emit(SaltyShared.Event.Voice_IsTalking, tsName, isTalking);
             }
         }
 
-        public static void OnPlayerTalkingOnRadio(IPlayer client, object[] args)
+        public static void OnPlayerTalkingOnRadio(IPlayer client, string radioChannel, bool isSending)
         {
             if (!client.Exists)
                 return;
 
-            string radioChannel = args[0].ToString();
-            bool isSending = (bool)args[1];
             PlayerTalkingOnRadioChannel(client, radioChannel, isSending);
         }
 

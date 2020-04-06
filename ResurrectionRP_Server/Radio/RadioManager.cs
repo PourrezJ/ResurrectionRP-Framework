@@ -17,7 +17,7 @@ namespace ResurrectionRP_Server.Radio
 
         public static void Init()
         {
-            Alt.OnClient("RadioManager", EventTrigered);
+            Alt.OnClient<IPlayer, string, string, string>("RadioManager", EventTrigered);
         }
         public static void Close(IPlayer client)
         {
@@ -40,7 +40,7 @@ namespace ResurrectionRP_Server.Radio
             return false;
         }
 
-        private static void EventTrigered(IPlayer client, object[] args)
+        private static void EventTrigered(IPlayer client, string eventName, string data, string data2)
         {
             if (!client.Exists)
                 return;
@@ -57,14 +57,14 @@ namespace ResurrectionRP_Server.Radio
             if (radio == null)
                 return;
 
-            switch (args[0])
+            switch (eventName)
             {
                 case "Open":
                     OpenRadio(player, ph.RadioSelected);
                     break;
 
                 case "OnOff":
-                    radio.Statut = ((bool)args[1]) ? RadioModes.LISTENING : RadioModes.OFF;
+                    radio.Statut = (bool.Parse(data)) ? RadioModes.LISTENING : RadioModes.OFF;
 
                     if (radio.Statut == RadioModes.OFF)
                         Voice.RemovePlayerRadioChannel(player);
@@ -80,12 +80,12 @@ namespace ResurrectionRP_Server.Radio
                 case "SaveFrequence":
                     try
                     {
-                        if (args[2] == null)
+                        if (string.IsNullOrEmpty(data2))
                             return;
 
-                        if (double.TryParse(args[2].ToString(), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double frequence))
+                        if (double.TryParse(data2, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double frequence))
                         {
-                            radio.SaveFrequenceRadio(Convert.ToInt32(args[1]), frequence);
+                            radio.SaveFrequenceRadio(Convert.ToInt32(data), frequence);
                             Voice.SetRadioChannel(player, radio.GetCurrentFrequence().ToString());
                             player.GetPlayerHandler().UpdateFull();
                         }
@@ -98,12 +98,12 @@ namespace ResurrectionRP_Server.Radio
                     break;
 
                 case "ChangeChannel":
-                    radio.CurrentChannel = int.Parse(args[1].ToString());
+                    radio.CurrentChannel = int.Parse(data);
                     Voice.SetRadioChannel(player, radio.GetCurrentFrequence().ToString());
                     break;
 
                 case "ChangeVolume":
-                    radio.Volume = int.Parse(args[1].ToString());
+                    radio.Volume = int.Parse(data);
                     break;
 
                 default:

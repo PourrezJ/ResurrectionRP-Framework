@@ -136,7 +136,7 @@ namespace ResurrectionRP_Server.Jobs
 
             #endregion
 
-            Alt.OnServer("DustMan_Callback", DustMan_Callback);
+            Alt.OnServer<IPlayer>("DustMan_Callback", DustMan_Callback);
             /*
             Utils.Utils.SetInterval(() =>
             {
@@ -184,11 +184,10 @@ namespace ResurrectionRP_Server.Jobs
             }
         }
 
-        private void DustMan_Callback(object[] args)
+        private void DustMan_Callback(IPlayer client)
         {
-            IPlayer client = args[0] as IPlayer;
             if (!client.Exists)
-                return ;
+                return;
             
             PlayerHandler ph = client.GetPlayerHandler();
             if (ph != null)
@@ -205,7 +204,7 @@ namespace ResurrectionRP_Server.Jobs
             }
         }
 
-        private async void DustManCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
+        private void DustManCallBack(IPlayer client, Menu menu, IMenuItem menuItem, int itemIndex)
         {
             switch (menuItem.Id)
             {

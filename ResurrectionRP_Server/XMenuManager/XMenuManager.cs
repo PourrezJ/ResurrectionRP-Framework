@@ -2,9 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Concurrent;
-using System.Threading.Tasks;
 
 namespace ResurrectionRP_Server.XMenuManager
 {
@@ -17,46 +15,36 @@ namespace ResurrectionRP_Server.XMenuManager
         #region Constructor
         public static void Init()
         {
-            Alt.OnClient("XMenuManager_ExecuteCallback", XMenuManager_ExecuteCallback);
-            Alt.OnClient("XMenuManager_ClosedMenu", XMenuManager_ClosedMenu);
+            Alt.OnClient<IPlayer, int, string>("XMenuManager_ExecuteCallback", XMenuManager_ExecuteCallback);
+            Alt.OnClient<IPlayer>("XMenuManager_ClosedMenu", XMenuManager_ClosedMenu);
         }
         #endregion
 
         #region Sync Callback
-        private static void XMenuManager_ExecuteCallback(IPlayer client, object[] args)
+        private static void XMenuManager_ExecuteCallback(IPlayer client, int menuIndex, string data)
         {
             if (!client.Exists)
                 return;
 
-            try
+            if (_clientMenus.TryGetValue(client, out XMenu menu))
             {
-                int menuIndex = Convert.ToInt32(args[0]);
-                string data = args[1].ToString();
-
-                if (_clientMenus.TryGetValue(client, out XMenu menu))
+                if (!string.IsNullOrEmpty(data))
                 {
-                    if (!string.IsNullOrEmpty(data))
-                    {
-                        XMenu temp = JsonConvert.DeserializeObject<XMenu>(data);
+                    XMenu temp = JsonConvert.DeserializeObject<XMenu>(data);
 
-                        if (!string.IsNullOrEmpty(temp.Items[menuIndex]?.InputValue))
-                            menu.Items[menuIndex].InputValue = temp.Items[menuIndex].InputValue;
-                    }
-
-                    if (menu.Items[menuIndex] != null)
-                    {
-                        menu.Items[menuIndex].OnMenuItemCallback?.Invoke(client, menu, menu.Items[menuIndex], menuIndex, "");
-                        menu.Callback?.Invoke(client, menu, menu.Items[menuIndex], menuIndex, "");         
-                    }
+                    if (!string.IsNullOrEmpty(temp.Items[menuIndex]?.InputValue))
+                        menu.Items[menuIndex].InputValue = temp.Items[menuIndex].InputValue;
                 }
-            }
-            catch (Exception ex)
-            {
-                Alt.Server.LogError(ex.ToString());
+
+                if (menu.Items[menuIndex] != null)
+                {
+                    menu.Items[menuIndex].OnMenuItemCallback?.Invoke(client, menu, menu.Items[menuIndex], menuIndex, "");
+                    menu.Callback?.Invoke(client, menu, menu.Items[menuIndex], menuIndex, "");
+                }
             }
         }
 
-        public static void XMenuManager_ClosedMenu(IPlayer client, object[] args)
+        public static void XMenuManager_ClosedMenu(IPlayer client)
         {
             if (!client.Exists)
                 return;
@@ -77,7 +65,7 @@ namespace ResurrectionRP_Server.XMenuManager
         {
             if (menu.Items.Count == 0 || menu.Items == null) return false;
             if (menu.Items.Count > 8)
-                Alt.Server.LogInfo($"ATTENTION LE XMENU {menu.Id} contient plus de 8 items");
+                Alt.Server.LogInfo($"Warning {menu.Id} have more 8 items");
             _clientMenus.TryRemove(client, out XMenu oldMenu);
 
             if (oldMenu != null)

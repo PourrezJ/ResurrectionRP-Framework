@@ -7,7 +7,6 @@ using MongoDB.Driver;
 using Newtonsoft.Json;
 using ResurrectionRP_Server.Entities.Players.Data;
 using ResurrectionRP_Server.Entities.Vehicles;
-using ResurrectionRP_Server.Entities.Worlds;
 using ResurrectionRP_Server.Factions;
 using ResurrectionRP_Server.Houses;
 using ResurrectionRP_Server.Illegal;
@@ -108,7 +107,6 @@ namespace ResurrectionRP_Server.Entities.Players
                 ph.IsOnline = false;
                 MenuManager.OnPlayerDisconnect(player);
                 FactionManager.OnPlayerDisconnected(player);
-                TrainManager.OnPlayerDisconnected(player);
 
                 if (Phone.PhoneManager.PhoneClientList.ContainsKey(player))
                     Phone.PhoneManager.PhoneClientList.TryRemove(player, out List<Phone.Phone> phoneList);

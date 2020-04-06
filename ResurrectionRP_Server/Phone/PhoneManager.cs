@@ -30,7 +30,7 @@ namespace ResurrectionRP_Server.Phone
         #region Constructor
         public static void Init()
         {
-            Alt.OnClient("PhoneMenuCallBack", PhoneMenuCallBack);
+            Alt.OnClient<IPlayer, string, string, string>("PhoneMenuCallBack", PhoneMenuCallBack);
         }
         #endregion
 
@@ -125,7 +125,7 @@ namespace ResurrectionRP_Server.Phone
         }
         #endregion
 
-        private static void PhoneMenuCallBack(IPlayer client, object[] args)
+        private static void PhoneMenuCallBack(IPlayer client, string eventName, string data, string data2)
         {
             if (client == null || !client.Exists)
                 return;
@@ -138,10 +138,10 @@ namespace ResurrectionRP_Server.Phone
             if (phone == null || ph == null)
                 return;
 
-            switch (args[0])
+            switch (eventName)
             {
                 case "SavePhoneSettings":
-                    phone.Settings = JsonConvert.DeserializeObject<PhoneSettings>(args[1].ToString()) ?? new PhoneSettings();
+                    phone.Settings = JsonConvert.DeserializeObject<PhoneSettings>(data) ?? new PhoneSettings();
                     break;
 
                 case "GetContacts":
@@ -149,7 +149,7 @@ namespace ResurrectionRP_Server.Phone
                     break;
 
                 case "AddOrEditContact":
-                    Address contact = JsonConvert.DeserializeObject<Address>(args[1].ToString());
+                    Address contact = JsonConvert.DeserializeObject<Address>(data);
 
                     if (string.IsNullOrEmpty(contact.originalNumber) && phone.TryAddNewContact(client, contact.contactName, contact.phoneNumber))
                         client.SendNotificationSuccess($"Vous avez ajouté le contact {contact.contactName}");
@@ -160,7 +160,7 @@ namespace ResurrectionRP_Server.Phone
                     break;
 
                 case "RemoveContact":
-                    if (phone.RemoveContactFromAddressBook(args[1].ToString()))
+                    if (phone.RemoveContactFromAddressBook(data))
                         client.SendNotificationSuccess("Contact Supprimé!!");
 
                     ph.UpdateFull();
@@ -172,7 +172,7 @@ namespace ResurrectionRP_Server.Phone
 
                 case "DeleteConversation":
                     var filter = Builders<Conversation>.Filter.And(
-                        Builders<Conversation>.Filter.Eq(p => p.receiver, (string)args[1]),
+                        Builders<Conversation>.Filter.Eq(p => p.receiver, data),
                         Builders<Conversation>.Filter.Eq(p => p.sender, phone.PhoneNumber)
                     );
 
@@ -184,27 +184,27 @@ namespace ResurrectionRP_Server.Phone
                     break;
 
                 case "GetMessages":
-                    phone.GetMessages(client, (string)args[1]);
+                    phone.GetMessages(client, data);
                     break;
 
                 case "SendMessage":
-                    phone.SendSMS(client, (string)args[1], (string)args[2]);
+                    phone.SendSMS(client, data, data2);
                     break;
 
                 case "initiateCall":
-                    phone.InitiateCall(client, args[1].ToString());
+                    phone.InitiateCall(client, data);
                     break;
 
                 case "cancelCall":
-                    phone.CancelCall(client, args[1].ToString());
+                    phone.CancelCall(client, data);
                     break;
 
                 case "endCall":
-                    phone.EndCall(client, args[1].ToString());
+                    phone.EndCall(client, data);
                     break;
 
                 case "acceptCall":
-                    phone.StartCall(client, args[1].ToString());
+                    phone.StartCall(client, data);
                     break;
 
                 case "ClosePhone":

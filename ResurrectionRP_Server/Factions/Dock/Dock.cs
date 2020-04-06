@@ -235,7 +235,7 @@ namespace ResurrectionRP_Server.Factions
                 }
             }
 
-            Alt.OnClient("OpenRackInventory", OpenRackInventory);
+            Alt.OnClient<IPlayer, string>("OpenRackInventory", OpenRackInventory);
 
             return this;
         }
@@ -385,12 +385,11 @@ namespace ResurrectionRP_Server.Factions
             return price;
         }
 
-        private void OpenRackInventory(IPlayer player, object[] args)
+        private void OpenRackInventory(IPlayer player, string id)
         {
             if (!player.Exists)
                 return;
 
-            string _id = args[0].ToString();
             var ph = player.GetPlayerHandler();
 
             if (ph == null)
@@ -406,19 +405,19 @@ namespace ResurrectionRP_Server.Factions
 
             Rack rack = null;
 
-            if (Quai.RackName == _id)
+            if (Quai.RackName == id)
             {
                 rack = Quai;
                 _inv = new RPGInventoryMenu(ph.PocketInventory, null, ph.BagInventory, Quai.InventoryBox.Inventory);
             }
-            else if (Importation.RackName == _id)
+            else if (Importation.RackName == id)
             {
                 rack = Importation;
                 _inv = new RPGInventoryMenu(ph.PocketInventory, null, ph.BagInventory, Importation.InventoryBox.Inventory);
             }
-            else if (Racks.Exists(p => p.RackName == _id))
+            else if (Racks.Exists(p => p.RackName == id))
             {
-                rack = Racks.Find(p => p.RackName == _id);
+                rack = Racks.Find(p => p.RackName == id);
                 _inv = new RPGInventoryMenu(ph.PocketInventory, null, ph.BagInventory, rack.InventoryBox.Inventory);
             }
 

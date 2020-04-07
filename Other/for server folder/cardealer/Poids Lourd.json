@@ -1,0 +1,61 @@
+{
+    "BlipSprite": 477,
+    "BlipPosition": {
+      "x": -273.761,
+      "y": 6048,
+      "z": 0
+    },
+    "LocationList": [
+      {
+        "position": {
+          "x": -268.76044,
+          "y": 6066.1978,
+          "z": 31.6
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 2.140625
+        }
+      },
+    {
+        "position": {
+          "x": -259.6088,
+          "y": 6058.8525,
+          "z": 31.9589
+        },
+        "rotation": {
+          "x": 0,
+          "y": 00,
+          "z": 2.14875
+        }
+      }
+    ],
+    "VehicleInfoList": [
+      {
+        "VehicleHash":  0x5A82F9AE,
+        "Name": "Hauler",
+        "InventoryWeight": 25,
+        "Price": 650000
+      },
+      {
+        "VehicleHash": 0x21EEE87D,
+        "Name": "Packer",
+        "InventoryWeight": 25,
+        "Price": 725000
+      },
+      {
+        "VehicleHash": 0x809AA4CB,
+        "Name": "Phantom",
+        "InventoryWeight": 25,
+        "Price": 850000
+      },
+      {
+        "VehicleHash":  0xA90ED5C,
+        "Name": "Phantom Upgraded",
+        "InventoryWeight": 25,
+        "Price": 950000
+      }
+    ]
+  }
+  

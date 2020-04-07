@@ -1,0 +1,138 @@
+{
+  "BlipSprite": 67,
+  "BlipPosition": {
+    "x": -197.1976,
+    "y": -1384.549,
+    "z": 31.25827
+  },
+  "LocationList": [
+    {
+      "position": {
+        "x": -214.16704,
+        "y": -1394.6505,
+        "z": 31.01538
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": -0.09375
+      }
+    },
+    {
+      "position": {
+        "x": -207.78462,
+        "y": -1392.5802,
+        "z": 31.268188
+      },
+      "rotation": {
+        "x":  0,
+        "y": 0,
+        "z": -0.015625
+      }
+    },
+    {
+      "position": {
+        "x": -200.9011,
+        "y": -1388.9407,
+        "z": 30.745728
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": -0.0625
+      }
+    },
+    {
+      "position": {
+        "x": -180.61978,
+        "y": -1374.9231,
+        "z": 30.998535
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 2.078125
+      }
+    }
+  ],
+  "VehicleInfoList": [
+    {
+      "VehicleHash": 65402552,
+      "Name": "Youga",
+      "InventoryWeight": 100,
+      "Price": 75000
+    },
+    {
+      "VehicleHash": 1488164764,
+      "Name": "Paradise",
+      "InventoryWeight": 100,
+      "Price": 80000
+    },
+    {
+      "VehicleHash": 4278019151,
+      "Name": "Bison",
+      "InventoryWeight": 90,
+      "Price": 120000
+    },
+    {
+      "VehicleHash": 3484649228,
+      "Name": "Speedo",
+      "InventoryWeight": 100,
+      "Price": 85000
+    },
+    {
+      "VehicleHash": 4174679674,
+      "Name": "Journey",
+      "InventoryWeight": 35,
+      "Price": 35000
+    },
+    {
+      "VehicleHash": 3695398481,
+      "Name": "Sadler",
+      "InventoryWeight": 90,
+      "Price": 120000
+    },
+    {
+      "VehicleHash": 2551651283,
+      "Name": "Burrito",
+      "InventoryWeight": 100,
+      "Price": 75000
+    },
+    {
+      "VehicleHash": 1876516712,
+      "Name": "Camper",
+      "InventoryWeight": 35,
+      "Price": 45000
+    },
+    {
+      "VehicleHash": 296357396,
+      "Name": "Burrito Stock",
+      "InventoryWeight": 100,
+      "Price": 80000
+    },
+    {
+      "VehicleHash": 3984502180,
+      "Name": "Minivan",
+      "InventoryWeight": 50,
+      "Price": 50000
+    },
+    {
+      "VehicleHash": 1162065741,
+      "Name": "Rumpo",
+      "InventoryWeight": 100,
+      "Price": 80000
+    },
+    {
+      "VehicleHash": 2983726598,
+      "Name": "Surfer",
+      "InventoryWeight": 50,
+      "Price": 50000
+    },
+    {
+      "VehicleHash": 1026149675,
+      "Name": "Youga Old School",
+      "InventoryWeight": 100,
+      "Price": 70000
+    }
+  ]
+}

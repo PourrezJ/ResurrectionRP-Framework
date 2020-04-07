@@ -1,0 +1,270 @@
+{
+  "BlipSprite": 663,
+  "BlipPosition": {
+    "x": -227.6239,
+    "y": 6256.357,
+    "z": 31.46507
+  },
+  "LocationList": [
+    {
+      "position": {
+        "x": -221.86813,
+        "y": 6268.7734,
+        "z": 31.116455
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 2.359375
+      }
+    },
+	{
+      "position": {
+        "x": -232.3712,
+        "y": 6267.3796,
+        "z": 30.98169
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": -2.28125
+      }
+    },
+	{
+    "position": {
+      "x": -237.73187,
+      "y": 6262.47,
+      "z": 30.914307
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": -2.375
+    }
+  },
+	{
+    "position": {
+      "x": -238.73407,
+      "y": 6247.933,
+      "z": 30.678345
+    },
+    "rotation": {
+      "x": 0.015625,
+      "y": 0,
+      "z": -0.734375
+    }
+  }
+  ],
+  "VehicleInfoList": [
+    {
+      "VehicleHash": 3796912450,
+      "Name": "Virgo",
+      "InventoryWeight": 30,
+      "Price": 46000
+    },
+    {
+      "VehicleHash": 80636076,
+      "Name": "Dominator",
+      "InventoryWeight": 30,
+      "Price": 150000
+    },
+    {
+      "VehicleHash": 2609945748,
+      "Name": "Sabre Turbo",
+      "InventoryWeight": 30,
+      "Price": 120000
+    },
+    {
+      "VehicleHash": 349605904,
+      "Name": "Chino",
+      "InventoryWeight": 30,
+      "Price": 50000
+    },
+    {
+      "VehicleHash": 2006667053,
+      "Name": "Voodoo custom",
+      "InventoryWeight": 30,
+      "Price": 80000
+    },
+    {
+      "VehicleHash": 525509695,
+      "Name": "Moonbeam",
+      "InventoryWeight": 50,
+      "Price": 40000
+    },
+    {
+      "VehicleHash": 723973206,
+      "Name": "Dukes",
+      "InventoryWeight": 30,
+      "Price": 128000
+    },
+    {
+      "VehicleHash": 729783779,
+      "Name": "Slamvan",
+      "InventoryWeight": 50,
+      "Price": 70000
+    },
+    {
+      "VehicleHash": 972671128,
+      "Name": "Tampa",
+      "InventoryWeight": 30,
+      "Price": 90000
+    },
+    {
+      "VehicleHash": 833469436,
+      "Name": "Lost Slamvan",
+      "InventoryWeight": 50,
+      "Price": 75000
+    },
+    {
+      "VehicleHash": 1507916787,
+      "Name": "Picador",
+      "InventoryWeight": 50,
+      "Price": 70000
+    },
+    {
+      "VehicleHash": 1896491931,
+      "Name": "Moonbeam Custom",
+      "InventoryWeight": 50,
+      "Price": 55000
+    },
+    {
+      "VehicleHash": 523724515,
+      "Name": "Voodoo",
+      "InventoryWeight": 30,
+      "Price": 90000
+    },
+    {
+      "VehicleHash": 2068293287,
+      "Name": "Lurcher",
+      "InventoryWeight": 30,
+      "Price": 66666
+    },
+    {
+      "VehicleHash": 2175389151,
+      "Name": "Faction",
+      "InventoryWeight": 30,
+      "Price": 45000
+    },
+    {
+      "VehicleHash": 2199527893,
+      "Name": "Phoenix",
+      "InventoryWeight": 30,
+      "Price": 111111
+    },
+    {
+      "VehicleHash": 2351681756,
+      "Name": "Nightshade",
+      "InventoryWeight": 30,
+      "Price": 135000
+    },
+    {
+      "VehicleHash": 2494797253,
+      "Name": "Gauntlet",
+      "InventoryWeight": 30,
+      "Price": 145000
+    },
+    {
+      "VehicleHash": 2504420315,
+      "Name": "Faction Custom",
+      "InventoryWeight": 30,
+      "Price": 99000
+    },
+    {
+      "VehicleHash": 2933279331,
+      "Name": "Chino Custom",
+      "InventoryWeight": 30,
+      "Price": 60000
+    },
+    {
+      "VehicleHash": 3089165662,
+      "Name": "Blade",
+      "InventoryWeight": 30,
+      "Price": 75000
+    },
+    {
+      "VehicleHash": 3796912450,
+      "Name": "Virgo",
+      "InventoryWeight": 30,
+      "Price": 56000
+    },
+    {
+      "VehicleHash": 3469130167,
+      "Name": "Vigero",
+      "InventoryWeight": 30,
+      "Price": 80000
+    },
+    {
+      "VehicleHash": 3612755468,
+      "Name": "Buccaneer",
+      "InventoryWeight": 30,
+      "Price": 85000
+    },
+    {
+      "VehicleHash": 3627815886,
+      "Name": "Rat Loader",
+      "InventoryWeight": 30,
+      "Price": 25000
+    },
+    {
+      "VehicleHash": 3705788919,
+      "Name": "Rat Truck",
+      "InventoryWeight": 30,
+      "Price": 28000
+    },
+    {
+      "VehicleHash": 4067225593,
+      "Name": "Ruiner",
+      "InventoryWeight": 30,
+      "Price": 60000
+    },
+    {
+      "VehicleHash": 3027423925,
+      "Name": "Ellie",
+      "InventoryWeight": 30,
+      "Price": 180000
+    },
+    {
+      "VehicleHash": 1923400478,
+      "Name": "Stalion",
+      "InventoryWeight": 30,
+      "Price": 65000
+    },
+    {
+      "VehicleHash": 1871995513,
+      "Name": "Yosemite",
+      "InventoryWeight": 50,
+      "Price": 62500
+    },
+    {
+      "VehicleHash": 1279262537,
+      "Name": "Deviant",
+      "InventoryWeight": 30,
+      "Price": 100000
+    },
+    {
+      "VehicleHash": 722226637,
+      "Name": "Gauntlet 3",
+      "InventoryWeight": 30,
+      "Price": 155000
+    },
+    {
+      "VehicleHash": 3281516360,
+      "Name": "Bucaaneer 2",
+      "InventoryWeight": 30,
+      "Price": 95000
+    },
+    {
+      "VehicleHash": 4245851645,
+      "Name": "Vamos",
+      "InventoryWeight": 30,
+      "Price": 70000
+    },
+    {
+      "VehicleHash": 1456744817,
+      "Name": "Tulip",
+      "InventoryWeight": 30,
+      "Price": 65000
+    }
+  ]
+}

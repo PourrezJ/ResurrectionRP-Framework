@@ -1,0 +1,5591 @@
+{
+  "Overlay": 8,
+  "DrawablesList": {
+    "0": {
+      "Name": "T-shirts",
+      "Price": 150,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt Crew"
+        },
+        "1": {
+          "GXT": "T-shirt Yeti"
+        },
+        "2": {
+          "GXT": "T-shirt anthracite"
+        },
+        "3": {
+          "GXT": "T-shirt Stank"
+        },
+        "4": {
+          "GXT": "T-shirt Ranch"
+        },
+        "5": {
+          "GXT": "T-shirt Pikeys"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "T-shirt multi-logos"
+        },
+        "8": {
+          "GXT": "T-shirt Sweatbox"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "T-shirt Eris"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "1": {
+      "Name": "T-shirts",
+      "Price": 150,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Col en V blanc"
+        },
+        "1": {
+          "GXT": "Col en V gris cendre"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "Col en V Swallow"
+        },
+        "4": {
+          "GXT": "Col en V Harsh Souls"
+        },
+        "5": {
+          "GXT": "Col en V Broker"
+        },
+        "6": {
+          "GXT": "Col en V Hip-Hop Royalty"
+        },
+        "7": {
+          "GXT": "Col en V vert"
+        },
+        "8": {
+          "GXT": "Col en V G&B"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "Col en V orange"
+        },
+        "12": {
+          "GXT": "Col en V marron"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "Col en V signes de main"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "2": {
+      "Name": "T-shirts",
+      "Price": 150,
+      "Torso": [0,19,30,41,52,63,74,85,99],     
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt Crew"
+        },
+        "1": {
+          "GXT": "T-shirt Yeti"
+        },
+        "2": {
+          "GXT": "T-shirt anthracite"
+        },
+        "3": {
+          "GXT": "T-shirt Stank"
+        },
+        "4": {
+          "GXT": "T-shirt Ranch"
+        },
+        "5": {
+          "GXT": "T-shirt Pikeys"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "T-shirt multi-logos"
+        },
+        "8": {
+          "GXT": "T-shirt Sweatbox"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "T-shirt Eris"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "3": {
+      "Name": "Gilets",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet noir"
+        },
+        "1": {
+          "GXT": "Gilet gris"
+        },
+        "2": {
+          "GXT": "Gilet bleu"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "4": {
+      "Name": "Gilets",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet noir"
+        },
+        "1": {
+          "GXT": "Gilet gris"
+        },
+        "2": {
+          "GXT": "Gilet bleu"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "5": {
+      "Name": "Débardeurs",
+      "Price": 150,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Débardeur blanc"
+        },
+        "1": {
+          "GXT": "Débardeur gris"
+        },
+        "2": {
+          "GXT": "Débardeur noir"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "Débardeur rouge"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "6": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [11,26,37,48,59,70,81,92,106],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise blanche"
+        },
+        "1": {
+          "GXT": "Chemise gris clair"
+        },
+        "2": {
+          "GXT": "Chemise anthracite"
+        },
+        "3": {
+          "GXT": "Chemise bleu clair"
+        },
+        "4": {
+          "GXT": "Chemise bleu très clair"
+        },
+        "5": {
+          "GXT": "Chemise rose à carreaux"
+        },
+        "6": {
+          "GXT": "Chemise saumon"
+        },
+        "7": {
+          "GXT": "Chemise olive pâle"
+        },
+        "8": {
+          "GXT": "Chemise fuchsia"
+        },
+        "9": {
+          "GXT": "Chemise blanc cassé"
+        },
+        "10": {
+          "GXT": "Chemise vert menthe"
+        },
+        "11": {
+          "GXT": "Chemise beige"
+        },
+        "12": {
+          "GXT": "Chemise saumon foncé"
+        },
+        "13": {
+          "GXT": "Chemise bleue à carreaux"
+        },
+        "14": {
+          "GXT": "Chemise rose"
+        },
+        "15": {
+          "GXT": "Chemise citron"
+        }
+      }
+    },
+    "7": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise blanche"
+        },
+        "1": {
+          "GXT": "Chemise gris clair"
+        },
+        "2": {
+          "GXT": "Chemise anthracite"
+        },
+        "3": {
+          "GXT": "Chemise bleu clair"
+        },
+        "4": {
+          "GXT": "Chemise bleu très clair"
+        },
+        "5": {
+          "GXT": "Chemise rose à carreaux"
+        },
+        "6": {
+          "GXT": "Chemise saumon"
+        },
+        "7": {
+          "GXT": "Chemise olive pâle"
+        },
+        "8": {
+          "GXT": "Chemise fuchsia"
+        },
+        "9": {
+          "GXT": "Chemise blanc cassé"
+        },
+        "10": {
+          "GXT": "Chemise vert menthe"
+        },
+        "11": {
+          "GXT": "Chemise beige"
+        },
+        "12": {
+          "GXT": "Chemise saumon foncé"
+        },
+        "13": {
+          "GXT": "Chemise bleue à carreaux"
+        },
+        "14": {
+          "GXT": "Chemise rose"
+        },
+        "15": {
+          "GXT": "Chemise citron"
+        }
+      }
+    },
+    "8": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt manches rouges"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "T-shirt bleu ciel"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "T-shirt ardoise"
+        },
+        "14": {
+          "GXT": "T-shirt blanc et gris"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "9": {
+      "Name": "Polos",
+      "Price": 200,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Polo blanc à rayures"
+        },
+        "1": {
+          "GXT": "Polo métal"
+        },
+        "2": {
+          "GXT": "Polo noir"
+        },
+        "3": {
+          "GXT": "Polo rose"
+        },
+        "4": {
+          "GXT": "Polo bleu"
+        },
+        "5": {
+          "GXT": "Polo Vibe"
+        },
+        "6": {
+          "GXT": "Polo saumon"
+        },
+        "7": {
+          "GXT": "Polo Royal"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "Polo Pro Lite"
+        },
+        "11": {
+          "GXT": "Polo blanc"
+        },
+        "12": {
+          "GXT": "Polo vert billet"
+        },
+        "13": {
+          "GXT": "Polo chasseur"
+        },
+        "14": {
+          "GXT": "Polo rouge"
+        },
+        "15": {
+          "GXT": "Polo jaune soleil"
+        }
+      }
+    },
+    "10": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise blanche"
+        },
+        "1": {
+          "GXT": "Chemise gris clair"
+        },
+        "2": {
+          "GXT": "Chemise anthracite"
+        },
+        "3": {
+          "GXT": "Chemise bleu clair"
+        },
+        "4": {
+          "GXT": "Chemise bleu très clair"
+        },
+        "5": {
+          "GXT": "Chemise rose à carreaux"
+        },
+        "6": {
+          "GXT": "Chemise bleue en mailles"
+        },
+        "7": {
+          "GXT": "Chemise saumon"
+        },
+        "8": {
+          "GXT": "Chemise olive pâle"
+        },
+        "9": {
+          "GXT": "Chemise fuchsia"
+        },
+        "10": {
+          "GXT": "Chemise blanc cassé"
+        },
+        "11": {
+          "GXT": "Chemise vert menthe"
+        },
+        "12": {
+          "GXT": "Chemise bleue à rayures"
+        },
+        "13": {
+          "GXT": "Chemise rose à rayures"
+        },
+        "14": {
+          "GXT": "Chemise beige"
+        },
+        "15": {
+          "GXT": "Chemise marine à rayures"
+        }
+      }
+    },
+    "11": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise blanche"
+        },
+        "1": {
+          "GXT": "Chemise gris clair"
+        },
+        "2": {
+          "GXT": "Chemise anthracite"
+        },
+        "3": {
+          "GXT": "Chemise bleu clair"
+        },
+        "4": {
+          "GXT": "Chemise bleu très clair"
+        },
+        "5": {
+          "GXT": "Chemise rose à carreaux"
+        },
+        "6": {
+          "GXT": "Chemise bleue en mailles"
+        },
+        "7": {
+          "GXT": "Chemise saumon"
+        },
+        "8": {
+          "GXT": "Chemise olive pâle"
+        },
+        "9": {
+          "GXT": "Chemise fuchsia"
+        },
+        "10": {
+          "GXT": "Chemise blanc cassé"
+        },
+        "11": {
+          "GXT": "Chemise vert menthe"
+        },
+        "12": {
+          "GXT": "Chemise bleue à rayures"
+        },
+        "13": {
+          "GXT": "Chemise rose à rayures"
+        },
+        "14": {
+          "GXT": "Chemise beige"
+        },
+        "15": {
+          "GXT": "Chemise marine à rayures"
+        }
+      }
+    },
+    "12": {
+      "Name": "Chemises",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Blanche, sortie"
+        },
+        "1": {
+          "GXT": "Acier, sortie"
+        },
+        "2": {
+          "GXT": "Noire, sortie"
+        },
+        "3": {
+          "GXT": "Bleu ciel, sortie"
+        },
+        "4": {
+          "GXT": "Bleu marine, sortie"
+        },
+        "5": {
+          "GXT": "Rouge, sortie"
+        },
+        "6": {
+          "GXT": "Mousse, sortie"
+        },
+        "7": {
+          "GXT": "Gris cendre, sortie"
+        },
+        "8": {
+          "GXT": "Moutarde, sortie"
+        },
+        "9": {
+          "GXT": "Jaune, sortie"
+        },
+        "10": {
+          "GXT": "Verte, sortie"
+        },
+        "11": {
+          "GXT": "Azur, sortie"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "13": {
+      "Name": "Chemises",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Blanche, rentrée"
+        },
+        "1": {
+          "GXT": "Gris clair, rentrée"
+        },
+        "2": {
+          "GXT": "Noire, rentrée"
+        },
+        "3": {
+          "GXT": "Bleue, rentrée"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "Bordeaux, rentrée"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "Verte à carreaux, rentrée"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "14": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Col en V blanc"
+        },
+        "1": {
+          "GXT": "Col en V gris cendre"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "Col en V Swallow"
+        },
+        "4": {
+          "GXT": "Col en V Harsh Souls"
+        },
+        "5": {
+          "GXT": "Col en V Broker"
+        },
+        "6": {
+          "GXT": "Col en V Hip-Hop Royalty"
+        },
+        "7": {
+          "GXT": "Col en V vert"
+        },
+        "8": {
+          "GXT": "Col en V G&B"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "Col en V orange"
+        },
+        "12": {
+          "GXT": "Col en V marron"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "Col en V signes de main"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "15": {
+      "Name": "NULL",
+      "Price": 100,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "16": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Col en V Cerveza Barracho"
+        },
+        "1": {
+          "GXT": "Col en V Los Santos"
+        },
+        "2": {
+          "GXT": "Col en V Farshtunken"
+        }
+      }
+    },
+    "17": {
+      "Name": "Débardeurs",
+      "Price": 150,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Débardeur bleu"
+        },
+        "1": {
+          "GXT": "Débardeur jaune"
+        },
+        "2": {
+          "GXT": "Débardeur orange"
+        },
+        "3": {
+          "GXT": "Débardeur Yeti violet"
+        },
+        "4": {
+          "GXT": "Débardeur tropical"
+        },
+        "5": {
+          "GXT": "Débardeur vert menthe"
+        }
+      }
+    },
+    "18": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Col en V Cerveza Barracho"
+        },
+        "1": {
+          "GXT": "Col en V Los Santos"
+        },
+        "2": {
+          "GXT": "Col en V Farshtunken"
+        }
+      }
+    },
+    "19": {
+      "Name": "T-shirts festif",
+      "Price": 150,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt Père Noël"
+        },
+        "1": {
+          "GXT": "T-shirt Elfe"
+        },
+        "2": {
+          "GXT": "T-shirt Bonhomme de neige"
+        },
+        "3": {
+          "GXT": "T-shirt Renne"
+        }
+      }
+    },
+    "20": {
+      "Name": "T-shirts festif",
+      "Price": 150,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt Père Noël"
+        },
+        "1": {
+          "GXT": "T-shirt Elfe"
+        },
+        "2": {
+          "GXT": "T-shirt Bonhomme de neige"
+        },
+        "3": {
+          "GXT": "T-shirt Renne"
+        }
+      }
+    },
+    "21": {
+      "Name": "Chemises",
+      "Price": 300,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise à manchettes noire"
+        },
+        "1": {
+          "GXT": "Chemise à manchettes rose"
+        },
+        "2": {
+          "GXT": "Chemise à manchettes rouge"
+        },
+        "3": {
+          "GXT": "Chemise à manchettes citron"
+        },
+        "4": {
+          "GXT": "Chemise à manchettes ivoire"
+        }
+      }
+    },
+    "22": {
+      "Name": "Chemises",
+      "Price": 300,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise dandy noire"
+        },
+        "1": {
+          "GXT": "Chemise dandy rose"
+        },
+        "2": {
+          "GXT": "Chemise dandy rouge"
+        },
+        "3": {
+          "GXT": "Chemise dandy citron"
+        },
+        "4": {
+          "GXT": "Chemise dandy blanche"
+        }
+      }
+    },
+    "23": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt romantique blanc"
+        },
+        "1": {
+          "GXT": "T-shirt romantique noir"
+        },
+        "2": {
+          "GXT": "T-shirt romantique rouge"
+        }
+      }
+    },
+    "24": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt romantique blanc"
+        },
+        "1": {
+          "GXT": "T-shirt romantique noir"
+        },
+        "2": {
+          "GXT": "T-shirt romantique rouge"
+        }
+      }
+    },
+    "25": {
+      "Name": "Gilets",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet gris clair"
+        },
+        "1": {
+          "GXT": "Gilet olive"
+        },
+        "2": {
+          "GXT": "Gilet mauve"
+        },
+        "3": {
+          "GXT": "Gilet rouge brique"
+        },
+        "4": {
+          "GXT": "Gilet bleu clair"
+        },
+        "5": {
+          "GXT": "Gilet marron"
+        },
+        "6": {
+          "GXT": "Gilet à maille vintage"
+        },
+        "7": {
+          "GXT": "Gilet crème"
+        },
+        "8": {
+          "GXT": "Gilet gris cendre"
+        },
+        "9": {
+          "GXT": "Gilet bleu marine"
+        },
+        "10": {
+          "GXT": "Gilet gris"
+        },
+        "11": {
+          "GXT": "Gilet gris perle"
+        },
+        "12": {
+          "GXT": "Gilet blanc"
+        }
+      }
+    },
+    "26": {
+      "Name": "Gilets",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet gris clair"
+        },
+        "1": {
+          "GXT": "Gilet olive"
+        },
+        "2": {
+          "GXT": "Gilet mauve"
+        },
+        "3": {
+          "GXT": "Gilet rouge brique"
+        },
+        "4": {
+          "GXT": "Gilet bleu clair"
+        },
+        "5": {
+          "GXT": "Gilet marron"
+        },
+        "6": {
+          "GXT": "Gilet à maille vintage"
+        },
+        "7": {
+          "GXT": "Gilet crème"
+        },
+        "8": {
+          "GXT": "Gilet gris cendre"
+        },
+        "9": {
+          "GXT": "Gilet bleu marine"
+        },
+        "10": {
+          "GXT": "Gilet gris"
+        },
+        "11": {
+          "GXT": "Gilet gris perle"
+        },
+        "12": {
+          "GXT": "Gilet blanc"
+        }
+      }
+    },
+    "27": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Bleu marine, rentrée"
+        },
+        "1": {
+          "GXT": "Verte, rentrée"
+        },
+        "2": {
+          "GXT": "Gris cendre, rentrée"
+        },
+        "3": {
+          "GXT": "Jaune, rentrée"
+        },
+        "4": {
+          "GXT": "Jaune citron, rentrée"
+        },
+        "5": {
+          "GXT": "Rose, rentrée"
+        },
+        "6": {
+          "GXT": "Patriotique, rentrée"
+        },
+        "7": {
+          "GXT": "Mauve à carreaux, rentrée"
+        },
+        "8": {
+          "GXT": "Bleue à carreaux, rentrée"
+        },
+        "9": {
+          "GXT": "Grise à carreaux, rentrée"
+        }
+      }
+    },
+    "28": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Col fermé blanche"
+        },
+        "1": {
+          "GXT": "Col fermé gris clair"
+        },
+        "2": {
+          "GXT": "Col fermé gris anthracite"
+        },
+        "3": {
+          "GXT": "Col fermé bleu pâle"
+        },
+        "4": {
+          "GXT": "Col fermé bleutée"
+        },
+        "5": {
+          "GXT": "Col fermé rose à carreaux"
+        },
+        "6": {
+          "GXT": "Col fermé à maille bleue"
+        },
+        "7": {
+          "GXT": "Col fermé saumon"
+        },
+        "8": {
+          "GXT": "Col fermé vert olive"
+        },
+        "9": {
+          "GXT": "Chemise rose fuchsia"
+        },
+        "10": {
+          "GXT": "Col fermé blanc cassé"
+        },
+        "11": {
+          "GXT": "Col fermé vert menthe"
+        },
+        "12": {
+          "GXT": "Col fermé bleu à rayures"
+        },
+        "13": {
+          "GXT": "Col fermé rose à rayures"
+        },
+        "14": {
+          "GXT": "Col fermé brun clair"
+        },
+        "15": {
+          "GXT": "Col fermé bleu océan rayée"
+        }
+      }
+    },
+    "29": {
+      "Name": "Chemises",
+      "Price": 250,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise bleue à carreaux"
+        },
+        "1": {
+          "GXT": "Chemise jaune à carreaux"
+        },
+        "2": {
+          "GXT": "Chemise gris clair à carreaux"
+        },
+        "3": {
+          "GXT": "Chemise citron à carreaux"
+        },
+        "4": {
+          "GXT": "Chemise orange à carreaux"
+        },
+        "5": {
+          "GXT": "Chemise violette à carreaux"
+        },
+        "6": {
+          "GXT": "Chemise turquoise à carreaux"
+        },
+        "7": {
+          "GXT": "Chemise anthracite à carreaux"
+        },
+        "8": {
+          "GXT": "Chemise bleu-vert à carreaux"
+        },
+        "9": {
+          "GXT": "Chemise rouge à carreaux"
+        },
+        "10": {
+          "GXT": "Chemise menthe à carreaux"
+        },
+        "11": {
+          "GXT": "Chemise grise à carreaux"
+        },
+        "12": {
+          "GXT": "Chemise patriotique"
+        },
+        "13": {
+          "GXT": "Chemise verdâtre à carreaux"
+        },
+        "14": {
+          "GXT": "Chemise forêt à carreaux"
+        },
+        "15": {
+          "GXT": "Chemise brun clair à carreaux"
+        }
+      }
+    },
+    "30": {
+      "Name": "Chemises",
+      "Price": 250,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise bleue à carreaux"
+        },
+        "1": {
+          "GXT": "Chemise jaune à carreaux"
+        },
+        "2": {
+          "GXT": "Chemise gris clair à carreaux"
+        },
+        "3": {
+          "GXT": "Chemise citron à carreaux"
+        },
+        "4": {
+          "GXT": "Chemise orange à carreaux"
+        },
+        "5": {
+          "GXT": "Chemise violette à carreaux"
+        },
+        "6": {
+          "GXT": "Chemise turquoise à carreaux"
+        },
+        "7": {
+          "GXT": "Chemise anthracite à carreaux"
+        },
+        "8": {
+          "GXT": "Chemise bleu-vert à carreaux"
+        },
+        "9": {
+          "GXT": "Chemise rouge à carreaux"
+        },
+        "10": {
+          "GXT": "Chemise menthe à carreaux"
+        },
+        "11": {
+          "GXT": "Chemise grise à carreaux"
+        },
+        "12": {
+          "GXT": "Chemise patriotique"
+        },
+        "13": {
+          "GXT": "Chemise verdâtre à carreaux"
+        },
+        "14": {
+          "GXT": "Chemise forêt à carreaux"
+        },
+        "15": {
+          "GXT": "Chemise brun clair à carreaux"
+        }
+      }
+    },
+    "31": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Col fermé blanche"
+        },
+        "1": {
+          "GXT": "Col fermé gris clair"
+        },
+        "2": {
+          "GXT": "Col fermé gris anthracite"
+        },
+        "3": {
+          "GXT": "Col fermé bleu pâle"
+        },
+        "4": {
+          "GXT": "Col fermé bleutée"
+        },
+        "5": {
+          "GXT": "Col fermé rose à carreaux"
+        },
+        "6": {
+          "GXT": "Col fermé à maille bleue"
+        },
+        "7": {
+          "GXT": "Col fermé saumon"
+        },
+        "8": {
+          "GXT": "Col fermé vert olive"
+        },
+        "9": {
+          "GXT": "Chemise rose fuchsia"
+        },
+        "10": {
+          "GXT": "Col fermé blanc cassé"
+        },
+        "11": {
+          "GXT": "Col fermé vert menthe"
+        },
+        "12": {
+          "GXT": "Col fermé bleu à rayures"
+        },
+        "13": {
+          "GXT": "Col fermé rose à rayures"
+        },
+        "14": {
+          "GXT": "Col fermé brun clair"
+        },
+        "15": {
+          "GXT": "Col fermé bleu océan rayée"
+        }
+      }
+    },
+    "32": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Col fermé blanche"
+        },
+        "1": {
+          "GXT": "Col fermé gris clair"
+        },
+        "2": {
+          "GXT": "Col fermé gris anthracite"
+        },
+        "3": {
+          "GXT": "Col fermé bleu pâle"
+        },
+        "4": {
+          "GXT": "Col fermé bleutée"
+        },
+        "5": {
+          "GXT": "Col fermé rose à carreaux"
+        },
+        "6": {
+          "GXT": "Col fermé à maille bleue"
+        },
+        "7": {
+          "GXT": "Col fermé saumon"
+        },
+        "8": {
+          "GXT": "Col fermé vert olive"
+        },
+        "9": {
+          "GXT": "Chemise rose fuchsia"
+        },
+        "10": {
+          "GXT": "Col fermé blanc cassé"
+        },
+        "11": {
+          "GXT": "Col fermé vert menthe"
+        },
+        "12": {
+          "GXT": "Col fermé bleu à rayures"
+        },
+        "13": {
+          "GXT": "Col fermé rose à rayures"
+        },
+        "14": {
+          "GXT": "Col fermé brun clair"
+        },
+        "15": {
+          "GXT": "Col fermé bleu océan rayée"
+        }
+      }
+    },
+    "33": {
+      "Name": "Gilets",
+      "Price": 450,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet moulant noir"
+        },
+        "1": {
+          "GXT": "Gilet moulant gris"
+        },
+        "2": {
+          "GXT": "Gilet moulant bleu marine"
+        },
+        "3": {
+          "GXT": "Gilet moulant bleu-vert"
+        },
+        "4": {
+          "GXT": "Gilet moulant rouge"
+        },
+        "5": {
+          "GXT": "Gilet moulant blanc"
+        },
+        "6": {
+          "GXT": "Gilet moulant beige"
+        }
+      }
+    },
+    "34": {
+      "Name": "Gilets",
+      "Price": 450,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet moulant noir"
+        },
+        "1": {
+          "GXT": "Gilet moulant gris"
+        },
+        "2": {
+          "GXT": "Gilet moulant bleu marine"
+        },
+        "3": {
+          "GXT": "Gilet moulant bleu-vert"
+        },
+        "4": {
+          "GXT": "Gilet moulant rouge"
+        },
+        "5": {
+          "GXT": "Gilet moulant blanc"
+        },
+        "6": {
+          "GXT": "Gilet moulant beige"
+        }
+      }
+    },
+    "35": {
+      "Name": "Gilets",
+      "Price": 450,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet moulant noir"
+        },
+        "1": {
+          "GXT": "Gilet moulant gris"
+        },
+        "2": {
+          "GXT": "Gilet moulant bleu marine"
+        },
+        "3": {
+          "GXT": "Gilet moulant bleu-vert"
+        },
+        "4": {
+          "GXT": "Gilet moulant rouge"
+        },
+        "5": {
+          "GXT": "Gilet moulant blanc"
+        },
+        "6": {
+          "GXT": "Gilet moulant beige"
+        }
+      }
+    },
+    "36": {
+      "Name": "Gilets",
+      "Price": 450,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet moulant noir"
+        },
+        "1": {
+          "GXT": "Gilet moulant gris"
+        },
+        "2": {
+          "GXT": "Gilet moulant bleu marine"
+        },
+        "3": {
+          "GXT": "Gilet moulant bleu-vert"
+        },
+        "4": {
+          "GXT": "Gilet moulant rouge"
+        },
+        "5": {
+          "GXT": "Gilet moulant blanc"
+        },
+        "6": {
+          "GXT": "Gilet moulant beige"
+        }
+      }
+    },
+    "37": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt gris à rayures"
+        }
+      }
+    },
+    "38": {
+      "Name": "T-shirts",
+      "Price": 150,
+      "Torso": [0,19,30,41,52,63,74,85,99],  
+      "Variations": {
+        "0": {
+          "GXT": "Col en V Love Fist"
+        },
+        "1": {
+          "GXT": "Col en V bleu à rayures"
+        }
+      }
+    },
+    "39": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt gris à rayures"
+        }
+      }
+    },
+    "40": {
+      "Name": "Débardeurs",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Débardeur bleu rayé"
+        },
+        "1": {
+          "GXT": "Débardeur lavande"
+        },
+        "2": {
+          "GXT": "Débardeur rose vif"
+        },
+        "3": {
+          "GXT": "Débardeur camouflage"
+        },
+        "4": {
+          "GXT": "Débardeur jaune rayé"
+        },
+        "5": {
+          "GXT": "Débardeur gris taché"
+        }
+      }
+    },
+    "41": {
+      "Name": "T-shirts",
+      "Price": 150,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt blanc et anthracite"
+        },
+        "1": {
+          "GXT": "T-shirt camouflage"
+        },
+        "2": {
+          "GXT": "T-shirt Pikeys"
+        },
+        "3": {
+          "GXT": "T-shirt jaune"
+        },
+        "4": {
+          "GXT": "T-shirt fractal floral"
+        }
+      }
+    },
+    "42": {
+      "Name": "Polos",
+      "Price": 200,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Polo blanc et rouge"
+        },
+        "1": {
+          "GXT": "Polo blanc et bleu marine"
+        }
+      }
+    },
+    "43": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Rouge à carreaux, sortie"
+        },
+        "1": {
+          "GXT": "Mauve à carreaux, sortie"
+        },
+        "2": {
+          "GXT": "Beige à carreaux, sortie"
+        },
+        "3": {
+          "GXT": "Écossaise, sortie"
+        }
+      }
+    },
+    "44": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Col en V Love Fist"
+        },
+        "1": {
+          "GXT": "Col en V bleu à rayures"
+        }
+      }
+    },
+    "45": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise en jean, bretelles"
+        }
+      }
+    },
+    "46": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise en jean, bretelles"
+        }
+      }
+    },
+    "47": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt vert"
+        },
+        "1": {
+          "GXT": "T-shirt jaune"
+        },
+        "2": {
+          "GXT": "T-shirt lilas"
+        },
+        "3": {
+          "GXT": "T-shirt gris"
+        }
+      }
+    },
+    "48": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt vert"
+        },
+        "1": {
+          "GXT": "T-shirt jaune"
+        },
+        "2": {
+          "GXT": "T-shirt lilas"
+        },
+        "3": {
+          "GXT": "T-shirt gris"
+        }
+      }
+    },
+    "49": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise blanc argile"
+        },
+        "1": {
+          "GXT": "Chemise à rayures rouges"
+        }
+      }
+    },
+    "50": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise blanc argile"
+        },
+        "1": {
+          "GXT": "Chemise à rayures rouges"
+        }
+      }
+    },
+    "51": {
+      "Name": "Gilets festif",
+      "Price": 300,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet drapeau vertical 1"
+        },
+        "1": {
+          "GXT": "Gilet drapeau vertical 2"
+        },
+        "2": {
+          "GXT": "Gilet drapeau vertical 3"
+        },
+        "3": {
+          "GXT": "Gilet drapeau américain 1"
+        },
+        "4": {
+          "GXT": "Gilet drapeau américain 2"
+        },
+        "5": {
+          "GXT": "Gilet drapeau américain 3"
+        },
+        "6": {
+          "GXT": "Gilet drapeau étoilé 1"
+        },
+        "7": {
+          "GXT": "Gilet drapeau étoilé 2"
+        },
+        "8": {
+          "GXT": "Gilet drapeau étoilé 3"
+        }
+      }
+    },
+    "52": {
+      "Name": "Gilets festif",
+      "Price": 300,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet drapeau vertical 1"
+        },
+        "1": {
+          "GXT": "Gilet drapeau vertical 2"
+        },
+        "2": {
+          "GXT": "Gilet drapeau vertical 3"
+        },
+        "3": {
+          "GXT": "Gilet drapeau américain 1"
+        },
+        "4": {
+          "GXT": "Gilet drapeau américain 2"
+        },
+        "5": {
+          "GXT": "Gilet drapeau américain 3"
+        },
+        "6": {
+          "GXT": "Gilet drapeau étoilé 1"
+        },
+        "7": {
+          "GXT": "Gilet drapeau étoilé 2"
+        },
+        "8": {
+          "GXT": "Gilet drapeau étoilé 3"
+        }
+      }
+    },
+    "53": {
+      "Name": "T-shirts festif",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt liberté"
+        },
+        "1": {
+          "GXT": "T-shirt drapeau américain"
+        }
+      }
+    },
+    "54": {
+      "Name": "T-shirts festif",
+      "Price": 1000,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt liberté"
+        },
+        "1": {
+          "GXT": "T-shirt drapeau américain"
+        }
+      }
+    },
+    "55": {
+      "Name": "NULL",
+      "Price": 500,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet de braquage furtif"
+        }
+      }
+    },
+    "56": {
+      "Name": "NULL",
+      "Price": 500,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet de braquage lourd gris"
+        },
+        "1": {
+          "GXT": "Gilet de braquage lourd noir"
+        }
+      }
+    },
+    "57": {
+      "Name": "NULL",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "58": {
+      "Name": "NULL",
+      "Price": 150,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "59": {
+      "Name": "NULL",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "60": {
+      "Name": "Chemises",
+      "Price": 300,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise droite blanche"
+        }
+      }
+    },
+    "61": {
+      "Name": "NULL",
+      "Price": 100,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "62": {
+      "Name": "NULL",
+      "Price": 100,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "63": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Blanche, sortie"
+        },
+        "1": {
+          "GXT": "Acier, sortie"
+        },
+        "2": {
+          "GXT": "Noire, sortie"
+        },
+        "3": {
+          "GXT": "Bleu ciel, sortie"
+        },
+        "4": {
+          "GXT": "Bleu marine, sortie"
+        },
+        "5": {
+          "GXT": "Rouge, sortie"
+        },
+        "6": {
+          "GXT": "Mousse, sortie"
+        },
+        "7": {
+          "GXT": "Gris cendre, sortie"
+        },
+        "8": {
+          "GXT": "Moutarde, sortie"
+        },
+        "9": {
+          "GXT": "Jaune, sortie"
+        },
+        "10": {
+          "GXT": "Verte, sortie"
+        },
+        "11": {
+          "GXT": "Azur, sortie"
+        },
+        "12": {
+          "GXT": "Rouge à carreaux, sortie"
+        },
+        "13": {
+          "GXT": "Mauve à carreaux, sortie"
+        },
+        "14": {
+          "GXT": "Beige à carreaux, sortie"
+        },
+        "15": {
+          "GXT": "Écossaise, sortie"
+        }
+      }
+    },
+    "64": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Blanche, sortie"
+        },
+        "1": {
+          "GXT": "Acier, sortie"
+        },
+        "2": {
+          "GXT": "Noire, sortie"
+        },
+        "3": {
+          "GXT": "Bleu ciel, sortie"
+        },
+        "4": {
+          "GXT": "Bleu marine, sortie"
+        },
+        "5": {
+          "GXT": "Rouge, sortie"
+        },
+        "6": {
+          "GXT": "Mousse, sortie"
+        },
+        "7": {
+          "GXT": "Gris cendre, sortie"
+        },
+        "8": {
+          "GXT": "Moutarde, sortie"
+        },
+        "9": {
+          "GXT": "Jaune, sortie"
+        },
+        "10": {
+          "GXT": "Verte, sortie"
+        },
+        "11": {
+          "GXT": "Azur, sortie"
+        },
+        "12": {
+          "GXT": "Rouge à carreaux, sortie"
+        },
+        "13": {
+          "GXT": "Mauve à carreaux, sortie"
+        },
+        "14": {
+          "GXT": "Beige à carreaux, sortie"
+        },
+        "15": {
+          "GXT": "Écossaise, sortie"
+        }
+      }
+    },
+    "65": {
+      "Name": "T-shirts chic",
+      "Price": 300,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt Pégase"
+        },
+        "1": {
+          "GXT": "T-shirt Andromède"
+        },
+        "2": {
+          "GXT": "T-shirt Méduse"
+        },
+        "3": {
+          "GXT": "T-shirt Angélique"
+        },
+        "4": {
+          "GXT": "T-shirt Perseus classique"
+        },
+        "5": {
+          "GXT": "T-shirt boucliers et épées"
+        },
+        "6": {
+          "GXT": "T-shirt boucliers"
+        },
+        "7": {
+          "GXT": "T-shirt à motif intégral marron"
+        },
+        "8": {
+          "GXT": "T-shirt à motif marron"
+        },
+        "9": {
+          "GXT": "T-shirt à motif intégral rose"
+        },
+        "10": {
+          "GXT": "T-shirt à motif noir"
+        },
+        "11": {
+          "GXT": "T-shirt SN à motif doré"
+        },
+        "12": {
+          "GXT": "T-shirt SN à motif marron"
+        },
+        "13": {
+          "GXT": "T-shirt SN PRB rose"
+        },
+        "14": {
+          "GXT": "T-shirt géométrique PRB brun"
+        },
+        "15": {
+          "GXT": "T-shirt Sessanta Nove contrefait"
+        },
+        "16": {
+          "GXT": "T-shirt géométrique PRB"
+        },
+        "17": {
+          "GXT": "T-shirt géométrique coloré"
+        },
+        "18": {
+          "GXT": "T-shirt géométrique marron"
+        }
+      }
+    },
+    "66": {
+      "Name": "T-shirts chic",
+      "Price": 300,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt Pégase"
+        },
+        "1": {
+          "GXT": "T-shirt Andromède"
+        },
+        "2": {
+          "GXT": "T-shirt Méduse"
+        },
+        "3": {
+          "GXT": "T-shirt Angélique"
+        },
+        "4": {
+          "GXT": "T-shirt Perseus classique"
+        },
+        "5": {
+          "GXT": "T-shirt boucliers et épées"
+        },
+        "6": {
+          "GXT": "T-shirt boucliers"
+        },
+        "7": {
+          "GXT": "T-shirt à motif intégral marron"
+        },
+        "8": {
+          "GXT": "T-shirt à motif marron"
+        },
+        "9": {
+          "GXT": "T-shirt à motif intégral rose"
+        },
+        "10": {
+          "GXT": "T-shirt à motif noir"
+        },
+        "11": {
+          "GXT": "T-shirt SN à motif doré"
+        },
+        "12": {
+          "GXT": "T-shirt SN à motif marron"
+        },
+        "13": {
+          "GXT": "T-shirt SN PRB rose"
+        },
+        "14": {
+          "GXT": "T-shirt géométrique PRB brun"
+        },
+        "15": {
+          "GXT": "T-shirt Sessanta Nove contrefait"
+        },
+        "16": {
+          "GXT": "T-shirt géométrique PRB"
+        },
+        "17": {
+          "GXT": "T-shirt géométrique coloré"
+        },
+        "18": {
+          "GXT": "T-shirt géométrique marron"
+        }
+      }
+    },
+    "67": {
+      "Name": "T-shirts chic",
+      "Price": 1000,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt doré brillant"
+        }
+      }
+    },
+    "68": {
+      "Name": "T-shirts chic",
+      "Price": 1000,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt doré brillant"
+        }
+      }
+    },
+    "69": {
+      "Name": "Chemises",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise droite A"
+        },
+        "1": {
+          "GXT": "Chemise droite B"
+        },
+        "2": {
+          "GXT": "Chemise droite C"
+        },
+        "3": {
+          "GXT": "Chemise droite D"
+        },
+        "4": {
+          "GXT": "Chemise droite E"
+        }
+      }
+    },
+    "70": {
+      "Name": "Chemises",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise pour pulls blanche"
+        }
+      }
+    },
+    "71": {
+      "Name": "Pulls",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Pull col roulé A"
+        },
+        "1": {
+          "GXT": "Pull col roulé B"
+        },
+        "2": {
+          "GXT": "Pull col roulé C"
+        },
+        "3": {
+          "GXT": "Pull col roulé D"
+        },
+        "4": {
+          "GXT": "Pull col roulé E"
+        },
+        "5": {
+          "GXT": "Pull col roulé F"
+        }
+      }
+    },
+    "72": {
+      "Name": "Pulls",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Pull col roulé A1"
+        },
+        "1": {
+          "GXT": "Pull col roulé A2"
+        },
+        "2": {
+          "GXT": "Pull col roulé A3"
+        },
+        "3": {
+          "GXT": "Pull col roulé A4"
+        },
+        "4": {
+          "GXT": "Pull col roulé A5"
+        },
+        "5": {
+          "GXT": "Pull col roulé A6"
+        }
+      }
+    },
+    "73": {
+      "Name": "Chemises",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise pour pulls bleue"
+        },
+        "1": {
+          "GXT": "Chemise pour pulls noire"
+        },
+        "2": {
+          "GXT": "Chemise pour pulls à carreaux"
+        }
+      }
+    },
+    "74": {
+      "Name": "Pulls",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Col roulé gris"
+        },
+        "1": {
+          "GXT": "Col roulé rouge"
+        },
+        "2": {
+          "GXT": "Col roulé marron"
+        },
+        "3": {
+          "GXT": "Col roulé noir"
+        },
+        "4": {
+          "GXT": "Col roulé bleu marine"
+        },
+        "5": {
+          "GXT": "Col roulé beige"
+        },
+        "6": {
+          "GXT": "Col roulé violet"
+        },
+        "7": {
+          "GXT": "Col roulé vert"
+        }
+      }
+    },
+    "75": {
+      "Name": "Pulls",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Col roulé gris"
+        },
+        "1": {
+          "GXT": "Col roulé rouge"
+        },
+        "2": {
+          "GXT": "Col roulé marron"
+        },
+        "3": {
+          "GXT": "Col roulé noir"
+        },
+        "4": {
+          "GXT": "Col roulé bleu marine"
+        },
+        "5": {
+          "GXT": "Col roulé beige"
+        },
+        "6": {
+          "GXT": "Col roulé violet"
+        },
+        "7": {
+          "GXT": "Col roulé vert"
+        }
+      }
+    },
+    "76": {
+      "Name": "NULL",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "77": {
+      "Name": "NULL",
+      "Price": 100,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "78": {
+      "Name": "NULL",
+      "Price": 100,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "79": {
+      "Name": "NULL",
+      "Price": 300,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "80": {
+      "Name": "NULL",
+      "Price": 300,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "81": {
+      "Name": "T-shirts",
+      "Price": 150,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt Crew"
+        },
+        "1": {
+          "GXT": "T-shirt Yeti"
+        },
+        "2": {
+          "GXT": "T-shirt anthracite"
+        },
+        "3": {
+          "GXT": "T-shirt Stank"
+        },
+        "4": {
+          "GXT": "T-shirt Ranch"
+        },
+        "5": {
+          "GXT": "T-shirt Pikeys"
+        },
+        "6": {
+          "GXT": "T-shirt multi-logos"
+        },
+        "7": {
+          "GXT": "T-shirt Sweatbox"
+        },
+        "8": {
+          "GXT": "T-shirt Eris"
+        },
+        "9": {
+          "GXT": "T-shirt romantique blanc"
+        },
+        "10": {
+          "GXT": "T-shirt romantique noir"
+        },
+        "11": {
+          "GXT": "T-shirt romantique rouge"
+        },
+        "12": {
+          "GXT": "T-shirt gris à rayures"
+        },
+        "13": {
+          "GXT": "T-shirt vert"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "T-shirt liberté"
+        },
+        "18": {
+          "GXT": "T-shirt drapeau américain"
+        },
+        "19": {
+          "GXT": "T-shirt Pégase"
+        },
+        "20": {
+          "GXT": "T-shirt Andromède"
+        },
+        "21": {
+          "GXT": "T-shirt Méduse"
+        },
+        "22": {
+          "GXT": "T-shirt Angélique"
+        },
+        "23": {
+          "GXT": "T-shirt Perseus classique"
+        },
+        "24": {
+          "GXT": "T-shirt boucliers et épées"
+        },
+        "25": {
+          "GXT": "T-shirt boucliers"
+        }
+      }
+    },
+    "82": {
+      "Name": "T-shirts",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt à motif intégral marron"
+        },
+        "1": {
+          "GXT": "T-shirt à motif marron"
+        },
+        "2": {
+          "GXT": "T-shirt à motif intégral rose"
+        },
+        "3": {
+          "GXT": "T-shirt à motif noir"
+        },
+        "4": {
+          "GXT": "T-shirt SN à motif doré"
+        },
+        "5": {
+          "GXT": "T-shirt SN à motif marron"
+        },
+        "6": {
+          "GXT": "T-shirt SN PRB rose"
+        },
+        "7": {
+          "GXT": "T-shirt géométrique PRB brun"
+        },
+        "8": {
+          "GXT": "T-shirt Sessanta Nove contrefait"
+        },
+        "9": {
+          "GXT": "T-shirt géométrique PRB"
+        },
+        "10": {
+          "GXT": "T-shirt géométrique coloré"
+        },
+        "11": {
+          "GXT": "T-shirt géométrique marron"
+        },
+        "12": {
+          "GXT": "T-shirt beige"
+        },
+        "13": {
+          "GXT": "T-shirt kaki"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "NULL"
+        },
+        "18": {
+          "GXT": "NULL"
+        },
+        "19": {
+          "GXT": "NULL"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "83": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt Crew"
+        },
+        "1": {
+          "GXT": "T-shirt Yeti"
+        },
+        "2": {
+          "GXT": "T-shirt anthracite"
+        },
+        "3": {
+          "GXT": "T-shirt Stank"
+        },
+        "4": {
+          "GXT": "T-shirt Ranch"
+        },
+        "5": {
+          "GXT": "T-shirt Pikeys"
+        },
+        "6": {
+          "GXT": "T-shirt multi-logos"
+        },
+        "7": {
+          "GXT": "T-shirt Sweatbox"
+        },
+        "8": {
+          "GXT": "T-shirt Eris"
+        },
+        "9": {
+          "GXT": "T-shirt romantique blanc"
+        },
+        "10": {
+          "GXT": "T-shirt romantique noir"
+        },
+        "11": {
+          "GXT": "T-shirt romantique rouge"
+        },
+        "12": {
+          "GXT": "T-shirt gris à rayures"
+        },
+        "13": {
+          "GXT": "T-shirt vert"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "T-shirt liberté"
+        },
+        "18": {
+          "GXT": "T-shirt drapeau américain"
+        },
+        "19": {
+          "GXT": "T-shirt Pégase"
+        },
+        "20": {
+          "GXT": "T-shirt Andromède"
+        },
+        "21": {
+          "GXT": "T-shirt Méduse"
+        },
+        "22": {
+          "GXT": "T-shirt Angélique"
+        },
+        "23": {
+          "GXT": "T-shirt Perseus classique"
+        },
+        "24": {
+          "GXT": "T-shirt boucliers et épées"
+        },
+        "25": {
+          "GXT": "T-shirt boucliers"
+        }
+      }
+    },
+    "84": {
+      "Name": "T-shirts",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt à motif intégral marron"
+        },
+        "1": {
+          "GXT": "T-shirt à motif marron"
+        },
+        "2": {
+          "GXT": "T-shirt à motif intégral rose"
+        },
+        "3": {
+          "GXT": "T-shirt à motif noir"
+        },
+        "4": {
+          "GXT": "T-shirt SN à motif doré"
+        },
+        "5": {
+          "GXT": "T-shirt SN à motif marron"
+        },
+        "6": {
+          "GXT": "T-shirt SN PRB rose"
+        },
+        "7": {
+          "GXT": "T-shirt géométrique PRB brun"
+        },
+        "8": {
+          "GXT": "T-shirt Sessanta Nove contrefait"
+        },
+        "9": {
+          "GXT": "T-shirt géométrique PRB"
+        },
+        "10": {
+          "GXT": "T-shirt géométrique coloré"
+        },
+        "11": {
+          "GXT": "T-shirt géométrique marron"
+        },
+        "12": {
+          "GXT": "T-shirt beige"
+        },
+        "13": {
+          "GXT": "T-shirt kaki"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "NULL"
+        },
+        "18": {
+          "GXT": "NULL"
+        },
+        "19": {
+          "GXT": "NULL"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "85": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt Crew"
+        },
+        "1": {
+          "GXT": "T-shirt Yeti"
+        },
+        "2": {
+          "GXT": "T-shirt anthracite"
+        },
+        "3": {
+          "GXT": "T-shirt Stank"
+        },
+        "4": {
+          "GXT": "T-shirt Ranch"
+        },
+        "5": {
+          "GXT": "T-shirt Pikeys"
+        },
+        "6": {
+          "GXT": "T-shirt multi-logos"
+        },
+        "7": {
+          "GXT": "T-shirt Sweatbox"
+        },
+        "8": {
+          "GXT": "T-shirt Eris"
+        },
+        "9": {
+          "GXT": "T-shirt romantique blanc"
+        },
+        "10": {
+          "GXT": "T-shirt romantique noir"
+        },
+        "11": {
+          "GXT": "T-shirt romantique rouge"
+        },
+        "12": {
+          "GXT": "T-shirt gris à rayures"
+        },
+        "13": {
+          "GXT": "T-shirt vert"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "T-shirt liberté"
+        },
+        "18": {
+          "GXT": "T-shirt drapeau américain"
+        },
+        "19": {
+          "GXT": "T-shirt Pégase"
+        },
+        "20": {
+          "GXT": "T-shirt Andromède"
+        },
+        "21": {
+          "GXT": "T-shirt Méduse"
+        },
+        "22": {
+          "GXT": "T-shirt Angélique"
+        },
+        "23": {
+          "GXT": "T-shirt Perseus classique"
+        },
+        "24": {
+          "GXT": "T-shirt boucliers et épées"
+        },
+        "25": {
+          "GXT": "T-shirt boucliers"
+        }
+      }
+    },
+    "86": {
+      "Name": "T-shirts",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt à motif intégral marron"
+        },
+        "1": {
+          "GXT": "T-shirt à motif marron"
+        },
+        "2": {
+          "GXT": "T-shirt à motif intégral rose"
+        },
+        "3": {
+          "GXT": "T-shirt à motif noir"
+        },
+        "4": {
+          "GXT": "T-shirt SN à motif doré"
+        },
+        "5": {
+          "GXT": "T-shirt SN à motif marron"
+        },
+        "6": {
+          "GXT": "T-shirt SN PRB rose"
+        },
+        "7": {
+          "GXT": "T-shirt géométrique PRB brun"
+        },
+        "8": {
+          "GXT": "T-shirt Sessanta Nove contrefait"
+        },
+        "9": {
+          "GXT": "T-shirt géométrique PRB"
+        },
+        "10": {
+          "GXT": "T-shirt géométrique coloré"
+        },
+        "11": {
+          "GXT": "T-shirt géométrique marron"
+        },
+        "12": {
+          "GXT": "T-shirt beige"
+        },
+        "13": {
+          "GXT": "T-shirt kaki"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "NULL"
+        },
+        "18": {
+          "GXT": "NULL"
+        },
+        "19": {
+          "GXT": "NULL"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "87": {
+      "Name": "T-shirts",
+      "Price": 1000,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt doré brillant"
+        }
+      }
+    },
+    "88": {
+      "Name": "T-shirts",
+      "Price": 1000,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt doré brillant"
+        }
+      }
+    },
+    "89": {
+      "Name": "T-shirts",
+      "Price": 1000,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt doré brillant"
+        }
+      }
+    },
+    "90": {
+      "Name": "Chemises",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise blazer bleue"
+        },
+        "1": {
+          "GXT": "Chemise blazer rouge"
+        }
+      }
+    },
+    "91": {
+      "Name": "Gilets",
+      "Price": 500,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Crème et chemise blanche"
+        },
+        "1": {
+          "GXT": "Crème et chemise noire"
+        },
+        "2": {
+          "GXT": "Crème et chemise bleue"
+        },
+        "3": {
+          "GXT": "Crème et chemise rouge"
+        },
+        "4": {
+          "GXT": "Rouge et chemise blanche"
+        },
+        "5": {
+          "GXT": "Rouge et chemise noire"
+        },
+        "6": {
+          "GXT": "Rouge et chemise bleue"
+        },
+        "7": {
+          "GXT": "Rouge et chemise rouge"
+        },
+        "8": {
+          "GXT": "Bleu et chemise blanche"
+        },
+        "9": {
+          "GXT": "Bleu et chemise noire"
+        },
+        "10": {
+          "GXT": "Bleu et chemise bleue"
+        },
+        "11": {
+          "GXT": "Bleu et chemise rouge"
+        },
+        "12": {
+          "GXT": "Cyan et chemise blanche"
+        },
+        "13": {
+          "GXT": "Cyan et chemise noire"
+        },
+        "14": {
+          "GXT": "Cyan et chemise bleue"
+        },
+        "15": {
+          "GXT": "Cyan et chemise rouge"
+        },
+        "16": {
+          "GXT": "Noir et chemise blanche"
+        },
+        "17": {
+          "GXT": "Noir et chemise noire"
+        },
+        "18": {
+          "GXT": "Noir et chemise bleue"
+        },
+        "19": {
+          "GXT": "Noir et chemise rouge"
+        },
+        "20": {
+          "GXT": "Blanc et chemise blanche"
+        },
+        "21": {
+          "GXT": "Blanc et chemise noire"
+        },
+        "22": {
+          "GXT": "Blanc et chemise bleue"
+        },
+        "23": {
+          "GXT": "Blanc et chemise rouge"
+        }
+      }
+    },
+    "92": {
+      "Name": "Gilets",
+      "Price": 500,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Crème et col roulé blanc"
+        },
+        "1": {
+          "GXT": "Crème et col roulé noir"
+        },
+        "2": {
+          "GXT": "Crème et col roulé bleu"
+        },
+        "3": {
+          "GXT": "Crème et col roulé rouge"
+        },
+        "4": {
+          "GXT": "Rouge et col roulé blanc"
+        },
+        "5": {
+          "GXT": "Rouge et col roulé noir"
+        },
+        "6": {
+          "GXT": "Rouge et col roulé bleu"
+        },
+        "7": {
+          "GXT": "Rouge et col roulé rouge"
+        },
+        "8": {
+          "GXT": "Bleu et col roulé blanc"
+        },
+        "9": {
+          "GXT": "Bleu et col roulé noir"
+        },
+        "10": {
+          "GXT": "Bleu et col roulé bleu"
+        },
+        "11": {
+          "GXT": "Bleu et col roulé rouge"
+        },
+        "12": {
+          "GXT": "Cyan et col roulé blanc"
+        },
+        "13": {
+          "GXT": "Cyan et col roulé noir"
+        },
+        "14": {
+          "GXT": "Cyan et col roulé bleu"
+        },
+        "15": {
+          "GXT": "Cyan et col roulé rouge"
+        },
+        "16": {
+          "GXT": "Noir et col roulé blanc"
+        },
+        "17": {
+          "GXT": "Noir et col roulé noir"
+        },
+        "18": {
+          "GXT": "Noir et col roulé bleu"
+        },
+        "19": {
+          "GXT": "Noir et col roulé rouge"
+        },
+        "20": {
+          "GXT": "Blanc et col roulé blanc"
+        },
+        "21": {
+          "GXT": "Blanc et col roulé noir"
+        },
+        "22": {
+          "GXT": "Blanc et col roulé bleu"
+        },
+        "23": {
+          "GXT": "Blanc et col roulé rouge"
+        }
+      }
+    },
+    "93": {
+      "Name": "Chemises",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise bleue"
+        },
+        "1": {
+          "GXT": "Chemise vert bouteille"
+        }
+      }
+    },
+    "94": {
+      "Name": "Chemises",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise bleue"
+        },
+        "1": {
+          "GXT": "Chemise vert bouteille"
+        }
+      }
+    },
+    "95": {
+      "Name": "Chemises",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Chemise bleue"
+        },
+        "1": {
+          "GXT": "Chemise vert bouteille"
+        }
+      }
+    },
+    "96": {
+      "Name": "Chemises",
+      "Price": 400,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "97": {
+      "Name": "NULL",
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "98": {
+      "Name": "T-shirts camo",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt bleu pixels"
+        },
+        "1": {
+          "GXT": "T-shirt marron pixels"
+        },
+        "2": {
+          "GXT": "T-shirt vert pixels"
+        },
+        "3": {
+          "GXT": "T-shirt gris pixels"
+        },
+        "4": {
+          "GXT": "T-shirt pêche pixels"
+        },
+        "5": {
+          "GXT": "T-shirt beige"
+        },
+        "6": {
+          "GXT": "T-shirt sombre forêt"
+        },
+        "7": {
+          "GXT": "T-shirt quadrillé"
+        },
+        "8": {
+          "GXT": "T-shirt vert mousse pixels"
+        },
+        "9": {
+          "GXT": "T-shirt gris forêt"
+        },
+        "10": {
+          "GXT": "T-shirt camouflage turquoise"
+        },
+        "11": {
+          "GXT": "T-shirt éclats"
+        },
+        "12": {
+          "GXT": "T-shirt camouflage contraste"
+        },
+        "13": {
+          "GXT": "T-shirt pavés"
+        },
+        "14": {
+          "GXT": "T-shirt camouflage pêche"
+        },
+        "15": {
+          "GXT": "T-shirt pinceau"
+        },
+        "16": {
+          "GXT": "T-shirt camouflage"
+        },
+        "17": {
+          "GXT": "T-shirt clair forêt"
+        },
+        "18": {
+          "GXT": "T-shirt vert mousse"
+        },
+        "19": {
+          "GXT": "T-shirt sable"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "99": {
+      "Name": "T-shirts camo",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt bleu pixels"
+        },
+        "1": {
+          "GXT": "T-shirt marron pixels"
+        },
+        "2": {
+          "GXT": "T-shirt vert pixels"
+        },
+        "3": {
+          "GXT": "T-shirt gris pixels"
+        },
+        "4": {
+          "GXT": "T-shirt pêche pixels"
+        },
+        "5": {
+          "GXT": "T-shirt beige"
+        },
+        "6": {
+          "GXT": "T-shirt sombre forêt"
+        },
+        "7": {
+          "GXT": "T-shirt quadrillé"
+        },
+        "8": {
+          "GXT": "T-shirt vert mousse pixels"
+        },
+        "9": {
+          "GXT": "T-shirt gris forêt"
+        },
+        "10": {
+          "GXT": "T-shirt camouflage turquoise"
+        },
+        "11": {
+          "GXT": "T-shirt éclats"
+        },
+        "12": {
+          "GXT": "T-shirt camouflage contraste"
+        },
+        "13": {
+          "GXT": "T-shirt pavés"
+        },
+        "14": {
+          "GXT": "T-shirt camouflage pêche"
+        },
+        "15": {
+          "GXT": "T-shirt pinceau"
+        },
+        "16": {
+          "GXT": "T-shirt camouflage"
+        },
+        "17": {
+          "GXT": "T-shirt clair forêt"
+        },
+        "18": {
+          "GXT": "T-shirt vert mousse"
+        },
+        "19": {
+          "GXT": "T-shirt sable"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "100": {
+      "Name": "T-shirts camo",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt bleu pixels"
+        },
+        "1": {
+          "GXT": "T-shirt marron pixels"
+        },
+        "2": {
+          "GXT": "T-shirt vert pixels"
+        },
+        "3": {
+          "GXT": "T-shirt gris pixels"
+        },
+        "4": {
+          "GXT": "T-shirt pêche pixels"
+        },
+        "5": {
+          "GXT": "T-shirt beige"
+        },
+        "6": {
+          "GXT": "T-shirt sombre forêt"
+        },
+        "7": {
+          "GXT": "T-shirt quadrillé"
+        },
+        "8": {
+          "GXT": "T-shirt vert mousse pixels"
+        },
+        "9": {
+          "GXT": "T-shirt gris forêt"
+        },
+        "10": {
+          "GXT": "T-shirt camouflage turquoise"
+        },
+        "11": {
+          "GXT": "T-shirt éclats"
+        },
+        "12": {
+          "GXT": "T-shirt camouflage contraste"
+        },
+        "13": {
+          "GXT": "T-shirt pavés"
+        },
+        "14": {
+          "GXT": "T-shirt camouflage pêche"
+        },
+        "15": {
+          "GXT": "T-shirt pinceau"
+        },
+        "16": {
+          "GXT": "T-shirt camouflage"
+        },
+        "17": {
+          "GXT": "T-shirt clair forêt"
+        },
+        "18": {
+          "GXT": "T-shirt vert mousse"
+        },
+        "19": {
+          "GXT": "T-shirt sable"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "101": {
+      "Name": "T-shirts camo",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt bleu pixels"
+        },
+        "1": {
+          "GXT": "T-shirt marron pixels"
+        },
+        "2": {
+          "GXT": "T-shirt vert pixels"
+        },
+        "3": {
+          "GXT": "T-shirt gris pixels"
+        },
+        "4": {
+          "GXT": "T-shirt pêche pixels"
+        },
+        "5": {
+          "GXT": "T-shirt beige"
+        },
+        "6": {
+          "GXT": "T-shirt sombre forêt"
+        },
+        "7": {
+          "GXT": "T-shirt quadrillé"
+        },
+        "8": {
+          "GXT": "T-shirt vert mousse pixels"
+        },
+        "9": {
+          "GXT": "T-shirt gris forêt"
+        },
+        "10": {
+          "GXT": "T-shirt camouflage turquoise"
+        },
+        "11": {
+          "GXT": "T-shirt éclats"
+        },
+        "12": {
+          "GXT": "T-shirt camouflage contraste"
+        },
+        "13": {
+          "GXT": "T-shirt pavés"
+        },
+        "14": {
+          "GXT": "T-shirt camouflage pêche"
+        },
+        "15": {
+          "GXT": "T-shirt pinceau"
+        },
+        "16": {
+          "GXT": "T-shirt camouflage"
+        },
+        "17": {
+          "GXT": "T-shirt clair forêt"
+        },
+        "18": {
+          "GXT": "T-shirt vert mousse"
+        },
+        "19": {
+          "GXT": "T-shirt sable"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "102": {
+      "Name": "T-shirts camo",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt bleu pixels"
+        },
+        "1": {
+          "GXT": "T-shirt marron pixels"
+        },
+        "2": {
+          "GXT": "T-shirt vert pixels"
+        },
+        "3": {
+          "GXT": "T-shirt gris pixels"
+        },
+        "4": {
+          "GXT": "T-shirt pêche pixels"
+        },
+        "5": {
+          "GXT": "T-shirt beige"
+        },
+        "6": {
+          "GXT": "T-shirt sombre forêt"
+        },
+        "7": {
+          "GXT": "T-shirt quadrillé"
+        },
+        "8": {
+          "GXT": "T-shirt vert mousse pixels"
+        },
+        "9": {
+          "GXT": "T-shirt gris forêt"
+        },
+        "10": {
+          "GXT": "T-shirt camouflage turquoise"
+        },
+        "11": {
+          "GXT": "T-shirt éclats"
+        },
+        "12": {
+          "GXT": "T-shirt camouflage contraste"
+        },
+        "13": {
+          "GXT": "T-shirt pavés"
+        },
+        "14": {
+          "GXT": "T-shirt camouflage pêche"
+        },
+        "15": {
+          "GXT": "T-shirt pinceau"
+        },
+        "16": {
+          "GXT": "T-shirt camouflage"
+        },
+        "17": {
+          "GXT": "T-shirt clair forêt"
+        },
+        "18": {
+          "GXT": "T-shirt vert mousse"
+        },
+        "19": {
+          "GXT": "T-shirt sable"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "103": {
+      "Name": "T-shirts",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt poing américain à poche"
+        }
+      }
+    },
+    "104": {
+      "Name": "T-shirts",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt poing américain à poche"
+        }
+      }
+    },
+    "105": {
+      "Name": "T-shirts",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt poing américain à poche"
+        }
+      }
+    },
+    "106": {
+      "Name": "T-shirts",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt poing américain à poche"
+        }
+      }
+    },
+    "107": {
+      "Name": "T-shirts",
+      "Price": 400,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt poing américain à poche"
+        }
+      }
+    },
+    "108": {
+      "Name": "NULL",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "109": {
+      "Name": "Polos",
+      "Price": 200,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "LC Beavers foncé"
+        },
+        "1": {
+          "GXT": "LC Beavers clair"
+        },
+        "2": {
+          "GXT": "LS Benders foncé"
+        },
+        "3": {
+          "GXT": "LS Benders clair"
+        },
+        "4": {
+          "GXT": "LS Jardineros clair"
+        },
+        "5": {
+          "GXT": "LS Jardineros foncé"
+        },
+        "6": {
+          "GXT": "Liberty Cocks foncé"
+        },
+        "7": {
+          "GXT": "Liberty Cocks clair"
+        },
+        "8": {
+          "GXT": "Red Mist XI foncé"
+        },
+        "9": {
+          "GXT": "Red Mist XI clair"
+        },
+        "10": {
+          "GXT": "Superstroika foncé"
+        },
+        "11": {
+          "GXT": "Superstroika clair"
+        }
+      }
+    },
+    "110": {
+      "Name": "Polos",
+      "Price": 200,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "LC Beavers foncé, rentré"
+        },
+        "1": {
+          "GXT": "LC Beavers clair, rentré"
+        },
+        "2": {
+          "GXT": "LS Benders foncé, rentré"
+        },
+        "3": {
+          "GXT": "LS Benders clair, rentré"
+        },
+        "4": {
+          "GXT": "LS Jardineros clair, rentré"
+        },
+        "5": {
+          "GXT": "LS Jardineros foncé, rentré"
+        },
+        "6": {
+          "GXT": "Liberty Cocks foncé, rentré"
+        },
+        "7": {
+          "GXT": "Liberty Cocks clair, rentré"
+        },
+        "8": {
+          "GXT": "Red Mist XI foncé, rentré"
+        },
+        "9": {
+          "GXT": "Red Mist XI clair, rentré"
+        },
+        "10": {
+          "GXT": "Superstroika foncé, rentré"
+        },
+        "11": {
+          "GXT": "Superstroika clair, rentré"
+        }
+      }
+    },
+    "111": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "NULL"
+        },
+        "18": {
+          "GXT": "NULL"
+        },
+        "19": {
+          "GXT": "NULL"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        },
+        "24": {
+          "GXT": "NULL"
+        },
+        "25": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "112": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "T-shirt retroussé gris rayé"
+        },
+        "4": {
+          "GXT": "T-shirt retroussé beige"
+        },
+        "5": {
+          "GXT": "T-shirt retroussé kaki"
+        }
+      }
+    },
+    "113": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "T-shirt retroussé gris rayé"
+        },
+        "4": {
+          "GXT": "T-shirt retroussé beige"
+        },
+        "5": {
+          "GXT": "T-shirt retroussé kaki"
+        }
+      }
+    },
+    "114": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "T-shirt retroussé gris rayé"
+        },
+        "4": {
+          "GXT": "T-shirt retroussé beige"
+        },
+        "5": {
+          "GXT": "T-shirt retroussé kaki"
+        }
+      }
+    },
+    "115": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "T-shirt retroussé gris rayé"
+        },
+        "4": {
+          "GXT": "T-shirt retroussé beige"
+        },
+        "5": {
+          "GXT": "T-shirt retroussé kaki"
+        }
+      }
+    },
+    "116": {
+      "Name": "T-shirts",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "T-shirt retroussé gris rayé"
+        },
+        "4": {
+          "GXT": "T-shirt retroussé beige"
+        },
+        "5": {
+          "GXT": "T-shirt retroussé kaki"
+        }
+      }
+    },
+    "117": {
+      "Name": "T-shirts camo",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt retroussé bleu pixels"
+        },
+        "1": {
+          "GXT": "T-shirt retrou. marron pixels"
+        },
+        "2": {
+          "GXT": "T-shirt retroussé vert pixels"
+        },
+        "3": {
+          "GXT": "T-shirt retroussé gris pixels"
+        },
+        "4": {
+          "GXT": "T-shirt retroussé pêche pixels"
+        },
+        "5": {
+          "GXT": "T-shirt retroussé beige"
+        },
+        "6": {
+          "GXT": "T-shirt retroussé sombre forêt"
+        },
+        "7": {
+          "GXT": "T-shirt retroussé quadrillé"
+        },
+        "8": {
+          "GXT": "T-shirt retrou. mousse pixels"
+        },
+        "9": {
+          "GXT": "T-shirt retroussé gris forêt"
+        },
+        "10": {
+          "GXT": "T-shirt retroussé camo. bleu"
+        },
+        "11": {
+          "GXT": "T-shirt retroussé éclats"
+        },
+        "12": {
+          "GXT": "T-shirt retroussé camo. contr."
+        },
+        "13": {
+          "GXT": "T-shirt retroussé pavés"
+        },
+        "14": {
+          "GXT": "T-shirt retroussé pêche forêt"
+        },
+        "15": {
+          "GXT": "T-shirt retroussé pinceau"
+        },
+        "16": {
+          "GXT": "T-shirt retroussé camouflage"
+        },
+        "17": {
+          "GXT": "T-shirt retroussé clair forêt"
+        },
+        "18": {
+          "GXT": "NULL"
+        },
+        "19": {
+          "GXT": "NULL"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "118": {
+      "Name": "T-shirts camo",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt retroussé bleu pixels"
+        },
+        "1": {
+          "GXT": "T-shirt retrou. marron pixels"
+        },
+        "2": {
+          "GXT": "T-shirt retroussé vert pixels"
+        },
+        "3": {
+          "GXT": "T-shirt retroussé gris pixels"
+        },
+        "4": {
+          "GXT": "T-shirt retroussé pêche pixels"
+        },
+        "5": {
+          "GXT": "T-shirt retroussé beige"
+        },
+        "6": {
+          "GXT": "T-shirt retroussé sombre forêt"
+        },
+        "7": {
+          "GXT": "T-shirt retroussé quadrillé"
+        },
+        "8": {
+          "GXT": "T-shirt retrou. mousse pixels"
+        },
+        "9": {
+          "GXT": "T-shirt retroussé gris forêt"
+        },
+        "10": {
+          "GXT": "T-shirt retroussé camo. bleu"
+        },
+        "11": {
+          "GXT": "T-shirt retroussé éclats"
+        },
+        "12": {
+          "GXT": "T-shirt retroussé camo. contr."
+        },
+        "13": {
+          "GXT": "T-shirt retroussé pavés"
+        },
+        "14": {
+          "GXT": "T-shirt retroussé pêche forêt"
+        },
+        "15": {
+          "GXT": "T-shirt retroussé pinceau"
+        },
+        "16": {
+          "GXT": "T-shirt retroussé camouflage"
+        },
+        "17": {
+          "GXT": "T-shirt retroussé clair forêt"
+        },
+        "18": {
+          "GXT": "NULL"
+        },
+        "19": {
+          "GXT": "NULL"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "119": {
+      "Name": "T-shirts camo",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt retroussé bleu pixels"
+        },
+        "1": {
+          "GXT": "T-shirt retrou. marron pixels"
+        },
+        "2": {
+          "GXT": "T-shirt retroussé vert pixels"
+        },
+        "3": {
+          "GXT": "T-shirt retroussé gris pixels"
+        },
+        "4": {
+          "GXT": "T-shirt retroussé pêche pixels"
+        },
+        "5": {
+          "GXT": "T-shirt retroussé beige"
+        },
+        "6": {
+          "GXT": "T-shirt retroussé sombre forêt"
+        },
+        "7": {
+          "GXT": "T-shirt retroussé quadrillé"
+        },
+        "8": {
+          "GXT": "T-shirt retrou. mousse pixels"
+        },
+        "9": {
+          "GXT": "T-shirt retroussé gris forêt"
+        },
+        "10": {
+          "GXT": "T-shirt retroussé camo. bleu"
+        },
+        "11": {
+          "GXT": "T-shirt retroussé éclats"
+        },
+        "12": {
+          "GXT": "T-shirt retroussé camo. contr."
+        },
+        "13": {
+          "GXT": "T-shirt retroussé pavés"
+        },
+        "14": {
+          "GXT": "T-shirt retroussé pêche forêt"
+        },
+        "15": {
+          "GXT": "T-shirt retroussé pinceau"
+        },
+        "16": {
+          "GXT": "T-shirt retroussé camouflage"
+        },
+        "17": {
+          "GXT": "T-shirt retroussé clair forêt"
+        },
+        "18": {
+          "GXT": "NULL"
+        },
+        "19": {
+          "GXT": "NULL"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "120": {
+      "Name": "T-shirts camo",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt retroussé bleu pixels"
+        },
+        "1": {
+          "GXT": "T-shirt retrou. marron pixels"
+        },
+        "2": {
+          "GXT": "T-shirt retroussé vert pixels"
+        },
+        "3": {
+          "GXT": "T-shirt retroussé gris pixels"
+        },
+        "4": {
+          "GXT": "T-shirt retroussé pêche pixels"
+        },
+        "5": {
+          "GXT": "T-shirt retroussé beige"
+        },
+        "6": {
+          "GXT": "T-shirt retroussé sombre forêt"
+        },
+        "7": {
+          "GXT": "T-shirt retroussé quadrillé"
+        },
+        "8": {
+          "GXT": "T-shirt retrou. mousse pixels"
+        },
+        "9": {
+          "GXT": "T-shirt retroussé gris forêt"
+        },
+        "10": {
+          "GXT": "T-shirt retroussé camo. bleu"
+        },
+        "11": {
+          "GXT": "T-shirt retroussé éclats"
+        },
+        "12": {
+          "GXT": "T-shirt retroussé camo. contr."
+        },
+        "13": {
+          "GXT": "T-shirt retroussé pavés"
+        },
+        "14": {
+          "GXT": "T-shirt retroussé pêche forêt"
+        },
+        "15": {
+          "GXT": "T-shirt retroussé pinceau"
+        },
+        "16": {
+          "GXT": "T-shirt retroussé camouflage"
+        },
+        "17": {
+          "GXT": "T-shirt retroussé clair forêt"
+        },
+        "18": {
+          "GXT": "NULL"
+        },
+        "19": {
+          "GXT": "NULL"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "121": {
+      "Name": "T-shirts camo",
+      "Price": 350,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt retroussé bleu pixels"
+        },
+        "1": {
+          "GXT": "T-shirt retrou. marron pixels"
+        },
+        "2": {
+          "GXT": "T-shirt retroussé vert pixels"
+        },
+        "3": {
+          "GXT": "T-shirt retroussé gris pixels"
+        },
+        "4": {
+          "GXT": "T-shirt retroussé pêche pixels"
+        },
+        "5": {
+          "GXT": "T-shirt retroussé beige"
+        },
+        "6": {
+          "GXT": "T-shirt retroussé sombre forêt"
+        },
+        "7": {
+          "GXT": "T-shirt retroussé quadrillé"
+        },
+        "8": {
+          "GXT": "T-shirt retrou. mousse pixels"
+        },
+        "9": {
+          "GXT": "T-shirt retroussé gris forêt"
+        },
+        "10": {
+          "GXT": "T-shirt retroussé camo. bleu"
+        },
+        "11": {
+          "GXT": "T-shirt retroussé éclats"
+        },
+        "12": {
+          "GXT": "T-shirt retroussé camo. contr."
+        },
+        "13": {
+          "GXT": "T-shirt retroussé pavés"
+        },
+        "14": {
+          "GXT": "T-shirt retroussé pêche forêt"
+        },
+        "15": {
+          "GXT": "T-shirt retroussé pinceau"
+        },
+        "16": {
+          "GXT": "T-shirt retroussé camouflage"
+        },
+        "17": {
+          "GXT": "T-shirt retroussé clair forêt"
+        },
+        "18": {
+          "GXT": "NULL"
+        },
+        "19": {
+          "GXT": "NULL"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "122": {
+      "Name": "NULL",
+      "Price": 150,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "123": {
+      "Name": "NULL",
+      "Price": 500,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "NULL"
+        },
+        "18": {
+          "GXT": "NULL"
+        },
+        "19": {
+          "GXT": "NULL"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        },
+        "24": {
+          "GXT": "NULL"
+        },
+        "25": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "124": {
+      "Name": "NULL",
+      "Price": 500,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet d'interv. ultraléger"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "125": {
+      "Name": "NULL",
+      "Price": 500,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet d'intervention léger"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "126": {
+      "Name": "NULL",
+      "Price": 500,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet d'intervention moyen"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "127": {
+      "Name": "NULL",
+      "Price": 5000,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet d'intervention lourd"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "128": {
+      "Name": "NULL",
+      "Price": 500,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet d'intervention extrême"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "129": {
+      "Name": "NULL",
+      "Price": 150,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "130": {
+      "Name": "NULL",
+      "Price": 150,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "131": {
+      "Name": "NULL",
+      "Price": 500,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Gilet tactique noir"
+        },
+        "1": {
+          "GXT": "Gilet tactique anthracite"
+        },
+        "2": {
+          "GXT": "Gilet tactique gris cendre"
+        },
+        "3": {
+          "GXT": "Gilet tactique blanc neige"
+        },
+        "4": {
+          "GXT": "Gilet tactique bleu marine"
+        },
+        "5": {
+          "GXT": "Gilet tactique chamois"
+        },
+        "6": {
+          "GXT": "Gilet tactique sable"
+        },
+        "7": {
+          "GXT": "Gilet tactique brun clair"
+        },
+        "8": {
+          "GXT": "Gilet tactique saumon"
+        },
+        "9": {
+          "GXT": "Gilet tactique vert mousse"
+        },
+        "10": {
+          "GXT": "Gilet tactique pêche"
+        },
+        "11": {
+          "GXT": "Gilet tactique marron pixels"
+        },
+        "12": {
+          "GXT": "Gilet tactique beige"
+        },
+        "13": {
+          "GXT": "Gilet tactique camo. blanc"
+        },
+        "14": {
+          "GXT": "Gilet tactique camo. pêche"
+        },
+        "15": {
+          "GXT": "Gilet tactique camo. rouge"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "NULL"
+        },
+        "18": {
+          "GXT": "NULL"
+        },
+        "19": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "132": {
+      "Name": "T-shirts logo",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt ras du cou"
+        },
+        "1": {
+          "GXT": "T-shirt Manor blanc zigzag"
+        },
+        "2": {
+          "GXT": "T-shirt Manor blanc"
+        },
+        "3": {
+          "GXT": "T-shirt Manor lilas"
+        },
+        "4": {
+          "GXT": "T-shirt Manor vert menthe"
+        },
+        "5": {
+          "GXT": "T-shirt Manor noir à rayures"
+        },
+        "6": {
+          "GXT": "T-shirt Manor blanc à rayures"
+        },
+        "7": {
+          "GXT": "T-shirt Blagueurs globe vert"
+        },
+        "8": {
+          "GXT": "T-shirt Blagueurs globe mauve"
+        },
+        "9": {
+          "GXT": "T-shirt Blagueurs"
+        },
+        "10": {
+          "GXT": "T-shirt Blagueurs LS"
+        },
+        "11": {
+          "GXT": "T-shirt Blagueurs à rayures"
+        },
+        "12": {
+          "GXT": "T-shirt sport Blagueurs"
+        },
+        "13": {
+          "GXT": "T-shirt Blagueurs LS bleu-vert"
+        },
+        "14": {
+          "GXT": "T-shirt Blagueurs LS n&b"
+        },
+        "15": {
+          "GXT": "T-shirt Santo Capra saumon"
+        },
+        "16": {
+          "GXT": "T-shirt Santo Capra bleu"
+        },
+        "17": {
+          "GXT": "T-shirt Santo Capra jaune"
+        },
+        "18": {
+          "GXT": "T-shirt Santo Capra rose"
+        },
+        "19": {
+          "GXT": "T-s. Santo Capra rouge & noir"
+        },
+        "20": {
+          "GXT": "T-shirt Santo Capra bleu rayé"
+        }
+      }
+    },
+    "133": {
+      "Name": "T-shirts logo",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt ras du cou"
+        },
+        "1": {
+          "GXT": "T-shirt Manor blanc zigzag"
+        },
+        "2": {
+          "GXT": "T-shirt Manor blanc"
+        },
+        "3": {
+          "GXT": "T-shirt Manor lilas"
+        },
+        "4": {
+          "GXT": "T-shirt Manor vert menthe"
+        },
+        "5": {
+          "GXT": "T-shirt Manor noir à rayures"
+        },
+        "6": {
+          "GXT": "T-shirt Manor blanc à rayures"
+        },
+        "7": {
+          "GXT": "T-shirt Blagueurs globe vert"
+        },
+        "8": {
+          "GXT": "T-shirt Blagueurs globe mauve"
+        },
+        "9": {
+          "GXT": "T-shirt Blagueurs"
+        },
+        "10": {
+          "GXT": "T-shirt Blagueurs LS"
+        },
+        "11": {
+          "GXT": "T-shirt Blagueurs à rayures"
+        },
+        "12": {
+          "GXT": "T-shirt sport Blagueurs"
+        },
+        "13": {
+          "GXT": "T-shirt Blagueurs LS bleu-vert"
+        },
+        "14": {
+          "GXT": "T-shirt Blagueurs LS n&b"
+        },
+        "15": {
+          "GXT": "T-shirt Santo Capra saumon"
+        },
+        "16": {
+          "GXT": "T-shirt Santo Capra bleu"
+        },
+        "17": {
+          "GXT": "T-shirt Santo Capra jaune"
+        },
+        "18": {
+          "GXT": "T-shirt Santo Capra rose"
+        },
+        "19": {
+          "GXT": "T-s. Santo Capra rouge & noir"
+        },
+        "20": {
+          "GXT": "T-shirt Santo Capra bleu rayé"
+        }
+      }
+    },
+    "134": {
+      "Name": "T-shirts logo",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt ras du cou"
+        },
+        "1": {
+          "GXT": "T-shirt Manor blanc zigzag"
+        },
+        "2": {
+          "GXT": "T-shirt Manor blanc"
+        },
+        "3": {
+          "GXT": "T-shirt Manor lilas"
+        },
+        "4": {
+          "GXT": "T-shirt Manor vert menthe"
+        },
+        "5": {
+          "GXT": "T-shirt Manor noir à rayures"
+        },
+        "6": {
+          "GXT": "T-shirt Manor blanc à rayures"
+        },
+        "7": {
+          "GXT": "T-shirt Blagueurs globe vert"
+        },
+        "8": {
+          "GXT": "T-shirt Blagueurs globe mauve"
+        },
+        "9": {
+          "GXT": "T-shirt Blagueurs"
+        },
+        "10": {
+          "GXT": "T-shirt Blagueurs LS"
+        },
+        "11": {
+          "GXT": "T-shirt Blagueurs à rayures"
+        },
+        "12": {
+          "GXT": "T-shirt sport Blagueurs"
+        },
+        "13": {
+          "GXT": "T-shirt Blagueurs LS bleu-vert"
+        },
+        "14": {
+          "GXT": "T-shirt Blagueurs LS n&b"
+        },
+        "15": {
+          "GXT": "T-shirt Santo Capra saumon"
+        },
+        "16": {
+          "GXT": "T-shirt Santo Capra bleu"
+        },
+        "17": {
+          "GXT": "T-shirt Santo Capra jaune"
+        },
+        "18": {
+          "GXT": "T-shirt Santo Capra rose"
+        },
+        "19": {
+          "GXT": "T-s. Santo Capra rouge & noir"
+        },
+        "20": {
+          "GXT": "T-shirt Santo Capra bleu rayé"
+        }
+      }
+    },
+    "135": {
+      "Name": "T-shirts logo",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt ras du cou"
+        },
+        "1": {
+          "GXT": "T-shirt Manor blanc zigzag"
+        },
+        "2": {
+          "GXT": "T-shirt Manor blanc"
+        },
+        "3": {
+          "GXT": "T-shirt Manor lilas"
+        },
+        "4": {
+          "GXT": "T-shirt Manor vert menthe"
+        },
+        "5": {
+          "GXT": "T-shirt Manor noir à rayures"
+        },
+        "6": {
+          "GXT": "T-shirt Manor blanc à rayures"
+        },
+        "7": {
+          "GXT": "T-shirt Blagueurs globe vert"
+        },
+        "8": {
+          "GXT": "T-shirt Blagueurs globe mauve"
+        },
+        "9": {
+          "GXT": "T-shirt Blagueurs"
+        },
+        "10": {
+          "GXT": "T-shirt Blagueurs LS"
+        },
+        "11": {
+          "GXT": "T-shirt Blagueurs à rayures"
+        },
+        "12": {
+          "GXT": "T-shirt sport Blagueurs"
+        },
+        "13": {
+          "GXT": "T-shirt Blagueurs LS bleu-vert"
+        },
+        "14": {
+          "GXT": "T-shirt Blagueurs LS n&b"
+        },
+        "15": {
+          "GXT": "T-shirt Santo Capra saumon"
+        },
+        "16": {
+          "GXT": "T-shirt Santo Capra bleu"
+        },
+        "17": {
+          "GXT": "T-shirt Santo Capra jaune"
+        },
+        "18": {
+          "GXT": "T-shirt Santo Capra rose"
+        },
+        "19": {
+          "GXT": "T-s. Santo Capra rouge & noir"
+        },
+        "20": {
+          "GXT": "T-shirt Santo Capra bleu rayé"
+        }
+      }
+    },
+    "136": {
+      "Name": "T-shirts logo",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "T-shirt ras du cou"
+        },
+        "1": {
+          "GXT": "T-shirt Manor blanc zigzag"
+        },
+        "2": {
+          "GXT": "T-shirt Manor blanc"
+        },
+        "3": {
+          "GXT": "T-shirt Manor lilas"
+        },
+        "4": {
+          "GXT": "T-shirt Manor vert menthe"
+        },
+        "5": {
+          "GXT": "T-shirt Manor noir à rayures"
+        },
+        "6": {
+          "GXT": "T-shirt Manor blanc à rayures"
+        },
+        "7": {
+          "GXT": "T-shirt Blagueurs globe vert"
+        },
+        "8": {
+          "GXT": "T-shirt Blagueurs globe mauve"
+        },
+        "9": {
+          "GXT": "T-shirt Blagueurs"
+        },
+        "10": {
+          "GXT": "T-shirt Blagueurs LS"
+        },
+        "11": {
+          "GXT": "T-shirt Blagueurs à rayures"
+        },
+        "12": {
+          "GXT": "T-shirt sport Blagueurs"
+        },
+        "13": {
+          "GXT": "T-shirt Blagueurs LS bleu-vert"
+        },
+        "14": {
+          "GXT": "T-shirt Blagueurs LS n&b"
+        },
+        "15": {
+          "GXT": "T-shirt Santo Capra saumon"
+        },
+        "16": {
+          "GXT": "T-shirt Santo Capra bleu"
+        },
+        "17": {
+          "GXT": "T-shirt Santo Capra jaune"
+        },
+        "18": {
+          "GXT": "T-shirt Santo Capra rose"
+        },
+        "19": {
+          "GXT": "T-s. Santo Capra rouge & noir"
+        },
+        "20": {
+          "GXT": "T-shirt Santo Capra bleu rayé"
+        }
+      }
+    },
+    "137": {
+      "Name": "NULL",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "138": {
+      "Name": "T-shirts logo",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "T-s. Rangers de l'espace noir"
+        },
+        "3": {
+          "GXT": "T-s. Rangers de l'espace blanc"
+        },
+        "4": {
+          "GXT": "T-s. Rangers de l'espace jaune"
+        },
+        "5": {
+          "GXT": "T-s. Rangers de l'espace vert"
+        },
+        "6": {
+          "GXT": "T-s. logo R. de l'espace noir"
+        },
+        "7": {
+          "GXT": "T-s. logo R. de l'espace vert"
+        },
+        "8": {
+          "GXT": "T-shirt blanc phases"
+        },
+        "9": {
+          "GXT": "T-shirt jaune phases"
+        },
+        "10": {
+          "GXT": "T-shirt roquette et tache bleu"
+        },
+        "11": {
+          "GXT": "T-shirt roquette et tache rose"
+        },
+        "12": {
+          "GXT": "T-shirt combi. alien noir"
+        },
+        "13": {
+          "GXT": "T-shirt combi. alien rose"
+        },
+        "14": {
+          "GXT": "T-shirt mauve deux lunes"
+        },
+        "15": {
+          "GXT": "T-shirt bleu deux lunes"
+        },
+        "16": {
+          "GXT": "T-shirt rose deux lunes"
+        },
+        "17": {
+          "GXT": "T-s. La liberté a un prix bleu"
+        },
+        "18": {
+          "GXT": "T-s. La liberté a un prix vert"
+        },
+        "19": {
+          "GXT": "T. La liberté a un prix rouge"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "139": {
+      "Name": "T-shirts logo",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "T-s. Rangers de l'espace noir"
+        },
+        "3": {
+          "GXT": "T-s. Rangers de l'espace blanc"
+        },
+        "4": {
+          "GXT": "T-s. Rangers de l'espace jaune"
+        },
+        "5": {
+          "GXT": "T-s. Rangers de l'espace vert"
+        },
+        "6": {
+          "GXT": "T-s. logo R. de l'espace noir"
+        },
+        "7": {
+          "GXT": "T-s. logo R. de l'espace vert"
+        },
+        "8": {
+          "GXT": "T-shirt blanc phases"
+        },
+        "9": {
+          "GXT": "T-shirt jaune phases"
+        },
+        "10": {
+          "GXT": "T-shirt roquette et tache bleu"
+        },
+        "11": {
+          "GXT": "T-shirt roquette et tache rose"
+        },
+        "12": {
+          "GXT": "T-shirt combi. alien noir"
+        },
+        "13": {
+          "GXT": "T-shirt combi. alien rose"
+        },
+        "14": {
+          "GXT": "T-shirt mauve deux lunes"
+        },
+        "15": {
+          "GXT": "T-shirt bleu deux lunes"
+        },
+        "16": {
+          "GXT": "T-shirt rose deux lunes"
+        },
+        "17": {
+          "GXT": "T-s. La liberté a un prix bleu"
+        },
+        "18": {
+          "GXT": "T-s. La liberté a un prix vert"
+        },
+        "19": {
+          "GXT": "T. La liberté a un prix rouge"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "140": {
+      "Name": "T-shirts logo",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "T-s. Rangers de l'espace noir"
+        },
+        "3": {
+          "GXT": "T-s. Rangers de l'espace blanc"
+        },
+        "4": {
+          "GXT": "T-s. Rangers de l'espace jaune"
+        },
+        "5": {
+          "GXT": "T-s. Rangers de l'espace vert"
+        },
+        "6": {
+          "GXT": "T-s. logo R. de l'espace noir"
+        },
+        "7": {
+          "GXT": "T-s. logo R. de l'espace vert"
+        },
+        "8": {
+          "GXT": "T-shirt blanc phases"
+        },
+        "9": {
+          "GXT": "T-shirt jaune phases"
+        },
+        "10": {
+          "GXT": "T-shirt roquette et tache bleu"
+        },
+        "11": {
+          "GXT": "T-shirt roquette et tache rose"
+        },
+        "12": {
+          "GXT": "T-shirt combi. alien noir"
+        },
+        "13": {
+          "GXT": "T-shirt combi. alien rose"
+        },
+        "14": {
+          "GXT": "T-shirt mauve deux lunes"
+        },
+        "15": {
+          "GXT": "T-shirt bleu deux lunes"
+        },
+        "16": {
+          "GXT": "T-shirt rose deux lunes"
+        },
+        "17": {
+          "GXT": "T-s. La liberté a un prix bleu"
+        },
+        "18": {
+          "GXT": "T-s. La liberté a un prix vert"
+        },
+        "19": {
+          "GXT": "T. La liberté a un prix rouge"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "141": {
+      "Name": "T-shirts logo",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "T-s. Rangers de l'espace noir"
+        },
+        "3": {
+          "GXT": "T-s. Rangers de l'espace blanc"
+        },
+        "4": {
+          "GXT": "T-s. Rangers de l'espace jaune"
+        },
+        "5": {
+          "GXT": "T-s. Rangers de l'espace vert"
+        },
+        "6": {
+          "GXT": "T-s. logo R. de l'espace noir"
+        },
+        "7": {
+          "GXT": "T-s. logo R. de l'espace vert"
+        },
+        "8": {
+          "GXT": "T-shirt blanc phases"
+        },
+        "9": {
+          "GXT": "T-shirt jaune phases"
+        },
+        "10": {
+          "GXT": "T-shirt roquette et tache bleu"
+        },
+        "11": {
+          "GXT": "T-shirt roquette et tache rose"
+        },
+        "12": {
+          "GXT": "T-shirt combi. alien noir"
+        },
+        "13": {
+          "GXT": "T-shirt combi. alien rose"
+        },
+        "14": {
+          "GXT": "T-shirt mauve deux lunes"
+        },
+        "15": {
+          "GXT": "T-shirt bleu deux lunes"
+        },
+        "16": {
+          "GXT": "T-shirt rose deux lunes"
+        },
+        "17": {
+          "GXT": "T-s. La liberté a un prix bleu"
+        },
+        "18": {
+          "GXT": "T-s. La liberté a un prix vert"
+        },
+        "19": {
+          "GXT": "T. La liberté a un prix rouge"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "142": {
+      "Name": "T-shirts logo",
+      "Price": 100,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "T-s. Rangers de l'espace noir"
+        },
+        "3": {
+          "GXT": "T-s. Rangers de l'espace blanc"
+        },
+        "4": {
+          "GXT": "T-s. Rangers de l'espace jaune"
+        },
+        "5": {
+          "GXT": "T-s. Rangers de l'espace vert"
+        },
+        "6": {
+          "GXT": "T-s. logo R. de l'espace noir"
+        },
+        "7": {
+          "GXT": "T-s. logo R. de l'espace vert"
+        },
+        "8": {
+          "GXT": "T-shirt blanc phases"
+        },
+        "9": {
+          "GXT": "T-shirt jaune phases"
+        },
+        "10": {
+          "GXT": "T-shirt roquette et tache bleu"
+        },
+        "11": {
+          "GXT": "T-shirt roquette et tache rose"
+        },
+        "12": {
+          "GXT": "T-shirt combi. alien noir"
+        },
+        "13": {
+          "GXT": "T-shirt combi. alien rose"
+        },
+        "14": {
+          "GXT": "T-shirt mauve deux lunes"
+        },
+        "15": {
+          "GXT": "T-shirt bleu deux lunes"
+        },
+        "16": {
+          "GXT": "T-shirt rose deux lunes"
+        },
+        "17": {
+          "GXT": "T-s. La liberté a un prix bleu"
+        },
+        "18": {
+          "GXT": "T-s. La liberté a un prix vert"
+        },
+        "19": {
+          "GXT": "T. La liberté a un prix rouge"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "143": {
+      "Name": "NULL",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+	    "153": {
+      "Name": "ceinturon",
+      "Price": 250,
+      "Torso": [0,19,30,41,52,63,74,85,99],
+      "Variations": {
+        "0": {
+          "GXT": "Ceinturon LSPD"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "BlipSprite": 225,
+  "BlipPosition": {
+    "x": 1728.291,
+    "y": 3721.018,
+    "z": 34.06687
+  },
+  "LocationList": [
+    {
+      "position": {
+        "x": 1736.822,
+        "y": 3725.5781,
+        "z": 33.542847
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 1.171875
+      }
+    },
+	{
+      "position": {
+        "x": 1720.9451,
+        "y": 3717.2966,
+        "z": 33.72815
+      },
+      "rotation": {
+        "x": -0.015625,
+        "y": 0,
+        "z": -0.359375
+      }
+    },
+	{
+      "position": {
+        "x": 1718.2946,
+        "y": 3722.413,
+        "z": 33.913574
+      },
+      "rotation": {
+        "x": -0.03125,
+        "y": -0.03125,
+        "z": -0.46875
+      }
+    }
+  ],
+  "VehicleInfoList": [
+    {
+      "VehicleHash": 1126868326,
+      "Name": "BfInjection",
+      "InventoryWeight": 10,
+      "Price": 40000
+    },
+    {
+      "VehicleHash": 3945366167,
+      "Name": "Bifta",
+      "InventoryWeight": 5,
+      "Price": 70000
+    },
+    {
+      "VehicleHash": 2859047862,
+      "Name": "Bodhi",
+      "InventoryWeight": 50,
+      "Price": 50000
+    },
+    {
+      "VehicleHash": 2815302597,
+      "Name": "Brawler",
+      "InventoryWeight": 30,
+      "Price": 125000
+    },
+    {
+      "VehicleHash": 1770332643,
+      "Name": "DLoader",
+      "InventoryWeight": 50,
+      "Price": 50000
+    },
+    {
+      "VehicleHash": 3057713523,
+      "Name": "Dubsta 6x6",
+      "InventoryWeight": 50,
+      "Price": 200000
+    },
+    {
+      "VehicleHash": 92612664,
+      "Name": "Kalahari",
+      "InventoryWeight": 10,
+      "Price": 5000
+    },
+    {
+      "VehicleHash": 4173521127,
+      "Name": "Kamacho",
+      "InventoryWeight": 50,
+      "Price": 185000
+    },
+    {
+      "VehicleHash": 2230595153,
+      "Name": "Mesa 4x4",
+      "InventoryWeight": 50,
+      "Price": 90000
+    },
+    {
+      "VehicleHash": 1645267888,
+      "Name": "RancherXL",
+      "InventoryWeight": 50,
+      "Price": 50000
+    },
+    {
+      "VehicleHash": 3087195462,
+      "Name": "Rebel Old",
+      "InventoryWeight": 50,
+      "Price": 45000
+    },
+    {
+      "VehicleHash": 2249373259,
+      "Name": "Rebel",
+      "InventoryWeight": 50,
+      "Price": 55000
+    },
+    {
+      "VehicleHash": 2762269779,
+      "Name": "Riata",
+      "InventoryWeight": 50,
+      "Price": 100000
+    },
+    {
+      "VehicleHash": 4240635011,
+      "Name": "Freecrawler",
+      "InventoryWeight": 30,
+      "Price": 80000
+    },
+    {
+      "VehicleHash": 2945871676,
+      "Name": "Caracara 2",
+      "InventoryWeight": 50,
+      "Price": 115000
+    },
+    {
+       "VehicleHash": 3932816511,
+       "Name": "Hellion",
+       "InventoryWeight": 50,
+      "Price": 75000
+    }
+  ]
+}

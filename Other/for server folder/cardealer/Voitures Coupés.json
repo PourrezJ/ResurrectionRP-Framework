@@ -1,0 +1,156 @@
+{
+  "BlipSprite": 225,
+  "BlipPosition": {
+    "x": -1609.644,
+    "y": -821.1548,
+    "z": 10.04853
+  },
+  "LocationList": [
+    {
+      "position": {
+        "x": -1617.534,
+        "y": -806.7033,
+        "z": 9.53186
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 2.4375
+      }
+    },
+	{
+      "position": {
+        "x": -1610.891,
+        "y": -812.6374,
+        "z": 9.329712
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 2.484375
+      }
+    },
+	{
+      "position": {
+        "x": -1605.9956,
+        "y": -816.61975,
+        "z": 9.734009
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 2.40625
+      }
+    },
+	{
+      "position": {
+        "x": -1600.7869,
+        "y": -820.47034,
+        "z": 9.363403
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 2.4375
+      }
+    },
+	{
+      "position": {
+        "x": -1593.6791,
+        "y": -825.626341,
+        "z": 9.430786
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 2.4375
+      }
+    }
+  ],
+  "VehicleInfoList": [
+    {
+      "VehicleHash": 330661258,
+      "Name": "Cognoscenti Cabriolet",
+      "InventoryWeight": 25,
+      "Price": 120000
+    },
+    {
+      "VehicleHash": 873639469,
+      "Name": "Sentinel XS",
+      "InventoryWeight": 25,
+      "Price": 100000
+    },
+    {
+      "VehicleHash": 1348744438,
+      "Name": "Oracle",
+      "InventoryWeight": 25,
+      "Price": 80000
+    },
+    {
+      "VehicleHash": 1349725314,
+      "Name": "Sentinel",
+      "InventoryWeight": 25,
+      "Price": 90000
+    },
+    {
+      "VehicleHash": 1581459400,
+      "Name": "Windsor",
+      "InventoryWeight": 25,
+      "Price": 150000
+    },
+    {
+      "VehicleHash": 2364918497,
+      "Name": "Windsor Cabriolet",
+      "InventoryWeight": 25,
+      "Price": 160000
+    },
+    {
+      "VehicleHash": 3101863448,
+      "Name": "Zion Cabriolet",
+      "InventoryWeight": 25,
+      "Price": 75000
+    },
+    {
+      "VehicleHash": 3172678083,
+      "Name": "Zion",
+      "InventoryWeight": 25,
+      "Price": 65000
+    },
+    {
+      "VehicleHash": 3670438162,
+      "Name": "Jackal",
+      "InventoryWeight": 25,
+      "Price": 80000
+    },
+    {
+      "VehicleHash": 3703357000,
+      "Name": "F620",
+      "InventoryWeight": 25,
+      "Price": 90000
+    },
+    {
+      "VehicleHash": 3783366066,
+      "Name": "Oracle XS",
+      "InventoryWeight": 25,
+      "Price": 84000
+    },
+    {
+      "VehicleHash": 3903372712,
+      "Name": "Felon",
+      "InventoryWeight": 25,
+      "Price": 90000
+    },
+    {
+      "VehicleHash": 4205676014,
+      "Name": "Felon GT",
+      "InventoryWeight": 25,
+      "Price": 100000
+    },
+    {
+      "VehicleHash": 4289813342,
+      "Name": "Exemplar",
+      "InventoryWeight": 25,
+      "Price": 120000
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+{
+  "BlipSprite": 530,
+  "BlipPosition": {
+    "x": -1092.719,
+    "y": -308.2573,
+    "z": 37.64968
+  },
+  "LocationList": [
+    {
+      "position": {
+        "x": -1086.3297,
+        "y": -301.41098,
+        "z": 37.300415
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 1.0625
+      }
+    },
+	{
+      "position": {
+        "x": -1086.0286,
+        "y": -309.178,
+        "z": 36.946533
+      },
+      "rotation": {
+        "x": 0,
+        "y": -0.015625,
+        "z": 1.03125
+      }
+    },
+	{
+      "position": {
+        "x": -1087.6088,
+        "y": -316.66812,
+        "z": 37.131836
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0.90625
+      }
+    }
+  ],
+  "VehicleInfoList": [
+    {
+      "VehicleHash": 941800958,
+      "Name": "Casco",
+      "InventoryWeight": 15,
+      "Price": 800000
+    },
+    {
+      "VehicleHash": 223240013,
+      "Name": "Cheetah",
+      "InventoryWeight": 15,
+      "Price": 870000
+    },
+    {
+      "VehicleHash": 3306466016,
+      "Name": "Cheburek",
+      "InventoryWeight": 15,
+      "Price": 50000
+    },
+    {
+      "VehicleHash": 1011753235,
+      "Name": "Coquette 2",
+      "InventoryWeight": 15,
+      "Price": 830000
+    },
+    {
+      "VehicleHash": 784565758,
+      "Name": "Coquette Old Fashion",
+      "InventoryWeight": 15,
+      "Price": 900000
+    },
+    {
+      "VehicleHash": 1617472902,
+      "Name": "Fagaloa",
+      "InventoryWeight": 15,
+      "Price": 40000
+    },
+    {
+      "VehicleHash": 2728226064,
+      "Name": "feltzer",
+      "InventoryWeight": 15,
+      "Price": 740000
+    },
+    {
+      "VehicleHash": 2215179066,
+      "Name": "GT500",
+      "InventoryWeight": 15,
+      "Price": 810000
+    },
+    {
+      "VehicleHash": 2889029532,
+      "Name": "infernus",
+      "InventoryWeight": 15,
+      "Price": 950000
+    },
+    {
+      "VehicleHash": 2634021974,
+      "Name": "Mamba",
+      "InventoryWeight": 15,
+      "Price": 780000
+    },
+    {
+      "VehicleHash": 2170765704,
+      "Name": "Manana",
+      "InventoryWeight": 15,
+      "Price": 60000
+    },
+    {
+      "VehicleHash": 1046206681,
+      "Name": "Michelli",
+      "InventoryWeight": 15,
+      "Price": 50000
+    },
+    {
+      "VehicleHash": 3861591579,
+      "Name": "Monroe",
+      "InventoryWeight": 15,
+      "Price": 800000
+    },
+    {
+      "VehicleHash": 4080061290,
+      "Name": "Jester",
+      "InventoryWeight": 15,
+      "Price": 650000
+    },
+    {
+      "VehicleHash": 1830407356,
+      "Name": "Peyote",
+      "InventoryWeight": 15,
+      "Price": 100000
+    },
+    {
+      "VehicleHash": 1078682497,
+      "Name": "Pigalle",
+      "InventoryWeight": 15,
+      "Price": 80000
+    },
+    {
+      "VehicleHash": 2049897956,
+      "Name": "Rapid GT3",
+      "InventoryWeight": 15,
+      "Price": 200000
+    },
+    {
+      "VehicleHash": 1841130506,
+      "Name": "Retinue",
+      "InventoryWeight": 15,
+      "Price": 70000
+    },
+    {
+      "VehicleHash": 903794909,
+      "Name": "Savestra",
+      "InventoryWeight": 15,
+      "Price": 120000
+    },
+    {
+      "VehicleHash": 2196019706,
+      "Name": "Stinger GT",
+      "InventoryWeight": 15,
+      "Price": 720000
+    },
+    {
+      "VehicleHash": 1545842587,
+      "Name": "Stinger",
+      "InventoryWeight": 15,
+      "Price": 700000
+    },
+    {
+      "VehicleHash": 1504306544,
+      "Name": "Torero",
+      "InventoryWeight": 15,
+      "Price": 920000
+    },
+    {
+      "VehicleHash": 500482303,
+      "Name": "Swinger",
+      "InventoryWeight": 15,
+      "Price": 1000000
+    },
+    {
+      "VehicleHash": 464687292,
+      "Name": "Tornado",
+      "InventoryWeight": 15,
+      "Price": 150000
+    },
+    {
+      "VehicleHash": 1531094468,
+      "Name": "Tornado Cabriolet",
+      "InventoryWeight": 15,
+      "Price": 170000
+    },
+    {
+      "VehicleHash": 838982985,
+      "Name": "Z190",
+      "InventoryWeight": 15,
+      "Price": 600000
+    }
+  ]
+}

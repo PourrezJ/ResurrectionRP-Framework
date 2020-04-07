@@ -1,0 +1,114 @@
+{
+  "BlipSprite": 225,
+  "BlipPosition": {
+    "x": 332.0306,
+    "y": -1158.489,
+    "z": 29.29191
+  },
+  "LocationList": [
+    {
+      "position": {
+        "x": 325.8989,
+        "y": -1162.7737,
+        "z": 29.111328
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": -1.59375
+      }
+    },	  
+	  {
+      "position": {
+        "x": 325.7201,
+        "y": -1156.967,
+        "z": 28.63953
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": -1.578125
+      }
+    },	 
+	  {
+      "position": {
+        "x": 337.41098,
+        "y": -1162.7605,
+        "z": 29.111328
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 1.5625
+      }
+    },	  
+	  {
+      "position": {
+        "x": 337.58243,
+        "y": -1156.9319,
+        "z": 28.976562
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 1.515625
+      }
+    }
+  ],
+  "VehicleInfoList": [
+    {
+      "VehicleHash": 841808271,
+      "Name": "Rhapsody",
+      "InventoryWeight": 10,
+      "Price": 5000
+    },
+    {
+      "VehicleHash": 1549126457,
+      "Name": "Brioso",
+      "InventoryWeight": 10,
+      "Price": 10000
+    },
+    {
+      "VehicleHash": 2844316578,
+      "Name": "Prairie",
+      "InventoryWeight": 10,
+      "Price": 3500
+    },
+    {
+      "VehicleHash": 3164157193,
+      "Name": "Dilettante",
+      "InventoryWeight": 10,
+      "Price": 3000
+    },
+    {
+      "VehicleHash": 3863274624,
+      "Name": "Panto",
+      "InventoryWeight": 10,
+      "Price": 3500
+    },
+    {
+      "VehicleHash": 3950024287,
+      "Name": "Blista",
+      "InventoryWeight": 10,
+      "Price": 4000
+    },
+    {
+      "VehicleHash": 3703315515,
+      "Name": "Blista Go Go Monkey",
+      "InventoryWeight": 10,
+      "Price": 4500
+    },
+    {
+      "VehicleHash": 931280609,
+      "Name": "Issy Old Fashion",
+      "InventoryWeight": 10,
+      "Price": 4500
+    },
+    {
+      "VehicleHash": 3117103977,
+      "Name": "Issy",
+      "InventoryWeight": 10,
+      "Price": 8000
+    }
+  ]
+}

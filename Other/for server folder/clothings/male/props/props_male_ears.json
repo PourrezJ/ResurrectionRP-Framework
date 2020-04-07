@@ -1,0 +1,527 @@
+{
+  "Overlay": 2,
+  "DrawablesList": {
+    "0": {
+        "Name": "Oreilette",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Oreillette grise"
+            }
+        }
+    },
+    "1": {
+        "Name": "Oreilette",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Oreillette rouge"
+            }
+        }
+    },
+    "2": {
+        "Name": "Oreilette",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Oreillette LCD"
+            }
+        }
+    },
+    "3": {
+        "Name": "Boucle oreille",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Créole angulaire or (G.)"
+            },
+            "1": {
+                "GXT": "Créole angulaire noire (G.)"
+            },
+            "2": {
+                "GXT": "Créole angulaire platine (G.)"
+            }
+        }
+    },
+    "4": {
+        "Name": "Boucle oreille",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Créole angulaire or (D.)"
+            },
+            "1": {
+                "GXT": "Créole angulaire noire (D.)"
+            },
+            "2": {
+                "GXT": "Créole angulaire platine (D.)"
+            }
+        }
+    },
+    "5": {
+        "Name": "Boucle oreille",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Créoles angulaires or"
+            },
+            "1": {
+                "GXT": "Créoles angulaires noires"
+            },
+            "2": {
+                "GXT": "Créoles angulaires platine"
+            }
+        }
+    },
+    "6": {
+        "Name": "Boucle oreille",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Clou en anneau or (G.)"
+            },
+            "1": {
+                "GXT": "Clou en anneau platine (G.)"
+            }
+        }
+    },
+    "7": {
+        "Name": "Boucle oreille",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Clou en anneau or (D.)"
+            },
+            "1": {
+                "GXT": "Clou en anneau platine (D.)"
+            }
+        }
+    },
+    "8": {
+        "Name": "Boucle oreille",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Clous en anneau or"
+            },
+            "1": {
+                "GXT": "Clous en anneau platine"
+            }
+        }
+    },
+    "9": {
+        "Name": "Boucle oreille",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Clou diamant or (G.)"
+            },
+            "1": {
+                "GXT": "Clou diamant noir (G.)"
+            },
+            "2": {
+                "GXT": "Clou diamant platine (G.)"
+            }
+        }
+    },
+    "10": {
+        "Name": "Boucle oreille",
+        "Price": 550,
+        "Variations": {
+            "0": {
+                "GXT": "Clou diamant or (D.)"
+            },
+            "1": {
+                "GXT": "Clou diamant noir (D.)"
+            },
+            "2": {
+                "GXT": "Clou diamant platine (D.)"
+            }
+        }
+    },
+    "11": {
+        "Name": "Boucle oreille",
+        "Price": 550,
+        "Variations": {
+            "0": {
+                "GXT": "Clous diamant or"
+            },
+            "1": {
+                "GXT": "Clous diamant noirs"
+            },
+            "2": {
+                "GXT": "Clous diamant platine"
+            }
+        }
+    },
+    "12": {
+        "Name": "Boucle oreille",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Clou concave or (G.)"
+            },
+            "1": {
+                "GXT": "Clou concave noir (G.)"
+            },
+            "2": {
+                "GXT": "Clou concave platine (G.)"
+            }
+        }
+    },
+    "13": {
+        "Name": "Boucle oreille",
+        "Price": 550,
+        "Variations": {
+            "0": {
+                "GXT": "Clou concave or (D.)"
+            },
+            "1": {
+                "GXT": "Clou concave noir (D.)"
+            },
+            "2": {
+                "GXT": "Clou concave platine (D.)"
+            }
+        }
+    },
+    "14": {
+        "Name": "Boucle oreille",
+        "Price": 550,
+        "Variations": {
+            "0": {
+                "GXT": "Clous concaves or"
+            },
+            "1": {
+                "GXT": "Clous concaves noirs"
+            },
+            "2": {
+                "GXT": "Clous concaves platine"
+            }
+        }
+    },
+    "15": {
+        "Name": "Boucle oreille",
+        "Price": 550,
+        "Variations": {
+            "0": {
+                "GXT": "Clou or à pierre (G.)"
+            },
+            "1": {
+                "GXT": "Clou à pierre noire (G.)"
+            },
+            "2": {
+                "GXT": "Clou platine à pierres (G.)"
+            }
+        }
+    },
+    "16": {
+        "Name": "Boucle oreille",
+        "Price": 600,
+        "Variations": {
+            "0": {
+                "GXT": "Clou or à pierre (D.)"
+            },
+            "1": {
+                "GXT": "Clou à pierre noire (D.)"
+            },
+            "2": {
+                "GXT": "Clou platine à pierres (D.)"
+            }
+        }
+    },
+    "17": {
+        "Name": "Boucle oreille",
+        "Price": 600,
+        "Variations": {
+            "0": {
+                "GXT": "Clous or à pierre"
+            },
+            "1": {
+                "GXT": "Clous à pierre noire"
+            },
+            "2": {
+                "GXT": "Clous platine à pierres"
+            }
+        }
+    },
+    "18": {
+        "Name": "Boucle oreille",
+        "Price": 600,
+        "Variations": {
+            "0": {
+                "GXT": "Clou carré illusion or (G.)"
+            },
+            "1": {
+                "GXT": "Clou carré grille or (G.)"
+            },
+            "2": {
+                "GXT": "Clou carré noir or (G.)"
+            },
+            "3": {
+                "GXT": "Clou carré grille platine (G.)"
+            },
+            "4": {
+                "GXT": "Clou carré noir platine (G.)"
+            }
+        }
+    },
+    "19": {
+        "Name": "Boucle oreille",
+        "Price": 700,
+        "Variations": {
+            "0": {
+                "GXT": "Clou carré illusion or (D.)"
+            },
+            "1": {
+                "GXT": "Clou carré grille or (D.)"
+            },
+            "2": {
+                "GXT": "Clou carré noir or (D.)"
+            },
+            "3": {
+                "GXT": "Clou carré grille platine (D.)"
+            },
+            "4": {
+                "GXT": "Clou carré noir platine (D.)"
+            }
+        }
+    },
+    "20": {
+        "Name": "Boucle oreille",
+        "Price": 700,
+        "Variations": {
+            "0": {
+                "GXT": "Clous carrés illusion or"
+            },
+            "1": {
+                "GXT": "Clous carrés grille or"
+            },
+            "2": {
+                "GXT": "Clous carrés noirs or"
+            },
+            "3": {
+                "GXT": "Clous carrés grille platine"
+            },
+            "4": {
+                "GXT": "Clous carrés noirs platine"
+            }
+        }
+    },
+    "21": {
+        "Name": "Boucle oreille",
+        "Price": 700,
+        "Variations": {
+            "0": {
+                "GXT": "Clou SN or (G.)"
+            },
+            "1": {
+                "GXT": "Clou SN platine (G.)"
+            }
+        }
+    },
+    "22": {
+        "Name": "Boucle oreille",
+        "Price": 700,
+        "Variations": {
+            "0": {
+                "GXT": "Clou SN or (D.)"
+            },
+            "1": {
+                "GXT": "Clou SN platine (D.)"
+            }
+        }
+    },
+    "23": {
+        "Name": "Boucle oreille",
+        "Price": 700,
+        "Variations": {
+            "0": {
+                "GXT": "Clous SN or"
+            },
+            "1": {
+                "GXT": "Clous SN platine"
+            }
+        }
+    },
+    "24": {
+        "Name": "Boucle oreille",
+        "Price": 700,
+        "Variations": {
+            "0": {
+                "GXT": "Clou crâne argent (G.)"
+            },
+            "1": {
+                "GXT": "Clou crâne or (G.)"
+            },
+            "2": {
+                "GXT": "Clou crâne noir (G.)"
+            },
+            "3": {
+                "GXT": "Clou crâne platine (G.)"
+            }
+        }
+    },
+    "25": {
+        "Name": "Boucle oreille",
+        "Price": 650,
+        "Variations": {
+            "0": {
+                "GXT": "Clou crâne argent (D.)"
+            },
+            "1": {
+                "GXT": "Clou crâne or (D.)"
+            },
+            "2": {
+                "GXT": "Clou crâne noir (D.)"
+            },
+            "3": {
+                "GXT": "Clou crâne platine (D.)"
+            }
+        }
+    },
+    "26": {
+        "Name": "Boucle oreille",
+        "Price": 650,
+        "Variations": {
+            "0": {
+                "GXT": "Clous crâne argent"
+            },
+            "1": {
+                "GXT": "Clous crâne or"
+            },
+            "2": {
+                "GXT": "Clous crâne noirs"
+            },
+            "3": {
+                "GXT": "Clous crâne platine"
+            }
+        }
+    },
+    "27": {
+        "Name": "Boucle oreille",
+        "Price": 650,
+        "Variations": {
+            "0": {
+                "GXT": "Clou à pointe platine (G.)"
+            },
+            "1": {
+                "GXT": "Clou à pointe or (G.)"
+            }
+        }
+    },
+    "28": {
+        "Name": "Boucle oreille",
+        "Price": 600,
+        "Variations": {
+            "0": {
+                "GXT": "Clou à pointe platine (D.)"
+            },
+            "1": {
+                "GXT": "Clou à pointe or (D.)"
+            }
+        }
+    },
+    "29": {
+        "Name": "Boucle oreille",
+        "Price": 600,
+        "Variations": {
+            "0": {
+                "GXT": "Clous à pointe platine"
+            },
+            "1": {
+                "GXT": "Clous à pointe or"
+            }
+        }
+    },
+    "30": {
+        "Name": "Boucle oreille",
+        "Price": 600,
+        "Variations": {
+            "0": {
+                "GXT": "Clou or onyx (G.)"
+            },
+            "1": {
+                "GXT": "Clou noir onyx (G.)"
+            },
+            "2": {
+                "GXT": "Clou platine onyx (G.)"
+            }
+        }
+    },
+    "31": {
+        "Name": "Boucle oreille",
+        "Price": 550,
+        "Variations": {
+            "0": {
+                "GXT": "Clou or onyx (D.)"
+            },
+            "1": {
+                "GXT": "Clou noir onyx (D.)"
+            },
+            "2": {
+                "GXT": "Clou platine onyx (D.)"
+            }
+        }
+    },
+    "32": {
+        "Name": "Boucle oreille",
+        "Price": 550,
+        "Variations": {
+            "0": {
+                "GXT": "Clous or onyx"
+            },
+            "1": {
+                "GXT": "Clous noirs onyx"
+            },
+            "2": {
+                "GXT": "Clous platine onyx"
+            }
+        }
+    },
+    "33": {
+        "Name": "NULL",
+        "Price": 0,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "34": {
+        "Name": "Boucle oreille",
+        "Price": 600,
+        "Variations": {
+            "0": {
+                "GXT": "Clou lingot SN platine (G.)"
+            },
+            "1": {
+                "GXT": "Clou lingot SN or (G.)"
+            }
+        }
+    },
+    "35": {
+        "Name": "Boucle oreille",
+        "Price": 750,
+        "Variations": {
+            "0": {
+                "GXT": "Clou lingot SN platine (D.)"
+            },
+            "1": {
+                "GXT": "Clou lingot SN or (D.)"
+            }
+        }
+    },
+    "36": {
+        "Name": "Boucle oreille",
+        "Price": 750,
+        "Variations": {
+            "0": {
+                "GXT": "Clous lingot SN platine"
+            },
+            "1": {
+                "GXT": "Clous lingot SN or"
+            }
+        }
+    }
+  }
+}

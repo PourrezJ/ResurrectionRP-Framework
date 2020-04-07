@@ -1,0 +1,209 @@
+{
+  "Overlay": 2,
+  "DrawablesList": {
+    "0": {
+        "Name": "Oreilette",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Oreillette grise"
+            }
+        }
+    },
+    "1": {
+        "Name": "Oreillette",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Oreillette rouge"
+            }
+        }
+    },
+    "2": {
+        "Name": "Oreillette",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Oreillette LCD"
+            }
+        }
+    },
+    "3": {
+        "Name": "Boucle oreille",
+        "Price": 750,
+        "Variations": {
+            "0": {
+                "GXT": "Pendants platine"
+            }
+        }
+    },
+    "4": {
+        "Name": "Boucle oreille",
+        "Price": 800,
+        "Variations": {
+            "0": {
+                "GXT": "Pendants or"
+            }
+        }
+    },
+    "5": {
+        "Name": "Boucle oreille",
+        "Price": 600,
+        "Variations": {
+            "0": {
+                "GXT": "Boules à diamants or"
+            }
+        }
+    },
+    "6": {
+        "Name": "Boucle oreille",
+        "Price": 650,
+        "Variations": {
+            "0": {
+                "GXT": "Gouttes à diamants or"
+            },
+            "1": {
+                "GXT": "Gouttes à diamants platine"
+            },
+            "2": {
+                "GXT": "Gouttes à diamants noires"
+            }
+        }
+    },
+    "7": {
+        "Name": "Boucle oreille",
+        "Price": 800,
+        "Variations": {
+            "0": {
+                "GXT": "Cascades or"
+            },
+            "1": {
+                "GXT": "Cascades platine"
+            },
+            "2": {
+                "GXT": "Cascades or noir"
+            }
+        }
+    },
+    "8": {
+        "Name": "Boucle oreille",
+        "Price": 800,
+        "Variations": {
+            "0": {
+                "GXT": "Tiges or"
+            },
+            "1": {
+                "GXT": "Tiges or noir"
+            },
+            "2": {
+                "GXT": "Tiges platine"
+            }
+        }
+    },
+    "9": {
+        "Name": "Boucle oreille",
+        "Price": 750,
+        "Variations": {
+            "0": {
+                "GXT": "Chaînes diamant or"
+            },
+            "1": {
+                "GXT": "Chaînes diamant platine"
+            },
+            "2": {
+                "GXT": "Chaînes diamant or noir"
+            }
+        }
+    },
+    "10": {
+        "Name": "Boucle oreille",
+        "Price": 700,
+        "Variations": {
+            "0": {
+                "GXT": "Chaînes émeraude or"
+            },
+            "1": {
+                "GXT": "Chaînes émeraude platine"
+            },
+            "2": {
+                "GXT": "Chaînes émeraude or noir"
+            }
+        }
+    },
+    "11": {
+        "Name": "Boucle oreille",
+        "Price": 700,
+        "Variations": {
+            "0": {
+                "GXT": "Gouttes soleil or"
+            },
+            "1": {
+                "GXT": "Gouttes soleil platine"
+            },
+            "2": {
+                "GXT": "Gouttes soleil or noir"
+            }
+        }
+    },
+    "12": {
+        "Name": "Boucle oreille",
+        "Price": 800,
+        "Variations": {
+            "0": {
+                "GXT": "Clous diamant platine"
+            },
+            "1": {
+                "GXT": "Clous diamant or"
+            },
+            "2": {
+                "GXT": "Clous diamant or noir"
+            }
+        }
+    },
+    "13": {
+        "Name": "Boucle oreille",
+        "Price": 700,
+        "Variations": {
+            "0": {
+                "GXT": "Créoles fusil d'assaut"
+            }
+        }
+    },
+    "14": {
+        "Name": "Boucle oreille",
+        "Price": 700,
+        "Variations": {
+            "0": {
+                "GXT": "Créoles larges"
+            }
+        }
+    },
+    "15": {
+        "Name": "Boucle oreille",
+        "Price": 800,
+        "Variations": {
+            "0": {
+                "GXT": "Créoles classiques"
+            }
+        }
+    },
+    "16": {
+        "Name": "Boucle oreille",
+        "Price": 900,
+        "Variations": {
+            "0": {
+                "GXT": "Créoles insultantes"
+            }
+        }
+    },
+    "17": {
+        "Name": "Boucle oreille",
+        "Price": 1900,
+        "Variations": {
+            "0": {
+                "GXT": "Boucle inscription or"
+            }
+        }
+    }
+  }
+}

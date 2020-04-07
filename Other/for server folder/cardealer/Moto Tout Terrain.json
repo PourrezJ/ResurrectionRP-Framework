@@ -1,0 +1,114 @@
+{
+  "BlipSprite": 512,
+  "BlipPosition": {
+    "x": 746.2393,
+    "y": 2519.663,
+    "z": 73.15753
+  },
+  "LocationList": [
+  {
+    "position": {
+      "x": 737.23517,
+      "y": 2513.1033,
+      "z": 72.70178
+    },
+    "rotation": {
+      "x": -0.015625,
+      "y": 0,
+      "z": -1.546875
+    }
+  },
+	{
+      "position": {
+        "x": 737.5912,
+        "y": 2519.1296,
+        "z": 72.66809
+      },
+      "rotation": {
+        "x": 0,
+        "y": -0.171875,
+        "z": -1.59375
+      }
+    },
+	{
+      "position": {
+        "x": 737.8022,
+        "y": 2527.5825,
+        "z": 72.66809
+      },
+      "rotation": {
+        "x": 0,
+        "y": -0.25,
+        "z": -1.546875
+      }
+    }
+  ],
+  "VehicleInfoList": [
+    {
+      "VehicleHash": 86520421,
+      "Name": "BF400",
+      "InventoryWeight": 5,
+      "Price": 125000
+    },
+    {
+      "VehicleHash": 1753414259,
+      "Name": "Enduro",
+      "InventoryWeight": 5,
+      "Price": 27000
+    },
+    {
+      "VehicleHash": 741090084,
+      "Name": "Gargoyle",
+      "InventoryWeight": 5,
+      "Price": 140000
+    },
+    {
+      "VehicleHash": 2771538552,
+      "Name": "Manchez",
+      "InventoryWeight": 5,
+      "Price": 40000
+    },
+    {
+      "VehicleHash": 1873600305,
+      "Name": "Ratbike",
+      "InventoryWeight": 5,
+      "Price": 20000
+    },
+    {
+      "VehicleHash": 2841686334,
+      "Name": "Sanchez",
+      "InventoryWeight": 5,
+      "Price": 35000
+    },
+    {
+      "VehicleHash": 3285698347,
+      "Name": "Zombie Classic",
+      "InventoryWeight": 5,
+      "Price": 60000
+    },
+    {
+      "VehicleHash": 390201602,
+      "Name": "Cliffanger",
+      "InventoryWeight": 5,
+      "Price": 95000
+    },
+    {
+      "VehicleHash": 2166734073,
+      "Name": "Blazer",
+      "InventoryWeight": 5,
+      "Price": 85000
+    },
+    {
+      "VehicleHash": 3025077634,
+      "Name": "Blazer3",
+      "InventoryWeight": 5,
+      "Price": 85000
+    },
+    {
+      "VehicleHash": 2035069708,
+      "Name": "Esskey",
+      "InventoryWeight": 5,
+      "Price": 65000
+    }
+  ]
+}

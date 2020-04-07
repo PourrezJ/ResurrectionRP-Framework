@@ -1,0 +1,86 @@
+{
+  "Overlay": 7,
+  "DrawablesList": {
+    "0": {
+        "Name": "Bracelet chaine",
+        "Price": 450,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne poignet légère (D.)"
+            }
+        }
+    },
+    "1": {
+        "Name": "Bracelet chaine",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne poignet lourde (D.)"
+            }
+        }
+    },
+    "2": {
+        "Name": "Bracelet chaine",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne poignet carrés (D.)"
+            }
+        }
+    },
+    "3": {
+        "Name": "Bracelet chaine",
+        "Price": 600,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne poignet crânes (D.)"
+            }
+        }
+    },
+    "4": {
+        "Name": "Bracelet chaine",
+        "Price": 550,
+        "Variations": {
+            "0": {
+                "GXT": "Bracelet large (D.)"
+            }
+        }
+    },
+    "5": {
+        "Name": "Bracelet chaine",
+        "Price": 350,
+        "Variations": {
+            "0": {
+                "GXT": "Parure chaîne (D.)"
+            }
+        }
+    },
+    "6": {
+        "Name": "Bracelet de cuir",
+        "Price": 280,
+        "Variations": {
+            "0": {
+                "GXT": "Bracelet large clouté (D.)"
+            }
+        }
+    },
+    "7": {
+        "Name": "Bracelet de cuir",
+        "Price": 150,
+        "Variations": {
+            "0": {
+                "GXT": "Bracelet large noir (D.)"
+            },
+            "1": {
+                "GXT": "Bracelet large marron (D.)"
+            },
+            "2": {
+                "GXT": "Bracelet large beige (D.)"
+            },
+            "3": {
+                "GXT": "Bracelet large rouge (D.)"
+            }
+        }
+    }
+  }
+}

@@ -1,0 +1,1553 @@
+{
+  "Overlay": 7,
+  "DrawablesList": {
+    "0": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Aucun"
+            }
+        }
+    },
+    "1": {
+        "Name": "Boucle oreille",      
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Art déco or"
+            },
+            "1": {
+                "GXT": "Art déco argent"
+            },
+            "2": {
+                "GXT": "Art déco nacre"
+            },
+            "3": {
+                "GXT": "Art déco cuivre"
+            },
+            "4": {
+                "GXT": "Art déco n&b"
+            },
+            "5": {
+                "GXT": "Art déco bleu rayé"
+            }
+        }
+    },
+    "2": {
+        "Name": "Boucle oreille",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Anneaux or"
+            },
+            "1": {
+                "GXT": "Anneaux argent"
+            },
+            "2": {
+                "GXT": "Anneaux roses"
+            },
+            "3": {
+                "GXT": "Anneaux cuivre"
+            },
+            "4": {
+                "GXT": "Anneaux mauves"
+            },
+            "5": {
+                "GXT": "Anneaux blancs"
+            }
+        }
+    },
+    "3": {
+        "Name": "Boucle oreille",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Bandeau Harsh Souls"
+            },
+            "1": {
+                "GXT": "Bandeau Prolaps"
+            },
+            "2": {
+                "GXT": "Bandeau LC"
+            },
+            "3": {
+                "GXT": "Bandeau turquoise"
+            },
+            "4": {
+                "GXT": "Bandeau rose à damiers"
+            },
+            "5": {
+                "GXT": "Bandeau Squeezers"
+            }
+        }
+    },
+    "4": {
+        "Name": "Bracelet en cuir",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "Bracelets zèbre"
+            },
+            "3": {
+                "GXT": "Bracelets or"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "5": {
+        "Name": "Bracelet en cuir",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "Bracelets en cuir blancs"
+            },
+            "5": {
+                "GXT": "Bracelets en cuir arc-en-ciel"
+            }
+        }
+    },
+    "6": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier onyx"
+            },
+            "1": {
+                "GXT": "Collier perle"
+            },
+            "2": {
+                "GXT": "Collier jade"
+            },
+            "3": {
+                "GXT": "Collier cornaline"
+            },
+            "4": {
+                "GXT": "Collier aigue-marine"
+            },
+            "5": {
+                "GXT": "Collier améthyste"
+            }
+        }
+    },
+    "7": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier or"
+            },
+            "1": {
+                "GXT": "Collier argent"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "8": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "9": {
+        "Name": "Foulard",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Foulard noir"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "10": {
+        "Name": "Bracelet",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Bracelets à fleurs"
+            },
+            "1": {
+                "GXT": "Bracelets psychédéliques"
+            },
+            "2": {
+                "GXT": "Bracelets verts"
+            },
+            "3": {
+                "GXT": "Bracelets rouges"
+            }
+        }
+    },
+    "11": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier cœur noir MyMy"
+            },
+            "1": {
+                "GXT": "Collier cœur rose MyMy"
+            },
+            "2": {
+                "GXT": "Collier cœur rose"
+            },
+            "3": {
+                "GXT": "Collier cœur argenté"
+            }
+        }
+    },
+    "12": {
+        "Name": "Collier de perle",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Perles blanches"
+            },
+            "1": {
+                "GXT": "Perles argentées"
+            },
+            "2": {
+                "GXT": "Perles noires"
+            }
+        }
+    },
+    "13": {
+        "Name": "Foulard",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Foulard noué à pois"
+            },
+            "1": {
+                "GXT": "Foulard noué à fleurs"
+            },
+            "2": {
+                "GXT": "Foulard noué rose"
+            },
+            "3": {
+                "GXT": "Foulard noué rouge"
+            },
+            "4": {
+                "GXT": "Foulard noué léopard"
+            },
+            "5": {
+                "GXT": "Foulard noué blanc"
+            }
+        }
+    },
+    "14": {
+        "Name": "Bracelet en cuir",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Bracelets en cuir N&B"
+            },
+            "1": {
+                "GXT": "Bracelets en cuir Été"
+            },
+            "2": {
+                "GXT": "Bracelets en cuir acidulés"
+            },
+            "3": {
+                "GXT": "Bracelets roses à carreaux"
+            }
+        }
+    },
+    "15": {
+        "Name": "Foulard",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Foulard rouge"
+            },
+            "1": {
+                "GXT": "Foulard mauve"
+            },
+            "2": {
+                "GXT": "Foulard olive"
+            },
+            "3": {
+                "GXT": "Foulard rose"
+            },
+            "4": {
+                "GXT": "Foulard bleu-vert"
+            }
+        }
+    },
+    "16": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "17": {
+        "Name": "Echarpe",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Écharpe rayée"
+            },
+            "1": {
+                "GXT": "Écharpe festive"
+            },
+            "2": {
+                "GXT": "Écharpe flocon de neige"
+            },
+            "3": {
+                "GXT": "Écharpe tempête"
+            }
+        }
+    },
+    "18": {
+        "Name": "Echarpe",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Écharpe rayée"
+            },
+            "1": {
+                "GXT": "Écharpe festive"
+            },
+            "2": {
+                "GXT": "Écharpe flocon de neige"
+            },
+            "3": {
+                "GXT": "Écharpe tempête"
+            }
+        }
+    },
+    "19": {
+        "Name": "Noeud papillon",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Nœud papillon négligé noir"
+            }
+        }
+    },
+    "20": {
+        "Name": "Cravate",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Cravate négligée anthracite"
+            },
+            "1": {
+                "GXT": "Cravate négligée kaki"
+            },
+            "2": {
+                "GXT": "Crav. négligée rayée blanche"
+            },
+            "3": {
+                "GXT": "Cravate négligée verte"
+            },
+            "4": {
+                "GXT": "Cravate négligée motif violet"
+            },
+            "5": {
+                "GXT": "Cravate négligée fuchsia"
+            },
+            "6": {
+                "GXT": "Crav. négligée losanges gris"
+            },
+            "7": {
+                "GXT": "Cravate négligée brun clair"
+            },
+            "8": {
+                "GXT": "Cravate négligée rayée bleue"
+            },
+            "9": {
+                "GXT": "Cravate négligée bleu-vert"
+            },
+            "10": {
+                "GXT": "Cravate négligée orange"
+            },
+            "11": {
+                "GXT": "Cravate négligée motif bleu"
+            },
+            "12": {
+                "GXT": "Crav. négligée rayée beige"
+            },
+            "13": {
+                "GXT": "Cravate négligée rose"
+            },
+            "14": {
+                "GXT": "Crav. négligée losanges verts"
+            },
+            "15": {
+                "GXT": "Cravate négligée bleue"
+            }
+        }
+    },
+    "21": {
+        "Name": "Cravate",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Cravate fine blanche"
+            },
+            "1": {
+                "GXT": "Cravate fine grise"
+            },
+            "2": {
+                "GXT": "Cravate fine noire"
+            }
+        }
+    },
+    "22": {
+        "Name": "Cravate",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Cravate droite anthracite"
+            },
+            "1": {
+                "GXT": "Cravate droite kaki"
+            },
+            "2": {
+                "GXT": "Cravate droite rayée blanche"
+            },
+            "3": {
+                "GXT": "Cravate droite verte"
+            },
+            "4": {
+                "GXT": "Cravate droite motif violet"
+            },
+            "5": {
+                "GXT": "Cravate droite fuchsia"
+            },
+            "6": {
+                "GXT": "Cravate droite losanges gris"
+            },
+            "7": {
+                "GXT": "Cravate droite brun clair"
+            },
+            "8": {
+                "GXT": "Cravate droite rayée bleue"
+            },
+            "9": {
+                "GXT": "Cravate droite bleu-vert"
+            },
+            "10": {
+                "GXT": "Cravate droite orange"
+            },
+            "11": {
+                "GXT": "Cravate droite motif bleu"
+            },
+            "12": {
+                "GXT": "Cravate droite rayée beige"
+            },
+            "13": {
+                "GXT": "Cravate droite rose"
+            },
+            "14": {
+                "GXT": "Crav. droite losanges verts"
+            },
+            "15": {
+                "GXT": "Cravate droite bleue"
+            }
+        }
+    },
+    "23": {
+        "Name": "Noeud papillon",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Nœud papillon noir"
+            },
+            "1": {
+                "GXT": "Nœud papillon blanc"
+            },
+            "2": {
+                "GXT": "Nœud papillon rouge"
+            }
+        }
+    },
+    "24": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "25": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "26": {
+        "Name": "Cravate",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Cravate négligée anthracite"
+            },
+            "1": {
+                "GXT": "Cravate négligée kaki"
+            },
+            "2": {
+                "GXT": "Crav. négligée rayée blanche"
+            },
+            "3": {
+                "GXT": "Cravate négligée verte"
+            },
+            "4": {
+                "GXT": "Cravate négligée motif violet"
+            },
+            "5": {
+                "GXT": "Cravate négligée fuchsia"
+            },
+            "6": {
+                "GXT": "Crav. négligée losanges gris"
+            },
+            "7": {
+                "GXT": "Cravate négligée brun clair"
+            },
+            "8": {
+                "GXT": "Cravate négligée rayée bleue"
+            },
+            "9": {
+                "GXT": "Cravate négligée bleu-vert"
+            },
+            "10": {
+                "GXT": "Cravate négligée orange"
+            },
+            "11": {
+                "GXT": "Cravate négligée motif bleu"
+            },
+            "12": {
+                "GXT": "Crav. négligée rayée beige"
+            },
+            "13": {
+                "GXT": "Cravate négligée rose"
+            },
+            "14": {
+                "GXT": "Crav. négligée losanges verts"
+            },
+            "15": {
+                "GXT": "Cravate négligée bleue"
+            }
+        }
+    },
+    "27": {
+        "Name": "Cravate",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Cravate fine blanche"
+            },
+            "1": {
+                "GXT": "Cravate fine grise"
+            },
+            "2": {
+                "GXT": "Cravate fine noire"
+            }
+        }
+    },
+    "28": {
+        "Name": "Cravate",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Cravate droite anthracite"
+            },
+            "1": {
+                "GXT": "Cravate droite kaki"
+            },
+            "2": {
+                "GXT": "Cravate droite rayée blanche"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "Cravate droite motif violet"
+            },
+            "5": {
+                "GXT": "Cravate droite fuchsia"
+            },
+            "6": {
+                "GXT": "Cravate droite losanges gris"
+            },
+            "7": {
+                "GXT": "Cravate droite brun clair"
+            },
+            "8": {
+                "GXT": "Cravate droite rayée bleue"
+            },
+            "9": {
+                "GXT": "Cravate droite bleu-vert"
+            },
+            "10": {
+                "GXT": "Cravate droite orange"
+            },
+            "11": {
+                "GXT": "Cravate droite motif bleu"
+            },
+            "12": {
+                "GXT": "Cravate droite rayée beige"
+            },
+            "13": {
+                "GXT": "Cravate droite rose"
+            },
+            "14": {
+                "GXT": "Crav. droite losanges verts"
+            },
+            "15": {
+                "GXT": "Cravate droite bleue"
+            }
+        }
+    },
+    "29": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier SN or"
+            },
+            "1": {
+                "GXT": "Collier SN platine"
+            }
+        }
+    },
+    "30": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier crâne or"
+            },
+            "1": {
+                "GXT": "Collier crâne platine"
+            }
+        }
+    },
+    "31": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier cagoule platine"
+            }
+        }
+    },
+    "32": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier Zorse or"
+            },
+            "1": {
+                "GXT": "Collier Zorse platine"
+            }
+        }
+    },
+    "33": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier LC or"
+            },
+            "1": {
+                "GXT": "Collier LC platine"
+            }
+        }
+    },
+    "34": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier Dix or"
+            },
+            "1": {
+                "GXT": "Collier Dix platine"
+            }
+        }
+    },
+    "35": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier Le Chien or"
+            },
+            "1": {
+                "GXT": "Collier Le Chien platine"
+            }
+        }
+    },
+    "36": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier SN or"
+            },
+            "1": {
+                "GXT": "Collier SN platine"
+            }
+        }
+    },
+    "37": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier crâne or"
+            },
+            "1": {
+                "GXT": "Collier crâne platine"
+            }
+        }
+    },
+    "38": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier cagoule platine"
+            }
+        }
+    },
+    "39": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier Zorse or"
+            },
+            "1": {
+                "GXT": "Collier Zorse platine"
+            }
+        }
+    },
+    "40": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier LC or"
+            },
+            "1": {
+                "GXT": "Collier LC platine"
+            }
+        }
+    },
+    "41": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier Dix or"
+            },
+            "1": {
+                "GXT": "Collier Dix platine"
+            }
+        }
+    },
+    "42": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier Le Chien or"
+            },
+            "1": {
+                "GXT": "Collier Le Chien platine"
+            }
+        }
+    },
+    "43": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "44": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "45": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "46": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "47": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "48": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "49": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "50": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "51": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "52": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "53": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne à gros maillons or"
+            },
+            "1": {
+                "GXT": "Chaîne à gros maillons platine"
+            }
+        }
+    },
+    "54": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne de Belcher or"
+            },
+            "1": {
+                "GXT": "Chaîne de Belcher platine"
+            }
+        }
+    },
+    "55": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne bretzel or"
+            },
+            "1": {
+                "GXT": "Chaîne bretzel platine"
+            }
+        }
+    },
+    "56": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne plate or"
+            },
+            "1": {
+                "GXT": "Chaîne plate platine"
+            }
+        }
+    },
+    "57": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne maillons ovales or"
+            },
+            "1": {
+                "GXT": "Chaîne maillons ovales platine"
+            }
+        }
+    },
+    "58": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne plate lourde or"
+            },
+            "1": {
+                "GXT": "Chaîne plate lourde platine"
+            }
+        }
+    },
+    "59": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne à gros carrés or"
+            },
+            "1": {
+                "GXT": "Chaîne à gros carrés platine"
+            }
+        }
+    },
+    "60": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne à carrés or"
+            },
+            "1": {
+                "GXT": "Chaîne à carrés platine"
+            }
+        }
+    },
+    "61": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne maille serrée or"
+            },
+            "1": {
+                "GXT": "Chaîne maille serrée platine"
+            }
+        }
+    },
+    "62": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne torsadée or"
+            },
+            "1": {
+                "GXT": "Chaîne torsadée platine"
+            }
+        }
+    },
+    "63": {
+        "Name": "Echarpe",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Écharpe écossaise bleue"
+            },
+            "1": {
+                "GXT": "Écharpe écossaise verte"
+            },
+            "2": {
+                "GXT": "Écharpe écossaise brun clair"
+            },
+            "3": {
+                "GXT": "Écharpe écossaise grise"
+            },
+            "4": {
+                "GXT": "Écharpe écossaise noire"
+            },
+            "5": {
+                "GXT": "Écharpe écossaise pêche"
+            }
+        }
+    },
+    "64": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne à gros maillons or"
+            },
+            "1": {
+                "GXT": "Chaîne à gros maillons platine"
+            }
+        }
+    },
+    "65": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne de Belcher or"
+            },
+            "1": {
+                "GXT": "Chaîne de Belcher platine"
+            }
+        }
+    },
+    "66": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne bretzel or"
+            },
+            "1": {
+                "GXT": "Chaîne bretzel platine"
+            }
+        }
+    },
+    "67": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne plate or"
+            },
+            "1": {
+                "GXT": "Chaîne plate platine"
+            }
+        }
+    },
+    "68": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne maillons ovales or"
+            },
+            "1": {
+                "GXT": "Chaîne maillons ovales platine"
+            }
+        }
+    },
+    "69": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne plate lourde or"
+            },
+            "1": {
+                "GXT": "Chaîne plate lourde platine"
+            }
+        }
+    },
+    "70": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne à gros carrés or"
+            },
+            "1": {
+                "GXT": "Chaîne à gros carrés platine"
+            }
+        }
+    },
+    "71": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne à carrés or"
+            },
+            "1": {
+                "GXT": "Chaîne à carrés platine"
+            }
+        }
+    },
+    "72": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne maille serrée or"
+            },
+            "1": {
+                "GXT": "Chaîne maille serrée platine"
+            }
+        }
+    },
+    "73": {
+        "Name": "Collier chaine",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Chaîne torsadée or"
+            },
+            "1": {
+                "GXT": "Chaîne torsadée platine"
+            }
+        }
+    },
+    "74": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "75": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "76": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "77": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "78": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "79": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "80": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "81": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier or Magnetics"
+            },
+            "1": {
+                "GXT": "Collier platine Magnetics"
+            }
+        }
+    },
+    "82": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier or Magnetics"
+            },
+            "1": {
+                "GXT": "Collier platine Magnetics"
+            }
+        }
+    },
+    "83": {
+        "Name": "Foulard",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Foulard à franges beige"
+            },
+            "1": {
+                "GXT": "Foulard à franges kaki"
+            },
+            "2": {
+                "GXT": "Foulard à franges noir"
+            }
+        }
+    },
+    "84": {
+        "Name": "Collier de perle",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier de perles noires"
+            }
+        }
+    },
+    "85": {
+        "Name": "Casque audio cou",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Casque audio cou"
+            }
+        }
+    },
+    "86": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "87": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "88": {
+        "Name": "Bretelles",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Bretelles noires"
+            },
+            "1": {
+                "GXT": "Bretelles blanches"
+            },
+            "2": {
+                "GXT": "Bretelles rouges"
+            }
+        }
+    },
+    "89": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier roue or int"
+            },
+            "1": {
+                "GXT": "Collier roue platine int"
+            }
+        }
+    },
+    "90": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier roue or"
+            },
+            "1": {
+                "GXT": "Collier roue platine"
+            }
+        }
+    },
+    "91": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier jante or int"
+            },
+            "1": {
+                "GXT": "Collier jante platine int"
+            }
+        }
+    },
+    "92": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier jante or"
+            },
+            "1": {
+                "GXT": "Collier jante platine"
+            }
+        }
+    },
+    "93": {
+        "Name": "Collier",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Collier de perles dorées"
+            },
+            "1": {
+                "GXT": "Collier de perles nacrées"
+            }
+        }
+    },
+    "94": {
+        "Name": "Casque audio cou",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Casque audio A"
+            },
+            "1": {
+                "GXT": "Casque audio B"
+            }
+        }
+    },
+    "95": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "96": {
+        "Name": "Plaque LSPD",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Plaque LSPD"
+            }
+        }
+    },
+    "97": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "98": {
+        "Name": "NULL",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "99": {
+        "Name": "Medaillon",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Médaillon Epsilon"
+            }
+        }
+    },
+    "100": {
+        "Name": "Medaillon",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Médaillon Epsilon"
+            }
+        }
+    },
+    "101": {
+        "Name": "Medaillon",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Médaillon Epsilon"
+            }
+        }
+    }
+  }
+}

@@ -1,0 +1,186 @@
+{
+    "BlipSprite": 225,
+    "BlipPosition": {
+      "x": -88.80961,
+      "y": 94.06551,
+      "z": 0
+    },
+    "LocationList": [
+      {
+        "position": {
+          "x": -101.617584,
+          "y": 99.19121,
+          "z": 72.31433
+        },
+        "rotation": {
+          "x": -0.109375,
+          "y": 0,
+          "z": 2.734375
+        }
+      },
+      {
+        "position": {
+          "x": -95.09011,
+          "y": 96.184616,
+          "z": 72.22998
+        },
+        "rotation": {
+          "x": -0.09375,
+          "y": 0,
+          "z": 2.671875
+        }
+      },
+      {
+        "position": {
+          "x": -88.641754,
+          "y": 93.45494,
+          "z": 72.246826
+        },
+        "rotation": {
+          "x": -0.09375,
+          "y": 0,
+          "z": 2.6875
+        }
+      },
+      {
+        "position": {
+          "x": -97.87253,
+          "y": 84.96264,
+          "z": 71.1853
+        },
+        "rotation": {
+          "x": 0.046875,
+          "y": 0,
+          "z": -0.484375
+        }
+      }
+    ],
+    "VehicleInfoList": [
+      {
+        "VehicleHash": 3486135912,
+        "Name": "Baller",
+        "InventoryWeight": 60,
+        "Price": 90000
+      },
+      {
+        "VehicleHash": 486987393,
+        "Name": "Huntley",
+        "InventoryWeight": 60,
+        "Price": 70000
+      },
+      {
+        "VehicleHash": 1878062887,
+        "Name": "Baller LE",
+        "InventoryWeight": 60,
+        "Price": 110000
+      },
+      {
+        "VehicleHash": 884422927,
+        "Name": "Habanero",
+        "InventoryWeight": 60,
+        "Price": 63000
+      },
+      {
+        "VehicleHash": 1177543287,
+        "Name": "Dubsta",
+        "InventoryWeight": 60,
+        "Price": 90000
+      },
+      {
+        "VehicleHash": 1203490606,
+        "Name": "XLS",
+        "InventoryWeight": 60,
+        "Price": 86000
+      },
+      {
+        "VehicleHash": 1221512915,
+        "Name": "Seminole",
+        "InventoryWeight": 60,
+        "Price": 65000
+      },
+      {
+        "VehicleHash": 1269098716,
+        "Name": "Landstalker",
+        "InventoryWeight": 60,
+        "Price": 60000
+      },
+      {
+        "VehicleHash": 1337041428,
+        "Name": "Serrano",
+        "InventoryWeight": 60,
+        "Price": 58000
+      },
+      {
+        "VehicleHash": 2136773105,
+        "Name": "Rocoto",
+        "InventoryWeight": 60,
+        "Price": 68000
+      },
+      {
+        "VehicleHash": 2643899483,
+        "Name": "Radius",
+        "InventoryWeight": 60,
+        "Price": 125000
+      },
+      {
+        "VehicleHash": 2751205197,
+        "Name": "Gresley",
+        "InventoryWeight": 60,
+        "Price": 75000
+      },
+      {
+        "VehicleHash": 3157435195,
+        "Name": "FQ2",
+        "InventoryWeight": 60,
+        "Price": 75000
+      },
+      {
+        "VehicleHash": 3486509883,
+        "Name": "Patriot",
+        "InventoryWeight": 60,
+        "Price": 120000
+      },
+      {
+        "VehicleHash": 2006918058,
+        "Name": "Cavalcade",
+        "InventoryWeight": 60,
+        "Price": 54000
+      },
+      {
+        "VehicleHash": 914654722,
+        "Name": "Mesa",
+        "InventoryWeight": 60,
+        "Price": 85000
+      },
+      {
+        "VehicleHash": 850565707,
+        "Name": "BJXL",
+        "InventoryWeight": 60,
+        "Price": 65000
+      },
+      {
+        "VehicleHash": 683047626,
+        "Name": "Contender",
+        "InventoryWeight": 60,
+        "Price": 180000
+      },
+      {
+        "VehicleHash": 2519238556,
+        "Name": "Granger",
+        "InventoryWeight": 60,
+        "Price": 110000
+      },
+      {
+        "VehicleHash": 2465530446,
+        "Name": "Novak",
+        "InventoryWeight": 60,
+        "Price": 120000
+      },
+      {
+        "VehicleHash": 3126015148,
+        "Name": "Toros",
+        "InventoryWeight": 60,
+        "Price": 160000
+      }
+    ]
+  }

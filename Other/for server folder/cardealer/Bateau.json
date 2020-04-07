@@ -1,0 +1,114 @@
+{
+    "BlipSprite": 427,
+    "BlipPosition": {
+      "x": -791.011,
+      "y": -1506.0264,
+      "z": 0
+    },
+    "LocationList": [
+      {
+        "position": {
+          "x": -791.011,
+          "y": -1506.0264,
+          "z": 0.3824463
+        },
+        "rotation": {
+          "x": -0.03125,
+          "y": 0,
+          "z": -1.140625
+        }
+      },
+    {
+        "position": {
+          "x": -797.15607,
+          "y": -1496.967,
+          "z": 0.4161377
+        },
+        "rotation": {
+          "x": -0.03125,
+          "y": 0,
+          "z": -1.7875
+        }
+      }
+    ],
+    "VehicleInfoList": [
+      {
+        "VehicleHash": 3251507587,
+        "Name": "Marquis",
+        "InventoryWeight": 30,
+        "Price": 660000
+      },
+      {
+        "VehicleHash": 861409633,
+        "Name": "Jetmax",
+        "InventoryWeight": 30,
+        "Price": 320000
+      },
+      {
+        "VehicleHash": 1033245328,
+        "Name": "Dinghy",
+        "InventoryWeight": 30,
+        "Price": 100000
+      },
+      {
+        "VehicleHash": 3264692260,
+        "Name": "Seashark",
+        "InventoryWeight": 10,
+        "Price": 12000
+      },
+      {
+        "VehicleHash": 4012021193,
+        "Name": "Suntrap",
+        "InventoryWeight": 30,
+        "Price": 50000
+      },
+      {
+        "VehicleHash": 1070967343,
+        "Name": "Toro",
+        "InventoryWeight": 30,
+        "Price": 260000
+      },
+      {
+        "VehicleHash": 908897389,
+        "Name": "Toro2",
+        "InventoryWeight": 30,
+        "Price": 260000
+      },
+      {
+        "VehicleHash": 290013743,
+        "Name": "Tropic",
+        "InventoryWeight": 30,
+        "Price": 290000
+      },
+      {
+        "VehicleHash": 1448677353,
+        "Name": "Tropic2",
+        "InventoryWeight": 30,
+        "Price": 290000
+      },
+      {
+        "VehicleHash": 231083307,
+        "Name": "Speeder",
+        "InventoryWeight": 30,
+        "Price": 400000
+      },
+      {
+        "VehicleHash": 437538602,
+        "Name": "Speeder2",
+        "InventoryWeight": 30,
+        "Price": 400000
+      },
+      {
+        "VehicleHash": 400514754,
+        "Name": "Squalo",
+        "InventoryWeight": 30,
+        "Price": 220000
+      },
+      {
+        "VehicleHash": 437538602,
+        "Name": "Tug",
+        "InventoryWeight": 200,
+        "Price": 500000
+      }
+    ]
+  }

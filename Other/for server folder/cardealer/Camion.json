@@ -1,0 +1,126 @@
+{
+  "BlipSprite": 477,
+  "BlipPosition": {
+    "x": 842.8926,
+    "y": -3212.313,
+    "z": 5.90078
+  },
+  "LocationList": [
+    {
+      "position": {
+        "x": 827.2879,
+        "y": -3213.033,
+        "z": 5.8754883
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 3.125
+      }
+    },
+	{
+      "position": {
+        "x": 834.67255,
+        "y": -3211.3845,
+        "z": 6.125174
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": -3.125
+      }
+    },
+	{
+      "position": {
+        "x": 848.83514,
+        "y": -3212.2417,
+        "z": 5.9765625
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": -3.125
+      }
+    },
+	{
+      "position": {
+        "x": 854.9802,
+        "y": -3211.0945,
+        "z": 5.942871
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": -3.109375
+      }
+    }
+  ],
+  "VehicleInfoList": [
+    {
+      "VehicleHash": 850991848,
+      "Name": "Biff",
+      "InventoryWeight": 200,
+      "Price": 350000
+    },
+    {
+      "VehicleHash": 904750859,
+      "Name": "Mule",
+      "InventoryWeight": 150,
+      "Price": 200000
+    },
+    {
+      "VehicleHash": 2053223216,
+      "Name": "Benson",
+      "InventoryWeight": 200,
+      "Price": 450000
+    },
+    {
+      "VehicleHash": 2112052861,
+      "Name": "Pounder",
+      "InventoryWeight": 200,
+      "Price": 390000
+    },
+    {
+      "VehicleHash": 3244501995,
+      "Name": "Mule 2",
+      "InventoryWeight": 150,
+      "Price": 200000
+    },
+    {
+      "VehicleHash": 2242229361,
+      "Name": "Mule 3",
+      "InventoryWeight": 150,
+      "Price": 200000
+    },
+    {
+      "VehicleHash": 1945374990,
+      "Name": "Mule 4",
+      "InventoryWeight": 150,
+      "Price": 200000
+    },
+    {
+      "VehicleHash": 2589662668,
+      "Name": "Rubble",
+      "InventoryWeight": 200,
+      "Price": 275000
+    },
+    {
+      "VehicleHash": 48339065,
+      "Name": "TipTruck",
+      "InventoryWeight": 150,
+      "Price": 200000
+    },
+    {
+      "VehicleHash": 3347205726,
+      "Name": "TipTruck2",
+      "InventoryWeight": 200,
+      "Price": 275000
+    },
+    {
+      "VehicleHash": 2594165727,
+      "Name": "Scrap",
+      "InventoryWeight": 150,
+      "Price": 190000
+    }   
+  ]
+}

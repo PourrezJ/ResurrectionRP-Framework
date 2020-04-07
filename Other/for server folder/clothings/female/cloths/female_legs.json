@@ -1,0 +1,4402 @@
+{
+  "Overlay": 4,
+  "DrawablesList": {
+    "0": {
+        "Name": "Jean",
+        "Price": 310,
+        "Variations": {
+            "0": {
+                "GXT": "Jean slim bleu marine"
+            },
+            "1": {
+                "GXT": "Jean slim noir"
+            },
+            "2": {
+                "GXT": "Jean slim indigo"
+            },
+            "3": {
+                "GXT": "Jean slim léopard"
+            },
+            "4": {
+                "GXT": "Jean slim à pois"
+            },
+            "5": {
+                "GXT": "Jean slim mauve"
+            },
+            "6": {
+                "GXT": "Jean slim noir à fleurs"
+            },
+            "7": {
+                "GXT": "Jean slim vert"
+            },
+            "8": {
+                "GXT": "Jean slim bleu marine délavé"
+            },
+            "9": {
+                "GXT": "Jean slim rouge"
+            },
+            "10": {
+                "GXT": "Jean slim bleu délavé"
+            },
+            "11": {
+                "GXT": "Jean slim vert menthe"
+            },
+            "12": {
+                "GXT": "Jean slim jaune"
+            },
+            "13": {
+                "GXT": "Jean slim tigré"
+            },
+            "14": {
+                "GXT": "Jean slim blanc à fleurs"
+            },
+            "15": {
+                "GXT": "Jean slim punk"
+            }
+        }
+    },
+    "1": {
+        "Name": "Jean",
+        "Price": 180,
+        "Variations": {
+            "0": {
+                "GXT": "Jean bleu foncé délavé"
+            },
+            "1": {
+                "GXT": "Jean bleu marine"
+            },
+            "2": {
+                "GXT": "Jean bleu ciel délavé"
+            },
+            "3": {
+                "GXT": "Jean bleu délavé"
+            },
+            "4": {
+                "GXT": "Jean bleu foncé"
+            },
+            "5": {
+                "GXT": "Jean noir usé"
+            },
+            "6": {
+                "GXT": "Jean ardoise"
+            },
+            "7": {
+                "GXT": "Jean bleu"
+            },
+            "8": {
+                "GXT": "Jean bleu clair"
+            },
+            "9": {
+                "GXT": "Jean décoloré"
+            },
+            "10": {
+                "GXT": "Jean bleu-vert foncé délavé"
+            },
+            "11": {
+                "GXT": "Jean marron"
+            },
+            "12": {
+                "GXT": "Jean blanc"
+            },
+            "13": {
+                "GXT": "Jean bleu marine"
+            },
+            "14": {
+                "GXT": "Jean rapiécé"
+            },
+            "15": {
+                "GXT": "Jean mauve"
+            }
+        }
+    },
+    "2": {
+        "Name": "Pantalons de sport",
+        "Price": 100,
+        "Variations": {
+            "0": {
+                "GXT": "Jogging gris cendre"
+            },
+            "1": {
+                "GXT": "Jogging anthracite"
+            },
+            "2": {
+                "GXT": "Jogging noir"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "3": {
+        "Name": "Chinos",
+        "Price": 350,
+        "Variations": {
+            "0": {
+                "GXT": "Chino noir"
+            },
+            "1": {
+                "GXT": "Chino taupe"
+            },
+            "2": {
+                "GXT": "Chino gris"
+            },
+            "3": {
+                "GXT": "Chino bleu marine"
+            },
+            "4": {
+                "GXT": "Chino blanc et noir"
+            },
+            "5": {
+                "GXT": "Chino kaki"
+            },
+            "6": {
+                "GXT": "Chino blanc"
+            },
+            "7": {
+                "GXT": "Chino rouge"
+            },
+            "8": {
+                "GXT": "Chino beige"
+            },
+            "9": {
+                "GXT": "Chino rose"
+            },
+            "10": {
+                "GXT": "Chino bleu layette"
+            },
+            "11": {
+                "GXT": "Chino bordeaux"
+            },
+            "12": {
+                "GXT": "Chino blanc cassé"
+            },
+            "13": {
+                "GXT": "Chino bleu clair"
+            },
+            "14": {
+                "GXT": "Chino gris clair"
+            },
+            "15": {
+                "GXT": "Chino orange"
+            }
+        }
+    },
+    "4": {
+        "Name": "Jean",
+        "Price": 200,
+        "Variations": {
+            "0": {
+                "GXT": "Jean retroussé ardoise"
+            },
+            "1": {
+                "GXT": "Jean retroussé bleu marine usé"
+            },
+            "2": {
+                "GXT": "Jean retroussé bleu clair délavé"
+            },
+            "3": {
+                "GXT": "Jean retroussé blanc"
+            },
+            "4": {
+                "GXT": "Jean retroussé turquoise"
+            },
+            "5": {
+                "GXT": "Jean retroussé orange"
+            },
+            "6": {
+                "GXT": "Jean retroussé bleu"
+            },
+            "7": {
+                "GXT": "Jean retroussé bleu layette"
+            },
+            "8": {
+                "GXT": "Jean retroussé bleu marine"
+            },
+            "9": {
+                "GXT": "Jean retroussé noir"
+            },
+            "10": {
+                "GXT": "Jean retroussé bordeaux"
+            },
+            "11": {
+                "GXT": "Jean retroussé gris"
+            },
+            "12": {
+                "GXT": "Jean retroussé vintage"
+            },
+            "13": {
+                "GXT": "Jean retroussé bleu délavé"
+            },
+            "14": {
+                "GXT": "Jean retroussé bleu usé"
+            },
+            "15": {
+                "GXT": "Jean retroussé beige"
+            }
+        }
+    },
+    "5": {
+        "Name": "Short",
+        "Price": 220,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "Short en jean rose"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "Short en jean mauve"
+            },
+            "15": {
+                "GXT": "Short en jean orange"
+            }
+        }
+    },
+    "6": {
+        "Name": "Pantalons de costume",
+        "Price": 350,
+        "Variations": {
+            "0": {
+                "GXT": "Tailleur noir"
+            },
+            "1": {
+                "GXT": "Tailleur anthracite"
+            },
+            "2": {
+                "GXT": "Tailleur bleu marine"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "7": {
+        "Name": "Jupes",
+        "Price": 350,
+        "Variations": {
+            "0": {
+                "GXT": "Jupe droite noire"
+            },
+            "1": {
+                "GXT": "Jupe droite grise"
+            },
+            "2": {
+                "GXT": "Jupe droite bleu marine"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "8": {
+        "Name": "Jupes",
+        "Price": 450,
+        "Variations": {
+            "0": {
+                "GXT": "Minijupe noire"
+            },
+            "1": {
+                "GXT": "Minijupe grise"
+            },
+            "2": {
+                "GXT": "Minijupe bleu marine"
+            },
+            "3": {
+                "GXT": "Minijupe en jean bleue usée"
+            },
+            "4": {
+                "GXT": "Minijupe rayée bicolore"
+            },
+            "5": {
+                "GXT": "Minijupe à fleurs"
+            },
+            "6": {
+                "GXT": "Minijupe rouge"
+            },
+            "7": {
+                "GXT": "Mini-jupe en jean noire"
+            },
+            "8": {
+                "GXT": "Minijupe à motifs"
+            },
+            "9": {
+                "GXT": "Minijupe à triangles"
+            },
+            "10": {
+                "GXT": "Minijupe anthracite et verte"
+            },
+            "11": {
+                "GXT": "Minijupe hawaïenne"
+            },
+            "12": {
+                "GXT": "Minijupe marron"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "Minijupe écossaise rouge"
+            },
+            "15": {
+                "GXT": "Minijupe bleu marine bicolore"
+            }
+        }
+    },
+    "9": {
+        "Name": "Jupes",
+        "Price": 450,
+        "Variations": {
+            "0": {
+                "GXT": "Jupe à sequins noire"
+            },
+            "1": {
+                "GXT": "Jupe à sequins gris clair"
+            },
+            "2": {
+                "GXT": "Jupe à sequins grise"
+            },
+            "3": {
+                "GXT": "Jupe à sequins dorée"
+            },
+            "4": {
+                "GXT": "Jupe à sequins bleue"
+            },
+            "5": {
+                "GXT": "Jupe à sequins verte"
+            },
+            "6": {
+                "GXT": "Jupe à sequins aztèque"
+            },
+            "7": {
+                "GXT": "Jupe à sequins noire à fleurs"
+            },
+            "8": {
+                "GXT": "Jupe à sequins symétrique"
+            },
+            "9": {
+                "GXT": "Jupe à sequins mauve"
+            },
+            "10": {
+                "GXT": "Jupe à sequins désert"
+            },
+            "11": {
+                "GXT": "Jupe à sequins turquoise"
+            },
+            "12": {
+                "GXT": "Jupe à sequins rouge"
+            },
+            "13": {
+                "GXT": "Jupe à sequins blanche"
+            },
+            "14": {
+                "GXT": "Jupe à sequins noire & or"
+            },
+            "15": {
+                "GXT": "Jupe à sequins rayée"
+            }
+        }
+    },
+    "10": {
+        "Name": "Shorts de sport",
+        "Price": 100,
+        "Variations": {
+            "0": {
+                "GXT": "Short blanc"
+            },
+            "1": {
+                "GXT": "Short bleu layette"
+            },
+            "2": {
+                "GXT": "Short bleu ciel"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "11": {
+        "Name": "Treillis",
+        "Price": 150,
+        "Variations": {
+            "0": {
+                "GXT": "Treillis olive"
+            },
+            "1": {
+                "GXT": "Treillis noir"
+            },
+            "2": {
+                "GXT": "Treillis marron"
+            },
+            "3": {
+                "GXT": "Treillis anthracite"
+            },
+            "4": {
+                "GXT": "Treillis bleu marine"
+            },
+            "5": {
+                "GXT": "Treillis bleu-vert"
+            },
+            "6": {
+                "GXT": "Treillis beige"
+            },
+            "7": {
+                "GXT": "Treillis beige foncé"
+            },
+            "8": {
+                "GXT": "Treillis camouflage rose"
+            },
+            "9": {
+                "GXT": "Treillis camouflage urbain"
+            },
+            "10": {
+                "GXT": "Treillis camouflage forêt"
+            },
+            "11": {
+                "GXT": "Treillis camouflage désert"
+            },
+            "12": {
+                "GXT": "Treillis gris"
+            },
+            "13": {
+                "GXT": "Treillis mauve"
+            },
+            "14": {
+                "GXT": "Treillis chocolat"
+            },
+            "15": {
+                "GXT": "Treillis blanc"
+            }
+        }
+    },
+    "12": {
+        "Name": "Jupes",
+        "Price": 300,
+        "Variations": {
+            "0": {
+                "GXT": "Jupe plissée écossaise pastel"
+            },
+            "1": {
+                "GXT": "Jupe plissée écossaise rouge"
+            },
+            "2": {
+                "GXT": "Jupe plissée écossaise noire"
+            },
+            "3": {
+                "GXT": "Jupe plissée de marque"
+            },
+            "4": {
+                "GXT": "Jupe camouflage forêt"
+            },
+            "5": {
+                "GXT": "Jupe plissée écossaise bleue"
+            },
+            "6": {
+                "GXT": "Jupe plissée rose"
+            },
+            "7": {
+                "GXT": "Jupe plissée noire"
+            },
+            "8": {
+                "GXT": "Jupe plissée blanche"
+            },
+            "9": {
+                "GXT": "Jupe plissée grise"
+            },
+            "10": {
+                "GXT": "Jupe plissée bleue"
+            },
+            "11": {
+                "GXT": "Jupe plissée nuances de bleu"
+            },
+            "12": {
+                "GXT": "Jupe plissée jaune"
+            },
+            "13": {
+                "GXT": "Jupe plissée beige et mauve"
+            },
+            "14": {
+                "GXT": "Jupe plissée rose pâle"
+            },
+            "15": {
+                "GXT": "Jupe plissée mauve"
+            }
+        }
+    },
+    "13": {
+        "Name": "NULL",
+        "Price": 0,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "14": {
+        "Name": "Short",
+        "Price": 140,
+        "Variations": {
+            "0": {
+                "GXT": "Short bleu-gris"
+            },
+            "1": {
+                "GXT": "Short olive"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "Short blanc"
+            },
+            "9": {
+                "GXT": "Short noir"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "15": {
+        "Name": "Bas de Bikini",
+        "Price": 200,
+        "Variations": {
+            "0": {
+                "GXT": "Bikini noir"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "Bikini gris"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "Bikini turquoise"
+            },
+            "11": {
+                "GXT": "Bikini orange"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "16": {
+        "Name": "Short",
+        "Price": 140,
+        "Variations": {
+            "0": {
+                "GXT": "Short jaune"
+            },
+            "1": {
+                "GXT": "Short nautique"
+            },
+            "2": {
+                "GXT": "Short bleu clair"
+            },
+            "3": {
+                "GXT": "Short rose"
+            },
+            "4": {
+                "GXT": "Short à carreaux"
+            },
+            "5": {
+                "GXT": "Short rouge à damiers"
+            },
+            "6": {
+                "GXT": "Short bleu ciel"
+            },
+            "7": {
+                "GXT": "Short rouge"
+            },
+            "8": {
+                "GXT": "Short beige"
+            },
+            "9": {
+                "GXT": "Short blanc à rayures"
+            },
+            "10": {
+                "GXT": "Short bleu"
+            },
+            "11": {
+                "GXT": "Short rose pâle"
+            }
+        }
+    },
+    "17": {
+        "Name": "Bas de Bikini",
+        "Price": 200,
+        "Variations": {
+            "0": {
+                "GXT": "Bikini blanc"
+            },
+            "1": {
+                "GXT": "Bikini motif croix"
+            },
+            "2": {
+                "GXT": "Bikini bleu"
+            },
+            "3": {
+                "GXT": "Bikini Santo Capra"
+            },
+            "4": {
+                "GXT": "Bikini rouge"
+            },
+            "5": {
+                "GXT": "Bikini marine à rayures"
+            },
+            "6": {
+                "GXT": "Bikini Yeti camouflage"
+            },
+            "7": {
+                "GXT": "Bikini Harsh Souls"
+            },
+            "8": {
+                "GXT": "Bikini rose à motifs"
+            },
+            "9": {
+                "GXT": "Bikini exotique"
+            },
+            "10": {
+                "GXT": "Bikini à fleurs"
+            },
+            "11": {
+                "GXT": "Bikini orange à rayures"
+            }
+        }
+    },
+    "18": {
+      "Name": "Bas festif",
+      "Price": 400,
+      "Variations": {
+        "0": {
+          "GXT": "Jupe de Mère Noël"
+        },
+        "1": {
+          "GXT": "Jupe d'elfette"
+        }
+      }
+    },
+    "19": {
+        "Name": "Lingerie",
+        "Price": 550,
+        "Variations": {
+            "0": {
+                "GXT": "Shorty en dentelle blanche"
+            },
+            "1": {
+                "GXT": "Shorty en dentelle rouge"
+            },
+            "2": {
+                "GXT": "Shorty en dentelle noire"
+            },
+            "3": {
+                "GXT": "Shorty en dentelle grise"
+            },
+            "4": {
+                "GXT": "Shorty en dentelle bleu clair"
+            }
+        }
+    },
+    "20": {
+        "Name": "Bas et jarretelles",
+        "Price": 400,
+        "Variations": {
+            "0": {
+                "GXT": "Bas blancs"
+            },
+            "1": {
+                "GXT": "Bas rouges"
+            },
+            "2": {
+                "GXT": "Bas noirs"
+            }
+        }
+    },
+    "21": {
+      "Name": "NULL",
+      "Price": 1000,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "22": {
+      "Name": "Bas et jarretelles",
+      "Price": 400,
+      "Variations": {
+        "0": {
+          "GXT": "Bas blanc"
+        },
+        "1": {
+          "GXT": "Bas rouge"
+        },
+        "2": {
+          "GXT": "Bas noir"
+        }
+      }
+    },
+    "23": {
+        "Name": "Pantalons de costume",
+        "Price": 390,
+        "Variations": {
+            "0": {
+                "GXT": "Tailleur blanc"
+            },
+            "1": {
+                "GXT": "Tailleur bleu"
+            },
+            "2": {
+                "GXT": "Tailleur mauve"
+            },
+            "3": {
+                "GXT": "Tailleur bleu ciel"
+            },
+            "4": {
+                "GXT": "Tailleur à maille gris"
+            },
+            "5": {
+                "GXT": "Tailleur olive"
+            },
+            "6": {
+                "GXT": "Tailleur jaune"
+            },
+            "7": {
+                "GXT": "Tailleur rouge"
+            },
+            "8": {
+                "GXT": "Tailleur rose"
+            },
+            "9": {
+                "GXT": "Tailleur fuchsia"
+            },
+            "10": {
+                "GXT": "Tailleur rayé noir & crème"
+            },
+            "11": {
+                "GXT": "Tailleur rayé bordeaux"
+            },
+            "12": {
+                "GXT": "Tailleur rayé noir & blanc"
+            }
+        }
+    },
+    "24": {
+        "Name": "Jupes",
+        "Price": 285,
+        "Variations": {
+            "0": {
+                "GXT": "Jupe droite couleurs vives"
+            },
+            "1": {
+                "GXT": "Jupe droite bleue"
+            },
+            "2": {
+                "GXT": "Jupe droite pied-de-poule"
+            },
+            "3": {
+                "GXT": "Jupe droite grise"
+            },
+            "4": {
+                "GXT": "Jupe droite olive"
+            },
+            "5": {
+                "GXT": "Jupe droite bleu ciel"
+            },
+            "6": {
+                "GXT": "Jupe droite à fleurs"
+            },
+            "7": {
+                "GXT": "Jupe droite noire et blanche"
+            },
+            "8": {
+                "GXT": "Jupe droite léopard"
+            },
+            "9": {
+                "GXT": "Jupe droite verte"
+            },
+            "10": {
+                "GXT": "Jupe droite fuchsia"
+            },
+            "11": {
+                "GXT": "Jupe droite mauve"
+            },
+            "12": {
+                "GXT": "Jupe droite aube"
+            }
+        }
+    },
+    "25": {
+        "Name":  "Short",
+        "Price": 305,
+        "Variations": {
+            "0": {
+                "GXT": "Short jean usé bleu marine"
+            },
+            "1": {
+                "GXT": "Short en jean usé bleu"
+            },
+            "2": {
+                "GXT": "Short en jean bleu"
+            },
+            "3": {
+                "GXT": "Short en jean noir délavé"
+            },
+            "4": {
+                "GXT": "Short en jean léopard"
+            },
+            "5": {
+                "GXT": "Short en jean serpent"
+            },
+            "6": {
+                "GXT": "Short en jean noir"
+            },
+            "7": {
+                "GXT": "Short en jean gris cendre"
+            },
+            "8": {
+                "GXT": "Short en jean olive"
+            },
+            "9": {
+                "GXT": "Short en jean bleu marine"
+            },
+            "10": {
+                "GXT": "Short jean perles bleues"
+            },
+            "11": {
+                "GXT": "Short en jean lavande"
+            },
+            "12": {
+                "GXT": "Short en jean vert menthe"
+            }
+        }
+    },
+    "26": {
+        "Name": "Jupes",
+        "Price": 380,
+        "Variations": {
+            "0": {
+                "GXT": "Minijupe imprimé léopard"
+            }
+        }
+    },
+    "27": {
+        "Name": "Leggings",
+        "Price": 300,
+        "Variations": {
+            "0": {
+                "GXT": "Legging noir"
+            },
+            "1": {
+                "GXT": "Legging gris"
+            },
+            "2": {
+                "GXT": "Legging jaune"
+            },
+            "3": {
+                "GXT": "Legging marron foncé"
+            },
+            "4": {
+                "GXT": "Legging touches de rouge"
+            },
+            "5": {
+                "GXT": "Legging squelette"
+            },
+            "6": {
+                "GXT": "Legging Kreppsohle"
+            },
+            "7": {
+                "GXT": "Legging à rayures"
+            },
+            "8": {
+                "GXT": "Legging tigré"
+            },
+            "9": {
+                "GXT": "Legging léopard"
+            },
+            "10": {
+                "GXT": "Legging tropical"
+            },
+            "11": {
+                "GXT": "Legging Princess RB"
+            },
+            "12": {
+                "GXT": "Legging à motifs colorés"
+            },
+            "13": {
+                "GXT": "Legging bleu marine"
+            },
+            "14": {
+                "GXT": "Legging bleu ciel"
+            },
+            "15": {
+                "GXT": "Legging noir Barlone"
+            }
+        }
+    },
+    "28": {
+        "Name": "Jupe festive",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Jupe de l'Indépendance"
+            }
+        }
+    },
+    "29": {
+      "Name": "NULL",
+      "Price": 4000,
+      "Variations": {
+        "0": {
+          "GXT": "Pantalon de pilote vert"
+        }
+      }
+    },
+    "30": {
+        "Name": "Pantalons d'extermination",
+        "Price": 260,
+        "Variations": {
+            "0": {
+                "GXT": "Treillis, noir"
+            },
+            "1": {
+                "GXT": "Treillis, gris"
+            },
+            "2": {
+                "GXT": "Treillis, anthracite"
+            },
+            "3": {
+                "GXT": "Treillis, brun clair"
+            },
+            "4": {
+                "GXT": "Treillis, forêt"
+            }
+        }
+    },
+    "31": {
+        "Name": "Leggings festif",
+        "Price": 300,
+        "Variations": {
+            "0": {
+                "GXT": "Legging rouge"
+            },
+            "1": {
+                "GXT": "Legging rayé"
+            },
+            "2": {
+                "GXT": "Legging d'hiver"
+            },
+            "3": {
+                "GXT": "Legging festif"
+            }
+        }
+    },
+    "32": {
+      "Name": "Treillis",
+      "Price": 200,
+      "Variations": {
+        "0": {
+          "GXT": "Treillis large noir retr."
+        }
+      }
+    },
+    "33": {
+      "Name": "Treillis",
+      "Price": 260,
+      "Variations": {
+        "0": {
+          "GXT": "Treillis genouillère noir"
+        }
+      }
+    },
+    "34": {
+        "Name": "Pantalons de costume",
+        "Price": 380,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon noir"
+            }
+        }
+    },
+    "35": {
+        "Name": "NULL",
+        "Price": 2000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "36": {
+        "Name": "Jupes",
+        "Price": 290,
+        "Variations": {
+            "0": {
+                "GXT": "Jupe crayon grise"
+            },
+            "1": {
+                "GXT": "Jupe crayon beige"
+            },
+            "2": {
+                "GXT": "Jupe crayon noire"
+            },
+            "3": {
+                "GXT": "Jupe crayon bleue"
+            }
+        }
+    },
+    "37": {
+        "Name": "Pantalons de costume",
+        "Price": 300,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon de costume noir"
+            },
+            "1": {
+                "GXT": "Pantalon de costume gris"
+            },
+            "2": {
+                "GXT": "Pantalon de costume marine"
+            },
+            "3": {
+                "GXT": "Pantalon de costume bleu-vert"
+            },
+            "4": {
+                "GXT": "Pantalon de costume rouge"
+            },
+            "5": {
+                "GXT": "Pantalon de costume blanc"
+            },
+            "6": {
+                "GXT": "Pantalon de costume marron"
+            }
+        }
+    },
+    "38": {
+        "Name": "NULL",
+        "Price": 2000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "39": {
+        "Name": "NULL",
+        "Price": 2000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "40": {
+        "Name": "NULL",
+        "Price": 2000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "41": {
+        "Name": "Pantalons de costume",
+        "Price": 300,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon mal repassé gris"
+            },
+            "1": {
+                "GXT": "Pantalon mal repassé beige"
+            },
+            "2": {
+                "GXT": "Pantalon mal repassé noir"
+            },
+            "3": {
+                "GXT": "Pantalon mal repassé bleu"
+            }
+        }
+    },
+    "42": {
+      "Name": "NULL",
+      "Price": 4500,
+      "Variations": {
+        "0": {
+          "GXT": "Pantalon de pilote noir"
+        }
+      }
+    },
+    "43": {
+        "Name": "Pantalons cuir",
+        "Price": 360,
+        "Variations": {
+            "0": {
+                "GXT": "Zippers cuir noir"
+            },
+            "1": {
+                "GXT": "Zippers cuir rouge"
+            },
+            "2": {
+                "GXT": "Zippers cuir marron"
+            },
+            "3": {
+                "GXT": "Zippers cuir brun clair"
+            },
+            "4": {
+                "GXT": "Zippers cuir bordeaux"
+            }
+        }
+    },
+    "44": {
+        "Name": "Pantalons cuir",
+        "Price": 370,
+        "Variations": {
+            "0": {
+                "GXT": "Slim noir entaillé"
+            },
+            "1": {
+                "GXT": "Slim rouge entaillé"
+            },
+            "2": {
+                "GXT": "Slim marron entaillé"
+            },
+            "3": {
+                "GXT": "Slim brun clair entaillé"
+            },
+            "4": {
+                "GXT": "Slim bordeaux entaillé"
+            }
+        }
+    },
+    "45": {
+        "Name": "Treillis",
+        "Price": 180,
+        "Variations": {
+            "0": {
+                "GXT": "Treillis large kaki"
+            },
+            "1": {
+                "GXT": "Treillis large noir"
+            },
+            "2": {
+                "GXT": "Treillis large crème"
+            },
+            "3": {
+                "GXT": "Treillis large gris"
+            }
+        }
+    },
+    "46": {
+        "Name": "NULL",
+        "Price": 0,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "47": {
+        "Name": "Bas de pyjama",
+        "Price": 250,
+        "Variations": {
+            "0": {
+                "GXT": "Bas pyjama soie noir"
+            },
+            "1": {
+                "GXT": "Bas pyjama soie s&n"
+            },
+            "2": {
+                "GXT": "Bas pyjama soie perseus"
+            },
+            "3": {
+                "GXT": "Bas pyjama soie gris"
+            },
+            "4": {
+                "GXT": "Bas pyjama soie rouge"
+            },
+            "5": {
+                "GXT": "Bas pyjama soie rose"
+            },
+            "6": {
+                "GXT": "Bas pyjama soie blanc"
+            }
+        }
+    },
+    "48": {
+      "Name": "Treillis",
+      "Price": 220,
+      "Variations": {
+        "0": {
+          "GXT": "Pantalon militaire brun clair"
+        },
+        "1": {
+          "GXT": "Pantalon militaire kaki"
+        }
+      }
+    },
+    "49": {
+        "Name": "Treillis",
+        "Price": 250,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon polyvalent beige"
+            },
+            "1": {
+                "GXT": "Pantalon polyvalent kaki"
+            }
+        }
+    },
+    "50": {
+        "Name": "Pantalons de costume",
+        "Price": 400,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon classique blanc"
+            },
+            "1": {
+                "GXT": "Pantalon classique marine"
+            },
+            "2": {
+                "GXT": "Pantalon classique bleu"
+            },
+            "3": {
+                "GXT": "Pantalon classique lilas"
+            },
+            "4": {
+                "GXT": "Pantalon classique jaune"
+            }
+        }
+    },
+    "51": {
+        "Name": "Pantalons de costume",
+        "Price": 380,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon classique blanc slim"
+            },
+            "1": {
+                "GXT": "Pantalon classique marine slim"
+            },
+            "2": {
+                "GXT": "Pantalon classique bleu slim"
+            },
+            "3": {
+                "GXT": "Pantalon classique lilas slim"
+            },
+            "4": {
+                "GXT": "Pantalon classique jaune slim"
+            }
+        }
+    },
+    "52": {
+        "Name": "Pantalons de costume",
+        "Price": 400,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon brillant rouge"
+            },
+            "1": {
+                "GXT": "Pantalon brillant bleu"
+            },
+            "2": {
+                "GXT": "Pantalon brillant noir"
+            },
+            "3": {
+                "GXT": "Pantalon brillant vert"
+            }
+        }
+    },
+    "53": {
+      "Name": "Pantalons de costume",
+      "Price": 1050,
+      "Variations": {
+        "0": {
+          "GXT": "Pantalon brodé doré"
+        }
+      }
+    },
+    "54": {
+        "Name": "Pantalons de costume",
+        "Price": 300,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon ajusté brillant rouge"
+            },
+            "1": {
+                "GXT": "Pantalon ajusté brillant bleu"
+            },
+            "2": {
+                "GXT": "Pantalon ajusté brillant noir"
+            },
+            "3": {
+                "GXT": "Pantalon ajusté brillant vert"
+            }
+        }
+    },
+    "55": {
+        "Name": "Pantalons de costume",
+        "Price": 1500,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon ajusté brodé doré"
+            }
+        }
+    },
+    "56": {
+        "Name": "Bas de Bikini",
+        "Price": 200,
+        "Variations": {
+            "0": {
+                "GXT": "Bikini Dix"
+            },
+            "1": {
+                "GXT": "Bikini Le Chien"
+            },
+            "2": {
+                "GXT": "Bikini Sessanta Nove"
+            },
+            "3": {
+                "GXT": "Bikini Perseus"
+            },
+            "4": {
+                "GXT": "Bikini fleurs orange"
+            },
+            "5": {
+                "GXT": "Bikini fleurs bleues"
+            }
+        }
+    },
+    "57": {
+      "Name": "Bas de peignoir",
+      "Price": 180,
+      "Variations": {
+        "0": {
+          "GXT": "Peignoir blanc"
+        },
+        "1": {
+          "GXT": "Peignoir gris"
+        },
+        "2": {
+          "GXT": "Peignoir noir"
+        },
+        "3": {
+          "GXT": "Peignoir imprimé rouge"
+        },
+        "4": {
+          "GXT": "Peignoir imprimé mauve"
+        },
+        "5": {
+          "GXT": "Peignoir imprimé bleu"
+        },
+        "6": {
+          "GXT": "Peignoir imprimé noir"
+        },
+        "7": {
+          "GXT": "Peignoir imprimé brun"
+        }
+      }
+    },
+    "58": {
+        "Name": "Pantalons de sport",
+        "Price": 110,
+        "Variations": {
+            "0": {
+                "GXT": "Survêtement noir"
+            },
+            "1": {
+                "GXT": "Survêtement anthracite"
+            },
+            "2": {
+                "GXT": "Survêtement bleu marine"
+            },
+            "3": {
+                "GXT": "Survêtement bleu-vert"
+            }
+        }
+    },
+    "59": {
+        "Name": "NULL",
+        "Price": 2000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "60": {
+        "Name": "Bas de pyjama festif",
+        "Price": 320,
+        "Variations": {
+            "0": {
+                "GXT": "Bas pyjama rouge à carreau"
+            },
+            "1": {
+                "GXT": "Bas pyjama vert à carreau"
+            },
+            "2": {
+                "GXT": "Bas pyjama écossais"
+            },
+            "3": {
+                "GXT": "Bas pyjama festif rayé"
+            },
+            "4": {
+                "GXT": "Bas pyjama festif chaussette"
+            },
+            "5": {
+                "GXT": "Bas pyjama festif flocon vert"
+            },
+            "6": {
+                "GXT": "Bas pyjama festif flocon rouge"
+            },
+            "7": {
+                "GXT": "Bas pyjama houx"
+            },
+            "8": {
+                "GXT": "Bas pyjama pinguin"
+            },
+            "9": {
+                "GXT": "Bas pyjama rennes"
+            },
+            "10": {
+                "GXT": "Bas pyjama blanc flocon rouge"
+            },
+            "11": {
+                "GXT": "Bas pyjama homme de neige"
+            },
+            "12": {
+                "GXT": "Bas pyjama sapin"
+            },
+            "13": {
+                "GXT": "Bas pyjama sapin flocon"
+            },
+            "14": {
+                "GXT": "Bas pyjama sapin vert"
+            },
+            "15": {
+                "GXT": "Bas pyjama rayé"
+            }
+        }
+    },
+    "61": {
+        "Name": "Treillis",
+        "Price": 180,
+        "Variations": {
+            "0": {
+                "GXT": "Treillis vert"
+            },
+            "1": {
+                "GXT": "Treillis orange"
+            },
+            "2": {
+                "GXT": "Treillis violet"
+            },
+            "3": {
+                "GXT": "Treillis rose"
+            },
+            "4": {
+                "GXT": "Treillis rouge pâle"
+            },
+            "5": {
+                "GXT": "Treillis bleu"
+            },
+            "6": {
+                "GXT": "Treillis gris"
+            },
+            "7": {
+                "GXT": "Treillis beige"
+            },
+            "8": {
+                "GXT": "Treillis blanc"
+            },
+            "9": {
+                "GXT": "Treillis noir"
+            }
+        }
+    },
+    "62": {
+        "Name": "Lingerie",
+        "Price": 470,
+        "Variations": {
+            "0": {
+                "GXT": "Shorty en soie chair"
+            },
+            "1": {
+                "GXT": "Shorty en soie lilas"
+            },
+            "2": {
+                "GXT": "Shorty en soie noire"
+            },
+            "3": {
+                "GXT": "Shorty en soie bleue à pois"
+            },
+            "4": {
+                "GXT": "Shorty en dentelle cramoisie"
+            },
+            "5": {
+                "GXT": "Shorty en soie blanche"
+            },
+            "6": {
+                "GXT": "Shorty en dentelle diva"
+            },
+            "7": {
+                "GXT": "Shorty en dentelle vermeille"
+            },
+            "8": {
+                "GXT": "Shorty en dentelle mauve"
+            },
+            "9": {
+                "GXT": "Shorty en dentelle brun clair"
+            },
+            "10": {
+                "GXT": "Shorty en dentelle sombre"
+            },
+            "11": {
+                "GXT": "Shorty en soie rouge"
+            }
+        }
+    },
+    "63": {
+        "Name": "Bas et jarretelles",
+        "Price": 420,
+        "Variations": {
+            "0": {
+                "GXT": "Ensemble gris et chair"
+            },
+            "1": {
+                "GXT": "Ensemble lilas écossais"
+            },
+            "2": {
+                "GXT": "Ensemble noir écossais"
+            },
+            "3": {
+                "GXT": "Ensemble noir et bleu à pois"
+            },
+            "4": {
+                "GXT": "Ensemble noir et rouge léopard"
+            },
+            "5": {
+                "GXT": "Ensemble blanc à cœurs"
+            },
+            "6": {
+                "GXT": "Ensemble noir à cœurs"
+            },
+            "7": {
+                "GXT": "Ensemble rouge à cœurs"
+            },
+            "8": {
+                "GXT": "Ensemble mauve à rayures"
+            },
+            "9": {
+                "GXT": "Ensemble brun clair à rayures"
+            },
+            "10": {
+                "GXT": "Ensemble noir léopard"
+            },
+            "11": {
+                "GXT": "Ensemble rouge à rayures"
+            }
+        }
+    },
+    "64": {
+        "Name": "Chinos",
+        "Price": 360,
+        "Variations": {
+            "0": {
+                "GXT": "Chino ajusté crème"
+            },
+            "1": {
+                "GXT": "Chino ajusté noir"
+            },
+            "2": {
+                "GXT": "Chino ajusté kaki"
+            },
+            "3": {
+                "GXT": "Chino ajusté gris"
+            }
+        }
+    },
+    "65": {
+        "Name": "Taille haute",
+        "Price": 320,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon taille haute noir"
+            },
+            "1": {
+                "GXT": "Pantalon taille haute blanc"
+            },
+            "2": {
+                "GXT": "Pantalon taille haute gris"
+            }
+        }
+    },
+    "66": {
+        "Name": "Pantalons de sport",
+        "Price": 110,
+        "Variations": {
+            "0": {
+                "GXT": "Survêtement bleu"
+            },
+            "1": {
+                "GXT": "Survêtement bordeaux"
+            },
+            "2": {
+                "GXT": "Survêtement brun clair"
+            },
+            "3": {
+                "GXT": "Survêtement bleu roi"
+            },
+            "4": {
+                "GXT": "Survêtement rouge"
+            },
+            "5": {
+                "GXT": "Survêtement bleu clair"
+            },
+            "6": {
+                "GXT": "Survêtement orange"
+            },
+            "7": {
+                "GXT": "Survêtement violet"
+            },
+            "8": {
+                "GXT": "Survêtement gris"
+            },
+            "9": {
+                "GXT": "Survêtement vert"
+            },
+            "10": {
+                "GXT": "Survêtement blanc"
+            }
+        }
+    },
+    "67": {
+        "Name": "Bas de pyjama",
+        "Price": 220,
+        "Variations": {
+            "0": {
+                "GXT": "Bas pyjama bleu pastel"
+            },
+            "1": {
+                "GXT": "Bas pyjama jaune pastel"
+            },
+            "2": {
+                "GXT": "Bas pyjama rose pastel"
+            },
+            "3": {
+                "GXT": "Bas pyjama vert pastel"
+            },
+            "4": {
+                "GXT": "Bas pyjama violet à carreaux"
+            },
+            "5": {
+                "GXT": "Bas pyjama bleu à carreaux"
+            },
+            "6": {
+                "GXT": "Bas pyjama rouge à volutes"
+            },
+            "7": {
+                "GXT": "Bas pyjama blanc à motifs"
+            },
+            "8": {
+                "GXT": "Bas pyjama bleu à arabesques"
+            },
+            "9": {
+                "GXT": "Bas pyjama jaune arabesques"
+            },
+            "10": {
+                "GXT": "Bas pyjama rouge arabesques"
+            },
+            "11": {
+                "GXT": "Bas pyjama bleu marine rayé"
+            },
+            "12": {
+                "GXT": "Bas pyjama bleu et rouge rayé"
+            },
+            "13": {
+                "GXT": "Bas pyjama orange rayé"
+            }
+        }
+    },
+    "68": {
+        "Name": "Bas de course",
+        "Price": 400,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon bleu et gris"
+            },
+            "1": {
+                "GXT": "Pantalon gris et noir"
+            },
+            "2": {
+                "GXT": "Pantalon rouge et blanc"
+            },
+            "3": {
+                "GXT": "Pantalon noir"
+            },
+            "4": {
+                "GXT": "Pantalon vert et jaune"
+            },
+            "5": {
+                "GXT": "Pantalon blanc"
+            },
+            "6": {
+                "GXT": "Pantalon vert et blanc"
+            },
+            "7": {
+                "GXT": "Pantalon orange et blanc"
+            },
+            "8": {
+                "GXT": "Pantalon violet et blanc"
+            },
+            "9": {
+                "GXT": "Pantalon rose et blanc"
+            }
+        }
+    },
+    "69": {
+        "Name": "Bas de course",
+        "Price": 300,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon cross vert et blanc"
+            },
+            "1": {
+                "GXT": "Pantalon cross noir et rouge"
+            },
+            "2": {
+                "GXT": "Pantalon cross blanc et vert"
+            },
+            "3": {
+                "GXT": "Pantalon cross noir"
+            },
+            "4": {
+                "GXT": "Pantalon cross multicolor"
+            },
+            "5": {
+                "GXT": "Pantalon cross noir et jaune"
+            },
+            "6": {
+                "GXT": "Pantalon cross rose et blanc"
+            },
+            "7": {
+                "GXT": "Pantalon cross blanc et bleu"
+            },
+            "8": {
+                "GXT": "Pantalon cross vert et blanc 2"
+            },
+            "9": {
+                "GXT": "Pantalon cross orange et blanc"
+            },
+            "10": {
+                "GXT": "Pantalon cross violet et blanc"
+            },
+            "11": {
+                "GXT": "Pantalon cross rose et blanc"
+            }
+        }
+    },
+    "70": {
+        "Name": "NULL",
+        "Price": 2000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "71": {
+        "Name": "Pantalons ample",
+        "Price": 180,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon ample crânes"
+            },
+            "1": {
+                "GXT": "Pantalon ample camouflage"
+            },
+            "2": {
+                "GXT": "Pantalon ample urbain"
+            },
+            "3": {
+                "GXT": "Pantalon ample étoilé"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "Pantalon ample Lazer Force"
+            },
+            "9": {
+                "GXT": "Pant. ample Rage impuissante"
+            },
+            "10": {
+                "GXT": "Pantalon ample hamburgers"
+            },
+            "11": {
+                "GXT": "Pantalon ample Up-n-Atom"
+            },
+            "12": {
+                "GXT": "Pantalon ample Barfs"
+            },
+            "13": {
+                "GXT": "Pantalon ample PRB"
+            },
+            "14": {
+                "GXT": "Pant. ample camouflage fluo"
+            },
+            "15": {
+                "GXT": "P. ample Rangers de l'espace"
+            },
+            "16": {
+                "GXT": "Pantalon ample Sprunk"
+            },
+            "17": {
+                "GXT": "Pantalon ample ondulations"
+            }
+        }
+    },
+    "72": {
+      "Name": "NULL",
+      "Price": 2000,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "73": {
+        "Name": "Jean",
+        "Price": 260,
+        "Variations": {
+            "0": {
+                "GXT": "Jean côtelé mal lavé"
+            },
+            "1": {
+                "GXT": "Jean côtelé noir"
+            },
+            "2": {
+                "GXT": "Jean côtelé bleu foncé"
+            },
+            "3": {
+                "GXT": "Jean côtelé délavé"
+            },
+            "4": {
+                "GXT": "Jean côtelé vintage"
+            },
+            "5": {
+                "GXT": "Jean côtelé décoloré"
+            }
+        }
+    },
+    "74": {
+        "Name": "Jean",
+        "Price": 295,
+        "Variations": {
+            "0": {
+                "GXT": "Jean usé mal lavé"
+            },
+            "1": {
+                "GXT": "Jean usé noir"
+            },
+            "2": {
+                "GXT": "Jean usé bleu foncé"
+            },
+            "3": {
+                "GXT": "Jean usé délavé"
+            },
+            "4": {
+                "GXT": "Jean usé vintage"
+            },
+            "5": {
+                "GXT": "Jean usé décoloré"
+            }
+        }
+    },
+    "75": {
+        "Name": "Pantalons cuir",
+        "Price": 420,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon uni noir"
+            },
+            "1": {
+                "GXT": "Pantalon uni café"
+            },
+            "2": {
+                "GXT": "Pantalon uni rouge"
+            }
+        }
+    },
+    "76": {
+        "Name": "Pantalons cuir",
+        "Price": 450,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon matelassé noir"
+            },
+            "1": {
+                "GXT": "Pantalon matelassé café"
+            },
+            "2": {
+                "GXT": "Pantalon matelassé rouge"
+            }
+        }
+    },
+    "77": {
+        "Name": "Pantalons cuir",
+        "Price": 445,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon côtelé noir"
+            },
+            "1": {
+                "GXT": "Pantalon côtelé café"
+            },
+            "2": {
+                "GXT": "Pantalon côtelé rouge"
+            }
+        }
+    },
+    "78": {
+        "Name": "Short",
+        "Price": 200,
+        "Variations": {
+            "0": {
+                "GXT": "Short indigo collants"
+            },
+            "1": {
+                "GXT": "Short ardoise collants"
+            },
+            "2": {
+                "GXT": "Short noir collants"
+            },
+            "3": {
+                "GXT": "Short gris cendre collants"
+            }
+        }
+    },
+    "79": {
+        "Name": "NULL",
+        "Price": 4000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "80": {
+        "Name": "Pantalons de sport",
+        "Price": 165,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon bas chocolat"
+            },
+            "1": {
+                "GXT": "Pantalon bas camouflage"
+            },
+            "2": {
+                "GXT": "Pantalon bas noir"
+            },
+            "3": {
+                "GXT": "Pantalon bas camo. bleu"
+            },
+            "4": {
+                "GXT": "Pantalon bas gris clair"
+            },
+            "5": {
+                "GXT": "Pantalon bas anthracite"
+            },
+            "6": {
+                "GXT": "Pantalon bas losanges"
+            },
+            "7": {
+                "GXT": "Pantalon bas carreaux"
+            }
+        }
+    },
+    "81": {
+        "Name": "Pantalons cuir",
+        "Price": 200,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon bas de cuir noir"
+            },
+            "1": {
+                "GXT": "Pantalon bas de cuir rouge"
+            },
+            "2": {
+                "GXT": "Pantalon bas de cuir blanc"
+            }
+        }
+    },
+    "82": {
+        "Name": "Shorts de sport",
+        "Price": 120,
+        "Variations": {
+            "0": {
+                "GXT": "Bermuda bas chocolat"
+            },
+            "1": {
+                "GXT": "Bermuda bas camouflage"
+            },
+            "2": {
+                "GXT": "Bermuda bas noir"
+            },
+            "3": {
+                "GXT": "Bermuda bas camo. bleu"
+            },
+            "4": {
+                "GXT": "Bermuda bas gris clair"
+            },
+            "5": {
+                "GXT": "Bermuda bas anthracite"
+            },
+            "6": {
+                "GXT": "Bermuda bas losanges"
+            },
+            "7": {
+                "GXT": "Bermuda bas carreaux"
+            }
+        }
+    },
+    "83": {
+        "Name": "Pantalons cuir",
+        "Price": 180,
+        "Variations": {
+            "0": {
+                "GXT": "Bermuda bas de cuir noir"
+            },
+            "1": {
+                "GXT": "Bermuda bas de cuir rouge"
+            },
+            "2": {
+                "GXT": "Bermuda bas de cuir blanc"
+            }
+        }
+    },
+    "84": {
+        "Name": "Jean",
+        "Price": 140,
+        "Variations": {
+            "0": {
+                "GXT": "Jean bas bleu marine"
+            },
+            "1": {
+                "GXT": "Jean bas ardoise"
+            },
+            "2": {
+                "GXT": "Jean bas classique"
+            },
+            "3": {
+                "GXT": "Jean bas anthracite"
+            },
+            "4": {
+                "GXT": "Jean bas noir"
+            },
+            "5": {
+                "GXT": "Jean bas bleu marine délavé"
+            },
+            "6": {
+                "GXT": "Jean bas ardoise délavé"
+            },
+            "7": {
+                "GXT": "Jean bas classique délavé"
+            },
+            "8": {
+                "GXT": "Jean bas anthracite délavé"
+            },
+            "9": {
+                "GXT": "Jean bas noir délavé"
+            }
+        }
+    },
+    "85": {
+        "Name": "Pantalons cuir",
+        "Price": 200,
+        "Variations": {
+            "0": {
+                "GXT": "Jean bas de cuir noir"
+            },
+            "1": {
+                "GXT": "Jean bas de cuir rouge"
+            },
+            "2": {
+                "GXT": "Jean bas de cuir blanc"
+            },
+            "3": {
+                "GXT": "Jean bas de cuir marron"
+            }
+        }
+    },
+    "86": {
+        "Name": "NULL",
+        "Price": 5000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "87": {
+        "Name": "Leggings",
+        "Price": 330,
+        "Variations": {
+            "0": {
+                "GXT": "Legging camouflage fluo"
+            },
+            "1": {
+                "GXT": "Legging camouflage rose"
+            },
+            "2": {
+                "GXT": "Legging camo. orange/marron"
+            },
+            "3": {
+                "GXT": "Legging camouflage rouge"
+            },
+            "4": {
+                "GXT": "Legging camouflage orange"
+            },
+            "5": {
+                "GXT": "Legging camouflage léger gris"
+            },
+            "6": {
+                "GXT": "Legging camouflage forêt"
+            },
+            "7": {
+                "GXT": "Legging camo. bleu et vert"
+            },
+            "8": {
+                "GXT": "Legging tigré gris"
+            },
+            "9": {
+                "GXT": "Legging tigré rose"
+            },
+            "10": {
+                "GXT": "Legging tigré turquoise"
+            },
+            "11": {
+                "GXT": "Legging camo. léger fluo"
+            },
+            "12": {
+                "GXT": "Legging camo. léger rouge"
+            },
+            "13": {
+                "GXT": "Legging à fleurs"
+            },
+            "14": {
+                "GXT": "Legging Squash banane"
+            },
+            "15": {
+                "GXT": "Legging Squash orange"
+            }
+        }
+    },
+    "88": {
+      "Name": "NULL",
+      "Price": 4000,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "89": {
+        "Name": "Treillis",
+        "Price": 250,
+        "Variations": {
+            "0": {
+                "GXT": "Treillis ample bleu pixels"
+            },
+            "1": {
+                "GXT": "Treillis ample marron pixels"
+            },
+            "2": {
+                "GXT": "Treillis ample vert pixels"
+            },
+            "3": {
+                "GXT": "Treillis ample gris pixels"
+            },
+            "4": {
+                "GXT": "Treillis ample pêche pixels"
+            },
+            "5": {
+                "GXT": "Treillis ample beige"
+            },
+            "6": {
+                "GXT": "Treillis ample sombre forêt"
+            },
+            "7": {
+                "GXT": "Treillis ample quadrillé"
+            },
+            "8": {
+                "GXT": "Treillis ample v. mousse pixels"
+            },
+            "9": {
+                "GXT": "Treillis ample gris forêt"
+            },
+            "10": {
+                "GXT": "Treillis ample camo. turquoise"
+            },
+            "11": {
+                "GXT": "Treillis ample éclats"
+            },
+            "12": {
+                "GXT": "Treillis ample camo. contraste"
+            },
+            "13": {
+                "GXT": "Treillis ample pavés"
+            },
+            "14": {
+                "GXT": "Treillis ample pêche forêt"
+            },
+            "15": {
+                "GXT": "Treillis ample pinceau"
+            },
+            "16": {
+                "GXT": "Treillis ample camouflage"
+            },
+            "17": {
+                "GXT": "Treillis ample clair forêt"
+            },
+            "18": {
+                "GXT": "Treillis ample vert mousse"
+            },
+            "19": {
+                "GXT": "Treillis ample sable"
+            },
+            "20": {
+                "GXT": "NULL"
+            },
+            "21": {
+                "GXT": "NULL"
+            },
+            "22": {
+                "GXT": "NULL"
+            },
+            "23": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "90": {
+        "Name": "Treillis",
+        "Price": 250,
+        "Variations": {
+            "0": {
+                "GXT": "Treillis ample bleu pixels"
+            },
+            "1": {
+                "GXT": "Treillis ample marron pixels"
+            },
+            "2": {
+                "GXT": "Treillis ample vert pixels"
+            },
+            "3": {
+                "GXT": "Treillis ample gris pixels"
+            },
+            "4": {
+                "GXT": "Treillis ample pêche pixels"
+            },
+            "5": {
+                "GXT": "Treillis ample beige"
+            },
+            "6": {
+                "GXT": "Treillis ample sombre forêt"
+            },
+            "7": {
+                "GXT": "Treillis ample quadrillé"
+            },
+            "8": {
+                "GXT": "Treillis ample v. mousse pixels"
+            },
+            "9": {
+                "GXT": "Treillis ample gris forêt"
+            },
+            "10": {
+                "GXT": "Treillis ample camo. turquoise"
+            },
+            "11": {
+                "GXT": "Treillis ample éclats"
+            },
+            "12": {
+                "GXT": "Treillis ample camo. contraste"
+            },
+            "13": {
+                "GXT": "Treillis ample pavés"
+            },
+            "14": {
+                "GXT": "Treillis ample pêche forêt"
+            },
+            "15": {
+                "GXT": "Treillis ample pinceau"
+            },
+            "16": {
+                "GXT": "Treillis ample camouflage"
+            },
+            "17": {
+                "GXT": "Treillis ample clair forêt"
+            },
+            "18": {
+                "GXT": "Treillis ample vert mousse"
+            },
+            "19": {
+                "GXT": "Treillis ample sable"
+            },
+            "20": {
+                "GXT": "NULL"
+            },
+            "21": {
+                "GXT": "NULL"
+            },
+            "22": {
+                "GXT": "NULL"
+            },
+            "23": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "91": {
+        "Name": "Shorts de sport",
+        "Price": 220,
+        "Variations": {
+            "0": {
+                "GXT": "Treillis court bleu pixels"
+            },
+            "1": {
+                "GXT": "Treillis court marron pixels"
+            },
+            "2": {
+                "GXT": "Treillis court vert pixels"
+            },
+            "3": {
+                "GXT": "Treillis court gris pixels"
+            },
+            "4": {
+                "GXT": "Treillis court pêche pixels"
+            },
+            "5": {
+                "GXT": "Treillis court beige"
+            },
+            "6": {
+                "GXT": "Treillis court sombre forêt"
+            },
+            "7": {
+                "GXT": "Treillis court quadrillé"
+            },
+            "8": {
+                "GXT": "Treillis court v. mousse pixels"
+            },
+            "9": {
+                "GXT": "Treillis court gris forêt"
+            },
+            "10": {
+                "GXT": "Treillis court camo. turquoise"
+            },
+            "11": {
+                "GXT": "Treillis court éclats"
+            },
+            "12": {
+                "GXT": "Treillis court camo. contraste"
+            },
+            "13": {
+                "GXT": "Treillis court pavés"
+            },
+            "14": {
+                "GXT": "Treillis court pêche forêt"
+            },
+            "15": {
+                "GXT": "Treillis court pinceau"
+            },
+            "16": {
+                "GXT": "Treillis court camouflage"
+            },
+            "17": {
+                "GXT": "Treillis court clair forêt"
+            },
+            "18": {
+                "GXT": "Treillis court vert mousse"
+            },
+            "19": {
+                "GXT": "Treillis court sable"
+            },
+            "20": {
+                "GXT": "NULL"
+            },
+            "21": {
+                "GXT": "NULL"
+            },
+            "22": {
+                "GXT": "NULL"
+            },
+            "23": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "92": {
+        "Name": "Salopettes",
+        "Price": 300,
+        "Variations": {
+            "0": {
+                "GXT": "Salopette bleue pixels"
+            },
+            "1": {
+                "GXT": "Salopette marron pixels"
+            },
+            "2": {
+                "GXT": "Salopette verte pixels"
+            },
+            "3": {
+                "GXT": "Salopette grise pixels"
+            },
+            "4": {
+                "GXT": "Salopette pêche pixels"
+            },
+            "5": {
+                "GXT": "Salopette beige"
+            },
+            "6": {
+                "GXT": "Salopette sombre forêt"
+            },
+            "7": {
+                "GXT": "Salopette quadrillée"
+            },
+            "8": {
+                "GXT": "Salopette vert mousse pixels"
+            },
+            "9": {
+                "GXT": "Salopette grise forêt"
+            },
+            "10": {
+                "GXT": "Salopette camouflage turquoise"
+            },
+            "11": {
+                "GXT": "Salopette éclats"
+            },
+            "12": {
+                "GXT": "Salopette camo. contraste"
+            },
+            "13": {
+                "GXT": "Salopette pavés"
+            },
+            "14": {
+                "GXT": "Salopette pêche forêt"
+            },
+            "15": {
+                "GXT": "Salopette pinceau"
+            },
+            "16": {
+                "GXT": "Salopette camouflage"
+            },
+            "17": {
+                "GXT": "Salopette claire forêt"
+            },
+            "18": {
+                "GXT": "Salopette vert mousse"
+            },
+            "19": {
+                "GXT": "Salopette sable"
+            },
+            "20": {
+                "GXT": "Salopette noire"
+            },
+            "21": {
+                "GXT": "Salopette ardoise"
+            },
+            "22": {
+                "GXT": "Salopette blanche"
+            },
+            "23": {
+                "GXT": "Salopette chocolat"
+            },
+            "24": {
+                "GXT": "Salopette olive"
+            },
+            "25": {
+                "GXT": "Salopette châtain"
+            }
+        }
+    },
+    "93": {
+        "Name": "Salopettes",
+        "Price": 300,
+        "Variations": {
+            "0": {
+                "GXT": "Salopette en jean indigo"
+            },
+            "1": {
+                "GXT": "Salopette jean indigo délavée"
+            },
+            "2": {
+                "GXT": "Salopette en jean sombre"
+            },
+            "3": {
+                "GXT": "Salopette jean sombre délavée"
+            },
+            "4": {
+                "GXT": "Salopette en jean clair"
+            },
+            "5": {
+                "GXT": "Salopette en jean clair délavée"
+            },
+            "6": {
+                "GXT": "Salopette en jean ardoise"
+            },
+            "7": {
+                "GXT": "Salopette jean ardoise délavée"
+            },
+            "8": {
+                "GXT": "Salopette en jean noire"
+            },
+            "9": {
+                "GXT": "Salopette jean noire délavée"
+            }
+        }
+    },
+    "94": {
+        "Name": "NULL",
+        "Price": 2000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "95": {
+        "Name": "NULL",
+        "Price": 4000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            },
+            "16": {
+                "GXT": "NULL"
+            },
+            "17": {
+                "GXT": "NULL"
+            },
+            "18": {
+                "GXT": "NULL"
+            },
+            "19": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "96": {
+        "Name": "NULL",
+        "Price": 4000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "97": {
+        "Name": "NULL",
+        "Price": 2100,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            },
+            "16": {
+                "GXT": "NULL"
+            },
+            "17": {
+                "GXT": "NULL"
+            },
+            "18": {
+                "GXT": "NULL"
+            },
+            "19": {
+                "GXT": "NULL"
+            },
+            "20": {
+                "GXT": "NULL"
+            },
+            "21": {
+                "GXT": "NULL"
+            },
+            "22": {
+                "GXT": "NULL"
+            },
+            "23": {
+                "GXT": "NULL"
+            },
+            "24": {
+                "GXT": "NULL"
+            },
+            "25": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "98": {
+        "Name": "NULL",
+        "Price": 3900,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "99": {
+        "Name": "Pantalons de costume",
+        "Price": 250,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon bleu"
+            },
+            "1": {
+                "GXT": "Pantalon vert bouteille"
+            }
+        }
+    },
+    "100": {
+        "Name": "NULL",
+        "Price": 2000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            },
+            "16": {
+                "GXT": "NULL"
+            },
+            "17": {
+                "GXT": "NULL"
+            },
+            "18": {
+                "GXT": "NULL"
+            },
+            "19": {
+                "GXT": "NULL"
+            },
+            "20": {
+                "GXT": "NULL"
+            },
+            "21": {
+                "GXT": "NULL"
+            },
+            "22": {
+                "GXT": "NULL"
+            },
+            "23": {
+                "GXT": "NULL"
+            },
+            "24": {
+                "GXT": "NULL"
+            },
+            "25": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "101": {
+        "Name": "NULL",
+        "Price": 2000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            },
+            "16": {
+                "GXT": "NULL"
+            },
+            "17": {
+                "GXT": "NULL"
+            },
+            "18": {
+                "GXT": "NULL"
+            },
+            "19": {
+                "GXT": "NULL"
+            },
+            "20": {
+                "GXT": "NULL"
+            },
+            "21": {
+                "GXT": "NULL"
+            },
+            "22": {
+                "GXT": "NULL"
+            },
+            "23": {
+                "GXT": "NULL"
+            },
+            "24": {
+                "GXT": "NULL"
+            },
+            "25": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "102": {
+        "Name": "Pantalon ceinture",
+        "Price": 420,
+        "Variations": {
+            "0": {
+                "GXT": "Pant cuir ceinture noir"
+            },
+            "1": {
+                "GXT": "Pant cuir gris ceinture noir"
+            },
+            "2": {
+                "GXT": "Pant cuir marron ceinture noir"
+            },
+            "3": {
+                "GXT": "Pant cuir beige ceinture beige"
+            },
+            "4": {
+                "GXT": "Pant cuir rouge ceinture noir"
+            },
+            "5": {
+                "GXT": "Pant cuir jaune ceinture noir"
+            },
+            "6": {
+                "GXT": "Pant cuir m&b ceinture noir"
+            },
+            "7": {
+                "GXT": "Pant cuir g&n ceinture noir"
+            },
+            "8": {
+                "GXT": "Pant kaki camo gris ceinture noir"
+            },
+            "9": {
+                "GXT": "Pant kaki camo vert ceinture noir"
+            },
+            "10": {
+                "GXT": "Pant kaki camo tri ceinture noir"
+            },
+            "11": {
+                "GXT": "Pant kaki camo seprent ceinture noir"
+            },
+            "12": {
+                "GXT": "Pant kaki camo blanc ceinture noir"
+            },
+            "13": {
+                "GXT": "Pant kaki camo rouge ceinture noir"
+            },
+            "14": {
+                "GXT": "Pant kaki camo à pois ceinture noir"
+            },
+            "15": {
+                "GXT": "Pant kaki camo puzzle ceinture noir"
+            },
+            "16": {
+                "GXT": "Pant noir camo artisitque ceinture noir"
+            },
+            "17": {
+                "GXT": "Pant noir camo vert ceinture noir"
+            },
+            "18": {
+                "GXT": "Pant noir camo ocre ceinture ocre"
+            },
+            "19": {
+                "GXT": "Pant noir camo violet ceinture violet"
+            },
+            "20": {
+                "GXT": "Pant noir camo rose ceinture rose"
+            }
+        }
+    },
+    "103": {
+        "Name": "NULL",
+        "Price": 2000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "104": {
+        "Name": "Pantalons ample",
+        "Price": 180,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon ample botanique foncé"
+            },
+            "1": {
+                "GXT": "Pantalon ample botanique blanc"
+            },
+            "2": {
+                "GXT": "Pantalon ample bota. pêche"
+            },
+            "3": {
+                "GXT": "Pantalon ample bleu-vert motif"
+            },
+            "4": {
+                "GXT": "Pantalon ample vert motif"
+            },
+            "5": {
+                "GXT": "Pantalon ample beige"
+            },
+            "6": {
+                "GXT": "Pantalon ample orange"
+            },
+            "7": {
+                "GXT": "Pantalon ample camo. violet"
+            },
+            "8": {
+                "GXT": "Pantalon ample camo. blanc"
+            },
+            "9": {
+                "GXT": "Pantalon ample camo. sombre"
+            },
+            "10": {
+                "GXT": "Pantalon ample géométrique"
+            },
+            "11": {
+                "GXT": "Pantalon ample abstrait"
+            },
+            "12": {
+                "GXT": "Pantalon ample à rayures"
+            },
+            "13": {
+                "GXT": "Pantalon ample léopard"
+            }
+        }
+    },
+    "105": {
+      "Price": 2000,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "106": {
+        "Name": "Pantalons cuir",
+        "Price": 350,
+        "Variations": {
+            "0": {
+                "GXT": "Zippers cuir rouille"
+            },
+            "1": {
+                "GXT": "Zippers cuir gris"
+            },
+            "2": {
+                "GXT": "Zippers cuir jaune"
+            },
+            "3": {
+                "GXT": "Zippers cuir blanc"
+            },
+            "4": {
+                "GXT": "Zippers cuir rouge clair"
+            },
+            "5": {
+                "GXT": "Zippers cuir vert"
+            },
+            "6": {
+                "GXT": "Zippers cuir caramel"
+            },
+            "7": {
+                "GXT": "Zippers cuir bleu"
+            }
+        }
+    },
+    "107": {
+        "Name": "Short",
+        "Price": 250,
+        "Variations": {
+            "0": {
+                "GXT": "Short moutarde"
+            },
+            "1": {
+                "GXT": "Short bleu marine"
+            },
+            "2": {
+                "GXT": "Short brun clair"
+            },
+            "3": {
+                "GXT": "Short dégradé de gris"
+            },
+            "4": {
+                "GXT": "Short bordeaux"
+            },
+            "5": {
+                "GXT": "Short à quadrillages"
+            },
+            "6": {
+                "GXT": "Short fluo peint"
+            },
+            "7": {
+                "GXT": "Short marine peint"
+            },
+            "8": {
+                "GXT": "Short aube à motifs"
+            },
+            "9": {
+                "GXT": "Short bleu ciel à motifs"
+            },
+            "10": {
+                "GXT": "Short tropical à motifs"
+            },
+            "11": {
+                "GXT": "Short vert à feuilles"
+            }
+        }
+    },
+    "108": {
+        "Name": "Jupes",
+        "Price": 470,
+        "Variations": {
+            "0": {
+                "GXT": "Sequins dégradé vert"
+            },
+            "1": {
+                "GXT": "Sequins dégradé bleu et or"
+            },
+            "2": {
+                "GXT": "Sequins blanche serpent"
+            },
+            "3": {
+                "GXT": "Sequins dorée serpent"
+            },
+            "4": {
+                "GXT": "Sequins léopard"
+            },
+            "5": {
+                "GXT": "Sequins rose léopard"
+            },
+            "6": {
+                "GXT": "Sequins bleue à fleurs"
+            },
+            "7": {
+                "GXT": "Sequins dorée à fleurs"
+            },
+            "8": {
+                "GXT": "Sequins dégradé rose et or"
+            },
+            "9": {
+                "GXT": "Sequins dégradé bleu et gris"
+            },
+            "10": {
+                "GXT": "Sequins dégradé rose et bleu"
+            },
+            "11": {
+                "GXT": "Sequins multicolore rayée"
+            },
+            "12": {
+                "GXT": "Sequins sombre à fleurs"
+            },
+            "13": {
+                "GXT": "Sequins bleu-vert à fleurs"
+            },
+            "14": {
+                "GXT": "Sequins SN dorée"
+            },
+            "15": {
+                "GXT": "Sequins SN blanche"
+            }
+        }
+    },
+    "109": {
+        "Name": "Pantalon de guerre d'arène",
+        "Price": 480,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon à chaînes noir"
+            },
+            "1": {
+                "GXT": "Pantalon à chaînes gris"
+            },
+            "2": {
+                "GXT": "Pantalon à chaînes blanc"
+            },
+            "3": {
+                "GXT": "Pantalon à chaînes marron"
+            },
+            "4": {
+                "GXT": "Pantalon à chaînes brun clair"
+            },
+            "5": {
+                "GXT": "Pantalon à chaînes beige"
+            },
+            "6": {
+                "GXT": "Pantalon à chaînes camo. gris"
+            },
+            "7": {
+                "GXT": "Pantalon à chaînes camo. vert"
+            },
+            "8": {
+                "GXT": "Pant. à chaînes sombre forêt"
+            },
+            "9": {
+                "GXT": "Pantalon à chaînes pavés"
+            },
+            "10": {
+                "GXT": "Pantalon à chaînes forêt vert"
+            },
+            "11": {
+                "GXT": "Pantalon à chaînes forêt beige"
+            },
+            "12": {
+                "GXT": "Pantalon à chaînes forêt gris"
+            },
+            "13": {
+                "GXT": "Pant. chaînes forêt brun clair"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            },
+            "16": {
+                "GXT": "NULL"
+            },
+            "17": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "110": {
+        "Name": "Pantalon de guerre d'arène",
+        "Price": 420,
+        "Variations": {
+            "0": {
+                "GXT": "Short à chaînes noir"
+            },
+            "1": {
+                "GXT": "Short à chaînes gris"
+            },
+            "2": {
+                "GXT": "Short à chaînes blanc"
+            },
+            "3": {
+                "GXT": "Short à chaînes marron"
+            },
+            "4": {
+                "GXT": "Short à chaînes brun clair"
+            },
+            "5": {
+                "GXT": "Short à chaînes beige"
+            },
+            "6": {
+                "GXT": "Short à chaînes camo. gris"
+            },
+            "7": {
+                "GXT": "Short à chaînes camo. vert"
+            },
+            "8": {
+                "GXT": "Short à chaînes sombre forêt"
+            },
+            "9": {
+                "GXT": "Short à chaînes pavés"
+            },
+            "10": {
+                "GXT": "Short à chaînes forêt vert"
+            },
+            "11": {
+                "GXT": "Short à chaînes forêt beige"
+            },
+            "12": {
+                "GXT": "Short à chaînes forêt gris"
+            },
+            "13": {
+                "GXT": "Short chaînes forêt brun clair"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            },
+            "16": {
+                "GXT": "NULL"
+            },
+            "17": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "111": {
+        "Name": "Chinos",
+        "Price": 160,
+        "Variations": {
+            "0": {
+                "GXT": "Chinos bleu ciel"
+            }
+        }
+    },
+    "112": {
+        "Name": "Pantalon de guerre d'arène",
+        "Price": 430,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon lacé cuir noir"
+            },
+            "1": {
+                "GXT": "Pant. lacé cuir noir & rouge"
+            },
+            "2": {
+                "GXT": "Pantalon lacé cuir blanc"
+            },
+            "3": {
+                "GXT": "Pant. lacé cuir rouge foncé"
+            },
+            "4": {
+                "GXT": "Pantalon lacé cuir rouge"
+            },
+            "5": {
+                "GXT": "Pantalon lacé cuir bleu"
+            },
+            "6": {
+                "GXT": "Pantalon lacé cuir v. mousse"
+            },
+            "7": {
+                "GXT": "Pantalon lacé cuir gris"
+            },
+            "8": {
+                "GXT": "Pantalon lacé cuir marron"
+            },
+            "9": {
+                "GXT": "Pantalon lacé cuir orange"
+            },
+            "10": {
+                "GXT": "Pant. lacé cuir gris cendre"
+            },
+            "11": {
+                "GXT": "Pantalon lacé cuir magenta"
+            }
+        }
+    },
+    "113": {
+        "Name": "NULL",
+        "Price": 3500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            },
+            "16": {
+                "GXT": "NULL"
+            },
+            "17": {
+                "GXT": "NULL"
+            },
+            "18": {
+                "GXT": "NULL"
+            },
+            "19": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "114": {
+        "Name": "Pantalon de guerre d'arène",
+        "Price": 80,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon de pillard marron"
+            },
+            "1": {
+                "GXT": "Pantalon de pillard noir"
+            },
+            "2": {
+                "GXT": "Pantalon de pillard vert"
+            },
+            "3": {
+                "GXT": "Pantalon de pillard beige"
+            },
+            "4": {
+                "GXT": "Pantalon pillard camo. bleu"
+            },
+            "5": {
+                "GXT": "Pantalon pillard camo. vert"
+            },
+            "6": {
+                "GXT": "Pantalon pillard camo. blanc"
+            },
+            "7": {
+                "GXT": "Pantalon pillard quadrillé"
+            },
+            "8": {
+                "GXT": "Pantalon de pillard jaune"
+            },
+            "9": {
+                "GXT": "Pantalon pillard noir & blanc"
+            },
+            "10": {
+                "GXT": "Pantalon de pillard rouge"
+            },
+            "11": {
+                "GXT": "Pantalon de pillard bleu"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "115": {
+        "Name": "NULL",
+        "Price": 4700,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "116": {
+        "Name": "NULL",
+        "Price": 4200,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            },
+            "16": {
+                "GXT": "NULL"
+            },
+            "17": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "117": {
+        "Name": "NULL",
+        "Price": 3150,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "118": {
+        "Name": "NULL",
+        "Price": 2000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "119": {
+        "Name": "NULL",
+        "Price": 4400,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "120": {
+        "Name": "NULL",
+        "Price": 4300,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "121": {
+        "Name": "NULL",
+        "Price": 3750,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "123": {
+        "Name": "Shorts",
+        "Price": 420,
+        "Variations": {
+            "0": {
+                "GXT": "Short rouge à motif"
+            },
+            "1": {
+                "GXT": "Short bleu à motif"
+            },
+            "2": {
+                "GXT": "Short blanc à motif"
+            },
+            "3": {
+                "GXT": "Short noir à motif"
+            },
+            "4": {
+                "GXT": "Short noir diamand"
+            },
+            "5": {
+                "GXT": "Short dorée à motif"
+            },
+            "6": {
+                "GXT": "Short blanc capra"
+            },
+            "7": {
+                "GXT": "Short noir capra"
+            },
+            "8": {
+                "GXT": "Short jaune broker"
+            },
+            "9": {
+                "GXT": "Short blanc motif D"
+            },
+            "10": {
+                "GXT": "Short noir motif D"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            },
+            "16": {
+                "GXT": "NULL"
+            },
+            "17": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "124": {
+        "Name": "Pantalons de costume",
+        "Price": 420,
+        "Variations": {
+            "0": {
+                "GXT": "Pantalon gris carreaux"
+            },
+            "1": {
+                "GXT": "Pantalon gris-bleu carreaux"
+            },
+            "2": {
+                "GXT": "Pantalon bleu à carreaux"
+            },
+            "3": {
+                "GXT": "Pantalon bleu P"
+            },
+            "4": {
+                "GXT": "Pantalon jaune P"
+            },
+            "5": {
+                "GXT": "Pantalon gris P"
+            },
+            "6": {
+                "GXT": "Pantalon noir E"
+            },
+            "7": {
+                "GXT": "Pantalon blanc motif jaune"
+            },
+            "8": {
+                "GXT": "Pantalon mauve sessanta"
+            },
+            "9": {
+                "GXT": "Pantalon rouge à motif jaune"
+            },
+            "10": {
+                "GXT": "Pantalon bleu capra"
+            },
+            "11": {
+                "GXT": "Pantalon bleu sessanta"
+            },
+            "12": {
+                "GXT": "Pantalon noir motif jaune"
+            },
+            "13": {
+                "GXT": "Pantalon blanc capra"
+            },
+            "14": {
+                "GXT": "Pantalon noir vinewood"
+            },
+            "15": {
+                "GXT": "Pantalon rose vinewood"
+            },
+            "16": {
+                "GXT": "Pantalon blanc sessanta"
+            },
+            "17": {
+                "GXT": "Pantalon ovni"
+            }
+        }
+    },
+    "125": {
+        "Name": "Bas de peignoir",
+        "Price": 420,
+        "Variations": {
+            "0": {
+                "GXT": "Peignoir blanc motif jaune"
+            },
+            "1": {
+                "GXT": "Peignoir rouge motif jaune"
+            },
+            "2": {
+                "GXT": "Peignoir gris capra"
+            },
+            "3": {
+                "GXT": "Peignoir jaune capra"
+            },
+            "4": {
+                "GXT": "Peignoir blanc"
+            },
+            "5": {
+                "GXT": "Peignoir noir"
+            },
+            "6": {
+                "GXT": "Peignoir gris étoile"
+            },
+            "7": {
+                "GXT": "Peignoir gris"
+            },
+            "8": {
+                "GXT": "Peignoir rouge étoile"
+            },
+            "9": {
+                "GXT": "Peignoir rouge ceinture jaune"
+            },
+            "10": {
+                "GXT": "Peignoir blanc ceinture jaune"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            },
+            "16": {
+                "GXT": "NULL"
+            },
+            "17": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "132": {
+        "Name": "Jeans troué",
+        "Price": 320,
+        "Variations": {
+            "0": {
+                "GXT": "Jean troué noir et gris"
+            },
+            "1": {
+                "GXT": "Jean troué noir avec motif à fleur"
+            },
+            "2": {
+                "GXT": "Jean avec tache de peinture"
+            }
+        }
+    }
+  }
+}

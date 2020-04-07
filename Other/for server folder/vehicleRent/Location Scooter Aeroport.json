@@ -1,0 +1,78 @@
+{
+  "BlipSprite": 494,
+  "BlipPosition": {
+    "x": -901.7466,
+    "y": -2335.287,
+    "z": 6.193579
+  },
+  "LocationList": [
+    {
+      "position": {
+        "x": -906.061,
+        "y": -2333.248,
+        "z": 6.186358
+      },
+      "rotation": {
+        "x": 12.41845,
+        "y": -4.967347,
+        "z": 241.7861
+      }
+    },
+    {
+      "position": {
+        "x": -896.1439,
+        "y": -2335.303,
+        "z": 6.192505
+      },
+      "rotation": {
+        "x": -7.926668,
+        "y": 4.148424,
+        "z": 53.55118
+      }
+    },
+    {
+      "position": {
+        "x": -892.4451,
+        "y": -2329.583,
+        "z": 6.192949
+      },
+      "rotation": {
+        "x": -7.62341,
+        "y": 2.286772,
+        "z": 61.72452
+      }
+    },
+    {
+      "position": {
+        "x": -903.2057,
+        "y": -2327.221,
+        "z": 6.194975
+      },
+      "rotation": {
+        "x": 5.905762,
+        "y": -1.178048,
+        "z": 242.5354
+      }
+    }
+  ],
+  "VehicleInfoList": [
+    {
+      "VehicleHash": 0x9229E4EB,
+      "Name": "faggio",
+      "InventoryWeight": 5,
+      "Price": 500
+    },
+	    {
+      "VehicleHash": 0x350D1AB,
+      "Name": "faggio2",
+      "InventoryWeight": 5,
+      "Price": 250
+    },
+	{
+      "VehicleHash": 0xB328B188,
+      "Name": "faggio3",
+      "InventoryWeight": 5,
+      "Price": 350
+    }
+  ]
+}

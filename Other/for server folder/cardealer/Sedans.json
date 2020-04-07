@@ -1,0 +1,192 @@
+{
+  "BlipSprite": 225,
+  "BlipPosition": {
+    "x": -46.54836,
+    "y": -1680.841,
+    "z": 29.41448
+  },
+  "LocationList": [
+    {
+      "position": {
+        "x": -42.46154,
+        "y": -1688.8088,
+        "z": 28.875488
+      },
+      "rotation": {
+        "x": 0.015625,
+        "y": 0,
+        "z": 0.1875
+      }
+    },
+	{
+      "position": {
+        "x": -48.07912,
+        "y": -1690.8132,
+        "z": 29.010254
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0.015625,
+        "z": 0.21875
+      }
+    },
+	{
+      "position": {
+        "x": -52.85275,
+        "y": -1693.3715,
+        "z": 29.17871
+      },
+      "rotation": {
+        "x": 0.015625,
+        "y": 0,
+        "z": 0.078125
+      }
+    },
+	{
+      "position": {
+        "x": -60.026375,
+        "y": -1687.1077,
+        "z": 28.993408
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": -1.515625
+      }
+    },
+	{
+      "position": {
+        "x": -57.534065,
+        "y": -1682.7032,
+        "z": 29.195557
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": -1.59375
+      }
+    }
+  ],
+  "VehicleInfoList": [
+    {
+      "VehicleHash": 2485144969,
+      "Name": "Asea",
+      "InventoryWeight": 30,
+      "Price": 12000
+    },
+    {
+      "VehicleHash": 2391954683,
+      "Name": "Asterope",
+      "InventoryWeight": 30,
+      "Price": 21000
+    },
+    {
+      "VehicleHash": 906642318,
+      "Name": "Cog55",
+      "InventoryWeight": 30,
+      "Price": 120000
+    },
+    {
+      "VehicleHash": 2264796000,
+      "Name": "Cognoscenti",
+      "InventoryWeight": 30,
+      "Price": 120000
+    },
+    {
+      "VehicleHash": 3609690755,
+      "Name": "Emperor",
+      "InventoryWeight": 30,
+      "Price": 25000
+    },
+    {
+      "VehicleHash": 2411965148,
+      "Name": "Emperor Old",
+      "InventoryWeight": 30,
+      "Price": 15000
+    },
+    {
+      "VehicleHash": 1909141499,
+      "Name": "Fugitive",
+      "InventoryWeight": 30,
+      "Price": 30000
+    },
+    {
+      "VehicleHash": 75131841,
+      "Name": "Glendale",
+      "InventoryWeight": 30,
+      "Price": 20000
+    },
+    {
+      "VehicleHash": 3005245074,
+      "Name": "Ingot",
+      "InventoryWeight": 50,
+      "Price": 35000
+    },
+    {
+      "VehicleHash": 886934177,
+      "Name": "Intruder",
+      "InventoryWeight": 30,
+      "Price": 33000
+    },
+    {
+      "VehicleHash": 2411098011,
+      "Name": "Premier",
+      "InventoryWeight": 30,
+      "Price": 13000
+    },
+    {
+      "VehicleHash": 3144368207,
+      "Name": "Primo",
+      "InventoryWeight": 30,
+      "Price": 13000
+    },
+    {
+      "VehicleHash": 4280472072,
+      "Name": "Regina",
+      "InventoryWeight": 50,
+      "Price": 34000
+    },
+    {
+      "VehicleHash": 2817386317,
+      "Name": "Stanier",
+      "InventoryWeight": 30,
+      "Price": 20000
+    },
+    {
+      "VehicleHash": 1723137093,
+      "Name": "Stratum",
+      "InventoryWeight": 50,
+      "Price": 34000
+    },    
+    {
+      "VehicleHash": 1123216662,
+      "Name": "superd",
+      "InventoryWeight": 30,
+      "Price": 130000
+    },
+    {
+      "VehicleHash": 2400073108,
+      "Name": "Surge",
+      "InventoryWeight": 30,
+      "Price": 13000
+    },
+    {
+      "VehicleHash": 3286105550,
+      "Name": "Tailgater",
+      "InventoryWeight": 30,
+      "Price": 30000
+    },
+    {
+      "VehicleHash": 1373123368,
+      "Name": "Warrener",
+      "InventoryWeight": 30,
+      "Price": 22000
+    },
+    {
+      "VehicleHash": 1777363799,
+      "Name": "Washington",
+      "InventoryWeight": 30,
+      "Price": 26000
+    }
+  ]
+}

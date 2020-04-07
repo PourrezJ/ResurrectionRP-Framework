@@ -1,0 +1,42 @@
+{
+  "BlipSprite": 455,
+  "BlipPosition": {
+    "x": -1736.321,
+    "y": -1052.519,
+    "z": 0
+  },
+  "LocationList": [
+    {
+      "position": {
+        "x": -1732.642,
+        "y": -1055.068,
+        "z": 0.5185298
+      },
+      "rotation": {
+        "x": 1.183299,
+        "y": -2.953805,
+        "z": 134.1167
+      }
+    },
+    {
+      "position": {
+        "x": -1740.495,
+        "y": -1054.431,
+        "z": 0.1588555
+      },
+      "rotation": {
+        "x": 2.484751,
+        "y": -4.274195,
+        "z": 136.5948
+      }
+    }
+  ],
+  "VehicleInfoList": [
+    {
+      "VehicleHash": 0xED762D49,
+      "Name": "SeaShark3",
+      "InventoryWeight": 10,
+      "Price": 200
+    }
+  ]
+}

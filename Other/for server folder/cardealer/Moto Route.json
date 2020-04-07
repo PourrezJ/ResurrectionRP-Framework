@@ -1,0 +1,198 @@
+{
+  "BlipSprite": 522,
+  "BlipPosition": {
+    "x": -1731.95,
+    "y": -726.5139,
+    "z": 10.40791
+  },
+  "LocationList": [
+    {
+      "position": {
+        "x": -1735.0154,
+        "y": -734.534186,
+        "z": 9.919434
+      },
+      "rotation": {
+        "x": 0,
+        "y": -0.25,
+        "z": -0.625
+      }
+    },
+	{
+      "position": {
+        "x": -1737.0725,
+        "y": -732.567,
+        "z": 9.919434
+      },
+      "rotation": {
+        "x": 0,
+        "y": -0.1875,
+        "z": -0.703125
+      }
+    },
+	{
+      "position": {
+        "x": -1739.8945,
+        "y": -730.68134,
+        "z": 9.919434
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0.25,
+        "z": -0.71875
+      }
+    },
+	{
+      "position": {
+        "x": -1742.822,
+        "y": -723.87695,
+        "z": 9.936279
+      },
+      "rotation": {
+        "x": 0,
+        "y": -0.25,
+        "z": -2.3125
+      }
+    },
+	{
+      "position": {
+        "x": -1741.4374,
+        "y": -721.17365,
+        "z": 9.969971
+      },
+      "rotation": {
+        "x": 0,
+        "y": -0.1875,
+        "z": -2.328125
+      }
+    },
+	{
+      "position": {
+        "x": -1737.2307,
+        "y": -716.9407,
+        "z": 9.784668
+      },
+      "rotation": {
+        "x": 0,
+        "y": -0.1875,
+        "z": -2.265625
+      }
+    }
+  ],
+  "VehicleInfoList": [
+    {
+      "VehicleHash": 640818791,
+      "Name": "Lectro",
+      "InventoryWeight": 5,
+      "Price": 70000
+    },
+    {
+      "VehicleHash": 1265391242,
+      "Name": "Hakuchou",
+      "InventoryWeight": 5,
+      "Price": 150000
+    },
+    {
+      "VehicleHash": 1672195559,
+      "Name": "Akuma",
+      "InventoryWeight": 5,
+      "Price": 130000
+    },
+    {
+      "VehicleHash": 1836027715,
+      "Name": "Thrust",
+      "InventoryWeight": 5,
+      "Price": 75000
+    },
+    {
+      "VehicleHash": 2154536131,
+      "Name": "Bagger",
+      "InventoryWeight": 5,
+      "Price": 80000
+    },
+    {
+      "VehicleHash": 2941886209,
+      "Name": "Vindicator",
+      "InventoryWeight": 5,
+      "Price": 85000
+    },
+    {
+      "VehicleHash": 3401388520,
+      "Name": "Ruffian",
+      "InventoryWeight": 5,
+      "Price": 77500
+    },
+    {
+      "VehicleHash": 4154065143,
+      "Name": "Vader",
+      "InventoryWeight": 5,
+      "Price": 82333
+    },
+    {
+      "VehicleHash": 3660088182,
+      "Name": "Nemesis",
+      "InventoryWeight": 5,
+      "Price": 70000
+    },
+    {
+      "VehicleHash": 2452219115,
+      "Name": "Faggio Racer",
+      "InventoryWeight": 5,
+      "Price": 4000
+    },
+    {
+      "VehicleHash": 4180675781,
+      "Name": "Bati",
+      "InventoryWeight": 5,
+      "Price": 140000
+    },
+    {
+      "VehicleHash": 822018448,
+      "Name": "Defiler",
+      "InventoryWeight": 5,
+      "Price": 90000
+    },
+    {
+      "VehicleHash": 3685342204,
+      "Name": "Vortex",
+      "InventoryWeight": 5,
+      "Price": 145000
+    },
+    {
+      "VehicleHash": 4055125828,
+      "Name": "Diablous",
+      "InventoryWeight": 5,
+      "Price": 80000
+    },
+    {
+      "VehicleHash": 2623969160,
+      "Name": "Double",
+      "InventoryWeight": 5,
+      "Price": 145000
+    },
+    {
+      "VehicleHash": 627535535,
+      "Name": "Fcr",
+      "InventoryWeight": 5,
+      "Price": 73000
+    },
+    {
+      "VehicleHash": 4039289119,
+      "Name": "Hakuchou 2",
+      "InventoryWeight": 5,
+      "Price": 150000
+    },
+    {
+      "VehicleHash": 3385765638,
+      "Name": "Pcj",
+      "InventoryWeight": 5,
+      "Price": 65000
+    },
+    {
+      "VehicleHash": 3854198872,
+      "Name": "Blazer 4",
+      "InventoryWeight": 5,
+      "Price": 85000
+    }
+  ]
+}

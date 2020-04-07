@@ -1,0 +1,366 @@
+{
+  "BlipSprite": 523,
+  "BlipPosition": {
+    "x": -732.1712,
+    "y": -411.1629,
+    "z": 35.2827
+  },
+  "LocationList": [
+    {
+      "position": {
+        "x": -726.5137,
+        "y": -427.1418,
+        "z": 34.72109
+      },
+      "rotation": {
+        "x": 0.046875,
+        "y": 0,
+        "z": 1.484375
+      }
+    },
+    {
+      "position": {
+        "x": -726.5137,
+        "y": -421.6967,
+        "z": 34.72109
+      },
+      "rotation": {
+        "x": 0.046875,
+        "y": 0,
+        "z": 1.484375
+      }
+    },
+    {
+      "position": {
+        "x": -726.1451,
+        "y": -405.33627,
+        "z": 34.267456
+      },
+      "rotation": {
+        "x": 0.046875,
+        "y": 0,
+        "z": 1.484375
+      }
+    },
+	{
+      "position": {
+        "x": -726.15826,
+        "y": -412.24615,
+        "z": 34.297456
+      },
+      "rotation": {
+        "x": 0.046875,
+        "y": 0,
+        "z": 1.5
+      }
+    }
+  ],
+  "VehicleInfoList": [
+    {
+      "VehicleHash": 108773431,
+      "Name": "Coquette",
+      "InventoryWeight": 15,
+      "Price": 450000
+    },
+    {
+      "VehicleHash": 384071873,
+      "Name": "Surano",
+      "InventoryWeight": 15,
+      "Price": 385000
+    },
+    {
+      "VehicleHash": 482197771,
+      "Name": "Lynx",
+      "InventoryWeight": 15,
+      "Price": 475000
+    },
+    {
+      "VehicleHash": 499169875,
+      "Name": "Fusilade",
+      "InventoryWeight": 15,
+      "Price": 295000
+    },
+    {
+      "VehicleHash": 544021352,
+      "Name": "Khamelion",
+      "InventoryWeight": 15,
+      "Price": 310000
+    },
+    {
+      "VehicleHash": 767087018,
+      "Name": "Alpha",
+      "InventoryWeight": 15,
+      "Price": 380000
+    },
+    {
+      "VehicleHash": 970598228,
+      "Name": "Sultan",
+      "InventoryWeight": 15,
+      "Price": 95000
+    },
+    {
+      "VehicleHash": 2016857647,
+      "Name": "Futo",
+      "InventoryWeight": 15,
+      "Price": 80000
+    },
+    {
+      "VehicleHash": 2072687711,
+      "Name": "Carbonizzare",
+      "InventoryWeight": 15,
+      "Price": 500000
+    },
+    {
+      "VehicleHash": 2922118804,
+      "Name": "Kuruma",
+      "InventoryWeight": 15,
+      "Price": 145000
+    },
+    {
+      "VehicleHash": 2997294755,
+      "Name": "Jester",
+      "InventoryWeight": 15,
+      "Price": 425000
+    },
+    {
+      "VehicleHash": 3253274834,
+      "Name": "Banshee",
+      "InventoryWeight": 15,
+      "Price": 430000
+    },
+    {
+      "VehicleHash": 3517794615,
+      "Name": "Omnis",
+      "InventoryWeight": 15,
+      "Price": 325000
+    },
+    {
+      "VehicleHash": 3917501776,
+      "Name": "Penumbra",
+      "InventoryWeight": 15,
+      "Price": 125000
+    },
+    {
+      "VehicleHash": 3990165190,
+      "Name": "Buffalo",
+      "InventoryWeight": 15,
+      "Price": 130000
+    },
+    {
+      "VehicleHash": 4152024626,
+      "Name": "Massacro",
+      "InventoryWeight": 15,
+      "Price": 180000
+    },
+    {
+      "VehicleHash": 1274868363,
+      "Name": "BestiaGTS",
+      "InventoryWeight": 15,
+      "Price": 410000
+    },
+    {
+      "VehicleHash": 3249425686,
+      "Name": "Comet Boxter",
+      "InventoryWeight": 15,
+      "Price": 480000
+    },
+    {
+      "VehicleHash": 2272483501,
+      "Name": "Comet Old School",
+      "InventoryWeight": 15,
+      "Price": 500000
+    },
+    {
+      "VehicleHash": 661493923,
+      "Name": "Comet Racer",
+      "InventoryWeight": 15,
+      "Price": 320000
+    },
+    {
+      "VehicleHash": 196747873,
+      "Name": "Elegy",
+      "InventoryWeight": 15,
+      "Price": 200000
+    },
+    {
+      "VehicleHash": 2299640309,
+      "Name": "Feltzer",
+      "InventoryWeight": 15,
+      "Price": 190000
+    },
+    {
+      "VehicleHash": 2728226064,
+      "Name": "Feltzer Old School",
+      "InventoryWeight": 15,
+      "Price": 740000
+    },
+    {
+      "VehicleHash": 3035832600,
+      "Name": "Flash GT",
+      "InventoryWeight": 15,
+      "Price": 398000
+    },
+    {
+      "VehicleHash": 3205927392,
+      "Name": "Furore GT",
+      "InventoryWeight": 15,
+      "Price": 410000
+    },
+    {
+      "VehicleHash": 1909189272,
+      "Name": "GB200",
+      "InventoryWeight": 15,
+      "Price": 315000
+    },
+    {
+      "VehicleHash": 2445973230,
+      "Name": "Neon",
+      "InventoryWeight": 15,
+      "Price": 520000
+    },
+    {
+      "VehicleHash": 1032823388,
+      "Name": "Nine F",
+      "InventoryWeight": 15,
+      "Price": 200000
+    },
+    {
+      "VehicleHash": 2833484545,
+      "Name": "Nine F Cabriolet",
+      "InventoryWeight": 15,
+      "Price": 220000
+    },
+    {
+      "VehicleHash": 867799010,
+      "Name": "Pariah",
+      "InventoryWeight": 15,
+      "Price": 750000
+    },
+    {
+      "VehicleHash": 2765724541,
+      "Name": "Raiden",
+      "InventoryWeight": 15,
+      "Price": 265000
+    },
+    {
+      "VehicleHash": 2360515092,
+      "Name": "Rapid GT",
+      "InventoryWeight": 15,
+      "Price": 185000
+    },
+    {
+      "VehicleHash": 1737773231,
+      "Name": "Rapid GT2",
+      "InventoryWeight": 15,
+      "Price": 210000
+    },
+    {
+      "VehicleHash": 3884762073,
+      "Name": "Revolter",
+      "InventoryWeight": 15,
+      "Price": 365000
+    },
+    {
+      "VehicleHash": 1489967196,
+      "Name": "Schafter",
+      "InventoryWeight": 15,
+      "Price": 310000
+    },
+    {
+      "VehicleHash": 3548084598,
+      "Name": "Schwarzer",
+      "InventoryWeight": 15,
+      "Price": 280000
+    },
+    {
+      "VehicleHash": 2537130571,
+      "Name": "Seven70",
+      "InventoryWeight": 15,
+      "Price": 575000
+    },
+    {
+      "VehicleHash": 1887331236,
+      "Name": "Tropos",
+      "InventoryWeight": 15,
+      "Price": 375000
+    },
+    {
+      "VehicleHash": 1102544804,
+      "Name": "Verlierer",
+      "InventoryWeight": 15,
+      "Price": 420000
+    },
+    {
+      "VehicleHash": 1886268224,
+      "Name": "Specter",
+      "InventoryWeight": 15,
+      "Price": 595000
+    },
+    {
+      "VehicleHash": 686471183,
+      "Name": "Drafter",
+      "InventoryWeight": 15,
+      "Price": 285000
+    },
+    {
+      "VehicleHash": 310284501,
+      "Name": "Dynasty",
+      "InventoryWeight": 15,
+      "Price": 60000
+    },
+    {
+      "VehicleHash": 1854776567,
+      "Name": "Issy 7",
+      "InventoryWeight": 15,
+      "Price": 350000
+    },
+    {
+      "VehicleHash": 3963499524,
+      "Name": "Italigto",
+      "InventoryWeight": 15,
+      "Price": 730000
+    },
+    {
+      "VehicleHash": 4086055493,
+      "Name": "Jugular",
+      "InventoryWeight": 15,
+      "Price": 340000
+    },
+    {
+      "VehicleHash": 3353694737,
+      "Name": "Locust",
+      "InventoryWeight": 15,
+      "Price": 375000
+    },
+    {
+      "VehicleHash": 2674840994,
+      "Name": "Neo",
+      "InventoryWeight": 15,
+      "Price": 535000
+    },
+    {
+      "VehicleHash": 3847255899,
+      "Name": "Paragon",
+      "InventoryWeight": 15,
+      "Price": 300000
+    },
+    {
+      "VehicleHash": 3620039993,
+      "Name": "Raptor",
+      "InventoryWeight": 15,
+      "Price": 180000
+    },
+    {
+      "VehicleHash": 3787471536,
+      "Name": "Schlagen",
+      "InventoryWeight": 15,
+      "Price": 450000
+    },
+    {
+      "VehicleHash": 1104234922,
+      "Name": "Sentinel 3",
+      "InventoryWeight": 15,
+      "Price": 310000
+    }
+  ]
+}

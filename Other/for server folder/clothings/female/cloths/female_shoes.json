@@ -1,0 +1,3623 @@
+{
+  "Overlay": 6,
+  "DrawablesList": {
+    "0": {
+      "Name": "Escarpins",
+      "Price": 300,
+      "Variations": {
+        "0": {
+          "GXT": "Escarpins à plateau anthracite"
+        },
+        "1": {
+          "GXT": "Escarpins à plateau gris"
+        },
+        "2": {
+          "GXT": "Escarpins à plateau écrus"
+        },
+        "3": {
+          "GXT": "Escarpins à plateau marine"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "1": {
+      "Name": "Chaussures de sport",
+      "Price": 275,
+      "Variations": {
+        "0": {
+          "GXT": "Baskets basses gris clair"
+        },
+        "1": {
+          "GXT": "Baskets basses noires"
+        },
+        "2": {
+          "GXT": "Baskets basses grises"
+        },
+        "3": {
+          "GXT": "Baskets basses bleu clair"
+        },
+        "4": {
+          "GXT": "Baskets basses bleu marine"
+        },
+        "5": {
+          "GXT": "Baskets basses bordeaux"
+        },
+        "6": {
+          "GXT": "Baskets basses rose clair"
+        },
+        "7": {
+          "GXT": "Baskets basses bleu ciel"
+        },
+        "8": {
+          "GXT": "Baskets basses vert olive"
+        },
+        "9": {
+          "GXT": "Baskets Passion"
+        },
+        "10": {
+          "GXT": "Baskets basses blanc cassé"
+        },
+        "11": {
+          "GXT": "Baskets léopard"
+        },
+        "12": {
+          "GXT": "Baskets tribal"
+        },
+        "13": {
+          "GXT": "Baskets basses à lacets roses"
+        },
+        "14": {
+          "GXT": "Baskets basses gris cendre"
+        },
+        "15": {
+          "GXT": "Baskets basses grises et roses"
+        }
+      }
+    },
+    "2": {
+      "Name": "Bottes",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Boots hiver"
+        },
+        "1": {
+          "GXT": "Boots noires"
+        },
+        "2": {
+          "GXT": "Boots grises"
+        },
+        "3": {
+          "GXT": "Boots blanc cassé"
+        },
+        "4": {
+          "GXT": "Boots gris cendre"
+        },
+        "5": {
+          "GXT": "Boots anthracite"
+        },
+        "6": {
+          "GXT": "Boots léopard"
+        },
+        "7": {
+          "GXT": "Boots cachemire"
+        },
+        "8": {
+          "GXT": "Boots à fleurs"
+        },
+        "9": {
+          "GXT": "Boots rose pâle"
+        },
+        "10": {
+          "GXT": "Boots bleu-vert foncé"
+        },
+        "11": {
+          "GXT": "Boots rose vif"
+        },
+        "12": {
+          "GXT": "Boots bleu layette"
+        },
+        "13": {
+          "GXT": "Boots bordeaux"
+        },
+        "14": {
+          "GXT": "Boots brun clair"
+        },
+        "15": {
+          "GXT": "Boots bleues"
+        }
+      }
+    },
+    "3": {
+      "Name": "Baskets",
+      "Price": 180,
+      "Variations": {
+        "0": {
+          "GXT": "Noires en toile"
+        },
+        "1": {
+          "GXT": "Blanches en toile"
+        },
+        "2": {
+          "GXT": "Rouges en toile"
+        },
+        "3": {
+          "GXT": "Bleu marine en toile"
+        },
+        "4": {
+          "GXT": "Lilas en toile"
+        },
+        "5": {
+          "GXT": "Vertes en toile"
+        },
+        "6": {
+          "GXT": "Mauves en toile"
+        },
+        "7": {
+          "GXT": "Rouges à carreaux"
+        },
+        "8": {
+          "GXT": "Camouflage désert en toile"
+        },
+        "9": {
+          "GXT": "Jaunes en toile"
+        },
+        "10": {
+          "GXT": "Camouflage forêt en toile"
+        },
+        "11": {
+          "GXT": "Bleues en toile"
+        },
+        "12": {
+          "GXT": "Roses en toile"
+        },
+        "13": {
+          "GXT": "Barfs en toile"
+        },
+        "14": {
+          "GXT": "Bleues à carreaux"
+        },
+        "15": {
+          "GXT": "Pêche en toile"
+        }
+      }
+    },
+    "4": {
+      "Name": "Chaussures de sport",
+      "Price": 200,
+      "Variations": {
+        "0": {
+          "GXT": "Baskets noires"
+        },
+        "1": {
+          "GXT": "Baskets blanches"
+        },
+        "2": {
+          "GXT": "Baskets blanc cassé"
+        },
+        "3": {
+          "GXT": "Baskets bleues"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "5": {
+      "Name": "Tongs",
+      "Price": 100,
+      "Variations": {
+        "0": {
+          "GXT": "Tongs grises"
+        },
+        "1": {
+          "GXT": "Tongs blanches"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "Tongs orange"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "Tongs cyan à fleurs"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "6": {
+      "Name": "Escarpins",
+      "Price": 300,
+      "Variations": {
+        "0": {
+          "GXT": "Escarpins vernis noirs"
+        },
+        "1": {
+          "GXT": "Escarpins léopard"
+        },
+        "2": {
+          "GXT": "Escarpins vernis beiges"
+        },
+        "3": {
+          "GXT": "Escarpins cobra"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "7": {
+      "Name": "Bottines à talon",
+      "Price": 300,
+      "Variations": {
+        "0": {
+          "GXT": "Boots noires"
+        },
+        "1": {
+          "GXT": "Boots grises bicolores"
+        },
+        "2": {
+          "GXT": "Boots rouge vif"
+        },
+        "3": {
+          "GXT": "Boots blanches"
+        },
+        "4": {
+          "GXT": "Boots café"
+        },
+        "5": {
+          "GXT": "Boots beige clair"
+        },
+        "6": {
+          "GXT": "Boots chocolat"
+        },
+        "7": {
+          "GXT": "Boots camouflage"
+        },
+        "8": {
+          "GXT": "Boots mauves"
+        },
+        "9": {
+          "GXT": "Boots vert olive"
+        },
+        "10": {
+          "GXT": "Boots marron bicolores"
+        },
+        "11": {
+          "GXT": "Boots cuivre"
+        },
+        "12": {
+          "GXT": "Boots turquoise"
+        },
+        "13": {
+          "GXT": "Boots beiges"
+        },
+        "14": {
+          "GXT": "Boots sable"
+        },
+        "15": {
+          "GXT": "Boots ocre"
+        }
+      }
+    },
+    "8": {
+      "Name": "Bottines à talon",
+      "Price": 300,
+      "Variations": {
+        "0": {
+          "GXT": "Bottines noires"
+        },
+        "1": {
+          "GXT": "Bottines grises"
+        },
+        "2": {
+          "GXT": "Bottines marron"
+        },
+        "3": {
+          "GXT": "Bottines noires et blanches"
+        },
+        "4": {
+          "GXT": "Bottines anthracite"
+        },
+        "5": {
+          "GXT": "Bottines crème"
+        },
+        "6": {
+          "GXT": "Bottines noisette"
+        },
+        "7": {
+          "GXT": "Bottines cobra"
+        },
+        "8": {
+          "GXT": "Bottines jungle"
+        },
+        "9": {
+          "GXT": "Bottines léopard"
+        },
+        "10": {
+          "GXT": "Bottines rouges"
+        },
+        "11": {
+          "GXT": "Bottines mauves"
+        },
+        "12": {
+          "GXT": "Bottines Zigzag"
+        },
+        "13": {
+          "GXT": "Bottines roses"
+        },
+        "14": {
+          "GXT": "Bottines Pollen"
+        },
+        "15": {
+          "GXT": "Bottines electric"
+        }
+      }
+    },
+    "9": {
+      "Name": "Bottes",
+      "Price": 460,
+      "Variations": {
+        "0": {
+          "GXT": "Montantes foncées"
+        },
+        "1": {
+          "GXT": "Montantes beiges"
+        },
+        "2": {
+          "GXT": "Montantes cuivre"
+        },
+        "3": {
+          "GXT": "Montantes grises"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "Montantes blanches"
+        },
+        "12": {
+          "GXT": "Montantes camouflage forêt"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "10": {
+      "Name": "Chaussures de running",
+      "Price": 200,
+      "Variations": {
+        "0": {
+          "GXT": "Running noires et violettes"
+        },
+        "1": {
+          "GXT": "Running grises"
+        },
+        "2": {
+          "GXT": "Running bleues et blanches"
+        },
+        "3": {
+          "GXT": "Running blanches et noires"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "11": {
+      "Name": "Baskets",
+      "Price": 200,
+      "Variations": {
+        "0": {
+          "GXT": "Baskets montantes mauves"
+        },
+        "1": {
+          "GXT": "Baskets montantes Elite Shock"
+        },
+        "2": {
+          "GXT": "Baskets montantes noires"
+        },
+        "3": {
+          "GXT": "Baskets à lacets rouges"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "12": {
+      "Name": "NULL",
+      "Price": 2000,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "13": {
+      "Name": "Ballerines",
+      "Price": 280,
+      "Variations": {
+        "0": {
+          "GXT": "Ballerines anthracite"
+        },
+        "1": {
+          "GXT": "Ballerines noires et or"
+        },
+        "2": {
+          "GXT": "Ballerines pêche"
+        },
+        "3": {
+          "GXT": "Ballerines noires"
+        },
+        "4": {
+          "GXT": "Ballerines jaune pâle"
+        },
+        "5": {
+          "GXT": "Ballerines blanches et noires"
+        },
+        "6": {
+          "GXT": "Ballerines bouts orange"
+        },
+        "7": {
+          "GXT": "Ballerines rouges et roses"
+        },
+        "8": {
+          "GXT": "Ballerines rouges"
+        },
+        "9": {
+          "GXT": "Ballerines léopard"
+        },
+        "10": {
+          "GXT": "Ballerines vertes"
+        },
+        "11": {
+          "GXT": "Ballerines bleues"
+        },
+        "12": {
+          "GXT": "Ballerines noires à rayures"
+        },
+        "13": {
+          "GXT": "Ballerines mauves"
+        },
+        "14": {
+          "GXT": "Ballerines grises et bleues"
+        },
+        "15": {
+          "GXT": "Ballerines jaunes"
+        }
+      }
+    },
+    "14": {
+      "Name": "Escarpins",
+      "Price": 280,
+      "Variations": {
+        "0": {
+          "GXT": "Sandales noires"
+        },
+        "1": {
+          "GXT": "Sandales beiges"
+        },
+        "2": {
+          "GXT": "Sandales marron"
+        },
+        "3": {
+          "GXT": "Sandales blanches"
+        },
+        "4": {
+          "GXT": "Sandales jaunes"
+        },
+        "5": {
+          "GXT": "Sandales bleues bicolores"
+        },
+        "6": {
+          "GXT": "Sandales mauves"
+        },
+        "7": {
+          "GXT": "Sandales bleu marine"
+        },
+        "8": {
+          "GXT": "Sandales cobra"
+        },
+        "9": {
+          "GXT": "Sandales zèbre"
+        },
+        "10": {
+          "GXT": "Sandales bleu ciel"
+        },
+        "11": {
+          "GXT": "Sandales bleu layette"
+        },
+        "12": {
+          "GXT": "Sandales roses"
+        },
+        "13": {
+          "GXT": "Sandales vert olive"
+        },
+        "14": {
+          "GXT": "Sandales roses bicolores"
+        },
+        "15": {
+          "GXT": "Sandales rouges"
+        }
+      }
+    },
+    "15": {
+      "Name": "Sandales",
+      "Price": 280,
+      "Variations": {
+        "0": {
+          "GXT": "Sandales Khol"
+        },
+        "1": {
+          "GXT": "Sandales beiges"
+        },
+        "2": {
+          "GXT": "Sandales turquoise"
+        },
+        "3": {
+          "GXT": "Sandales noires et jaunes"
+        },
+        "4": {
+          "GXT": "Sandales grises"
+        },
+        "5": {
+          "GXT": "Sandales roses"
+        },
+        "6": {
+          "GXT": "Sandales rouges"
+        },
+        "7": {
+          "GXT": "Sandales brun clair"
+        },
+        "8": {
+          "GXT": "Sandales bleues"
+        },
+        "9": {
+          "GXT": "Sandales ocre"
+        },
+        "10": {
+          "GXT": "Sandales désert"
+        },
+        "11": {
+          "GXT": "Sandales indigo"
+        },
+        "12": {
+          "GXT": "Sandales paillettes"
+        },
+        "13": {
+          "GXT": "Sandales rayées"
+        },
+        "14": {
+          "GXT": "Sandales blanches"
+        },
+        "15": {
+          "GXT": "Sandales crème"
+        }
+      }
+    },
+    "16": {
+      "Name": "Tongs",
+      "Price": 100,
+      "Variations": {
+        "0": {
+          "GXT": "Tongs anthracite"
+        },
+        "1": {
+          "GXT": "Tongs beiges"
+        },
+        "2": {
+          "GXT": "Tongs bleues"
+        },
+        "3": {
+          "GXT": "Tongs rouge sang"
+        },
+        "4": {
+          "GXT": "Tongs rouge brique"
+        },
+        "5": {
+          "GXT": "Tongs vertes"
+        },
+        "6": {
+          "GXT": "Tongs camouflage"
+        },
+        "7": {
+          "GXT": "Tongs Hawaiian Snow"
+        },
+        "8": {
+          "GXT": "Tongs violettes"
+        },
+        "9": {
+          "GXT": "Tongs roses"
+        },
+        "10": {
+          "GXT": "Tongs Swingers"
+        },
+        "11": {
+          "GXT": "Tongs Penetrators"
+        }
+      }
+    },
+    "17": {
+      "Name": "Chaussures festive",
+      "Price": 180,
+      "Variations": {
+        "0": {
+          "GXT": "Chaussures d'elfe"
+        }
+      }
+    },
+    "18": {
+      "Name": "Talons pour jartelles",
+      "Price": 380,
+      "Variations": {
+        "0": {
+          "GXT": "Talon noir chausette blanche"
+        },
+        "1": {
+          "GXT": "Talon noir chausette rouge"
+        },
+        "2": {
+          "GXT": "Talon rouge chausette noir"
+        }
+      }
+    },
+    "19": {
+      "Name": "Escarpins",
+      "Price": 300,
+      "Variations": {
+        "0": {
+          "GXT": "Escarpins à plateau olive"
+        },
+        "1": {
+          "GXT": "Escarpins à plateau turquoise"
+        },
+        "2": {
+          "GXT": "Escarpins à plateau marron"
+        },
+        "3": {
+          "GXT": "Escarpins à plateau rouge vif"
+        },
+        "4": {
+          "GXT": "Escarpins à plateau roses"
+        },
+        "5": {
+          "GXT": "Escarpins à plateau léopard"
+        },
+        "6": {
+          "GXT": "Escarpins à plateau rouges"
+        },
+        "7": {
+          "GXT": "Escarpins à plateau rose vif"
+        },
+        "8": {
+          "GXT": "Escarpins à plateau pêche"
+        },
+        "9": {
+          "GXT": "Escarpins à plateau bicolores"
+        },
+        "10": {
+          "GXT": "Escarpins à plateau acidulés"
+        },
+        "11": {
+          "GXT": "Escarpins à plateau bleus"
+        }
+      }
+    },
+    "20": {
+      "Name": "Escarpins",
+      "Price": 350,
+      "Variations": {
+        "0": {
+          "GXT": "Escarpins vernis léopard"
+        },
+        "1": {
+          "GXT": "Escarpins vernis olive"
+        },
+        "2": {
+          "GXT": "Escarpins vernis bordeaux"
+        },
+        "3": {
+          "GXT": "Escarpins vernis gris"
+        },
+        "4": {
+          "GXT": "Escarpins vernis rouges"
+        },
+        "5": {
+          "GXT": "Escarpins vernis léopard roses"
+        },
+        "6": {
+          "GXT": "Escarpins vernis bleus"
+        },
+        "7": {
+          "GXT": "Escarpins vernis bleu ciel"
+        },
+        "8": {
+          "GXT": "Escarpins vernis rose fluo"
+        },
+        "9": {
+          "GXT": "Escarpins vernis jaune fluo"
+        },
+        "10": {
+          "GXT": "Escarpins vernis bicolores"
+        },
+        "11": {
+          "GXT": "Escarpins vernis zébrés"
+        }
+      }
+    },
+    "21": {
+      "Name": "Bottes",
+      "Price": 460,
+      "Variations": {
+        "0": {
+          "GXT": "Montantes ocre"
+        },
+        "1": {
+          "GXT": "Montantes noisette"
+        },
+        "2": {
+          "GXT": "Montantes mauves"
+        },
+        "3": {
+          "GXT": "Montantes bordeaux"
+        },
+        "4": {
+          "GXT": "Montantes bleues"
+        },
+        "5": {
+          "GXT": "Montantes touches de rouge"
+        },
+        "6": {
+          "GXT": "Montantes café"
+        },
+        "7": {
+          "GXT": "Montantes touches d'ocre"
+        },
+        "8": {
+          "GXT": "Montantes touches de mauve"
+        },
+        "9": {
+          "GXT": "Montantes touches de gris"
+        }
+      }
+    },
+    "22": {
+      "Name": "Bottines à talon",
+      "Price": 390,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes à revers beiges"
+        },
+        "1": {
+          "GXT": "Bottes à revers noires"
+        },
+        "2": {
+          "GXT": "Bottes à revers café"
+        },
+        "3": {
+          "GXT": "Bottes à revers blanches"
+        },
+        "4": {
+          "GXT": "Bottes à revers grises"
+        },
+        "5": {
+          "GXT": "Bottes à revers N&B"
+        },
+        "6": {
+          "GXT": "Bottes à revers olive"
+        },
+        "7": {
+          "GXT": "Bottes à revers bleues"
+        },
+        "8": {
+          "GXT": "Bottes à revers brun clair"
+        },
+        "9": {
+          "GXT": "Bottes revers touches rouge"
+        },
+        "10": {
+          "GXT": "Bottes à revers chocolat"
+        },
+        "11": {
+          "GXT": "Bottes revers touches rose"
+        },
+        "12": {
+          "GXT": "Bottes à revers mauves"
+        },
+        "13": {
+          "GXT": "Bottes à revers cuivre"
+        },
+        "14": {
+          "GXT": "Bottes à revers léopard"
+        },
+        "15": {
+          "GXT": "Bottes à revers clous dorés"
+        }
+      }
+    },
+    "23": {
+      "Name": "Escarpins",
+      "Price": 300,
+      "Variations": {
+        "0": {
+          "GXT": "Escarpins brillants bleus"
+        },
+        "1": {
+          "GXT": "Escarpins brillants rouges"
+        },
+        "2": {
+          "GXT": "Escarpins brillants blancs"
+        }
+      }
+    },
+    "24": {
+      "Name": "Bottes",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes de pilote noires"
+        }
+      }
+    },
+    "25": {
+      "Name": "Bottes",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes tactiques noires"
+        }
+      }
+    },
+    "26": {
+      "Name": "Bottes",
+      "Price": 200,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes miteuses noires"
+        }
+      }
+    },
+    "27": {
+      "Name": "Chaussures de sport",
+      "Price": 200,
+      "Variations": {
+        "0": {
+          "GXT": "Baskets basses noires unies"
+        }
+      }
+    },
+    "28": {
+      "Name": "Chaussures de sport",
+      "Price": 2000,
+      "Variations": {
+        "0": {
+          "GXT": "Baskets noires unies"
+        }
+      }
+    },
+    "29": {
+      "Name": "Chaussures chic",
+      "Price": 550,
+      "Variations": {
+        "0": {
+          "GXT": "Richelieus noires unies"
+        },
+        "1": {
+          "GXT": "Richelieus blanches"
+        },
+        "2": {
+          "GXT": "Richelieus marron"
+        }
+      }
+    },
+    "30": {
+      "Name": "Bottines à talon",
+      "Price": 400,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes cloutées en cuir"
+        }
+      }
+    },
+    "31": {
+      "Name": "Baskets",
+      "Price": 1800,
+      "Variations": {
+        "0": {
+          "GXT": "Baskets montantes dorées"
+        }
+      }
+    },
+    "32": {
+      "Name": "Chaussures de running",
+      "Price": 160,
+      "Variations": {
+        "0": {
+          "GXT": "Running blancheur ambrée"
+        },
+        "1": {
+          "GXT": "Running noirceur dorée"
+        },
+        "2": {
+          "GXT": "Running fraîcheur exquise"
+        },
+        "3": {
+          "GXT": "Running mauvais sort"
+        },
+        "4": {
+          "GXT": "Running esprit animal"
+        }
+      }
+    },
+    "33": {
+      "Name": "Baskets en toile",
+      "Price": 270,
+      "Variations": {
+        "0": {
+          "GXT": "Baskets jaunes et jambières"
+        },
+        "1": {
+          "GXT": "Baskets noires et jambières"
+        },
+        "2": {
+          "GXT": "Baskets grises et jambières"
+        },
+        "3": {
+          "GXT": "Baskets blanches et jambières"
+        },
+        "4": {
+          "GXT": "Baskets rouges et jambières"
+        },
+        "5": {
+          "GXT": "Baskets bleues et jambières"
+        },
+        "6": {
+          "GXT": "Baskets vertes et jambières"
+        },
+        "7": {
+          "GXT": "Baskets marron et jambières"
+        }
+      }
+    },
+    "34": {
+      "Name": "NULL",
+      "Price": 2000,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "35": {
+      "Name": "NULL",
+      "Price": 2000,
+      "Variations": {
+        "0": {
+          "GXT": "Pas de chaussures"
+        }
+      }
+    },
+    "36": {
+      "Name": "Bottes",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Chaussures de marche beiges"
+        },
+        "1": {
+          "GXT": "Chaussures de marche kaki"
+        }
+      }
+    },
+    "37": {
+      "Name": "Mocassins",
+      "Price": 480,
+      "Variations": {
+        "0": {
+          "GXT": "Mocassins de cuir ocre"
+        },
+        "1": {
+          "GXT": "Mocassins de cuir orange"
+        },
+        "2": {
+          "GXT": "Mocassins de cuir marron"
+        },
+        "3": {
+          "GXT": "Mocassins de cuir noirs"
+        }
+      }
+    },
+    "38": {
+      "Name": "Bottes",
+      "Price": 650,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes de cow-boy noires unies"
+        },
+        "1": {
+          "GXT": "Bottes de cow-boy ocre"
+        },
+        "2": {
+          "GXT": "Bottes de cow-boy crème"
+        },
+        "3": {
+          "GXT": "Bottes de cow-boy marron"
+        },
+        "4": {
+          "GXT": "Bottes de cow-boy noires"
+        }
+      }
+    },
+    "39": {
+      "Name": "Bottes",
+      "Price": 650,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes de cow-boy noires unies"
+        },
+        "1": {
+          "GXT": "Bottes de cow-boy ocre"
+        },
+        "2": {
+          "GXT": "Bottes de cow-boy crème"
+        },
+        "3": {
+          "GXT": "Bottes de cow-boy marron"
+        },
+        "4": {
+          "GXT": "Bottes de cow-boy noires"
+        }
+      }
+    },
+    "40": {
+      "Name": "NULL",
+      "Price": 3500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "41": {
+      "Name": "Talons pour jartelles",
+      "Price": 380,
+      "Variations": {
+        "0": {
+          "GXT": "Talon blanc chauss. grise"
+        },
+        "1": {
+          "GXT": "Talon violet chauss. blanche"
+        },
+        "2": {
+          "GXT": "Talon noir chauss. noir"
+        },
+        "3": {
+          "GXT": "Talon bleu chauss. noir"
+        },
+        "4": {
+          "GXT": "Talon rouge chauss. noir"
+        },
+        "5": {
+          "GXT": "Talon rose chauss. blanche à motif"
+        },
+        "6": {
+          "GXT": "Talon rose chauss. noir à motif"
+        },
+        "7": {
+          "GXT": "Talon rouge foncé chauss. rouge à motif"
+        },
+        "8": {
+          "GXT": "Talon blanc chauss. violette à rayure"
+        },
+        "9": {
+          "GXT": "Talon crème chauss. brune à rayure"
+        },
+        "10": {
+          "GXT": "Talon leopard chauss. noir"
+        },
+        "11": {
+          "GXT": "Talon rouge chauss. tricolor"
+        }
+      }
+    },
+    "42": {
+      "Name": "Escarpins",
+      "Price": 300,
+      "Variations": {
+        "0": {
+          "GXT": "Escarpins arrondis chair"
+        },
+        "1": {
+          "GXT": "Escarpins arrondis violets"
+        },
+        "2": {
+          "GXT": "Escarpins arrondis noirs"
+        },
+        "3": {
+          "GXT": "Escarpins arrondis bleus"
+        },
+        "4": {
+          "GXT": "Escarpins arrondis rouges"
+        },
+        "5": {
+          "GXT": "Escarpins arrondis roses"
+        },
+        "6": {
+          "GXT": "Escarpins arrondis rose pâle"
+        },
+        "7": {
+          "GXT": "Escarpins arrondis cramoisis"
+        },
+        "8": {
+          "GXT": "Escarpins arrondis lilas"
+        },
+        "9": {
+          "GXT": "Escarpins arrondis crème"
+        },
+        "10": {
+          "GXT": "Escarpins arrondis léopard"
+        },
+        "11": {
+          "GXT": "Escarpins rouges à paillettes"
+        }
+      }
+    },
+    "43": {
+      "Name": "Baskets à talon",
+      "Price": 300,
+      "Variations": {
+        "0": {
+          "GXT": "Baskets compensées jaunes"
+        },
+        "1": {
+          "GXT": "Baskets compensées noires"
+        },
+        "2": {
+          "GXT": "Baskets compensées grises"
+        },
+        "3": {
+          "GXT": "Baskets compensées blanches"
+        },
+        "4": {
+          "GXT": "Baskets compensées rouges"
+        },
+        "5": {
+          "GXT": "Baskets compensées bleues"
+        },
+        "6": {
+          "GXT": "Baskets compensées vertes"
+        },
+        "7": {
+          "GXT": "Baskets compensées marron"
+        }
+      }
+    },
+    "44": {
+      "Name": "Baskets à talon",
+      "Price": 300,
+      "Variations": {
+        "0": {
+          "GXT": "Baskets à talons jaunes"
+        },
+        "1": {
+          "GXT": "Baskets à talons noires"
+        },
+        "2": {
+          "GXT": "Baskets à talons grises"
+        },
+        "3": {
+          "GXT": "Baskets à talons blanches"
+        },
+        "4": {
+          "GXT": "Baskets à talons rouges"
+        },
+        "5": {
+          "GXT": "Baskets à talons bleues"
+        },
+        "6": {
+          "GXT": "Baskets à talons vertes"
+        },
+        "7": {
+          "GXT": "Baskets à talons marron"
+        }
+      }
+    },
+    "45": {
+      "Name": "Bottes",
+      "Price": 650,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes de cow-boy bleues"
+        },
+        "1": {
+          "GXT": "Bottes de cow-boy rose vif"
+        },
+        "2": {
+          "GXT": "Bottes de cow-boy blanches"
+        },
+        "3": {
+          "GXT": "Bottes de cow-boy rouges"
+        },
+        "4": {
+          "GXT": "Bottes de cow-boy bordeaux"
+        },
+        "5": {
+          "GXT": "Bottes de cow-boy cramoisies"
+        },
+        "6": {
+          "GXT": "Bottes de cow-boy vertes"
+        },
+        "7": {
+          "GXT": "Bottes de cow-boy violettes"
+        },
+        "8": {
+          "GXT": "Bottes de cow-boy orange"
+        },
+        "9": {
+          "GXT": "Bottes de cow-boy bleu marine"
+        },
+        "10": {
+          "GXT": "Bottes de cow-boy roses"
+        }
+      }
+    },
+    "46": {
+      "Name": "Bottes",
+      "Price": 650,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes de cow-boy bleues"
+        },
+        "1": {
+          "GXT": "Bottes de cow-boy rose vif"
+        },
+        "2": {
+          "GXT": "Bottes de cow-boy blanches"
+        },
+        "3": {
+          "GXT": "Bottes de cow-boy rouges"
+        },
+        "4": {
+          "GXT": "Bottes de cow-boy bordeaux"
+        },
+        "5": {
+          "GXT": "Bottes de cow-boy cramoisies"
+        },
+        "6": {
+          "GXT": "Bottes de cow-boy vertes"
+        },
+        "7": {
+          "GXT": "Bottes de cow-boy violettes"
+        },
+        "8": {
+          "GXT": "Bottes de cow-boy orange"
+        },
+        "9": {
+          "GXT": "Bottes de cow-boy bleu marine"
+        },
+        "10": {
+          "GXT": "Bottes de cow-boy roses"
+        }
+      }
+    },
+    "47": {
+      "Name": "Chaussures de course",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Chaussure bleu et blanche"
+        },
+        "1": {
+          "GXT": "Chaussure grise et blanche"
+        },
+        "2": {
+          "GXT": "Chaussure blanche et rouge"
+        },
+        "3": {
+          "GXT": "Chaussure noir"
+        },
+        "4": {
+          "GXT": "Chaussure verte et jaune"
+        },
+        "5": {
+          "GXT": "Chaussure blanche"
+        },
+        "6": {
+          "GXT": "Chaussure verte et blanche"
+        },
+        "7": {
+          "GXT": "Chaussure orange et blanche"
+        },
+        "8": {
+          "GXT": "Chassure violette et blanche"
+        },
+        "9": {
+          "GXT": "Chaussure rose et blanche"
+        }
+      }
+    },
+    "48": {
+      "Name": "Chaussures de course",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes verte"
+        },
+        "1": {
+          "GXT": "Bottes rouge"
+        },
+        "2": {
+          "GXT": "Bottes blanche multi"
+        },
+        "3": {
+          "GXT": "Bottes noir et grise"
+        },
+        "4": {
+          "GXT": "Bottes bleu mutli"
+        },
+        "5": {
+          "GXT": "Bottes jaune et noir"
+        },
+        "6": {
+          "GXT": "Bottes rose et blanche"
+        },
+        "7": {
+          "GXT": "Bottes bleu mutli"
+        },
+        "8": {
+          "GXT": "Bottes verte et blanche"
+        },
+        "9": {
+          "GXT": "Bottes orange pastel"
+        },
+        "10": {
+          "GXT": "Bottes violette"
+        },
+        "11": {
+          "GXT": "Bottes rose"
+        }
+      }
+    },
+    "49": {
+      "Name": "Basket montante",
+      "Price": 200,
+      "Variations": {
+        "0": {
+          "GXT": "Basket noir"
+        },
+        "1": {
+          "GXT": "Basket rose"
+        }
+      }
+    },
+    "50": {
+      "Name": "Basket montante",
+      "Price": 200,
+      "Variations": {
+        "0": {
+          "GXT": "Basket jaune"
+        },
+        "1": {
+          "GXT": "Basket blanche"
+        }
+      }
+    },
+    "51": {
+      "Name": "Bottes",
+      "Price": 160,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes lacées noires"
+        },
+        "1": {
+          "GXT": "Bottes lacées brun-rouge"
+        },
+        "2": {
+          "GXT": "Bottes lacées chocolat"
+        },
+        "3": {
+          "GXT": "Bottes lacées usées noires"
+        },
+        "4": {
+          "GXT": "Bottes lacées usées brun-rouge"
+        },
+        "5": {
+          "GXT": "Bottes lacées usées chocolat"
+        }
+      }
+    },
+    "52": {
+      "Name": "Bottes",
+      "Price": 390,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes lacées noires"
+        },
+        "1": {
+          "GXT": "Bottes lacées brun-rouge"
+        },
+        "2": {
+          "GXT": "Bottes lacées chocolat"
+        },
+        "3": {
+          "GXT": "Bottes lacées usées noires"
+        },
+        "4": {
+          "GXT": "Bottes lacées usées brun-rouge"
+        },
+        "5": {
+          "GXT": "Bottes lacées usées chocolat"
+        }
+      }
+    },
+    "53": {
+      "Name": "Bottes",
+      "Price": 350,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes à harnais beiges"
+        },
+        "1": {
+          "GXT": "Bottes à harnais noires"
+        }
+      }
+    },
+    "54": {
+      "Name": "Bottes",
+      "Price": 240,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes ouvertes noires"
+        },
+        "1": {
+          "GXT": "Bottes ouvertes brun-rouge"
+        },
+        "2": {
+          "GXT": "Bottes ouvertes chocolat"
+        },
+        "3": {
+          "GXT": "Bottes ouvertes usées noires"
+        },
+        "4": {
+          "GXT": "Bottes ouv. usées brun-rouge"
+        },
+        "5": {
+          "GXT": "Bottes ouvertes usées chocolat"
+        }
+      }
+    },
+    "55": {
+      "Name": "Bottes",
+      "Price": 240,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes ouvertes noires"
+        },
+        "1": {
+          "GXT": "Bottes ouvertes brun-rouge"
+        },
+        "2": {
+          "GXT": "Bottes ouvertes chocolat"
+        },
+        "3": {
+          "GXT": "Bottes ouvertes usées noires"
+        },
+        "4": {
+          "GXT": "Bottes ouv. usées brun-rouge"
+        },
+        "5": {
+          "GXT": "Bottes ouvertes usées chocolat"
+        }
+      }
+    },
+    "56": {
+      "Name": "Bottes",
+      "Price": 300,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes en vachette noires"
+        },
+        "1": {
+          "GXT": "Bottes en vachette brun-rouge"
+        },
+        "2": {
+          "GXT": "Bottes en vachette beiges"
+        }
+      }
+    },
+    "57": {
+      "Name": "Bottes",
+      "Price": 300,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes en vachette noires"
+        },
+        "1": {
+          "GXT": "Bottes en vachette brun-rouge"
+        },
+        "2": {
+          "GXT": "Bottes en vachette beiges"
+        }
+      }
+    },
+    "58": {
+      "Name": "NULL",
+      "Price": 2000,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "59": {
+      "Name": "Bottes",
+      "Price": 200,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes à harnais beiges"
+        },
+        "1": {
+          "GXT": "Bottes à harnais noires"
+        }
+      }
+    },
+    "60": {
+      "Name": "Baskets",
+      "Price": 240,
+      "Variations": {
+        "0": {
+          "GXT": "Baskets montantes unies pêche"
+        },
+        "1": {
+          "GXT": "Baskets mont. unies violettes"
+        },
+        "2": {
+          "GXT": "Baskets montantes unies bleues"
+        },
+        "3": {
+          "GXT": "Baskets montantes unies bronze"
+        },
+        "4": {
+          "GXT": "Baskets montantes unies perle"
+        },
+        "5": {
+          "GXT": "Baskets montantes unies cuivre"
+        },
+        "6": {
+          "GXT": "Baskets montantes unies grises"
+        },
+        "7": {
+          "GXT": "Baskets montantes unies vertes"
+        },
+        "8": {
+          "GXT": "Baskets montantes unies cerise"
+        },
+        "9": {
+          "GXT": "Baskets mont. unies blanches"
+        },
+        "10": {
+          "GXT": "Baskets montantes unies noires"
+        },
+        "11": {
+          "GXT": "Baskets montantes unies roses"
+        }
+      }
+    },
+    "61": {
+      "Name": "NULL",
+      "Price": 2000,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "62": {
+      "Name": "Chaussures de sport",
+      "Price": 180,
+      "Variations": {
+        "0": {
+          "GXT": "Multisports bleues pixels"
+        },
+        "1": {
+          "GXT": "Multisports marron pixels"
+        },
+        "2": {
+          "GXT": "Multisports vertes pixels"
+        },
+        "3": {
+          "GXT": "Multisports grises pixels"
+        },
+        "4": {
+          "GXT": "Multisports pêche pixels"
+        },
+        "5": {
+          "GXT": "Multisports beiges"
+        },
+        "6": {
+          "GXT": "Multisports sombres forêt"
+        },
+        "7": {
+          "GXT": "Multisports quadrillées"
+        },
+        "8": {
+          "GXT": "Multisports vert mousse pixels"
+        },
+        "9": {
+          "GXT": "Multisports grises forêt"
+        },
+        "10": {
+          "GXT": "Multisports camo. turquoise"
+        },
+        "11": {
+          "GXT": "Multisports éclats"
+        },
+        "12": {
+          "GXT": "Multisports camo. contraste"
+        },
+        "13": {
+          "GXT": "Multisports pavés"
+        },
+        "14": {
+          "GXT": "Multisports pêche forêt"
+        },
+        "15": {
+          "GXT": "Multisports pinceau"
+        },
+        "16": {
+          "GXT": "Multisports camouflage"
+        },
+        "17": {
+          "GXT": "Multisports claires forêt"
+        },
+        "18": {
+          "GXT": "Multisports vert mousse"
+        },
+        "19": {
+          "GXT": "Multisports sable"
+        },
+        "20": {
+          "GXT": "Multisports noires"
+        },
+        "21": {
+          "GXT": "Multisports ardoise"
+        },
+        "22": {
+          "GXT": "Multisports blanches"
+        },
+        "23": {
+          "GXT": "Multisports marron"
+        },
+        "24": {
+          "GXT": "Multisports vertes"
+        },
+        "25": {
+          "GXT": "Multisports rouges"
+        }
+      }
+    },
+    "63": {
+      "Name": "Bottes",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes randonnée noires"
+        },
+        "1": {
+          "GXT": "Bottes randonnée beiges"
+        },
+        "2": {
+          "GXT": "Bottes randonnée marron"
+        },
+        "3": {
+          "GXT": "Bottes rando. vert mousse"
+        },
+        "4": {
+          "GXT": "Bottes rando. orange"
+        },
+        "5": {
+          "GXT": "Bottes randonnée venin"
+        },
+        "6": {
+          "GXT": "Bottes randonnée désert"
+        },
+        "7": {
+          "GXT": "Bottes rando. chocolat"
+        }
+      }
+    },
+    "64": {
+      "Name": "Bottes",
+      "Price": 200,
+      "Variations": {
+        "0": {
+          "GXT": "Chaussures randonnée noires"
+        },
+        "1": {
+          "GXT": "Chaussures randonnée beiges"
+        },
+        "2": {
+          "GXT": "Chaussures randonnée marron"
+        },
+        "3": {
+          "GXT": "Chaussures rando. vert mousse"
+        },
+        "4": {
+          "GXT": "Chaussures rando. orange"
+        },
+        "5": {
+          "GXT": "Chaussures randonnée venin"
+        },
+        "6": {
+          "GXT": "Chaussures randonnée désert"
+        },
+        "7": {
+          "GXT": "Chaussures rando. chocolat"
+        }
+      }
+    },
+    "65": {
+      "Name": "Bottes",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes tactiques désert"
+        },
+        "1": {
+          "GXT": "Bottes tactiques sauge"
+        },
+        "2": {
+          "GXT": "Bottes tactiques bleues"
+        },
+        "3": {
+          "GXT": "Bottes tactiques kaki"
+        },
+        "4": {
+          "GXT": "Bottes tactiques anthracite"
+        },
+        "5": {
+          "GXT": "Bottes tactiques noix"
+        },
+        "6": {
+          "GXT": "Bottes tactiques argentées"
+        },
+        "7": {
+          "GXT": "Bottes tactiques olive"
+        }
+      }
+    },
+    "66": {
+      "Name": "Bottes",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes tactiques désert"
+        },
+        "1": {
+          "GXT": "Bottes tactiques sauge"
+        },
+        "2": {
+          "GXT": "Bottes tactiques bleues"
+        },
+        "3": {
+          "GXT": "Bottes tactiques kaki"
+        },
+        "4": {
+          "GXT": "Bottes tactiques anthracite"
+        },
+        "5": {
+          "GXT": "Bottes tactiques noix"
+        },
+        "6": {
+          "GXT": "Bottes tactiques argentées"
+        },
+        "7": {
+          "GXT": "Bottes tactiques olive"
+        }
+      }
+    },
+    "67": {
+      "Name": "Chaussures de course",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Bottine verte"
+        },
+        "1": {
+          "GXT": "Bottine bleu et noir"
+        },
+        "2": {
+          "GXT": "Bottine rouge et bleu"
+        },
+        "3": {
+          "GXT": "Bottine noir et rouge"
+        },
+        "4": {
+          "GXT": "Bottine jaune et noir"
+        },
+        "5": {
+          "GXT": "Bottine noir lacet jaune"
+        },
+        "6": {
+          "GXT": "Bottine N&B lacet rouge"
+        },
+        "7": {
+          "GXT": "Bottine jaune lacet rouge"
+        },
+        "8": {
+          "GXT": "Bottine N&R lacet blanc"
+        },
+        "9": {
+          "GXT": "Bottine jaune et noir"
+        },
+        "10": {
+          "GXT": "Bottine B&B lacet rouge"
+        },
+        "11": {
+          "GXT": "Bottine grise lacet bleu"
+        },
+        "12": {
+          "GXT": "Bottine vert lacet rouge"
+        },
+        "13": {
+          "GXT": "Bottine grise"
+        }
+      }
+    },
+    "68": {
+      "Name": "Bottes",
+      "Price": 320,
+      "Variations": {
+        "0": {
+          "GXT": "Moc Toe classiques"
+        },
+        "1": {
+          "GXT": "Moc Toe noires"
+        },
+        "2": {
+          "GXT": "Moc Toe anthracite"
+        },
+        "3": {
+          "GXT": "Moc Toe chocolat"
+        },
+        "4": {
+          "GXT": "Moc Toe brun clair"
+        },
+        "5": {
+          "GXT": "Moc Toe rouille"
+        },
+        "6": {
+          "GXT": "Moc Toe ocre-roux"
+        }
+      }
+    },
+    "69": {
+      "Name": "Bottes",
+      "Price": 280,
+      "Variations": {
+        "0": {
+          "GXT": "Moc Toe classiques"
+        },
+        "1": {
+          "GXT": "Moc Toe noires"
+        },
+        "2": {
+          "GXT": "Moc Toe anthracite"
+        },
+        "3": {
+          "GXT": "Moc Toe chocolat"
+        },
+        "4": {
+          "GXT": "Moc Toe brun clair"
+        },
+        "5": {
+          "GXT": "Moc Toe rouille"
+        },
+        "6": {
+          "GXT": "Moc Toe ocre-roux"
+        }
+      }
+    },
+    "70": {
+      "Name": "NULL",
+      "Price": 4000,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "NULL"
+        },
+        "18": {
+          "GXT": "NULL"
+        },
+        "19": {
+          "GXT": "NULL"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        },
+        "24": {
+          "GXT": "NULL"
+        },
+        "25": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "71": {
+      "Name": "NULL",
+      "Price": 2000,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "72": {
+      "Name": "Chaussures de course",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Chaussure noir"
+        },
+        "1": {
+          "GXT": "Chaussure noir et grise"
+        },
+        "2": {
+          "GXT": "Chaussure noir et violette"
+        },
+        "3": {
+          "GXT": "Chaussure noir et rouge foncé"
+        },
+        "4": {
+          "GXT": "Chaussure noir trait bleu"
+        },
+        "5": {
+          "GXT": "Chaussure noir trait verte"
+        },
+        "6": {
+          "GXT": "Chaussure noir trait orange"
+        },
+        "7": {
+          "GXT": "Chaussure noir et jaune"
+        },
+        "8": {
+          "GXT": "Chaussure noir et rouge"
+        },
+        "9": {
+          "GXT": "Chaussure noir trait rose"
+        },
+        "10": {
+          "GXT": "Chaussure noir et bleu"
+        },
+        "11": {
+          "GXT": "Chaussure noir bande verte"
+        },
+        "12": {
+          "GXT": "Chaussure bleu bande orange"
+        },
+        "13": {
+          "GXT": "Chaussure noir bande grise"
+        },
+        "14": {
+          "GXT": "Chassure grise bande rouge foncé"
+        },
+        "15": {
+          "GXT": "Chaussure noir bande jaune"
+        },
+        "16": {
+          "GXT": "Chaussure noir bande orange"
+        },
+        "17": {
+          "GXT": "Chaussure noir bande camo"
+        },
+        "18": {
+          "GXT": "Chaussure noir bande crème"
+        },
+        "19": {
+          "GXT": "Chaussure noir trait rouge"
+        },
+        "20": {
+          "GXT": "Chaussure noir trait bleu clair"
+        },
+        "21": {
+          "GXT": "Chaussure noir bande à motif"
+        },
+        "22": {
+          "GXT": "Chaussure noir et verte"
+        },
+        "23": {
+          "GXT": "Chaussure noir et orange"
+        },
+        "24": {
+          "GXT": "Chaussure noir et violette"
+        },
+        "25": {
+          "GXT": "Chaussure noir et rose"
+        }
+      }
+    },
+    "73": {
+      "Name": "Bottes caoutchoutées",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Caoutchoutées terre"
+        },
+        "1": {
+          "GXT": "Caoutchoutées unies"
+        },
+        "2": {
+          "GXT": "Caoutchoutées grises et rouges"
+        },
+        "3": {
+          "GXT": "Caoutchoutées dégradé de gris"
+        },
+        "4": {
+          "GXT": "Caoutchoutées kaki"
+        },
+        "5": {
+          "GXT": "Caoutchoutées brun clair"
+        },
+        "6": {
+          "GXT": "Caoutchoutées rouille"
+        },
+        "7": {
+          "GXT": "Caoutchoutées camo. forêt"
+        },
+        "8": {
+          "GXT": "Caoutchoutées camo. turquoise"
+        },
+        "9": {
+          "GXT": "Caoutchoutées camo. cyan"
+        },
+        "10": {
+          "GXT": "Caoutchoutées camo. rose"
+        },
+        "11": {
+          "GXT": "Caoutchoutées camo. gris"
+        },
+        "12": {
+          "GXT": "Caout. bleues et marron"
+        },
+        "13": {
+          "GXT": "Caout. marine et marron"
+        },
+        "14": {
+          "GXT": "Caoutchoutées pied-de-poule"
+        },
+        "15": {
+          "GXT": "Caoutchoutées bleues"
+        },
+        "16": {
+          "GXT": "Caoutchoutées orange"
+        },
+        "17": {
+          "GXT": "Caoutchoutées rouges"
+        },
+        "18": {
+          "GXT": "Caoutchoutées vert mousse"
+        },
+        "19": {
+          "GXT": "Caoutchoutées bleu foncé"
+        },
+        "20": {
+          "GXT": "Caoutchoutées beiges"
+        },
+        "21": {
+          "GXT": "Caoutchoutées éclats"
+        },
+        "22": {
+          "GXT": "Caout. blanches et rouges"
+        },
+        "23": {
+          "GXT": "Caoutchoutées noires et rouges"
+        },
+        "24": {
+          "GXT": "Caoutchoutées noires et bleues"
+        },
+        "25": {
+          "GXT": "Caoutchoutées chocolat"
+        }
+      }
+    },
+    "74": {
+      "Name": "Bottes caoutchoutées",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Caoutchoutées terre"
+        },
+        "1": {
+          "GXT": "Caoutchoutées unies"
+        },
+        "2": {
+          "GXT": "Caoutchoutées grises et rouges"
+        },
+        "3": {
+          "GXT": "Caoutchoutées dégradé de gris"
+        },
+        "4": {
+          "GXT": "Caoutchoutées kaki"
+        },
+        "5": {
+          "GXT": "Caoutchoutées brun clair"
+        },
+        "6": {
+          "GXT": "Caoutchoutées rouille"
+        },
+        "7": {
+          "GXT": "Caoutchoutées camo. forêt"
+        },
+        "8": {
+          "GXT": "Caoutchoutées camo. turquoise"
+        },
+        "9": {
+          "GXT": "Caoutchoutées camo. cyan"
+        },
+        "10": {
+          "GXT": "Caoutchoutées camo. rose"
+        },
+        "11": {
+          "GXT": "Caoutchoutées camo. gris"
+        },
+        "12": {
+          "GXT": "Caout. bleues et marron"
+        },
+        "13": {
+          "GXT": "Caout. marine et marron"
+        },
+        "14": {
+          "GXT": "Caoutchoutées pied-de-poule"
+        },
+        "15": {
+          "GXT": "Caoutchoutées bleues"
+        },
+        "16": {
+          "GXT": "Caoutchoutées orange"
+        },
+        "17": {
+          "GXT": "Caoutchoutées rouges"
+        },
+        "18": {
+          "GXT": "Caoutchoutées vert mousse"
+        },
+        "19": {
+          "GXT": "Caoutchoutées bleu foncé"
+        },
+        "20": {
+          "GXT": "Caoutchoutées beiges"
+        },
+        "21": {
+          "GXT": "Caoutchoutées éclats"
+        },
+        "22": {
+          "GXT": "Caout. blanches et rouges"
+        },
+        "23": {
+          "GXT": "Caoutchoutées noires et rouges"
+        },
+        "24": {
+          "GXT": "Caoutchoutées noires et bleues"
+        },
+        "25": {
+          "GXT": "Caoutchoutées chocolat"
+        }
+      }
+    },
+    "75": {
+      "Name": "Treks",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Trek unies"
+        },
+        "1": {
+          "GXT": "Trek noires et sable"
+        },
+        "2": {
+          "GXT": "Trek noires et bleues"
+        },
+        "3": {
+          "GXT": "Trek chamois"
+        },
+        "4": {
+          "GXT": "Trek grises et jaunes"
+        },
+        "5": {
+          "GXT": "Trek beiges"
+        },
+        "6": {
+          "GXT": "Trek noires et marron"
+        },
+        "7": {
+          "GXT": "Trek marron"
+        },
+        "8": {
+          "GXT": "Trek noires et marron clair"
+        },
+        "9": {
+          "GXT": "Trek blanches"
+        },
+        "10": {
+          "GXT": "Trek camouflage forêt"
+        },
+        "11": {
+          "GXT": "Trek ardoise"
+        },
+        "12": {
+          "GXT": "Trek brun clair"
+        },
+        "13": {
+          "GXT": "Trek vert mousse"
+        },
+        "14": {
+          "GXT": "Trek kaki"
+        },
+        "15": {
+          "GXT": "Trek grises"
+        },
+        "16": {
+          "GXT": "Trek anthracite"
+        },
+        "17": {
+          "GXT": "Trek rouges"
+        },
+        "18": {
+          "GXT": "Trek orange"
+        },
+        "19": {
+          "GXT": "Trek bleues"
+        },
+        "20": {
+          "GXT": "Trek bleu marine"
+        },
+        "21": {
+          "GXT": "Trek terre"
+        },
+        "22": {
+          "GXT": "Trek bleu clair"
+        },
+        "23": {
+          "GXT": "Trek bleues et marron"
+        },
+        "24": {
+          "GXT": "Trek camouflage gris"
+        },
+        "25": {
+          "GXT": "Trek camouflage turquoise"
+        }
+      }
+    },
+    "76": {
+      "Name": "Treks",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Trek unies"
+        },
+        "1": {
+          "GXT": "Trek noires et sable"
+        },
+        "2": {
+          "GXT": "Trek noires et bleues"
+        },
+        "3": {
+          "GXT": "Trek chamois"
+        },
+        "4": {
+          "GXT": "Trek grises et jaunes"
+        },
+        "5": {
+          "GXT": "Trek beiges"
+        },
+        "6": {
+          "GXT": "Trek noires et marron"
+        },
+        "7": {
+          "GXT": "Trek marron"
+        },
+        "8": {
+          "GXT": "Trek noires et marron clair"
+        },
+        "9": {
+          "GXT": "Trek blanches"
+        },
+        "10": {
+          "GXT": "Trek camouflage forêt"
+        },
+        "11": {
+          "GXT": "Trek ardoise"
+        },
+        "12": {
+          "GXT": "Trek brun clair"
+        },
+        "13": {
+          "GXT": "Trek vert mousse"
+        },
+        "14": {
+          "GXT": "Trek kaki"
+        },
+        "15": {
+          "GXT": "Trek grises"
+        },
+        "16": {
+          "GXT": "Trek anthracite"
+        },
+        "17": {
+          "GXT": "Trek rouges"
+        },
+        "18": {
+          "GXT": "Trek orange"
+        },
+        "19": {
+          "GXT": "Trek bleues"
+        },
+        "20": {
+          "GXT": "Trek bleu marine"
+        },
+        "21": {
+          "GXT": "Trek terre"
+        },
+        "22": {
+          "GXT": "Trek bleu clair"
+        },
+        "23": {
+          "GXT": "Trek bleues et marron"
+        },
+        "24": {
+          "GXT": "Trek camouflage gris"
+        },
+        "25": {
+          "GXT": "Trek camouflage turquoise"
+        }
+      }
+    },
+    "77": {
+      "Name": "Bottines à talon",
+      "Price": 410,
+      "Variations": {
+        "0": {
+          "GXT": "Bottines à talon noires"
+        },
+        "1": {
+          "GXT": "Bottines à talon grises"
+        },
+        "2": {
+          "GXT": "Bottines à talon brunes"
+        },
+        "3": {
+          "GXT": "Bottines à talon châtains"
+        },
+        "4": {
+          "GXT": "Bottines à talon jaunes"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "78": {
+      "Name": "Chaussures de course",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Bottine turquoise et grise"
+        },
+        "1": {
+          "GXT": "Bottine jaune et grise"
+        }
+      }
+    },
+    "79": {
+      "Name": "Chaussures de running",
+      "Price": 200,
+      "Variations": {
+        "0": {
+          "GXT": "Running rétro mauve flashy"
+        },
+        "1": {
+          "GXT": "Running rétro bleu nuit"
+        },
+        "2": {
+          "GXT": "Running rétro soleil couchant"
+        },
+        "3": {
+          "GXT": "Running rétro vertes"
+        },
+        "4": {
+          "GXT": "Running rétro crème et roses"
+        },
+        "5": {
+          "GXT": "Running rétro noires et rouges"
+        },
+        "6": {
+          "GXT": "Running rétro grises et orange"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "Running rétro orange flashy"
+        },
+        "12": {
+          "GXT": "Running rétro roses flashy"
+        },
+        "13": {
+          "GXT": "Running rétro orange & blanc."
+        },
+        "14": {
+          "GXT": "Running rétro couleurs vives"
+        },
+        "15": {
+          "GXT": "Running rétro cendre"
+        },
+        "16": {
+          "GXT": "Running rétro sauge"
+        },
+        "17": {
+          "GXT": "Running rétro grises unies"
+        },
+        "18": {
+          "GXT": "Running rétro bleues"
+        },
+        "19": {
+          "GXT": "Running rétro rouges"
+        },
+        "20": {
+          "GXT": "Running rétro dégradé de gris"
+        },
+        "21": {
+          "GXT": "Running rétro bleues flashy"
+        },
+        "22": {
+          "GXT": "Running rétro blanches"
+        },
+        "23": {
+          "GXT": "Running rétro graphite"
+        },
+        "24": {
+          "GXT": "Running rétro café"
+        },
+        "25": {
+          "GXT": "Running rétro unies"
+        }
+      }
+    },
+    "80": {
+      "Name": "Chaussures de running",
+      "Price": 200,
+      "Variations": {
+        "0": {
+          "GXT": "Running rétro mauve flashy"
+        },
+        "1": {
+          "GXT": "Running rétro bleu nuit"
+        },
+        "2": {
+          "GXT": "Running rétro soleil couchant"
+        },
+        "3": {
+          "GXT": "Running rétro vertes"
+        },
+        "4": {
+          "GXT": "Running rétro crème et roses"
+        },
+        "5": {
+          "GXT": "Running rétro noires et rouges"
+        },
+        "6": {
+          "GXT": "Running rétro grises et orange"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "Running rétro orange flashy"
+        },
+        "12": {
+          "GXT": "Running rétro roses flashy"
+        },
+        "13": {
+          "GXT": "Running rétro orange & blanc."
+        },
+        "14": {
+          "GXT": "Running rétro couleurs vives"
+        },
+        "15": {
+          "GXT": "Running rétro cendre"
+        },
+        "16": {
+          "GXT": "Running rétro sauge"
+        },
+        "17": {
+          "GXT": "Running rétro grises unies"
+        },
+        "18": {
+          "GXT": "Running rétro bleues"
+        },
+        "19": {
+          "GXT": "Running rétro rouges"
+        },
+        "20": {
+          "GXT": "Running rétro dégradé de gris"
+        },
+        "21": {
+          "GXT": "Running rétro bleues flashy"
+        },
+        "22": {
+          "GXT": "Running rétro blanches"
+        },
+        "23": {
+          "GXT": "Running rétro graphite"
+        },
+        "24": {
+          "GXT": "Running rétro café"
+        },
+        "25": {
+          "GXT": "Running rétro unies"
+        }
+      }
+    },
+    "81": {
+      "Name": "Chaussures de guerre d'arène",
+      "Price": 480,
+      "Variations": {
+        "0": {
+          "GXT": "Lumin. blanches et bleues"
+        },
+        "1": {
+          "GXT": "Lumineuses blanches et vertes"
+        },
+        "2": {
+          "GXT": "Lumineuses blanches et roses"
+        },
+        "3": {
+          "GXT": "Lumin. blanches et rouges"
+        },
+        "4": {
+          "GXT": "Lumineuses grises et bleues"
+        },
+        "5": {
+          "GXT": "Lumineuses grises et vertes"
+        },
+        "6": {
+          "GXT": "Lumineuses grises et roses"
+        },
+        "7": {
+          "GXT": "Lumineuses grises et rouges"
+        },
+        "8": {
+          "GXT": "Lumineuses noires et bleues"
+        },
+        "9": {
+          "GXT": "Lumineuses noires et vertes"
+        },
+        "10": {
+          "GXT": "Lumineuses noires et roses"
+        },
+        "11": {
+          "GXT": "Lumineuses noires et rouges"
+        },
+        "12": {
+          "GXT": "Lumineuses roses et bleues"
+        },
+        "13": {
+          "GXT": "Lumineuses roses et vertes"
+        },
+        "14": {
+          "GXT": "Lumin. gris cendre & roses"
+        },
+        "15": {
+          "GXT": "Lumineuses rouges"
+        },
+        "16": {
+          "GXT": "Lumineuses bleues à motif"
+        },
+        "17": {
+          "GXT": "Lumineuses vertes à motif"
+        },
+        "18": {
+          "GXT": "Lumineuses roses à motif"
+        },
+        "19": {
+          "GXT": "Lumineuses rouges à motif"
+        },
+        "20": {
+          "GXT": "Lumineuses camo. rouges"
+        },
+        "21": {
+          "GXT": "Lumineuses camo. roses"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        },
+        "24": {
+          "GXT": "NULL"
+        },
+        "25": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "82": {
+      "Name": "NULL",
+      "Price": 2000,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "83": {
+      "Name": "Chaussures de guerre d'arène",
+      "Price": 370,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes crâne enflammé"
+        },
+        "1": {
+          "GXT": "Bottes crâne enflammé rouges"
+        }
+      }
+    },
+    "84": {
+      "Name": "Chaussures de guerre d'arène",
+      "Price": 370,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes crâne enflammé"
+        },
+        "1": {
+          "GXT": "Bottes crâne enflammé rouges"
+        }
+      }
+    },
+    "85": {
+      "Name": "Chaussures de guerre d'arène",
+      "Price": 370,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes crâne sangle noires"
+        },
+        "1": {
+          "GXT": "Bottes crâne sangle brunes"
+        },
+        "2": {
+          "GXT": "Bottes crâne sangle beiges"
+        }
+      }
+    },
+    "86": {
+      "Name": "Chaussures de guerre d'arène",
+      "Price": 370,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes crâne sangle noires"
+        },
+        "1": {
+          "GXT": "Bottes crâne sangle brunes"
+        },
+        "2": {
+          "GXT": "Bottes crâne sangle beiges"
+        }
+      }
+    },
+    "87": {
+      "Name": "NULL",
+      "Price": 2000,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "NULL"
+        },
+        "18": {
+          "GXT": "NULL"
+        },
+        "19": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "88": {
+      "Name": "Chaussures de guerre d'arène",
+      "Price": 90,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes de pillard marron"
+        },
+        "1": {
+          "GXT": "Bottes de pillard brunes"
+        },
+        "2": {
+          "GXT": "Bottes de pillard vertes"
+        },
+        "3": {
+          "GXT": "Bottes de pillard beiges"
+        },
+        "4": {
+          "GXT": "Bottes de pillard blanches"
+        },
+        "5": {
+          "GXT": "Bottes de pillard grises"
+        },
+        "6": {
+          "GXT": "Bottes de pillard rouges"
+        },
+        "7": {
+          "GXT": "Bottes pill. marr. & blanches"
+        }
+      }
+    },
+    "89": {
+      "Name": "Chaussures de guerre d'arène",
+      "Price": 120,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes métal marron"
+        },
+        "1": {
+          "GXT": "Bottes métal noires"
+        },
+        "2": {
+          "GXT": "Bottes métal vert clair"
+        },
+        "3": {
+          "GXT": "Bottes métal beiges"
+        },
+        "4": {
+          "GXT": "Bottes métal camo. bleu"
+        },
+        "5": {
+          "GXT": "Bottes métal camo. vert"
+        },
+        "6": {
+          "GXT": "Bottes métal camo. blanc"
+        },
+        "7": {
+          "GXT": "Bottes métal quadrillées"
+        },
+        "8": {
+          "GXT": "Bottes métal jaunes"
+        },
+        "9": {
+          "GXT": "Bottes métal acier"
+        },
+        "10": {
+          "GXT": "Bottes métal rouges"
+        },
+        "11": {
+          "GXT": "Bottes métal bleues"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "90": {
+      "Name": "Chaussures de guerre d'arène",
+      "Price": 120,
+      "Variations": {
+        "0": {
+          "GXT": "Bottes métal marron"
+        },
+        "1": {
+          "GXT": "Bottes métal noires"
+        },
+        "2": {
+          "GXT": "Bottes métal vert clair"
+        },
+        "3": {
+          "GXT": "Bottes métal beiges"
+        },
+        "4": {
+          "GXT": "Bottes métal camo. bleu"
+        },
+        "5": {
+          "GXT": "Bottes métal camo. vert"
+        },
+        "6": {
+          "GXT": "Bottes métal camo. blanc"
+        },
+        "7": {
+          "GXT": "Bottes métal quadrillées"
+        },
+        "8": {
+          "GXT": "Bottes métal jaunes"
+        },
+        "9": {
+          "GXT": "Bottes métal acier"
+        },
+        "10": {
+          "GXT": "Bottes métal rouges"
+        },
+        "11": {
+          "GXT": "Bottes métal bleues"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "91": {
+      "Name": "NULL",
+      "Price": 2500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "92": {
+      "Name": "NULL",
+      "Price": 2500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "93": {
+      "Name": "NULL",
+      "Price": 2500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "94": {
+        "Name": "NULL",
+        "Price": 2000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "96": {
+        "Name": "Baskets",
+        "Price": 250,
+        "Variations": {
+            "0": {
+                "GXT": "Basket bleue éléctrique"
+            },
+            "1": {
+                "GXT": "Basket jaune dorée"
+            },
+            "2": {
+                "GXT": "Basket bleue-verte"
+            },
+            "3": {
+                "GXT": "Basket mauve"
+            },
+            "4": {
+                "GXT": "Basket rouge sang"
+            },
+            "5": {
+                "GXT": "Basket grise semelle noire"
+            },
+            "6": {
+                "GXT": "Basket grise lacet noir"
+            },
+            "7": {
+                "GXT": "Basket bleu dégradée rose"
+            },
+            "8": {
+                "GXT": "Basket rose dégradée jaune"
+            },
+            "9": {
+                "GXT": "Basket violette dégradée rose"
+            },
+            "10": {
+                "GXT": "Basket orange dégradée violet"
+            },
+            "11": {
+                "GXT": "Basket grise dégradée noir"
+            }
+        }
+    },
+    "97": {
+        "Name": "Baskets",
+        "Price": 250,
+        "Variations": {
+            "0": {
+                "GXT": "Basket bleue éléctrique"
+            },
+            "1": {
+                "GXT": "Basket jaune dorée"
+            },
+            "2": {
+                "GXT": "Basket bleue-verte"
+            },
+            "3": {
+                "GXT": "Basket mauve"
+            },
+            "4": {
+                "GXT": "Basket rouge sang"
+            },
+            "5": {
+                "GXT": "Basket grise semelle noire"
+            },
+            "6": {
+                "GXT": "Basket grise lacet noir"
+            },
+            "7": {
+                "GXT": "Basket bleu dégradée rose"
+            },
+            "8": {
+                "GXT": "Basket rose dégradée jaune"
+            },
+            "9": {
+                "GXT": "Basket violette dégradée rose"
+            },
+            "10": {
+                "GXT": "Basket orange dégradée violet"
+            },
+            "11": {
+                "GXT": "Basket grise dégradée noir"
+            }
+        }
+    },
+  "98": {
+      "Name": "Pantoufles",
+      "Price": 250,
+      "Variations": {
+        "0": {
+          "GXT": "Pantoufle verte à motif"
+        },
+        "1": {
+          "GXT": "Pantoufle bleue et jaune"
+        },
+        "2": {
+          "GXT": "Pantoufle verte et jaune"
+        },
+        "3": {
+          "GXT": "Pantoufle bleue et jaune"
+        },
+        "4": {
+          "GXT": "Pantoufle jaune et rouge"
+        },
+        "5": {
+          "GXT": "Pantoufle bleue à motif"
+        },
+        "6": {
+          "GXT": "Pantoufle rouge à motif"
+        },
+        "7": {
+          "GXT": "Pantoufle jaune à motif"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        }
+      }
+    }
+  }
+}

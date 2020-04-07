@@ -1,0 +1,986 @@
+{
+  "Overlay": 1,
+  "DrawablesList": {
+    "0": {
+        "Name": "NULL",
+        "Price": 1000,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "1": {
+        "Name": "Lunettes soleil",
+        "Price": 100,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "Lunettes noires"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "2": {
+        "Name": "Lunettes soleil",
+        "Price": 300,
+        "Variations": {
+            "0": {
+                "GXT": "Fumées noires hiver"
+            },
+            "1": {
+                "GXT": "Fumées blanches"
+            },
+            "2": {
+                "GXT": "Fumées rouges"
+            },
+            "3": {
+                "GXT": "Fumées noires été"
+            },
+            "4": {
+                "GXT": "Fumées noires automne"
+            },
+            "5": {
+                "GXT": "Fumées rouille blanches"
+            },
+            "6": {
+                "GXT": "Fumées acier blanches"
+            },
+            "7": {
+                "GXT": "Fumées vertes"
+            },
+            "8": {
+                "GXT": "Stank écailles"
+            },
+            "9": {
+                "GXT": "Stank noires"
+            },
+            "10": {
+                "GXT": "Stank blanches"
+            }
+        }
+    },
+    "3": {
+        "Name": "Lunettes soleil",
+        "Price": 300,
+        "Variations": {
+            "0": {
+                "GXT": "Concierge ardoise"
+            },
+            "1": {
+                "GXT": "Concierge noires"
+            },
+            "2": {
+                "GXT": "Concierge grises"
+            },
+            "3": {
+                "GXT": "Concierge gris cendre"
+            },
+            "4": {
+                "GXT": "Concierge beiges"
+            },
+            "5": {
+                "GXT": "Concierge gris foncé"
+            },
+            "6": {
+                "GXT": "Concierge anthracite"
+            },
+            "7": {
+                "GXT": "Concierge blanches"
+            },
+            "8": {
+                "GXT": "Concierge écailles"
+            },
+            "9": {
+                "GXT": "Concierge noires neutres"
+            },
+            "10": {
+                "GXT": "Concierge blanches neutres"
+            }
+        }
+    },
+    "4": {
+        "Name": "Lunettes carre",
+        "Price": 350,
+        "Variations": {
+            "0": {
+                "GXT": "Enema marron"
+            },
+            "1": {
+                "GXT": "Enema grises"
+            },
+            "2": {
+                "GXT": "Enema noires"
+            },
+            "3": {
+                "GXT": "Enema à écailles"
+            },
+            "4": {
+                "GXT": "Enema brun foncé"
+            },
+            "5": {
+                "GXT": "Enema marbrées"
+            },
+            "6": {
+                "GXT": "Enema gris foncé"
+            },
+            "7": {
+                "GXT": "Enema teintées"
+            },
+            "8": {
+                "GXT": "Enema écailles neutres"
+            },
+            "9": {
+                "GXT": "Enema noires neutres"
+            },
+            "10": {
+                "GXT": "Enema blanches neutres"
+            }
+        }
+    },
+    "5": {
+        "Name": "Lunettes aviateur",
+        "Price": 750,
+        "Variations": {
+            "0": {
+                "GXT": "Aviateur or"
+            },
+            "1": {
+                "GXT": "Aviateur acier"
+            },
+            "2": {
+                "GXT": "Aviateur à verres marron"
+            },
+            "3": {
+                "GXT": "Aviateur à verres verts"
+            },
+            "4": {
+                "GXT": "Aviateur à verres bleus"
+            },
+            "5": {
+                "GXT": "Aviateur à verres noirs"
+            },
+            "6": {
+                "GXT": "Aviateur à verres bleu ciel"
+            },
+            "7": {
+                "GXT": "Aviateur à verres cuivrés"
+            },
+            "8": {
+                "GXT": "Aviateur écailles"
+            },
+            "9": {
+                "GXT": "Aviateur noires"
+            },
+            "10": {
+                "GXT": "Aviateur blanches"
+            }
+        }
+    },
+    "6": {
+        "Name": "NULL",
+        "Price": 100,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "7": {
+        "Name": "Lunettes carre",
+        "Price": 700,
+        "Variations": {
+            "0": {
+                "GXT": "Décontractées noires"
+            },
+            "1": {
+                "GXT": "Zap mauves"
+            },
+            "2": {
+                "GXT": "Décontractées écailles"
+            },
+            "3": {
+                "GXT": "Décontractées rouges"
+            },
+            "4": {
+                "GXT": "Décontractées blanches"
+            },
+            "5": {
+                "GXT": "Décontractées camouflage"
+            },
+            "6": {
+                "GXT": "Décontractées citron"
+            },
+            "7": {
+                "GXT": "Décontractées sang"
+            },
+            "8": {
+                "GXT": "Décontr. écailles neutres"
+            },
+            "9": {
+                "GXT": "Décontr. noires neutres"
+            },
+            "10": {
+                "GXT": "Décontr. blanches neutres"
+            }
+        }
+    },
+    "8": {
+        "Name": "Lunettes aviateur",
+        "Price": 750,
+        "Variations": {
+            "0": {
+                "GXT": "Lunettes de police marron"
+            },
+            "1": {
+                "GXT": "Lunettes de police argent"
+            },
+            "2": {
+                "GXT": "Lunettes de police grises"
+            },
+            "3": {
+                "GXT": "Lunettes de police fumées"
+            },
+            "4": {
+                "GXT": "Lunettes de police café"
+            },
+            "5": {
+                "GXT": "Lunettes de police noires"
+            },
+            "6": {
+                "GXT": "Lunettes de police ardoise"
+            },
+            "7": {
+                "GXT": "Lunettes de police acier"
+            },
+            "8": {
+                "GXT": "Police écailles"
+            },
+            "9": {
+                "GXT": "Police noires neutres"
+            },
+            "10": {
+                "GXT": "Police blanches neutres"
+            }
+        }
+    },
+    "9": {
+        "Name": "Lunettes soleil",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Hawaiian Snow noires"
+            },
+            "1": {
+                "GXT": "Hawaiian Snow grises"
+            },
+            "2": {
+                "GXT": "Hawaiian Snow blanches"
+            },
+            "3": {
+                "GXT": "Hawaiian Snow gris cendre"
+            },
+            "4": {
+                "GXT": "Hawaiian Snow cuivre"
+            },
+            "5": {
+                "GXT": "Hawaiian Snow en écailles"
+            },
+            "6": {
+                "GXT": "Hawaiian Snow marbrées"
+            },
+            "7": {
+                "GXT": "Hawaiian Snow noyer"
+            },
+            "8": {
+                "GXT": "HS écailles"
+            },
+            "9": {
+                "GXT": "HS noires"
+            },
+            "10": {
+                "GXT": "HS blanches"
+            }
+        }
+    },
+    "10": {
+        "Name": "Lunettes carre",
+        "Price": 650,
+        "Variations": {
+            "0": {
+                "GXT": "Bull Emic or"
+            },
+            "1": {
+                "GXT": "Bull Emic grises"
+            },
+            "2": {
+                "GXT": "Bull Emic argent"
+            },
+            "3": {
+                "GXT": "Bull Emic noires"
+            },
+            "4": {
+                "GXT": "Bull Emic marron"
+            },
+            "5": {
+                "GXT": "Bull Emic ardoise"
+            },
+            "6": {
+                "GXT": "Bull Emic blanches"
+            },
+            "7": {
+                "GXT": "Bull Emic verres mauves"
+            },
+            "8": {
+                "GXT": "Bull Emic écailles neutres"
+            },
+            "9": {
+                "GXT": "Bull Emic noires neutres"
+            },
+            "10": {
+                "GXT": "Bull Emic blanches neutres"
+            }
+        }
+    },
+    "11": {
+        "Name": "NULL",
+        "Price": 100,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "12": {
+        "Name": "Lunettes aviateur",
+        "Price": 400,
+        "Variations": {
+            "0": {
+                "GXT": "Elvis orange"
+            },
+            "1": {
+                "GXT": "Elvis grises"
+            },
+            "2": {
+                "GXT": "Elvis ardoise"
+            },
+            "3": {
+                "GXT": "Elvis noires"
+            },
+            "4": {
+                "GXT": "Elvis blanches"
+            },
+            "5": {
+                "GXT": "Elvis verres bleus"
+            },
+            "6": {
+                "GXT": "Elvis verres roses"
+            },
+            "7": {
+                "GXT": "Elvis cuivre"
+            },
+            "8": {
+                "GXT": "Elvis écailles neutres"
+            },
+            "9": {
+                "GXT": "Elvis noires neutres"
+            },
+            "10": {
+                "GXT": "Elvis blanches neutres"
+            }
+        }
+    },
+    "13": {
+        "Name": "Lunettes carre",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Broker hipster noires"
+            },
+            "1": {
+                "GXT": "Polarisées blanches"
+            },
+            "2": {
+                "GXT": "Polarisées chocolat"
+            },
+            "3": {
+                "GXT": "Hipster ardoise"
+            },
+            "4": {
+                "GXT": "Hipster anthracite"
+            },
+            "5": {
+                "GXT": "Polarisées olive"
+            },
+            "6": {
+                "GXT": "Polarisées dorées"
+            },
+            "7": {
+                "GXT": "Polarisées Candy"
+            },
+            "8": {
+                "GXT": "Hipster écailles"
+            },
+            "9": {
+                "GXT": "Hipster noires"
+            },
+            "10": {
+                "GXT": "Hipster blanches"
+            }
+        }
+    },
+    "14": {
+        "Name": "NULL",
+        "Price": 100,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "15": {
+        "Name": "Lunettes de tir",
+        "Price": 400,
+        "Variations": {
+            "0": {
+                "GXT": "Lunettes de tir jaunes"
+            },
+            "1": {
+                "GXT": "Lunettes de tir blanches"
+            },
+            "2": {
+                "GXT": "Lunettes de tir grises"
+            },
+            "3": {
+                "GXT": "Lunettes de tir rouges"
+            },
+            "4": {
+                "GXT": "Lunettes de tir bleues"
+            },
+            "5": {
+                "GXT": "Lunettes de tir frelon"
+            },
+            "6": {
+                "GXT": "Lunettes de tir orange"
+            },
+            "7": {
+                "GXT": "Lunettes de tir rose"
+            },
+            "8": {
+                "GXT": "Lunettes de tir écailles"
+            },
+            "9": {
+                "GXT": "Lunettes de tir noires"
+            },
+            "10": {
+                "GXT": "Lunettes de tir ivoire"
+            }
+        }
+    },
+    "16": {
+        "Name": "Lunettes soleil",
+        "Price": 400,
+        "Variations": {
+            "0": {
+                "GXT": "Broker roses"
+            },
+            "1": {
+                "GXT": "Broker violettes"
+            },
+            "2": {
+                "GXT": "Broker orange"
+            },
+            "3": {
+                "GXT": "Broker rouges"
+            },
+            "4": {
+                "GXT": "Broker cramoisies"
+            },
+            "5": {
+                "GXT": "Broker vert citron"
+            },
+            "6": {
+                "GXT": "Broker jaunes"
+            },
+            "7": {
+                "GXT": "Enveloppantes écailles"
+            },
+            "8": {
+                "GXT": "Enveloppantes noires"
+            },
+            "9": {
+                "GXT": "Enveloppantes blanches"
+            }
+        }
+    },
+    "17": {
+        "Name": "Lunettes carre",
+        "Price": 650,
+        "Variations": {
+            "0": {
+                "GXT": "Fines gris clair"
+            },
+            "1": {
+                "GXT": "Fines or"
+            },
+            "2": {
+                "GXT": "Fines marron"
+            },
+            "3": {
+                "GXT": "Fines acier, jaunes"
+            },
+            "4": {
+                "GXT": "Fines acier, bleues"
+            },
+            "5": {
+                "GXT": "Fines jaunes & noires"
+            },
+            "6": {
+                "GXT": "Fines anthracite"
+            },
+            "7": {
+                "GXT": "Fines noires"
+            },
+            "8": {
+                "GXT": "Fines écailles"
+            },
+            "9": {
+                "GXT": "Fines noires neutres"
+            },
+            "10": {
+                "GXT": "Fines blanches"
+            }
+        }
+    },
+    "18": {
+        "Name": "Lunettes aviateur",
+        "Price": 750,
+        "Variations": {
+            "0": {
+                "GXT": "Classes or"
+            },
+            "1": {
+                "GXT": "Classes acier"
+            },
+            "2": {
+                "GXT": "Classes noires"
+            },
+            "3": {
+                "GXT": "Classes gris clair"
+            },
+            "4": {
+                "GXT": "Classes bleues"
+            },
+            "5": {
+                "GXT": "Classes bronze, jaunes"
+            },
+            "6": {
+                "GXT": "Classes blanches, bleues"
+            },
+            "7": {
+                "GXT": "Classes argent, rouges"
+            },
+            "8": {
+                "GXT": "Supérieures écailles"
+            },
+            "9": {
+                "GXT": "Supérieures noires"
+            },
+            "10": {
+                "GXT": "Supérieures blanches"
+            }
+        }
+    },
+    "19": {
+        "Name": "Lunettes de vue",
+        "Price": 600,
+        "Variations": {
+            "0": {
+                "GXT": "Trends noir et or"
+            },
+            "1": {
+                "GXT": "Trends noir et argent"
+            },
+            "2": {
+                "GXT": "Trends vernis argent"
+            },
+            "3": {
+                "GXT": "Trends verts"
+            },
+            "4": {
+                "GXT": "Trends cramoisis"
+            },
+            "5": {
+                "GXT": "Trends vernis orange"
+            },
+            "6": {
+                "GXT": "Trends grises"
+            },
+            "7": {
+                "GXT": "Trends blanc et or"
+            },
+            "8": {
+                "GXT": "Trends écailles"
+            },
+            "9": {
+                "GXT": "Trends noires"
+            },
+            "10": {
+                "GXT": "Trends blanches"
+            }
+        }
+    },
+    "20": {
+        "Name": "Lunettes de vue",
+        "Price": 750,
+        "Variations": {
+            "0": {
+                "GXT": "Docks solaires"
+            },
+            "1": {
+                "GXT": "Docks marron"
+            },
+            "2": {
+                "GXT": "Docks noires"
+            },
+            "3": {
+                "GXT": "Docks à damier"
+            },
+            "4": {
+                "GXT": "Docks blanches"
+            },
+            "5": {
+                "GXT": "Docks rouges"
+            },
+            "6": {
+                "GXT": "Docks cramoisis"
+            },
+            "7": {
+                "GXT": "Docks jaunes"
+            },
+            "8": {
+                "GXT": "Docks écailles"
+            },
+            "9": {
+                "GXT": "Docks noires neutres"
+            },
+            "10": {
+                "GXT": "Docks blanches neutres"
+            }
+        }
+    },
+    "21": {
+        "Name": "Lunettes festive",
+        "Price": 400,
+        "Variations": {
+            "0": {
+                "GXT": "Lunettes en forme d'étoiles"
+            }
+        }
+    },
+    "22": {
+        "Name": "Lunettes festive",
+        "Price": 400,
+        "Variations": {
+            "0": {
+                "GXT": "Lunettes étoilées"
+            }
+        }
+    },
+    "23": {
+        "Name": "Lunettes de tir teintée",
+        "Price": 400,
+        "Variations": {
+            "0": {
+                "GXT": "Lunette de tir verte"
+            },
+            "1": {
+                "GXT": "Lunette de tir orange"
+            },
+            "2": {
+                "GXT": "Lunette de tir violette"
+            },
+            "3": {
+                "GXT": "Lunette de tir rose"
+            },
+            "4": {
+                "GXT": "Lunette de tir marron"
+            },
+            "5": {
+                "GXT": "Lunette de tir bleue"
+            },
+            "6": {
+                "GXT": "Lunette de tir kaki"
+            },
+            "7": {
+                "GXT": "Lunette de tir grise"
+            },
+            "8": {
+                "GXT": "Lunette de tir blanche"
+            },
+            "9": {
+                "GXT": "Lunette de tir noire"
+            }
+        }
+    },
+    "24": {
+        "Name": "Lunettes aviateur",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Lunettes hors-la-loi marron"
+            },
+            "1": {
+                "GXT": "Lunettes hors-la-loi n&b"
+            },
+            "2": {
+                "GXT": "Lunettes hors-la-loi noires"
+            },
+            "3": {
+                "GXT": "Lunettes hors-la-loi rouges"
+            },
+            "4": {
+                "GXT": "Lunettes hors-la-loi bleues"
+            },
+            "5": {
+                "GXT": "Lunettes hors-la-loi beiges"
+            }
+        }
+    },
+    "25": {
+        "Name": "Lunettes ski",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "Masque ski tropical"
+            },
+            "1": {
+                "GXT": "Masque ski jaune"
+            },
+            "2": {
+                "GXT": "Masque ski vert"
+            },
+            "3": {
+                "GXT": "Masque ski crépuscule"
+            },
+            "4": {
+                "GXT": "Masque ski dégradé de gris"
+            },
+            "5": {
+                "GXT": "Masque ski rose"
+            },
+            "6": {
+                "GXT": "Masque ski orange"
+            },
+            "7": {
+                "GXT": "Masque ski marron"
+            }
+        }
+    },
+    "26": {
+        "Name": "NULL",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            },
+            "1": {
+                "GXT": "NULL"
+            },
+            "2": {
+                "GXT": "NULL"
+            },
+            "3": {
+                "GXT": "NULL"
+            },
+            "4": {
+                "GXT": "NULL"
+            },
+            "5": {
+                "GXT": "NULL"
+            },
+            "6": {
+                "GXT": "NULL"
+            },
+            "7": {
+                "GXT": "NULL"
+            },
+            "8": {
+                "GXT": "NULL"
+            },
+            "9": {
+                "GXT": "NULL"
+            },
+            "10": {
+                "GXT": "NULL"
+            },
+            "11": {
+                "GXT": "NULL"
+            },
+            "12": {
+                "GXT": "NULL"
+            },
+            "13": {
+                "GXT": "NULL"
+            },
+            "14": {
+                "GXT": "NULL"
+            },
+            "15": {
+                "GXT": "NULL"
+            },
+            "16": {
+                "GXT": "NULL"
+            },
+            "17": {
+                "GXT": "NULL"
+            },
+            "18": {
+                "GXT": "NULL"
+            },
+            "19": {
+                "GXT": "NULL"
+            },
+            "20": {
+                "GXT": "NULL"
+            },
+            "21": {
+                "GXT": "NULL"
+            },
+            "22": {
+                "GXT": "NULL"
+            },
+            "23": {
+                "GXT": "NULL"
+            },
+            "24": {
+                "GXT": "NULL"
+            },
+            "25": {
+                "GXT": "NULL"
+            }
+        }
+    },
+    "27": {
+        "Name": "NULL",
+        "Price": 500,
+        "Variations": {
+            "0": {
+                "GXT": "NULL"
+            }
+        }
+    }
+  }
+}

@@ -1,0 +1,4865 @@
+{
+  "Overlay": 1,
+  "DrawablesList": {
+    "0": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Aucun"
+        }
+      }
+    },
+    "1": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Cochon rose"
+        },
+        "1": {
+          "GXT": "Cochon marron"
+        },
+        "2": {
+          "GXT": "Cochon sanglant"
+        },
+        "3": {
+          "GXT": "Cochon noir"
+        }
+      }
+    },
+    "2": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Crâne gris clair"
+        },
+        "1": {
+          "GXT": "Crâne d'os"
+        },
+        "2": {
+          "GXT": "Crâne gris"
+        },
+        "3": {
+          "GXT": "Crâne noir"
+        }
+      }
+    },
+    "3": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Pogo"
+        }
+      }
+    },
+    "4": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Hockey blanc"
+        },
+        "1": {
+          "GXT": "Hockey rouge"
+        },
+        "2": {
+          "GXT": "Hockey noir sanglant"
+        },
+        "3": {
+          "GXT": "Hockey Dust Devils"
+        }
+      }
+    },
+    "5": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Singe brun clair"
+        },
+        "1": {
+          "GXT": "Singe marron"
+        },
+        "2": {
+          "GXT": "Singe vert"
+        },
+        "3": {
+          "GXT": "Singe rose"
+        }
+      }
+    },
+    "6": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Jour des morts vert"
+        },
+        "1": {
+          "GXT": "Jour des morts blanc"
+        },
+        "2": {
+          "GXT": "Jour des morts bleu"
+        },
+        "3": {
+          "GXT": "Jour des morts noir"
+        }
+      }
+    },
+    "7": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Monstre vert"
+        },
+        "1": {
+          "GXT": "Monstre rouge"
+        },
+        "2": {
+          "GXT": "Monstre noir"
+        },
+        "3": {
+          "GXT": "Monstre blanc"
+        }
+      }
+    },
+    "8": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Père Noël blanc"
+        },
+        "1": {
+          "GXT": "Père Noël noir"
+        },
+        "2": {
+          "GXT": "Père Noël latino"
+        }
+      }
+    },
+    "9": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Renne"
+        }
+      }
+    },
+    "10": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Bonhomme de neige"
+        }
+      }
+    },
+    "11": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Loup blanc"
+        },
+        "1": {
+          "GXT": "Loup rouge"
+        },
+        "2": {
+          "GXT": "Loup noir"
+        }
+      }
+    },
+    "12": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Bal masqué bronze"
+        },
+        "1": {
+          "GXT": "Bal masqué argent"
+        },
+        "2": {
+          "GXT": "Bal masqué noir & or"
+        }
+      }
+    },
+    "13": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Chérubin"
+        }
+      }
+    },
+    "14": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Hockey balle"
+        },
+        "1": {
+          "GXT": "Hockey Vinewood"
+        },
+        "2": {
+          "GXT": "Hockey touriste"
+        },
+        "3": {
+          "GXT": "Hockey chien"
+        },
+        "4": {
+          "GXT": "Hockey loup"
+        },
+        "5": {
+          "GXT": "Hockey bête"
+        },
+        "6": {
+          "GXT": "Hockey ours"
+        },
+        "7": {
+          "GXT": "Hockey Dust Devils"
+        },
+        "8": {
+          "GXT": "Hockey Rampage à rayures"
+        },
+        "9": {
+          "GXT": "Hockey royal"
+        },
+        "10": {
+          "GXT": "Hockey chic"
+        },
+        "11": {
+          "GXT": "Hockey zombie affreux"
+        },
+        "12": {
+          "GXT": "Hockey zombie décomposé"
+        },
+        "13": {
+          "GXT": "Hockey crâne enflammé"
+        },
+        "14": {
+          "GXT": "Hockey crâne abominable"
+        },
+        "15": {
+          "GXT": "Hockey crâne électrique"
+        }
+      }
+    },
+    "15": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Hockey crâne"
+        },
+        "1": {
+          "GXT": "Hockey rapiécé"
+        },
+        "2": {
+          "GXT": "Hockey rapiécé clair"
+        },
+        "3": {
+          "GXT": "Hockey Rampage croix"
+        }
+      }
+    },
+    "16": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Guerrier métal"
+        },
+        "1": {
+          "GXT": "Guerrier circuit"
+        },
+        "2": {
+          "GXT": "Guerrier fusion"
+        },
+        "3": {
+          "GXT": "Guerrier fluo"
+        },
+        "4": {
+          "GXT": "Guerrier carbone"
+        },
+        "5": {
+          "GXT": "Guerrier œil de lynx"
+        },
+        "6": {
+          "GXT": "Guerrier pierre"
+        },
+        "7": {
+          "GXT": "Guerrier foudre"
+        },
+        "8": {
+          "GXT": "Guerrier bois"
+        }
+      }
+    },
+    "17": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Chat gris"
+        },
+        "1": {
+          "GXT": "Chat tigré"
+        }
+      }
+    },
+    "18": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Renard rouge"
+        },
+        "1": {
+          "GXT": "Renard marron"
+        }
+      }
+    },
+    "19": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Hibou marron"
+        },
+        "1": {
+          "GXT": "Hibou blanc"
+        }
+      }
+    },
+    "20": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Raton laveur gris"
+        },
+        "1": {
+          "GXT": "Raton laveur noir"
+        }
+      }
+    },
+    "21": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Ours brun"
+        },
+        "1": {
+          "GXT": "Ours gris"
+        }
+      }
+    },
+    "22": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Bison brun"
+        },
+        "1": {
+          "GXT": "Bison châtain"
+        }
+      }
+    },
+    "23": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Taureau noir"
+        },
+        "1": {
+          "GXT": "Taureau brun"
+        }
+      }
+    },
+    "24": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Aigle brun"
+        },
+        "1": {
+          "GXT": "Aigle blanc"
+        }
+      }
+    },
+    "25": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Vautour rose"
+        },
+        "1": {
+          "GXT": "Vautour noir"
+        }
+      }
+    },
+    "26": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Loup gris"
+        },
+        "1": {
+          "GXT": "Loup noir"
+        }
+      }
+    },
+    "27": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Chapeau d'aviateur"
+        }
+      }
+    },
+    "28": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Combat, noir"
+        },
+        "1": {
+          "GXT": "Combat, gris"
+        },
+        "2": {
+          "GXT": "Combat, anthracite"
+        },
+        "3": {
+          "GXT": "Combat, brun clair"
+        },
+        "4": {
+          "GXT": "Combat, forêt"
+        }
+      }
+    },
+    "29": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Squelette (noir)"
+        },
+        "1": {
+          "GXT": "Squelette (gris)"
+        },
+        "2": {
+          "GXT": "Squelette (anthracite)"
+        },
+        "3": {
+          "GXT": "Squelette (brun clair)"
+        },
+        "4": {
+          "GXT": "Squelette (vert)"
+        }
+      }
+    },
+    "30": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Hockey Sauve qui peut"
+        }
+      }
+    },
+    "31": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Pingouin"
+        }
+      }
+    },
+    "32": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Bas"
+        }
+      }
+    },
+    "33": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Pain d'épices"
+        }
+      }
+    },
+    "34": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Lutin blanc"
+        },
+        "1": {
+          "GXT": "Lutin noir"
+        },
+        "2": {
+          "GXT": "Lutin latino"
+        }
+      }
+    },
+    "35": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Vision nocturne"
+        }
+      }
+    },
+    "36": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Recycleur"
+        }
+      }
+    },
+    "37": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Cagoule miteuse"
+        }
+      }
+    },
+    "38": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Masque à gaz"
+        }
+      }
+    },
+    "39": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Infecté rose"
+        },
+        "1": {
+          "GXT": "Infecté marron"
+        }
+      }
+    },
+    "40": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Momie blanche"
+        },
+        "1": {
+          "GXT": "Momie verte"
+        }
+      }
+    },
+    "41": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Vampyr blanc"
+        },
+        "1": {
+          "GXT": "Vampyr bleu"
+        }
+      }
+    },
+    "42": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Frank pâle"
+        },
+        "1": {
+          "GXT": "Frank gris"
+        }
+      }
+    },
+    "43": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Rage impuissante"
+        }
+      }
+    },
+    "44": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Princess Robot Bubblegum"
+        }
+      }
+    },
+    "45": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Moorehead"
+        }
+      }
+    },
+    "46": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Masque à gaz"
+        }
+      }
+    },
+    "47": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Bande lieu du crime"
+        },
+        "1": {
+          "GXT": "Bande flèche noire"
+        },
+        "2": {
+          "GXT": "Bande danger"
+        },
+        "3": {
+          "GXT": "Bande flèche rouge"
+        }
+      }
+    },
+    "48": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Ruban adhésif gris pâle"
+        },
+        "1": {
+          "GXT": "Ruban adhésif gris foncé"
+        },
+        "2": {
+          "GXT": "Ruban adhésif blanc"
+        },
+        "3": {
+          "GXT": "Ruban adhésif d'électricien"
+        }
+      }
+    },
+    "49": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Sac en papier Up-n-Atom"
+        },
+        "1": {
+          "GXT": "Sac en papier maniaque"
+        },
+        "2": {
+          "GXT": "Sac en papier triste"
+        },
+        "3": {
+          "GXT": "Sac en papier heureux"
+        },
+        "4": {
+          "GXT": "Sac en papier matou-vu"
+        },
+        "5": {
+          "GXT": "Sac en papier bouche"
+        },
+        "6": {
+          "GXT": "Sac en papier timide"
+        },
+        "7": {
+          "GXT": "Sac en papier Burger Shot"
+        },
+        "8": {
+          "GXT": "Sac en papier Tuez-moi"
+        },
+        "9": {
+          "GXT": "Sac en papier diabolique"
+        },
+        "10": {
+          "GXT": "Sac en papier flic"
+        },
+        "11": {
+          "GXT": "Sac en papier monstre"
+        },
+        "12": {
+          "GXT": "Sac en papier furie"
+        },
+        "13": {
+          "GXT": "Sac en papier zigzag"
+        },
+        "14": {
+          "GXT": "Sac en papier crâne"
+        },
+        "15": {
+          "GXT": "Sac en papier chien"
+        },
+        "16": {
+          "GXT": "Sac en papier rose"
+        },
+        "17": {
+          "GXT": "Sac en papier alien"
+        },
+        "18": {
+          "GXT": "Sac en papier À l'aide"
+        },
+        "19": {
+          "GXT": "Sac en papier labyrinthe"
+        },
+        "20": {
+          "GXT": "Sac en papier doigt"
+        },
+        "21": {
+          "GXT": "Sac en papier élégant"
+        },
+        "22": {
+          "GXT": "Sac en papier autocollants"
+        },
+        "23": {
+          "GXT": "Sac en papier moderniste"
+        },
+        "24": {
+          "GXT": "Sac en papier amour"
+        },
+        "25": {
+          "GXT": "Sac en papier regard noir"
+        }
+      }
+    },
+    "50": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Masque vert"
+        },
+        "1": {
+          "GXT": "Masque Don"
+        },
+        "2": {
+          "GXT": "Masque rose"
+        },
+        "3": {
+          "GXT": "Masque de clown"
+        },
+        "4": {
+          "GXT": "Masque noir"
+        },
+        "5": {
+          "GXT": "Masque marron"
+        },
+        "6": {
+          "GXT": "Masque de mannequin"
+        },
+        "7": {
+          "GXT": "Masque de poupée"
+        },
+        "8": {
+          "GXT": "Masque de pantin"
+        },
+        "9": {
+          "GXT": "Masque de mime"
+        }
+      }
+    },
+    "51": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Bandana noir"
+        },
+        "1": {
+          "GXT": "Bandana crâne"
+        },
+        "2": {
+          "GXT": "Bandana urbain"
+        },
+        "3": {
+          "GXT": "Bandana désert"
+        },
+        "4": {
+          "GXT": "Bandana forêt"
+        },
+        "5": {
+          "GXT": "Bandana vert"
+        },
+        "6": {
+          "GXT": "Bandana violet"
+        },
+        "7": {
+          "GXT": "Bandana cachemire"
+        },
+        "8": {
+          "GXT": "Bandana jaune"
+        },
+        "9": {
+          "GXT": "Bandana crâne électrique"
+        }
+      }
+    },
+    "52": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Cagoule noire"
+        },
+        "1": {
+          "GXT": "Cagoule grise"
+        },
+        "2": {
+          "GXT": "Cagoule blanche"
+        },
+        "3": {
+          "GXT": "Cagoule verte"
+        },
+        "4": {
+          "GXT": "Cagoule kaki"
+        },
+        "5": {
+          "GXT": "Cagoule anthracite"
+        },
+        "6": {
+          "GXT": "Cagoule forêt"
+        },
+        "7": {
+          "GXT": "Cagoule urbaine"
+        },
+        "8": {
+          "GXT": "Cagoule bleue"
+        },
+        "9": {
+          "GXT": "Cagoule jaune"
+        },
+        "10": {
+          "GXT": "Cagoule crâne"
+        }
+      }
+    },
+    "53": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Cagoule à capuche noire"
+        },
+        "1": {
+          "GXT": "Cagoule à capuche grise"
+        },
+        "2": {
+          "GXT": "Cagoule à capuche blanche"
+        },
+        "3": {
+          "GXT": "Cagoule à capuche verte"
+        },
+        "4": {
+          "GXT": "Cagoule à capuche kaki"
+        },
+        "5": {
+          "GXT": "Cagoule à capuche sombre"
+        },
+        "6": {
+          "GXT": "Cagoule à capuche forêt"
+        },
+        "7": {
+          "GXT": "Cagoule à capuche urbaine"
+        },
+        "8": {
+          "GXT": "Cagoule à capuche crâne"
+        }
+      }
+    },
+    "54": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Masque t-shirt noir"
+        },
+        "1": {
+          "GXT": "Masque t-shirt blanc"
+        },
+        "2": {
+          "GXT": "Masque t-shirt beige"
+        },
+        "3": {
+          "GXT": "Masque t-shirt Benders"
+        },
+        "4": {
+          "GXT": "Masque t-shirt justice"
+        },
+        "5": {
+          "GXT": "Masque t-shirt forêt"
+        },
+        "6": {
+          "GXT": "Masque t-shirt rayé"
+        },
+        "7": {
+          "GXT": "Masque t-shirt Love Fist"
+        },
+        "8": {
+          "GXT": "Masque t-shirt T.P.I"
+        },
+        "9": {
+          "GXT": "Masque t-shirt rose"
+        },
+        "10": {
+          "GXT": "Masque t-shirt Police LS"
+        }
+      }
+    },
+    "55": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Cagoule réglable anthracite"
+        },
+        "1": {
+          "GXT": "Cagoule réglable kaki"
+        }
+      }
+    },
+    "56": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Cagoule ample bleue"
+        },
+        "1": {
+          "GXT": "Cagoule ample noire"
+        },
+        "2": {
+          "GXT": "Cagoule ample crâne"
+        },
+        "3": {
+          "GXT": "Cagoule ample kaki"
+        },
+        "4": {
+          "GXT": "Cagoule ample sang"
+        },
+        "5": {
+          "GXT": "Cagoule ample forêt"
+        },
+        "6": {
+          "GXT": "Cagoule ample rouge"
+        },
+        "7": {
+          "GXT": "Cagoule ample désert"
+        },
+        "8": {
+          "GXT": "Cagoule ample bicolore"
+        }
+      }
+    },
+    "57": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Cagoule en laine noire"
+        },
+        "1": {
+          "GXT": "Cagoule en laine vert foncé"
+        },
+        "2": {
+          "GXT": "Cagoule en laine cuivre"
+        },
+        "3": {
+          "GXT": "Cagoule en laine grise"
+        },
+        "4": {
+          "GXT": "Cagoule en laine marron"
+        },
+        "5": {
+          "GXT": "Cagoule en laine arc-en-ciel"
+        },
+        "6": {
+          "GXT": "Cagoule en laine forêt"
+        },
+        "7": {
+          "GXT": "Cagoule en laine sale"
+        },
+        "8": {
+          "GXT": "Cagoule en laine rose"
+        },
+        "9": {
+          "GXT": "Cagoule Flying Bravo FB"
+        },
+        "10": {
+          "GXT": "Cagoule Flying Bravo"
+        },
+        "11": {
+          "GXT": "Cagoule Princess"
+        },
+        "12": {
+          "GXT": "Cagoule Didier Sachs"
+        },
+        "13": {
+          "GXT": "Cagoule Perseus"
+        },
+        "14": {
+          "GXT": "Cagoule Perseus logo"
+        },
+        "15": {
+          "GXT": "Cagoule Sessanta Nove"
+        },
+        "16": {
+          "GXT": "Cagoule en laine blanche"
+        },
+        "17": {
+          "GXT": "Cagoule en laine bleue"
+        },
+        "18": {
+          "GXT": "Cagoule en laine rouge"
+        },
+        "19": {
+          "GXT": "Cagoule en laine verte"
+        },
+        "20": {
+          "GXT": "Cagoule en laine orange"
+        },
+        "21": {
+          "GXT": "Cagoule en laine mauve"
+        }
+      }
+    },
+    "58": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Cagoule en laine bandit"
+        },
+        "1": {
+          "GXT": "Cagoule en laine nature"
+        },
+        "2": {
+          "GXT": "Cagoule camo. fluo"
+        },
+        "3": {
+          "GXT": "Cagoule camo. rose"
+        },
+        "4": {
+          "GXT": "Cagoule camo. orange"
+        },
+        "5": {
+          "GXT": "Cagoule Impotent Rage"
+        },
+        "6": {
+          "GXT": "Cagoule Pogo"
+        },
+        "7": {
+          "GXT": "Cagoule bleue à rayures"
+        },
+        "8": {
+          "GXT": "Cagoule noire à rayures"
+        },
+        "9": {
+          "GXT": "Cagoule rose à rayures"
+        }
+      }
+    },
+    "59": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "60": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Citrouille diabolique"
+        },
+        "1": {
+          "GXT": "Citrouille moisie"
+        },
+        "2": {
+          "GXT": "Pastèque hideuse"
+        }
+      }
+    },
+    "61": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Majordome affreux"
+        },
+        "1": {
+          "GXT": "Majordome mort"
+        },
+        "2": {
+          "GXT": "Majordome décomposé"
+        }
+      }
+    },
+    "62": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Psychopathe brûlé blanc"
+        },
+        "1": {
+          "GXT": "Psychopathe brûlé sanglant"
+        },
+        "2": {
+          "GXT": "Psychopathe brûlé noir"
+        }
+      }
+    },
+    "63": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Démon écorché rouge"
+        },
+        "1": {
+          "GXT": "Démon écorché vert"
+        },
+        "2": {
+          "GXT": "Démon écorché gris"
+        }
+      }
+    },
+    "64": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Crâne blanc surgissant"
+        },
+        "1": {
+          "GXT": "Crâne rouge surgissant"
+        },
+        "2": {
+          "GXT": "Crâne jaunâtre surgissant"
+        }
+      }
+    },
+    "65": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Loup-garou pâle"
+        },
+        "1": {
+          "GXT": "Loup-garou sombre"
+        },
+        "2": {
+          "GXT": "Loup-garou gris"
+        }
+      }
+    },
+    "66": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Insecte toxique vert"
+        },
+        "1": {
+          "GXT": "Insecte toxique rouge"
+        },
+        "2": {
+          "GXT": "Insecte toxique mauve"
+        }
+      }
+    },
+    "67": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Créature souterraine immonde"
+        },
+        "1": {
+          "GXT": "Créature souterraine putride"
+        },
+        "2": {
+          "GXT": "Créature souterraine exsangue"
+        }
+      }
+    },
+    "68": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Lucifer classique rouge"
+        },
+        "1": {
+          "GXT": "Lucifer classique orange"
+        },
+        "2": {
+          "GXT": "Lucifer classique noir"
+        }
+      }
+    },
+    "69": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Meurtrier sac classique"
+        },
+        "1": {
+          "GXT": "Meurtrier sac ensanglanté"
+        },
+        "2": {
+          "GXT": "Meurtrier sac noir"
+        }
+      }
+    },
+    "70": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Alien hypnotique bleu"
+        },
+        "1": {
+          "GXT": "Alien hypnotique vert"
+        },
+        "2": {
+          "GXT": "Alien hypnotique rouge"
+        }
+      }
+    },
+    "71": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Sorcière blafarde jaune"
+        },
+        "1": {
+          "GXT": "Sorcière blafarde grise"
+        },
+        "2": {
+          "GXT": "Sorcière blafarde blanche"
+        }
+      }
+    },
+    "72": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Lucifer barbu rouge"
+        },
+        "1": {
+          "GXT": "Lucifer barbu orange"
+        },
+        "2": {
+          "GXT": "Lucifer barbu noir"
+        }
+      }
+    },
+    "73": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "74": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Pain d'épices dément"
+        },
+        "1": {
+          "GXT": "Pain d'épices furieux"
+        },
+        "2": {
+          "GXT": "Pain d'épices énervé"
+        }
+      }
+    },
+    "75": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Pain d'épices fou rose"
+        },
+        "1": {
+          "GXT": "Pain d'épices fou bleu"
+        },
+        "2": {
+          "GXT": "Pain d'épices fou marron"
+        }
+      }
+    },
+    "76": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Père Noël amoché"
+        },
+        "1": {
+          "GXT": "Père Noël grincheux"
+        },
+        "2": {
+          "GXT": "Père Noël dégoûtant"
+        }
+      }
+    },
+    "77": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Sapin festif vert"
+        },
+        "1": {
+          "GXT": "Sapin festif vert foncé"
+        },
+        "2": {
+          "GXT": "Sapin festif noir"
+        },
+        "3": {
+          "GXT": "Sapin festif blanc"
+        },
+        "4": {
+          "GXT": "Sapin festif rouge"
+        },
+        "5": {
+          "GXT": "Sapin festif violet"
+        }
+      }
+    },
+    "78": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Gâteau sombre"
+        },
+        "1": {
+          "GXT": "Gâteau clair"
+        }
+      }
+    },
+    "79": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Bête brune"
+        },
+        "1": {
+          "GXT": "Bête blonde"
+        },
+        "2": {
+          "GXT": "Bête platine"
+        }
+      }
+    },
+    "80": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Bête LS noire"
+        },
+        "1": {
+          "GXT": "Bête LS rouge"
+        },
+        "2": {
+          "GXT": "Bête LS blanche"
+        }
+      }
+    },
+    "81": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Bête visière rouge"
+        },
+        "1": {
+          "GXT": "Bête visière LS"
+        },
+        "2": {
+          "GXT": "Bête visière brune"
+        }
+      }
+    },
+    "82": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Bête bandeau blanc"
+        },
+        "1": {
+          "GXT": "Bête bandeau patriotique"
+        },
+        "2": {
+          "GXT": "Bête bandeau bleu"
+        }
+      }
+    },
+    "83": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Bête festive classique"
+        },
+        "1": {
+          "GXT": "Bête brune festive"
+        },
+        "2": {
+          "GXT": "Bête blonde festive"
+        },
+        "3": {
+          "GXT": "Bête platine festive"
+        }
+      }
+    },
+    "84": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Yéti"
+        }
+      }
+    },
+    "85": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Dinde crue"
+        },
+        "1": {
+          "GXT": "Dinde cuite"
+        },
+        "2": {
+          "GXT": "Dinde brûlée"
+        }
+      }
+    },
+    "86": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Mère Noël éméchée"
+        },
+        "1": {
+          "GXT": "Mère Noël bourrée"
+        },
+        "2": {
+          "GXT": "Mère Noël défoncée"
+        }
+      }
+    },
+    "87": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Lutin rebelle"
+        },
+        "1": {
+          "GXT": "Lutin gangsta"
+        },
+        "2": {
+          "GXT": "Lutin dur à cuire"
+        }
+      }
+    },
+    "88": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Mère Noël blanche"
+        },
+        "1": {
+          "GXT": "Mère Noël noire"
+        },
+        "2": {
+          "GXT": "Mère Noël latina"
+        }
+      }
+    },
+    "89": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Combat, noir"
+        },
+        "1": {
+          "GXT": "Combat, gris"
+        },
+        "2": {
+          "GXT": "Combat, anthracite"
+        },
+        "3": {
+          "GXT": "Combat, brun clair"
+        },
+        "4": {
+          "GXT": "Combat, forêt"
+        }
+      }
+    },
+    "90": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Filtrant brun-rouge"
+        },
+        "1": {
+          "GXT": "Filtrant chocolat"
+        },
+        "2": {
+          "GXT": "Filtrant noir"
+        },
+        "3": {
+          "GXT": "Filtrant beige"
+        },
+        "4": {
+          "GXT": "Ventilé brun-rouge"
+        },
+        "5": {
+          "GXT": "Ventilé chocolat"
+        },
+        "6": {
+          "GXT": "Ventilé noir"
+        },
+        "7": {
+          "GXT": "Ventilé beige"
+        }
+      }
+    },
+    "91": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "92": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Monstre marin amphibien"
+        },
+        "1": {
+          "GXT": "Monstre marin alien"
+        },
+        "2": {
+          "GXT": "Monstre marin reptilien"
+        },
+        "3": {
+          "GXT": "Monstre marin mystique"
+        },
+        "4": {
+          "GXT": "Monstre marin divin"
+        },
+        "5": {
+          "GXT": "Monstre marin démoniaque"
+        }
+      }
+    },
+    "93": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Dinosaure à rayures"
+        },
+        "1": {
+          "GXT": "Dinosaure gris"
+        },
+        "2": {
+          "GXT": "Dinosaure tropical"
+        },
+        "3": {
+          "GXT": "Dinosaure désert"
+        },
+        "4": {
+          "GXT": "Dinosaure forêt"
+        },
+        "5": {
+          "GXT": "Dinosaure dangereux"
+        }
+      }
+    },
+    "94": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Oni rouge"
+        },
+        "1": {
+          "GXT": "Oni bleu"
+        },
+        "2": {
+          "GXT": "Oni blanc"
+        },
+        "3": {
+          "GXT": "Oni noir"
+        },
+        "4": {
+          "GXT": "Oni or"
+        },
+        "5": {
+          "GXT": "Oni vert"
+        }
+      }
+    },
+    "95": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Clown rouge"
+        },
+        "1": {
+          "GXT": "Clown bleu"
+        },
+        "2": {
+          "GXT": "Clown vert"
+        },
+        "3": {
+          "GXT": "Clown orange"
+        },
+        "4": {
+          "GXT": "Clown charognard"
+        },
+        "5": {
+          "GXT": "Clown néon"
+        },
+        "6": {
+          "GXT": "Clown monstrueux"
+        },
+        "7": {
+          "GXT": "Clown sinistre"
+        }
+      }
+    },
+    "96": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Gorille enragé"
+        },
+        "1": {
+          "GXT": "Orang-outan enragé"
+        },
+        "2": {
+          "GXT": "Vieux singe enragé"
+        },
+        "3": {
+          "GXT": "Singe albinos enragé"
+        }
+      }
+    },
+    "97": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Cheval alezan"
+        },
+        "1": {
+          "GXT": "Cheval noir"
+        },
+        "2": {
+          "GXT": "Cheval gris"
+        },
+        "3": {
+          "GXT": "Cheval marron"
+        },
+        "4": {
+          "GXT": "Cheval pie"
+        },
+        "5": {
+          "GXT": "Zèbre"
+        }
+      }
+    },
+    "98": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Licorne"
+        }
+      }
+    },
+    "99": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Crâne orné rouge"
+        },
+        "1": {
+          "GXT": "Crâne orné argent"
+        },
+        "2": {
+          "GXT": "Crâne orné bleu"
+        },
+        "3": {
+          "GXT": "Crâne orné bleu-vert"
+        },
+        "4": {
+          "GXT": "Crâne orné blanc"
+        },
+        "5": {
+          "GXT": "Crâne orné noir"
+        }
+      }
+    },
+    "100": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Carlin Moe"
+        },
+        "1": {
+          "GXT": "Carlin noir"
+        },
+        "2": {
+          "GXT": "Carlin gris"
+        },
+        "3": {
+          "GXT": "Carlin marron"
+        },
+        "4": {
+          "GXT": "Carlin Joséphine"
+        },
+        "5": {
+          "GXT": "Carlin noir et brun clair"
+        }
+      }
+    },
+    "101": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Masque Bigness orange"
+        },
+        "1": {
+          "GXT": "Masque Bigness bleu"
+        },
+        "2": {
+          "GXT": "Masque Bigness magenta"
+        },
+        "3": {
+          "GXT": "Masque Bigness jaune"
+        },
+        "4": {
+          "GXT": "Masque Bigness automne"
+        },
+        "5": {
+          "GXT": "Masque Bigness gris"
+        },
+        "6": {
+          "GXT": "Masque Bigness camouflage"
+        },
+        "7": {
+          "GXT": "Masque Bigness camo. gris"
+        },
+        "8": {
+          "GXT": "Masque Bigness camo. géo."
+        },
+        "9": {
+          "GXT": "Masque Bigness noir"
+        },
+        "10": {
+          "GXT": "Masque Bigness zèbre"
+        },
+        "11": {
+          "GXT": "Masque Bigness abstrait vif"
+        },
+        "12": {
+          "GXT": "Masque Bigness abstrait pâle"
+        },
+        "13": {
+          "GXT": "Masque Bigness abstrait gris"
+        },
+        "14": {
+          "GXT": "Masque Bigness léopard gris"
+        },
+        "15": {
+          "GXT": "Masque Bigness camo. bleu"
+        }
+      }
+    },
+    "102": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "103": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Zombie bleu pixels"
+        },
+        "1": {
+          "GXT": "Zombie marron pixels"
+        },
+        "2": {
+          "GXT": "Zombie vert pixels"
+        },
+        "3": {
+          "GXT": "Zombie gris pixels"
+        },
+        "4": {
+          "GXT": "Zombie pêche pixels"
+        },
+        "5": {
+          "GXT": "Zombie beige"
+        },
+        "6": {
+          "GXT": "Zombie sombre forêt"
+        },
+        "7": {
+          "GXT": "Zombie quadrillé"
+        },
+        "8": {
+          "GXT": "Zombie vert mousse pixels"
+        },
+        "9": {
+          "GXT": "Zombie gris forêt"
+        },
+        "10": {
+          "GXT": "Zombie camouflage turquoise"
+        },
+        "11": {
+          "GXT": "Zombie éclats"
+        },
+        "12": {
+          "GXT": "Zombie camouflage contraste"
+        },
+        "13": {
+          "GXT": "Zombie pavés"
+        },
+        "14": {
+          "GXT": "Zombie pêche forêt"
+        },
+        "15": {
+          "GXT": "Zombie pinceau"
+        },
+        "16": {
+          "GXT": "Zombie camouflage"
+        },
+        "17": {
+          "GXT": "Zombie clair forêt"
+        },
+        "18": {
+          "GXT": "Zombie vert mousse"
+        },
+        "19": {
+          "GXT": "Zombie sable"
+        },
+        "20": {
+          "GXT": "Zombie putréfié noir"
+        },
+        "21": {
+          "GXT": "Zombie putréfié ardoise"
+        },
+        "22": {
+          "GXT": "Zombie putréfié grège"
+        },
+        "23": {
+          "GXT": "Zombie putréfié vert"
+        },
+        "24": {
+          "GXT": "Zombie putréfié forêt"
+        },
+        "25": {
+          "GXT": "Zombie putr. mousse camo."
+        }
+      }
+    },
+    "104": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Tactique bleu pixels"
+        },
+        "1": {
+          "GXT": "Tactique marron pixels"
+        },
+        "2": {
+          "GXT": "Tactique vert pixels"
+        },
+        "3": {
+          "GXT": "Tactique gris pixels"
+        },
+        "4": {
+          "GXT": "Tactique pêche pixels"
+        },
+        "5": {
+          "GXT": "Tactique beige"
+        },
+        "6": {
+          "GXT": "Tactique sombre forêt"
+        },
+        "7": {
+          "GXT": "Tactique quadrillé"
+        },
+        "8": {
+          "GXT": "Tactique mousse pixels"
+        },
+        "9": {
+          "GXT": "Tactique gris forêt"
+        },
+        "10": {
+          "GXT": "Tactique camo. turquoise"
+        },
+        "11": {
+          "GXT": "Tactique éclats"
+        },
+        "12": {
+          "GXT": "Tactique camo. contraste"
+        },
+        "13": {
+          "GXT": "Tactique pavés"
+        },
+        "14": {
+          "GXT": "Tactique pêche forêt"
+        },
+        "15": {
+          "GXT": "Tactique pinceau"
+        },
+        "16": {
+          "GXT": "Tactique camouflage"
+        },
+        "17": {
+          "GXT": "Tactique clair forêt"
+        },
+        "18": {
+          "GXT": "Tactique mousse"
+        },
+        "19": {
+          "GXT": "Tactique sable"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        },
+        "24": {
+          "GXT": "Tactique olive"
+        },
+        "25": {
+          "GXT": "Tactique crâne"
+        }
+      }
+    },
+    "105": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Oni obsidienne"
+        },
+        "1": {
+          "GXT": "Oni buriné"
+        },
+        "2": {
+          "GXT": "Oni en grès"
+        },
+        "3": {
+          "GXT": "Oni peinture blanche"
+        },
+        "4": {
+          "GXT": "Oni peinture or"
+        },
+        "5": {
+          "GXT": "Oni peinture rouge"
+        },
+        "6": {
+          "GXT": "Oni peinture noire"
+        },
+        "7": {
+          "GXT": "Oni noir possédé"
+        },
+        "8": {
+          "GXT": "Oni marron"
+        },
+        "9": {
+          "GXT": "Oni jaune"
+        },
+        "10": {
+          "GXT": "Oni prune"
+        },
+        "11": {
+          "GXT": "Oni gris dégradé"
+        },
+        "12": {
+          "GXT": "Oni jaune et noir"
+        },
+        "13": {
+          "GXT": "Oni orange"
+        },
+        "14": {
+          "GXT": "Oni possédé en pierre dorée"
+        },
+        "15": {
+          "GXT": "Oni possédé en pierre"
+        },
+        "16": {
+          "GXT": "Oni gris"
+        },
+        "17": {
+          "GXT": "Oni noir et or"
+        },
+        "18": {
+          "GXT": "Oni gris et orange"
+        },
+        "19": {
+          "GXT": "Oni possédé blanc"
+        },
+        "20": {
+          "GXT": "Oni gris et or"
+        },
+        "21": {
+          "GXT": "Oni grège"
+        },
+        "22": {
+          "GXT": "Oni vert eau"
+        },
+        "23": {
+          "GXT": "Oni mauve"
+        }
+      }
+    },
+    "106": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Crâne serpent bleu pixels"
+        },
+        "1": {
+          "GXT": "Crâne serpent marron pixels"
+        },
+        "2": {
+          "GXT": "Crâne serpent vert pixels"
+        },
+        "3": {
+          "GXT": "Crâne serpent gris pixels"
+        },
+        "4": {
+          "GXT": "Crâne serpent pêche pixels"
+        },
+        "5": {
+          "GXT": "Crâne serpent beige"
+        },
+        "6": {
+          "GXT": "Crâne serpent sombre forêt"
+        },
+        "7": {
+          "GXT": "Crâne serpent quadrillé"
+        },
+        "8": {
+          "GXT": "Crâne serpent mousse pixels"
+        },
+        "9": {
+          "GXT": "Crâne serpent gris forêt"
+        },
+        "10": {
+          "GXT": "Crâne serp. camo. turquoise"
+        },
+        "11": {
+          "GXT": "Crâne serpent éclats"
+        },
+        "12": {
+          "GXT": "Crâne serp. camo. contraste"
+        },
+        "13": {
+          "GXT": "Crâne serpent pavés"
+        },
+        "14": {
+          "GXT": "Crâne serpent pêche forêt"
+        },
+        "15": {
+          "GXT": "Crâne serpent pinceau"
+        },
+        "16": {
+          "GXT": "Crâne serpent camouflage"
+        },
+        "17": {
+          "GXT": "Crâne serpent clair forêt"
+        },
+        "18": {
+          "GXT": "Crâne serpent vert mousse"
+        },
+        "19": {
+          "GXT": "Crâne serpent sable"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        },
+        "24": {
+          "GXT": "Crâne serpent rouge"
+        },
+        "25": {
+          "GXT": "Crâne serpent blanc"
+        }
+      }
+    },
+    "107": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Ventilé bleu pixels"
+        },
+        "1": {
+          "GXT": "Ventilé marron pixels"
+        },
+        "2": {
+          "GXT": "Ventilé vert pixels"
+        },
+        "3": {
+          "GXT": "Ventilé gris pixels"
+        },
+        "4": {
+          "GXT": "Ventilé pêche pixels"
+        },
+        "5": {
+          "GXT": "Ventilé camouflage beige"
+        },
+        "6": {
+          "GXT": "Ventilé sombre forêt"
+        },
+        "7": {
+          "GXT": "Ventilé quadrillé"
+        },
+        "8": {
+          "GXT": "Ventilé mousse pixels"
+        },
+        "9": {
+          "GXT": "Ventilé gris forêt"
+        },
+        "10": {
+          "GXT": "Ventilé camouflage turquoise"
+        },
+        "11": {
+          "GXT": "Ventilé éclats"
+        },
+        "12": {
+          "GXT": "Ventilé camouflage contraste"
+        },
+        "13": {
+          "GXT": "Ventilé pavés"
+        },
+        "14": {
+          "GXT": "Ventilé pêche forêt"
+        },
+        "15": {
+          "GXT": "Ventilé pinceau"
+        },
+        "16": {
+          "GXT": "Ventilé camouflage"
+        },
+        "17": {
+          "GXT": "Ventilé clair forêt"
+        },
+        "18": {
+          "GXT": "Ventilé vert mousse"
+        },
+        "19": {
+          "GXT": "Ventilé sable"
+        },
+        "20": {
+          "GXT": "NULL"
+        },
+        "21": {
+          "GXT": "NULL"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "108": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Crâne blanc"
+        },
+        "1": {
+          "GXT": "Crâne buriné"
+        },
+        "2": {
+          "GXT": "Crâne ancien"
+        },
+        "3": {
+          "GXT": "Crâne venin"
+        },
+        "4": {
+          "GXT": "Crâne frais"
+        },
+        "5": {
+          "GXT": "Crâne en chair"
+        },
+        "6": {
+          "GXT": "Crâne vert mousse"
+        },
+        "7": {
+          "GXT": "Crâne de sable"
+        },
+        "8": {
+          "GXT": "Crâne encre noire"
+        },
+        "9": {
+          "GXT": "Crâne taché"
+        },
+        "10": {
+          "GXT": "Crâne brun clair en cuir"
+        },
+        "11": {
+          "GXT": "Crâne chocolat en cuir"
+        },
+        "12": {
+          "GXT": "Crâne orange yeux ouverts"
+        },
+        "13": {
+          "GXT": "Crâne possédé"
+        },
+        "14": {
+          "GXT": "Crâne yeux ouverts"
+        },
+        "15": {
+          "GXT": "Crâne tatoué"
+        },
+        "16": {
+          "GXT": "Crâne bleu peint"
+        },
+        "17": {
+          "GXT": "Crâne rose peint"
+        },
+        "18": {
+          "GXT": "Crâne vert peint"
+        },
+        "19": {
+          "GXT": "Crâne moutarde peint"
+        },
+        "20": {
+          "GXT": "Crâne orange yeux tourbi."
+        },
+        "21": {
+          "GXT": "Crâne cuir yeux lumineux"
+        },
+        "22": {
+          "GXT": "Crâne ocre brun"
+        },
+        "23": {
+          "GXT": "Crâne à rayure"
+        }
+      }
+    },
+    "109": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "Bonnet aviateur noir"
+        },
+        "5": {
+          "GXT": "Bonnet aviateur brun clair"
+        },
+        "6": {
+          "GXT": "Bonnet aviateur vert"
+        },
+        "7": {
+          "GXT": "Bonnet aviateur olive"
+        },
+        "8": {
+          "GXT": "Bonnet aviateur clair forêt"
+        },
+        "9": {
+          "GXT": "Bonnet aviateur camo. turq."
+        },
+        "10": {
+          "GXT": "Bonnet aviateur éclats"
+        },
+        "11": {
+          "GXT": "Bonnet aviateur marron pix."
+        }
+      }
+    },
+    "110": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Cyborg noir"
+        },
+        "1": {
+          "GXT": "Cyborg bleu pixels"
+        },
+        "2": {
+          "GXT": "Cyborg marron pixels"
+        },
+        "3": {
+          "GXT": "Cyborg vert pixels"
+        },
+        "4": {
+          "GXT": "Cyborg beige"
+        },
+        "5": {
+          "GXT": "Cyborg sombre forêt"
+        },
+        "6": {
+          "GXT": "Cyborg quadrillé"
+        },
+        "7": {
+          "GXT": "Cyborg gris forêt"
+        },
+        "8": {
+          "GXT": "Cyborg camouflage turquoise"
+        },
+        "9": {
+          "GXT": "Cyborg éclats"
+        },
+        "10": {
+          "GXT": "Cyborg camouflage contraste"
+        },
+        "11": {
+          "GXT": "Cyborg pavés"
+        },
+        "12": {
+          "GXT": "Cyborg pêche forêt"
+        },
+        "13": {
+          "GXT": "Cyborg pinceau"
+        },
+        "14": {
+          "GXT": "Cyborg camouflage"
+        },
+        "15": {
+          "GXT": "Cyborg clair forêt"
+        },
+        "16": {
+          "GXT": "Cyborg à rayures bleues"
+        },
+        "17": {
+          "GXT": "Cyborg à rayures vert mousse"
+        },
+        "18": {
+          "GXT": "Cyborg à rayures orange"
+        },
+        "19": {
+          "GXT": "Cyborg jaune"
+        },
+        "20": {
+          "GXT": "Cyborg zébré"
+        },
+        "21": {
+          "GXT": "Cyborg blanc"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        },
+        "24": {
+          "GXT": "NULL"
+        },
+        "25": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "111": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "Bandana Blagueurs bleu"
+        },
+        "5": {
+          "GXT": "Bandana Blagueurs rouge"
+        },
+        "6": {
+          "GXT": "Bandana abstrait vif"
+        },
+        "7": {
+          "GXT": "Bandana géométrique"
+        },
+        "8": {
+          "GXT": "Bandana Bigness éclats"
+        },
+        "9": {
+          "GXT": "Bandana Bigness rouge"
+        },
+        "10": {
+          "GXT": "Bandana vert à feuilles"
+        },
+        "11": {
+          "GXT": "Bandana bleu à feuilles"
+        },
+        "12": {
+          "GXT": "Bandana Manor rouge"
+        },
+        "13": {
+          "GXT": "Bandana Manor noir"
+        },
+        "14": {
+          "GXT": "Bandana Manor crânes"
+        },
+        "15": {
+          "GXT": "Bandana Broker blanc"
+        },
+        "16": {
+          "GXT": "Bandana Broker orange"
+        },
+        "17": {
+          "GXT": "Bandana Broker noir"
+        },
+        "18": {
+          "GXT": "Bandana Broker blanc cassé"
+        },
+        "19": {
+          "GXT": "Bandana patriotique"
+        },
+        "20": {
+          "GXT": "Bandana bariolé"
+        },
+        "21": {
+          "GXT": "Bandana fractal"
+        },
+        "22": {
+          "GXT": "Bandana camo. contraste"
+        },
+        "23": {
+          "GXT": "Bandana zébré"
+        },
+        "24": {
+          "GXT": "Bandana à motifs sombres"
+        },
+        "25": {
+          "GXT": "Bandana à motifs clairs"
+        }
+      }
+    },
+    "112": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Mandibule noire"
+        },
+        "1": {
+          "GXT": "Mandibule bleue pixels"
+        },
+        "2": {
+          "GXT": "Mandibule marron pixels"
+        },
+        "3": {
+          "GXT": "Mandibule verte pixels"
+        },
+        "4": {
+          "GXT": "Mandibule beige"
+        },
+        "5": {
+          "GXT": "Mandibule sombre forêt"
+        },
+        "6": {
+          "GXT": "Mandibule quadrillée"
+        },
+        "7": {
+          "GXT": "Mandibule grise forêt"
+        },
+        "8": {
+          "GXT": "Mandibule camo. turquoise"
+        },
+        "9": {
+          "GXT": "Mandibule éclats"
+        },
+        "10": {
+          "GXT": "Mandibule camo. contraste"
+        },
+        "11": {
+          "GXT": "Mandibule pavés"
+        },
+        "12": {
+          "GXT": "Mandibule pêche forêt"
+        },
+        "13": {
+          "GXT": "Mandibule pinceau"
+        },
+        "14": {
+          "GXT": "Mandibule camouflage"
+        },
+        "15": {
+          "GXT": "Mandibule claire forêt"
+        },
+        "16": {
+          "GXT": "Mandibule à rayure bleue"
+        },
+        "17": {
+          "GXT": "Mandibule à rayure v. mousse"
+        },
+        "18": {
+          "GXT": "Mandibule à rayure orange"
+        },
+        "19": {
+          "GXT": "Mandibule jaune"
+        },
+        "20": {
+          "GXT": "Mandibule zébrée"
+        },
+        "21": {
+          "GXT": "Mandibule blanche"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        },
+        "24": {
+          "GXT": "NULL"
+        },
+        "25": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "113": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Cagoule de skate"
+        },
+        "1": {
+          "GXT": "Cagoule multicolore à feuilles"
+        },
+        "2": {
+          "GXT": "Cagoule Xero vert citron"
+        },
+        "3": {
+          "GXT": "Cagoule Xero tropicale"
+        },
+        "4": {
+          "GXT": "Cagoule à rayure rouge"
+        },
+        "5": {
+          "GXT": "Cagoule Bigness grise"
+        },
+        "6": {
+          "GXT": "Cagoule orange et rouge"
+        },
+        "7": {
+          "GXT": "Cagoule couleurs vives"
+        },
+        "8": {
+          "GXT": "Cagoule Bigness bleue"
+        },
+        "9": {
+          "GXT": "Cagoule moutarde"
+        },
+        "10": {
+          "GXT": "Cagoule patriotique"
+        },
+        "11": {
+          "GXT": "Cagoule noire crâne"
+        },
+        "12": {
+          "GXT": "Cagoule blanche crâne"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "Cagoule République SA"
+        },
+        "18": {
+          "GXT": "Cagoule noire patriotique"
+        },
+        "19": {
+          "GXT": "Cagoule noire et rouge"
+        },
+        "20": {
+          "GXT": "Cagoule abstraite vive"
+        },
+        "21": {
+          "GXT": "Cagoule Bigness camouflage"
+        }
+      }
+    },
+    "114": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Découvert marron"
+        },
+        "1": {
+          "GXT": "Découvert bleu-vert"
+        },
+        "2": {
+          "GXT": "Découvert vert"
+        },
+        "3": {
+          "GXT": "Découvert jaune"
+        },
+        "4": {
+          "GXT": "Découvert turquoise"
+        },
+        "5": {
+          "GXT": "Découvert marron pixels"
+        },
+        "6": {
+          "GXT": "Découvert jaune à motifs"
+        },
+        "7": {
+          "GXT": "Découv. rouge foncé à motifs"
+        },
+        "8": {
+          "GXT": "Découvert pêche pixels"
+        },
+        "9": {
+          "GXT": "Découvert beige"
+        },
+        "10": {
+          "GXT": "Découvert sombre forêt"
+        },
+        "11": {
+          "GXT": "Découvert orange à motifs"
+        },
+        "12": {
+          "GXT": "Découvert rouge à motifs"
+        },
+        "13": {
+          "GXT": "Découvert gris forêt"
+        },
+        "14": {
+          "GXT": "Découvert bleu à motifs"
+        },
+        "15": {
+          "GXT": "Découvert éclats"
+        },
+        "16": {
+          "GXT": "Découvert violet à motifs"
+        },
+        "17": {
+          "GXT": "Découvert pavillon noir"
+        },
+        "18": {
+          "GXT": "Découvert pêche forêt"
+        },
+        "19": {
+          "GXT": "Découvert pinceau"
+        },
+        "20": {
+          "GXT": "Découvert camouflage"
+        },
+        "21": {
+          "GXT": "Découvert à motifs armes"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        },
+        "24": {
+          "GXT": "NULL"
+        },
+        "25": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "115": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Couvert marron"
+        },
+        "1": {
+          "GXT": "Couvert bleu-vert"
+        },
+        "2": {
+          "GXT": "Couvert vert"
+        },
+        "3": {
+          "GXT": "Couvert jaune"
+        },
+        "4": {
+          "GXT": "Couvert turquoise"
+        },
+        "5": {
+          "GXT": "Couvert marron pixels"
+        },
+        "6": {
+          "GXT": "Couvert rouge à motifs"
+        },
+        "7": {
+          "GXT": "Couvert pavillon noir"
+        },
+        "8": {
+          "GXT": "Couvert pêche pixels"
+        },
+        "9": {
+          "GXT": "Couvert beige"
+        },
+        "10": {
+          "GXT": "Couvert sombre forêt"
+        },
+        "11": {
+          "GXT": "Couvert à motifs armes"
+        },
+        "12": {
+          "GXT": "Couvert bleu à motifs"
+        },
+        "13": {
+          "GXT": "Couvert gris forêt"
+        },
+        "14": {
+          "GXT": "Couvert sombre à motifs"
+        },
+        "15": {
+          "GXT": "Couvert éclats"
+        },
+        "16": {
+          "GXT": "Couvert rouge foncé à motifs"
+        },
+        "17": {
+          "GXT": "Couvert orange à motifs"
+        },
+        "18": {
+          "GXT": "Couvert pêche forêt"
+        },
+        "19": {
+          "GXT": "Couvert pinceau"
+        },
+        "20": {
+          "GXT": "Couvert camouflage"
+        },
+        "21": {
+          "GXT": "Couvert violet à motifs"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        },
+        "24": {
+          "GXT": "NULL"
+        },
+        "25": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "116": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Cache-col marron"
+        },
+        "1": {
+          "GXT": "Cache-col bleu-vert"
+        },
+        "2": {
+          "GXT": "Cache-col vert"
+        },
+        "3": {
+          "GXT": "Cache-col jaune"
+        },
+        "4": {
+          "GXT": "Cache-col turquoise"
+        },
+        "5": {
+          "GXT": "Cache-col marron pixels"
+        },
+        "6": {
+          "GXT": "Cache-col rouge foncé motifs"
+        },
+        "7": {
+          "GXT": "Cache-col orange"
+        },
+        "8": {
+          "GXT": "Cache-col pêche pixels"
+        },
+        "9": {
+          "GXT": "Cache-col beige"
+        },
+        "10": {
+          "GXT": "Cache-col sombre forêt"
+        },
+        "11": {
+          "GXT": "Cache-col bleu à motifs"
+        },
+        "12": {
+          "GXT": "Cache-col violet à motifs"
+        },
+        "13": {
+          "GXT": "Cache-col gris forêt"
+        },
+        "14": {
+          "GXT": "Cache-col jaune à motifs"
+        },
+        "15": {
+          "GXT": "Cache-col éclats"
+        },
+        "16": {
+          "GXT": "Cache-col rouge à motifs"
+        },
+        "17": {
+          "GXT": "Cache-col à motifs armes"
+        },
+        "18": {
+          "GXT": "Cache-col pêche forêt"
+        },
+        "19": {
+          "GXT": "Cache-col pinceau"
+        },
+        "20": {
+          "GXT": "Cache-col camouflage"
+        },
+        "21": {
+          "GXT": "Cache-col pavillon noir"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        },
+        "24": {
+          "GXT": "NULL"
+        },
+        "25": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "117": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Laine claire rayée"
+        },
+        "1": {
+          "GXT": "Laine rouge foncé"
+        },
+        "2": {
+          "GXT": "Laine verte & beige"
+        },
+        "3": {
+          "GXT": "Laine aube"
+        },
+        "4": {
+          "GXT": "Laine grise pixels"
+        },
+        "5": {
+          "GXT": "Laine grise forêt"
+        },
+        "6": {
+          "GXT": "Laine marron pixels"
+        },
+        "7": {
+          "GXT": "Laine rayures rouges"
+        },
+        "8": {
+          "GXT": "Laine crâne"
+        },
+        "9": {
+          "GXT": "Laine bordeaux à rayures"
+        },
+        "10": {
+          "GXT": "Laine vert clair"
+        },
+        "11": {
+          "GXT": "Laine camo. turquoise"
+        },
+        "12": {
+          "GXT": "Laine à rayures"
+        },
+        "13": {
+          "GXT": "Laine noire & rouge"
+        },
+        "14": {
+          "GXT": "Laine verte à rayures"
+        },
+        "15": {
+          "GXT": "Laine tigrée"
+        },
+        "16": {
+          "GXT": "Laine léopard"
+        },
+        "17": {
+          "GXT": "Laine sombre"
+        },
+        "18": {
+          "GXT": "Laine patriotique"
+        },
+        "19": {
+          "GXT": "Laine bleue luchador"
+        },
+        "20": {
+          "GXT": "Laine verte luchador"
+        }
+      }
+    },
+    "118": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "T-shirt léopard magenta"
+        },
+        "5": {
+          "GXT": "T-shirt marine peint"
+        },
+        "6": {
+          "GXT": "T-shirt feuilles"
+        },
+        "7": {
+          "GXT": "T-shirt gris pixels"
+        },
+        "8": {
+          "GXT": "T-shirt camouflage turquoise"
+        },
+        "9": {
+          "GXT": "T-shirt camouflage rouge"
+        },
+        "10": {
+          "GXT": "T-shirt Bigness camouflage"
+        },
+        "11": {
+          "GXT": "T-shirt Bigness noir"
+        },
+        "12": {
+          "GXT": "T-shirt Bigness rouge"
+        },
+        "13": {
+          "GXT": "T-shirt Bigness gris"
+        },
+        "14": {
+          "GXT": "T-shirt rayé"
+        },
+        "15": {
+          "GXT": "T-shirt Squash jus d'orange"
+        },
+        "16": {
+          "GXT": "T-shirt vert et rose"
+        },
+        "17": {
+          "GXT": "T-shirt patriotique"
+        },
+        "18": {
+          "GXT": "T-shirt noir patriotique"
+        },
+        "19": {
+          "GXT": "T-shirt République SA"
+        },
+        "20": {
+          "GXT": "T-shirt turquoise teint"
+        },
+        "21": {
+          "GXT": "T-shirt excentrique"
+        },
+        "22": {
+          "GXT": "T-shirt rose teint"
+        },
+        "23": {
+          "GXT": "T-shirt orange à motif"
+        },
+        "24": {
+          "GXT": "T-shirt vert à motif"
+        },
+        "25": {
+          "GXT": "T-shirt rose à motif"
+        }
+      }
+    },
+    "119": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Miteuse crâne"
+        },
+        "1": {
+          "GXT": "Miteuse gris cendre"
+        },
+        "2": {
+          "GXT": "Miteuse anthracite"
+        },
+        "3": {
+          "GXT": "Miteuse chocolat"
+        },
+        "4": {
+          "GXT": "Miteuse bleue"
+        },
+        "5": {
+          "GXT": "Miteuse toile de jute"
+        },
+        "6": {
+          "GXT": "Miteuse rouge foncé"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "Miteuse vert clair"
+        },
+        "12": {
+          "GXT": "Miteuse beige rayée"
+        },
+        "13": {
+          "GXT": "Miteuse rasta rayée"
+        },
+        "14": {
+          "GXT": "Miteuse trio rayée"
+        },
+        "15": {
+          "GXT": "Miteuse orange rayée"
+        },
+        "16": {
+          "GXT": "Miteuse léopard magenta"
+        },
+        "17": {
+          "GXT": "Miteuse couleurs vives"
+        },
+        "18": {
+          "GXT": "Miteuse de skate"
+        },
+        "19": {
+          "GXT": "Miteuse rose"
+        },
+        "20": {
+          "GXT": "Miteuse camouflage turquoise"
+        },
+        "21": {
+          "GXT": "Miteuse grise pixels"
+        },
+        "22": {
+          "GXT": "Miteuse grise forêt"
+        },
+        "23": {
+          "GXT": "Miteuse ravissante"
+        },
+        "24": {
+          "GXT": "Miteuse sombre fluo"
+        }
+      }
+    },
+    "120": {
+      "Price": 1500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "121": {
+      "Price": 1500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "122": {
+      "Price": 1500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "123": {
+      "Price": 1500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "124": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Dément lumineux"
+        },
+        "1": {
+          "GXT": "Dément électrique"
+        },
+        "2": {
+          "GXT": "Dément néon"
+        },
+        "3": {
+          "GXT": "Amusé électrique"
+        },
+        "4": {
+          "GXT": "Amusé lumineux"
+        },
+        "5": {
+          "GXT": "Amusé néon"
+        },
+        "6": {
+          "GXT": "Furieux lumineux"
+        },
+        "7": {
+          "GXT": "Furieux électrique"
+        },
+        "8": {
+          "GXT": "Furieux néon"
+        },
+        "9": {
+          "GXT": "Ravi néon"
+        },
+        "10": {
+          "GXT": "Ravi lumineux"
+        },
+        "11": {
+          "GXT": "Ravi électrique"
+        },
+        "12": {
+          "GXT": "Paisible néon"
+        },
+        "13": {
+          "GXT": "Paisible électrique"
+        },
+        "14": {
+          "GXT": "Paisible lumineux"
+        },
+        "15": {
+          "GXT": "Transcendant lumineux"
+        },
+        "16": {
+          "GXT": "Transcendant électrique"
+        },
+        "17": {
+          "GXT": "Transcendant néon"
+        },
+        "18": {
+          "GXT": "Tribal électrique"
+        },
+        "19": {
+          "GXT": "Tribal lumineux"
+        },
+        "20": {
+          "GXT": "Tribal néon"
+        },
+        "21": {
+          "GXT": "Iwazaru lumineux"
+        },
+        "22": {
+          "GXT": "Iwazaru électrique"
+        },
+        "23": {
+          "GXT": "Iwazaru néon"
+        }
+      }
+    },
+    "125": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Cuirassé uni noir"
+        },
+        "1": {
+          "GXT": "Cuirassé uni gris"
+        },
+        "2": {
+          "GXT": "Cuirassé uni blanc"
+        },
+        "3": {
+          "GXT": "Cuirassé uni sable"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "Cuirassé à lunettes sable"
+        },
+        "9": {
+          "GXT": "Cuirassé à lunettes rouge"
+        },
+        "10": {
+          "GXT": "Cuirassé carbone noir"
+        },
+        "11": {
+          "GXT": "Cuirassé carbone sable"
+        },
+        "12": {
+          "GXT": "Cuirassé crânien"
+        },
+        "13": {
+          "GXT": "Cuirassé camouflage"
+        },
+        "14": {
+          "GXT": "Cuirassé éclats"
+        },
+        "15": {
+          "GXT": "Cuirassé rouge et noir"
+        },
+        "16": {
+          "GXT": "Cuirassé bleu et noir"
+        },
+        "17": {
+          "GXT": "Cuirassé jaune et noir"
+        },
+        "18": {
+          "GXT": "Cuirassé orange et noir"
+        },
+        "19": {
+          "GXT": "Cuirassé blanc et noir"
+        },
+        "20": {
+          "GXT": "Cuirassé bande rouge"
+        },
+        "21": {
+          "GXT": "Cuirassé bande noire"
+        },
+        "22": {
+          "GXT": "Cuirassé blanc cassé & rouge"
+        },
+        "23": {
+          "GXT": "Cuirassé rouge"
+        },
+        "24": {
+          "GXT": "Cuirassé marron pixels"
+        },
+        "25": {
+          "GXT": "Cuirassé beige"
+        }
+      }
+    },
+    "126": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Forces spéciales noir"
+        },
+        "1": {
+          "GXT": "Forces spéciales carbone"
+        },
+        "2": {
+          "GXT": "Forces spéciales écailles"
+        },
+        "3": {
+          "GXT": "Forces spéciales beige pixels"
+        },
+        "4": {
+          "GXT": "Forces spéc. camo. turquoise"
+        },
+        "5": {
+          "GXT": "Forces spéciales éclats"
+        },
+        "6": {
+          "GXT": "Forces spéciales uni éclats"
+        },
+        "7": {
+          "GXT": "Forces spéciales gris forêt"
+        },
+        "8": {
+          "GXT": "Forces spéciales sombre forêt"
+        },
+        "9": {
+          "GXT": "Forces spéc. crâne électrique"
+        },
+        "10": {
+          "GXT": "Forces spéciales LSPD"
+        },
+        "11": {
+          "GXT": "Forces spéciales crâne orné"
+        },
+        "12": {
+          "GXT": "Forces spéciales à rayures"
+        },
+        "13": {
+          "GXT": "Forces spéciales opéra"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "127": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Hockey pain d'épices festif"
+        },
+        "1": {
+          "GXT": "Hockey pain d'épices joyeux"
+        },
+        "2": {
+          "GXT": "Hockey pain d'épices jovial"
+        },
+        "3": {
+          "GXT": "Hockey pain d'épices gai"
+        }
+      }
+    },
+    "128": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Faux visage gris forêt"
+        },
+        "1": {
+          "GXT": "Faux visage camo. turquoise"
+        },
+        "2": {
+          "GXT": "Faux visage gros titre"
+        },
+        "3": {
+          "GXT": "Faux visage éclats"
+        },
+        "4": {
+          "GXT": "Faux visage marron pixels"
+        },
+        "5": {
+          "GXT": "Faux visage rayé camo. forêt"
+        },
+        "6": {
+          "GXT": "Faux vis. camo. forêt pavés"
+        },
+        "7": {
+          "GXT": "Faux visage soleil levant"
+        },
+        "8": {
+          "GXT": "Faux visage opéra"
+        },
+        "9": {
+          "GXT": "Faux visage patriotique"
+        },
+        "10": {
+          "GXT": "Faux visage vert à motif"
+        },
+        "11": {
+          "GXT": "Faux visage gothique"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "129": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Masque à gaz gris"
+        },
+        "1": {
+          "GXT": "Masque à gaz carbone"
+        },
+        "2": {
+          "GXT": "Masque à gaz beige pixels"
+        },
+        "3": {
+          "GXT": "Masque à gaz camo. turq."
+        },
+        "4": {
+          "GXT": "Masque à gaz éclats"
+        },
+        "5": {
+          "GXT": "Masque à gaz éclats gris"
+        },
+        "6": {
+          "GXT": "Masque à gaz gris rayé"
+        },
+        "7": {
+          "GXT": "Mas. à gaz rayures v. mousse"
+        },
+        "8": {
+          "GXT": "Masque à gaz camo. pêche"
+        },
+        "9": {
+          "GXT": "Masque à gaz forêt pixels"
+        },
+        "10": {
+          "GXT": "Masque à gaz crâne"
+        },
+        "11": {
+          "GXT": "Masque à gaz industriel blanc"
+        },
+        "12": {
+          "GXT": "Masque à gaz industriel jaune"
+        },
+        "13": {
+          "GXT": "Mas. à gaz industriel orange"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "130": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Respirateur noir"
+        },
+        "1": {
+          "GXT": "Respirateur camouflage"
+        },
+        "2": {
+          "GXT": "Respirateur gris pixels"
+        },
+        "3": {
+          "GXT": "Respirateur camo. turquoise"
+        },
+        "4": {
+          "GXT": "Respirateur éclats"
+        },
+        "5": {
+          "GXT": "Respirateur éclats gris"
+        },
+        "6": {
+          "GXT": "Respirateur tigré"
+        },
+        "7": {
+          "GXT": "Respirateur rayures v. mousse"
+        },
+        "8": {
+          "GXT": "Respirateur vert pixels"
+        },
+        "9": {
+          "GXT": "Respirateur pinceau"
+        },
+        "10": {
+          "GXT": "Respirateur gris forêt"
+        },
+        "11": {
+          "GXT": "Respirateur pavés"
+        },
+        "12": {
+          "GXT": "Respirateur camo. contraste"
+        },
+        "13": {
+          "GXT": "Respirateur vipère"
+        },
+        "14": {
+          "GXT": "Respirateur quadrillé"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "NULL"
+        },
+        "18": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "131": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Krampus hideux"
+        },
+        "1": {
+          "GXT": "Krampus terrifiant"
+        },
+        "2": {
+          "GXT": "Krampus odieux"
+        },
+        "3": {
+          "GXT": "Krampus abominable"
+        }
+      }
+    },
+    "132": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Vision nocturne noire"
+        },
+        "1": {
+          "GXT": "Vision nocturne blanche"
+        },
+        "2": {
+          "GXT": "Vision nocturne grise"
+        },
+        "3": {
+          "GXT": "Vision nocturne bleue"
+        },
+        "4": {
+          "GXT": "Vision nocturne brun clair"
+        },
+        "5": {
+          "GXT": "Vision nocturne vert mousse"
+        },
+        "6": {
+          "GXT": "Vision nocturne camo. marron"
+        },
+        "7": {
+          "GXT": "Vision noct. camo. turquoise"
+        },
+        "8": {
+          "GXT": "Vision nocturne camo. gris"
+        },
+        "9": {
+          "GXT": "Vision noct. blanche pixels"
+        },
+        "10": {
+          "GXT": "Vision nocturne verte pixels"
+        },
+        "11": {
+          "GXT": "Vision nocturne éclats"
+        },
+        "12": {
+          "GXT": "Vision nocturne brillante"
+        },
+        "13": {
+          "GXT": "Vision nocturne marron pixels"
+        },
+        "14": {
+          "GXT": "Vision nocturne camo. forêt"
+        },
+        "15": {
+          "GXT": "Vision nocturne grise forêt"
+        },
+        "16": {
+          "GXT": "Vision nocturne quadrillée"
+        },
+        "17": {
+          "GXT": "Vision noct. camo. contraste"
+        },
+        "18": {
+          "GXT": "Vision nocturne pavés"
+        },
+        "19": {
+          "GXT": "Vis. noct. rayures v. mousse"
+        },
+        "20": {
+          "GXT": "Vision noct. camo. blanc"
+        },
+        "21": {
+          "GXT": "Vision nocturne crâne"
+        },
+        "22": {
+          "GXT": "NULL"
+        },
+        "23": {
+          "GXT": "NULL"
+        },
+        "24": {
+          "GXT": "NULL"
+        },
+        "25": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "133": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Hockey Bigness SN sombre"
+        },
+        "1": {
+          "GXT": "Hockey Bigness SN bleu"
+        },
+        "2": {
+          "GXT": "Hockey Bigness SN clair"
+        },
+        "3": {
+          "GXT": "Hockey Bigness SN mauve"
+        },
+        "4": {
+          "GXT": "Hockey camouflage sombre"
+        },
+        "5": {
+          "GXT": "Hockey camouflage clair"
+        },
+        "6": {
+          "GXT": "Hockey camouflage mauve"
+        },
+        "7": {
+          "GXT": "Hockey camouflage forêt"
+        },
+        "8": {
+          "GXT": "Hockey abstrait"
+        },
+        "9": {
+          "GXT": "Hockey géométrique"
+        },
+        "10": {
+          "GXT": "Hockey bleu pixels"
+        },
+        "11": {
+          "GXT": "Hockey gris pixels"
+        },
+        "12": {
+          "GXT": "Hockey zébré"
+        },
+        "13": {
+          "GXT": "Hockey Bigness SN losanges"
+        },
+        "14": {
+          "GXT": "Hockey léopard"
+        },
+        "15": {
+          "GXT": "Hockey beige"
+        },
+        "16": {
+          "GXT": "Hockey orange"
+        }
+      }
+    },
+    "134": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        },
+        "14": {
+          "GXT": "NULL"
+        },
+        "15": {
+          "GXT": "NULL"
+        },
+        "16": {
+          "GXT": "NULL"
+        },
+        "17": {
+          "GXT": "NULL"
+        },
+        "18": {
+          "GXT": "NULL"
+        },
+        "19": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "135": {
+      "Price": 1500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        },
+        "12": {
+          "GXT": "NULL"
+        },
+        "13": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "136": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Bec funeste marron clair"
+        },
+        "1": {
+          "GXT": "Bec funeste blanc"
+        },
+        "2": {
+          "GXT": "Bec funeste noir"
+        },
+        "3": {
+          "GXT": "Bec funeste croix rouge"
+        },
+        "4": {
+          "GXT": "Bec funeste camo. vert"
+        },
+        "5": {
+          "GXT": "Bec funeste camo. bleu"
+        },
+        "6": {
+          "GXT": "Bec funeste camo. beige"
+        },
+        "7": {
+          "GXT": "Bec funeste quadrillé"
+        },
+        "8": {
+          "GXT": "Bec funeste éclats"
+        },
+        "9": {
+          "GXT": "Bec funeste plumes rouges"
+        },
+        "10": {
+          "GXT": "Bec funeste noir & blanc"
+        },
+        "11": {
+          "GXT": "Bec funeste gris cendre"
+        },
+        "12": {
+          "GXT": "Bec funeste noir & jaune"
+        },
+        "13": {
+          "GXT": "Bec funeste rouge et blanc"
+        },
+        "14": {
+          "GXT": "Bec funeste marron et blanc"
+        },
+        "15": {
+          "GXT": "Bec funeste marron et jaune"
+        }
+      }
+    },
+    "137": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Pisteur vert"
+        },
+        "1": {
+          "GXT": "Pisteur marron"
+        },
+        "2": {
+          "GXT": "Pisteur mauve"
+        },
+        "3": {
+          "GXT": "Pisteur rouge"
+        },
+        "4": {
+          "GXT": "Pisteur noir"
+        },
+        "5": {
+          "GXT": "Pisteur étoiles"
+        },
+        "6": {
+          "GXT": "Pisteur camo. marron"
+        },
+        "7": {
+          "GXT": "Pisteur camo. vert"
+        }
+      }
+    },
+    "138": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Pillard orange"
+        },
+        "1": {
+          "GXT": "Pillard chocolat"
+        },
+        "2": {
+          "GXT": "Pillard marron"
+        },
+        "3": {
+          "GXT": "Pillard rouge"
+        },
+        "4": {
+          "GXT": "Pillard beige"
+        },
+        "5": {
+          "GXT": "Pillard orange vif"
+        },
+        "6": {
+          "GXT": "Pillard bleu"
+        },
+        "7": {
+          "GXT": "Pillard gris"
+        },
+        "8": {
+          "GXT": "Pillard vert"
+        },
+        "9": {
+          "GXT": "Pillard camo. marron"
+        },
+        "10": {
+          "GXT": "Pillard rouge et gris"
+        },
+        "11": {
+          "GXT": "Pillard orange et gris"
+        }
+      }
+    },
+    "139": {
+      "Price": 1500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "140": {
+      "Price": 1500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "141": {
+      "Price": 1500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        },
+        "1": {
+          "GXT": "NULL"
+        },
+        "2": {
+          "GXT": "NULL"
+        },
+        "3": {
+          "GXT": "NULL"
+        },
+        "4": {
+          "GXT": "NULL"
+        },
+        "5": {
+          "GXT": "NULL"
+        },
+        "6": {
+          "GXT": "NULL"
+        },
+        "7": {
+          "GXT": "NULL"
+        },
+        "8": {
+          "GXT": "NULL"
+        },
+        "9": {
+          "GXT": "NULL"
+        },
+        "10": {
+          "GXT": "NULL"
+        },
+        "11": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "142": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Maraudeur brun"
+        },
+        "1": {
+          "GXT": "Maraudeur radioactif"
+        },
+        "2": {
+          "GXT": "Maraudeur éclair"
+        },
+        "3": {
+          "GXT": "Maraudeur de marque"
+        },
+        "4": {
+          "GXT": "Maraudeur tête de mort"
+        },
+        "5": {
+          "GXT": "Maraudeur bande rouge"
+        },
+        "6": {
+          "GXT": "Maraudeur jaune"
+        },
+        "7": {
+          "GXT": "Maraudeur boule 8"
+        },
+        "8": {
+          "GXT": "Maraudeur flèche noir"
+        },
+        "9": {
+          "GXT": "Maraudeur étoiles filantes"
+        },
+        "10": {
+          "GXT": "Maraudeur beige"
+        },
+        "11": {
+          "GXT": "Maraudeur noir"
+        }
+      }
+    },
+    "143": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Masque de Paco le taco"
+        }
+      }
+    },
+    "144": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Masque Burger Shot"
+        }
+      }
+    },
+    "145": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Masque Cluckin' Bell"
+        }
+      }
+    },
+    "146": {
+      "Price": 500,
+      "Variations": {
+        "0": {
+          "GXT": "Casque optique bleu"
+        },
+        "1": {
+          "GXT": "Casque optique blanc"
+        },
+        "2": {
+          "GXT": "Casque optique noir"
+        },
+        "3": {
+          "GXT": "Casque optique rouge"
+        },
+        "4": {
+          "GXT": "Casque optique vert"
+        },
+        "5": {
+          "GXT": "Casque optique jaune"
+        },
+        "6": {
+          "GXT": "Casque optique rose"
+        },
+        "7": {
+          "GXT": "Casque optique orange"
+        },
+        "8": {
+          "GXT": "Casque optique mauve"
+        },
+        "9": {
+          "GXT": "Casque optique gris et rouge"
+        },
+        "10": {
+          "GXT": "Casque optique noir et vert"
+        },
+        "11": {
+          "GXT": "Casque opt. beige et orange"
+        },
+        "12": {
+          "GXT": "Casque opt. orange et jaune"
+        },
+        "13": {
+          "GXT": "Casque optique blanc et bleu"
+        },
+        "14": {
+          "GXT": "Casque opt. mauve et noir"
+        },
+        "15": {
+          "GXT": "Casque optique rouge et noir"
+        },
+        "16": {
+          "GXT": "Casque optique vert et jaune"
+        }
+      }
+    },
+    "147": {
+      "Price": 1500,
+      "Variations": {
+        "0": {
+          "GXT": "NULL"
+        }
+      }
+    },
+    "149": {
+      "0": {
+          "GXT": "CLO_VWM_B_0_0",
+          "Localized": "Masque pour les yeux Noir"
+      }
+    },
+    "149": {
+      "0": {
+          "GXT": "CLO_VWM_B_1_0",
+          "Localized": "Masque de fraise"
+      }
+    },
+    "150": {
+      "0": {
+          "GXT": "CLO_VWM_B_2_0",
+          "Localized": "Masque de citron"
+      }
+    },
+    "151": {
+      "0": {
+          "GXT": "CLO_VWM_B_3_0",
+          "Localized": "Masque de raisin"
+      }
+    },
+    "152": {
+      "0": {
+          "GXT": "CLO_VWM_B_4_0",
+          "Localized": "Masque d'Ananas"
+      }
+    },
+    "153": {
+      "0": {
+          "GXT": "CLO_VWM_B_5_0",
+          "Localized": "Masque de cerise"
+      }
+    },
+    "154": {
+      "0": {
+          "GXT": "CLO_VWM_B_6_0",
+          "Localized": "Masque de Lucky Seven"
+      }
+    },
+    "155": {
+      "0": {
+          "GXT": "CLO_VWM_B_7_0",
+          "Localized": "Masque de Joker Bleu"
+      },
+      "1": {
+          "GXT": "CLO_VWM_B_7_1",
+          "Localized": "Masque de Joker Rouge"
+      },
+      "2": {
+          "GXT": "CLO_VWM_B_7_2",
+          "Localized": "Masque de Joker Vert"
+      },
+      "3": {
+          "GXT": "CLO_VWM_B_7_3",
+          "Localized": "Masque de Joker Violet"
+      }
+    },
+    "156": {
+      "0": {
+          "GXT": "CLO_VWM_B_8_0",
+          "Localized": "Masque de Roi of Hearts"
+      },
+      "1": {
+          "GXT": "CLO_VWM_B_8_1",
+          "Localized": "Masque de Roi of Clubs"
+      },
+      "2": {
+          "GXT": "CLO_VWM_B_8_2",
+          "Localized": "Masque de Roi of Diamonds"
+      },
+      "3": {
+          "GXT": "CLO_VWM_B_8_3",
+          "Localized": "Masque de Roi of Spades"
+      }
+    },
+    "157": {
+      "0": {
+          "GXT": "CLO_VWM_B_9_0",
+          "Localized": "Masque de Reine of Spades"
+      },
+      "1": {
+          "GXT": "CLO_VWM_B_9_1",
+          "Localized": "Masque de Reine of Hearts"
+      },
+      "2": {
+          "GXT": "CLO_VWM_B_9_2",
+          "Localized": "Masque de Reine of Diamonds"
+      },
+      "3": {
+          "GXT": "CLO_VWM_B_9_3",
+          "Localized": "Masque de Reine of Clubs"
+      }
+    },
+    "158": {
+      "0": {
+          "GXT": "CLO_VWM_B_10_0",
+          "Localized": "Masque de Valet of Spades"
+      },
+      "1": {
+          "GXT": "CLO_VWM_B_10_1",
+          "Localized": "Masque de Valet of Hearts"
+      },
+      "2": {
+          "GXT": "CLO_VWM_B_10_2",
+          "Localized": "Masque de Valet of Clubs"
+      },
+      "3": {
+          "GXT": "CLO_VWM_B_10_3",
+          "Localized": "Masque de Valet of Diamonds"
+      }
+    },
+    "159": {
+      "0": {
+          "GXT": "CLO_VWM_B_11_0",
+          "Localized": "Masque de AS of Spades"
+      },
+      "1": {
+          "GXT": "CLO_VWM_B_11_1",
+          "Localized": "Masque de AS of Hearts"
+      },
+      "2": {
+          "GXT": "CLO_VWM_B_11_2",
+          "Localized": "Masque de AS of Clubs"
+      },
+      "3": {
+          "GXT": "CLO_VWM_B_11_3",
+          "Localized": "Masque de AS of Diamonds"
+      }
+    },
+    "160": {
+      "0": {
+          "GXT": "CLO_H3M_B_0_0",
+          "Localized": "Masque de Sourire de bébé"
+      }
+    },
+    "161": {
+      "0": {
+          "GXT": "CLO_H3M_B_1_0",
+          "Localized": "Masque de Figure"
+      }
+    },
+    "162": {
+      "0": {
+          "GXT": "CLO_H3M_B_2_0",
+          "Localized": "Masque de cochon"
+      }
+    },
+    "163": {
+      "0": {
+          "GXT": "CLO_H3M_B_3_0",
+          "Localized": "Masque de singe"
+      }
+    },
+    "164": {
+      "0": {
+          "GXT": "CLO_H3M_B_4_0",
+          "Localized": "Masque de smiley cassé"
+      }
+    },
+    "165": {
+      "0": {
+          "GXT": "CLO_H3M_B_5_0",
+          "Localized": "Masque de lapin"
+      }
+    },
+    "166": {
+      "0": {
+          "GXT": "NO_LABEL",
+          "Localized": "Petit masque à gaz 1"
+      },
+      "1": {
+          "GXT": "NO_LABEL",
+          "Localized": "Petit masque à gaz 2"
+      },
+      "2": {
+          "GXT": "NO_LABEL",
+          "Localized": "Petit masque à gaz 3"
+      },
+      "3": {
+          "GXT": "NO_LABEL",
+          "Localized": "Petit masque à gaz 4"
+      }
+    },
+    "167": {
+      "0": {
+          "GXT": "CLO_H3M_B_7_0",
+          "Localized": "Masque de Sniper"
+      }
+    },
+    "168": {
+      "0": {
+          "GXT": "CLO_H3M_B_8_0",
+          "Localized": "Masque sans chair"
+      }
+    },
+    "169": {
+      "0": {
+          "GXT": "CLO_H3M_B_9_0",
+          "Localized": "Cache cou Noir"
+      },
+      "1": {
+          "GXT": "CLO_H3M_B_9_1",
+          "Localized": "Cache cou Gris"
+      },
+      "2": {
+          "GXT": "CLO_H3M_B_9_2",
+          "Localized": "Cache cou Gris clair"
+      },
+      "3": {
+          "GXT": "CLO_H3M_B_9_3",
+          "Localized": "Cache cou Rouge"
+      },
+      "4": {
+          "GXT": "CLO_H3M_B_9_4",
+          "Localized": "Teal Neck Gaiter"
+      },
+      "5": {
+          "GXT": "CLO_H3M_B_9_5",
+          "Localized": "Smiley Neck Gaiter"
+      },
+      "6": {
+          "GXT": "CLO_H3M_B_9_6",
+          "Localized": "Gray Digital Neck Gaiter"
+      },
+      "7": {
+          "GXT": "CLO_H3M_B_9_7",
+          "Localized": "Blue Digital Neck Gaiter"
+      },
+      "8": {
+          "GXT": "CLO_H3M_B_9_8",
+          "Localized": "Blue Wave Neck Gaiter"
+      },
+      "9": {
+          "GXT": "CLO_H3M_B_9_9",
+          "Localized": "Stars & Stripes Neck Gaiter"
+      },
+      "10": {
+          "GXT": "CLO_H3M_B_9_10",
+          "Localized": "Toothy Grin Neck Gaiter"
+      },
+      "11": {
+          "GXT": "CLO_H3M_B_9_11",
+          "Localized": "Wolf Neck Gaiter"
+      },
+      "12": {
+          "GXT": "CLO_H3M_B_9_12",
+          "Localized": "Gray Camo Neck Gaiter"
+      },
+      "13": {
+          "GXT": "CLO_H3M_B_9_13",
+          "Localized": "Black Skull Neck Gaiter"
+      },
+      "14": {
+          "GXT": "CLO_H3M_B_9_14",
+          "Localized": "Blood Cross Neck Gaiter"
+      },
+      "15": {
+          "GXT": "CLO_H3M_B_9_15",
+          "Localized": "Brown Skull Neck Gaiter"
+      },
+      "16": {
+          "GXT": "CLO_H3M_B_9_16",
+          "Localized": "Green Camo Neck Gaiter"
+      },
+      "17": {
+          "GXT": "CLO_H3M_B_9_17",
+          "Localized": "Green Neon Camo Neck Gaiter"
+      },
+      "18": {
+          "GXT": "CLO_H3M_B_9_18",
+          "Localized": "Purple Neon Camo Neck Gaiter"
+      },
+      "19": {
+          "GXT": "CLO_H3M_B_9_19",
+          "Localized": "Cobble Neck Gaiter"
+      },
+      "20": {
+          "GXT": "CLO_H3M_B_9_20",
+          "Localized": "Green Snakeskin Neck Gaiter"
+      },
+      "21": {
+          "GXT": "CLO_H3M_B_9_21",
+          "Localized": "Purple Snakeskin Neck Gaiter"
+      },
+      "22": {
+          "GXT": "NO_LABEL",
+          "Localized": "NULL"
+      },
+      "23": {
+          "GXT": "NO_LABEL",
+          "Localized": "NULL"
+      },
+      "24": {
+          "GXT": "NO_LABEL",
+          "Localized": "NULL"
+      },
+      "25": {
+          "GXT": "NO_LABEL",
+          "Localized": "NULL"
+      }
+    },
+    "170": {
+      "0": {
+          "GXT": "CLO_H3M_B_10_0",
+          "Localized": "Voyeur"
+      }
+    },
+    "171": {
+      "0": {
+          "GXT": "CLO_H3M_B_11_0",
+          "Localized": "Masque en papier renard"
+      }
+    },
+    "172": {
+      "0": {
+          "GXT": "CLO_H3M_B_12_0",
+          "Localized": "Masque en papier de chat Blanc et Marron"
+      },
+      "1": {
+          "GXT": "CLO_H3M_B_12_1",
+          "Localized": "Masque en papier de chat Blanc et Gris"
+      },
+      "2": {
+          "GXT": "CLO_H3M_B_12_2",
+          "Localized": "Masque en papier de chat Blanc et Noir"
+      }
+    },
+    "173": {
+      "0": {
+          "GXT": "CLO_H3M_B_13_0",
+          "Localized": "Masque en papier de Cochon"
+      }
+    },
+    "174": {
+      "0": {
+          "GXT": "CLO_H3M_B_14_0",
+          "Localized": "Masque Demi-visage en cuir gris et rouge"
+      },
+      "1": {
+          "GXT": "CLO_H3M_B_14_1",
+          "Localized": "Masque Demi-visage en cuir blanc"
+      },
+      "2": {
+          "GXT": "CLO_H3M_B_14_2",
+          "Localized": "Masque Demi-visage en cuir blans et gris"
+      },
+      "3": {
+          "GXT": "CLO_H3M_B_14_3",
+          "Localized": "Masque Demi-visage en cuir rouge"
+      },
+      "4": {
+          "GXT": "CLO_H3M_B_14_4",
+          "Localized": "Masque Demi-visage en cuir jaune"
+      },
+      "5": {
+          "GXT": "CLO_H3M_B_14_5",
+          "Localized": "Masque Demi-visage en cuir vert"
+      },
+      "6": {
+          "GXT": "CLO_H3M_B_14_6",
+          "Localized": "Masque Demi-visage en cuir noir"
+      },
+      "7": {
+          "GXT": "CLO_H3M_B_14_7",
+          "Localized": "Red Swirl Leather Half Face"
+      },
+      "8": {
+          "GXT": "CLO_H3M_B_14_8",
+          "Localized": "Yellow Swirl Leather Half Face"
+      },
+      "9": {
+          "GXT": "CLO_H3M_B_14_9",
+          "Localized": "Pale Leather Half Face"
+      },
+      "10": {
+          "GXT": "CLO_H3M_B_14_10",
+          "Localized": "Red Lip Leather Half Face"
+      },
+      "11": {
+          "GXT": "CLO_H3M_B_14_11",
+          "Localized": "Smoke Leather Half Face"
+      },
+      "12": {
+          "GXT": "CLO_H3M_B_14_12",
+          "Localized": "Red Leather Half Face"
+      },
+      "13": {
+          "GXT": "CLO_H3M_B_14_13",
+          "Localized": "Cyan Leather Half Face"
+      },
+      "14": {
+          "GXT": "CLO_H3M_B_14_14",
+          "Localized": "Dark Pink Leather Half Face"
+      },
+      "15": {
+          "GXT": "CLO_H3M_B_14_15",
+          "Localized": "Green Leather Half Face"
+      },
+      "16": {
+          "GXT": "CLO_H3M_B_14_16",
+          "Localized": "Peach Leather Half Face"
+      },
+      "17": {
+          "GXT": "CLO_H3M_B_14_17",
+          "Localized": "Purple Leather Half Face"
+      },
+      "18": {
+          "GXT": "CLO_H3M_B_14_18",
+          "Localized": "Light Pink Leather Half Face"
+      },
+      "19": {
+          "GXT": "CLO_H3M_B_14_19",
+          "Localized": "Terracotta Leather Half Face"
+      },
+      "20": {
+          "GXT": "CLO_H3M_B_14_20",
+          "Localized": "Dusty Blue Leather Half Face"
+      },
+      "21": {
+          "GXT": "CLO_H3M_B_14_21",
+          "Localized": "Gray Leather Half Face"
+      },
+      "22": {
+          "GXT": "CLO_H3M_B_14_22",
+          "Localized": "Putty Leather Half Face"
+      },
+      "23": {
+          "GXT": "CLO_H3M_B_14_23",
+          "Localized": "White Leather Half Face"
+      },
+      "24": {
+          "GXT": "CLO_H3M_B_14_24",
+          "Localized": "Stone Leather Half Face"
+      }
+    },
+    "175": {
+      "0": {
+          "GXT": "CLO_H3M_B_15_0",
+          "Localized": "Yellow Visor Respirator"
+      },
+      "1": {
+          "GXT": "CLO_H3M_B_15_1",
+          "Localized": "Green Visor Respirator"
+      },
+      "2": {
+          "GXT": "CLO_H3M_B_15_2",
+          "Localized": "Orange Mask Respirator"
+      },
+      "3": {
+          "GXT": "CLO_H3M_B_15_3",
+          "Localized": "Gold Mask Respirator"
+      }
+    },
+    "176": {
+      "0": {
+          "GXT": "CLO_H3M_B_16_0",
+          "Localized": "Geo Gold Dog"
+      },
+      "1": {
+          "GXT": "CLO_H3M_B_16_1",
+          "Localized": "Geo White Dog"
+      },
+      "2": {
+          "GXT": "CLO_H3M_B_16_2",
+          "Localized": "Geo Brown Dog"
+      },
+      "3": {
+          "GXT": "CLO_H3M_B_16_3",
+          "Localized": "Geo Gray Dog"
+      }
+    },
+    "177": {
+      "0": {
+          "GXT": "CLO_H3M_B_17_0",
+          "Localized": "Cerberus"
+      }
+    },
+    "178": {
+      "0": {
+          "GXT": "CLO_H3M_B_18_0",
+          "Localized": "Gray & Red Leather with NVG"
+      },
+      "1": {
+          "GXT": "CLO_H3M_B_18_1",
+          "Localized": "Ash & White Leather with NVG"
+      },
+      "2": {
+          "GXT": "CLO_H3M_B_18_2",
+          "Localized": "Gray & White Leather with NVG"
+      },
+      "3": {
+          "GXT": "CLO_H3M_B_18_3",
+          "Localized": "Worn Red Leather with NVG"
+      },
+      "4": {
+          "GXT": "CLO_H3M_B_18_4",
+          "Localized": "Worn Yellow Leather with NVG"
+      },
+      "5": {
+          "GXT": "CLO_H3M_B_18_5",
+          "Localized": "Worn Green Leather with NVG"
+      },
+      "6": {
+          "GXT": "CLO_H3M_B_18_6",
+          "Localized": "Black Swirl Leather with NVG"
+      },
+      "7": {
+          "GXT": "CLO_H3M_B_18_7",
+          "Localized": "Red Swirl Leather with NVG"
+      },
+      "8": {
+          "GXT": "CLO_H3M_B_18_8",
+          "Localized": "Yellow Swirl Leather with NVG"
+      },
+      "9": {
+          "GXT": "CLO_H3M_B_18_9",
+          "Localized": "Pale Leather with NVG"
+      },
+      "10": {
+          "GXT": "CLO_H3M_B_18_10",
+          "Localized": "Red Lip Leather with NVG"
+      },
+      "11": {
+          "GXT": "CLO_H3M_B_18_11",
+          "Localized": "Smoke Leather with NVG"
+      },
+      "12": {
+          "GXT": "CLO_H3M_B_18_12",
+          "Localized": "Red Leather with NVG"
+      },
+      "13": {
+          "GXT": "CLO_H3M_B_18_13",
+          "Localized": "Cyan Leather with NVG"
+      },
+      "14": {
+          "GXT": "CLO_H3M_B_18_14",
+          "Localized": "Dark Pink Leather with NVG"
+      },
+      "15": {
+          "GXT": "CLO_H3M_B_18_15",
+          "Localized": "Green Leather with NVG"
+      },
+      "16": {
+          "GXT": "CLO_H3M_B_18_16",
+          "Localized": "Peach Leather with NVG"
+      },
+      "17": {
+          "GXT": "CLO_H3M_B_18_17",
+          "Localized": "Purple Leather with NVG"
+      },
+      "18": {
+          "GXT": "CLO_H3M_B_18_18",
+          "Localized": "Light Pink Leather with NVG"
+      },
+      "19": {
+          "GXT": "CLO_H3M_B_18_19",
+          "Localized": "Terracotta Leather with NVG"
+      },
+      "20": {
+          "GXT": "CLO_H3M_B_18_20",
+          "Localized": "Dusty Blue Leather with NVG"
+      },
+      "21": {
+          "GXT": "CLO_H3M_B_18_21",
+          "Localized": "Gray Leather with NVG"
+      },
+      "22": {
+          "GXT": "CLO_H3M_B_18_22",
+          "Localized": "Putty Leather with NVG"
+      },
+      "23": {
+          "GXT": "CLO_H3M_B_18_23",
+          "Localized": "White Leather with NVG"
+      },
+      "24": {
+          "GXT": "CLO_H3M_B_18_24",
+          "Localized": "Stone Leather with NVG"
+      }
+    },
+    "179": {
+      "0": {
+          "GXT": "CLO_H3M_B_19_0",
+          "Localized": "Grin"
+      },
+      "1": {
+          "GXT": "CLO_H3M_B_19_1",
+          "Localized": "Cry"
+      },
+      "2": {
+          "GXT": "CLO_H3M_B_19_2",
+          "Localized": "Laugh"
+      },
+      "3": {
+          "GXT": "CLO_H3M_B_19_3",
+          "Localized": "Grimace"
+      },
+      "4": {
+          "GXT": "CLO_H3M_B_19_4",
+          "Localized": "In Love"
+      },
+      "5": {
+          "GXT": "CLO_H3M_B_19_5",
+          "Localized": "Blow Kiss"
+      },
+      "6": {
+          "GXT": "CLO_H3M_B_19_6",
+          "Localized": "Gasp"
+      },
+      "7": {
+          "GXT": "CLO_H3M_B_19_7",
+          "Localized": "Wink"
+      }
+    }
+  }
+}

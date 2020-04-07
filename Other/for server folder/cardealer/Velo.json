@@ -1,0 +1,78 @@
+{
+  "BlipSprite": 376,
+  "BlipPosition": {
+    "x": -1261.245,
+    "y": -1442.401,
+    "z": 4.353218
+  },
+  "LocationList": [
+    {
+      "position": {
+        "x": -1261.0417,
+        "y": -1443.7979,
+        "z": 3.7354736
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0.046875,
+        "z": 1.890625
+      }
+    },
+    {
+      "position": {
+        "x": -1264.3912,
+        "y": -1438.1011,
+        "z": 4.005127
+      },
+      "rotation": {
+        "x": 0,
+        "y": -0.078125,
+        "z": 1.734375
+      }
+    }
+  ],
+  "VehicleInfoList": [
+    {
+      "VehicleHash": 1131912276,
+      "Name": "BMX",
+      "InventoryWeight": 0,
+      "Price": 1000
+    },
+	    {
+      "VehicleHash": 448402357,
+      "Name": "cruiser",
+      "InventoryWeight": 0,
+      "Price": 1025
+    },
+    {
+      "VehicleHash": 3458454463,
+      "Name": "Fixter",
+      "InventoryWeight": 0,
+      "Price": 1035
+    },
+    {
+      "VehicleHash": 4108429845,
+      "Name": "Scorcher",
+      "InventoryWeight": 0,
+      "Price": 1200
+    },
+	{
+      "VehicleHash": 1127861609,
+      "Name": "tribike",
+      "InventoryWeight": 0,
+      "Price": 1250
+    },
+    {
+      "VehicleHash": 3061159916,
+      "Name": "tribike2",
+      "InventoryWeight": 0,
+      "Price": 1250
+    },
+    {
+      "VehicleHash": 3894672200,
+      "Name": "tribike3",
+      "InventoryWeight": 0,
+      "Price": 1250
+    }
+  ]
+}

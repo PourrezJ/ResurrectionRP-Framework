@@ -66,9 +66,6 @@ export class Hud {
             if (!alt.Player.local.getMeta("IsConnected"))
                 return;
 
-            if (!game.hasStreamedTextureDictLoaded("resurrection_images"))
-                game.requestStreamedTextureDict("resurrection_images", true);
-
             if (!VoiceChat.isConnected && !alt.Player.local.getMeta("IsDebug") && alt.Player.local.getMeta("LevelRank") != null) {
                 if (alt.Player.local.getMeta("LevelRank") > 0)
                     return;
@@ -80,7 +77,7 @@ export class Hud {
                     let screenY = screenRes[2];
 
                     game.drawRect(1, 1, screenX, screenY, 0, 0, 0, 255, false);
-                    ui.DrawText2d("Veuillez-être connecté sur le Teamspeak: ~r~ts.resurrectionrp.fr ", 0.5, 0.5, 0.5, 4, 255, 255, 255, 255, true, true, 99);
+                    ui.DrawText2d("Veuillez-être connecté sur le Teamspeak: ~r~address.ts ", 0.5, 0.5, 0.5, 4, 255, 255, 255, 255, true, true, 99);
                     ui.DrawText2d("~w~\n et avoir votre ~r~plugin activé~w~.", 0.5, 0.5, 0.5, 4, 255, 255, 255, 255, true, true, 99);
                 }
                 return;
@@ -90,24 +87,6 @@ export class Hud {
                 ui.DrawText2d("Transmission en cours (" + VoiceChat.radioChannel + "MHz)", 0.1, 0.75, 0.4, 4, 255, 255, 255, 255, true, true, 99);
 
             this._advert = 0;
-
-            if (this.Hide)
-                return;
-
-            /*
-            *  STRESS  TEST
-            */
-
-            //ui.DrawText2d("~r~RESURRECTIONRP ALT:V !STRESS-TEST! V0.4", 0.5, 0.03, 0.7, 4, 255, 255, 255, 255, true, true, 99);
-            //ui.DrawText2d(game.getClockHours() + ":" + game.getClockMinutes(), 0.5, 0.005, 0.3, 4, 255, 255, 255, 90, true, true, 99);
-
-            let health = (game.getEntityHealth(alt.Player.local.scriptID) - 100);
-            if (health <= 70) {
-                var blood = (1 - (health / 70)) * 255;
-                game.drawSprite("resurrection_images", "blood_screen", 0.5, 0.5, 1, 1, 0, 255, 255, 255, blood, false);
-            }
-
-            game.drawSprite("resurrection_images", "resu_2", 0.02, 0.03, 0.06, 0.08, 0, 255, 255, 255, 180, false);
         });
 
         alt.setInterval(() => {
